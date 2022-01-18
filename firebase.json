@@ -1,0 +1,20 @@
+{
+  "hosting": {
+    "public": "public",
+    "cleanUrls": true,
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "run":{
+          "serviceId": "comuthor-web",
+          "region": "asia-southeast1"
+        }
+      }
+    ]
+  }
+}

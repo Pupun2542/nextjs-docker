@@ -1,0 +1,28 @@
+
+  .NavTextColor {
+      color: white;
+  }
+  .ThumbnailStyle{
+    padding-right: -100px;
+    /* box-sizing: border-box; */
+    /* float: right; */
+    /* width: 220px; */
+  }
+  .ThumbnailTextStyle{
+    color: white;
+    text-align: center;
+    padding-left: 5px;
+    float: right;
+  }
+  .Thumbnailimg{
+    border-radius: 20px;
+    float: right;
+    margin: auto;
+  }
+  .dropdown{
+    max-width: 170px;
+    float: right;
+  }
+  .navmargin{
+    margin-left: 10px;
+  }
