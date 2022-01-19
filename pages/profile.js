@@ -51,7 +51,7 @@ export default function Profile() {
       const handleUpload = (e) => {
         e.preventDefault();
         const file = e.target[0].files[0];
-        Uploadprofileimg(file);
+        Uploadprofileimg(file, user.uid);
       };
       console.log(user.photoURL);
 
@@ -226,7 +226,7 @@ export default function Profile() {
         </div>
       );
     }
-    return router.push("/login");
+    return Router.push("/login");
   };
 
   return CurrentUser();

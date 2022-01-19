@@ -6,10 +6,7 @@ import CustomNavbar from "../components/navbar";
 export default function Browse() {
 
 
-
-
-
-
+  
   return (
     <div>
       <CustomNavbar />

@@ -7,7 +7,7 @@ import { async } from "@firebase/util";
 // import { store } from "./firebaseadminservice";
 
 
-export function Uploadprofileimg(file){
+export function Uploadprofileimg(file, name){
     const app = getApp();
     const store = getStorage(app);
     const auth = getAuth(app);
@@ -17,7 +17,7 @@ export function Uploadprofileimg(file){
         // console.log("returned")
         return;
     }
-    const storageref = ref(store,`profileimg/${file.name}`);
+    const storageref = ref(store,`profileimg/${name}`);
     const uploadtask = uploadBytesResumable(storageref, file);
 
     uploadtask.on("state_changed", (snapshot) =>{

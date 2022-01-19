@@ -27,13 +27,13 @@ function CustomNavbar() {
     if (user) {
       return (
         <div className="ms auto">
-              <Image
+              <img
                 src={user.photoURL}
                 alt="profile picture"
                 width={40}
                 height={40}
                 className={style.Thumbnailimg}
-              ></Image>
+              ></img>
               <NavDropdown
                 title={
                   <span className={style.ThumbnailTextStyle}>
@@ -81,7 +81,7 @@ function CustomNavbar() {
             <Nav.Link href="/creategroup">
               <span className={style.NavTextColor}>Create Commu</span>
             </Nav.Link>
-            <Nav.Link href="/register" disabled>
+            <Nav.Link href="/Mygroup">
               <span className={style.NavTextColor}>My Group</span>
             </Nav.Link>
           </Nav>

@@ -10,10 +10,10 @@ import {
   collection,
   addDoc,
   serverTimestamp,
+  setDoc,
 } from "firebase/firestore";
 import { getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { map } from "@firebase/util";
 import "../components/caroselPreview";
 // import CaroselPreview from "../components/caroselPreview";
 import { useDropzone } from "react-dropzone";
@@ -24,6 +24,7 @@ export default function CreateGroup() {
   const auth = getAuth();
 
   const [tags, setTags] = useState([]);
+  const [hashtag, setHashtag] = useState("");
   const [communame, setCommuname] = useState("");
   const [maxplayer, setMaxplayer] = useState("");
   const [regDate, setRegDate] = useState("");
@@ -37,7 +38,7 @@ export default function CreateGroup() {
   const [submitlink, setSubmitlink] = useState("");
   const [resultlink, setResultlink] = useState("");
   const [contactlink, setContactlink] = useState("");
-  const [genreString, setGenreString] = useState("");
+  // const [genreString, setGenreString] = useState("");
   const [privacy, setPrivacy] = useState("");
 
   const CaroselPreview = () => {
@@ -52,15 +53,15 @@ export default function CreateGroup() {
       setImageurls(newImageurls);
     }, [images]);
 
-    function onImageChange(e) {
+    function OnImageChange(e) {
       setImages([...e.target.files]);
     }
 
-    const handleSelect = (selectedIndex, e) => {
+    const HandleSelect = (selectedIndex, e) => {
       setIndex(selectedIndex);
     };
 
-    function removeImage(indexToRemove) {
+    function RemoveImage(indexToRemove) {
       setImageurls([...tags.filter((_, index) => index !== indexToRemove)]);
     }
 
@@ -101,30 +102,30 @@ export default function CreateGroup() {
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
-    console.log("submitted");
+    console.log(tags);
 
-
-    // const docRef = await addDoc(collection(db, "group"), {
-    //   Name: communame,
-    //   Creator: auth.currentUser.uid,
-    //   Type: privacy,
-    //   description: description, 
-    //   maxplayer: maxplayer,
-    //   runtime: runtime,
-    //   genre: genreString.split(","),
-    //   smlink: smlink,
-    //   doclink: doclink,
-    //   qaasklink: qaasklink,
-    //   qaanslink: qaanslink,
-    //   submitlink: submitlink,
-    //   resultlink: resultlink,
-    //   contactlink: contactlink,
-    //   regDate: regDate,
-    //   endDate: endDate,
-    //   createAt: serverTimestamp(),
-    // });
+    const docRef = await addDoc(collection(db, "group"), {
+      Name: communame,
+      Creator: auth.currentUser.uid,
+      Type: privacy,
+      tag: hashtag,
+      description: description,
+      maxplayer: maxplayer,
+      runtime: runtime,
+      genre: tags,
+      smlink: smlink,
+      doclink: doclink,
+      qaasklink: qaasklink,
+      qaanslink: qaanslink,
+      submitlink: submitlink,
+      resultlink: resultlink,
+      contactlink: contactlink,
+      regDate: regDate,
+      endDate: endDate,
+      createAt: serverTimestamp(),
+    });
     // console.log(docRef.id);
-    // setHashtagString("");
+    setTags([]);
     setCommuname("");
     setMaxplayer("");
     setRegDate("");
@@ -138,7 +139,6 @@ export default function CreateGroup() {
     setSubmitlink("");
     setResultlink("");
     setContactlink("");
-    setGenreString("");
     setPrivacy("");
   };
 
@@ -147,9 +147,11 @@ export default function CreateGroup() {
       setTags([...tags.filter((_, index) => index !== indexToRemove)]);
     };
     const addTags = (event) => {
-      if (event.target.value !== "") {
-        setTags([...tags, event.target.value]);
-        props.selectedTags([...tags, event.target.value]);
+      let tag = event.target.value.replace(",",'');
+      tag = tag.trim();
+      if (tag !== "") {
+        setTags([...tags, tag]);
+        props.selectedTags([...tags, tag]);
         event.target.value = "";
       }
     };
@@ -171,9 +173,9 @@ export default function CreateGroup() {
             <input
               type="text"
               onKeyUp={(event) =>
-                event.key === "Enter" ? addTags(event) : null
+                event.key === "," ? addTags(event) : null
               }
-              placeholder="กด Enter เพื่อกำหนดแท็ค"
+              placeholder="ใช้ , เพื่อแบ่งประเภท"
               className={style.input}
             />
           </div>
@@ -194,16 +196,19 @@ export default function CreateGroup() {
           <Col md={2}></Col>
           <Col md={8}>
             <Container>
-              <form onSubmit={HandleSubmit}>
+              <div>
                 <Row>
                   <Col>
                     <label>
                       <h4 className={style.label}>Hashtag</h4>
                     </label>
+                    <input
+                      type="text"
+                      value={hashtag}
+                      onChange={(e)=>{setHashtag(e.target.value)}}
+                    />
                   </Col>
-                  <Col md={12}>
-                    {/* <Hashtag selectedTags={selectedTags} /> */}
-                  </Col>
+                  <Col md={12}></Col>
                 </Row>
                 <Row>
                   <Col md={6}>
@@ -251,6 +256,7 @@ export default function CreateGroup() {
                       <input
                         type="text"
                         value={maxplayer}
+                        name="Maxplayer"
                         onChange={(e) => {
                           setMaxplayer(e.target.value);
                         }}
@@ -313,13 +319,7 @@ export default function CreateGroup() {
                       ประเภทของคอมมู (ใช้ , ในการแบ่งคำ)
                     </h4>
                   </label>
-                  <input
-                    type="text"
-                    value={genreString}
-                    onChange={(e) => {
-                      setGenreString(e.target.value);
-                    }}
-                  ></input>
+                  <Hashtag selectedTags={selectedTags} />
                 </Row>
                 <Row md={12}>
                   <label>
@@ -406,8 +406,8 @@ export default function CreateGroup() {
                   ></input>
                 </Row>
 
-                <button type="submit">สร้างคอมมู</button>
-              </form>
+                <button onClick={HandleSubmit}>สร้างคอมมู</button>
+              </div>
             </Container>
           </Col>
           <Col md={2}></Col>
