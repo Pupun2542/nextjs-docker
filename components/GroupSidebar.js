@@ -15,6 +15,7 @@ function GroupSidebar() {
   const db = getFirestore(app);
   const auth = getAuth(app);
   const [commu, setCommu] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const Fetchdata = async () => {
@@ -23,20 +24,22 @@ function GroupSidebar() {
         where("Creator", "==", auth.currentUser.uid)
       );
       const QuerySnapshot = await getDocs(q);
-      setCommu(QuerySnapshot.docs.map((doc) => ({ ...doc })));
+      QuerySnapshot.docs.map(doc => doc.data())
+      setCommu(QuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      setLoading(false);
     };
     Fetchdata();
   }, []);
-  console.log(commu.length);
+  // console.log(commu.length);
   return (
     <div>
-      {commu.map((value, index) => {
-        // console.log(value.data());
+      {!loading&&commu.map((value, index) => {
+        console.log(value.id);
         return (
           <div key={index}>
             <Link href={"/group/" + value.id}>
               <a>
-                <h3>LINK</h3>
+                <h3>{value.Name}</h3>
               </a>
             </Link>
           </div>

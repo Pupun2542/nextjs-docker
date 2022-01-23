@@ -81,7 +81,7 @@ function CustomNavbar() {
             <Nav.Link href="/creategroup">
               <span className={style.NavTextColor}>Create Commu</span>
             </Nav.Link>
-            <Nav.Link href="/Mygroup">
+            <Nav.Link href="/group">
               <span className={style.NavTextColor}>My Group</span>
             </Nav.Link>
           </Nav>

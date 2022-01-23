@@ -17,9 +17,10 @@ import { async } from "@firebase/util";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
 import GroupSidebar from "../components/GroupSidebar";
+import { useApp } from "../src/hook/local";
 
 export default function Mygroup() {
-  const app = getApp();
+  const app = useApp();
   const db = getFirestore(app);
   const auth = getAuth(app);
   const Router = useRouter();
