@@ -29,56 +29,32 @@ export default function Group() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
 
-  const CurrentUser = () => {
-    const [user, loading, error] = useAuthState(auth);
-    const { id } = Router.query;
-    useEffect(() => {
-        const Fetchdata = async () => {
-            const d = getDoc(doc(db, "group", id)).then((d) => {
-              setData(d.data());
-              setLoading(false);
-            });
-            
-        };
-        if (id) Fetchdata();
-    }, [id]);
-    
-    if (loading) {
-      return (
-        <SSRProvider>
-          <CustomNavbar />
-        </SSRProvider>
-      );
-    }
-    if (error) {
-      return (
-        <div>
-          <p>Error: {error}</p>
-        </div>
-      );
-    }
+  const { id } = Router.query;
+  useEffect(() => {
+    const Fetchdata = async () => {
+      const d = getDoc(doc(db, "group", id)).then((d) => {
+        setData(d.data());
+        setLoading(false);
+      });
+    };
+    if (id) Fetchdata();
+  }, [id]);
 
-    if (user) {
-      return (
-        <div>
-          <CustomNavbar />
-          <div></div>
-          <Row>
-            <Col md={3}>
-              <GroupSidebar />
-            </Col>
-            <Col md={6}>
-              <h1>{data.Name}</h1>
-            </Col>
-            <Col md={3}>
-              <h1>Something</h1>
-            </Col>
-          </Row>
-        </div>
-      );
-    }
-    return Router.push("/login");
-  };
-
-  return CurrentUser();
+  return (
+    <div>
+      <CustomNavbar />
+      <div></div>
+      <Row>
+        <Col md={2}>
+          <GroupSidebar />
+        </Col>
+        <Col md={8}>
+          <h1>{data.Name}</h1>
+        </Col>
+        <Col md={2}>
+          <h1>Something</h1>
+        </Col>
+      </Row>
+    </div>
+  );
 }

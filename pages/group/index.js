@@ -50,14 +50,14 @@ export default function Groups() {
           <div>
           </div>
             <Row>
-              <Col md={3}>
+              <Col md={2}>
                 <h1>menubar</h1>
                 <GroupSidebar/>
               </Col>
-              <Col md={6}>
+              <Col md={8}>
                 <h1>Content</h1>
               </Col>
-              <Col md={3}>
+              <Col md={2}>
                 <h1>Something</h1>
               </Col>
             </Row>

@@ -6,48 +6,62 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
-import { getApp } from "firebase/app";
 import Link from "next/link";
 import { getAuth } from "firebase/auth";
-import style from '../styles/groupsidebar.module.css'
+import style from "../styles/groupsidebar.module.css";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useApp } from "../src/hook/local";
+import { useRouter } from "next/router";
 
 function GroupSidebar() {
-  const app = getApp();
+  const app = useApp();
   const db = getFirestore(app);
   const auth = getAuth(app);
   const [commu, setCommu] = useState([]);
   const [loading, setLoading] = useState(true);
+  const Router = useRouter();
 
-  useEffect(() => {
-    const Fetchdata = async () => {
-      const q = query(
-        collection(db, "group"),
-        where("Creator", "==", auth.currentUser.uid)
-      );
-      const QuerySnapshot = await getDocs(q);
-      QuerySnapshot.docs.map(doc => doc.data())
-      setCommu(QuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-      setLoading(false);
-    };
-    Fetchdata();
-  }, []);
-  // console.log(commu.length);
-  return (
-    <div>
-      {!loading&&commu.map((value, index) => {
-        console.log(value.id);
-        return (
-          <div key={index}>
-            <Link href={"/group/" + value.id}>
-              <a>
-                <h3>{value.Name}</h3>
-              </a>
-            </Link>
-          </div>
+  const CurrentUser = () => {
+    const [user, loading, error] = useAuthState(auth);
+    useEffect(() => {
+      const Fetchdata = async () => {
+        const q = query(
+          collection(db, "group"),
+          where("Creator", "==", user.uid)
         );
-      })}
-    </div>
-  );
+        const QuerySnapshot = await getDocs(q);
+        QuerySnapshot.docs.map((doc) => doc.data());
+        setCommu(
+          QuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+        );
+        setLoading(false);
+      };
+      Fetchdata();
+    }, []);
+    if (user) {
+      return (
+        <div>
+          {!loading &&
+            commu.map((value, index) => {
+              console.log(value.id);
+              return (
+                <div key={index}>
+                  <Link href={"/group/" + value.id}>
+                    <a>
+                      <h3>{value.Name}</h3>
+                    </a>
+                  </Link>
+                </div>
+              );
+            })}
+        </div>
+      );
+    }
+    return Router.push("/login");
+  };
+  return CurrentUser();
+
+  // console.log(commu.length);
 }
 
 export default GroupSidebar;
