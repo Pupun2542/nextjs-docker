@@ -9,6 +9,7 @@ import {
 import { getApp } from "firebase/app";
 import Link from "next/link";
 import { getAuth } from "firebase/auth";
+import style from '../styles/groupsidebar.module.css'
 
 function GroupSidebar() {
   const app = getApp();
