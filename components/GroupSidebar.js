@@ -25,25 +25,29 @@ function GroupSidebar() {
     const [user, loading, error] = useAuthState(auth);
     useEffect(() => {
       const Fetchdata = async () => {
-        const q = query(
-          collection(db, "group"),
-          where("Creator", "==", user.uid)
-        );
-        const QuerySnapshot = await getDocs(q);
-        QuerySnapshot.docs.map((doc) => doc.data());
-        setCommu(
-          QuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-        );
-        setLoading(false);
+        if(user){
+          const q = query(
+            collection(db, "group"),
+            where("Creator", "==", user.uid)
+          );
+          const QuerySnapshot = await getDocs(q);
+          QuerySnapshot.docs.map((doc) => doc.data());
+          setCommu(
+            QuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+          );
+          setLoading(false);
+        }
       };
       Fetchdata();
-    }, []);
+    }, [user]);
     if (user) {
+
+      
       return (
         <div>
           {!loading &&
             commu.map((value, index) => {
-              console.log(value.id);
+              // console.log(value.id);
               return (
                 <div key={index}>
                   <Link href={"/group/" + value.id}>
@@ -57,7 +61,7 @@ function GroupSidebar() {
         </div>
       );
     }
-    return Router.push("/login");
+    return <div></div>
   };
   return CurrentUser();
 

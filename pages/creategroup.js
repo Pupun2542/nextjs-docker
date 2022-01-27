@@ -11,15 +11,18 @@ import {
   addDoc,
   serverTimestamp,
   setDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import "../components/caroselPreview";
+import "../components/Banner";
 // import CaroselPreview from "../components/caroselPreview";
 import { useDropzone } from "react-dropzone";
+import { useApp } from "../src/hook/local";
+import { UpdateUserGroup } from "../src/services/firestoreservice";
 
 export default function CreateGroup() {
-  const app = getApp();
+  const app = useApp();
   const db = getFirestore(app);
   const auth = getAuth();
 
@@ -102,7 +105,7 @@ export default function CreateGroup() {
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
-    console.log(tags);
+    // console.log(tags);
 
     const docRef = await addDoc(collection(db, "group"), {
       Name: communame,
@@ -124,6 +127,7 @@ export default function CreateGroup() {
       endDate: endDate,
       createAt: serverTimestamp(),
     });
+    UpdateUserGroup(auth.currentUser.uid, docRef)
     // console.log(docRef.id);
     setTags([]);
     setCommuname("");
@@ -200,12 +204,14 @@ export default function CreateGroup() {
                 <Row>
                   <Col>
                     <label>
-                      <h4 className={style.label}>Hashtag</h4>
+                      <h4 className={style.label}>ชื่อย่อคอมมู ไม่เกิน 4 ตัวอักษร</h4>
                     </label>
                     <input
                       type="text"
                       value={hashtag}
                       onChange={(e)=>{setHashtag(e.target.value)}}
+                      required
+                      maxLength="4"
                     />
                   </Col>
                   <Col md={12}></Col>
@@ -220,6 +226,7 @@ export default function CreateGroup() {
                         onChange={(e) => {
                           setCommuname(e.target.value);
                         }}
+                        required
                       ></input>
                     </label>
                   </Col>
@@ -243,6 +250,7 @@ export default function CreateGroup() {
                       onChange={(e) => {
                         setPrivacy(e.target.value);
                       }}
+                      checked
                     ></input>
                     <label>
                       <h6 className={style.radio}>สาธารณะ</h6>
@@ -254,7 +262,7 @@ export default function CreateGroup() {
                     <label>
                       <h4 className={style.label}>จำนวนรับ</h4>
                       <input
-                        type="text"
+                        type="number"
                         value={maxplayer}
                         name="Maxplayer"
                         onChange={(e) => {
@@ -286,6 +294,7 @@ export default function CreateGroup() {
                         onChange={(e) => {
                           setRegDate(e.target.value);
                         }}
+                        required
                       ></input>
                     </label>
                   </Col>
@@ -403,6 +412,7 @@ export default function CreateGroup() {
                     onChange={(e) => {
                       setContactlink(e.target.value);
                     }}
+                    required
                   ></input>
                 </Row>
 

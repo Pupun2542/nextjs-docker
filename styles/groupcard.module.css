@@ -1,0 +1,11 @@
+.card {
+    background-color: darkgray;
+    padding: 5px;
+    box-sizing: border-box;
+}
+.genre {
+    background-color: gray;
+    padding: 2px;
+    text-align: center;
+    color: white;
+}

@@ -3,20 +3,24 @@ import { getApp } from "firebase/app"
 import "../config/firebase.config"
 import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useContext } from "react";
-import { ProfileContext } from "../hook/local";
+import { useApp } from "../hook/local";
+import { initializeUserDb } from "./firestoreservice";
 
-const app = getApp();
+const app = useApp();
 const auth = getAuth(app);
 
-export async function SignInwithGoogle(){
+export function SignInwithGoogle(){
     // const { setLoginPhoto } = useContext(ProfileContext);
     const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    signInWithPopup(auth, provider).then(
+        (v)=>{initializeUserDb(auth.currentUser.uid)}
+    );
 }
 export async function SignInWithFacebook(){
     const provider = new FacebookAuthProvider();
-    await signInWithPopup(auth, provider);
-    
+    signInWithPopup(auth, provider).then(
+        (v)=>{initializeUserDb(auth.currentUser.uid)}
+    );
 }
 export async function Logout(){
     signOut(auth)

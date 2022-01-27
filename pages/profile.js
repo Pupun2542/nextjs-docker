@@ -56,8 +56,6 @@ export default function Profile() {
       console.log(user.photoURL);
 
       const handleNameChange = (e) => {
-        // console.log(e.target.value);
-        // setname(e.target.value);
         
         updateProfile(user, { displayName: e.target.value })
         .then(() => {
@@ -70,33 +68,6 @@ export default function Profile() {
       };
 
       return (
-        // <SSRProvider>
-        //   <div>
-        //     <CustomNavbar />
-        //     <form onSubmit={handleUpload}>
-        //       <label>profile image</label>
-        //       <input type="file"></input>
-        //       <input type="submit"></input>
-        //     </form>
-        //     <form onSubmit={savechange}>
-        //       <label>Username</label>
-        //       <input
-        //         type="text"
-        //         defaultValue={user.displayName}
-        //         onChange={(e) => {
-        //           setname(e.target.value);
-        //         }}
-        //       ></input>
-        //       <input type="submit" value="submit"></input>
-        //     </form>
-        //     <Image
-        //       src={user.photoURL}
-        //       alt="profile picture"
-        //       width={500}
-        //       height={500}
-        //     ></Image>
-        //   </div>
-        // </SSRProvider>
         <div className={style.background}>
           <SSRProvider>
             <CustomNavbar />

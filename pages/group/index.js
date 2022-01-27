@@ -18,6 +18,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
 import GroupSidebar from "../../components/GroupSidebar";
 import { useApp } from "../../src/hook/local";
+import GroupCard from "../../components/GroupCard";
 
 export default function Groups() {
   const app = useApp();
@@ -56,6 +57,7 @@ export default function Groups() {
               </Col>
               <Col md={8}>
                 <h1>Content</h1>
+                <GroupCard/>
               </Col>
               <Col md={2}>
                 <h1>Something</h1>
