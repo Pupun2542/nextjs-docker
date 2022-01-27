@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container,SSRProvider, Row, Col } from "react-bootstrap";
 import CustomNavbar from "../../components/navbar";
 import {
@@ -29,6 +29,14 @@ export default function Groups() {
 
   const CurrentUser = () => {
     const [user, loading, error] = useAuthState(auth);
+
+    useEffect(()=>{
+      if(!loading && !user){
+        Router.push("/login")
+      }
+    },[user,loading])
+
+
     if (loading) {
       return (
         <SSRProvider>
@@ -66,7 +74,7 @@ export default function Groups() {
         </div>
       );
     }
-    return Router.push("/login");
+    return <></>;
   };
 
   return CurrentUser();

@@ -43,7 +43,7 @@ function GroupCard() {
       else{
           const q = query(
             collection(db, "group"),
-            orderBy("Name")
+            orderBy("createAt", "desc")
           );
           const QuerySnapshot = await getDocs(q)
           setCommu(
@@ -62,7 +62,7 @@ function GroupCard() {
     <div>
     {!loading&&commu.map((value,index)=>{
       return(
-        <div className={style.card}>
+        <div className={style.card} onClick={()=>{Router.push("/group/"+value.id)}}>
       <Col md={2}>
         <img src={value.banner_url} height="150" width="150"></img>
       </Col>
