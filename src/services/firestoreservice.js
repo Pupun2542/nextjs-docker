@@ -2,9 +2,10 @@ import { getAuth } from "firebase/auth";
 import { async } from "@firebase/util";
 import { addDoc, collection, getFirestore, query, QuerySnapshot, serverTimestamp, setDoc,getDoc, updateDoc } from "firebase/firestore";
 import { getApp } from "firebase/app";
+import { useApp } from "../hook/local";
 // import { db } from "./firebaseadminservice";
 
-const app = getApp();
+const app = useApp();
 const db = getFirestore(app);
 
 export async function UpdateUserDetail(user) {

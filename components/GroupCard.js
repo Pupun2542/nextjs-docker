@@ -17,14 +17,14 @@ import { getAuth } from "firebase/auth";
 function GroupCard() {
   
   const Router = useRouter();
-  const { ismygroup } = Router.query();
+  // const { ismygroup } = Router.query();
 
   const app = useApp();
   const db = getFirestore(app);
   const auth = getAuth(app);
   const [commu, setCommu] = useState([]);
   const [loading, setLoading] = useState(true);
-  const query;
+  // const query;
   useEffect(() => {
     const Fetchdata = async () => {
       if(auth.currentUser){
@@ -48,25 +48,32 @@ function GroupCard() {
       }
     };
     Fetchdata();
+    
   }, []);
 
 
 
   return (
-    <div className={style.card}>
+    <div>
+    {!loading&&commu.map((value,index)=>{
+      return(
+        <div className={style.card}>
       <Col md={2}>
-        <img src={data.banner_url} height="150" width="150"></img>
+        <img src={value.banner_url} height="150" width="150"></img>
       </Col>
       <Col md={10}>
         <Row>
-          <h2>{data.Name}</h2>
+          <h2>{value.Name}</h2>
         </Row>
         <Row>
-          {data.genre.map((tag) => {
+          {value.genre.map((tag) => {
             return <div className={style.genre}>{tag}</div>;
           })}
         </Row>
       </Col>
+    </div>
+      )
+    })}
     </div>
   );
 }
