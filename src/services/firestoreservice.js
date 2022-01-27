@@ -1,11 +1,11 @@
 import { getAuth } from "firebase/auth";
 import { async } from "@firebase/util";
-import { addDoc, collection, getFirestore, query, QuerySnapshot, serverTimestamp, setDoc,getDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, getFirestore, query, QuerySnapshot, serverTimestamp, setDoc,getDoc, updateDoc, doc } from "firebase/firestore";
 import { getApp } from "firebase/app";
 import { useApp } from "../hook/local";
 // import { db } from "./firebaseadminservice";
 
-const app = useApp();
+const app = getApp();
 const db = getFirestore(app);
 
 export async function UpdateUserDetail(user) {
@@ -13,17 +13,17 @@ export async function UpdateUserDetail(user) {
 
     const docsnap = await getDoc(ref);
     if (docsnap.exists()){
-        await updateDoc(coll, lastnamechange =serverTimestamp())
+        await updateDoc(ref, {lastnamechange: serverTimestamp()})
     }
     else{
         await setDoc(ref, {
-            userid = user,
-            lastnamechange = serverTimestamp()
+            userid: user,
+            lastnamechange: serverTimestamp()
         })
     }
 }
 export async function UpdateUserGroup(user, groupId) {
-    const ref = collection(db, "userDetail", user);
+    const ref = doc(db, "userDetail", user);
 
     const docsnap = await getDoc(ref);
     if (docsnap.exists()){
@@ -42,11 +42,11 @@ export async function UpdateUserGroup(user, groupId) {
 }
 
 export async function initializeUserDb(user){
-    const ref = collection(db, "userDetail", user);
+    const ref = doc(db, "userDetail", user);
     const docsnap = await getDoc(ref);
     if (!docsnap.exists()){
         await setDoc(ref, {
-            userId = user
+            userId: user
         })
     }
 }

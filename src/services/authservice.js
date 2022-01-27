@@ -6,20 +6,23 @@ import { useContext } from "react";
 import { useApp } from "../hook/local";
 import { initializeUserDb } from "./firestoreservice";
 
-const app = useApp();
+const app = getApp();
 const auth = getAuth(app);
 
 export function SignInwithGoogle(){
     // const { setLoginPhoto } = useContext(ProfileContext);
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider).then(
-        (v)=>{initializeUserDb(auth.currentUser.uid)}
+        (v)=>{
+            console.log(v)
+            initializeUserDb(v.user.uid)
+        }
     );
 }
 export async function SignInWithFacebook(){
     const provider = new FacebookAuthProvider();
     signInWithPopup(auth, provider).then(
-        (v)=>{initializeUserDb(auth.currentUser.uid)}
+        (v)=>{initializeUserDb(v.user.uid)}
     );
 }
 export async function Logout(){

@@ -9,6 +9,7 @@ import {
   where,
   getDocs,
   getDoc,
+  orderBy,
 } from "firebase/firestore";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -17,7 +18,7 @@ import { getAuth } from "firebase/auth";
 function GroupCard() {
   
   const Router = useRouter();
-  // const { ismygroup } = Router.query();
+  const { bws } = Router.query;
 
   const app = useApp();
   const db = getFirestore(app);
@@ -27,7 +28,7 @@ function GroupCard() {
   // const query;
   useEffect(() => {
     const Fetchdata = async () => {
-      if(auth.currentUser){
+      if(auth.currentUser && bws=="mygroup"){
         const q = query(
           collection(db, "group"),
           where("Creator", "==", auth.currentUser.uid)
@@ -40,7 +41,11 @@ function GroupCard() {
         setLoading(false);
       }
       else{
-          const snapshot = await getDocs(collection(db, "group"))
+          const q = query(
+            collection(db, "group"),
+            orderBy("Name")
+          );
+          const QuerySnapshot = await getDocs(q)
           setCommu(
             QuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
           );
@@ -49,7 +54,7 @@ function GroupCard() {
     };
     Fetchdata();
     
-  }, []);
+  }, [bws]);
 
 
 
