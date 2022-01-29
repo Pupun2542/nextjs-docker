@@ -5,7 +5,7 @@ import style from '../styles/banner.module.css'
 export default function Banner(props) {
     const gid = props.groupId;
     
-
+    
 
 
 

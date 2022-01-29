@@ -5,6 +5,8 @@ import {
   query,
   where,
   getDocs,
+  getDoc,
+  doc,
 } from "firebase/firestore";
 import Link from "next/link";
 import { getAuth } from "firebase/auth";
@@ -23,19 +25,43 @@ function GroupSidebar() {
   const Router = useRouter();
 
   const CurrentUser = () => {
-    const [user, loading, error] = useAuthState(auth);
+    const [user, load, error] = useAuthState(auth);
     useEffect(() => {
       const Fetchdata = async () => {
         if (user) {
+          const ref = await getDoc(doc(db, "userDetail", user.uid));
+
+          if(ref.exists()){
+            const pinned = ref.data().PinnedGroup;
+
           const q = query(
             collection(db, "group"),
-            where("Creator", "==", user.uid)
+            where("__name__", "in", pinned)
           );
           const QuerySnapshot = await getDocs(q);
-          QuerySnapshot.docs.map((doc) => doc.data());
+          QuerySnapshot.docs.map((doc) => console.log(doc.data()));
+          
           setCommu(
             QuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
           );
+
+            // console.log(pinned)
+
+            // const pgroup = await getDoc(doc(db, "group", pinned))
+
+            // console.log(pgroup)
+            // setCommu(
+            //   pinned.map( async (g)=>{
+            //     const pinref = await getDoc(doc(db, "group", g))
+            //     if(pinref.exists){
+            //       ([{...pinref.data(),id: g}])
+            //     }
+            //   })
+            // )
+            
+          }
+
+
           setLoading(false);
         }
       };

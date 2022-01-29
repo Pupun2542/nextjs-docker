@@ -27,13 +27,13 @@ function CustomNavbar() {
     if (user) {
       return (
         <div className="ms auto">
-              <img
+              <Image
                 src={user.photoURL}
                 alt="profile picture"
                 width={40}
                 height={40}
                 className={style.Thumbnailimg}
-              ></img>
+              ></Image>
               <NavDropdown
                 title={
                   <span className={style.ThumbnailTextStyle}>

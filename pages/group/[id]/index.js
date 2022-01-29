@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, SSRProvider, Row, Col } from "react-bootstrap";
+import { Container, SSRProvider, Row, Col, Dropdown } from "react-bootstrap";
 import CustomNavbar from "../../../components/navbar";
 import {
   getFirestore,
@@ -19,6 +19,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
 import GroupSidebar from "../../../components/GroupSidebar";
 import { useApp } from "../../../src/hook/local";
+import { UpdateUserPinGroup } from "../../../src/services/firestoreservice";
 
 export default function Group() {
   const app = useApp();
@@ -28,6 +29,7 @@ export default function Group() {
 
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
+  const [pin, setPin] = useState(true);
 
   const { id } = Router.query;
   useEffect(() => {
@@ -40,6 +42,38 @@ export default function Group() {
     if (id) Fetchdata();
     // console.log(data)
   }, [id]);
+
+  const editButtonHandler = () =>{
+    Router.push("/group/"+id+"/edit")
+  }
+
+    useEffect(()=>{
+      if (auth.currentUser&&db){
+        const d = getDoc(doc(db, "userDetail", auth.currentUser.uid)).then((d) => {
+          
+          if (d.data().PinnedGroup.includes(id)){
+            // console.log(d.data().PinnedGroup.includes(id))
+            setPin(false);
+          }
+        });
+      }
+    },[auth,db,id])
+
+    const pinHandler = () =>{
+      if (auth.currentUser){
+        UpdateUserPinGroup(auth.currentUser.uid, id)
+        if(pin){
+          setPin(false);
+        }
+        else{
+          setPin(true);
+        }
+      }
+      else{
+        alert("กรุณาล็อกอินเพื่อใช้ฟังก์ชั่นปักหมุด")
+      }
+      
+    }
 
   return (
     <div>
@@ -59,7 +93,13 @@ export default function Group() {
           <div>ตรวจสอบคำถาม : {data.qaanslink ? data.qaanslink : "ยังไม่มีลิงค์ตอบคำถาม"}</div>
           <div>จำนวนรับ : {data.maxplayer ? data.maxplayer : "ไม่จำกัดจำนวนรับ"}</div>
           <div>ช่องทางติดต่อ : {data.contactlink ? data.contactlink : "ไม่มีช่องทางติดต่อ"}</div>
-          {/* {auth ? auth.currentUser.uid = data.Creator ? (<button/>) : null : null} */}
+          {auth.currentUser ? auth.currentUser.uid == data.Creator ? (<button onClick={editButtonHandler}>แก้ไขข้อมูล</button>) : null : null}
+          <Dropdown>
+            <Dropdown.Toggle>...</Dropdown.Toggle>
+            <Dropdown.Menu>
+              {pin ? <Dropdown.Item onClick={pinHandler}>ปักหมุดกลุ่มนี้</Dropdown.Item> : <Dropdown.Item onClick={pinHandler}>ถอนปักหมุดกลุ่มนี้</Dropdown.Item>}
+            </Dropdown.Menu>
+          </Dropdown>
         </Col>
         <Col md={2}>
           <h1>Something</h1>

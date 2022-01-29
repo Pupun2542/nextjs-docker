@@ -1,10 +1,10 @@
 import React from "react";
-import CustomNavbar from "../components/navbar";
-import style from "../styles/creategroup.module.css";
+import CustomNavbar from "../../../components/navbar";
+import style from "../../../styles/creategroup.module.css";
 import { useState, useEffect } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Col, Container, Row, Carousel } from "react-bootstrap";
+import { Col, Container, Row, Carousel, Alert } from "react-bootstrap";
 import {
   getFirestore,
   collection,
@@ -12,30 +12,26 @@ import {
   serverTimestamp,
   setDoc,
   updateDoc,
+  getDoc,
+  doc,
 } from "firebase/firestore";
 import { getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import "../components/Banner";
+import "../../../components/Banner";
 // import CaroselPreview from "../components/caroselPreview";
 import { useDropzone } from "react-dropzone";
-import { useApp } from "../src/hook/local";
-import { UpdateUserGroup } from "../src/services/firestoreservice";
+import { useApp } from "../../../src/hook/local";
+import { UpdateUserDetail } from "../../../src/services/firestoreservice";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
 
-export default function CreateGroup() {
+function Edit() {
   const app = useApp();
   const db = getFirestore(app);
   const auth = getAuth(app);
   const [user, loading, error] = useAuthState(auth);
-  const Router = useRouter()
-
-  useEffect(()=>{
-    if(!loading && !user){
-      Router.push("/login")
-    }
-  },[user,loading])
-
+  const Router = useRouter();
+  const { id } = Router.query;
 
   const [tags, setTags] = useState([]);
   const [hashtag, setHashtag] = useState("");
@@ -55,25 +51,47 @@ export default function CreateGroup() {
   // const [genreString, setGenreString] = useState("");
   const [privacy, setPrivacy] = useState("");
 
-  const Dropzone = () => {
-    const { getRootProps, getInputProps } = useDropzone({});
-    return (
-      <div>
-        <div {...getRootProps()}>
-          <input {...getInputProps()} />
-          <p>drop image here</p>
-        </div>
-      </div>
-    );
-  };
+  useEffect(() => {
+    if (!loading && !user) {
+      Router.push("/login");
+    } else {
+      if (id && user) {
+        getDoc(doc(db, "group", id)).then((v) => {
+          const data = v.data();
+
+          if (user.uid != data.Creator) {
+            console.log(data.Creator + " ", user);
+            alert("Unorthorized Access");
+            Router.back();
+          } else {
+            setTags(data.genre);
+            setCommuname(data.Name);
+            setMaxplayer(data.maxplayer);
+            setRegDate(data.regDate);
+            setRuntime(data.runtime);
+            setEndDate(data.endDate);
+            setSmlink(data.smlink);
+            setDescription(data.description);
+            setDoclink(data.doclink);
+            setQaasklink(data.qaasklink);
+            setQaanslink(data.qaanslink);
+            setSubmitlink(data.submitlink);
+            setResultlink(data.resultlink);
+            setContactlink(data.contactlink);
+            setPrivacy(data.Type);
+          }
+        });
+      }
+    }
+  }, [user, loading, id]);
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(tags);
 
-    const docRef = await addDoc(collection(db, "group"), {
+    // console.log(communame,privacy,hashtag,description,maxplayer,runtime,tags,smlink,doclink,qaasklink,qaanslink,submitlink,resultlink,contactlink,regDate,endDate)
+
+    const docRef = await updateDoc(doc(db, "group", id), {
       Name: communame,
-      Creator: auth.currentUser.uid,
       Type: privacy,
       tag: hashtag,
       description: description,
@@ -89,10 +107,7 @@ export default function CreateGroup() {
       contactlink: contactlink,
       regDate: regDate,
       endDate: endDate,
-      createAt: serverTimestamp(),
     });
-    UpdateUserGroup(auth.currentUser.uid, docRef)
-    // console.log(docRef.id);
     setTags([]);
     setCommuname("");
     setMaxplayer("");
@@ -108,7 +123,7 @@ export default function CreateGroup() {
     setResultlink("");
     setContactlink("");
     setPrivacy("");
-    Router.push("/group/"+docRef)
+    Router.back();
   };
 
   const Hashtag = (props) => {
@@ -116,7 +131,7 @@ export default function CreateGroup() {
       setTags([...tags.filter((_, index) => index !== indexToRemove)]);
     };
     const addTags = (event) => {
-      let tag = event.target.value.replace(",",'');
+      let tag = event.target.value.replace(",", "");
       tag = tag.trim();
       if (tag !== "") {
         setTags([...tags, tag]);
@@ -141,9 +156,7 @@ export default function CreateGroup() {
             ))}
             <input
               type="text"
-              onKeyUp={(event) =>
-                event.key === "," ? addTags(event) : null
-              }
+              onKeyUp={(event) => (event.key === "," ? addTags(event) : null)}
               placeholder="ใช้ , เพื่อแบ่งประเภท"
               className={style.input}
             />
@@ -153,7 +166,6 @@ export default function CreateGroup() {
     );
   };
   const selectedTags = (tags) => {
-    console.log(tags);
   };
 
   return (
@@ -169,12 +181,16 @@ export default function CreateGroup() {
                 <Row>
                   <Col>
                     <label>
-                      <h4 className={style.label}>ชื่อย่อคอมมู ไม่เกิน 4 ตัวอักษร</h4>
+                      <h4 className={style.label}>
+                        ชื่อย่อคอมมู ไม่เกิน 4 ตัวอักษร
+                      </h4>
                     </label>
                     <input
                       type="text"
                       value={hashtag}
-                      onChange={(e)=>{setHashtag(e.target.value)}}
+                      onChange={(e) => {
+                        setHashtag(e.target.value);
+                      }}
                       required
                       maxLength="4"
                     />
@@ -203,6 +219,7 @@ export default function CreateGroup() {
                       onChange={(e) => {
                         setPrivacy(e.target.value);
                       }}
+                      checked={privacy=="Private"}
                     ></input>
                     <label>
                       <h6 className={style.radio}>ส่วนตัว</h6>
@@ -215,7 +232,7 @@ export default function CreateGroup() {
                       onChange={(e) => {
                         setPrivacy(e.target.value);
                       }}
-                      checked
+                      checked={privacy=="Public"}
                     ></input>
                     <label>
                       <h6 className={style.radio}>สาธารณะ</h6>
@@ -381,7 +398,7 @@ export default function CreateGroup() {
                   ></input>
                 </Row>
 
-                <button onClick={HandleSubmit}>สร้างคอมมู</button>
+                <button onClick={HandleSubmit}>แก้ไข</button>
               </div>
             </Container>
           </Col>
@@ -391,3 +408,5 @@ export default function CreateGroup() {
     </div>
   );
 }
+
+export default Edit;

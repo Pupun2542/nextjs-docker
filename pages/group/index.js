@@ -60,15 +60,12 @@ export default function Groups() {
           </div>
             <Row>
               <Col md={2}>
-                <h1>menubar</h1>
                 <GroupSidebar/>
               </Col>
               <Col md={8}>
-                <h1>Content</h1>
                 <GroupCard/>
               </Col>
               <Col md={2}>
-                <h1>Something</h1>
               </Col>
             </Row>
         </div>

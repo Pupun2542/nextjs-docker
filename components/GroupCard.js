@@ -25,20 +25,22 @@ function GroupCard() {
   const auth = getAuth(app);
   const [commu, setCommu] = useState([]);
   const [loading, setLoading] = useState(true);
-  // const query;
+
   useEffect(() => {
     const Fetchdata = async () => {
-      if(auth.currentUser && bws=="mygroup"){
-        const q = query(
-          collection(db, "group"),
-          where("Creator", "==", auth.currentUser.uid)
-        );
-        const QuerySnapshot = await getDocs(q);
-        // QuerySnapshot.docs.map((doc) => doc.data());
-        setCommu(
-          QuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-        );
-        setLoading(false);
+      if(bws=="mygroup"){
+        if (auth.currentUser){
+          const q = query(
+            collection(db, "group"),
+            where("Creator", "==", auth.currentUser.uid)
+          );
+          const QuerySnapshot = await getDocs(q);
+          // QuerySnapshot.docs.map((doc) => doc.data());
+          setCommu(
+            QuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+          );
+          setLoading(false);
+        }
       }
       else{
           const q = query(
@@ -68,7 +70,7 @@ function GroupCard() {
       </Col>
       <Col md={10}>
         <Row>
-          <h2>{value.Name}</h2>
+          <h2>[{value.tag}]{value.Name}</h2>
         </Row>
         <Row>
           {value.genre.map((tag) => {
