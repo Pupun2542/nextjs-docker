@@ -22,7 +22,7 @@ export function SignInwithGoogle(){
 export async function SignInWithFacebook(){
     const provider = new FacebookAuthProvider();
     signInWithPopup(auth, provider).then(
-        (v)=>{initializeUserDb(v.user.uid)}
+        (v)=>{initializeUserDb(v.user)}
     );
 }
 export async function Logout(){
