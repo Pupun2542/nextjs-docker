@@ -71,36 +71,5 @@ export function uploadImageWithPopup() {
   const app = useApp();
   const store = getStorage(app);
 
-  const uploadPopup = () => {
-    const onDrop = useCallback((acceptedFiles) => {
-      // Do something with the files
-    }, []);
-    const [show, setShow] = useState(true);
-
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
-      onDrop,
-    });
-
-    return (
-      <Modal
-        show={show}
-        fullscreen="true"
-        onHide={() => {
-          setShow(false);
-        }}
-      >
-        <Modal.Header closeButton></Modal.Header>
-        <Modal.Body>
-          <div {...getRootProps()}>
-            <input {...getInputProps()} />
-            {isDragActive ? (
-              <p>Drop the files here ...</p>
-            ) : (
-              <p>Drag 'n' drop some files here, or click to select files</p>
-            )}
-          </div>
-        </Modal.Body>
-      </Modal>
-    );
   };
 }

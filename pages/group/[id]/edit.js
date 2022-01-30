@@ -24,6 +24,7 @@ import { useApp } from "../../../src/hook/local";
 import { UpdateUserDetail } from "../../../src/services/firestoreservice";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
+import UploadImageModal from "../../../components/Banner";
 
 function Edit() {
   const app = useApp();
@@ -50,6 +51,7 @@ function Edit() {
   const [contactlink, setContactlink] = useState("");
   // const [genreString, setGenreString] = useState("");
   const [privacy, setPrivacy] = useState("");
+  const [bannerBlob, setBannerBlob] = useState("");
 
   useEffect(() => {
     if (!loading && !user) {
@@ -79,6 +81,7 @@ function Edit() {
             setResultlink(data.resultlink);
             setContactlink(data.contactlink);
             setPrivacy(data.Type);
+            setBannerBlob(data.banner);
           }
         });
       }
@@ -107,6 +110,7 @@ function Edit() {
       contactlink: contactlink,
       regDate: regDate,
       endDate: endDate,
+      banner: bannerBlob
     });
     setTags([]);
     setCommuname("");
@@ -123,6 +127,7 @@ function Edit() {
     setResultlink("");
     setContactlink("");
     setPrivacy("");
+    setBannerBlob("");
     Router.back();
   };
 
@@ -178,6 +183,9 @@ function Edit() {
           <Col md={8}>
             <Container>
               <div>
+              <Row>
+                  <UploadImageModal setBannerBlob={setBannerBlob} BannerBlob={bannerBlob}/>
+                </Row>
                 <Row>
                   <Col>
                     <label>

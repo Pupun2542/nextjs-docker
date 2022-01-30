@@ -39,7 +39,7 @@ function GroupSidebar() {
             where("__name__", "in", pinned)
           );
           const QuerySnapshot = await getDocs(q);
-          QuerySnapshot.docs.map((doc) => console.log(doc.data()));
+          // QuerySnapshot.docs.map((doc) => console.log(doc.data()));
           
           setCommu(
             QuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))

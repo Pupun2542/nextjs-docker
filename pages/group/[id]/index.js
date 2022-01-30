@@ -34,13 +34,18 @@ export default function Group() {
   const { id } = Router.query;
   useEffect(() => {
     const Fetchdata = async () => {
-      const d = getDoc(doc(db, "group", id)).then((d) => {
-        setData(d.data());
+      getDoc(doc(db, "group", id)).then((d) => {
+        getDoc(doc(db, "userDetail", d.data().Creator)).then((staff)=>{
+          if (staff.exists){
+            setData({...d.data(), CreatorName: staff.data().displayName});
+          }
+        });
+
+        
         setLoading(false);
       });
     };
     if (id) Fetchdata();
-    // console.log(data)
   }, [id]);
 
   const editButtonHandler = () =>{
@@ -52,7 +57,6 @@ export default function Group() {
         const d = getDoc(doc(db, "userDetail", auth.currentUser.uid)).then((d) => {
           
           if (d.data().PinnedGroup.includes(id)){
-            // console.log(d.data().PinnedGroup.includes(id))
             setPin(false);
           }
         });
@@ -84,7 +88,7 @@ export default function Group() {
           <GroupSidebar />
         </Col>
         <Col md={8}>
-          <img className="Banner"></img>
+          <img src={data.banner} height={360} width={640}></img>
           <div>วันเริ่มวิ่ง : {data.regDate ? data.regDate : "ยังไม่ได้ลงวันวิ่ง"}</div>
           <div>ด็อค : {data.doclink ? data.doclink : "ยังไม่มีลิงค์ด็อค"}</div>
           <div>ส่งวิ่ง : {data.submitlink ? data.submitlink : "ยังไม่มีลิงค์วิ่ง"}</div>
@@ -93,6 +97,7 @@ export default function Group() {
           <div>ตรวจสอบคำถาม : {data.qaanslink ? data.qaanslink : "ยังไม่มีลิงค์ตอบคำถาม"}</div>
           <div>จำนวนรับ : {data.maxplayer ? data.maxplayer : "ไม่จำกัดจำนวนรับ"}</div>
           <div>ช่องทางติดต่อ : {data.contactlink ? data.contactlink : "ไม่มีช่องทางติดต่อ"}</div>
+          <div>ชื่อทีมงาน : {data.CreatorName ? data.CreatorName : data.Creator}</div>
           {auth.currentUser ? auth.currentUser.uid == data.Creator ? (<button onClick={editButtonHandler}>แก้ไขข้อมูล</button>) : null : null}
           <Dropdown>
             <Dropdown.Toggle>...</Dropdown.Toggle>
@@ -102,7 +107,6 @@ export default function Group() {
           </Dropdown>
         </Col>
         <Col md={2}>
-          <h1>Something</h1>
         </Col>
       </Row>
     </div>

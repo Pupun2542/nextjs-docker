@@ -66,7 +66,7 @@ function GroupCard() {
       return(
         <div className={style.card} onClick={()=>{Router.push("/group/"+value.id)}}>
       <Col md={2}>
-        <img src={value.banner_url} height="150" width="150"></img>
+        <img src={value.banner} height="144" width="256"></img>
       </Col>
       <Col md={10}>
         <Row>

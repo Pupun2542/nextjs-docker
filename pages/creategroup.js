@@ -22,6 +22,7 @@ import { useApp } from "../src/hook/local";
 import { UpdateUserGroup } from "../src/services/firestoreservice";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
+import UploadImageModal from "../components/Banner";
 
 export default function CreateGroup() {
   const app = useApp();
@@ -52,24 +53,11 @@ export default function CreateGroup() {
   const [submitlink, setSubmitlink] = useState("");
   const [resultlink, setResultlink] = useState("");
   const [contactlink, setContactlink] = useState("");
-  // const [genreString, setGenreString] = useState("");
   const [privacy, setPrivacy] = useState("");
-
-  const Dropzone = () => {
-    const { getRootProps, getInputProps } = useDropzone({});
-    return (
-      <div>
-        <div {...getRootProps()}>
-          <input {...getInputProps()} />
-          <p>drop image here</p>
-        </div>
-      </div>
-    );
-  };
+  const [bannerBlob, setBannerBlob] = useState("");
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(tags);
 
     const docRef = await addDoc(collection(db, "group"), {
       Name: communame,
@@ -89,6 +77,7 @@ export default function CreateGroup() {
       contactlink: contactlink,
       regDate: regDate,
       endDate: endDate,
+      banner: bannerBlob,
       createAt: serverTimestamp(),
     });
     UpdateUserGroup(auth.currentUser.uid, docRef)
@@ -108,7 +97,8 @@ export default function CreateGroup() {
     setResultlink("");
     setContactlink("");
     setPrivacy("");
-    Router.push("/group/"+docRef)
+    setBannerBlob("");
+    Router.push("/group/"+docRef.id)
   };
 
   const Hashtag = (props) => {
@@ -166,6 +156,9 @@ export default function CreateGroup() {
           <Col md={8}>
             <Container>
               <div>
+                <Row>
+                  <UploadImageModal setBannerBlob={setBannerBlob} BannerBlob={bannerBlob}/>
+                </Row>
                 <Row>
                   <Col>
                     <label>

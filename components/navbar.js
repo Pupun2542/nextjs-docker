@@ -44,14 +44,14 @@ function CustomNavbar() {
                 menuVariant="dark"
                 className={style.dropdown}
               >
-                <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
+                {/* <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2">
                   Another action
                 </NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.3">
                   Something
                 </NavDropdown.Item>
-                <NavDropdown.Divider />
+                <NavDropdown.Divider /> */}
                 <NavDropdown.Item href="/logout">Logout</NavDropdown.Item>
               </NavDropdown>
         </div>
@@ -82,7 +82,7 @@ function CustomNavbar() {
               <span className={style.NavTextColor}>Create Commu</span>
             </Nav.Link>
             <Nav.Link href="/group">
-              <span className={style.NavTextColor}>My Group</span>
+              <span className={style.NavTextColor}>Browse Group</span>
             </Nav.Link>
           </Nav>
           <div className="d-flex">

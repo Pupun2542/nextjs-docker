@@ -1,0 +1,23 @@
+.bannerPlaceholder {
+    background-color: gray;
+    height: 360;
+    width: 640;
+    align-content: center;
+    cursor: pointer;
+}
+.dragdropArea {
+    height: inherit;
+    width: inherit;
+    background-color: inherit;
+    text-align: center;
+    vertical-align: middle;
+}
+.dropareaContainer {
+    height: 100%;
+    width: 100%;
+    padding :20px;
+    border: lightblue;
+    border-style: dashed;
+    border-radius: 20px;
+    background-color: inherit;
+}
