@@ -19,6 +19,7 @@ import { useRouter } from "next/router";
 import GroupSidebar from "../../components/GroupSidebar";
 import { useApp } from "../../src/hook/local";
 import GroupCard from "../../components/GroupCard";
+import style from "../../styles/group.module.css"
 
 export default function Groups() {
   const app = useApp();

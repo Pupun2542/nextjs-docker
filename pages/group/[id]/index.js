@@ -20,6 +20,7 @@ import { useRouter } from "next/router";
 import GroupSidebar from "../../../components/GroupSidebar";
 import { useApp } from "../../../src/hook/local";
 import { UpdateUserPinGroup } from "../../../src/services/firestoreservice";
+import style from "../../../styles/groupdetail.module.css"
 
 export default function Group() {
   const app = useApp();
