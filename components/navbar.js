@@ -84,6 +84,9 @@ function CustomNavbar() {
             <Nav.Link href="/group">
               <span className={style.NavTextColor}>Browse Group</span>
             </Nav.Link>
+            <Nav.Link href="/about">
+              <span className={style.NavTextColor}>About us</span>
+            </Nav.Link>
           </Nav>
           <div className="d-flex">
             <Loadthumbnail />
