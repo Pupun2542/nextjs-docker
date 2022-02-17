@@ -1,0 +1,61 @@
+.background{
+    background-color: rgb(207, 207, 207);
+    color:rgb(0, 0, 0);
+}
+.frombackground{
+    background-color:rgb(255, 255, 255);
+    border-radius: 30px;
+    padding-bottom: 50px;
+}
+
+.head{
+    font-size: 40px;
+    padding: 15px;
+    margin-bottom: 30px;
+    width: 100%;
+    text-align: center;
+    border: 2px solid;
+    border-radius: 20px;
+    background: rgb(34, 34, 34);
+    color:white;
+}
+
+.des{
+    background-color: rgb(255, 255, 255);
+    padding: 10px;
+    margin: 0px 50px;
+    color:rgb(34, 34, 34);
+
+}
+
+.des:hover{
+    color:#0052cc;
+    /*border-color:  #0052cc;
+    border: 2px solid;
+    border-radius: 20px;*/
+
+}
+
+.pic{
+    margin:auto;
+    padding: auto;
+}
+
+.button{
+    text-align: center;
+    margin: 30px 80% 20px;
+    width:8%;
+    background-color:rgb(34, 34, 34);
+}
+
+.button:hover{
+    background-color:#0052cc;
+}
+
+.subbutton{
+    text-align: center;
+}
+.subbutton:hover{
+    background-color:gainsboro;
+
+}

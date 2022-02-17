@@ -4,18 +4,21 @@
   flex-wrap: wrap;
   /* min-height: 48px; */
   /* width: 480px; */
-  padding: 0 8px;
-  border: 1px solid rgb(214, 216, 218);
-  border-radius: 6px;
+  padding: 8px 0px 12px 10px;
+  border: 1.5px solid rgb(214, 216, 218);
+  border-radius: 8px;
+  /*margin-left: 12px;*/
   background-color: white;
 }
 .input {
   /* display: table-cell; */
   flex: 1;
-  border: none;
-  height: 46px;
-  font-size: 14px;
-  padding: 4px -10px 0 0;
+  border:none;
+  border-radius: 8px;
+  height: 30px;
+  font-size: 13px;
+  padding: 5px -10px 5px 0;
+  margin-top: 5px;
   float: left;
 }
 
@@ -30,29 +33,31 @@
 .tag {
   width: auto;
   height: 32px;
-  display: flex;
+  display:flex;
   align-items: center;
   justify-content: center;
   color: #fff;
   padding: 0 8px;
   font-size: 14px;
   list-style: none;
-  border-radius: 6px;
-  margin: 0 8px 8px 0;
+  border-radius: 8px;
+  margin: 4px 5px 0 0;
   background: #0052cc;
   float: left;
 }
+
 .tagTiitle {
   margin-top: 3px;
 }
+
 .tagCloseIcon {
   display: block;
-  width: 16px;
-  height: 16px;
-  line-height: 16px;
+  width: 18px;
+  height: 18px;
+  line-height: 15px;
   text-align: center;
   font-size: 14px;
-  margin-left: 8px;
+  margin-left: 10px;
   color: #0052cc;
   border-radius: 50%;
   background: #fff;
@@ -60,22 +65,59 @@
 }
 
 .background{
-  background-color: darkgray;
+  background-color: rgb(207, 207, 207);
 }
 
 .frombackground{
-  background-color: #bf977b;
+  /*background-color: #bf977b;*/
+  background-color:rgb(255, 255, 255);
   border-radius: 30px;
+  
   /* border-bottom-left-radius: 300px; */
 }
+
 .label{
-  background-color: #9c601d;
-  color: white;
-  padding: 5px;
-  border-radius: 5px;
+  /*background-color: #9c805f;*/
+  color:black;
+  font-size: 15px;
+  padding: 6px 10px;
+  border-radius: 3px;
+  margin-right: -12px;
+  margin-top: 18px;
+  margin-left: -21px;
+  margin-bottom: -2px;
 }
 .radio{
-  font-weight: 800;
-  font-size: 30px;
+  font-weight: 600;
+  font-size: 18px;
   margin: 10px;
+  width: 60px;
+}
+
+.setDescription {
+  display: flex;
+  font-size: 15px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding: 8px 0px 8px 10px;
+  border: 1.5px solid rgb(214, 216, 218);
+  border-radius: 8px;
+  background-color: white;
+}
+
+.button{
+  font-size: 15px;
+  border-radius: 25px;
+  border:none;
+  padding: 7px;
+  margin: 30px 77% 70px;
+  width: 25%;
+  color: rgb(255, 255, 255);
+  background-color: rgb(34, 34, 34);
+
+}
+
+.button:hover{
+  color:white;
+  background-color: #0052cc;
 }
