@@ -1,15 +1,36 @@
+
+  
 .card {
-    background-color: darkgray;
-    padding: 5px;
-    box-sizing: border-box;
+    text-align: top;
+    background-color:rgb(138, 138, 138);
+    /*padding: 5px;
+    box-sizing: border-box;*/
     cursor: pointer;
+    max-width: 900px;
+    border-top: #d4d4d4 20px solid;
+    padding: 30px 0px 28px 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    /*box-shadow: 6px 0px 30px #d4d4d4;*/
 }
 .genre {
-    background-color: gray;
-    padding: 2px;
+    background-color: rgb(207, 207, 207);
+    padding: 6px;
+    height: 40px;
+    max-width: 500px;
+    width: 18%;
+    border-radius: 8px;
+    /*margin-top:-180px;*/
+    margin: 10px;
     text-align: center;
-    color: white;
+    color: rgb(0, 0, 0);
 }
 .card:hover {
     background-color: lightgray;
+}
+
+.genre:hover{
+    background-color: rgb(42, 42, 42);
+    color:white;
 }

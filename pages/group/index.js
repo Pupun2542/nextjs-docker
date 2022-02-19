@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container,SSRProvider, Row, Col } from "react-bootstrap";
 import CustomNavbar from "../../components/navbar";
+
 import {
   getFirestore,
   getDoc,
@@ -63,7 +64,7 @@ export default function Groups() {
               <Col md={2}>
                 <GroupSidebar/>
               </Col>
-              <Col md={8}>
+              <Col   md={8}>
                 <GroupCard/>
               </Col>
               <Col md={2}>

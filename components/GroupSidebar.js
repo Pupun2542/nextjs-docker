@@ -71,13 +71,13 @@ function GroupSidebar() {
       return (
         <div>
           <Row>
-            <h5>Main Hall</h5>
+            <h5 className={style.sideMain} >Main Hall</h5>
             <h5>
               <Menu />
             </h5>
           </Row>
           <Row>
-            <h5>Pinned</h5>
+            <h5 className={style.sidePinned} >Pinned</h5>
             {!loading &&
               commu.map((value, index) => {
                 // console.log(value.id);
@@ -107,12 +107,12 @@ function Menu() {
     <div>
       <Row>
         <Link href="/group/">
-          <a>Newest</a>
+          <a className={style.sideNewest}>Newest</a>
         </Link>
       </Row>
       <Row>
         <Link href="/group/?bws=mygroup">
-          <a>My Group</a>
+          <a className={style.sideGroup}>My Group</a>
         </Link>
       </Row>
     </div>

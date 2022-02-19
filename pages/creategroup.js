@@ -134,7 +134,7 @@ export default function CreateGroup() {
               onKeyUp={(event) =>
                 event.key === "," ? addTags(event) : null
               }
-              placeholder="ใช้ , เพื่อแบ่งประเภท"
+              placeholder=" ใช้ , เพื่อแบ่งประเภท"
               className={style.input}
             />
           </div>
@@ -164,7 +164,7 @@ export default function CreateGroup() {
                     <label>
                       <h4 className={style.label}>ชื่อย่อคอมมู ไม่เกิน 4 ตัวอักษร</h4>
                     </label>
-                    <input
+                    <input className={style.setDescription}
                       type="text"
                       value={hashtag}
                       onChange={(e)=>{setHashtag(e.target.value)}}
@@ -178,7 +178,7 @@ export default function CreateGroup() {
                   <Col md={6}>
                     <label>
                       <h4 className={style.label}>ชื่อคอมมู</h4>
-                      <input
+                      <input className={style.setDescription}
                         type="text"
                         value={communame}
                         onChange={(e) => {
@@ -219,7 +219,7 @@ export default function CreateGroup() {
                   <Col md={6}>
                     <label>
                       <h4 className={style.label}>จำนวนรับ</h4>
-                      <input
+                      <input className={style.setDescription}
                         type="number"
                         value={maxplayer}
                         name="Maxplayer"
@@ -232,7 +232,7 @@ export default function CreateGroup() {
                   <Col md={6}>
                     <label>
                       <h4 className={style.label}>ระยะเวลา</h4>
-                      <input
+                      <input className={style.setDescription}
                         type="text"
                         value={runtime}
                         onChange={(e) => {
@@ -246,7 +246,7 @@ export default function CreateGroup() {
                   <Col md={6}>
                     <label>
                       <h4 className={style.label}>วันวิ่ง</h4>
-                      <input
+                      <input className={style.setDescription}
                         type="date"
                         value={regDate}
                         onChange={(e) => {
@@ -259,7 +259,7 @@ export default function CreateGroup() {
                   <Col md={6}>
                     <label>
                       <h4 className={style.label}>วันที่สิ้นสุด</h4>
-                      <input
+                      <input className={style.setDescription}
                         type="date"
                         value={endDate}
                         onChange={(e) => {
@@ -273,12 +273,12 @@ export default function CreateGroup() {
                   <label>
                     <h4 className={style.label}>คำอธิบาย</h4>
                   </label>
-                  <textarea
+                  <textarea className={style.setDescription}
                     value={description}
                     onChange={(e) => {
                       setDescription(e.target.value);
                     }}
-                  ></textarea>
+                  ></textarea >
                 </Row>
                 <Row md={12}>
                   <label>
@@ -290,9 +290,9 @@ export default function CreateGroup() {
                 </Row>
                 <Row md={12}>
                   <label>
-                    <h4 className={style.label}>ลิงค์กลุ่มคอมมู</h4>
+                    <h4 className={style.label}>ลิงก์กลุ่มคอมมู</h4>
                   </label>
-                  <input
+                  <input className={style.setDescription}
                     type="url"
                     value={smlink}
                     onChange={(e) => {
@@ -302,9 +302,9 @@ export default function CreateGroup() {
                 </Row>
                 <Row md={12}>
                   <label>
-                    <h4 className={style.label}>ลิงค์ดอค</h4>
+                    <h4 className={style.label}>ลิงก์ดอค</h4>
                   </label>
-                  <input
+                  <input className={style.setDescription}
                     type="url"
                     value={doclink}
                     onChange={(e) => {
@@ -314,9 +314,9 @@ export default function CreateGroup() {
                 </Row>
                 <Row md={12}>
                   <label>
-                    <h4 className={style.label}>ลิงค์ถามคำถาม</h4>
+                    <h4 className={style.label}>ลิงก์ถามคำถาม</h4>
                   </label>
-                  <input
+                  <input className={style.setDescription}
                     type="url"
                     value={qaasklink}
                     onChange={(e) => {
@@ -326,9 +326,9 @@ export default function CreateGroup() {
                 </Row>
                 <Row md={12}>
                   <label>
-                    <h4 className={style.label}>ลิงค์ตอบคำถาม</h4>
+                    <h4 className={style.label}>ลิงก์ตอบคำถาม</h4>
                   </label>
-                  <input
+                  <input className={style.setDescription}
                     type="url"
                     value={qaanslink}
                     onChange={(e) => {
@@ -338,9 +338,9 @@ export default function CreateGroup() {
                 </Row>
                 <Row md={12}>
                   <label>
-                    <h4 className={style.label}>ลิงค์ส่งฟอร์มวิ่ง</h4>
+                    <h4 className={style.label}>ลิงก์ส่งฟอร์มวิ่ง</h4>
                   </label>
-                  <input
+                  <input className={style.setDescription}
                     type="url"
                     value={submitlink}
                     onChange={(e) => {
@@ -350,9 +350,9 @@ export default function CreateGroup() {
                 </Row>
                 <Row md={12}>
                   <label>
-                    <h4 className={style.label}>ลิงค์ตรวจผล</h4>
+                    <h4 className={style.label}>ลิงก์ตรวจผล</h4>
                   </label>
-                  <input
+                  <input className={style.setDescription}
                     type="url"
                     value={resultlink}
                     onChange={(e) => {
@@ -364,7 +364,7 @@ export default function CreateGroup() {
                   <label>
                     <h4 className={style.label}>ช่องทางติดต่อ</h4>
                   </label>
-                  <input
+                  <input className={style.setDescription}
                     type="url"
                     value={contactlink}
                     onChange={(e) => {
@@ -374,7 +374,7 @@ export default function CreateGroup() {
                   ></input>
                 </Row>
 
-                <button onClick={HandleSubmit}>สร้างคอมมู</button>
+                <button className={style.button} onClick={HandleSubmit}>สร้างคอมมู</button>
               </div>
             </Container>
           </Col>
@@ -384,3 +384,5 @@ export default function CreateGroup() {
     </div>
   );
 }
+
+

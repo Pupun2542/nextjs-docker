@@ -193,7 +193,7 @@ function Edit() {
                         ชื่อย่อคอมมู ไม่เกิน 4 ตัวอักษร
                       </h4>
                     </label>
-                    <input
+                    <input className={style.setDescription}
                       type="text"
                       value={hashtag}
                       onChange={(e) => {
@@ -209,7 +209,7 @@ function Edit() {
                   <Col md={6}>
                     <label>
                       <h4 className={style.label}>ชื่อคอมมู</h4>
-                      <input
+                      <input className={style.setDescription}
                         type="text"
                         value={communame}
                         onChange={(e) => {
@@ -220,7 +220,7 @@ function Edit() {
                     </label>
                   </Col>
                   <Col md={6}>
-                    <input
+                    <input className={style.setDescription}
                       type="radio"
                       value="Private"
                       name="Privacy"
@@ -233,7 +233,7 @@ function Edit() {
                       <h6 className={style.radio}>ส่วนตัว</h6>
                     </label>
 
-                    <input
+                    <input  className={style.setDescription}
                       type="radio"
                       value="Public"
                       name="Privacy"
@@ -251,7 +251,7 @@ function Edit() {
                   <Col md={6}>
                     <label>
                       <h4 className={style.label}>จำนวนรับ</h4>
-                      <input
+                      <input className={style.setDescription}
                         type="number"
                         value={maxplayer}
                         name="Maxplayer"
@@ -264,7 +264,7 @@ function Edit() {
                   <Col md={6}>
                     <label>
                       <h4 className={style.label}>ระยะเวลา</h4>
-                      <input
+                      <input  className={style.setDescription}
                         type="text"
                         value={runtime}
                         onChange={(e) => {
@@ -278,7 +278,7 @@ function Edit() {
                   <Col md={6}>
                     <label>
                       <h4 className={style.label}>วันวิ่ง</h4>
-                      <input
+                      <input className={style.setDescription}
                         type="date"
                         value={regDate}
                         onChange={(e) => {
@@ -291,7 +291,7 @@ function Edit() {
                   <Col md={6}>
                     <label>
                       <h4 className={style.label}>วันที่สิ้นสุด</h4>
-                      <input
+                      <input className={style.setDescription}
                         type="date"
                         value={endDate}
                         onChange={(e) => {
@@ -305,7 +305,7 @@ function Edit() {
                   <label>
                     <h4 className={style.label}>คำอธิบาย</h4>
                   </label>
-                  <textarea
+                  <textarea className={style.setDescription}
                     value={description}
                     onChange={(e) => {
                       setDescription(e.target.value);
@@ -322,9 +322,9 @@ function Edit() {
                 </Row>
                 <Row md={12}>
                   <label>
-                    <h4 className={style.label}>ลิงค์กลุ่มคอมมู</h4>
+                    <h4 className={style.label}>ลิงก์กลุ่มคอมมู</h4>
                   </label>
-                  <input
+                  <input className={style.setDescription}
                     type="url"
                     value={smlink}
                     onChange={(e) => {
@@ -334,9 +334,9 @@ function Edit() {
                 </Row>
                 <Row md={12}>
                   <label>
-                    <h4 className={style.label}>ลิงค์ดอค</h4>
+                    <h4 className={style.label}>ลิงก์ดอค</h4>
                   </label>
-                  <input
+                  <input className={style.setDescription}
                     type="url"
                     value={doclink}
                     onChange={(e) => {
@@ -346,9 +346,9 @@ function Edit() {
                 </Row>
                 <Row md={12}>
                   <label>
-                    <h4 className={style.label}>ลิงค์ถามคำถาม</h4>
+                    <h4 className={style.label}>ลิงก์ถามคำถาม</h4>
                   </label>
-                  <input
+                  <input className={style.setDescription}
                     type="url"
                     value={qaasklink}
                     onChange={(e) => {
@@ -358,9 +358,9 @@ function Edit() {
                 </Row>
                 <Row md={12}>
                   <label>
-                    <h4 className={style.label}>ลิงค์ตอบคำถาม</h4>
+                    <h4 className={style.label}>ลิงก์ตอบคำถาม</h4>
                   </label>
-                  <input
+                  <input className={style.setDescription}
                     type="url"
                     value={qaanslink}
                     onChange={(e) => {
@@ -370,9 +370,9 @@ function Edit() {
                 </Row>
                 <Row md={12}>
                   <label>
-                    <h4 className={style.label}>ลิงค์ส่งฟอร์มวิ่ง</h4>
+                    <h4 className={style.label}>ลิงก์ส่งฟอร์มวิ่ง</h4>
                   </label>
-                  <input
+                  <input className={style.setDescription}
                     type="url"
                     value={submitlink}
                     onChange={(e) => {
@@ -382,9 +382,9 @@ function Edit() {
                 </Row>
                 <Row md={12}>
                   <label>
-                    <h4 className={style.label}>ลิงค์ตรวจผล</h4>
+                    <h4 className={style.label}>ลิงก์ตรวจผล</h4>
                   </label>
-                  <input
+                  <input className={style.setDescription}
                     type="url"
                     value={resultlink}
                     onChange={(e) => {
@@ -396,7 +396,7 @@ function Edit() {
                   <label>
                     <h4 className={style.label}>ช่องทางติดต่อ</h4>
                   </label>
-                  <input
+                  <input className={style.setDescription}
                     type="url"
                     value={contactlink}
                     onChange={(e) => {
@@ -406,7 +406,7 @@ function Edit() {
                   ></input>
                 </Row>
 
-                <button onClick={HandleSubmit}>แก้ไข</button>
+                <button className={style.button} onClick={HandleSubmit}>แก้ไข</button>
               </div>
             </Container>
           </Col>

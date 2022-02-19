@@ -1,0 +1,25 @@
+.sideMain{ 
+    font-size: 18px;
+    color:black;
+    margin-top: 20px;
+    margin-bottom: 3px;
+    margin-left: 10px;
+}
+.sidePinned{
+    font-size: 18px;
+    color:black;
+    margin-bottom: 3px;
+    margin-left: 10px;
+}
+.sideNewest{
+    font-size: 18px;
+    color:black;
+    margin-bottom: 3px;
+    margin-left: 10px;
+}
+.sideGroup{
+    font-size: 18px;
+    color:black;
+    margin-bottom: 3px;
+    margin-left: 10px;
+}
