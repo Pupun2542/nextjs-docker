@@ -15,12 +15,12 @@ import Image from "next/image";
 import { useAuthState } from "react-firebase-hooks/auth";
 import "../src/config/firebase.config";
 import style from "../styles/navbar.module.css";
-// import { useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 function CustomNavbar() {
   const app = getApp();
   const auth = getAuth(app);
-  // const router = useRouter();
+  const router = useRouter();
 
   const Loadthumbnail = () => {
     const [user, loading, error] = useAuthState(auth);
@@ -75,18 +75,22 @@ function CustomNavbar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="/">
+            {/* <Nav.Link href="/">
               <span className={style.NavTextColor}>Home</span>
-            </Nav.Link>
-            <Nav.Link href="/creategroup">
+            </Nav.Link> */}
+            <img src="../public/favicon.ico" height={50} width={50} onClick={()=>router.push("/")} className={style.icon}></img>
+            {/* <Nav.Link href="/creategroup">
               <span className={style.NavTextColor}>Create Commu</span>
-            </Nav.Link>
-            <Nav.Link href="/group">
+            </Nav.Link> */}
+            <img src="../public/favicon.ico" height={50} width={50} onClick={()=>router.push("/creategroup")} className={style.icon}></img>
+            <img src="../public/favicon.ico" height={50} width={50} onClick={()=>router.push("/group")} className={style.icon}></img>
+            <img src="../public/favicon.ico" height={50} width={50} onClick={()=>router.push("/about")} className={style.icon}></img>
+            {/* <Nav.Link href="/group">
               <span className={style.NavTextColor}>Browse Group</span>
-            </Nav.Link>
-            <Nav.Link href="/about">
+            </Nav.Link> */}
+            {/* <Nav.Link href="/about">
               <span className={style.NavTextColor}>About us</span>
-            </Nav.Link>
+            </Nav.Link> */}
           </Nav>
           <div className="d-flex">
             <Loadthumbnail />

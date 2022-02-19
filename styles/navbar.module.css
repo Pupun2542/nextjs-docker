@@ -26,3 +26,7 @@
   .navmargin{
     margin-left: 10px;
   }
+  .icon{
+    cursor: pointer;
+    margin-left: 10px;
+  }
