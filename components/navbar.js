@@ -78,12 +78,12 @@ function CustomNavbar() {
             {/* <Nav.Link href="/">
               <span className={style.NavTextColor}>Home</span>
             </Nav.Link> */}
-            <img src="../public/favicon.ico" height={50} width={50} onClick={()=>router.push("/")} className={style.icon}></img>
-            {/* <Nav.Link href="/creategroup">
+{/*             <img src="../public/favicon.ico" height={50} width={50} onClick={()=>router.push("/")} className={style.icon}></img>
+ */}            {/* <Nav.Link href="/creategroup">
               <span className={style.NavTextColor}>Create Commu</span>
             </Nav.Link> */}
             <img src="../public/favicon.ico" height={50} width={50} onClick={()=>router.push("/creategroup")} className={style.icon}></img>
-            <img src="../public/favicon.ico" height={50} width={50} onClick={()=>router.push("/group")} className={style.icon}></img>
+            <img src="Group1616.png" height={50} width={50} onClick={()=>router.push("/group")} className={style.icon}></img>
             <img src="../public/favicon.ico" height={50} width={50} onClick={()=>router.push("/about")} className={style.icon}></img>
             {/* <Nav.Link href="/group">
               <span className={style.NavTextColor}>Browse Group</span>
