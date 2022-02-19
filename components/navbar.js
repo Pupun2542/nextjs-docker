@@ -27,24 +27,24 @@ function CustomNavbar() {
     if (user) {
       return (
         <div className="ms auto">
-              <Image
-                src={user.photoURL}
-                alt="profile picture"
-                width={40}
-                height={40}
-                className={style.Thumbnailimg}
-              ></Image>
-              <NavDropdown
-                title={
-                  <span className={style.ThumbnailTextStyle}>
-                    {user.displayName}
-                  </span>
-                }
-                id="basic-nav-dropdown"
-                menuVariant="dark"
-                className={style.dropdown}
-              >
-                {/* <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
+          <Image
+            src={user.photoURL}
+            alt="profile picture"
+            width={40}
+            height={40}
+            className={style.Thumbnailimg}
+          ></Image>
+          <NavDropdown
+            title={
+              <span className={style.ThumbnailTextStyle}>
+                {user.displayName}
+              </span>
+            }
+            id="basic-nav-dropdown"
+            menuVariant="dark"
+            className={style.dropdown}
+          >
+            {/* <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2">
                   Another action
                 </NavDropdown.Item>
@@ -52,8 +52,8 @@ function CustomNavbar() {
                   Something
                 </NavDropdown.Item>
                 <NavDropdown.Divider /> */}
-                <NavDropdown.Item href="/logout">Logout</NavDropdown.Item>
-              </NavDropdown>
+            <NavDropdown.Item href="/logout">Logout</NavDropdown.Item>
+          </NavDropdown>
         </div>
       );
     }
@@ -69,33 +69,44 @@ function CustomNavbar() {
 
   return (
     <Navbar bg="dark" expand="lg">
-        <Navbar.Brand href="/" className={style.navmargin}>
-          <span className={style.NavTextColor}>Comuthor</span>
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            {/* <Nav.Link href="/">
+      <Navbar.Brand href="/" className={style.navmargin}>
+        <span className={style.NavTextColor}>Comuthor</span>
+      </Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="me-auto">
+          {/* <Nav.Link href="/">
               <span className={style.NavTextColor}>Home</span>
             </Nav.Link> */}
-{/*             <img src="../public/favicon.ico" height={50} width={50} onClick={()=>router.push("/")} className={style.icon}></img>
+          {/*             <img src="../public/favicon.ico" height={50} width={50} onClick={()=>router.push("/")} className={style.icon}></img>
  */}            {/* <Nav.Link href="/creategroup">
               <span className={style.NavTextColor}>Create Commu</span>
             </Nav.Link> */}
-            <img src="../public/favicon.ico" height={50} width={50} onClick={()=>router.push("/creategroup")} className={style.icon}></img>
-            <img src="Group1616.png" height={50} width={50} onClick={()=>router.push("/group")} className={style.icon}></img>
-            <img src="../public/favicon.ico" height={50} width={50} onClick={()=>router.push("/about")} className={style.icon}></img>
-            {/* <Nav.Link href="/group">
+          <NavDropdown
+            title={
+              <img src="favicon.ico" height={45} width={45}></img>
+            }
+          >
+            <NavDropdown.Item>
+              <a href="/creatgroup"><img src="favicon.ico" height={50} width={50}></img>
+              </a>
+            </NavDropdown.Item>
+          </NavDropdown>
+
+
+          <img src="../public/favicon.ico" height={50} width={50} onClick={() => router.push("/group")} className={style.icon}></img>
+          <img src="../public/favicon.ico" height={50} width={50} onClick={() => router.push("/about")} className={style.icon}></img>
+          {/* <Nav.Link href="/group">
               <span className={style.NavTextColor}>Browse Group</span>
             </Nav.Link> */}
-            {/* <Nav.Link href="/about">
+          {/* <Nav.Link href="/about">
               <span className={style.NavTextColor}>About us</span>
             </Nav.Link> */}
-          </Nav>
-          <div className="d-flex">
-            <Loadthumbnail />
-          </div>
-        </Navbar.Collapse>
+        </Nav>
+        <div className="d-flex">
+          <Loadthumbnail />
+        </div>
+      </Navbar.Collapse>
     </Navbar>
   );
 }
