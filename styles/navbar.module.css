@@ -1,7 +1,12 @@
 
   .NavTextColor {
       color: white;
-
+      /* font-family: Montserrat subrayada; */
+      /* font-family: Della Respira; */
+      font-family: Euphorigenic;
+      font-size: 45px;
+      font-weight: lighter;
+      padding: 10px;
   }
   .ThumbnailStyle{
     padding-right: -100px;
@@ -21,11 +26,12 @@
     margin: auto;
   }
   .dropdown{
-    max-width: 170px;
+    width: 100px;
     float: right;
   }
   .navmargin{
     margin-left: 10px;
+    padding: 0px;
   }
   .icon{
     cursor: pointer;

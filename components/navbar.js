@@ -82,20 +82,20 @@ function CustomNavbar() {
  */}            {/* <Nav.Link href="/creategroup">
               <span className={style.NavTextColor}>Create Commu</span>
             </Nav.Link> */}
-          <NavDropdown
+          <NavDropdown 
             title={
-              <img src="favicon.ico" height={45} width={45}></img>
+              <img src="Group1616.png" height={50} width={50}></img >
             }
           >
-            <NavDropdown.Item>
-              <a href="/creatgroup"><img src="favicon.ico" height={50} width={50}></img>
+            <NavDropdown.Item href="/creategroup">
+              <a href="/creategroup"><img src="CreateCommu1616.png" height={50} width={50}></img>
               </a>
             </NavDropdown.Item>
           </NavDropdown>
 
 
-          <img src="../public/favicon.ico" height={50} width={50} onClick={() => router.push("/group")} className={style.icon}></img>
-          <img src="../public/favicon.ico" height={50} width={50} onClick={() => router.push("/about")} className={style.icon}></img>
+          <img src="Group1616.png" height={50} width={50} onClick={() => router.push("/group")} className={style.icon}></img>
+          <img src="Contact1616.png" height={50} width={50} onClick={() => router.push("/about")} className={style.icon}></img>
           {/* <Nav.Link href="/group">
               <span className={style.NavTextColor}>Browse Group</span>
             </Nav.Link> */}
