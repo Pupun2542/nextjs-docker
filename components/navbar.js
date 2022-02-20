@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   Navbar,
   Container,
@@ -21,6 +21,7 @@ function CustomNavbar() {
   const app = getApp();
   const auth = getAuth(app);
   const router = useRouter();
+  const [showgroup, setShowgroup] = useState(false);
 
   const Loadthumbnail = () => {
     const [user, loading, error] = useAuthState(auth);
@@ -62,7 +63,7 @@ function CustomNavbar() {
     }
     return (
       <Button variant="primary" href="/login">
-        Login?
+        Login
       </Button>
     );
   };
@@ -82,19 +83,24 @@ function CustomNavbar() {
  */}            {/* <Nav.Link href="/creategroup">
               <span className={style.NavTextColor}>Create Commu</span>
             </Nav.Link> */}
+            {/* <img src="Group1616.png" height={50} width={50} onClick={() => router.push("/group")} className={style.icon}></img> */}
           <NavDropdown 
             title={
-              <img src="Group1616.png" height={50} width={50}></img >
+                <img src="Group1616.png" height={50} width={50} onClick={()=>router.push("/group")} className={style.icon}></img >
             }
+            onMouseEnter={(e)=>setShowgroup(true)}
+            onMouseLeave={(e)=>setShowgroup(false)}
+            show={showgroup}
           >
             <NavDropdown.Item href="/creategroup">
-              <a href="/creategroup"><img src="CreateCommu1616.png" height={50} width={50}></img>
+              <a href="/creategroup">
+                <img src="CreateCommu1616.png" height={50} width={50}></img>
               </a>
             </NavDropdown.Item>
           </NavDropdown>
 
 
-          <img src="Group1616.png" height={50} width={50} onClick={() => router.push("/group")} className={style.icon}></img>
+          
           <img src="Contact1616.png" height={50} width={50} onClick={() => router.push("/about")} className={style.icon}></img>
           {/* <Nav.Link href="/group">
               <span className={style.NavTextColor}>Browse Group</span>
