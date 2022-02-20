@@ -1,25 +1,47 @@
 .sideMain{ 
+    font-family: Sarabun;
     font-size: 18px;
-    color:black;
+    color:whitesmoke;
     margin-top: 20px;
     margin-bottom: 3px;
     margin-left: 10px;
 }
 .sidePinned{
     font-size: 18px;
-    color:black;
+    font-family: Sarabun;
+    color: whitesmoke;
     margin-bottom: 3px;
     margin-left: 10px;
 }
 .sideNewest{
-    font-size: 18px;
-    color:black;
+    font-family: Sarabun;
+    font-size: 22px;
+    color: whitesmoke;
     margin-bottom: 3px;
     margin-left: 10px;
+    margin-top: 15px;
+}
+.sideNewest:hover{
+    color: aliceblue;
 }
 .sideGroup{
-    font-size: 18px;
-    color:black;
+    font-family: Sarabun;
+    font-size: 22px;
+    color: whitesmoke;
     margin-bottom: 3px;
     margin-left: 10px;
+    margin-top: 15px;
+}
+.sideGroup:hover{
+    color: aliceblue;
+}
+.padsidebar{
+    background-color: #535353;
+    height: 65px;
+    margin-top: 5px;
+    /* margin-left: 5px; */
+    border-radius: 0px 10px 10px 0px;
+}
+.padsidebar:hover{
+    background-color: #5F5A9C;
 }
