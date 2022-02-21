@@ -95,7 +95,7 @@ export async function initializeUserDb(user) {
   const docsnap = await getDoc(ref);
   if (!docsnap.exists()) {
     await setDoc(ref, {
-      userId: user.uid,
+      userId: user,
       displayName: user.displayName
     });
   }
