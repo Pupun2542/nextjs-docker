@@ -17,7 +17,14 @@ export default function Home() {
         <Row>
           <Row>Next Patch</Row>
           <Row>
-            <Col>Roleplay</Col>
+            <Col>
+            <div>
+            Roleplay
+            </div>
+            <div>
+              <img src="test_3.svg" height={200} width={200}></img>
+            </div>
+            </Col>
             <Col>Function</Col>
             <Col>Q/A</Col>
             <Col>member</Col>
