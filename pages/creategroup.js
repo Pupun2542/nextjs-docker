@@ -12,6 +12,7 @@ import {
   serverTimestamp,
   setDoc,
   updateDoc,
+  doc
 } from "firebase/firestore";
 import { getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
@@ -23,6 +24,7 @@ import { UpdateUserGroup } from "../src/services/firestoreservice";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
 import UploadImageModal from "../components/Banner";
+import { UploadBannerImage } from "../src/services/filestoreageservice";
 
 export default function CreateGroup() {
   const app = useApp();
@@ -59,6 +61,9 @@ export default function CreateGroup() {
   const HandleSubmit = async (e) => {
     e.preventDefault();
 
+
+    
+
     const docRef = await addDoc(collection(db, "group"), {
       Name: communame,
       Creator: auth.currentUser.uid,
@@ -77,10 +82,18 @@ export default function CreateGroup() {
       contactlink: contactlink,
       regDate: regDate,
       endDate: endDate,
-      banner: bannerBlob,
+      // banner: bannerBlob,
       createAt: serverTimestamp(),
     });
-    UpdateUserGroup(auth.currentUser.uid, docRef)
+    console.log(docRef.id)
+    UpdateUserGroup(auth.currentUser.uid, docRef.id)
+    const bannerurl = await UploadBannerImage(bannerBlob, docRef.id+".jpg");
+    console.log(bannerurl);
+    updateDoc(doc(db, "group", docRef.id),{
+      banner: bannerurl
+    })
+      
+    
     // console.log(docRef.id);
     setTags([]);
     setCommuname("");

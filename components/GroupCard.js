@@ -66,10 +66,10 @@ function GroupCard() {
     {!loading&&commu.map((value,index)=>{
       return(
         <div className={style.card} onClick={()=>{Router.push("/group/"+value.id)}}>
-      <Col md={2}>
+      <Col md={7} >
         <img src={value.banner} height="216" width="384"></img>
       </Col>
-      <Col md={10}>
+      <Col>
         <Row>
           <h2 className={style.namecommu}>[{value.tag}]{value.Name}</h2>
         </Row>

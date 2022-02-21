@@ -22,7 +22,7 @@ export default function Home() {
             Roleplay
             </div>
             <div>
-              <img src="test_3.svg" height={200} width={200}></img>
+              <img src="icon_1.svg" height={200} width={200}></img>
             </div>
             </Col>
             <Col>Function</Col>

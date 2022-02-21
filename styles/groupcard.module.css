@@ -5,10 +5,10 @@
     box-sizing: border-box;*/
     cursor: pointer;
     max-width: 720px;
-    padding: 0px 0px 0px 20px;
+    padding: 0px 0px 0px 15px;
     box-sizing: border-box;
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     margin-top: 10px;
     border-radius: 10px;
     margin-left: 8.5px;
@@ -23,8 +23,8 @@
     /*margin-top:-180px;*/
     text-align: center;
     color: whitesmoke;
-    margin-left: 425px;
-    margin-top: -165px;
+    /* margin-left: 425px; */
+    /* margin-top: -165px; */
 }
 .card:hover {
     background-color: #cbc9df;
@@ -35,15 +35,17 @@
     color:white;
 }
 .namecommu{
-    margin-left: 425px;
-    margin-top: -435px;
+    /* margin-left: 425px; */
+    /* margin-top: -435px; */
 }
 .padgroupcard{
     background-color: #fff;
     width: 275px;
     height: 100px;
     border-radius: 10px;
-    margin-left: 405px;
-    margin-top: -110px;
-
+    /* margin-left: 405px; */
+    /* margin-top: -110px; */
+}
+.bg{
+    background-color: #737373;
 }

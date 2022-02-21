@@ -105,6 +105,7 @@ export default function Group() {
       setShow(false);
       Router.push("/group");
     } else {
+      console.log(text,data.tag)
       alert("กรุณากรอกข้อมูลอีกครั้ง");
     }
   };
@@ -126,7 +127,7 @@ export default function Group() {
               width={640}
             ></img>
             <div className={style.head}>
-              ชื่อย่อคอมมู | {data.commuName ? data.commuName : "ชื่อคอมมู"}
+              ชื่อย่อคอมมู | {data.Name ? data.Name : "ชื่อคอมมู"}
             </div>
             <div className={style.des}>
               วันเริ่มวิ่ง :{" "}
