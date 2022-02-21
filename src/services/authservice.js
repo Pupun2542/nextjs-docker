@@ -15,7 +15,7 @@ export function SignInwithGoogle(){
     signInWithPopup(auth, provider).then(
         (v)=>{
             // console.log(v)
-            initializeUserDb(v.user.uid)
+            initializeUserDb(v.user)
         }
     );
 }

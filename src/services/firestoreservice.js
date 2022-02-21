@@ -91,11 +91,12 @@ export async function UpdateUserPinGroup(user, groupId) {
 }
 
 export async function initializeUserDb(user) {
-  const ref = doc(db, "userDetail", user);
+  // console.log(user)
+  const ref = doc(db, "userDetail", user.uid);
   const docsnap = await getDoc(ref);
   if (!docsnap.exists()) {
     await setDoc(ref, {
-      userId: user,
+      userId: user.uid,
       displayName: user.displayName
     });
   }
