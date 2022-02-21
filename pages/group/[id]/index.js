@@ -67,8 +67,10 @@ export default function Group() {
     if (auth.currentUser && db) {
       const d = getDoc(doc(db, "userDetail", auth.currentUser.uid)).then(
         (d) => {
-          if (d.data().PinnedGroup.includes(id)) {
-            setPin(false);
+          if (d.data.PinnedGroup){
+            if (d.data().PinnedGroup.includes(id)) {
+              setPin(false);
+            }
           }
         }
       );
