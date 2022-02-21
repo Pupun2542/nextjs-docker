@@ -1,36 +1,49 @@
-
-  
 .card {
     text-align: top;
     background-color:rgb(138, 138, 138);
     /*padding: 5px;
     box-sizing: border-box;*/
     cursor: pointer;
-    max-width: 900px;
-    border-top: #d4d4d4 20px solid;
-    padding: 30px 0px 28px 20px;
+    max-width: 720px;
+    padding: 0px 0px 0px 20px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    margin-top: 10px;
+    border-radius: 10px;
+    margin-left: 8.5px;
     /*box-shadow: 6px 0px 30px #d4d4d4;*/
 }
 .genre {
-    background-color: rgb(207, 207, 207);
-    padding: 6px;
-    height: 40px;
+    background-color: #7874a3;
+    height: 30px;
     max-width: 500px;
-    width: 18%;
+    width: 10%;
     border-radius: 8px;
     /*margin-top:-180px;*/
-    margin: 10px;
     text-align: center;
-    color: rgb(0, 0, 0);
+    color: whitesmoke;
+    margin-left: 425px;
+    margin-top: -165px;
 }
 .card:hover {
-    background-color: lightgray;
+    background-color: #cbc9df;
 }
 
 .genre:hover{
     background-color: rgb(42, 42, 42);
     color:white;
+}
+.namecommu{
+    margin-left: 425px;
+    margin-top: -435px;
+}
+.padgroupcard{
+    background-color: #fff;
+    width: 275px;
+    height: 100px;
+    border-radius: 10px;
+    margin-left: 405px;
+    margin-top: -110px;
+
 }

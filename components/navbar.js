@@ -62,7 +62,7 @@ function CustomNavbar() {
       return <div>loading user</div>;
     }
     return (
-      <Button variant="primary" href="/login">
+      <Button variant="primary" href="/login" className={style.bntlogin}>
         Login
       </Button>
     );
@@ -99,9 +99,9 @@ function CustomNavbar() {
             </NavDropdown.Item>
           </NavDropdown>
 
-
+ 
           
-          <img src="Contact1616.png" height={50} width={50} onClick={() => router.push("/about")} className={style.icon}></img>
+          <img src="Contact1616.png" height={50} width={50} onClick={() => router.push("/about")} className={style.icon2}></img>
           {/* <Nav.Link href="/group">
               <span className={style.NavTextColor}>Browse Group</span>
             </Nav.Link> */}

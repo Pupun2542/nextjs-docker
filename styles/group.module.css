@@ -2,3 +2,13 @@
 .cardGroup{
     margin:10px;
 }
+.groupbg{
+    background-color: #737373;
+}
+.GroupCardpad{
+    background-color: #fff;
+    width: 750px;
+    margin-left: 265px;
+    margin-top: 10px;
+    border-radius: 10px;
+}

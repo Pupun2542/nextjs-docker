@@ -73,7 +73,7 @@ function GroupSidebar() {
           <Row>
             <h5 className={style.sideMain} >Main Hall</h5>
             <h5>
-              <Menu />
+              <Menu/>
             </h5>
           </Row>
           <Row>
@@ -105,14 +105,14 @@ function GroupSidebar() {
 function Menu() {
   return (
     <div>
-      <Row>
+      <Row className={style.padsidebar}>
         <Link href="/group/">
-          <a className={style.sideNewest}>Newest</a>
+          <a className={style.sideNewest}><img src="PngItem_2135957.png" height={30} width={30}></img>&nbsp;Newest</a>
         </Link>
       </Row>
-      <Row>
+      <Row className={style.padsidebar}>
         <Link href="/group/?bws=mygroup">
-          <a className={style.sideGroup}>My Group</a>
+          <a className={style.sideGroup}><img src="PngItem_2135957.png" height={30} width={30}></img>&nbsp;My Group</a>
         </Link>
       </Row>
     </div>

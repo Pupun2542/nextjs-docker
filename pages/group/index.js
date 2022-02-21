@@ -56,7 +56,7 @@ export default function Groups() {
 
     if (user) {
       return (
-        <div>
+        <div className={style.groupbg}>
           <CustomNavbar />
           <div>
           </div>
@@ -64,7 +64,7 @@ export default function Groups() {
               <Col md={2}>
                 <GroupSidebar/>
               </Col>
-              <Col   md={8}>
+              <Col md={8} className={style.GroupCardpad}>
                 <GroupCard/>
               </Col>
               <Col md={2}>
