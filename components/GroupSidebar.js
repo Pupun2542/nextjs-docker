@@ -33,31 +33,17 @@ function GroupSidebar() {
 
           if(ref.exists()){
             const pinned = ref.data().PinnedGroup;
-
-          const q = query(
-            collection(db, "group"),
-            where("__name__", "in", pinned)
-          );
-          const QuerySnapshot = await getDocs(q);
-          // QuerySnapshot.docs.map((doc) => console.log(doc.data()));
-          
-          setCommu(
-            QuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-          );
-
-            // console.log(pinned)
-
-            // const pgroup = await getDoc(doc(db, "group", pinned))
-
-            // console.log(pgroup)
-            // setCommu(
-            //   pinned.map( async (g)=>{
-            //     const pinref = await getDoc(doc(db, "group", g))
-            //     if(pinref.exists){
-            //       ([{...pinref.data(),id: g}])
-            //     }
-            //   })
-            // )
+            if (pinned){
+              const q = query(
+                collection(db, "group"),
+                where("__name__", "in", pinned)
+              );
+              const QuerySnapshot = await getDocs(q);
+              
+              setCommu(
+                QuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+              );
+            }
             
           }
 
