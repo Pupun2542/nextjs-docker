@@ -8,9 +8,10 @@
 }
 .GroupCardpad{
     background-color: #fff;
-    width: 750px;
-    margin-left: 265px;
+    width: 890px;
+    align-items: center;
     margin-top: 10px;
     border-radius: 10px;
     min-height: 860px;
+    margin-left: 200px;
 }

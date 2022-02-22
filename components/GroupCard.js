@@ -69,7 +69,7 @@ function GroupCard() {
       <Col md={7} >
         <img src={value.banner} height="216" width="384"></img>
       </Col>
-      <Col>
+      <Col className={style.info}>
         <Row>
           <h2 className={style.namecommu}>[{value.tag}]{value.Name}</h2>
         </Row>
@@ -78,7 +78,8 @@ function GroupCard() {
             return <div className={style.genre}>{tag}</div>;
           })}
         </Row>
-        <Row className={style.padgroupcard}></Row>
+        <Row className={style.opacity}>.</Row>
+        {/* <Row className={style.padgroupcard}></Row> */}
       </Col>
     </div>
       )

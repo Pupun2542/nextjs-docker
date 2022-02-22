@@ -123,8 +123,8 @@ export default function Group() {
             <img
               className={style.pic}
               src={data.banner}
-              height={360}
-              width={640}
+              height={723}
+              width={1285}
             ></img>
             <div className={style.head}>
               ชื่อย่อคอมมู | {data.Name ? data.Name : "ชื่อคอมมู"}
@@ -164,7 +164,7 @@ export default function Group() {
             </div>
             {auth.currentUser ? (
               auth.currentUser.uid == data.Creator ? (
-                <button onClick={editButtonHandler}>แก้ไขข้อมูล</button>
+                <button onClick={editButtonHandler} className={style.button}>แก้ไขข้อมูล</button>
               ) : null
             ) : null}
             <Dropdown>
