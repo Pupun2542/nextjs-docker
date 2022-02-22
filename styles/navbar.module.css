@@ -33,8 +33,7 @@
   }
   .Thumbnailimg{
     border-radius: 20px;
-    padding-right: ;
-    /* float: right; */
+    margin-right: 5px;    /* float: right; */
     /* margin: auto; */
   }
   .Profile{
