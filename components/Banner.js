@@ -11,7 +11,6 @@ export default function UploadImageModal({setBannerBlob, BannerBlob}) {
   const [show, setShow] = useState(false);
   const [image, setImage] = useState(BannerBlob);
   const [cropmodal, setCropmodal] = useState(false);
-  const [previewmodal, setpreviewmodal] = useState(false);
   const { acceptedFiles, fileRejections, getRootProps, getInputProps } =
     useDropzone({
       accept: "image/jpeg, image/png",
@@ -57,16 +56,19 @@ export default function UploadImageModal({setBannerBlob, BannerBlob}) {
       const imageElement = cropperRef.current;
       const cropper = imageElement.cropper;
       // console.log(cropper.getCroppedCanvas().toDataURL());
-      setImage(cropper.getCroppedCanvas().toDataURL())
+      const cropped = cropper.getCroppedCanvas().toDataURL()
+      setImage(cropped);
       setCropmodal(false);
-      setBannerBlob(cropper.getCroppedCanvas().toDataURL());
+      
+      // setBannerBlob(cropper.getCroppedCanvas().toDataURL());
     };
-
+    console.log(image);
   return (
     <div>
       <div>
+        
         <img
-          src={image}
+          src={image?image : "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/group%2Fbanner%2FUploadBanner.jpg?alt=media&token=aad81eb7-7a07-4e8d-98aa-faa551116946"}
           width={750}
           height={422}
           className={style.bannerPlaceholder}

@@ -4,7 +4,8 @@ import {
   getStorage,
   ref,
   uploadBytesResumable,
-  uploadBytes
+  uploadBytes,
+  getBlob
 } from "firebase/storage";
 import { getApp } from "firebase/app";
 import { getAuth, updateProfile } from "firebase/auth";
@@ -43,30 +44,41 @@ export function Uploadprofileimg(file, name) {
 }
 
 export async function UploadBannerImage(file, name) {
+  // console.log(typeof file);
   const app = getApp();
   const store = getStorage(app);
   if (!file) {
     return;
   }
+  // const blob = new Blob(file);
   const storageref = ref(store, `group/banner/${name}`);
   // const uploadtask = uploadBytesResumable(storageref, file);
-  const upl = await uploadBytes(storageref, file);
+  const upl = await uploadBytes(storageref, blob);
   const downloadurl = await getDownloadURL(storageref);
-  return downloadurl
+  // const xhr = new XMLHttpRequest();
+  // xhr.responseText = 'blob';
+  // xhr.onload = (e) =>{
+  //   const blob = xhr.response;
+  // };
+  // xhr.open('GET', downloadurl);
+  // xhr.send();
 
-  // uploadtask.on(
-  //   "state_changed",
-  //   (snapshot) => {
-  //     // console.log(snapshot.totalBytes)
-  //   },
-  //   (error) => {
-  //     console.log(error);
-  //   },
-  //   () => {
-  //     getDownloadURL(uploadtask.snapshot.ref).then((url) => {
-  //       return url;
-  //     });
-  //   }
-  // );
-  // return;
+
+  return downloadurl
+}
+export async function UploadTempImage(file) {
+  const name = Math.floor(Math.random()*10000000000)+".jpg"
+  const app = getApp();
+  const store = getStorage(app);
+  if (!file) {
+    return;
+  }
+  // const blob = new Blob(file);
+  const storageref = ref(store, `group/temp/${name}`);
+  // const uploadtask = uploadBytesResumable(storageref, file);
+  const upl = await uploadBytes(storageref, blob);
+  const downloadurl = await getDownloadURL(storageref);
+
+
+  return downloadurl
 }

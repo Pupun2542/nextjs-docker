@@ -93,9 +93,9 @@ function CustomNavbar() {
             show={showgroup}
           >
             <NavDropdown.Item href="/creategroup">
-              <a href="/creategroup">
+              
                 <img src="CreateCommu1616.png" height={50} width={50}></img>
-              </a>
+              
             </NavDropdown.Item>
           </NavDropdown>
 
