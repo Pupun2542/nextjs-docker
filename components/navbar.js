@@ -101,7 +101,7 @@ function CustomNavbar() {
 
  
           
-          <img src="Contact1616.png" height={50} width={50} onClick={() => router.push("/about")} className={style.icon2}></img>
+          {/* <img src="Contact1616.png" height={50} width={50} onClick={() => router.push("/about")} className={style.icon2}></img> */}
           {/* <Nav.Link href="/group">
               <span className={style.NavTextColor}>Browse Group</span>
             </Nav.Link> */}

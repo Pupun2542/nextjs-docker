@@ -114,3 +114,103 @@
     flex-direction: column;
   }
 }
+.presentHome{
+  background-color: #737373;
+  /* background-color: gray; */
+  min-height: 2750px;
+}
+
+.nameComuthor{
+  font-family: Euphorigenic;
+  font-size: 150px;
+  color: #fafafa;
+  /* padding: 0px 0px 0px 190px; */
+  text-align: center;
+}
+.picfeather{
+  margin-left: 70px;
+}
+.pichome{
+  float: center;
+  opacity: 100%;
+  margin-left: 20px;
+}
+.texthome{
+  font-family: Thai Sans Lite;
+  font-size: 50px;
+  color: #eaeaea;
+  text-align: center;
+  /* margin-left: -60px; */
+  /* padding: 0px 0px 0px 100px; */
+}
+.texthome4{
+  font-family: Thai Sans Lite;
+  font-size: 50px;
+  font-weight: bold;
+  color: #eaeaea;
+  /* margin-left: -60px; */
+  padding: 10px 0px 0px 55px;
+}
+.texthome5{
+  font-family: Thai Sans Lite;
+  font-size: 50px;
+  font-weight: bold;
+  color: #eaeaea;
+  /* margin-left: -60px; */
+  padding: 10px 0px 0px 230px;
+}
+.texthome2{
+  font-family: Thai Sans Lite;
+  font-size: 42px;
+  color: #fafafa;
+  margin-left: 10px;
+  text-align: right;
+}
+.texthome3{
+  font-family: Thai Sans Lite;
+  font-size: 42px;
+  color: #eaeaea;
+  margin-left: 10px;
+  text-align: left;
+}
+.padhome{
+  background-color: #515259;
+  border-radius: 10px;
+  padding: 50px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+.textpatch{
+  font-family: Montserrat Subrayada;
+  font-size: 75px;
+  color: #fafafa;
+  text-align: center;
+}
+.textother{
+  font-family: Thai Sans Lite;
+  font-size: 40px;
+  color: #eaeaea;
+  margin-left: 10px;
+  text-align: center;
+}
+.textdot{
+  opacity: 0%;
+}
+.textHeader{
+  font-weight: bold;
+  font-family: Thai sans lite;
+  font-size: 40px;
+  color: #fafafa;
+  text-align: center;
+}
+.linkcomuthor{
+  text-decoration: none;
+  color: #9895b4;
+}
+.textother2{
+  font-family: Thai Sans Lite;
+  font-size: 50px;
+  color: #eaeaea;
+  margin-left: 10px;
+  text-align: center;
+}

@@ -172,8 +172,8 @@ export default function CreateGroup() {
       <Container className={style.frombackground}>
         {/* <CaroselPreview /> */}
         <Row>
-          <Col md={2}></Col>
-          <Col md={8}>
+          <Col md={0}></Col>
+          <Col md={10}>
             <Container>
               <div>
                 <Row>
@@ -322,7 +322,7 @@ export default function CreateGroup() {
                 </Row>
                 <Row md={12}>
                   <label>
-                    <h4 className={style.label}>ลิงก์ดอค</h4>
+                    <h4 className={style.label}>ลิงก์ข้อมูลคอมมู</h4>
                   </label>
                   <input className={style.setDescription}
                     type="url"
@@ -334,7 +334,7 @@ export default function CreateGroup() {
                 </Row>
                 <Row md={12}>
                   <label>
-                    <h4 className={style.label}>ลิงก์ถามคำถาม</h4>
+                    <h4 className={style.label}>ลิงก์ลงทะเบียนตัวละคร</h4>
                   </label>
                   <input className={style.setDescription}
                     type="url"
@@ -344,7 +344,7 @@ export default function CreateGroup() {
                     }}
                   ></input>
                 </Row>
-                <Row md={12}>
+                {/* <Row md={12}>
                   <label>
                     <h4 className={style.label}>ลิงก์ตอบคำถาม</h4>
                   </label>
@@ -367,10 +367,10 @@ export default function CreateGroup() {
                       setSubmitlink(e.target.value);
                     }}
                   ></input>
-                </Row>
+                </Row> */}
                 <Row md={12}>
                   <label>
-                    <h4 className={style.label}>ลิงก์ตรวจผล</h4>
+                    <h4 className={style.label}>ลิงก์ตรวจสอบผลการสมัคร</h4>
                   </label>
                   <input className={style.setDescription}
                     type="url"
@@ -398,7 +398,7 @@ export default function CreateGroup() {
               </div>
             </Container>
           </Col>
-          <Col md={2}></Col>
+          <Col md={0}></Col>
         </Row>
       </Container>
     </div>
