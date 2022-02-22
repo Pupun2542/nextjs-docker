@@ -12,7 +12,7 @@ import {
   serverTimestamp,
   setDoc,
   updateDoc,
-  doc
+  doc,
 } from "firebase/firestore";
 import { getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
@@ -26,27 +26,26 @@ import { useRouter } from "next/router";
 import UploadImageModal from "../components/Banner";
 import { UploadBannerImage } from "../src/services/filestoreageservice";
 import { getBlob } from "firebase/storage";
+// import { Blob } from "node:buffer";
 
 export default function CreateGroup() {
   const app = useApp();
   const db = getFirestore(app);
   const auth = getAuth(app);
   const [user, loading, error] = useAuthState(auth);
-  const Router = useRouter()
+  const Router = useRouter();
 
-  useEffect(()=>{
-    if(!loading && !user){
-      Router.push("/login")
+  useEffect(() => {
+    if (!loading && !user) {
+      Router.push("/login");
     }
-  },[user,loading])
+  }, [user, loading]);
 
-  const getplaceholder = async() =>{
+  const getplaceholder = async () => {
     const blob = await getBlob("group/banner/UploadBanner.jpg");
-    return blob
-  }
+    return blob;
+  };
 
-
- 
   const [tags, setTags] = useState([]);
   const [hashtag, setHashtag] = useState("");
   const [communame, setCommuname] = useState("");
@@ -63,13 +62,10 @@ export default function CreateGroup() {
   const [resultlink, setResultlink] = useState("");
   const [contactlink, setContactlink] = useState("");
   const [privacy, setPrivacy] = useState("");
-  const [bannerBlob, setBannerBlob] = useState("");
+  const [bannerBlob, setBannerBlob] = useState();
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
-
-
-    
 
     const docRef = await addDoc(collection(db, "group"), {
       Name: communame,
@@ -89,18 +85,17 @@ export default function CreateGroup() {
       contactlink: contactlink,
       regDate: regDate,
       endDate: endDate,
-      // banner: bannerBlob,
+      banner: bannerBlob,
       createAt: serverTimestamp(),
     });
-    console.log(docRef.id)
-    UpdateUserGroup(auth.currentUser.uid, docRef.id)
-    const bannerurl = await UploadBannerImage(bannerBlob, docRef.id+".jpg");
-    console.log(bannerurl);
-    updateDoc(doc(db, "group", docRef.id),{
-      banner: bannerurl
-    })
-      
-    
+    // console.log(docRef.id);
+    // UpdateUserGroup(auth.currentUser.uid, docRef.id);
+    // const bannerurl = await UploadBannerImage(bannerBlob, docRef.id + ".jpg");
+    // console.log(bannerurl);
+    // updateDoc(doc(db, "group", docRef.id), {
+    //   banner: bannerurl,
+    // });
+
     // console.log(docRef.id);
     setTags([]);
     setCommuname("");
@@ -118,7 +113,7 @@ export default function CreateGroup() {
     setContactlink("");
     setPrivacy("");
     setBannerBlob("");
-    Router.push("/group/"+docRef.id)
+    Router.push("/group/" + docRef.id);
   };
 
   const Hashtag = (props) => {
@@ -126,7 +121,7 @@ export default function CreateGroup() {
       setTags([...tags.filter((_, index) => index !== indexToRemove)]);
     };
     const addTags = (event) => {
-      let tag = event.target.value.replace(",",'');
+      let tag = event.target.value.replace(",", "");
       tag = tag.trim();
       if (tag !== "") {
         setTags([...tags, tag]);
@@ -151,9 +146,7 @@ export default function CreateGroup() {
             ))}
             <input
               type="text"
-              onKeyUp={(event) =>
-                event.key === "," ? addTags(event) : null
-              }
+              onKeyUp={(event) => (event.key === "," ? addTags(event) : null)}
               placeholder=" ใช้ , เพื่อแบ่งประเภท"
               className={style.input}
             />
@@ -177,17 +170,25 @@ export default function CreateGroup() {
             <Container>
               <div>
                 <Row>
-                  <UploadImageModal setBannerBlob={setBannerBlob} BannerBlob={bannerBlob}/>
+                  <UploadImageModal
+                    setBannerBlob={setBannerBlob}
+                    BannerBlob={bannerBlob}
+                  />
                 </Row>
                 <Row>
                   <Col>
                     <label>
-                      <h4 className={style.label}>ชื่อย่อคอมมู ไม่เกิน 4 ตัวอักษร</h4>
+                      <h4 className={style.label}>
+                        ชื่อย่อคอมมู ไม่เกิน 4 ตัวอักษร
+                      </h4>
                     </label>
-                    <input className={style.setDescription}
+                    <input
+                      className={style.setDescription}
                       type="text"
                       value={hashtag}
-                      onChange={(e)=>{setHashtag(e.target.value)}}
+                      onChange={(e) => {
+                        setHashtag(e.target.value);
+                      }}
                       required
                       maxLength="4"
                     />
@@ -198,7 +199,8 @@ export default function CreateGroup() {
                   <Col md={6}>
                     <label>
                       <h4 className={style.label}>ชื่อคอมมู</h4>
-                      <input className={style.setDescription}
+                      <input
+                        className={style.setDescription}
                         type="text"
                         value={communame}
                         onChange={(e) => {
@@ -239,7 +241,8 @@ export default function CreateGroup() {
                   <Col md={6}>
                     <label>
                       <h4 className={style.label}>จำนวนรับ</h4>
-                      <input className={style.setDescription}
+                      <input
+                        className={style.setDescription}
                         type="number"
                         value={maxplayer}
                         name="Maxplayer"
@@ -252,7 +255,8 @@ export default function CreateGroup() {
                   <Col md={6}>
                     <label>
                       <h4 className={style.label}>ระยะเวลา</h4>
-                      <input className={style.setDescription}
+                      <input
+                        className={style.setDescription}
                         type="text"
                         value={runtime}
                         onChange={(e) => {
@@ -266,7 +270,8 @@ export default function CreateGroup() {
                   <Col md={6}>
                     <label>
                       <h4 className={style.label}>วันวิ่ง</h4>
-                      <input className={style.setDescription}
+                      <input
+                        className={style.setDescription}
                         type="date"
                         value={regDate}
                         onChange={(e) => {
@@ -279,7 +284,8 @@ export default function CreateGroup() {
                   <Col md={6}>
                     <label>
                       <h4 className={style.label}>วันที่สิ้นสุด</h4>
-                      <input className={style.setDescription}
+                      <input
+                        className={style.setDescription}
                         type="date"
                         value={endDate}
                         onChange={(e) => {
@@ -293,12 +299,13 @@ export default function CreateGroup() {
                   <label>
                     <h4 className={style.label}>คำอธิบาย</h4>
                   </label>
-                  <textarea className={style.setDescription}
+                  <textarea
+                    className={style.setDescription}
                     value={description}
                     onChange={(e) => {
                       setDescription(e.target.value);
                     }}
-                  ></textarea >
+                  ></textarea>
                 </Row>
                 <Row md={12}>
                   <label>
@@ -312,7 +319,8 @@ export default function CreateGroup() {
                   <label>
                     <h4 className={style.label}>ลิงก์กลุ่มคอมมู</h4>
                   </label>
-                  <input className={style.setDescription}
+                  <input
+                    className={style.setDescription}
                     type="url"
                     value={smlink}
                     onChange={(e) => {
@@ -324,7 +332,8 @@ export default function CreateGroup() {
                   <label>
                     <h4 className={style.label}>ลิงก์ข้อมูลคอมมู</h4>
                   </label>
-                  <input className={style.setDescription}
+                  <input
+                    className={style.setDescription}
                     type="url"
                     value={doclink}
                     onChange={(e) => {
@@ -336,7 +345,8 @@ export default function CreateGroup() {
                   <label>
                     <h4 className={style.label}>ลิงก์ลงทะเบียนตัวละคร</h4>
                   </label>
-                  <input className={style.setDescription}
+                  <input
+                    className={style.setDescription}
                     type="url"
                     value={qaasklink}
                     onChange={(e) => {
@@ -372,7 +382,8 @@ export default function CreateGroup() {
                   <label>
                     <h4 className={style.label}>ลิงก์ตรวจสอบผลการสมัคร</h4>
                   </label>
-                  <input className={style.setDescription}
+                  <input
+                    className={style.setDescription}
                     type="url"
                     value={resultlink}
                     onChange={(e) => {
@@ -384,7 +395,8 @@ export default function CreateGroup() {
                   <label>
                     <h4 className={style.label}>ช่องทางติดต่อ</h4>
                   </label>
-                  <input className={style.setDescription}
+                  <input
+                    className={style.setDescription}
                     type="url"
                     value={contactlink}
                     onChange={(e) => {
@@ -394,7 +406,9 @@ export default function CreateGroup() {
                   ></input>
                 </Row>
 
-                <button className={style.button} onClick={HandleSubmit}>สร้างคอมมู</button>
+                <button className={style.button} onClick={HandleSubmit}>
+                  สร้างคอมมู
+                </button>
               </div>
             </Container>
           </Col>
@@ -404,5 +418,3 @@ export default function CreateGroup() {
     </div>
   );
 }
-
-

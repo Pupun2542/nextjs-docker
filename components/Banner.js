@@ -6,8 +6,7 @@ import Dropzone from "react-dropzone";
 import "cropperjs/dist/cropper.css";
 import { Cropper } from "react-cropper";
 
-export default function UploadImageModal({setBannerBlob, BannerBlob}) {
-
+export default function UploadImageModal({ setBannerBlob, BannerBlob }) {
   const [show, setShow] = useState(false);
   const [image, setImage] = useState(BannerBlob);
   const [cropmodal, setCropmodal] = useState(false);
@@ -15,23 +14,16 @@ export default function UploadImageModal({setBannerBlob, BannerBlob}) {
     useDropzone({
       accept: "image/jpeg, image/png",
       maxFiles: 1,
+      maxSize: 1048486,
     });
 
   if (fileRejections.length > 0) {
-    fileRejections.map(({ file, errors }) => {
-      alert(
-        "ไม่สามารถอัพโหลดไฟล์ " +
-          file.name +
-          " เนื่องจาก " +
-          errors.map((e) => e.message)
-      );
-    });
+    alert("ไม่สามารถอัพโหลดไฟล์ได้");
+    fileRejections.pop();
   }
-  useEffect(()=>{
+  useEffect(() => {
     setImage(BannerBlob);
-  },[BannerBlob])
-  
-
+  }, [BannerBlob]);
 
   useEffect(() => {
     if (acceptedFiles.length > 0) {
@@ -44,7 +36,7 @@ export default function UploadImageModal({setBannerBlob, BannerBlob}) {
         };
         reader.readAsDataURL(file);
       });
-    
+
       setShow(false);
       setCropmodal(true);
       // imageCropper();
@@ -52,23 +44,26 @@ export default function UploadImageModal({setBannerBlob, BannerBlob}) {
   }, [acceptedFiles]);
 
   const cropperRef = useRef(null);
-    const onCrop = () => {
-      const imageElement = cropperRef.current;
-      const cropper = imageElement.cropper;
-      // console.log(cropper.getCroppedCanvas().toDataURL());
-      const cropped = cropper.getCroppedCanvas().toDataURL()
-      setImage(cropped);
-      setCropmodal(false);
-      
-      // setBannerBlob(cropper.getCroppedCanvas().toDataURL());
-    };
-    console.log(image);
+  const onCrop = () => {
+    const imageElement = cropperRef.current;
+    const cropper = imageElement.cropper;
+    // console.log(cropper.getCroppedCanvas().toDataURL());
+    const cropped = cropper.getCroppedCanvas().toDataURL();
+    setImage(cropped);
+    setCropmodal(false);
+
+    setBannerBlob(cropped);
+  };
+  console.log(image);
   return (
     <div>
       <div>
-        
         <img
-          src={image?image : "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/group%2Fbanner%2FUploadBanner.jpg?alt=media&token=aad81eb7-7a07-4e8d-98aa-faa551116946"}
+          src={
+            image
+              ? image
+              : "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/group%2Fbanner%2FUploadBanner.jpg?alt=media&token=aad81eb7-7a07-4e8d-98aa-faa551116946"
+          }
           width={750}
           height={422}
           className={style.bannerPlaceholder}
@@ -94,7 +89,10 @@ export default function UploadImageModal({setBannerBlob, BannerBlob}) {
           <section className={style.dropareaContainer}>
             <div {...getRootProps()} className={style.dragdropArea}>
               <input {...getInputProps()} />
-              <div className={style.dragdropArea}>Drop file here</div>
+              <div className={style.dragdropArea}>
+                <h2>Drop image file here</h2>
+                <h4>ขนาดไม่เกิน 1MB</h4>
+              </div>
             </div>
           </section>
         </Modal.Body>
@@ -102,26 +100,28 @@ export default function UploadImageModal({setBannerBlob, BannerBlob}) {
       </Modal>
 
       <Modal
-          show={cropmodal}
-          fullscreen={true}
-          onHide={() => setCropmodal(false)}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Crop Image</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Cropper
-              src={image}
-              style={{ height: 400, width: "100%" }}
-              // Cropper.js options
-              aspectRatio={16 / 9}
-              guides={false}
-              // crop={onCrop}
-              ref={cropperRef}
-            />
-          </Modal.Body>
-          <Modal.Footer><Button onClick={onCrop}>ยืนยัน</Button></Modal.Footer>
-        </Modal>
+        show={cropmodal}
+        fullscreen={true}
+        onHide={() => setCropmodal(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Crop Image</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Cropper
+            src={image}
+            style={{ height: 400, width: "100%" }}
+            // Cropper.js options
+            aspectRatio={16 / 9}
+            guides={false}
+            // crop={onCrop}
+            ref={cropperRef}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={onCrop}>ยืนยัน</Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
