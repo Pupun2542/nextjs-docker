@@ -94,11 +94,11 @@ function CustomNavbar() {
           >
             <NavDropdown.Item href="/creategroup">
                 <img src="CreateCommu1616.png" height={50} width={50}></img>
-                <p>สร้างคอมมู</p>
+                {/* <p>สร้างคอมมู</p> */}
             </NavDropdown.Item>
             <NavDropdown.Item href="/group">
                 <img src="Group1616.png" height={50} width={50}></img>
-                <p>ค้นหาคอมมู</p>
+                {/* <p>ค้นหาคอมมู</p> */}
             </NavDropdown.Item>
           </NavDropdown>
 

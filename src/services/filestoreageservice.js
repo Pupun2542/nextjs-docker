@@ -44,7 +44,7 @@ export function Uploadprofileimg(file, name) {
 }
 
 export async function UploadBannerImage(file, name) {
-  // console.log(typeof file);
+  // const file = new File([file], name)
   const app = getApp();
   const store = getStorage(app);
   if (!file) {
@@ -55,14 +55,6 @@ export async function UploadBannerImage(file, name) {
   // const uploadtask = uploadBytesResumable(storageref, file);
   const upl = await uploadBytes(storageref, blob);
   const downloadurl = await getDownloadURL(storageref);
-  // const xhr = new XMLHttpRequest();
-  // xhr.responseText = 'blob';
-  // xhr.onload = (e) =>{
-  //   const blob = xhr.response;
-  // };
-  // xhr.open('GET', downloadurl);
-  // xhr.send();
-
 
   return downloadurl
 }
@@ -78,7 +70,4 @@ export async function UploadTempImage(file) {
   // const uploadtask = uploadBytesResumable(storageref, file);
   const upl = await uploadBytes(storageref, blob);
   const downloadurl = await getDownloadURL(storageref);
-
-
-  return downloadurl
 }
