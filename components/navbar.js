@@ -27,7 +27,7 @@ function CustomNavbar() {
     const [user, loading, error] = useAuthState(auth);
     if (user) {
       return (
-        <div className="ms auto">
+        <div className={style.Profile}>
           <NavDropdown
             title={
               <span className={style.ThumbnailTextStyle}>
@@ -45,7 +45,7 @@ function CustomNavbar() {
             menuVariant="dark"
             className={style.dropdown}
           >
-            <NavDropdown.Item href="/logout">Logout</NavDropdown.Item>
+            <NavDropdown.Item href="/logout" className={style.drop}>Logout</NavDropdown.Item>
           </NavDropdown>
         </div>
       );

@@ -33,12 +33,16 @@
   }
   .Thumbnailimg{
     border-radius: 20px;
-    float: right;
-    margin: auto;
+    padding-right: ;
+    /* float: right; */
+    /* margin: auto; */
+  }
+  .Profile{
+    margin-right: 40px;
   }
   .dropdown{
     width: 100px;
-    float: right;
+    float: left;
   }
   .navmargin{
     margin-left: 10px;
