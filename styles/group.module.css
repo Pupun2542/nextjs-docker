@@ -20,11 +20,23 @@
     float: right;
     margin-right: -12px;
     margin-top: 50px;
-    width: 20%; 
+    width: 75%;
+    height: 50px;
+    border-radius: 10px 0px 0px 10px;
+}
+.create:hover{
+    background-color: #faa8a8;  
 }
 .textcreate{
     text-decoration: none;
     color: #fff;
+    padding-left: 20px;
+    padding-top: 15px;
+    font-size: 30px;
+}
+.textcreate:hover{
+    text-decoration: none;
+    color: rgb(95, 95, 95);
 }
 .colright{
     width: 504px;

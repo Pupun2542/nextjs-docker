@@ -45,14 +45,6 @@ function CustomNavbar() {
             menuVariant="dark"
             className={style.dropdown}
           >
-            {/* <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
-                  Another action
-                </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">
-                  Something
-                </NavDropdown.Item>
-                <NavDropdown.Divider /> */}
             <NavDropdown.Item href="/logout">Logout</NavDropdown.Item>
           </NavDropdown>
         </div>
@@ -76,41 +68,20 @@ function CustomNavbar() {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
-          {/* <Nav.Link href="/">
-              <span className={style.NavTextColor}>Home</span>
-            </Nav.Link> */}
-          {/*             <img src="../public/favicon.ico" height={50} width={50} onClick={()=>router.push("/")} className={style.icon}></img>
- */}            {/* <Nav.Link href="/creategroup">
-              <span className={style.NavTextColor}>Create Commu</span>
-            </Nav.Link> */}
-            {/* <img src="Group1616.png" height={50} width={50} onClick={() => router.push("/group")} className={style.icon}></img> */}
           <NavDropdown 
             title={
-                <img src="Group1616.png" height={50} width={50} className={style.icon}></img>
+                <img src="https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2FGroup1616.png?alt=media&token=a07238ec-3d03-4851-88d5-8642111506c0" height={50} width={50} className={style.icon}></img>
             }
-            // onMouseEnter={(e)=>setShowgroup(true)}
-            // onMouseLeave={(e)=>setShowgroup(false)}
-            // show={showgroup}
           >
             <NavDropdown.Item href="/creategroup">
-                <img src="CreateCommu1616.png" height={50} width={50}></img>
+                <img src="https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2FCreateCommu1616.png?alt=media&token=516e1afb-5447-4c4a-82d3-6fbe6d51a310" height={50} width={50}></img>
                 {/* <p>สร้างคอมมู</p> */}
             </NavDropdown.Item>
             <NavDropdown.Item href="/group">
-                <img src="Group1616.png" height={50} width={50}></img>
+                <img src="https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2FGroup1616.png?alt=media&token=a07238ec-3d03-4851-88d5-8642111506c0" height={50} width={50}></img>
                 {/* <p>ค้นหาคอมมู</p> */}
             </NavDropdown.Item>
           </NavDropdown>
-
- 
-          
-          {/* <img src="Contact1616.png" height={50} width={50} onClick={() => router.push("/about")} className={style.icon2}></img> */}
-          {/* <Nav.Link href="/group">
-              <span className={style.NavTextColor}>Browse Group</span>
-            </Nav.Link> */}
-          {/* <Nav.Link href="/about">
-              <span className={style.NavTextColor}>About us</span>
-            </Nav.Link> */}
         </Nav>
         <div className="d-flex">
           <Loadthumbnail />

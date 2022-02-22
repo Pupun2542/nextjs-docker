@@ -117,7 +117,7 @@
 .presentHome{
   background-color: #737373;
   /* background-color: gray; */
-  min-height: 2750px;
+  min-height: 4100px;
 }
 
 .nameComuthor{
@@ -205,7 +205,11 @@
 }
 .linkcomuthor{
   text-decoration: none;
-  color: #9895b4;
+  color: #cdcaea;
+  font-weight: bold;
+}
+.linkcomuthor:hover{
+  color: #9895b4
 }
 .textother2{
   font-family: Thai Sans Lite;
@@ -213,4 +217,8 @@
   color: #eaeaea;
   margin-left: 10px;
   text-align: center;
+}
+.Dotline{
+  margin-top: 10px;
+  margin-bottom: 10px;
 }

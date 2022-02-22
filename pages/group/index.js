@@ -69,7 +69,9 @@ export default function Groups() {
               </Col>
               <Col md={2} className={style.colright}>
                 <div className={style.create}>
-                  <a href="/createcommy" className={style.textcreate}>CREATE COMMU</a>
+                  <a href="/createcommy" className={style.textcreate}>
+                    <img src="plus.png" height={30} width={30}></img>
+                    &nbsp;CREATE COMMU</a>
                 </div>
               </Col>
             </Row>
