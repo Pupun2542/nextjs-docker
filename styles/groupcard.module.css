@@ -11,40 +11,42 @@
     /* flex-direction: column; */
     margin-top: 10px;
     border-radius: 10px;
-    margin-left: 8.5px;
+    margin-left: 3.5px;
     /*box-shadow: 6px 0px 30px #d4d4d4;*/
 }
 .genre {
     background-color: #7874a3;
     height: 30px;
     max-width: 500px;
-    width: 10%;
+    width: auto;
     border-radius: 8px;
     /*margin-top:-180px;*/
     text-align: center;
     color: whitesmoke;
-    /* margin-left: 425px; */
-    /* margin-top: -165px; */
+    margin-left: 5px;
+    margin-top:-5px;
 }
 .card:hover {
     background-color: #cbc9df;
 }
 
 .genre:hover{
-    background-color: rgb(42, 42, 42);
+    background-color: #9895b4;
     color:white;
 }
 .namecommu{
     /* margin-left: 425px; */
-    /* margin-top: -435px; */
+    margin-top: 5px;
+    font-size: auto;
+    max-width: 300px;
 }
 .padgroupcard{
     background-color: #fff;
-    width: 275px;
-    height: 100px;
+    width: 295px;
+    height: 95px;
     border-radius: 10px;
-    /* margin-left: 405px; */
-    /* margin-top: -110px; */
+    margin-right: 5px;
+    margin-top: 35px;
 }
 .bg{
     background-color: #737373;

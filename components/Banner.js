@@ -67,8 +67,8 @@ export default function UploadImageModal({setBannerBlob, BannerBlob}) {
       <div>
         <img
           src={image}
-          width={640}
-          height={360}
+          width={750}
+          height={422}
           className={style.bannerPlaceholder}
           onClick={() => {
             setShow(true);

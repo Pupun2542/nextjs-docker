@@ -16,6 +16,7 @@
 .sideNewest{
     font-family: Sarabun;
     font-size: 22px;
+    text-decoration: none;
     color: whitesmoke;
     margin-bottom: 3px;
     margin-left: 10px;
@@ -27,6 +28,7 @@
 .sideGroup{
     font-family: Sarabun;
     font-size: 22px;
+    text-decoration: none;
     color: whitesmoke;
     margin-bottom: 3px;
     margin-left: 10px;
