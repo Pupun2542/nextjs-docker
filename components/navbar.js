@@ -86,16 +86,19 @@ function CustomNavbar() {
             {/* <img src="Group1616.png" height={50} width={50} onClick={() => router.push("/group")} className={style.icon}></img> */}
           <NavDropdown 
             title={
-                <img src="Group1616.png" height={50} width={50} onClick={()=>router.push("/group")} className={style.icon}></img >
+                <img src="Group1616.png" height={50} width={50} className={style.icon}></img>
             }
-            onMouseEnter={(e)=>setShowgroup(true)}
-            onMouseLeave={(e)=>setShowgroup(false)}
-            show={showgroup}
+            // onMouseEnter={(e)=>setShowgroup(true)}
+            // onMouseLeave={(e)=>setShowgroup(false)}
+            // show={showgroup}
           >
             <NavDropdown.Item href="/creategroup">
-              
                 <img src="CreateCommu1616.png" height={50} width={50}></img>
-              
+                <p>สร้างคอมมู</p>
+            </NavDropdown.Item>
+            <NavDropdown.Item href="/group">
+                <img src="Group1616.png" height={50} width={50}></img>
+                <p>ค้นหาคอมมู</p>
             </NavDropdown.Item>
           </NavDropdown>
 
