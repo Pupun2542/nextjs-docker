@@ -64,18 +64,21 @@ export default function Group() {
   };
 
   useEffect(() => {
-    if (auth.currentUser && db) {
-      const d = getDoc(doc(db, "userDetail", auth.currentUser.uid)).then(
-        (d) => {
-          if (d.data.PinnedGroup){
-            if (d.data().PinnedGroup.includes(id)) {
-              setPin(false);
-            }
+    const l = async ()=>{
+      if (auth.currentUser && db) {
+        
+        const d = await getDoc(doc(db, "userDetail", auth.currentUser.uid))
+        console.log(auth.currentUser.uid);
+        if (d.data().PinnedGroup){
+          if (d.data().PinnedGroup.includes(id)) {
+            setPin(false);
+            console.log(pin);
           }
         }
-      );
+      }
     }
-  }, [auth, db, id]);
+   l();
+  }, [auth, db, id, pin]);
 
   const pinHandler = () => {
     if (auth.currentUser) {
@@ -178,7 +181,11 @@ export default function Group() {
                     ปักหมุดกลุ่มนี้
                   </Dropdown.Item>
                 ) : (
-                  <Dropdown.Item onClick={pinHandler}>
+                  <Dropdown.Item 
+                  onClick={pinHandler}
+                  className={style.subbutton}
+                  >
+                    
                     ถอนปักหมุดกลุ่มนี้
                   </Dropdown.Item>
                 )}

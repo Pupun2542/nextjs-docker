@@ -68,6 +68,9 @@ export default function Groups() {
                 <GroupCard/>
               </Col>
               <Col md={2}>
+                <div>
+                  <a href="/createcommy">CREATE COMMU</a>
+                </div>
               </Col>
             </Row>
         </div>

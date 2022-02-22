@@ -33,7 +33,9 @@ function GroupSidebar() {
 
           if(ref.exists()){
             const pinned = ref.data().PinnedGroup;
-            if (pinned){
+            console.log(pinned = ref.data().PinnedGroup)
+            
+            if (pinned && pinned.length > 0){
               const q = query(
                 collection(db, "group"),
                 where("__name__", "in", pinned)
