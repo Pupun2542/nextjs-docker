@@ -39,8 +39,11 @@
   .dropdown{
     width: 100px;
     float: right;
-    
   }
+  .dropdown::after {
+    display: none !important; 
+  }
+
   .navmargin{
     margin-left: 10px;
     padding: 0px;
