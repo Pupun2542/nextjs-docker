@@ -40,10 +40,24 @@
 .padsidebar{
     background-color: #535353;
     height: 65px;
+    max-height: auto;
     margin-top: 5px;
     /* margin-left: 5px; */
     border-radius: 0px 10px 10px 0px;
 }
 .padsidebar:hover{
+    background-color: #5F5A9C;
+}
+.pinned{
+    background-color: #535353;
+    height: 65px;
+    max-height: auto;
+    margin-top: 5px;
+    /* margin-left: 5px; */
+    border-radius: 0px 10px 10px 0px;
+    text-decoration: none;
+    color: aqua;
+}
+.pinned:hover{
     background-color: #5F5A9C;
 }
