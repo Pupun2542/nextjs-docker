@@ -69,8 +69,8 @@ export default function Groups() {
               </Col>
               <Col md={2} className={style.colright}>
                 <div className={style.create}>
-                  <a href="/createcommy" className={style.textcreate}>
-                    <img src="plus.png" height={30} width={30}></img>
+                  <a href="/creategroup" className={style.textcreate}>
+                    <img src="https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2FPlus.png?alt=media&token=802be6cb-0fc7-4bf4-b532-0d82bf418805" height={30} width={30}></img>
                     &nbsp;CREATE COMMU</a>
                 </div>
               </Col>
