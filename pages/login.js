@@ -2,6 +2,7 @@ import { getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
+import styles from "../styles/Login.module.css";
 import "../src/config/firebase.config";
 import {
   SignInwithGoogle,
@@ -51,17 +52,24 @@ function Login() {
         <CustomNavbar />
         <Row>
           <Col>
-            <h2>Sign in</h2>
-            <div>
-              <button onClick={google}>Sign in with google</button>
-              <button onClick={facebook}>Sign in with Facebook</button>
+            <h2 className={styles.textSignin}>Sign in</h2>
+            <div className={styles.padSignin}>
+              <Row className={styles.BUtton}>
+                <button onClick={google} className={styles.stylebutton}>Sign in with Google</button>
+              </Row>
+              <Row className={styles.BUtton}>
+                <button onClick={facebook} className={styles.stylebutton}>Sign in with Facebook</button>
+              </Row>
             </div>
           </Col>
-          <Col>
-            <h5>ยินดีต้อนรับกลับเข้าสู่ Comuthor อีกครั้ง</h5>
-            <div>
-              เริ่มเล่น เริ่มเขียน เริ่มสร้าง มาเริ่มต้นใหม่ที่ Comuthor กันเถอะ
+          <Col className={styles.bglogin}>
+            <div className={styles.padpr}>
+                <div>ยินดีต้อนรับกลับเข้าสู่ Comuthor อีกครั้ง</div>
+                <div>
+                  เริ่มเล่น เริ่มเขียน เริ่มสร้าง มาเริ่มต้นใหม่ที่ Comuthor กันเถอะ
+                </div>
             </div>
+            
           </Col>
         </Row>
     </SSRProvider>
