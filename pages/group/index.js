@@ -67,7 +67,7 @@ export default function Groups() {
               <Col md={8} className={style.GroupCardpad}>
                 <GroupCard/>
               </Col>
-              <Col md={2} className={style.colright}>
+              <Col className={style.colright}>
                 <div className={style.create}>
                   <a href="/creategroup" className={style.textcreate}>
                     <img src="https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2FPlus.png?alt=media&token=802be6cb-0fc7-4bf4-b532-0d82bf418805" height={30} width={30}></img>

@@ -106,6 +106,7 @@ export default function CreateGroup() {
     setContactlink("");
     setPrivacy("");
     setBannerBlob("");
+    setHashtag("");
     Router.push("/group/" + docRef.id);
   };
 
@@ -347,7 +348,7 @@ export default function CreateGroup() {
                     }}
                   ></input>
                 </Row>
-                {/* <Row md={12}>
+                <Row md={12}>
                   <label>
                     <h4 className={style.label}>ลิงก์ตอบคำถาม</h4>
                   </label>
@@ -370,7 +371,7 @@ export default function CreateGroup() {
                       setSubmitlink(e.target.value);
                     }}
                   ></input>
-                </Row> */}
+                </Row>
                 <Row md={12}>
                   <label>
                     <h4 className={style.label}>ลิงก์ตรวจสอบผลการสมัคร</h4>

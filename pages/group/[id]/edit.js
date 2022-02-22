@@ -82,6 +82,7 @@ function Edit() {
             setContactlink(data.contactlink);
             setPrivacy(data.Type);
             setBannerBlob(data.banner);
+            setHashtag(data.tag);
           }
         });
       }
@@ -130,6 +131,7 @@ function Edit() {
     setContactlink("");
     setPrivacy("");
     setBannerBlob("");
+    setHashtag("");
     Router.back();
   };
 
@@ -181,12 +183,15 @@ function Edit() {
       <Container className={style.frombackground}>
         {/* <CaroselPreview /> */}
         <Row>
-          <Col md={2}></Col>
-          <Col md={8}>
+          <Col md={0}></Col>
+          <Col md={10}>
             <Container>
               <div>
-              <Row>
-                  <UploadImageModal setBannerBlob={setBannerBlob} BannerBlob={bannerBlob}/>
+                <Row>
+                  <UploadImageModal
+                    setBannerBlob={setBannerBlob}
+                    BannerBlob={bannerBlob}
+                  />
                 </Row>
                 <Row>
                   <Col>
@@ -195,7 +200,8 @@ function Edit() {
                         ชื่อย่อคอมมู ไม่เกิน 4 ตัวอักษร
                       </h4>
                     </label>
-                    <input className={style.setDescription}
+                    <input
+                      className={style.setDescription}
                       type="text"
                       value={hashtag}
                       onChange={(e) => {
@@ -211,7 +217,8 @@ function Edit() {
                   <Col md={6}>
                     <label>
                       <h4 className={style.label}>ชื่อคอมมู</h4>
-                      <input className={style.setDescription}
+                      <input
+                        className={style.setDescription}
                         type="text"
                         value={communame}
                         onChange={(e) => {
@@ -222,27 +229,26 @@ function Edit() {
                     </label>
                   </Col>
                   <Col md={6}>
-                    <input className={style.setDescription}
+                    <input
                       type="radio"
                       value="Private"
                       name="Privacy"
                       onChange={(e) => {
                         setPrivacy(e.target.value);
                       }}
-                      checked={privacy=="Private"}
                     ></input>
                     <label>
                       <h6 className={style.radio}>ส่วนตัว</h6>
                     </label>
 
-                    <input  className={style.setDescription}
+                    <input
                       type="radio"
                       value="Public"
                       name="Privacy"
                       onChange={(e) => {
                         setPrivacy(e.target.value);
                       }}
-                      checked={privacy=="Public"}
+                      checked
                     ></input>
                     <label>
                       <h6 className={style.radio}>สาธารณะ</h6>
@@ -253,7 +259,8 @@ function Edit() {
                   <Col md={6}>
                     <label>
                       <h4 className={style.label}>จำนวนรับ</h4>
-                      <input className={style.setDescription}
+                      <input
+                        className={style.setDescription}
                         type="number"
                         value={maxplayer}
                         name="Maxplayer"
@@ -266,7 +273,8 @@ function Edit() {
                   <Col md={6}>
                     <label>
                       <h4 className={style.label}>ระยะเวลา</h4>
-                      <input  className={style.setDescription}
+                      <input
+                        className={style.setDescription}
                         type="text"
                         value={runtime}
                         onChange={(e) => {
@@ -280,7 +288,8 @@ function Edit() {
                   <Col md={6}>
                     <label>
                       <h4 className={style.label}>วันวิ่ง</h4>
-                      <input className={style.setDescription}
+                      <input
+                        className={style.setDescription}
                         type="date"
                         value={regDate}
                         onChange={(e) => {
@@ -293,7 +302,8 @@ function Edit() {
                   <Col md={6}>
                     <label>
                       <h4 className={style.label}>วันที่สิ้นสุด</h4>
-                      <input className={style.setDescription}
+                      <input
+                        className={style.setDescription}
                         type="date"
                         value={endDate}
                         onChange={(e) => {
@@ -307,7 +317,8 @@ function Edit() {
                   <label>
                     <h4 className={style.label}>คำอธิบาย</h4>
                   </label>
-                  <textarea className={style.setDescription}
+                  <textarea
+                    className={style.setDescription}
                     value={description}
                     onChange={(e) => {
                       setDescription(e.target.value);
@@ -326,7 +337,8 @@ function Edit() {
                   <label>
                     <h4 className={style.label}>ลิงก์กลุ่มคอมมู</h4>
                   </label>
-                  <input className={style.setDescription}
+                  <input
+                    className={style.setDescription}
                     type="url"
                     value={smlink}
                     onChange={(e) => {
@@ -336,9 +348,10 @@ function Edit() {
                 </Row>
                 <Row md={12}>
                   <label>
-                    <h4 className={style.label}>ลิงก์ดอค</h4>
+                    <h4 className={style.label}>ลิงก์ข้อมูลคอมมู</h4>
                   </label>
-                  <input className={style.setDescription}
+                  <input
+                    className={style.setDescription}
                     type="url"
                     value={doclink}
                     onChange={(e) => {
@@ -348,9 +361,10 @@ function Edit() {
                 </Row>
                 <Row md={12}>
                   <label>
-                    <h4 className={style.label}>ลิงก์ถามคำถาม</h4>
+                    <h4 className={style.label}>ลิงก์ลงทะเบียนตัวละคร</h4>
                   </label>
-                  <input className={style.setDescription}
+                  <input
+                    className={style.setDescription}
                     type="url"
                     value={qaasklink}
                     onChange={(e) => {
@@ -384,9 +398,10 @@ function Edit() {
                 </Row>
                 <Row md={12}>
                   <label>
-                    <h4 className={style.label}>ลิงก์ตรวจผล</h4>
+                    <h4 className={style.label}>ลิงก์ตรวจสอบผลการสมัคร</h4>
                   </label>
-                  <input className={style.setDescription}
+                  <input
+                    className={style.setDescription}
                     type="url"
                     value={resultlink}
                     onChange={(e) => {
@@ -398,7 +413,8 @@ function Edit() {
                   <label>
                     <h4 className={style.label}>ช่องทางติดต่อ</h4>
                   </label>
-                  <input className={style.setDescription}
+                  <input
+                    className={style.setDescription}
                     type="url"
                     value={contactlink}
                     onChange={(e) => {
@@ -408,11 +424,13 @@ function Edit() {
                   ></input>
                 </Row>
 
-                <button className={style.button} onClick={HandleSubmit}>แก้ไข</button>
+                <button className={style.button} onClick={HandleSubmit}>
+                  แก้ไข
+                </button>
               </div>
             </Container>
           </Col>
-          <Col md={2}></Col>
+          <Col md={0}></Col>
         </Row>
       </Container>
     </div>
