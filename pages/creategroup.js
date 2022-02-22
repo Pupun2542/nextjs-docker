@@ -25,6 +25,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
 import UploadImageModal from "../components/Banner";
 import { UploadBannerImage } from "../src/services/filestoreageservice";
+import { getBlob } from "firebase/storage";
 
 export default function CreateGroup() {
   const app = useApp();
@@ -39,7 +40,13 @@ export default function CreateGroup() {
     }
   },[user,loading])
 
+  const getplaceholder = async() =>{
+    const blob = await getBlob("group/banner/UploadBanner.jpg");
+    return blob
+  }
 
+
+ 
   const [tags, setTags] = useState([]);
   const [hashtag, setHashtag] = useState("");
   const [communame, setCommuname] = useState("");
