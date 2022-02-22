@@ -15,3 +15,17 @@
     min-height: 860px;
     margin-left: 200px;
 }
+.create{
+    background-color: #ff5757;
+    float: right;
+    margin-right: -12px;
+    margin-top: 50px;
+    width: 20%; 
+}
+.textcreate{
+    text-decoration: none;
+    color: #fff;
+}
+.colright{
+    width: 504px;
+}

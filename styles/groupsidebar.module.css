@@ -50,14 +50,23 @@
 }
 .pinned{
     background-color: #535353;
-    height: 65px;
+    min-height: 50px;
     max-height: auto;
     margin-top: 5px;
+    padding-left: 30px;
+    padding-top: 10px;
+    padding-bottom: 5px;
     /* margin-left: 5px; */
     border-radius: 0px 10px 10px 0px;
-    text-decoration: none;
-    color: aqua;
 }
 .pinned:hover{
     background-color: #5F5A9C;
+}
+.textpinned{
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+}
+.textpinned:hover{
+    color: aliceblue;
 }

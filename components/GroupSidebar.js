@@ -33,9 +33,7 @@ function GroupSidebar() {
 
           if(ref.exists()){
             const pinned = ref.data().PinnedGroup;
-            console.log(pinned = ref.data().PinnedGroup)
-            
-            if (pinned && pinned.length > 0){
+            if (pinned){
               const q = query(
                 collection(db, "group"),
                 where("__name__", "in", pinned)
@@ -70,9 +68,9 @@ function GroupSidebar() {
               commu.map((value, index) => {
                 // console.log(value.id);
                 return (
-                  <div key={index}>
+                  <div key={index} className={style.pinned}>
                     <Link href={"/group/" + value.id}>
-                      <a>
+                      <a className={style.textpinned}>
                         <h5>{value.Name}</h5>
                       </a>
                     </Link>
@@ -95,12 +93,16 @@ function Menu() {
     <div>
       <Row className={style.padsidebar}>
         <Link href="/group/">
-          <a className={style.sideNewest}><img src="PngItem_2135957.png" height={30} width={30}></img>&nbsp;Newest</a>
+          <a className={style.sideNewest}> 
+            {/* <img src="PngItem_2135957.png" height={30} width={30}></img>&nbsp; */}
+          Newest</a>
         </Link>
       </Row>
       <Row className={style.padsidebar}>
         <Link href="/group/?bws=mygroup">
-          <a className={style.sideGroup}><img src="PngItem_2135957.png" height={30} width={30}></img>&nbsp;My Group</a>
+          <a className={style.sideGroup}>
+            {/* <img src="PngItem_2135957.png" height={30} width={30}></img>&nbsp; */}
+          My Group</a>
         </Link>
       </Row>
     </div>

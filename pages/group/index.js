@@ -67,9 +67,9 @@ export default function Groups() {
               <Col md={8} className={style.GroupCardpad}>
                 <GroupCard/>
               </Col>
-              <Col md={2}>
-                <div>
-                  <a href="/createcommy">CREATE COMMU</a>
+              <Col md={2} className={style.colright}>
+                <div className={style.create}>
+                  <a href="/createcommy" className={style.textcreate}>CREATE COMMU</a>
                 </div>
               </Col>
             </Row>

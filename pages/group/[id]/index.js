@@ -135,30 +135,26 @@ export default function Group() {
             <div className={style.head}>
               {data.tag ? data.tag : "ชื่อย่อคอมมู"} | {data.Name ? data.Name : "ชื่อคอมมู"}
             </div>
-            <label>คำอธิบาย</label>
-            <div>{data.description}</div>
+            <label className={style.dis}>คำอธิบาย</label>
+            <div className={style.des}>{data.description}</div>
             <div className={style.des}>
               วันเริ่มวิ่ง :{" "}
               {data.regDate ? data.regDate : "ยังไม่ได้ลงวันวิ่ง"}
             </div>
             <div className={style.des}>
-              ด็อค : {data.doclink ? data.doclink : "ยังไม่มีลิงก์ด็อค"}
+              ลิงก์กลุ่มคอมมู : {data.doclink ? data.doclink : "ยังไม่มีลิงก์ด็อค"}
             </div>
             <div className={style.des}>
-              ส่งวิ่ง :{" "}
+              ลิงก์ข้อมูลคอมมู :{" "}
               {data.submitlink ? data.submitlink : "ยังไม่มีลิงก์วิ่ง"}
             </div>
             <div className={style.des}>
-              ตรวจสอบวิ่ง :{" "}
+              ลิงก์ลงทะเบียนตัวละคร :{" "}
               {data.resultlink ? data.resultlink : "ยังไม่มีลิงก์ตรวจสอบวิ่ง"}
             </div>
             <div className={style.des}>
-              ถามคำถาม :{" "}
+              ลิงก์ตรวจสอบผลการสมัคร :{" "}
               {data.qaasklink ? data.qaasklink : "ยังไม่มีลิงก์ถามคำถาม"}
-            </div>
-            <div className={style.des}>
-              ตรวจสอบคำถาม :{" "}
-              {data.qaanslink ? data.qaanslink : "ยังไม่มีลิงก์ตอบคำถาม"}
             </div>
             <div className={style.des}>
               จำนวนรับ : {data.maxplayer ? data.maxplayer : "ไม่จำกัดจำนวนรับ"}

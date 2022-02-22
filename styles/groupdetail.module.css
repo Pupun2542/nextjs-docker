@@ -4,7 +4,7 @@
 }
 .frombackground{
     background-color: #fff;
-    border-radius: 30px;
+    border-radius: 10px;
     padding-bottom: 50px;
     padding-top: 0px;
     margin-top: 10px;
@@ -38,26 +38,27 @@
 
 }
 
-.des:hover{
-    color:#0052cc;
+/* .des:hover{ */
+    /* color:#0052cc; */
     /*border-color:  #0052cc;
     border: 2px solid;
     border-radius: 20px;*/
 
-}
+/* } */
 
 .pic{
     margin-left: -12px;
     /* padding: auto; */
     margin-top: 0px;
     border-radius: 10px 10px 0px 0px;
-    background-color: #0052cc;
+    background-color: rgba(146, 146, 146, 0.76);
 }
 
 .button{
     text-align: center;
-    margin: 30px 10% 20px;
-    width:50%;
+    margin: 30px 20% 0px;
+    width: auto;
+    min-width: 50%;
     background-color:rgb(34, 34, 34);
     font-family: Thai Sans Lite;
     color: aliceblue;
@@ -69,7 +70,8 @@
 }
 
 .button:hover{
-    background-color:#0052cc;
+    background-color: #5F5A9C;
+    color: rgb(235, 183, 86);
 }
 
 .subbutton{
@@ -87,4 +89,9 @@
     padding: 10px;
     font-size: 25px;
     border-radius: 10px;
+}
+.dis{
+    font-family: Thai Sans Lite;
+    font-size: 30px;
+    margin-left: 50px;
 }
