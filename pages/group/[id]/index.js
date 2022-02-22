@@ -135,6 +135,8 @@ export default function Group() {
             <div className={style.head}>
               {data.tag ? data.tag : "ชื่อย่อคอมมู"} | {data.Name ? data.Name : "ชื่อคอมมู"}
             </div>
+            <label>คำอธิบาย</label>
+            <div>{data.description}</div>
             <div className={style.des}>
               วันเริ่มวิ่ง :{" "}
               {data.regDate ? data.regDate : "ยังไม่ได้ลงวันวิ่ง"}
