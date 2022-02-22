@@ -3,6 +3,17 @@
   src: url('../assets/THAISANSLITE_R1.TTF');
 }
 
+@font-face {
+  font-family: Euphorigenic;
+  ;
+  src: url('../assets/EUPHORIG.TTF');
+}
+
+@font-face {
+  font-family: Montserrat Subrayada;
+  src: url('../assets/MONTSERRATSUBRAYADA-BOLD.TTF');
+}
+
 .container {
   padding: 0 2rem;
 }

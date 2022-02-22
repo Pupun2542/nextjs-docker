@@ -99,7 +99,7 @@ export default function Home() {
 
             <Row>
               <img src="icon_4.svg" width={350} height={350}></img>
-              <div className={styles.textHeader}>ระบบการจัดการตัวละคนที่ทุก ๆ ท่านสามารถสร้างและจัดการสตอรี่ของลูก ๆ ของพวกท่านได้ภายในเว็บไซต์นี้</div>
+              <div className={styles.textHeader}>ระบบการจัดการตัวละครที่ทุก ๆ ท่านสามารถสร้างและจัดการสตอรี่ของลูก ๆ ของพวกท่านได้ภายในเว็บไซต์นี้</div>
             </Row>
           </Col>
           <div className={styles.textother}>ดังนั้นช่วยอดใจรอกันไว้หน่อยนะ!</div>

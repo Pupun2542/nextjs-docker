@@ -1,3 +1,8 @@
+@font-face {
+    font-family: Thai Sans Lite;
+    src: url('../assets/THAISANSLITE_R1.TTF');
+  }
+  
 .background{
     background-color: #737373;
     color:rgb(0, 0, 0);

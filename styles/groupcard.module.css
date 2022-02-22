@@ -1,3 +1,8 @@
+@font-face {
+    font-family: Thai Sans Lite;
+    src: url('../assets/THAISANSLITE_R1.TTF');
+  }
+  
 .card {
     text-align: top;
     background-color:rgb(138, 138, 138);

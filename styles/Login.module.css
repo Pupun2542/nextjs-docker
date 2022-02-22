@@ -1,3 +1,15 @@
+@font-face {
+    font-family: Thai Sans Lite;
+    src: url('../assets/THAISANSLITE_R1.TTF');
+  }
+
+@font-face {
+  font-family: Euphorigenic;
+  ;
+  src: url('../assets/EUPHORIG.TTF');
+}
+
+
 .textSignin{
     font-family: Thai Sans Lite;
     font-size: 50px;
