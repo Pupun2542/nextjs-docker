@@ -51,7 +51,7 @@ function Login() {
     <SSRProvider>
       <Row>
         <CustomNavbar />
-        <Col md={6}>
+        <Col>
           <h2 className={styles.textSignin}>Sign in</h2>
           <div className={styles.padSignin}>
             <Row className={styles.BUtton}>
@@ -66,7 +66,7 @@ function Login() {
             </Row>
           </div>
         </Col>
-        <Col className={styles.bglogin} md={6}>
+        <Col className={styles.bglogin}>
           <div className={styles.padpr}>
             <div>ยินดีต้อนรับกลับเข้าสู่ Comuthor อีกครั้ง</div>
             <div>

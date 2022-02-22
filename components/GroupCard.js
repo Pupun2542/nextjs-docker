@@ -15,7 +15,6 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { getAuth } from "firebase/auth";
 
-
 function GroupCard() {
   
   const Router = useRouter();

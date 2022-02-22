@@ -90,7 +90,9 @@ function Edit() {
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
-
+    if (!bannerBlob){
+      setBannerBlob("https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2Fimageplaceholder.png?alt=media&token=f5f9ea02-1b1d-404c-8fb4-4619892dc474")
+    }
     // console.log(communame,privacy,hashtag,description,maxplayer,runtime,tags,smlink,doclink,qaasklink,qaanslink,submitlink,resultlink,contactlink,regDate,endDate)
 
     const docRef = await updateDoc(doc(db, "group", id), {
