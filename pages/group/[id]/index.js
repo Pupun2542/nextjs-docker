@@ -64,12 +64,15 @@ export default function Group() {
   };
 
   useEffect(() => {
+    console.log("effect");
     const l = async ()=>{
+      console.log(auth.currentUser,db);
       if (auth.currentUser && db) {
-        
+        console.log("if1");
         const d = await getDoc(doc(db, "userDetail", auth.currentUser.uid))
         console.log(auth.currentUser.uid);
         if (d.data().PinnedGroup){
+          console.log("if2");
           if (d.data().PinnedGroup.includes(id)) {
             setPin(false);
             console.log(pin);
@@ -130,7 +133,7 @@ export default function Group() {
               width={1285}
             ></img>
             <div className={style.head}>
-              ชื่อย่อคอมมู | {data.Name ? data.Name : "ชื่อคอมมู"}
+              {data.tag ? data.tag : "ชื่อย่อคอมมู"} | {data.Name ? data.Name : "ชื่อคอมมู"}
             </div>
             <div className={style.des}>
               วันเริ่มวิ่ง :{" "}
@@ -165,12 +168,17 @@ export default function Group() {
             <div className={style.des}>
               ชื่อทีมงาน : {data.CreatorName ? data.CreatorName : data.Creator}
             </div>
-            {auth.currentUser ? (
+            <Row>
+              <Col md={8}></Col>
+              <Col md={2}>
+              {auth.currentUser ? (
               auth.currentUser.uid == data.Creator ? (
                 <button onClick={editButtonHandler} className={style.button}>แก้ไขข้อมูล</button>
               ) : null
             ) : null}
-            <Dropdown>
+              </Col>
+              <Col md={2}>
+              <Dropdown>
               <Dropdown.Toggle className={style.button}>...</Dropdown.Toggle>
               <Dropdown.Menu>
                 {pin ? (
@@ -201,6 +209,10 @@ export default function Group() {
                 ) : null}
               </Dropdown.Menu>
             </Dropdown>
+              </Col>
+            </Row>
+            
+            
           </Col>
           <Col md={2}></Col>
         </Row>
