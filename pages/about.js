@@ -1,10 +1,11 @@
 import React from 'react';
 import {Container, Row, Col} from 'react-bootstrap'
 import CustomNavbar from '../components/navbar';
+import styles from "../styles/Home.module.css" ;
 
 function about() {
   return (
-      <div>
+      <div className={styles.presentHome}>
           <CustomNavbar/>
           <Container>
               <Row>
@@ -19,7 +20,7 @@ function about() {
                     Project Owner
                   </Col>
                   <Col>
-                    Commu Author
+                    Manger
                   </Col>
                   </Row>
                   <Row>
@@ -27,7 +28,7 @@ function about() {
                     Programmer
                   </Col>
                   <Col>
-                    Commu Author
+                    Apprentice
                   </Col>
                   </Row>
                   
