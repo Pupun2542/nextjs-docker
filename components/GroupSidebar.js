@@ -68,9 +68,9 @@ function GroupSidebar() {
               commu.map((value, index) => {
                 // console.log(value.id);
                 return (
-                  <div key={index}>
+                  <div key={index} className={style.pinned}>
                     <Link href={"/group/" + value.id}>
-                      <a>
+                      <a className={style.textpinned}>
                         <h5>{value.Name}</h5>
                       </a>
                     </Link>
@@ -93,12 +93,16 @@ function Menu() {
     <div>
       <Row className={style.padsidebar}>
         <Link href="/group/">
-          <a className={style.sideNewest}><img src="PngItem_2135957.png" height={30} width={30}></img>&nbsp;Newest</a>
+          <a className={style.sideNewest}>
+            {/* <img src="https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2FPngItem_2135957.png?alt=media&token=2afc00d8-fcae-47b4-a80e-af6ae86fd792" height={30} width={30}></img>&nbsp; */}
+            Newest</a>
         </Link>
       </Row>
       <Row className={style.padsidebar}>
         <Link href="/group/?bws=mygroup">
-          <a className={style.sideGroup}><img src="PngItem_2135957.png" height={30} width={30}></img>&nbsp;My Group</a>
+          <a className={style.sideGroup}>
+            {/* <img src="https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2FPngItem_2135957.png?alt=media&token=2afc00d8-fcae-47b4-a80e-af6ae86fd792" height={30} width={30}></img>&nbsp; */}
+            My Group</a>
         </Link>
       </Row>
     </div>

@@ -1,60 +1,102 @@
+@font-face {
+    font-family: Thai Sans Lite;
+    src: url('../assets/THAISANSLITE_R1.TTF');
+  }
+  
 .background{
-    background-color: rgb(207, 207, 207);
+    background-color: #737373;
     color:rgb(0, 0, 0);
 }
 .frombackground{
-    background-color:rgb(255, 255, 255);
-    border-radius: 30px;
+    background-color: #fff;
+    border-radius: 10px;
     padding-bottom: 50px;
+    padding-top: 0px;
+    margin-top: 10px;
+    margin-left: 10px;
 }
 
 .head{
     font-size: 40px;
-    padding: 15px;
+    padding: 20px;
     margin-bottom: 30px;
-    width: 100%;
+    width: 1285px;
     text-align: center;
-    border: 2px solid;
-    border-radius: 20px;
+    /* border: 2px solid; */
+    /* border-radius: 20px; */
     background: rgb(34, 34, 34);
     color:white;
+    margin-left: -12px;
+    font-family: Thai Sans Lite;
 }
 
 .des{
-    background-color: rgb(255, 255, 255);
+    background-color: #bbbbbbbb;
     padding: 10px;
     margin: 0px 50px;
     color:rgb(34, 34, 34);
+    font-family: Thai Sans Lite;
+    font-size: 30px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    color: #000;
+
 }
 
-.des:hover{
-    color:#0052cc;
+/* .des:hover{ */
+    /* color:#0052cc; */
     /*border-color:  #0052cc;
     border: 2px solid;
     border-radius: 20px;*/
 
-}
+/* } */
 
 .pic{
-    margin:auto;
-    padding: auto;
+    margin-left: -12px;
+    /* padding: auto; */
+    margin-top: 0px;
+    border-radius: 10px 10px 0px 0px;
+    background-color: rgba(146, 146, 146, 0.76);
 }
 
 .button{
     text-align: center;
-    margin: 30px 80% 20px;
-    width:8%;
+    margin: 30px 20% 0px;
+    width: auto;
+    min-width: 50%;
     background-color:rgb(34, 34, 34);
+    font-family: Thai Sans Lite;
+    color: aliceblue;
+    padding: 10px;
+    font-size: 25px;
+    border-radius: 10px;
+    border: none;
+
 }
 
 .button:hover{
-    background-color:#0052cc;
+    background-color: #5F5A9C;
+    color: rgb(235, 183, 86);
 }
 
 .subbutton{
     text-align: center;
+    font-family: Thai Sans Lite;
+    font-size: 25px;
 }
 .subbutton:hover{
     background-color:gainsboro;
 
+}
+.editebutton{
+    margin-top: 20px;
+    margin-left: 50px;
+    padding: 10px;
+    font-size: 25px;
+    border-radius: 10px;
+}
+.dis{
+    font-family: Thai Sans Lite;
+    font-size: 30px;
+    margin-left: 50px;
 }

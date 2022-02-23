@@ -1,3 +1,19 @@
+@font-face {
+  font-family: Thai Sans Lite;
+  src: url('../assets/THAISANSLITE_R1.TTF');
+}
+
+@font-face {
+  font-family: Euphorigenic;
+  ;
+  src: url('../assets/EUPHORIG.TTF');
+}
+
+@font-face {
+  font-family: Montserrat Subrayada;
+  src: url('../assets/MONTSERRATSUBRAYADA-BOLD.TTF');
+}
+
 .container {
   padding: 0 2rem;
 }
@@ -117,7 +133,7 @@
 .presentHome{
   background-color: #737373;
   /* background-color: gray; */
-  min-height: 2750px;
+  min-height: 4100px;
 }
 
 .nameComuthor{
@@ -205,7 +221,11 @@
 }
 .linkcomuthor{
   text-decoration: none;
-  color: #9895b4;
+  color: #cdcaea;
+  font-weight: bold;
+}
+.linkcomuthor:hover{
+  color: #9895b4
 }
 .textother2{
   font-family: Thai Sans Lite;
@@ -213,4 +233,8 @@
   color: #eaeaea;
   margin-left: 10px;
   text-align: center;
+}
+.Dotline{
+  margin-top: 10px;
+  margin-bottom: 10px;
 }

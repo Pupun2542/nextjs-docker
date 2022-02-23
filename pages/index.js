@@ -34,7 +34,7 @@ export default function Home() {
          
          <Col md={9}>
             <div className={styles.texthome2}>แพลตฟอร์มสำหรับผู้สร้างสรรค์ผลงาน ประกอบการเล่นบทบาทสมมติ</div>
-            <div className={styles.texthome2}>โดยมีระบบช่วยเหลือสำหรับผู้ใช้งาน มีการจัดเก็บข้อมูลภายใจคอมมูนิตี้ได้</div>
+            <div className={styles.texthome2}>โดยมีระบบช่วยเหลือสำหรับผู้ใช้งาน มีการจัดเก็บข้อมูลภายในคอมมูนิตี้ได้</div>
             <div className={styles.texthome2}>สะดวก เรียบร้อย เป็นระบบระเบียบอยู่ภายในเว็บไซต์เดียว</div>
          </Col>
        </Row>
@@ -69,7 +69,41 @@ export default function Home() {
           <div className={styles.textother}>แม้จะยังเป็นแค่การวางรายละเอียดของคอมมูเอาไว้ แต่ในอนาคตเราจะพัฒนาให้ทุก ๆ ท่านสามารถมีส่วนร่วมกับพวกเราได้ภายในเว็บไซต์เดียวอย่างแน่นอน</div>
           <div className={styles.textother}>...............................</div>
           <div className={styles.textHeader}>แผนการพัฒนาเว็บไซต์ขั้นต่อไปในอนาคต</div>
-          <div className={styles.textother}>ในอนาคตอันใกล้นี้พวกเราจะทำให้เว็บไซต์นี้กลายเป็นพื้นที่ที่ทุก ๆ ท่านสามารถเล่นและมีปฏิสัมพันธ์กันในคอมมูได้ ดังนั้นช่วยอดใจรอกันไว้หน่อยนะ!</div>
+          <div className={styles.textother}>ในอนาคตอันใกล้นี้พวกเราจะทำให้เว็บไซต์ Comuthor</div>
+          <div className={styles.textother}>กลายเป็นพื้นที่ที่ทุก ๆ ท่านสามารถเล่นและมีปฏิสัมพันธ์กันภายในคอมมูได้</div>
+          
+          <Col md={5}>
+            <Row>
+              <img src="Icon_1.svg" width={350} height={350}></img>
+              <div className={styles.textHeader}>การพูดคุยตอบโต้ภายในเว็บไซต์</div>
+              <div className={styles.textHeader}>และภายในคอมมู</div>
+
+            </Row>
+            
+            <Row>
+              <img src="icon_2.svg" width={350} height={350}></img>
+              <div className={styles.textHeader}>ระบบ Combat ที่สามารถจัดการการต่อสู้ของทุกท่านได้อย่างราบรื่นและสมดุล</div>
+            </Row>
+          </Col>
+          
+          <Col md={2}>
+            <img className={styles.Dotline} src="Dotline.svg" width={200} height={1000}></img>
+          </Col>
+
+          <Col md={5}>
+            <Row>
+              <img src="icon_3.svg" width={350} height={350}></img>
+              <div className={styles.textHeader}>การประกาศและประชาสัมพันธ์</div>
+              <div className={styles.textHeader}>รวมถึงการแจ้งเตือนที่ดี</div>
+            </Row>
+
+            <Row>
+              <img src="icon_4.svg" width={350} height={350}></img>
+              <div className={styles.textHeader}>ระบบการจัดการตัวละครที่ทุก ๆ ท่านสามารถสร้างและจัดการสตอรี่ของลูก ๆ ของพวกท่านได้ภายในเว็บไซต์นี้</div>
+            </Row>
+          </Col>
+          <div className={styles.textother}>ดังนั้นช่วยอดใจรอกันไว้หน่อยนะ!</div>
+
           <div className={styles.textother}>...............................</div>
           <div className={styles.textother}>ทางเราต้องขอขอบคุณทุก ๆ ท่านที่ให้ความสนใจเว็บไซต์ของพวกเราด้วยนะ! พวกเราจะพยายามพัฒนาเว็บไซต์นี้กันอย่างสุดความสามารถเลยล่ะ!</div>
           <div className={styles.textother}>...............................</div>

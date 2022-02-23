@@ -8,9 +8,36 @@
 }
 .GroupCardpad{
     background-color: #fff;
-    width: 750px;
-    margin-left: 265px;
+    width: 890px;
+    align-items: center;
     margin-top: 10px;
     border-radius: 10px;
     min-height: 860px;
+    margin-left: 200px;
+}
+.create{
+    background-color: #ff5757;
+    float: right;
+    margin-right: -12px;
+    margin-top: 50px;
+    width: 75%;
+    /* height: 50px; */
+    border-radius: 10px 0px 0px 10px;
+}
+.create:hover{
+    background-color: #faa8a8;  
+}
+.textcreate{
+    text-decoration: none;
+    color: #fff;
+    padding-left: 20px;
+    padding-top: 15px;
+    font-size: 30px;
+}
+.textcreate:hover{
+    text-decoration: none;
+    color: rgb(95, 95, 95);
+}
+.colright{
+    width: 504px;
 }

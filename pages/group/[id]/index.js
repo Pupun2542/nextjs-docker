@@ -64,18 +64,24 @@ export default function Group() {
   };
 
   useEffect(() => {
-    if (auth.currentUser && db) {
-      const d = getDoc(doc(db, "userDetail", auth.currentUser.uid)).then(
-        (d) => {
-          if (d.data.PinnedGroup){
-            if (d.data().PinnedGroup.includes(id)) {
-              setPin(false);
-            }
+    console.log("effect");
+    const l = async ()=>{
+      console.log(auth.currentUser,db);
+      if (auth.currentUser && db) {
+        console.log("if1");
+        const d = await getDoc(doc(db, "userDetail", auth.currentUser.uid))
+        console.log(auth.currentUser.uid);
+        if (d.data().PinnedGroup){
+          console.log("if2");
+          if (d.data().PinnedGroup.includes(id)) {
+            setPin(false);
+            console.log(pin);
           }
         }
-      );
+      }
     }
-  }, [auth, db, id]);
+   l();
+  }, [auth, db, id, pin]);
 
   const pinHandler = () => {
     if (auth.currentUser) {
@@ -123,34 +129,32 @@ export default function Group() {
             <img
               className={style.pic}
               src={data.banner}
-              height={360}
-              width={640}
+              height={723}
+              width={1285}
             ></img>
             <div className={style.head}>
-              ชื่อย่อคอมมู | {data.Name ? data.Name : "ชื่อคอมมู"}
+              {data.tag ? data.tag : "ชื่อย่อคอมมู"} | {data.Name ? data.Name : "ชื่อคอมมู"}
             </div>
+            <label className={style.dis}>คำอธิบาย</label>
+            <div className={style.des}>{data.description}</div>
             <div className={style.des}>
               วันเริ่มวิ่ง :{" "}
               {data.regDate ? data.regDate : "ยังไม่ได้ลงวันวิ่ง"}
             </div>
             <div className={style.des}>
-              ด็อค : {data.doclink ? data.doclink : "ยังไม่มีลิงก์ด็อค"}
+              ลิงก์กลุ่มคอมมู : {data.doclink ? data.doclink : "ยังไม่มีลิงก์ด็อค"}
             </div>
             <div className={style.des}>
-              ส่งวิ่ง :{" "}
+              ลิงก์ข้อมูลคอมมู :{" "}
               {data.submitlink ? data.submitlink : "ยังไม่มีลิงก์วิ่ง"}
             </div>
             <div className={style.des}>
-              ตรวจสอบวิ่ง :{" "}
+              ลิงก์ลงทะเบียนตัวละคร :{" "}
               {data.resultlink ? data.resultlink : "ยังไม่มีลิงก์ตรวจสอบวิ่ง"}
             </div>
             <div className={style.des}>
-              ถามคำถาม :{" "}
+              ลิงก์ตรวจสอบผลการสมัคร :{" "}
               {data.qaasklink ? data.qaasklink : "ยังไม่มีลิงก์ถามคำถาม"}
-            </div>
-            <div className={style.des}>
-              ตรวจสอบคำถาม :{" "}
-              {data.qaanslink ? data.qaanslink : "ยังไม่มีลิงก์ตอบคำถาม"}
             </div>
             <div className={style.des}>
               จำนวนรับ : {data.maxplayer ? data.maxplayer : "ไม่จำกัดจำนวนรับ"}
@@ -162,12 +166,17 @@ export default function Group() {
             <div className={style.des}>
               ชื่อทีมงาน : {data.CreatorName ? data.CreatorName : data.Creator}
             </div>
-            {auth.currentUser ? (
+            <Row>
+              <Col md={8}></Col>
+              <Col md={2}>
+              {auth.currentUser ? (
               auth.currentUser.uid == data.Creator ? (
-                <button onClick={editButtonHandler}>แก้ไขข้อมูล</button>
+                <button onClick={editButtonHandler} className={style.button}>แก้ไขข้อมูล</button>
               ) : null
             ) : null}
-            <Dropdown>
+              </Col>
+              <Col md={2}>
+              <Dropdown>
               <Dropdown.Toggle className={style.button}>...</Dropdown.Toggle>
               <Dropdown.Menu>
                 {pin ? (
@@ -178,7 +187,11 @@ export default function Group() {
                     ปักหมุดกลุ่มนี้
                   </Dropdown.Item>
                 ) : (
-                  <Dropdown.Item onClick={pinHandler}>
+                  <Dropdown.Item 
+                  onClick={pinHandler}
+                  className={style.subbutton}
+                  >
+                    
                     ถอนปักหมุดกลุ่มนี้
                   </Dropdown.Item>
                 )}
@@ -194,6 +207,10 @@ export default function Group() {
                 ) : null}
               </Dropdown.Menu>
             </Dropdown>
+              </Col>
+            </Row>
+            
+            
           </Col>
           <Col md={2}></Col>
         </Row>

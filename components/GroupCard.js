@@ -15,9 +15,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { getAuth } from "firebase/auth";
 
-
 function GroupCard() {
-  
   const Router = useRouter();
   const { bws } = Router.query;
 
@@ -29,8 +27,8 @@ function GroupCard() {
 
   useEffect(() => {
     const Fetchdata = async () => {
-      if(bws=="mygroup"){
-        if (auth.currentUser){
+      if (bws == "mygroup") {
+        if (auth.currentUser) {
           const q = query(
             collection(db, "group"),
             where("Creator", "==", auth.currentUser.uid)
@@ -42,47 +40,52 @@ function GroupCard() {
           );
           setLoading(false);
         }
-      }
-      else{
-          const q = query(
-            collection(db, "group"),
-            orderBy("createAt", "desc")
-          );
-          const QuerySnapshot = await getDocs(q)
-          setCommu(
-            QuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-          );
-          setLoading(false);
+      } else {
+        const q = query(
+          collection(db, "group"),
+          orderBy("createAt", "desc")
+        );
+        const QuerySnapshot = await getDocs(q);
+        setCommu(
+          QuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+        );
+        setLoading(false);
       }
     };
     Fetchdata();
-    
   }, [bws]);
-
-
 
   return (
     <div>
-    {!loading&&commu.map((value,index)=>{
-      return(
-        <div className={style.card} onClick={()=>{Router.push("/group/"+value.id)}}>
-      <Col md={7} >
-        <img src={value.banner} height="216" width="384"></img>
-      </Col>
-      <Col>
-        <Row>
-          <h2 className={style.namecommu}>[{value.tag}]{value.Name}</h2>
-        </Row>
-        <Row>
-          {value.genre.map((tag) => {
-            return <div className={style.genre}>{tag}</div>;
-          })}
-        </Row>
-        <Row className={style.padgroupcard}></Row>
-      </Col>
-    </div>
-      )
-    })}
+      {!loading &&
+        commu.map((value, index) => {
+          return (
+            <div
+              className={style.card}
+              onClick={() => {
+                Router.push("/group/" + value.id);
+              }}
+            >
+              <Col md={7}>
+                <img src={value.banner} height="216" width="384"></img>
+              </Col>
+              <Col className={style.info}>
+                <Row>
+                  <h2 className={style.namecommu}>
+                    [{value.tag}]{value.Name}
+                  </h2>
+                </Row>
+                <Row>
+                  {value.genre.map((tag) => {
+                    return <div className={style.genre}>{tag}</div>;
+                  })}
+                </Row>
+                <Row className={style.opacity}>.</Row>
+                {/* <Row className={style.padgroupcard}></Row> */}
+              </Col>
+            </div>
+          );
+        })}
     </div>
   );
 }
