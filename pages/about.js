@@ -1,49 +1,91 @@
 import React from 'react';
 import {Container, Row, Col} from 'react-bootstrap'
 import CustomNavbar from '../components/navbar';
-import styles from "../styles/Home.module.css" ;
+import styles from "../styles/about.module.css" ;
+import Head from 'next/head';
 
 function about() {
   return (
-      <div>
+    <>
+    <Head>
+      <title> รายชื่อทีมงาน | Comuthor </title>
+    </Head>
+      <div className={styles.presentHome}>
           <CustomNavbar/>
           <Container>
-            <div> Project Commuthor 2022 </div>
-            <div> รายชื่อทีมงาน </div>
-            <Row>
-              ManiaS
-              Founder / Concept Design มีรูปแล้ว
+            <div className={styles.nameComuthor}> Project Comuthor 2022 </div>
+            <div className={styles.texttitle}> รายชื่อทีมงาน </div>
+            <Row className={styles.padhome}>
+              <Col>
+                <div className={styles.picabout}><img src="ManiaS.png" height={150} width={150}></img></div>
+              </Col>
+              <Col>
+                <div className={styles.text1}> ManiaS </div>
+                <div className={styles.text2}> Founder / Concept Design </div>
+              </Col>
+              <Col>
+              <div className={styles.picabout}><img src="daruma.png" height={150} width={150}></img></div>
+              </Col>
+              <Col>
+                <div className={styles.text1}> Mr.Daruma-Tan </div>
+                <div className={styles.text2}> Founder  / Developer </div>
+              </Col>
             </Row>
-            <Row>
-              Mr.Daruma-Tan
-              Founder / Developer มีรูปแล้ว
+
+            <Row className={styles.padhome}>
+              <Col>
+                <div className={styles.picabout}><img src="Rose.png" height={150} width={150}></img></div>
+              </Col>
+              <Col>
+                <div className={styles.text1}> Rose : Niflheimea </div>
+                <div className={styles.text2}> Project Manager </div>
+              </Col>
+              <Col>
+              <div className={styles.picabout}><img src="-" height={150} width={150}></img></div>
+              </Col>
+              <Col>
+                <div className={styles.text1}> CreatorVerse Official </div>
+                <div className={styles.text2}> Project Adviser </div>
+              </Col>
             </Row>
-            <Row>
-              Rose : Niflheimea
-              Project Manager มีรูปแล้ว
+
+            <Row className={styles.padhome}>
+              <Col>
+                <div className={styles.picabout}><img src="-" height={150} width={150}></img></div>
+              </Col>
+              <Col>
+                <div className={styles.text1}> Pun </div>
+                <div className={styles.text2}> Developer </div>
+              </Col>
+              <Col>
+              <div className={styles.picabout}><img src="-" height={150} width={150}></img></div>
+              </Col>
+              <Col>
+                <div className={styles.text1}> แงวอยู่ทุกที่ </div>
+                <div className={styles.text2}> Developer </div>
+              </Col>
             </Row>
-            <Row>
-              CreatorVerse Official
-              Project Adviser ยังไม่มีรูป
+            
+            <Row className={styles.padhome}>
+              <Col>
+                <div className={styles.picabout}><img src="Tar.png" height={150} width={150}></img></div>
+              </Col>
+              <Col>
+                <div className={styles.text1}> Kasayama </div>
+                <div className={styles.text2}> Developer </div>
+              </Col>
+              <Col>
+              <div className={styles.picabout}><img src="nxtthara.png" height={150} width={150}></img></div>
+              </Col>
+              <Col>
+                <div className={styles.text1}> Nxttharx : Nattharawipa </div>
+                <div className={styles.text2}> Developer </div>
+              </Col>
             </Row>
-            <Row>
-              Pun
-              Developer
-            </Row>
-            <Row>
-              Kuro
-              Developer
-            </Row>
-            <Row>
-              Kasayama
-              Developer มีรูปแล้ว
-            </Row>
-            <Row>
-              Nxttharx
-              Developer มีรูปแล้วว
-            </Row>
+
           </Container>
       </div>
+      </>
   );
 }
 

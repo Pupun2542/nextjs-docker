@@ -1,0 +1,61 @@
+@font-face {
+    font-family: Thai Sans Lite;
+    src: url('../assets/THAISANSLITE_R1.TTF');
+  }
+  
+  @font-face {
+    font-family: Euphorigenic;
+    ;
+    src: url('../assets/EUPHORIG.TTF');
+  }
+  
+  @font-face {
+    font-family: Montserrat Subrayada;
+    src: url('../assets/MONTSERRATSUBRAYADA-BOLD.TTF');
+  }
+  
+.nameComuthor{
+    font-family: Euphorigenic;
+    font-size: 70px;
+    color: #fafafa;
+    /* padding: 0px 0px 0px 190px; */
+    text-align: center;
+}
+.padhome{
+    background-color: #515259;
+    border-radius: 10px;
+    padding: 50px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+.presentHome{
+    background-color: #737373;
+    /* background-color: gray; */
+    min-height: 1500px;
+}
+.texttitle{
+    font-family: Thai Sans Lite;
+    font-size: 50px;
+    color: #eaeaea;
+    text-align: center;
+    /* margin-left: -60px; */
+    /* padding: 0px 0px 0px 100px; */
+    margin-bottom: 10px;
+}
+.text1{
+  font-family: Thai Sans Lite;
+  font-size: 30px;
+  color: #fafafa;
+  text-align: left;
+}
+.text2{
+    font-family: Thai Sans Lite;
+    font-size: 20px;
+    color: #fafafa;
+    text-align: left;
+}
+.picabout{
+    float: center;
+    opacity: 100%;
+    margin-left: 20px;
+}
