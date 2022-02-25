@@ -34,7 +34,7 @@ export default function Home() {
          
          <Col md={9}>
             <div className={styles.texthome2}>แพลตฟอร์มสำหรับผู้สร้างสรรค์ผลงาน ประกอบการเล่นบทบาทสมมติ</div>
-            <div className={styles.texthome2}>โดยมีระบบช่วยเหลือสำหรับผู้ใช้งาน มีการจัดเก็บข้อมูลภายใจคอมมูนิตี้ได้</div>
+            <div className={styles.texthome2}>โดยมีระบบช่วยเหลือสำหรับผู้ใช้งาน มีการจัดเก็บข้อมูลภายในคอมมูนิตี้ได้</div>
             <div className={styles.texthome2}>สะดวก เรียบร้อย เป็นระบบระเบียบอยู่ภายในเว็บไซต์เดียว</div>
          </Col>
        </Row>
