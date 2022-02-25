@@ -31,13 +31,16 @@ function CustomNavbar() {
           <NavDropdown
             title={
               <span className={style.ThumbnailTextStyle}>
-                <Image
+                <div className={style.padpic}>
+                  <Image
                   src={user.photoURL}
                   alt="profile picture"
                   width={40}
                   height={40}
                   className={style.Thumbnailimg}
                 ></Image>
+                </div>
+                
                 {user.displayName}
               </span>
             }
