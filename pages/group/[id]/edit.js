@@ -4,7 +4,7 @@ import style from "../../../styles/creategroup.module.css";
 import { useState, useEffect } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Col, Container, Row, Carousel, Alert } from "react-bootstrap";
+import { Col, Container, Row, Carousel, Alert, SSRProvider } from "react-bootstrap";
 import {
   getFirestore,
   collection,
@@ -25,6 +25,7 @@ import { UpdateUserDetail } from "../../../src/services/firestoreservice";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
 import UploadImageModal from "../../../components/Banner";
+import Head from "next/head";
 
 function Edit() {
   const app = useApp();
@@ -178,6 +179,7 @@ function Edit() {
   };
 
   return (
+    <SSRProvider>
     <div className={style.background}>
       <CustomNavbar />
       <Container className={style.frombackground}>
@@ -434,6 +436,7 @@ function Edit() {
         </Row>
       </Container>
     </div>
+    </SSRProvider>
   );
 }
 

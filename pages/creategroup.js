@@ -4,7 +4,7 @@ import style from "../styles/creategroup.module.css";
 import { useState, useEffect } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Col, Container, Row, Carousel } from "react-bootstrap";
+import { Col, Container, Row, Carousel, SSRProvider } from "react-bootstrap";
 import {
   getFirestore,
   collection,
@@ -27,6 +27,7 @@ import UploadImageModal from "../components/Banner";
 import { UploadBannerImage } from "../src/services/filestoreageservice";
 import { getBlob } from "firebase/storage";
 // import { Blob } from "node:buffer";
+import Head from "next/head";
 
 export default function CreateGroup() {
   const app = useApp();
@@ -66,8 +67,10 @@ export default function CreateGroup() {
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
-    if (!bannerBlob){
-      setBannerBlob("https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2Fimageplaceholder.png?alt=media&token=f5f9ea02-1b1d-404c-8fb4-4619892dc474")
+    if (!bannerBlob) {
+      setBannerBlob(
+        "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2Fimageplaceholder.png?alt=media&token=f5f9ea02-1b1d-404c-8fb4-4619892dc474"
+      );
     }
     const docRef = await addDoc(collection(db, "group"), {
       Name: communame,
@@ -154,261 +157,270 @@ export default function CreateGroup() {
   };
 
   return (
-    <div className={style.background}>
-      <CustomNavbar />
-      <Container className={style.frombackground}>
-        {/* <CaroselPreview /> */}
-        <Row>
-          <Col md={0}></Col>
-          <Col md={10}>
-            <Container>
-              <div>
-                <Row>
-                  <UploadImageModal
-                    setBannerBlob={setBannerBlob}
-                    BannerBlob={bannerBlob}
-                  />
-                </Row>
-                <Row>
-                  <Col>
+    <SSRProvider>
+      <Head>
+        <link rel="shortcut icon" href="favicon.ico"></link>
+        <title>Comuthor</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+      <div className={style.background}>
+        <CustomNavbar />
+        <Container className={style.frombackground}>
+          {/* <CaroselPreview /> */}
+          <Row>
+            <Col md={0}></Col>
+            <Col md={10}>
+              <Container>
+                <div>
+                  <Row>
+                    <UploadImageModal
+                      setBannerBlob={setBannerBlob}
+                      BannerBlob={bannerBlob}
+                    />
+                  </Row>
+                  <Row>
+                    <Col>
+                      <label>
+                        <h4 className={style.label}>
+                          ชื่อย่อคอมมู ไม่เกิน 4 ตัวอักษร
+                        </h4>
+                      </label>
+                      <input
+                        className={style.setDescription}
+                        type="text"
+                        value={hashtag}
+                        onChange={(e) => {
+                          setHashtag(e.target.value);
+                        }}
+                        required
+                        maxLength="4"
+                      />
+                    </Col>
+                    <Col md={12}></Col>
+                  </Row>
+                  <Row>
+                    <Col md={6}>
+                      <label>
+                        <h4 className={style.label}>ชื่อคอมมู</h4>
+                        <input
+                          className={style.setDescription}
+                          type="text"
+                          value={communame}
+                          onChange={(e) => {
+                            setCommuname(e.target.value);
+                          }}
+                          required
+                        ></input>
+                      </label>
+                    </Col>
+                    <Col md={6}>
+                      <input
+                        type="radio"
+                        value="Private"
+                        name="Privacy"
+                        onChange={(e) => {
+                          setPrivacy(e.target.value);
+                        }}
+                      ></input>
+                      <label>
+                        <h6 className={style.radio}>ส่วนตัว</h6>
+                      </label>
+
+                      <input
+                        type="radio"
+                        value="Public"
+                        name="Privacy"
+                        onChange={(e) => {
+                          setPrivacy(e.target.value);
+                        }}
+                        checked
+                      ></input>
+                      <label>
+                        <h6 className={style.radio}>สาธารณะ</h6>
+                      </label>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md={6}>
+                      <label>
+                        <h4 className={style.label}>จำนวนรับ</h4>
+                        <input
+                          className={style.setDescription}
+                          type="number"
+                          value={maxplayer}
+                          name="Maxplayer"
+                          onChange={(e) => {
+                            setMaxplayer(e.target.value);
+                          }}
+                        ></input>
+                      </label>
+                    </Col>
+                    <Col md={6}>
+                      <label>
+                        <h4 className={style.label}>ระยะเวลา</h4>
+                        <input
+                          className={style.setDescription}
+                          type="text"
+                          value={runtime}
+                          onChange={(e) => {
+                            setRuntime(e.target.value);
+                          }}
+                        ></input>
+                      </label>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md={6}>
+                      <label>
+                        <h4 className={style.label}>วันวิ่ง</h4>
+                        <input
+                          className={style.setDescription}
+                          type="date"
+                          value={regDate}
+                          onChange={(e) => {
+                            setRegDate(e.target.value);
+                          }}
+                          required
+                        ></input>
+                      </label>
+                    </Col>
+                    <Col md={6}>
+                      <label>
+                        <h4 className={style.label}>วันที่สิ้นสุด</h4>
+                        <input
+                          className={style.setDescription}
+                          type="date"
+                          value={endDate}
+                          onChange={(e) => {
+                            setEndDate(e.target.value);
+                          }}
+                        ></input>
+                      </label>
+                    </Col>
+                  </Row>
+                  <Row md={12}>
+                    <label>
+                      <h4 className={style.label}>คำอธิบาย</h4>
+                    </label>
+                    <textarea
+                      className={style.setDescription}
+                      value={description}
+                      onChange={(e) => {
+                        setDescription(e.target.value);
+                      }}
+                    ></textarea>
+                  </Row>
+                  <Row md={12}>
                     <label>
                       <h4 className={style.label}>
-                        ชื่อย่อคอมมู ไม่เกิน 4 ตัวอักษร
+                        ประเภทของคอมมู (ใช้ , ในการแบ่งคำ)
                       </h4>
+                    </label>
+                    <Hashtag selectedTags={selectedTags} />
+                  </Row>
+                  <Row md={12}>
+                    <label>
+                      <h4 className={style.label}>ลิงก์กลุ่มคอมมู</h4>
                     </label>
                     <input
                       className={style.setDescription}
-                      type="text"
-                      value={hashtag}
+                      type="url"
+                      value={smlink}
                       onChange={(e) => {
-                        setHashtag(e.target.value);
+                        setSmlink(e.target.value);
+                      }}
+                    ></input>
+                  </Row>
+                  <Row md={12}>
+                    <label>
+                      <h4 className={style.label}>ลิงก์ข้อมูลคอมมู</h4>
+                    </label>
+                    <input
+                      className={style.setDescription}
+                      type="url"
+                      value={doclink}
+                      onChange={(e) => {
+                        setDoclink(e.target.value);
+                      }}
+                    ></input>
+                  </Row>
+                  <Row md={12}>
+                    <label>
+                      <h4 className={style.label}>ลิงค์ถามคำถาม</h4>
+                    </label>
+                    <input
+                      className={style.setDescription}
+                      type="url"
+                      value={qaasklink}
+                      onChange={(e) => {
+                        setQaasklink(e.target.value);
+                      }}
+                    ></input>
+                  </Row>
+                  <Row md={12}>
+                    <label>
+                      <h4 className={style.label}>ลิงก์ตอบคำถาม</h4>
+                    </label>
+                    <input
+                      className={style.setDescription}
+                      type="url"
+                      value={qaanslink}
+                      onChange={(e) => {
+                        setQaanslink(e.target.value);
+                      }}
+                    ></input>
+                  </Row>
+                  <Row md={12}>
+                    <label>
+                      <h4 className={style.label}>ลิงก์ส่งฟอร์มวิ่ง</h4>
+                    </label>
+                    <input
+                      className={style.setDescription}
+                      type="url"
+                      value={submitlink}
+                      onChange={(e) => {
+                        setSubmitlink(e.target.value);
+                      }}
+                    ></input>
+                  </Row>
+                  <Row md={12}>
+                    <label>
+                      <h4 className={style.label}>ลิงก์ตรวจสอบผลการสมัคร</h4>
+                    </label>
+                    <input
+                      className={style.setDescription}
+                      type="url"
+                      value={resultlink}
+                      onChange={(e) => {
+                        setResultlink(e.target.value);
+                      }}
+                    ></input>
+                  </Row>
+                  <Row md={12}>
+                    <label>
+                      <h4 className={style.label}>ช่องทางติดต่อ</h4>
+                    </label>
+                    <input
+                      className={style.setDescription}
+                      type="url"
+                      value={contactlink}
+                      onChange={(e) => {
+                        setContactlink(e.target.value);
                       }}
                       required
-                      maxLength="4"
-                    />
-                  </Col>
-                  <Col md={12}></Col>
-                </Row>
-                <Row>
-                  <Col md={6}>
-                    <label>
-                      <h4 className={style.label}>ชื่อคอมมู</h4>
-                      <input
-                        className={style.setDescription}
-                        type="text"
-                        value={communame}
-                        onChange={(e) => {
-                          setCommuname(e.target.value);
-                        }}
-                        required
-                      ></input>
-                    </label>
-                  </Col>
-                  <Col md={6}>
-                    <input
-                      type="radio"
-                      value="Private"
-                      name="Privacy"
-                      onChange={(e) => {
-                        setPrivacy(e.target.value);
-                      }}
                     ></input>
-                    <label>
-                      <h6 className={style.radio}>ส่วนตัว</h6>
-                    </label>
+                  </Row>
 
-                    <input
-                      type="radio"
-                      value="Public"
-                      name="Privacy"
-                      onChange={(e) => {
-                        setPrivacy(e.target.value);
-                      }}
-                      checked
-                    ></input>
-                    <label>
-                      <h6 className={style.radio}>สาธารณะ</h6>
-                    </label>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col md={6}>
-                    <label>
-                      <h4 className={style.label}>จำนวนรับ</h4>
-                      <input
-                        className={style.setDescription}
-                        type="number"
-                        value={maxplayer}
-                        name="Maxplayer"
-                        onChange={(e) => {
-                          setMaxplayer(e.target.value);
-                        }}
-                      ></input>
-                    </label>
-                  </Col>
-                  <Col md={6}>
-                    <label>
-                      <h4 className={style.label}>ระยะเวลา</h4>
-                      <input
-                        className={style.setDescription}
-                        type="text"
-                        value={runtime}
-                        onChange={(e) => {
-                          setRuntime(e.target.value);
-                        }}
-                      ></input>
-                    </label>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col md={6}>
-                    <label>
-                      <h4 className={style.label}>วันวิ่ง</h4>
-                      <input
-                        className={style.setDescription}
-                        type="date"
-                        value={regDate}
-                        onChange={(e) => {
-                          setRegDate(e.target.value);
-                        }}
-                        required
-                      ></input>
-                    </label>
-                  </Col>
-                  <Col md={6}>
-                    <label>
-                      <h4 className={style.label}>วันที่สิ้นสุด</h4>
-                      <input
-                        className={style.setDescription}
-                        type="date"
-                        value={endDate}
-                        onChange={(e) => {
-                          setEndDate(e.target.value);
-                        }}
-                      ></input>
-                    </label>
-                  </Col>
-                </Row>
-                <Row md={12}>
-                  <label>
-                    <h4 className={style.label}>คำอธิบาย</h4>
-                  </label>
-                  <textarea
-                    className={style.setDescription}
-                    value={description}
-                    onChange={(e) => {
-                      setDescription(e.target.value);
-                    }}
-                  ></textarea>
-                </Row>
-                <Row md={12}>
-                  <label>
-                    <h4 className={style.label}>
-                      ประเภทของคอมมู (ใช้ , ในการแบ่งคำ)
-                    </h4>
-                  </label>
-                  <Hashtag selectedTags={selectedTags} />
-                </Row>
-                <Row md={12}>
-                  <label>
-                    <h4 className={style.label}>ลิงก์กลุ่มคอมมู</h4>
-                  </label>
-                  <input
-                    className={style.setDescription}
-                    type="url"
-                    value={smlink}
-                    onChange={(e) => {
-                      setSmlink(e.target.value);
-                    }}
-                  ></input>
-                </Row>
-                <Row md={12}>
-                  <label>
-                    <h4 className={style.label}>ลิงก์ข้อมูลคอมมู</h4>
-                  </label>
-                  <input
-                    className={style.setDescription}
-                    type="url"
-                    value={doclink}
-                    onChange={(e) => {
-                      setDoclink(e.target.value);
-                    }}
-                  ></input>
-                </Row>
-                <Row md={12}>
-                  <label>
-                    <h4 className={style.label}>ลิงก์ลงทะเบียนตัวละคร</h4>
-                  </label>
-                  <input
-                    className={style.setDescription}
-                    type="url"
-                    value={qaasklink}
-                    onChange={(e) => {
-                      setQaasklink(e.target.value);
-                    }}
-                  ></input>
-                </Row>
-                <Row md={12}>
-                  <label>
-                    <h4 className={style.label}>ลิงก์ตอบคำถาม</h4>
-                  </label>
-                  <input className={style.setDescription}
-                    type="url"
-                    value={qaanslink}
-                    onChange={(e) => {
-                      setQaanslink(e.target.value);
-                    }}
-                  ></input>
-                </Row>
-                <Row md={12}>
-                  <label>
-                    <h4 className={style.label}>ลิงก์ส่งฟอร์มวิ่ง</h4>
-                  </label>
-                  <input className={style.setDescription}
-                    type="url"
-                    value={submitlink}
-                    onChange={(e) => {
-                      setSubmitlink(e.target.value);
-                    }}
-                  ></input>
-                </Row>
-                <Row md={12}>
-                  <label>
-                    <h4 className={style.label}>ลิงก์ตรวจสอบผลการสมัคร</h4>
-                  </label>
-                  <input
-                    className={style.setDescription}
-                    type="url"
-                    value={resultlink}
-                    onChange={(e) => {
-                      setResultlink(e.target.value);
-                    }}
-                  ></input>
-                </Row>
-                <Row md={12}>
-                  <label>
-                    <h4 className={style.label}>ช่องทางติดต่อ</h4>
-                  </label>
-                  <input
-                    className={style.setDescription}
-                    type="url"
-                    value={contactlink}
-                    onChange={(e) => {
-                      setContactlink(e.target.value);
-                    }}
-                    required
-                  ></input>
-                </Row>
-
-                <button className={style.button} onClick={HandleSubmit}>
-                  สร้างคอมมู
-                </button>
-              </div>
-            </Container>
-          </Col>
-          <Col md={0}></Col>
-        </Row>
-      </Container>
-    </div>
+                  <button className={style.button} onClick={HandleSubmit}>
+                    สร้างคอมมู
+                  </button>
+                </div>
+              </Container>
+            </Col>
+            <Col md={0}></Col>
+          </Row>
+        </Container>
+      </div>
+    </SSRProvider>
   );
 }

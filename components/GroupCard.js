@@ -10,6 +10,7 @@ import {
   getDocs,
   getDoc,
   orderBy,
+  onSnapshot,
 } from "firebase/firestore";
 import { useRouter } from "next/router";
 import Link from "next/link";

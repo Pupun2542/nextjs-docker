@@ -15,6 +15,7 @@ import { SSRProvider } from "react-bootstrap";
 import { Router, useRouter } from "next/router";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Col, Container, Row } from "react-bootstrap";
+import Head from "next/head";
 
 function Login() {
   const app = getApp();
@@ -49,6 +50,11 @@ function Login() {
   };
   return (
     <SSRProvider>
+      <Head>
+        <link rel="shortcut icon" href="favicon.ico"></link>
+        <title>Login</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <Row>
         <CustomNavbar />
         <Col>

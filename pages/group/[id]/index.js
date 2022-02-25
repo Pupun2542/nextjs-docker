@@ -30,6 +30,7 @@ import GroupSidebar from "../../../components/GroupSidebar";
 import { useApp } from "../../../src/hook/local";
 import { UpdateUserPinGroup } from "../../../src/services/firestoreservice";
 import style from "../../../styles/groupdetail.module.css";
+import Head from "next/head";
 
 export default function Group() {
   const app = useApp();
@@ -118,6 +119,11 @@ export default function Group() {
 
   return (
     <SSRProvider>
+      <Head>
+        <link rel="shortcut icon" href="../../../favicon.ico"></link>
+        <title>Comuthor</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <div className={style.background}>
         <CustomNavbar />
         <div></div>
@@ -142,22 +148,28 @@ export default function Group() {
               {data.regDate ? data.regDate : "ยังไม่ได้ลงวันวิ่ง"}
             </div>
             <div className={style.des}>
-              ลิงก์กลุ่มคอมมู : {data.doclink ? data.doclink : "ยังไม่มีลิงก์ด็อค"}
+              ลิงก์กลุ่มคอมมู : {data.smlink ? data.smlink : "ยังไม่มีลิงก์ด็อค"}
             </div>
             <div className={style.des}>
               ลิงก์ข้อมูลคอมมู :{" "}
-              {data.submitlink ? data.submitlink : "ยังไม่มีลิงก์วิ่ง"}
+              {data.doclink ? data.doclink : "ยังไม่มีลิงก์วิ่ง"}
             </div>
             <div className={style.des}>
               ลิงก์ลงทะเบียนตัวละคร :{" "}
-              {data.resultlink ? data.resultlink : "ยังไม่มีลิงก์ตรวจสอบวิ่ง"}
+              {data.submitlink ? data.submitlink : "ยังไม่มีลิงก์ตรวจสอบวิ่ง"}
             </div>
             <div className={style.des}>
               ลิงก์ตรวจสอบผลการสมัคร :{" "}
-              {data.qaasklink ? data.qaasklink : "ยังไม่มีลิงก์ถามคำถาม"}
+              {data.resultlink ? data.resultlink : "ยังไม่มีลิงก์ถามคำถาม"}
             </div>
             <div className={style.des}>
               จำนวนรับ : {data.maxplayer ? data.maxplayer : "ไม่จำกัดจำนวนรับ"}
+            </div>
+            <div className={style.des}>
+              ลิงค์ถามคำถาม : {data.qaasklink ? data.qaasklink : "ไม่จำกัดจำนวนรับ"}
+            </div>
+            <div className={style.des}>
+              ลิงค์ตอบคำถาม : {data.qaanslink ? data.qaanslink : "ไม่จำกัดจำนวนรับ"}
             </div>
             <div className={style.des}>
               ช่องทางติดต่อ :{" "}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container,SSRProvider, Row, Col } from "react-bootstrap";
+import { Container, SSRProvider, Row, Col } from "react-bootstrap";
 import CustomNavbar from "../../components/navbar";
 
 import {
@@ -20,7 +20,8 @@ import { useRouter } from "next/router";
 import GroupSidebar from "../../components/GroupSidebar";
 import { useApp } from "../../src/hook/local";
 import GroupCard from "../../components/GroupCard";
-import style from "../../styles/group.module.css"
+import style from "../../styles/group.module.css";
+import Head from "next/head";
 
 export default function Groups() {
   const app = useApp();
@@ -32,12 +33,11 @@ export default function Groups() {
   const CurrentUser = () => {
     const [user, loading, error] = useAuthState(auth);
 
-    useEffect(()=>{
-      if(!loading && !user){
-        Router.push("/login")
+    useEffect(() => {
+      if (!loading && !user) {
+        Router.push("/login");
       }
-    },[user,loading])
-
+    }, [user, loading]);
 
     if (loading) {
       return (
@@ -56,26 +56,40 @@ export default function Groups() {
 
     if (user) {
       return (
-        <div className={style.groupbg}>
-          <CustomNavbar />
-          <div>
-          </div>
+        <SSRProvider>
+          <div className={style.groupbg}>
+            <Head>
+              <link rel="shortcut icon" href="favicon.ico"></link>
+              <title>Comuthor</title>
+              <meta
+                name="viewport"
+                content="initial-scale=1.0, width=device-width"
+              />
+            </Head>
+            <CustomNavbar />
+            <div></div>
             <Row>
               <Col md={2}>
-                <GroupSidebar/>
+                <GroupSidebar />
               </Col>
               <Col md={8} className={style.GroupCardpad}>
-                <GroupCard/>
+                <GroupCard />
               </Col>
               <Col className={style.colright}>
                 <div className={style.create}>
                   <a href="/creategroup" className={style.textcreate}>
-                    <img src="https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2FPlus.png?alt=media&token=802be6cb-0fc7-4bf4-b532-0d82bf418805" height={30} width={30}></img>
-                    &nbsp;CREATE COMMU</a>
+                    <img
+                      src="https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2FPlus.png?alt=media&token=802be6cb-0fc7-4bf4-b532-0d82bf418805"
+                      height={30}
+                      width={30}
+                    ></img>
+                    &nbsp;CREATE COMMU
+                  </a>
                 </div>
               </Col>
             </Row>
-        </div>
+          </div>
+        </SSRProvider>
       );
     }
     return <></>;
