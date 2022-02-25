@@ -151,7 +151,7 @@ export default function Group() {
               ลิงก์กลุ่มคอมมู : {data.smlink ? data.smlink : "ยังไม่มีลิงก์ด็อค"}
             </div>
             <div className={style.des}>
-              ลิงก์ข้อมูลคอมมู :{" "}
+              ลิงก์ด็อคคอมมู :{" "}
               {data.doclink ? data.doclink : "ยังไม่มีลิงก์วิ่ง"}
             </div>
             <div className={style.des}>
