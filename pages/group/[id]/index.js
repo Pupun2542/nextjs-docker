@@ -148,35 +148,35 @@ export default function Group() {
               {data.regDate ? data.regDate : "ยังไม่ได้ลงวันวิ่ง"}
             </div>
             <div className={style.des}>
-              ลิงก์กลุ่มคอมมู : {data.smlink ? data.smlink : "ยังไม่มีลิงก์ด็อค"}
+              ลิงก์กลุ่มคอมมู : {data.smlink ? (<a href={data.smlink}>{data.smlink}</a>) : "ยังไม่มีลิงก์ด็อค"}
             </div>
             <div className={style.des}>
               ลิงก์ด็อคคอมมู :{" "}
-              {data.doclink ? data.doclink : "ยังไม่มีลิงก์วิ่ง"}
+              {data.doclink ? (<a href={data.doclink}>{data.doclink}</a>) : "ยังไม่มีลิงก์วิ่ง"}
             </div>
             <div className={style.des}>
               ลิงก์ลงทะเบียนตัวละคร :{" "}
-              {data.submitlink ? data.submitlink : "ยังไม่มีลิงก์ตรวจสอบวิ่ง"}
+              {data.submitlink ? (<a href={data.submitlink}>{data.submitlink}</a>) : "ยังไม่มีลิงก์ตรวจสอบวิ่ง"}
             </div>
             <div className={style.des}>
               ลิงก์ตรวจสอบผลการสมัคร :{" "}
-              {data.resultlink ? data.resultlink : "ยังไม่มีลิงก์ถามคำถาม"}
+              {data.resultlink ? (<a href={data.resultlink}>{data.resultlink}</a>) : "ยังไม่มีลิงก์ถามคำถาม"}
             </div>
             <div className={style.des}>
               จำนวนรับ : {data.maxplayer ? data.maxplayer : "ไม่จำกัดจำนวนรับ"}
             </div>
             <div className={style.des}>
-              ลิงค์ถามคำถาม : {data.qaasklink ? data.qaasklink : "ไม่จำกัดจำนวนรับ"}
+              ลิงค์ถามคำถาม : {data.qaasklink ? (<a href={data.qaasklink}>{data.qaasklink}</a>) : "ไม่จำกัดจำนวนรับ"}
             </div>
             <div className={style.des}>
-              ลิงค์ตอบคำถาม : {data.qaanslink ? data.qaanslink : "ไม่จำกัดจำนวนรับ"}
+              ลิงค์ตอบคำถาม : {data.qaanslink ? (<a href={data.qaanslink}>{data.qaanslink}</a>) : "ไม่จำกัดจำนวนรับ"}
             </div>
             <div className={style.des}>
               ช่องทางติดต่อ :{" "}
-              {data.contactlink ? data.contactlink : "ไม่มีช่องทางติดต่อ"}
+              {data.contactlink ? (<a href={data.contactlink}>{data.contactlink}</a>) : "ไม่มีช่องทางติดต่อ"}
             </div>
             <div className={style.des}>
-              ชื่อทีมงาน : {data.CreatorName ? data.CreatorName : data.Creator}
+              ชื่อทีมงาน : {data.CreatorName ? (data.CreatorName) : data.Creator}
             </div>
             <Row>
               <Col md={8}></Col>
