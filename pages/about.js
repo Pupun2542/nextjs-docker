@@ -41,7 +41,7 @@ function about() {
                 <div className={styles.text2}> Project Manager </div>
               </Col>
               <Col>
-              <div className={styles.picabout}><img src="-" height={150} width={150}></img></div>
+              <div className={styles.picabout}><img src="comuthor1.png" height={150} width={150}></img></div>
               </Col>
               <Col>
                 <div className={styles.text1}> CreatorVerse Official </div>
@@ -51,14 +51,14 @@ function about() {
 
             <Row className={styles.padhome}>
               <Col>
-                <div className={styles.picabout}><img src="-" height={150} width={150}></img></div>
+                <div className={styles.picabout}><img src="comuthor1.png" height={150} width={150}></img></div>
               </Col>
               <Col>
-                <div className={styles.text1}> Pun </div>
+                <div className={styles.text1}> WeFails </div>
                 <div className={styles.text2}> Developer </div>
               </Col>
               <Col>
-              <div className={styles.picabout}><img src="-" height={150} width={150}></img></div>
+              <div className={styles.picabout}><img src="comuthor1.png" height={150} width={150}></img></div>
               </Col>
               <Col>
                 <div className={styles.text1}> แงวอยู่ทุกที่ </div>

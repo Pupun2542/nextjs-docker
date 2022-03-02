@@ -289,7 +289,7 @@ function Edit() {
                 <Row>
                   <Col md={6}>
                     <label>
-                      <h4 className={style.label}>วันวิ่ง</h4>
+                      <h4 className={style.label}>วันเริ่มรับลงทะเบียน</h4>
                       <input
                         className={style.setDescription}
                         type="date"
@@ -363,7 +363,7 @@ function Edit() {
                 </Row>
                 <Row md={12}>
                   <label>
-                    <h4 className={style.label}>ลิงก์ลงทะเบียนตัวละคร</h4>
+                    <h4 className={style.label}>ลิงค์ถามคำถาม</h4>
                   </label>
                   <input
                     className={style.setDescription}
@@ -388,7 +388,7 @@ function Edit() {
                 </Row>
                 <Row md={12}>
                   <label>
-                    <h4 className={style.label}>ลิงก์ส่งฟอร์มวิ่ง</h4>
+                    <h4 className={style.label}>ลิงก์ลงทะเบียนตัวละคร</h4>
                   </label>
                   <input className={style.setDescription}
                     type="url"

@@ -272,7 +272,7 @@ export default function CreateGroup() {
                   <Row>
                     <Col md={6}>
                       <label>
-                        <h4 className={style.label}>วันวิ่ง</h4>
+                        <h4 className={style.label}>วันเริ่มรับลงทะเบียน</h4>
                         <input
                           className={style.setDescription}
                           type="date"
@@ -333,7 +333,7 @@ export default function CreateGroup() {
                   </Row>
                   <Row md={12}>
                     <label>
-                      <h4 className={style.label}>ลิงก์ข้อมูลคอมมู</h4>
+                      <h4 className={style.label}>ลิงก์ด็อคคอมมู</h4>
                     </label>
                     <input
                       className={style.setDescription}
@@ -372,7 +372,7 @@ export default function CreateGroup() {
                   </Row>
                   <Row md={12}>
                     <label>
-                      <h4 className={style.label}>ลิงก์ส่งฟอร์มวิ่ง</h4>
+                      <h4 className={style.label}>ลิงก์ลงทะเบียนตัวละคร</h4>
                     </label>
                     <input
                       className={style.setDescription}

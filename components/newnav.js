@@ -40,7 +40,7 @@ const NavLink = ({ children }) => (
   </Link>
 );
 
-function CustomNavbar() {
+export default function Nav() {
   const app = getApp();
   const auth = getAuth(app);
   const { colorMode, toggleColorMode } = useColorMode();
@@ -153,5 +153,3 @@ function CustomNavbar() {
     </>
   );
 }
-
-export default CustomNavbar
