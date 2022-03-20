@@ -17,6 +17,7 @@ import {
   Center,
   Image,
   Text,
+  Spacer
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import style from "../styles/navbar.module.css";
@@ -24,6 +25,15 @@ import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import React from "react";
+import reactDom from "react-dom";
+import { 
+  UsersThree,
+  Plus,
+  House,
+  DotsThreeVertical,
+ } from "phosphor-react";
+
 
 const NavLink = ({ children }) => (
   <Link
@@ -59,18 +69,34 @@ function CustomNavbar() {
             cursor={"pointer"}
             minW={0}
           >
-            <Avatar size={"sm"} src={user.photoURL} />
+            <Center bg='#6768AB' rounded={50}>
+              <Center px={0}>
+                <Avatar minH={50} minW={50} src={user.photoURL} />
+              </Center>
+              
+              <Center width={"auto"} px={4} >
+                <p>{user.displayName}</p>
+              </Center>
+              
+            </Center>
+
           </MenuButton>
-          <MenuList alignItems={"center"}>
+          
+          <MenuList alignItems={"center"} >
             <br />
+
             <Center>
               <Avatar size={"2xl"} src={user.photoURL} />
-            </Center>
+            </Center> 
+
             <br />
+
             <Center>
               <p>{user.displayName}</p>
             </Center>
+            
             <br />
+            
             <MenuDivider />
             {/* <MenuItem>Your Servers</MenuItem> */}
             <MenuItem>Account Settings</MenuItem>
@@ -91,61 +117,94 @@ function CustomNavbar() {
 
   return (
     <>
-      <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
+
+      <Box bg='black' h='auto' px={5}>
+        
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <Flex align={"center"}>
-            <Text
-              className={style.NavTextColor}
-              color={useColorModeValue("gray.900", "gray.100")}
-            >
-              Comuthor
-            </Text>
-            <Menu>
-              <MenuButton
-                as={Button}
-                rounded="full"
-                variant="link"
-                cursor="pointer"
-                minW={0}
-              >
-                <Image
-                  src="https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2FGroup1616.png?alt=media&token=a07238ec-3d03-4851-88d5-8642111506c0"
-                  borderRadius={"full"}
-                  boxSize={50}
-                />
-              </MenuButton>
-              <MenuList minWidth={"180px"}>
-                <MenuItem minH="48px" as={"a"} href="/group">
-                  <Image
-                    boxSize="3rem"
-                    borderRadius="full"
-                    src="https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2FGroup1616.png?alt=media&token=a07238ec-3d03-4851-88d5-8642111506c0"
-                    alt="Fluffybuns the destroyer"
-                    mr="12px"
-                  />
-                  <span className={style.normalText}>หาคอมมู</span>
-                </MenuItem>
-                <MenuItem minH="40px" as={"a"} href="/creategroup">
-                  <Image
-                    boxSize="3rem"
-                    borderRadius="full"
-                    src="https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2FCreateCommu1616.png?alt=media&token=516e1afb-5447-4c4a-82d3-6fbe6d51a310"
-                    alt="Simon the pensive"
-                    mr="12px"
-                  />
-                  <span className={style.normalText}>สร้างคอมมู</span>
-                </MenuItem>
-              </MenuList>
-            </Menu>
+            <Text className={style.Logonav}>Comuthor</Text>
           </Flex>
 
-          <Flex alignItems={"center"}>
-            <Stack direction={"row"} spacing={7}>
-              <Button onClick={toggleColorMode}>
-                {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-              </Button>
+          <Spacer />
 
-              <Loadthumbnail />
+          <Flex alignItems={"center"}>
+            <Stack direction={"row"} spacing={2}>
+
+              <Menu>
+                  <MenuButton
+                    as={Button}
+                    rounded="full"
+                    variant="link"
+                    cursor="pointer"
+                    minW={0}
+                    title='Commu'>
+                    <Center 
+                      bg='#FFC75A'
+                      minH={"50"}
+                      minW={"50"}
+                      rounded={50}
+                      >
+                      <UsersThree 
+                        size={32}
+                        color='#6768AB'/>
+                    </Center>
+
+                  </MenuButton>
+
+                    <MenuList minWidth={"auto"} ml={-1}>
+
+                      <MenuItem minH="48px" as={"a"} href="/group" title='Main Hall'>
+                        <House size={32} /> 
+                      </MenuItem>
+
+                      <MenuItem minH="48px" as={"a"} href="/creategroup" title='Create Commu'>
+                        <Plus size={32} />
+                      </MenuItem>
+                      
+                    </MenuList>
+                
+
+                {/* <Button onClick={toggleColorMode}>
+                  {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+                </Button> */}
+
+                  <Loadthumbnail />
+
+                  <Menu>
+                  <MenuButton
+                    as={Button}
+                    rounded="full"
+                    variant="link"
+                    cursor="pointer"
+                    minW={0}
+                    title='Commu'>
+                    <Center 
+                      bg='#FFC75A'
+                      minH={"50"}
+                      minW={"50"}
+                      rounded={50}
+                      >
+                    <DotsThreeVertical size={32} color='#6768AB' />
+
+                    </Center>
+
+                  </MenuButton>
+
+                    <MenuList minWidth={"auto"} ml={-1}>
+
+                      <MenuItem minH="48px" as={"a"} href="#" title='Main Hall'>
+                        <House size={32} /> 
+                      </MenuItem>
+
+                      <MenuItem minH="48px" as={"a"} href="#" title='Create Commu'>
+                        <Plus size={32} />
+                      </MenuItem>
+                      
+                    </MenuList>
+                  </Menu>
+                  
+                
+              </Menu>
             </Stack>
           </Flex>
         </Flex>

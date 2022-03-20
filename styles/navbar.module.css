@@ -1,4 +1,4 @@
-@font-face {
+/* @font-face {
   font-family: Thai Sans Lite;
   src: url('../assets/THAISANSLITE_R1.TTF');
 }
@@ -7,8 +7,34 @@
   font-family: Euphorigenic;
   ;
   src: url('../assets/EUPHORIG.TTF');
+} */
+
+@font-face {
+  font-family: Mitr;
+  src: url('../assets/MITR-REGULAR.TTF');
 }
 
+.Logonav{
+  /* Comuthor */
+
+/* position: absolute; */
+width: auto;
+height: auto;
+/* left: 23px;
+top: 15px; */
+
+/* font logo */
+
+font-family: Mitr;
+font-style: normal;
+font-weight: 700;
+font-size: 30px;
+line-height: 38px;
+
+/* white */
+
+color: #FDFDFD;
+}
 
   .NavTextColor {
       color: white;
