@@ -109,7 +109,7 @@ function CustomNavbar() {
       return <div>loading user</div>;
     }
     return (
-      <Button variant="primary" href="/login" className={style.bntlogin}>
+      <Button variant="primary" onClick={()=>router.push("/login")} className={style.bntlogin}>
         Login
       </Button>
     );
