@@ -26,7 +26,7 @@ import {
   Input,
   InputLeftElement,
   InputGroup,
-  SearchIcon,} from "@chakra-ui/react";
+  } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import style from "../styles/navbar.module.css";
 import { useRouter } from "next/router";
@@ -152,7 +152,7 @@ function CustomNavbar() {
             <InputGroup>
               <InputLeftElement
                 pointerEvents='none'
-                children={<SearchIcon color='gray.300' />}
+                children={<MagnifyingGlass color='white' />}
               />
               <Input placeholder='ค้นหาบน Comuthor' />
             </InputGroup>
