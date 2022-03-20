@@ -150,7 +150,8 @@ function CustomNavbar() {
                     variant="link"
                     cursor="pointer"
                     minW={0}
-                    title='Commu'>
+                    title='Commu'
+                    >
                     <Center 
                       bg='#FFC75A'
                       minH={"50"}
