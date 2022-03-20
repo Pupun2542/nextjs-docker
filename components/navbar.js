@@ -100,7 +100,7 @@ function CustomNavbar() {
             <MenuDivider />
             {/* <MenuItem>Your Servers</MenuItem> */}
             <MenuItem>Account Settings</MenuItem>
-            <MenuItem>Logout</MenuItem>
+            <MenuItem onClick={()=>router.push("/logout")}>Logout</MenuItem>
           </MenuList>
         </Menu>
       );
