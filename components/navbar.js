@@ -14,6 +14,8 @@ import {
   useDisclosure,
   useColorModeValue,
   Stack,
+  HStack,
+  VStack,
   useColorMode,
   Center,
   Image,
@@ -22,7 +24,9 @@ import {
   IconButton,
   IconButtonProps,
   Input,
-} from "@chakra-ui/react";
+  InputLeftElement,
+  InputGroup,
+  SearchIcon,} from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import style from "../styles/navbar.module.css";
 import { useRouter } from "next/router";
@@ -143,24 +147,38 @@ function CustomNavbar() {
           <Flex align={"center"} float={1}>
             <Text className={style.Logonav}>Comuthor</Text>
           </Flex>
-          <Flex alignItems={"center"} justifyContent={"space-between"}>
+          
+          <Stack spacing={4}>
+            <InputGroup>
+              <InputLeftElement
+                pointerEvents='none'
+                children={<SearchIcon color='gray.300' />}
+              />
+              <Input placeholder='ค้นหาบน Comuthor' />
+            </InputGroup>
+
+          </Stack>
+          
+          {/* <Flex alignItems={"center"} justifyContent={"space-between"}>
+            
             <Box
-              height={50}
+              height={'auto'}
+              width={'200'}
               backgroundColor={"white"}
               rounded={10}
-              float={"left"}
               marginLeft={5}
             >
-              <MagnifyingGlass size={24} color={"black"} float={"left"} />
-              <Input
-                border={"hidden"}
-                maxLength={100}
-                placeholder={"ค้นหา Comuthor"}
-                color={"black"}
-                float={"left"}
-              />
+              <Center>
+                <Input
+                  border={"hidden"} maxLength={150}
+                  placeholder={"<i class><i/> ค้นหา Comuthor"}
+                  color={"black"}              
+                />
+
+              </Center>
+              
             </Box>
-          </Flex>
+          </Flex> */}
 
           <Spacer />
 
