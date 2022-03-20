@@ -36,6 +36,24 @@ line-height: 38px;
 color: #FDFDFD;
 }
 
+.search{
+  color: Black;
+  font-family: Mitr;
+  font-weight: 100;
+}
+
+.search::-webkit-input-placeholder { 
+  font-family: Mitr;
+  /* font-weight: 100; */
+  overflow: visible;
+  vertical-align: top;
+  display: inline-block !important;
+  padding-left: 5px;
+  padding-top: 2px;
+  color: gray;
+  opacity: 70%;
+  }
+
 .prName{
   font-family: Mitr;
   font-weight: 100;

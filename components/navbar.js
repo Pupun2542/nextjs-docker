@@ -132,7 +132,6 @@ function CustomNavbar() {
           onClick={() => router.push("/login")}
           title="Login"
           color="#6768AB"
-          // className={style.bntlogin}
         >
           Login
         </Button>
@@ -148,37 +147,23 @@ function CustomNavbar() {
             <Text className={style.Logonav}>Comuthor</Text>
           </Flex>
           
-          <Stack spacing={4}>
+          <Stack 
+            spacing={4}
+            marginLeft='5'
+            bg="white"
+            rounded={10}
+          >
+            
             <InputGroup>
               <InputLeftElement
                 pointerEvents='none'
-                children={<MagnifyingGlass color='white' />}
+                children={<MagnifyingGlass color='black' />}
               />
-              <Input placeholder='ค้นหาบน Comuthor' />
+              <Input placeholder='ค้นหาบน Comuthor' className={style.search}/>
             </InputGroup>
 
           </Stack>
           
-          {/* <Flex alignItems={"center"} justifyContent={"space-between"}>
-            
-            <Box
-              height={'auto'}
-              width={'200'}
-              backgroundColor={"white"}
-              rounded={10}
-              marginLeft={5}
-            >
-              <Center>
-                <Input
-                  border={"hidden"} maxLength={150}
-                  placeholder={"<i class><i/> ค้นหา Comuthor"}
-                  color={"black"}              
-                />
-
-              </Center>
-              
-            </Box>
-          </Flex> */}
 
           <Spacer />
 
