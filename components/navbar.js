@@ -5,6 +5,7 @@ import {
   Avatar,
   Link,
   Button,
+  ButtonGroup,
   Menu,
   MenuButton,
   MenuList,
@@ -17,7 +18,9 @@ import {
   Center,
   Image,
   Text,
-  Spacer
+  Spacer,
+  IconButton,
+  IconButtonProps
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import style from "../styles/navbar.module.css";
@@ -70,6 +73,9 @@ function CustomNavbar() {
             variant={"link"}
             cursor={"pointer"}
             minW={0}
+            _hover={{
+              textDecoration: 'none'
+            }}
           >
             <Center bg='#6768AB' rounded={50}>
               <Center px={0}>
@@ -79,9 +85,7 @@ function CustomNavbar() {
               <Center 
                 width={"auto"}
                 px={4}
-                _hover={{
-                  textDecoration: 'none'
-                }}>
+                >
                 <p className={style.prName}>{user.displayName}</p>
               </Center>
               
@@ -99,15 +103,15 @@ function CustomNavbar() {
             <br />
 
             <Center>
-              <p>{user.displayName}</p>
+              <p className={style.prName}>{user.displayName}</p>
             </Center>
             
             <br />
             
             <MenuDivider />
             {/* <MenuItem>Your Servers</MenuItem> */}
-            <MenuItem>Account Settings</MenuItem>
-            <MenuItem onClick={()=>router.push("/logout")}>Logout</MenuItem>
+            <MenuItem className={style.prName} isDisabled>Account Settings</MenuItem>
+            <MenuItem className={style.prName} onClick={()=>router.push("/logout")}>Logout</MenuItem>
           </MenuList>
         </Menu>
       );
@@ -157,8 +161,11 @@ function CustomNavbar() {
                       variant="link"
                       cursor="pointer"
                       minW={0}
-                      title='Chats'>
-
+                      title='Chats'
+                      isDisabled
+                      >
+                      
+                      
                       <Center 
                         bg='#FFC75A'
                         minH={"50"}
@@ -192,7 +199,8 @@ function CustomNavbar() {
                       variant="link"
                       cursor="pointer"
                       minW={0}
-                      title='Notifications'>
+                      title='Notifications'
+                      isDisabled>
                       <Center 
                         bg='#FFC75A'
                         minH={"50"}
@@ -265,7 +273,8 @@ function CustomNavbar() {
                       variant="link"
                       cursor="pointer"
                       minW={0}
-                      title='Account'>
+                      title='Account'
+                      isDisabled>
                       <Center 
                         bg='#FFC75A'
                         minH={"50"}
