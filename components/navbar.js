@@ -109,9 +109,22 @@ function CustomNavbar() {
       return <div>loading user</div>;
     }
     return (
-      <Button variant="primary" href="/login" className={style.bntlogin}>
+      
+      <Center
+        bg={'#FFC75A'}
+        rounded={'10'}
+      > 
+        <Button 
+        variant="primary"
+        href="/login"
+        title="Login"
+        color='#6768AB'
+        // className={style.bntlogin}
+        >
         Login
       </Button>
+      </Center>
+      
     );
   };
 
