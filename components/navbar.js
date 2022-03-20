@@ -20,7 +20,8 @@ import {
   Text,
   Spacer,
   IconButton,
-  IconButtonProps
+  IconButtonProps,
+  Input,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import style from "../styles/navbar.module.css";
@@ -30,15 +31,15 @@ import { getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import React from "react";
 import reactDom from "react-dom";
-import { 
+import {
   UsersThree,
   Plus,
   House,
   DotsThreeVertical,
   Chats,
   Bell,
- } from "phosphor-react";
-
+  MagnifyingGlass,
+} from "phosphor-react";
 
 const NavLink = ({ children }) => (
   <Link
@@ -61,9 +62,8 @@ function CustomNavbar() {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
-
+  const [user, loading, error] = useAuthState(auth);
   const Loadthumbnail = () => {
-    const [user, loading, error] = useAuthState(auth);
     if (user) {
       return (
         <Menu>
@@ -74,44 +74,46 @@ function CustomNavbar() {
             cursor={"pointer"}
             minW={0}
             _hover={{
-              textDecoration: 'none'
+              textDecoration: "none",
             }}
           >
-            <Center bg='#6768AB' rounded={50}>
+            <Center bg="#6768AB" rounded={50}>
               <Center px={0}>
                 <Avatar minH={50} minW={50} src={user.photoURL} />
               </Center>
-              
-              <Center 
-                width={"auto"}
-                px={4}
-                >
+
+              <Center width={"auto"} px={4}>
                 <p className={style.prName}>{user.displayName}</p>
               </Center>
-              
             </Center>
-
           </MenuButton>
-          
+
           <MenuList alignItems={"center"} mr={-8}>
             <br />
 
             <Center>
               <Avatar size={"2xl"} src={user.photoURL} />
-            </Center> 
+            </Center>
 
             <br />
 
             <Center>
               <p className={style.prName}>{user.displayName}</p>
             </Center>
-            
+
             <br />
-            
+
             <MenuDivider />
             {/* <MenuItem>Your Servers</MenuItem> */}
-            <MenuItem className={style.prName} isDisabled>Account Settings</MenuItem>
-            <MenuItem className={style.prName} onClick={()=>router.push("/logout")}>Logout</MenuItem>
+            <MenuItem className={style.prName} isDisabled>
+              Account Settings
+            </MenuItem>
+            <MenuItem
+              className={style.prName}
+              onClick={() => router.push("/logout")}
+            >
+              Logout
+            </MenuItem>
           </MenuList>
         </Menu>
       );
@@ -120,153 +122,151 @@ function CustomNavbar() {
       return <div>loading user</div>;
     }
     return (
-      
-      <Center
-        bg={'#FFC75A'}
-        rounded={'10'}
-      > 
-        <Button 
-        variant="primary"
-        onClick={()=>router.push("/login")}
-        title="Login"
-        color='#6768AB'
-        // className={style.bntlogin}
+      <Center bg={"#FFC75A"} rounded={"10"}>
+        <Button
+          variant="primary"
+          onClick={() => router.push("/login")}
+          title="Login"
+          color="#6768AB"
+          // className={style.bntlogin}
         >
-        Login
+          Login
         </Button>
       </Center>
-      
     );
   };
 
   return (
     <>
-
-      <Box bg='black' h='auto' px={5}>
-        
+      <Box bg="black" h="auto" px={5}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-          <Flex align={"center"}>
+          <Flex align={"center"} float={1}>
             <Text className={style.Logonav}>Comuthor</Text>
+          </Flex>
+          <Flex alignItems={"center"} justifyContent={"space-between"}>
+            <Box
+              height={50}
+              backgroundColor={"white"}
+              rounded={10}
+              float={"left"}
+              marginLeft={5}
+            >
+              <MagnifyingGlass size={24} color={"black"} float={"left"} />
+              <Input
+                border={"hidden"}
+                maxLength={100}
+                placeholder={"ค้นหา Comuthor"}
+                color={"black"}
+                float={"left"}
+              />
+            </Box>
           </Flex>
 
           <Spacer />
 
           <Flex alignItems={"center"}>
             <Stack direction={"row"} spacing={2}>
-
-            <Menu>
-                    <MenuButton
-                      as={Button}
-                      rounded="full"
-                      variant="link"
-                      cursor="pointer"
-                      minW={0}
-                      title='Chats'
-                      isDisabled
-                      >
-                      
-                      
-                      <Center 
-                        bg='#FFC75A'
-                        minH={"50"}
-                        minW={"50"}
-                        rounded={50}
-                        >
-
-                      <Chats size={32} color='#6768AB' />
-
-                      </Center>
-
-                    </MenuButton>
-
-                      {/* <MenuList minWidth={"auto"} ml={-1}>
-
-                        <MenuItem minH="48px" as={"a"} href="#" title='Main Hall'>
-                          <House size={32} /> 
-                        </MenuItem>
-
-                        <MenuItem minH="48px" as={"a"} href="#" title='Create Commu'>
-                          <Plus size={32} />
-                        </MenuItem>
-                        
-                      </MenuList> */}
-                  </Menu>
-
-            <Menu>
-                    <MenuButton
-                      as={Button}
-                      rounded="full"
-                      variant="link"
-                      cursor="pointer"
-                      minW={0}
-                      title='Notifications'
-                      isDisabled>
-                      <Center 
-                        bg='#FFC75A'
-                        minH={"50"}
-                        minW={"50"}
-                        rounded={50}
-                        >
-                      <Bell size={32} color='#6768AB' />
-
-                      </Center>
-
-                    </MenuButton>
-
-                      {/* <MenuList minWidth={"auto"} ml={-1}>
-
-                        <MenuItem minH="48px" as={"a"} href="#" title='Main Hall'>
-                          <House size={32} /> 
-                        </MenuItem>
-
-                        <MenuItem minH="48px" as={"a"} href="#" title='Create Commu'>
-                          <Plus size={32} />
-                        </MenuItem>
-                        
-                      </MenuList> */}
-                  </Menu>
-
-              <Menu>
+              {user && (
+                <Menu>
                   <MenuButton
                     as={Button}
                     rounded="full"
                     variant="link"
                     cursor="pointer"
                     minW={0}
-                    title='Commu'
-                    >
-                    <Center 
-                      bg='#FFC75A'
-                      minH={"50"}
-                      minW={"50"}
-                      rounded={50}
-                      >
-                      <UsersThree 
-                        size={32}
-                        color='#6768AB'/>
+                    title="Chats"
+                    isDisabled
+                  >
+                    <Center bg="#FFC75A" minH={"50"} minW={"50"} rounded={50}>
+                      <Chats size={32} color="#6768AB" />
                     </Center>
-
                   </MenuButton>
 
-                    <MenuList minWidth={"auto"} ml={-1}>
+                  {/* <MenuList minWidth={"auto"} ml={-1}>
 
-                      <MenuItem minH="48px" as={"a"} href="/group" title='Main Hall'>
-                        <House size={32} /> 
-                      </MenuItem>
+                        <MenuItem minH="48px" as={"a"} href="#" title='Main Hall'>
+                          <House size={32} /> 
+                        </MenuItem>
 
-                      <MenuItem minH="48px" as={"a"} href="/creategroup" title='Create Commu'>
-                        <Plus size={32} />
-                      </MenuItem>
-                      
-                    </MenuList>
-                
+                        <MenuItem minH="48px" as={"a"} href="#" title='Create Commu'>
+                          <Plus size={32} />
+                        </MenuItem>
+                        
+                      </MenuList> */}
+                </Menu>
+              )}
+
+              {user && (
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    rounded="full"
+                    variant="link"
+                    cursor="pointer"
+                    minW={0}
+                    title="Notifications"
+                    isDisabled
+                  >
+                    <Center bg="#FFC75A" minH={"50"} minW={"50"} rounded={50}>
+                      <Bell size={32} color="#6768AB" />
+                    </Center>
+                  </MenuButton>
+                </Menu>
+              )}
+
+              {/* <MenuList minWidth={"auto"} ml={-1}>
+
+                        <MenuItem minH="48px" as={"a"} href="#" title='Main Hall'>
+                          <House size={32} /> 
+                        </MenuItem>
+
+                        <MenuItem minH="48px" as={"a"} href="#" title='Create Commu'>
+                          <Plus size={32} />
+                        </MenuItem>
+                        
+                      </MenuList> */}
+
+              <Menu>
+                <MenuButton
+                  as={Button}
+                  rounded="full"
+                  variant="link"
+                  cursor="pointer"
+                  minW={0}
+                  title="Commu"
+                >
+                  <Center bg="#FFC75A" minH={"50"} minW={"50"} rounded={50}>
+                    <UsersThree size={32} color="#6768AB" />
+                  </Center>
+                </MenuButton>
+
+                <MenuList minWidth={"auto"} ml={-1}>
+                  <MenuItem
+                    minH="48px"
+                    as={"a"}
+                    href="/group"
+                    title="Main Hall"
+                  >
+                    <House size={32} />
+                  </MenuItem>
+
+                  <MenuItem
+                    minH="48px"
+                    as={"a"}
+                    href="/creategroup"
+                    title="Create Commu"
+                  >
+                    <Plus size={32} />
+                  </MenuItem>
+                </MenuList>
 
                 {/* <Button onClick={toggleColorMode}>
                   {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
                 </Button> */}
 
-                  <Loadthumbnail />
+                <Loadthumbnail />
 
+                {user && (
                   <Menu>
                     <MenuButton
                       as={Button}
@@ -274,21 +274,15 @@ function CustomNavbar() {
                       variant="link"
                       cursor="pointer"
                       minW={0}
-                      title='Account'
-                      isDisabled>
-                      <Center 
-                        bg='#FFC75A'
-                        minH={"50"}
-                        minW={"50"}
-                        rounded={50}
-                        >
-                      <DotsThreeVertical size={32} color='#6768AB' />
-
+                      title="Account"
+                      isDisabled
+                    >
+                      <Center bg="#FFC75A" minH={"50"} minW={"50"} rounded={50}>
+                        <DotsThreeVertical size={32} color="#6768AB" />
                       </Center>
-
                     </MenuButton>
 
-                      {/* <MenuList minWidth={"auto"} ml={-1}>
+                    {/* <MenuList minWidth={"auto"} ml={-1}>
 
                         <MenuItem minH="48px" as={"a"} href="#" title='Main Hall'>
                           <House size={32} /> 
@@ -300,8 +294,7 @@ function CustomNavbar() {
                         
                       </MenuList> */}
                   </Menu>
-                  
-                
+                )}
               </Menu>
             </Stack>
           </Flex>
@@ -311,4 +304,4 @@ function CustomNavbar() {
   );
 }
 
-export default CustomNavbar
+export default CustomNavbar;
