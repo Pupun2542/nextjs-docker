@@ -99,7 +99,7 @@ function CustomNavbar() {
             <br />
 
             <Center>
-              <p>{user.displayName}</p>
+              <p className={style.prName}>{user.displayName}</p>
             </Center>
             
             <br />
