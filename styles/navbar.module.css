@@ -36,6 +36,11 @@ line-height: 38px;
 color: #FDFDFD;
 }
 
+.prName{
+  font-family: Mitr;
+  font-weight: 100;
+}
+
   .NavTextColor {
       color: white;
       /* font-family: Montserrat subrayada; */

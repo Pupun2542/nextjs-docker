@@ -32,6 +32,8 @@ import {
   Plus,
   House,
   DotsThreeVertical,
+  Chats,
+  Bell,
  } from "phosphor-react";
 
 
@@ -74,15 +76,20 @@ function CustomNavbar() {
                 <Avatar minH={50} minW={50} src={user.photoURL} />
               </Center>
               
-              <Center width={"auto"} px={4} >
-                <p>{user.displayName}</p>
+              <Center 
+                width={"auto"}
+                px={4}
+                _hover={{
+                  textDecoration: 'none'
+                }}>
+                <p className={style.prName}>{user.displayName}</p>
               </Center>
               
             </Center>
 
           </MenuButton>
           
-          <MenuList alignItems={"center"} >
+          <MenuList alignItems={"center"} mr={-8}>
             <br />
 
             <Center>
@@ -122,7 +129,7 @@ function CustomNavbar() {
         // className={style.bntlogin}
         >
         Login
-      </Button>
+        </Button>
       </Center>
       
     );
@@ -142,6 +149,74 @@ function CustomNavbar() {
 
           <Flex alignItems={"center"}>
             <Stack direction={"row"} spacing={2}>
+
+            <Menu>
+                    <MenuButton
+                      as={Button}
+                      rounded="full"
+                      variant="link"
+                      cursor="pointer"
+                      minW={0}
+                      title='Chats'>
+
+                      <Center 
+                        bg='#FFC75A'
+                        minH={"50"}
+                        minW={"50"}
+                        rounded={50}
+                        >
+
+                      <Chats size={32} color='#6768AB' />
+
+                      </Center>
+
+                    </MenuButton>
+
+                      {/* <MenuList minWidth={"auto"} ml={-1}>
+
+                        <MenuItem minH="48px" as={"a"} href="#" title='Main Hall'>
+                          <House size={32} /> 
+                        </MenuItem>
+
+                        <MenuItem minH="48px" as={"a"} href="#" title='Create Commu'>
+                          <Plus size={32} />
+                        </MenuItem>
+                        
+                      </MenuList> */}
+                  </Menu>
+
+            <Menu>
+                    <MenuButton
+                      as={Button}
+                      rounded="full"
+                      variant="link"
+                      cursor="pointer"
+                      minW={0}
+                      title='Notifications'>
+                      <Center 
+                        bg='#FFC75A'
+                        minH={"50"}
+                        minW={"50"}
+                        rounded={50}
+                        >
+                      <Bell size={32} color='#6768AB' />
+
+                      </Center>
+
+                    </MenuButton>
+
+                      {/* <MenuList minWidth={"auto"} ml={-1}>
+
+                        <MenuItem minH="48px" as={"a"} href="#" title='Main Hall'>
+                          <House size={32} /> 
+                        </MenuItem>
+
+                        <MenuItem minH="48px" as={"a"} href="#" title='Create Commu'>
+                          <Plus size={32} />
+                        </MenuItem>
+                        
+                      </MenuList> */}
+                  </Menu>
 
               <Menu>
                   <MenuButton
@@ -185,36 +260,36 @@ function CustomNavbar() {
                   <Loadthumbnail />
 
                   <Menu>
-                  <MenuButton
-                    as={Button}
-                    rounded="full"
-                    variant="link"
-                    cursor="pointer"
-                    minW={0}
-                    title='Commu'>
-                    <Center 
-                      bg='#FFC75A'
-                      minH={"50"}
-                      minW={"50"}
-                      rounded={50}
-                      >
-                    <DotsThreeVertical size={32} color='#6768AB' />
+                    <MenuButton
+                      as={Button}
+                      rounded="full"
+                      variant="link"
+                      cursor="pointer"
+                      minW={0}
+                      title='Account'>
+                      <Center 
+                        bg='#FFC75A'
+                        minH={"50"}
+                        minW={"50"}
+                        rounded={50}
+                        >
+                      <DotsThreeVertical size={32} color='#6768AB' />
 
-                    </Center>
+                      </Center>
 
-                  </MenuButton>
+                    </MenuButton>
 
-                    <MenuList minWidth={"auto"} ml={-1}>
+                      {/* <MenuList minWidth={"auto"} ml={-1}>
 
-                      <MenuItem minH="48px" as={"a"} href="#" title='Main Hall'>
-                        <House size={32} /> 
-                      </MenuItem>
+                        <MenuItem minH="48px" as={"a"} href="#" title='Main Hall'>
+                          <House size={32} /> 
+                        </MenuItem>
 
-                      <MenuItem minH="48px" as={"a"} href="#" title='Create Commu'>
-                        <Plus size={32} />
-                      </MenuItem>
-                      
-                    </MenuList>
+                        <MenuItem minH="48px" as={"a"} href="#" title='Create Commu'>
+                          <Plus size={32} />
+                        </MenuItem>
+                        
+                      </MenuList> */}
                   </Menu>
                   
                 
