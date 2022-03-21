@@ -77,13 +77,14 @@ function CustomNavbar() {
             variant={"link"}
             cursor={"pointer"}
             minW={0}
+            minH={0}
             _hover={{
               textDecoration: "none",
             }}
           >
-            <Center bg="#6768AB" rounded={50}>
+            <Center bg="#6768AB" rounded={50} minHeight={42}>
               <Center px={0}>
-                <Avatar minH={50} minW={50} src={user.photoURL} />
+                <Avatar minH={42} minW={42} src={user.photoURL} />
               </Center>
 
               <Center width={"auto"} px={4}>
@@ -180,8 +181,15 @@ function CustomNavbar() {
                     title="Chats"
                     isDisabled
                   >
-                    <Center bg="#FFC75A" minH={"50"} minW={"50"} rounded={50}>
-                      <Chats size={32} color="#6768AB" />
+                    <Center
+                        bg="#FFC75A"
+                        minH={'auto'} 
+                        minW={'auto'} 
+                        rounded={50}
+                        size={40}
+                        padding={1}
+                      >
+                      <Chats size={32} color="#6768AB"/>
                     </Center>
                   </MenuButton>
 
@@ -210,7 +218,14 @@ function CustomNavbar() {
                     title="Notifications"
                     isDisabled
                   >
-                    <Center bg="#FFC75A" minH={"50"} minW={"50"} rounded={50}>
+                    <Center
+                        bg="#FFC75A"
+                        minH={'auto'} 
+                        minW={'auto'} 
+                        rounded={50}
+                        size={40}
+                        padding={1}
+                      >
                       <Bell size={32} color="#6768AB" />
                     </Center>
                   </MenuButton>
@@ -238,7 +253,14 @@ function CustomNavbar() {
                   minW={0}
                   title="Commu"
                 >
-                  <Center bg="#FFC75A" minH={"50"} minW={"50"} rounded={50}>
+                  <Center
+                        bg="#FFC75A"
+                        minH={'auto'} 
+                        minW={'auto'} 
+                        rounded={50}
+                        size={40}
+                        padding={1}
+                      >
                     <UsersThree size={32} color="#6768AB" />
                   </Center>
                 </MenuButton>
@@ -280,7 +302,14 @@ function CustomNavbar() {
                       title="Account"
                       isDisabled
                     >
-                      <Center bg="#FFC75A" minH={"50"} minW={"50"} rounded={50}>
+                      <Center
+                        bg="#FFC75A"
+                        minH={'auto'} 
+                        minW={'auto'} 
+                        rounded={50}
+                        size={40}
+                        padding={1}
+                      >
                         <DotsThreeVertical size={32} color="#6768AB" />
                       </Center>
                     </MenuButton>
