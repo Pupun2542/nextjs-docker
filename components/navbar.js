@@ -21,8 +21,6 @@ import {
   Image,
   Text,
   Spacer,
-  IconButton,
-  IconButtonProps,
   Input,
   InputLeftElement,
   InputGroup,
@@ -44,6 +42,7 @@ import {
   Bell,
   MagnifyingGlass,
 } from "phosphor-react";
+import { extendTheme } from '@chakra-ui/react'
 
 const NavLink = ({ children }) => (
   <Link
@@ -82,47 +81,20 @@ function CustomNavbar() {
               textDecoration: "none",
             }}
           >
-            <Center bg="#6768AB" rounded={50} minHeight={42}>
+            <Center bg="#6768AB" rounded={50} minHeight={50}>
               <Center px={0}>
-                <Avatar minH={42} minW={42} src={user.photoURL} />
+                <Avatar minH={50} minW={50} src={user.photoURL} />
               </Center>
 
-              <Center width={"auto"} px={4}>
+              <Center width={"auto"} px={5}>
                 <p className={style.prName}>{user.displayName}</p>
               </Center>
             </Center>
           </MenuButton>
-
-          <MenuList alignItems={"center"} mr={-8}>
-            <br />
-
-            <Center>
-              <Avatar size={"2xl"} src={user.photoURL} />
-            </Center>
-
-            <br />
-
-            <Center>
-              <p className={style.prName}>{user.displayName}</p>
-            </Center>
-
-            <br />
-
-            <MenuDivider />
-            {/* <MenuItem>Your Servers</MenuItem> */}
-            <MenuItem className={style.prName} isDisabled>
-              Account Settings
-            </MenuItem>
-            <MenuItem
-              className={style.prName}
-              onClick={() => router.push("/logout")}
-            >
-              Logout
-            </MenuItem>
-          </MenuList>
         </Menu>
       );
     }
+
     if (loading) {
       return <div>loading user</div>;
     }
@@ -142,8 +114,8 @@ function CustomNavbar() {
 
   return (
     <>
-      <Box bg="black" h="auto" px={5}>
-        <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
+      <Box bg="black" h="auto" w="auto" px={5}>
+        <Flex h={20} alignItems={"center"} justifyContent={"space-between"}>
           <Flex align={"center"} float={1}>
             <Text className={style.Logonav}>Comuthor</Text>
           </Flex>
@@ -155,11 +127,13 @@ function CustomNavbar() {
             rounded={10}
           >
             
-            <InputGroup>
+            <InputGroup
+              isDisabled
+            >
               <InputLeftElement
                 pointerEvents='none'
-                children={<MagnifyingGlass color='black' />}
-              />
+                children={<MagnifyingGlass color='black'/>}
+            />
               <Input placeholder='ค้นหาบน Comuthor' className={style.search}/>
             </InputGroup>
 
@@ -178,15 +152,16 @@ function CustomNavbar() {
                     variant="link"
                     cursor="pointer"
                     minW={0}
+                    minH={50}
                     title="Chats"
                     isDisabled
                   >
                     <Center
                         bg="#FFC75A"
-                        minH={'auto'} 
-                        minW={'auto'} 
+                        minH={'50'} 
+                        minW={'50'} 
                         rounded={50}
-                        size={40}
+                        size={50}
                         padding={1}
                       >
                       <Chats size={32} color="#6768AB"/>
@@ -220,8 +195,8 @@ function CustomNavbar() {
                   >
                     <Center
                         bg="#FFC75A"
-                        minH={'auto'} 
-                        minW={'auto'} 
+                        minH={'50'} 
+                        minW={'50'} 
                         rounded={50}
                         size={40}
                         padding={1}
@@ -250,22 +225,27 @@ function CustomNavbar() {
                   rounded="full"
                   variant="link"
                   cursor="pointer"
-                  minW={0}
+                  minW={50}
+                  minH={50}
                   title="Commu"
+                  
                 >
                   <Center
-                        bg="#FFC75A"
-                        minH={'auto'} 
-                        minW={'auto'} 
-                        rounded={50}
-                        size={40}
-                        padding={1}
-                      >
+                    bg="#FFC75A"
+                    minH={'50'} 
+                    minW={'50'} 
+                    rounded={50}
+                    size={40}
+                    padding={1}
+                    _hover={{
+                      backgroundColor:"#6768AB"
+                    }}
+                  >
                     <UsersThree size={32} color="#6768AB" />
                   </Center>
                 </MenuButton>
 
-                <MenuList minWidth={"auto"} ml={-1}>
+                <MenuList bg={"#343434"} minWidth={"auto"} ml={-1}>
                   <MenuItem
                     minH="48px"
                     as={"a"}
@@ -300,12 +280,11 @@ function CustomNavbar() {
                       cursor="pointer"
                       minW={0}
                       title="Account"
-                      isDisabled
                     >
                       <Center
                         bg="#FFC75A"
-                        minH={'auto'} 
-                        minW={'auto'} 
+                        minH={'50'} 
+                        minW={'50'} 
                         rounded={50}
                         size={40}
                         padding={1}
@@ -313,6 +292,34 @@ function CustomNavbar() {
                         <DotsThreeVertical size={32} color="#6768AB" />
                       </Center>
                     </MenuButton>
+
+                    <MenuList bg={"#343434"} alignItems={"center"} mr={-4}>
+                      <br />
+
+                      <Center>
+                        <Avatar size={"2xl"} src={user.photoURL} />
+                      </Center>
+
+                      <br />
+
+                      <Center>
+                        <p className={style.prName}>{user.displayName}</p>
+                      </Center>
+
+                      <br />
+
+                      <MenuDivider />
+                      {/* <MenuItem>Your Servers</MenuItem> */}
+                      <MenuItem className={style.prName} isDisabled>
+                        Account Settings
+                      </MenuItem>
+                      <MenuItem
+                        className={style.prName}
+                        onClick={() => router.push("/logout")}
+                      >
+                        Logout
+                      </MenuItem>
+                    </MenuList>
 
                     {/* <MenuList minWidth={"auto"} ml={-1}>
 
