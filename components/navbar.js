@@ -222,24 +222,23 @@ function CustomNavbar() {
               <Menu>
                 <MenuButton
                   as={Button}
+                  bg="#FFC75A"
                   rounded="full"
                   variant="link"
                   cursor="pointer"
                   minW={50}
                   minH={50}
-                  title="Commu"
-                  
+                  title="Commu"   
+                  _hover={{
+                    bg:"#6768AB"
+                  }}               
                 >
                   <Center
-                    bg="#FFC75A"
                     minH={'50'} 
                     minW={'50'} 
                     rounded={50}
                     size={40}
                     padding={1}
-                    _hover={{
-                      backgroundColor:"#6768AB"
-                    }}
                   >
                     <UsersThree size={32} color="#6768AB" />
                   </Center>
