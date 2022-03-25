@@ -228,10 +228,7 @@ function CustomNavbar() {
                   cursor="pointer"
                   minW={50}
                   minH={50}
-                  title="Commu"   
-                  _hover={{
-                    bg:"#6768AB"
-                  }}               
+                  title="Commu"            
                 >
                   <Center
                     minH={'50'} 
@@ -240,7 +237,10 @@ function CustomNavbar() {
                     size={40}
                     padding={1}
                   >
-                    <UsersThree size={32} color="#6768AB" />
+                    <UsersThree
+                      size={32}
+                      color="#6768AB"
+                    />
                   </Center>
                 </MenuButton>
 

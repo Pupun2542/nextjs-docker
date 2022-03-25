@@ -2,6 +2,12 @@
     font-family: Thai Sans Lite;
     src: url('../assets/THAISANSLITE_R1.TTF');
   }
+
+.Communame{
+  font-family: Mitr;
+  font-size: 32px;
+  font-weight: 700;
+}
   
 .card {
     text-align: top;
@@ -22,7 +28,6 @@
 .genre {
     background-color: #7874a3;
     height: 30px;
-    max-width: 500px;
     width: auto;
     border-radius: 8px;
     /*margin-top:-180px;*/

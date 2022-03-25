@@ -1,77 +1,16 @@
 @font-face {
-    font-family: Thai Sans Lite;
-    src: url('../assets/THAISANSLITE_R1.TTF');
+    font-family: Mitr;
+    src: url('../assets/MITR-REGULAR.TTF');
   }
   
-.sideMain{ 
-    font-family: Thai Sans Lite;
-    font-size: 25px;
-    color:whitesmoke;
-    margin-top: 20px;
-    margin-bottom: 3px;
-    margin-left: 10px;
-}
-.sidePinned{
-    font-size: 25px;
-    font-family: Thai Sans Lite;
-    color: whitesmoke;
-    margin-bottom: 3px;
-    margin-left: 10px;
-}
-.sideNewest{
-    font-family: Thai Sans Lite;
-    font-size: 30px;
-    text-decoration: none;
-    color: whitesmoke;
-    margin-bottom: 3px;
-    margin-left: 10px;
-    margin-top: 15px;
-}
-.sideNewest:hover{
-    color: aliceblue;
-}
 .sideGroup{
-    font-family: Thai Sans Lite;
-    font-size: 30px;
-    text-decoration: none;
-    color: whitesmoke;
-    margin-bottom: 3px;
-    margin-left: 10px;
-    margin-top: 15px;
+    font-family: Mitr;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
 }
-.sideGroup:hover{
-    color: aliceblue;
-}
-.padsidebar{
-    background-color: #535353;
-    height: 65px;
-    max-height: auto;
-    margin-top: 5px;
-    /* margin-left: 5px; */
-    border-radius: 0px 10px 10px 0px;
-}
-.padsidebar:hover{
-    background-color: #5F5A9C;
-}
-.pinned{
-    background-color: #535353;
-    min-height: 50px;
-    max-height: auto;
-    margin-top: 5px;
-    padding-left: 30px;
-    padding-top: 10px;
-    padding-bottom: 5px;
-    /* margin-left: 5px; */
-    border-radius: 0px 10px 10px 0px;
-}
-.pinned:hover{
-    background-color: #5F5A9C;
-}
-.textpinned{
-    color: white;
-    text-decoration: none;
-    font-size: 20px;
-}
-.textpinned:hover{
-    color: aliceblue;
-}
+.pin{
+    font-family: Mitr;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;}

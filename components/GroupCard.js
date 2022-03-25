@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, SSRProvider, Row, Col } from "react-bootstrap";
+import { Container, SSRProvider, Row, Col, Form } from "react-bootstrap";
 import style from "../styles/groupcard.module.css";
 import { useApp } from "../src/hook/local";
 import {
@@ -15,6 +15,13 @@ import {
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { getAuth } from "firebase/auth";
+import {
+  Box,
+  Flex,
+  Center,
+  Stack,
+  Text,
+} from '@chakra-ui/react'
 
 function GroupCard() {
   const Router = useRouter();
@@ -57,37 +64,46 @@ function GroupCard() {
   }, [bws]);
 
   return (
-    <div>
+    <Box>
       {!loading &&
         commu.map((value, index) => {
           return (
-            <div
-              className={style.card}
+            <Flex
               onClick={() => {
                 Router.push("/group/" + value.id);
               }}
+              bg={"#d4d4d4"}
+              m={5}
             >
-              <Col md={7}>
+              <Center>
                 <img src={value.banner} height="216" width="384"></img>
-              </Col>
-              <Col className={style.info}>
-                <Row>
-                  <h2 className={style.namecommu}>
+              </Center>
+              
+              <Stack>
+                <Center
+                  className={style.Communame}
+                  color="black"
+                >
+                  <h2>
                     [{value.tag}]{value.Name}
                   </h2>
-                </Row>
-                <Row>
+                </Center>
+                <Flex
+                  w={'auto'}
+                >
                   {value.genre.map((tag) => {
-                    return <div className={style.genre}>{tag}</div>;
+                    return <Text
+                              bg={"#6768AB"}
+                              className={style.genre}
+                              m={1}
+                          >{tag}</Text>;
                   })}
-                </Row>
-                <Row className={style.opacity}>.</Row>
-                {/* <Row className={style.padgroupcard}></Row> */}
-              </Col>
-            </div>
+                </Flex>
+              </Stack>
+            </Flex>
           );
         })}
-    </div>
+    </Box>
   );
 }
 
