@@ -46,11 +46,9 @@ import {
   Input,
   Select,
   CloseButton,
-  } from "@chakra-ui/react";
-  import {
-    CaretLeft,
-    CaretRight,
-  } from "phosphor-react";
+} from "@chakra-ui/react";
+import { CaretLeft, CaretRight } from "phosphor-react";
+import GroupSidebar from "../components/GroupSidebar";
 
 export default function CreateGroup() {
   const app = useApp();
@@ -150,34 +148,27 @@ export default function CreateGroup() {
       }
     };
     return (
-      <Box
-        w={680}
-        h={58}
-      >
+      <Box w={680} h={58}>
         <Box>
-          <Box
-            id="tags"
-            p={1}
-          >
+          <Box id="tags" p={1}>
             {tags.map((tag, index) => (
               <li key={index} className={style.tag}>
                 <span>{tag}</span>
-                <CloseButton 
+                <CloseButton
                   onClick={() => removeTags(index)}
                   rounded={50}
-                  bg='white'
-                  color={'black'}
+                  bg="white"
+                  color={"black"}
                   h={22}
                   w={22}
                 />
-                
               </li>
             ))}
             <Input
               type="text"
               onKeyUp={(event) => (event.key === "," ? addTags(event) : null)}
               placeholder=" ใช้ , เพื่อแบ่งประเภท"
-              w={'auto'}
+              w={"auto"}
               className={style.search}
             />
           </Box>
@@ -199,14 +190,11 @@ export default function CreateGroup() {
       <Box bg="#FDFDFD">
         <CustomNavbar />
         <Flex>
-          <Box minW={400} bg={"gray.300"}></Box>
+          <GroupSidebar />
 
           <Spacer />
 
-          <Center
-            bg={"#D5D5D5"}
-            minW={1000}
-          >
+          <Center bg={"#D5D5D5"} minW={1000}>
             <VStack>
               <Center>
                 <Box>
@@ -215,7 +203,7 @@ export default function CreateGroup() {
                       <Circle
                         as="button"
                         _hover={{
-                          background:"gray"
+                          background: "gray",
                         }}
                         m={2}
                       >
@@ -230,91 +218,57 @@ export default function CreateGroup() {
                       <Circle
                         as="button"
                         _hover={{
-                          background:"gray"
+                          background: "gray",
                         }}
                         m={2}
                       >
-                        <CaretRight size={32} color={"Black"}/>
+                        <CaretRight size={32} color={"Black"} />
                       </Circle>
                     </Center>
                   </Flex>
-                  
-                  <Box
-                    bg={"#535353"}
-                    p={2}
-                    borderTopRadius={10}
-                  >
-                    <Center 
-                      className={style.HeadingCreate}
-                    >
+
+                  <Box bg={"#535353"} p={2} borderTopRadius={10}>
+                    <Center className={style.HeadingCreate}>
                       Community Name
                     </Center>
 
-                    <Center
-                      className={style.HeadingCreate2}
-                    >
+                    <Center className={style.HeadingCreate2}>
                       (ชื่อคอมมูนิตี้)
                     </Center>
-
                   </Box>
-                  
+
                   <Accordion allowMultiple>
                     <AccordionItem>
                       <h2>
                         <AccordionButton>
-                          <AccordionIcon 
-                            color={"Black"}
-                            w={50}
-                            h={50}
-                          />
+                          <AccordionIcon color={"Black"} w={50} h={50} />
 
-                          <Box
-                            className={style.Accordion}
-                            color='Black'
-                          >
+                          <Box className={style.Accordion} color="Black">
                             Basic Information
                           </Box>
                         </AccordionButton>
                       </h2>
-                      
-                      <AccordionPanel> 
-                        
+
+                      <AccordionPanel>
                         <VStack>
                           {/* Community Name */}
-                          <Center
-                            w={1024}>
-                            <Flex
-                              bg={"#535353"}
-                              borderRadius={10}
-                              minW={900}
-                            >
-                              <Box
-                                p={2}
-                                w={238}
-                              >
-                                <Box
-                                  className={style.Topic}
-                                  pl={2}
-                                >
+                          <Center w={1024}>
+                            <Flex bg={"#535353"} borderRadius={10} minW={900}>
+                              <Box p={2} w={238}>
+                                <Box className={style.Topic} pl={2}>
                                   Community Name
                                 </Box>
-                                <Box 
-                                  className={style.Topic2}
-                                  pl={2}
-                                >
+                                <Box className={style.Topic2} pl={2}>
                                   (ชื่อคอมมูนิตี้)
                                 </Box>
                               </Box>
-                              
-                              <Spacer 
-                                borderRightColor={'white'}
+
+                              <Spacer
+                                borderRightColor={"white"}
                                 borderRightWidth={3}
                               />
 
-                              <Center
-                                pl={1.5}
-                                pr={1.5}
-                              >
+                              <Center pl={1.5} pr={1.5}>
                                 <Input
                                   type="text"
                                   value={communame}
@@ -329,226 +283,166 @@ export default function CreateGroup() {
                                   className={style.search}
                                 />
                               </Center>
-                              
                             </Flex>
-                            
                           </Center>
 
-                            {/* Name Tag */}
+                          {/* Name Tag */}
                           <Center>
-                            <Flex
-                              maxW={900}>
-                                <Flex
-                                  bg={"#535353"}
-                                  borderRadius={10}
-                                  minW={'auto'}>
-                                  <Box
-                                    p={2}
-                                    w={238}
-                                  >
-                                    <Box
-                                      className={style.Topic}
-                                      pl={2}>
-                                      Short Name
-                                    </Box>
-                                    <Box 
-                                      className={style.Topic2}
-                                      pl={2}>
-                                      (ชื่อย่อไม่เกิน 4 ตัวอักษร)
-                                    </Box>
+                            <Flex maxW={900}>
+                              <Flex
+                                bg={"#535353"}
+                                borderRadius={10}
+                                minW={"auto"}
+                              >
+                                <Box p={2} w={238}>
+                                  <Box className={style.Topic} pl={2}>
+                                    Short Name
                                   </Box>
+                                  <Box className={style.Topic2} pl={2}>
+                                    (ชื่อย่อไม่เกิน 4 ตัวอักษร)
+                                  </Box>
+                                </Box>
 
-                                  <Spacer 
-                                    borderRightColor={'white'}
-                                    borderRightWidth={3}
+                                <Spacer
+                                  borderRightColor={"white"}
+                                  borderRightWidth={3}
+                                />
+
+                                <Center pl={1.5} pr={1.5}>
+                                  <Input
+                                    type="text"
+                                    value={hashtag}
+                                    onChange={(e) => {
+                                      setHashtag(e.target.value);
+                                    }}
+                                    required
+                                    w={130}
+                                    h={58}
+                                    bg={"white"}
+                                    placeholder={"..."}
+                                    className={style.search}
+                                    maxLength={4}
                                   />
-
-                                  <Center
-                                    pl={1.5}
-                                    pr={1.5}>
-                                    <Input
-                                      type="text"
-                                      value={hashtag}
-                                      onChange={(e) => {
-                                        setHashtag(e.target.value);
-                                      }}
-                                      required
-                                      w={130}
-                                      h={58}
-                                      bg={"white"}
-                                      placeholder={"..."}
-                                      className={style.search}
-                                      maxLength={4}
-                                    />
-                                  </Center>
-                                </Flex>
+                                </Center>
+                              </Flex>
 
                               <Spacer w={50} />
 
-                                <Flex
-                                  bg={"#535353"}
-                                  borderRadius={10}
-                                  minW={'10'}
-                                >
-                                  <Box
-                                    p={2}
-                                    w={238}
-                                  >
-                                    <Box
-                                      className={style.Topic}
-                                      pl={2}
-                                    >
-                                      Privancy
-                                    </Box>
-                                    <Box 
-                                      className={style.Topic2}
-                                      pl={2}
-                                    >
-                                      (ความเป็นส่วนตัว)
-                                    </Box>
+                              <Flex
+                                bg={"#535353"}
+                                borderRadius={10}
+                                minW={"10"}
+                              >
+                                <Box p={2} w={238}>
+                                  <Box className={style.Topic} pl={2}>
+                                    Privancy
                                   </Box>
-
-                                  <Spacer 
-                                    borderRightColor={'white'}
-                                    borderRightWidth={3}
-                                  />
-
-                                  <Center
-                                    pl={1.5}
-                                    pr={1.5}
-                                    
-                                  >
-                                    <Center
-                                      w={260}
-                                      h={58}
-                                      borderRadius={10}
-                                      bg={'white'}
-                                    >
-                                    </Center>
-                                  
-                                  </Center>
-                                </Flex>
-
-                            </Flex>
-                          </Center>
-                          
-                          <Center>
-                            <Flex
-                              maxW={900}>
-                                <Flex
-                                  bg={"#535353"}
-                                  borderRadius={10}
-                                  minW={'auto'}>
-                                  <Box
-                                    w={238}
-                                    p={2}>
-                                    <Box
-                                      className={style.Topic}
-                                      pl={2}>
-                                      Genre
-                                    </Box>
-                                    <Box 
-                                      className={style.Topic2}
-                                      pl={2}>
-                                      (ประเภท)
-                                    </Box>
+                                  <Box className={style.Topic2} pl={2}>
+                                    (ความเป็นส่วนตัว)
                                   </Box>
+                                </Box>
 
-                                  <Spacer 
-                                    borderRightColor={'white'}
-                                    borderRightWidth={3}
-                                    />
+                                <Spacer
+                                  borderRightColor={"white"}
+                                  borderRightWidth={3}
+                                />
 
+                                <Center pl={1.5} pr={1.5}>
                                   <Center
-                                    pl={1.5}
-                                    pr={1.5}
-                                  >
-                                    <Select
-                                      isRequired
-                                      w={650}
-                                      h={58}
-                                      bg={"white"}
-                                      color='black'
-                                      placeholder='Select Genre'
-                                      size='lg'
-                                    >
-                                      <option>Slow-Life</option>
-                                      <option>Vote for kill</option>
-                                      <option>Survival</option>
-                                      <option>Slow-Survival</option>
-                                    </Select>
-                                  </Center>
-                                </Flex>
-
+                                    w={260}
+                                    h={58}
+                                    borderRadius={10}
+                                    bg={"white"}
+                                  ></Center>
+                                </Center>
+                              </Flex>
                             </Flex>
                           </Center>
 
                           <Center>
-                            <Flex
-                              maxW={900}>
-                                <Flex
-                                  bg={"#535353"}
-                                  borderRadius={10}
-                                  minW={'auto'}
-                                  minH={'auto'}
-                                >
-                                  <Box
-                                    w={238}
-                                    p={2}>
-                                    <Box
-                                      className={style.Topic}
-                                      pl={2}>
-                                      Category
-                                    </Box>
-                                    <Box 
-                                      className={style.Topic2}
-                                      pl={2}>
-                                      (หมวดหมู่)
-                                    </Box>
+                            <Flex maxW={900}>
+                              <Flex
+                                bg={"#535353"}
+                                borderRadius={10}
+                                minW={"auto"}
+                              >
+                                <Box w={238} p={2}>
+                                  <Box className={style.Topic} pl={2}>
+                                    Genre
                                   </Box>
+                                  <Box className={style.Topic2} pl={2}>
+                                    (ประเภท)
+                                  </Box>
+                                </Box>
 
-                                  <Spacer 
-                                    borderRightColor={'white'}
-                                    borderRightWidth={3}
-                                    />
+                                <Spacer
+                                  borderRightColor={"white"}
+                                  borderRightWidth={3}
+                                />
 
-                                  <Center
-                                    pl={1.5}
-                                    pr={1.5}
+                                <Center pl={1.5} pr={1.5}>
+                                  <Select
+                                    isRequired
+                                    w={650}
+                                    h={58}
+                                    bg={"white"}
+                                    color="black"
+                                    placeholder="Select Genre"
+                                    size="lg"
                                   >
-                                    <Center
-                                      w={650}
-                                      h='auto'
-                                      minH={58}
-                                      bg={"white"}
-                                      borderRadius={10}
-                                    >
-                                      <Hashtag
-                                        selectedTags={selectedTags}
-                                      />
-                                    </Center>
-                                    
-                                  </Center>
-                                </Flex>
-
+                                    <option>Slow-Life</option>
+                                    <option>Vote for kill</option>
+                                    <option>Survival</option>
+                                    <option>Slow-Survival</option>
+                                  </Select>
+                                </Center>
+                              </Flex>
                             </Flex>
                           </Center>
 
+                          <Center>
+                            <Flex maxW={900}>
+                              <Flex
+                                bg={"#535353"}
+                                borderRadius={10}
+                                minW={"auto"}
+                                minH={"auto"}
+                              >
+                                <Box w={238} p={2}>
+                                  <Box className={style.Topic} pl={2}>
+                                    Category
+                                  </Box>
+                                  <Box className={style.Topic2} pl={2}>
+                                    (หมวดหมู่)
+                                  </Box>
+                                </Box>
 
-                          
-                          
+                                <Spacer
+                                  borderRightColor={"white"}
+                                  borderRightWidth={3}
+                                />
+
+                                <Center pl={1.5} pr={1.5}>
+                                  <Center
+                                    w={650}
+                                    h="auto"
+                                    minH={58}
+                                    bg={"white"}
+                                    borderRadius={10}
+                                  >
+                                    <Hashtag selectedTags={selectedTags} />
+                                  </Center>
+                                </Center>
+                              </Flex>
+                            </Flex>
+                          </Center>
                         </VStack>
-                      
                       </AccordionPanel>
                     </AccordionItem>
-
-
                   </Accordion>
-                  
+
                   <Row>
-                    <Col md={6}>
-                      
-                    </Col>
+                    <Col md={6}></Col>
                     <Col md={6}>
                       <input
                         type="radio"
@@ -646,7 +540,7 @@ export default function CreateGroup() {
                       }}
                     ></textarea>
                   </Row>
-                  
+
                   <Row md={12}>
                     <label>
                       <h4 className={style.label}>ลิงก์กลุ่มคอมมู</h4>
