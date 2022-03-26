@@ -64,8 +64,8 @@ export default function UploadImageModal({ setBannerBlob, BannerBlob }) {
               ? image
               : "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/group%2Fbanner%2FUploadBanner.jpg?alt=media&token=aad81eb7-7a07-4e8d-98aa-faa551116946"
           }
-          width={750}
-          height={422}
+          width={928}
+          height={522}
           className={style.bannerPlaceholder}
           onClick={() => {
             setShow(true);

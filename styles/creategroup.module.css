@@ -1,4 +1,53 @@
 @font-face {
+  font-family: Mitr;
+  src: url('../assets/MITR-REGULAR.TTF');
+}
+
+.HeadingCreate{
+  font-family: Mitr;
+  font-size: 28px;
+}
+
+.HeadingCreate2{
+  font-family: Mitr;
+  font-size: 20px;
+  font-weight: 500;
+}
+.Accordion{
+  font-family: Mitr;
+  font-size: 30px;
+  font-weight: 700;
+}
+.Topic{
+  font-family: Mitr;
+  font-size: 20px;
+}
+
+.Topic2{
+  font-family: Mitr;
+  font-size: 16px;
+}
+
+.search{
+  color: Black;
+  font-family: Mitr;
+  font-weight: 100;
+  font-size: 24px;
+}
+
+.search::-webkit-input-placeholder { 
+  font-family: Mitr;
+  /* font-weight: 100; */
+  overflow: visible;
+  vertical-align: top;
+  display: inline-block !important;
+  /* padding-left: 5px; */
+  /* padding-top: 2px; */
+  color: gray;
+  opacity: 70%;
+  }
+
+@font-face {
   font-family: Thai Sans Lite;
   src: url('../assets/THAISANSLITE_R1.TTF');
 }
@@ -7,20 +56,9 @@
   border-radius: 10px;
 }
 
-.tagsInput {
-  display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  /* min-height: 48px; */
-  /* width: 480px; */
-  padding: 8px 0px 12px 10px;
-  border: 1.5px solid rgb(214, 216, 218);
-  border-radius: 8px;
-  /*margin-left: 12px;*/
-  /* background-color: ; */
-}
+
 .input {
-  /* display: table-cell; */
+  display: table-cell;
   flex: 1;
   border:none;
   border-radius: 8px;
@@ -35,7 +73,7 @@
   display: flex;
   flex-wrap: wrap;
   padding: 0;
-  /* margin: 8px 0 0 0; */
+  margin: 8px 0 0 0;
 }
 
 .tag {
@@ -54,9 +92,6 @@
   float: left;
 }
 
-.tagTiitle {
-  margin-top: 3px;
-}
 
 .tagCloseIcon {
   display: block;
@@ -72,32 +107,18 @@
   cursor: pointer;
 }
 
-.background{
-  background-color: #737373;
-}
-
-.frombackground{
-  /*background-color: #bf977b;*/
-  background-color: rgb(189, 189, 189);
-  border-radius: 0px;
-  width: 1000px;
-  margin-top: 10px;
-  border-radius: 30px;
-  /* border-bottom-left-radius: 300px; */
-}
-
 .label{
-  /*background-color: #9c805f;*/
+  background-color: #9c805f;
   color:black;
   font-size: 22.5px;
   font-family: Thai Sans Lite;
   padding: 6px 10px;
   border-radius: 3px;
   font-weight: bold;
-  /* margin-right: -12px;
+  margin-right: -12px;
   margin-top: 18px;
   margin-left: -21px;
-  margin-bottom: -2px; */
+  margin-bottom: -2px;
 }
 .radio{
   font-weight: 600;

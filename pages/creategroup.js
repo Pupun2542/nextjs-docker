@@ -4,7 +4,7 @@ import style from "../styles/creategroup.module.css";
 import { useState, useEffect } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Col, Container, Row, Carousel, SSRProvider } from "react-bootstrap";
+import { Row, Col, Carousel, SSRProvider } from "react-bootstrap";
 import {
   getFirestore,
   collection,
@@ -28,6 +28,29 @@ import { UploadBannerImage } from "../src/services/filestoreageservice";
 import { getBlob } from "firebase/storage";
 // import { Blob } from "node:buffer";
 import Head from "next/head";
+import {
+  Box,
+  Flex,
+  Center,
+  Square,
+  Circle,
+  Container,
+  Spacer,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Stack,
+  VStack,
+  Input,
+  Select,
+  CloseButton,
+  } from "@chakra-ui/react";
+  import {
+    CaretLeft,
+    CaretRight,
+  } from "phosphor-react";
 
 export default function CreateGroup() {
   const app = useApp();
@@ -127,29 +150,39 @@ export default function CreateGroup() {
       }
     };
     return (
-      <div className={style.tagsInput}>
-        <div>
-          <div id="tags">
+      <Box
+        w={680}
+        h={58}
+      >
+        <Box>
+          <Box
+            id="tags"
+            p={1}
+          >
             {tags.map((tag, index) => (
               <li key={index} className={style.tag}>
-                <span className={style.tagTitle}>{tag}</span>
-                <span
-                  className={style.tagCloseIcon}
+                <span>{tag}</span>
+                <CloseButton 
                   onClick={() => removeTags(index)}
-                >
-                  x
-                </span>
+                  rounded={50}
+                  bg='white'
+                  color={'black'}
+                  h={22}
+                  w={22}
+                />
+                
               </li>
             ))}
-            <input
+            <Input
               type="text"
               onKeyUp={(event) => (event.key === "," ? addTags(event) : null)}
               placeholder=" ใช้ , เพื่อแบ่งประเภท"
-              className={style.input}
+              w={'auto'}
+              className={style.search}
             />
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Box>
+      </Box>
     );
   };
   const selectedTags = (tags) => {
@@ -163,55 +196,358 @@ export default function CreateGroup() {
         <title>Comuthor</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <div className={style.background}>
+      <Box bg="#FDFDFD">
         <CustomNavbar />
-        <Container className={style.frombackground}>
-          {/* <CaroselPreview /> */}
-          <Row>
-            <Col md={0}></Col>
-            <Col md={10}>
-              <Container>
-                <div>
-                  <Row>
+        <Flex>
+          <Box minW={400} bg={"gray.300"}></Box>
+
+          <Spacer />
+
+          <Center
+            bg={"#D5D5D5"}
+            minW={1000}
+          >
+            <VStack>
+              <Center>
+                <Box>
+                  <Flex>
+                    <Center>
+                      <Circle
+                        as="button"
+                        _hover={{
+                          background:"gray"
+                        }}
+                        m={2}
+                      >
+                        <CaretLeft size={32} color={"Black"} />
+                      </Circle>
+                    </Center>
                     <UploadImageModal
                       setBannerBlob={setBannerBlob}
                       BannerBlob={bannerBlob}
                     />
-                  </Row>
-                  <Row>
-                    <Col>
-                      <label>
-                        <h4 className={style.label}>
-                          ชื่อย่อคอมมู ไม่เกิน 4 ตัวอักษร
-                        </h4>
-                      </label>
-                      <input
-                        className={style.setDescription}
-                        type="text"
-                        value={hashtag}
-                        onChange={(e) => {
-                          setHashtag(e.target.value);
+                    <Center>
+                      <Circle
+                        as="button"
+                        _hover={{
+                          background:"gray"
                         }}
-                        required
-                        maxLength="4"
-                      />
-                    </Col>
-                    <Col md={12}></Col>
-                  </Row>
+                        m={2}
+                      >
+                        <CaretRight size={32} color={"Black"}/>
+                      </Circle>
+                    </Center>
+                  </Flex>
+                  
+                  <Box
+                    bg={"#535353"}
+                    p={2}
+                    borderTopRadius={10}
+                  >
+                    <Center 
+                      className={style.HeadingCreate}
+                    >
+                      Community Name
+                    </Center>
+
+                    <Center
+                      className={style.HeadingCreate2}
+                    >
+                      (ชื่อคอมมูนิตี้)
+                    </Center>
+
+                  </Box>
+                  
+                  <Accordion allowMultiple>
+                    <AccordionItem>
+                      <h2>
+                        <AccordionButton>
+                          <AccordionIcon 
+                            color={"Black"}
+                            w={50}
+                            h={50}
+                          />
+
+                          <Box
+                            className={style.Accordion}
+                            color='Black'
+                          >
+                            Basic Information
+                          </Box>
+                        </AccordionButton>
+                      </h2>
+                      
+                      <AccordionPanel> 
+                        
+                        <VStack>
+                          {/* Community Name */}
+                          <Center
+                            w={1024}>
+                            <Flex
+                              bg={"#535353"}
+                              borderRadius={10}
+                              minW={900}
+                            >
+                              <Box
+                                p={2}
+                                w={238}
+                              >
+                                <Box
+                                  className={style.Topic}
+                                  pl={2}
+                                >
+                                  Community Name
+                                </Box>
+                                <Box 
+                                  className={style.Topic2}
+                                  pl={2}
+                                >
+                                  (ชื่อคอมมูนิตี้)
+                                </Box>
+                              </Box>
+                              
+                              <Spacer 
+                                borderRightColor={'white'}
+                                borderRightWidth={3}
+                              />
+
+                              <Center
+                                pl={1.5}
+                                pr={1.5}
+                              >
+                                <Input
+                                  type="text"
+                                  value={communame}
+                                  onChange={(e) => {
+                                    setCommuname(e.target.value);
+                                  }}
+                                  required
+                                  w={650}
+                                  h={58}
+                                  bg={"white"}
+                                  placeholder={"..."}
+                                  className={style.search}
+                                />
+                              </Center>
+                              
+                            </Flex>
+                            
+                          </Center>
+
+                            {/* Name Tag */}
+                          <Center>
+                            <Flex
+                              maxW={900}>
+                                <Flex
+                                  bg={"#535353"}
+                                  borderRadius={10}
+                                  minW={'auto'}>
+                                  <Box
+                                    p={2}
+                                    w={238}
+                                  >
+                                    <Box
+                                      className={style.Topic}
+                                      pl={2}>
+                                      Short Name
+                                    </Box>
+                                    <Box 
+                                      className={style.Topic2}
+                                      pl={2}>
+                                      (ชื่อย่อไม่เกิน 4 ตัวอักษร)
+                                    </Box>
+                                  </Box>
+
+                                  <Spacer 
+                                    borderRightColor={'white'}
+                                    borderRightWidth={3}
+                                  />
+
+                                  <Center
+                                    pl={1.5}
+                                    pr={1.5}>
+                                    <Input
+                                      type="text"
+                                      value={hashtag}
+                                      onChange={(e) => {
+                                        setHashtag(e.target.value);
+                                      }}
+                                      required
+                                      w={130}
+                                      h={58}
+                                      bg={"white"}
+                                      placeholder={"..."}
+                                      className={style.search}
+                                      maxLength={4}
+                                    />
+                                  </Center>
+                                </Flex>
+
+                              <Spacer w={50} />
+
+                                <Flex
+                                  bg={"#535353"}
+                                  borderRadius={10}
+                                  minW={'10'}
+                                >
+                                  <Box
+                                    p={2}
+                                    w={238}
+                                  >
+                                    <Box
+                                      className={style.Topic}
+                                      pl={2}
+                                    >
+                                      Privancy
+                                    </Box>
+                                    <Box 
+                                      className={style.Topic2}
+                                      pl={2}
+                                    >
+                                      (ความเป็นส่วนตัว)
+                                    </Box>
+                                  </Box>
+
+                                  <Spacer 
+                                    borderRightColor={'white'}
+                                    borderRightWidth={3}
+                                  />
+
+                                  <Center
+                                    pl={1.5}
+                                    pr={1.5}
+                                    
+                                  >
+                                    <Center
+                                      w={260}
+                                      h={58}
+                                      borderRadius={10}
+                                      bg={'white'}
+                                    >
+                                    </Center>
+                                  
+                                  </Center>
+                                </Flex>
+
+                            </Flex>
+                          </Center>
+                          
+                          <Center>
+                            <Flex
+                              maxW={900}>
+                                <Flex
+                                  bg={"#535353"}
+                                  borderRadius={10}
+                                  minW={'auto'}>
+                                  <Box
+                                    w={238}
+                                    p={2}>
+                                    <Box
+                                      className={style.Topic}
+                                      pl={2}>
+                                      Genre
+                                    </Box>
+                                    <Box 
+                                      className={style.Topic2}
+                                      pl={2}>
+                                      (ประเภท)
+                                    </Box>
+                                  </Box>
+
+                                  <Spacer 
+                                    borderRightColor={'white'}
+                                    borderRightWidth={3}
+                                    />
+
+                                  <Center
+                                    pl={1.5}
+                                    pr={1.5}
+                                  >
+                                    <Select
+                                      isRequired
+                                      w={650}
+                                      h={58}
+                                      bg={"white"}
+                                      color='black'
+                                      placeholder='Select Genre'
+                                      size='lg'
+                                    >
+                                      <option>Slow-Life</option>
+                                      <option>Vote for kill</option>
+                                      <option>Survival</option>
+                                      <option>Slow-Survival</option>
+                                    </Select>
+                                  </Center>
+                                </Flex>
+
+                            </Flex>
+                          </Center>
+
+                          <Center>
+                            <Flex
+                              maxW={900}>
+                                <Flex
+                                  bg={"#535353"}
+                                  borderRadius={10}
+                                  minW={'auto'}
+                                  minH={'auto'}
+                                >
+                                  <Box
+                                    w={238}
+                                    p={2}>
+                                    <Box
+                                      className={style.Topic}
+                                      pl={2}>
+                                      Category
+                                    </Box>
+                                    <Box 
+                                      className={style.Topic2}
+                                      pl={2}>
+                                      (หมวดหมู่)
+                                    </Box>
+                                  </Box>
+
+                                  <Spacer 
+                                    borderRightColor={'white'}
+                                    borderRightWidth={3}
+                                    />
+
+                                  <Center
+                                    pl={1.5}
+                                    pr={1.5}
+                                  >
+                                    <Center
+                                      w={650}
+                                      h='auto'
+                                      minH={58}
+                                      bg={"white"}
+                                      borderRadius={10}
+                                    >
+                                      <Hashtag
+                                        selectedTags={selectedTags}
+                                      />
+                                    </Center>
+                                    
+                                  </Center>
+                                </Flex>
+
+                            </Flex>
+                          </Center>
+
+
+                          
+                          
+                        </VStack>
+                      
+                      </AccordionPanel>
+                    </AccordionItem>
+
+
+                  </Accordion>
+                  
                   <Row>
                     <Col md={6}>
-                      <label>
-                        <h4 className={style.label}>ชื่อคอมมู</h4>
-                        <input
-                          className={style.setDescription}
-                          type="text"
-                          value={communame}
-                          onChange={(e) => {
-                            setCommuname(e.target.value);
-                          }}
-                          required
-                        ></input>
-                      </label>
+                      
                     </Col>
                     <Col md={6}>
                       <input
@@ -310,14 +646,7 @@ export default function CreateGroup() {
                       }}
                     ></textarea>
                   </Row>
-                  <Row md={12}>
-                    <label>
-                      <h4 className={style.label}>
-                        ประเภทของคอมมู (ใช้ , ในการแบ่งคำ)
-                      </h4>
-                    </label>
-                    <Hashtag selectedTags={selectedTags} />
-                  </Row>
+                  
                   <Row md={12}>
                     <label>
                       <h4 className={style.label}>ลิงก์กลุ่มคอมมู</h4>
@@ -414,13 +743,16 @@ export default function CreateGroup() {
                   <button className={style.button} onClick={HandleSubmit}>
                     สร้างคอมมู
                   </button>
-                </div>
-              </Container>
-            </Col>
-            <Col md={0}></Col>
-          </Row>
-        </Container>
-      </div>
+                </Box>
+              </Center>
+            </VStack>
+          </Center>
+
+          <Spacer />
+
+          <Box minW={400} bg={"gray.300"}></Box>
+        </Flex>
+      </Box>
     </SSRProvider>
   );
 }

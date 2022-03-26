@@ -1,6 +1,11 @@
-@font-face {
+/* @font-face {
     font-family: Thai Sans Lite;
     src: url('../assets/THAISANSLITE_R1.TTF');
+  } */
+
+  @font-face {
+    font-family: Mitr;
+    src: url('../assets/MITR-REGULAR.TTF');
   }
 
 .Communame{
@@ -9,68 +14,15 @@
   font-weight: 700;
 }
   
-.card {
-    text-align: top;
-    background-color:rgb(138, 138, 138);
-    /*padding: 5px;
-    box-sizing: border-box;*/
-    cursor: pointer;
-    max-width: 900px;
-    padding: 0px 0px 0px 0px;
-    box-sizing: border-box;
-    display: flex;
-    /* flex-direction: column; */
-    margin-top: 10px;
-    border-radius: 10px;
-    margin-left: 0px;
-    /*box-shadow: 6px 0px 30px #d4d4d4;*/
-}
 .genre {
     background-color: #7874a3;
-    height: 30px;
+    height: 40px;
     width: auto;
-    border-radius: 8px;
-    /*margin-top:-180px;*/
-    text-align: center;
-    color: whitesmoke;
-    margin-left: 5px;
-    margin-top: 5px;
-    padding-top: 2px;
-    margin-bottom: 1px;
-}
-.card:hover {
-    background-color: #cbc9df;
+    color: white;
+    font-family: Mitr;
 }
 
 .genre:hover{
     background-color:rgb(235, 183, 86);
     color: black;
-}
-.namecommu{
-    /* margin-left: 425px; */
-    margin-top: 5px;
-    font-size: 42px;
-    font-family: Thai Sans Lite;
-    font-weight: bold;
-    max-width: 600px;
-}
-.padgroupcard{
-    background-color: #fff;
-    width: 295px;
-    height: 95px;
-    border-radius: 10px;
-    margin-right: 0px;
-    margin-left: 5px;
-    margin-top: 0px;
-    margin-bottom: 10px;
-}
-.bg{
-    background-color: #737373;
-}
-.info{
-    margin-left: -100px;
-    width: 600px;
-}
-.opacity{
-    opacity: 0%;
 }

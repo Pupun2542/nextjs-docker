@@ -20,7 +20,12 @@ import {
   Flex,
   Center,
   Stack,
+  Spacer,
   Text,
+  VStack,
+  HStack,
+  Wrap,
+  WrapItem,
 } from '@chakra-ui/react'
 
 function GroupCard() {
@@ -64,7 +69,9 @@ function GroupCard() {
   }, [bws]);
 
   return (
-    <Box>
+    <Box
+      bg={"#d4d4d4"}
+    >
       {!loading &&
         commu.map((value, index) => {
           return (
@@ -72,34 +79,54 @@ function GroupCard() {
               onClick={() => {
                 Router.push("/group/" + value.id);
               }}
-              bg={"#d4d4d4"}
-              m={5}
+              bg={"#9A9A9A"}
+              mr={5}
+              ml={5}
+              mt={2}
+              mb={1.5}
+              h={'auto'}
+              borderRadius={10}
+              _hover={{
+                background:"#535353"
+              }}
+              // as="button"
+              cursor="pointer"
             >
-              <Center>
+              <Center
+                minH={216}
+                minW={384}
+              >
                 <img src={value.banner} height="216" width="384"></img>
               </Center>
               
-              <Stack>
-                <Center
+              <VStack ml={5}>
+                <Box
                   className={style.Communame}
                   color="black"
+                  maxW={606}
+                  w={556}
                 >
-                  <h2>
+                  <Box>
                     [{value.tag}]{value.Name}
-                  </h2>
-                </Center>
-                <Flex
-                  w={'auto'}
+                  </Box>
+                </Box>
+
+                <Wrap
+                  w={556}
+                  maxW={606}
+                  h={30}
                 >
                   {value.genre.map((tag) => {
-                    return <Text
+                    return <WrapItem
                               bg={"#6768AB"}
                               className={style.genre}
                               m={1}
-                          >{tag}</Text>;
+                              borderRadius={10}
+                              p={2}
+                          >{tag}</WrapItem>;
                   })}
-                </Flex>
-              </Stack>
+                </Wrap>
+              </VStack>
             </Flex>
           );
         })}
