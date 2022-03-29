@@ -104,7 +104,7 @@ export default function Groups() {
                       onClick={() => Router.push("/prototype/" + val.id)}
                       cursor={"pointer"}
                     >
-                      {console.log(val.Name)}
+                      {/* {console.log(val.Name)} */}
                       <Text color={"black"}>{val.Name}</Text>
                     </Box>
                   ))}

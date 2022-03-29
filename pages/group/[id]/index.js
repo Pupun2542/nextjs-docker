@@ -65,13 +65,13 @@ export default function Group() {
   };
 
   useEffect(() => {
-    console.log("effect");
+    // console.log("effect");
     const l = async ()=>{
-      console.log(auth.currentUser,db);
+      // console.log(auth.currentUser,db);
       if (auth.currentUser && db) {
         console.log("if1");
         const d = await getDoc(doc(db, "userDetail", auth.currentUser.uid))
-        console.log(auth.currentUser.uid);
+        // console.log(auth.currentUser.uid);
         if (d.data().PinnedGroup){
           console.log("if2");
           if (d.data().PinnedGroup.includes(id)) {

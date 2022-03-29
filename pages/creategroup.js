@@ -97,6 +97,9 @@ export default function CreateGroup() {
   const [contactlink, setContactlink] = useState("");
   const [privacy, setPrivacy] = useState("");
   const [bannerBlob, setBannerBlob] = useState("");
+  const [durationsw, setDurationsw] = useState(true);
+
+  //ก็อปปี้บรรทัดบนไปวางเพิ่ม หรือเขียนเอง ลักษณะคือ const [state, setState] = useState(true) โดยที่ state คือชื่อตัวแปรที่จะใช้ เช่น durationsw ส่วน setstate คือฟังก์ชั่นที่ไว้ใช้เปลี่ยนค่าตัวแปร
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
@@ -514,6 +517,9 @@ export default function CreateGroup() {
                               <Switch 
                                 bg={'gray.500'}
                                 borderRadius={10}
+                                isChecked = {durationsw}
+                                onChange = {()=>setDurationsw(!durationsw)}
+                                //เพิ่ม 2 บรรทัดบน ตัวแปรให้ตรงกับที่สร้าง 1 state ต่อ 1 component
                               />
                             </Center>
                             
@@ -540,7 +546,7 @@ export default function CreateGroup() {
                                   />
 
                                   <Center pl={1.5} pr={1.5}>
-                                    <Select
+                                    {/* <Select
                                       isRequired
                                       w={650}
                                       h={58}
@@ -549,7 +555,15 @@ export default function CreateGroup() {
                                       placeholder="22/02/2022 22:22 - 22/02/2222 22:22"
                                       size="lg"
                                     >
-                                    </Select>
+                                    </Select> */}
+                                    <Input
+                                      type="datetime-local"
+                                      isDisabled ={!durationsw} //แล้วก็เพิ่มตรงนี้ ชื่อตัวแปรตาม state ที่สร้าง
+                                      
+                                    />
+                                    {/* <Box>
+                                      {durationsw? "True":"False"}
+                                    </Box> */}
                                   </Center>
                                   
                                 </Flex>
