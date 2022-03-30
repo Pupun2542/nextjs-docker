@@ -99,6 +99,7 @@ export default function CreateGroup() {
   const [privacy, setPrivacy] = useState("");
   const [bannerBlob, setBannerBlob] = useState("");
   const [durationsw, setDurationsw] = useState(true);
+  const [Averagesw, setAveragesw] = useState(true);
 
   //ก็อปปี้บรรทัดบนไปวางเพิ่ม หรือเขียนเอง ลักษณะคือ const [state, setState] = useState(true) โดยที่ state คือชื่อตัวแปรที่จะใช้ เช่น durationsw ส่วน setstate คือฟังก์ชั่นที่ไว้ใช้เปลี่ยนค่าตัวแปร
 
@@ -164,17 +165,15 @@ export default function CreateGroup() {
       }
     };
     return (
-      <Box w={680} h={58}>
+      <Box w={680} h={38}>
         <Box>
           <Box id="tags">
             {tags.map((tag, index) => (
               <Box
                 key={index}
                 className={style.tag}
-                mr={1}
-                mt={1}
-                p={2}
-                mb={1}
+                m={1.5}
+                p={1}
                 maxW={600}
               >
                 <Box>{tag}</Box>
@@ -196,7 +195,7 @@ export default function CreateGroup() {
               w={"auto"}
               className={style.search}
               maxW={650}
-              mt={2}
+              mt={1}
             />
           </Box>
         </Box>
@@ -466,27 +465,22 @@ export default function CreateGroup() {
                                 bg={"#535353"}
                                 borderRadius={10}
                                 minW={"auto"}
-                                minH={"auto"}
-                              >
-                                <Box w={238} p={2}>
-                                  <Box className={style.Topic} pl={2}>
-                                    Category
-                                  </Box>
-                                  <Box className={style.Topic2} pl={2}>
-                                    (หมวดหมู่)
+                                minH={"auto"}>
+                                <Box w={238} p={4}>
+                                  <Box className={style.Topic2}>
+                                    หมวดหมู่
                                   </Box>
                                 </Box>
 
                                 <Spacer
                                   borderRightColor={"white"}
-                                  borderRightWidth={3}
-                                />
+                                  borderRightWidth={3}/>
 
                                 <Center>
                                   <Container
                                     minW={650}
                                     h="auto"
-                                    minH={58}
+                                    minH={46}
                                     bg={"white"}
                                     borderRadius={10}
                                     m={1.5}
@@ -519,12 +513,9 @@ export default function CreateGroup() {
                                   borderRadius={10}
                                   minW={"auto"}
                                 >
-                                  <Box w={238} p={2}>
-                                    <Box className={style.Topic} pl={2}>
-                                      Duration
-                                    </Box>
-                                    <Box className={style.Topic2} pl={2}>
-                                      (ระยะเวลา)
+                                  <Box w={238} p={4}>
+                                    <Box className={style.Topic2}>
+                                      ระยะเวลา
                                     </Box>
                                   </Box>
 
@@ -534,24 +525,31 @@ export default function CreateGroup() {
                                   />
 
                                   <Center pl={1.5} pr={1.5}>
-                                    {/* <Select
-                                      isRequired
-                                      w={650}
-                                      h={58}
-                                      bg={"white"}
-                                      color="black"
-                                      placeholder="22/02/2022 22:22 - 22/02/2222 22:22"
-                                      size="lg"
-                                    >
-                                    </Select> */}
                                     <Input
                                       type="datetime-local"
                                       isDisabled={!durationsw} //แล้วก็เพิ่มตรงนี้ ชื่อตัวแปรตาม state ที่สร้าง
-
+                                      isRequired
+                                      h={46}
+                                      bg={"white"}
+                                      color="black"
                                     />
-                                    {/* <Box>
-                                      {durationsw? "True":"False"}
-                                    </Box> */}
+                                  </Center>
+
+                                  <Spacer />
+                                  
+                                  <Center>ถึง</Center>
+                                  
+                                  <Spacer />
+                                  
+                                  <Center pl={1.5} pr={1.5}>
+                                    <Input
+                                      type="datetime-local"
+                                      isDisabled={!durationsw} //แล้วก็เพิ่มตรงนี้ ชื่อตัวแปรตาม state ที่สร้าง
+                                      isRequired
+                                      h={46}
+                                      bg={"white"}
+                                      color="black"
+                                    />
                                   </Center>
 
                                 </Flex>
@@ -566,6 +564,7 @@ export default function CreateGroup() {
                               <Switch
                                 bg={'gray.500'}
                                 borderRadius={10}
+                                onChange={() => setAveragesw(!Averagesw)}
                               />
                             </Center>
 
@@ -577,12 +576,9 @@ export default function CreateGroup() {
                                   borderRadius={10}
                                   minW={"auto"}
                                 >
-                                  <Box w={238} p={2}>
-                                    <Box className={style.Topic} pl={2}>
-                                      Average Time
-                                    </Box>
-                                    <Box className={style.Topic2} pl={2}>
-                                      (ระยะเวลาโดยประมาณ)
+                                  <Box w={238} p={4}>
+                                    <Box className={style.Topic2}>
+                                      ระยะเวลาโดยประมาณ
                                     </Box>
                                   </Box>
 
@@ -591,32 +587,29 @@ export default function CreateGroup() {
                                     borderRightWidth={3}
                                   />
 
-                                  <Center
+                                  <Input
                                     bg='white'
                                     m={1.5}
                                     borderRadius={10}
                                     w={480}
-                                  >
-                                  </Center>
+                                    h={46}
+                                    color={'Black'}
+                                  />
 
                                   <Spacer
                                     borderLeftColor={"white"}
-                                    borderLeftWidth={3}
-                                  />
+                                    borderLeftWidth={3}/>
 
                                   <Center
                                     pl={1.5}
-                                    pr={1.5}
-
-                                  >
+                                    pr={1.5}>
                                     <Select
                                       isRequired
-
-                                      h={58}
+                                      h={46}
                                       bg={"white"}
                                       color="black"
                                       size="lg"
-
+                                      isDisabled={!Averagesw}
                                     >
                                       <option>วัน(Day)</option>
                                       <option>เดือน(Month)</option>
