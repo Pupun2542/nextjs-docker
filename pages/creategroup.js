@@ -55,11 +55,12 @@ import {
   NumberIncrementStepper,
   Textarea,
 } from "@chakra-ui/react";
-import { 
-  CaretLeft, 
-  CaretRight, 
+import {
+  CaretLeft,
+  CaretRight,
   Plus,
-  Minus, } from "phosphor-react";
+  Minus,
+} from "phosphor-react";
 import GroupSidebar from "../components/GroupSidebar";
 
 export default function CreateGroup() {
@@ -168,7 +169,7 @@ export default function CreateGroup() {
           <Box id="tags">
             {tags.map((tag, index) => (
               <Box
-                key={index} 
+                key={index}
                 className={style.tag}
                 mr={1}
                 mt={1}
@@ -214,7 +215,7 @@ export default function CreateGroup() {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <Box bg="#FDFDFD">
+      <Box bg="#FDFDFD" maxW={1980}>
         <CustomNavbar />
         <Flex>
           <GroupSidebar />
@@ -224,7 +225,7 @@ export default function CreateGroup() {
           <Center bg={"#D5D5D5"} w={1024}>
             <VStack>
               <Center>
-                <Box>
+              <Box>
                   <Flex>
                     <Center>
                       <Circle
@@ -237,10 +238,12 @@ export default function CreateGroup() {
                         <CaretLeft size={32} color={"Black"} />
                       </Circle>
                     </Center>
-                    <UploadImageModal
+                    {/* <UploadImageModal
                       setBannerBlob={setBannerBlob}
                       BannerBlob={bannerBlob}
-                    />
+                    /> */}
+                    <Center w={928} h={522}>
+                    </Center>
                     <Center>
                       <Circle
                         as="button"
@@ -254,20 +257,26 @@ export default function CreateGroup() {
                     </Center>
                   </Flex>
 
-                  <Box 
-                    bg={"#535353"} 
-                    p={2} 
+                  <Center
+                    bg={"#535353"}
+                    p={4}
                     borderTopRadius={10}
                     maxW={1024}
                   >
-                    <Center className={style.HeadingCreate}>
-                      Community Name
-                    </Center>
-
-                    <Center className={style.HeadingCreate2}>
-                      (ชื่อคอมมูนิตี้)
-                    </Center>
-                  </Box>
+                    <Flex>
+                      <Center
+                        //จะเป็น Real-Time จากช่องพิมพ์ชื่อย่อคอมมู
+                        p={2}
+                        className={style.HeadingCreate2}>
+                        [____]
+                      </Center>
+                      <Center
+                        //จะเป็น Real-Time จากช่องพิมพ์ชื่อคอมมู
+                        className={style.HeadingCreate2}>
+                        ชื่อคอมมูนิตี้
+                      </Center>
+                    </Flex>
+                  </Center>
 
                   <Accordion allowMultiple>
                     <AccordionItem maxW={1024} >
@@ -286,12 +295,9 @@ export default function CreateGroup() {
                           {/* Community Name */}
                           <Center w={1024}>
                             <Flex bg={"#535353"} borderRadius={10} minW={900}>
-                              <Box p={2} w={238}>
-                                <Box className={style.Topic} pl={2}>
-                                  Community Name
-                                </Box>
-                                <Box className={style.Topic2} pl={2}>
-                                  (ชื่อคอมมูนิตี้)
+                              <Box p={4} w={238}>
+                                <Box className={style.Topic2} pl={0}>
+                                  ชื่อคอมมูนิตี้
                                 </Box>
                               </Box>
 
@@ -304,12 +310,10 @@ export default function CreateGroup() {
                                 <Input
                                   type="text"
                                   value={communame}
-                                  onChange={(e) => {
-                                    setCommuname(e.target.value);
-                                  }}
+                                  onChange={(e) => {setCommuname(e.target.value);}}
                                   required
                                   w={650}
-                                  h={58}
+                                  h={46}
                                   bg={"white"}
                                   placeholder={"..."}
                                   className={style.search}
@@ -324,14 +328,10 @@ export default function CreateGroup() {
                               <Flex
                                 bg={"#535353"}
                                 borderRadius={10}
-                                minW={"auto"}
-                              >
-                                <Box p={2} w={238}>
-                                  <Box className={style.Topic} pl={2}>
-                                    Short Name
-                                  </Box>
-                                  <Box className={style.Topic2} pl={2}>
-                                    (ชื่อย่อไม่เกิน 4 ตัวอักษร)
+                                minW={"auto"}>
+                                <Box p={4} w={238}>
+                                  <Box className={style.Topic2} pl={0}>
+                                    ชื่อย่อไม่เกิน 4 ตัวอักษร
                                   </Box>
                                 </Box>
 
@@ -349,12 +349,11 @@ export default function CreateGroup() {
                                     }}
                                     required
                                     w={130}
-                                    h={58}
+                                    h={46}
                                     bg={"white"}
                                     placeholder={"..."}
                                     className={style.search}
-                                    maxLength={4}
-                                  />
+                                    maxLength={4}/>
                                 </Center>
                               </Flex>
 
@@ -363,86 +362,10 @@ export default function CreateGroup() {
                               <Flex
                                 bg={"#535353"}
                                 borderRadius={10}
-                                minW={"10"}
-                              >
-                                <Box p={2} w={238}>
-                                  <Box className={style.Topic} pl={2}>
-                                    Privacy
-                                  </Box>
-                                  <Box className={style.Topic2} pl={2}>
-                                    (ความเป็นส่วนตัว)
-                                  </Box>
-                                </Box>
-
-                                <Spacer
-                                  borderRightColor={"white"}
-                                  borderRightWidth={3}
-                                />
-
-                                <Center pl={1.5} pr={1.5}>
-                                  <Center
-                                    w={260}
-                                    h={58}
-                                    borderRadius={10}
-                                    bg={"white"}
-                                  ></Center>
-                                </Center>
-                              </Flex>
-                            </Flex>
-                          </Center>
-
-                          <Center>
-                            <Flex maxW={900}>
-                              <Flex
-                                bg={"#535353"}
-                                borderRadius={10}
-                                minW={"auto"}
-                              >
-                                <Box p={2} w={238}>
-                                  <Box className={style.Topic} pl={2}>
-                                    Number of Player
-                                  </Box>
-                                  <Box className={style.Topic2} pl={2}>
-                                    (จำนวนผู้เล่น)
-                                  </Box>
-                                </Box>
-
-                                <Spacer
-                                  borderRightColor={"white"}
-                                  borderRightWidth={3}
-                                />
-
-                                <Center pl={1.5} pr={1.5}>
-                                  <NumberInput 
-                                    w={130}
-                                  >
-                                    <NumberInputField
-                                      bg={'white'}
-                                      h={58}
-                                      color={'black'}
-                                    />
-                                    <NumberInputStepper>
-                                      <NumberIncrementStepper color='black' />
-                                      <NumberDecrementStepper color='black' />
-                                    </NumberInputStepper>
-                                  </NumberInput>
-                                </Center>
-                                
-                              </Flex>
-
-                              <Spacer w={50} />
-
-                              <Flex
-                                bg={"#535353"}
-                                borderRadius={10}
-                                minW={"10"}
-                              >
-                                <Box p={2} w={238}>
-                                  <Box className={style.Topic} pl={2}>
-                                    Genre
-                                  </Box>
-                                  <Box className={style.Topic2} pl={2}>
-                                    (ประเภท)
+                                minW={"10"}>
+                                <Box p={4} w={238}>
+                                  <Box className={style.Topic2}>
+                                    ความเป็นส่วนตัว
                                   </Box>
                                 </Box>
 
@@ -455,16 +378,81 @@ export default function CreateGroup() {
                                   <Select
                                     isRequired
                                     w={260}
-                                    h={58}
+                                    h={46}
                                     bg={"white"}
                                     color="black"
-                                    placeholder="Select Genre"
-                                    size="lg"
+                                    size="lg">
+                                    <option style={{ backgroundColor: 'White' }}>สาธารณะ</option>
+                                    <option style={{ backgroundColor: 'White' }}>ส่วนตัว</option>
+                                  </Select>
+                                </Center>
+                              </Flex>
+                            </Flex>
+                          </Center>
+
+                          <Center>
+                            <Flex maxW={900}>
+                              <Flex
+                                bg={"#535353"}
+                                borderRadius={10}
+                                minW={"auto"}>
+                                <Box p={4} w={238}>
+                                  <Box className={style.Topic2}>
+                                    จำนวนผู้เล่น
+                                  </Box>
+                                </Box>
+
+                                <Spacer
+                                  borderRightColor={"white"}
+                                  borderRightWidth={3}
+                                />
+
+                                <Center pl={1.5} pr={1.5}>
+                                  <NumberInput
+                                    w={130}
                                   >
-                                    <option>Slow-Life</option>
-                                    <option>Vote for kill</option>
-                                    <option>Survival</option>
-                                    <option>Slow-Survival</option>
+                                    <NumberInputField
+                                      bg={'white'}
+                                      h={46}
+                                      color={'black'}
+                                    />
+                                    <NumberInputStepper>
+                                      <NumberIncrementStepper color='black' />
+                                      <NumberDecrementStepper color='black' />
+                                    </NumberInputStepper>
+                                  </NumberInput>
+                                </Center>
+
+                              </Flex>
+
+                              <Spacer w={50} />
+
+                              <Flex
+                                bg={"#535353"}
+                                borderRadius={10}
+                                minW={"10"}>
+                                <Box p={4} w={238}>
+                                  <Box className={style.Topic2}>
+                                    ประเภท
+                                  </Box>
+                                </Box>
+
+                                <Spacer
+                                  borderRightColor={"white"}
+                                  borderRightWidth={3}/>
+
+                                <Center pl={1.5} pr={1.5}>
+                                  <Select
+                                    isRequired
+                                    w={260}
+                                    h={46}
+                                    bg={"white"}
+                                    color="black"
+                                    size="lg">
+                                    <option style={{ backgroundColor: 'White' }}>Slow-Life</option>
+                                    <option style={{ backgroundColor: 'White' }}>Vote for kill</option>
+                                    <option style={{ backgroundColor: 'White' }}>Survival</option>
+                                    <option style={{ backgroundColor: 'White' }}>Slow-Survival</option>
                                   </Select>
                                 </Center>
 
@@ -512,19 +500,19 @@ export default function CreateGroup() {
                           </Center>
 
                           <Flex w={1024}>
-                            
+
                             <Center w={62}>
-                              <Switch 
+                              <Switch
                                 bg={'gray.500'}
                                 borderRadius={10}
-                                isChecked = {durationsw}
-                                onChange = {()=>setDurationsw(!durationsw)}
-                                //เพิ่ม 2 บรรทัดบน ตัวแปรให้ตรงกับที่สร้าง 1 state ต่อ 1 component
+                                isChecked={durationsw}
+                                onChange={() => setDurationsw(!durationsw)}
+                              //เพิ่ม 2 บรรทัดบน ตัวแปรให้ตรงกับที่สร้าง 1 state ต่อ 1 component
                               />
                             </Center>
-                            
+
                             <Center>
-                            
+
                               <Flex maxW={900}>
                                 <Flex
                                   bg={"#535353"}
@@ -558,31 +546,31 @@ export default function CreateGroup() {
                                     </Select> */}
                                     <Input
                                       type="datetime-local"
-                                      isDisabled ={!durationsw} //แล้วก็เพิ่มตรงนี้ ชื่อตัวแปรตาม state ที่สร้าง
-                                      
+                                      isDisabled={!durationsw} //แล้วก็เพิ่มตรงนี้ ชื่อตัวแปรตาม state ที่สร้าง
+
                                     />
                                     {/* <Box>
                                       {durationsw? "True":"False"}
                                     </Box> */}
                                   </Center>
-                                  
+
                                 </Flex>
                               </Flex>
                             </Center>
                           </Flex>
-                          
+
 
                           <Flex w={1024}>
-                            
+
                             <Center w={62}>
-                              <Switch 
+                              <Switch
                                 bg={'gray.500'}
                                 borderRadius={10}
                               />
                             </Center>
-                            
+
                             <Center>
-                            
+
                               <Flex maxW={900}>
                                 <Flex
                                   bg={"#535353"}
@@ -610,25 +598,25 @@ export default function CreateGroup() {
                                     w={480}
                                   >
                                   </Center>
-                                  
+
                                   <Spacer
                                     borderLeftColor={"white"}
                                     borderLeftWidth={3}
                                   />
 
-                                  <Center 
-                                    pl={1.5} 
+                                  <Center
+                                    pl={1.5}
                                     pr={1.5}
-                                    
+
                                   >
                                     <Select
                                       isRequired
-                                      
+
                                       h={58}
                                       bg={"white"}
                                       color="black"
                                       size="lg"
-                                      
+
                                     >
                                       <option>วัน(Day)</option>
                                       <option>เดือน(Month)</option>
@@ -641,14 +629,14 @@ export default function CreateGroup() {
                           </Flex>
 
                           <Flex w={1024}>
-                            
+
                             <Center w={62}>
-                              <Switch 
+                              <Switch
                                 bg={'gray.500'}
                                 borderRadius={10}
                               />
                             </Center>
-                            
+
                             <Center>
                               <Flex maxW={900}>
                                 <Flex
@@ -690,14 +678,14 @@ export default function CreateGroup() {
                           </Flex>
 
                           <Flex w={1024}>
-                            
+
                             <Center w={62}>
-                              <Switch 
+                              <Switch
                                 bg={'gray.500'}
                                 borderRadius={10}
                               />
                             </Center>
-                            
+
                             <Center>
                               <Flex maxW={900}>
                                 <Flex
@@ -739,16 +727,16 @@ export default function CreateGroup() {
                           </Flex>
 
                           <Flex w={1024}>
-                            
+
                             <Center w={62}>
-                              <Switch 
+                              <Switch
                                 bg={'gray.500'}
                                 borderRadius={10}
                               />
                             </Center>
-                            
+
                             <Center>
-                            
+
                               <Flex maxW={900}>
                                 <Flex
                                   bg={"#535353"}
@@ -784,21 +772,21 @@ export default function CreateGroup() {
                                       <option>NC-21 (ไม่เหมาะสำหรับเยาวชน)</option>
                                     </Select>
                                   </Center>
-                                  
+
                                 </Flex>
                               </Flex>
                             </Center>
                           </Flex>
-                          
+
                           <Flex w={1024}>
-                            
+
                             <Center w={62}>
-                              <Switch 
+                              <Switch
                                 bg={'gray.500'}
                                 borderRadius={10}
                               />
                             </Center>
-                            
+
                             <Center>
                               <Flex maxW={900}>
                                 <Flex
@@ -840,14 +828,14 @@ export default function CreateGroup() {
                           </Flex>
 
                           <Flex w={1024}>
-                            
+
                             <Center w={62}>
-                              <Switch 
+                              <Switch
                                 bg={'gray.500'}
                                 borderRadius={10}
                               />
                             </Center>
-                            
+
                             <Center>
                               <Flex maxW={900}>
                                 <Flex
@@ -887,11 +875,11 @@ export default function CreateGroup() {
                           </Flex>
 
                           <Flex w={1024}>
-                            
+
                             <Center w={62}>
-                              
+
                             </Center>
-                            
+
                             <Center>
                               <Flex maxW={900}>
                                 <Flex
@@ -940,7 +928,7 @@ export default function CreateGroup() {
                   </Accordion>
 
 
-{/* Other Link */}
+                  {/* Other Link */}
 
 
                   <Accordion allowMultiple>
@@ -957,26 +945,26 @@ export default function CreateGroup() {
 
                       <AccordionPanel>
                         <VStack>
-                          
+
                           <Flex w={1024}>
-                            
+
                             <Center w={62} >
-                              <Center 
+                              <Center
                                 // red
                                 // bg={'#EA4545'} 
                                 bg={'#72994C'}
                                 rounded="50">
                                 {/* <Minus size={32} */}
                                 <Plus size={32}
-                              />
+                                />
                               </Center>
                             </Center>
-                            
+
                             <Center>
                               <Flex bg={"#535353"} borderRadius={10} minW={900}>
                                 <Box p={2} w={238}>
                                   <Input
-                                    className={style.Topic3} 
+                                    className={style.Topic3}
                                     pl={2}
                                     h={58}
                                     placeholder={"Link title"}
@@ -988,22 +976,22 @@ export default function CreateGroup() {
                                   borderRightWidth={3}
                                 />
 
-                                  <Center>
-                                    <Input
-                                      type="text"
-                                      required
-                                      w={650}
-                                      h={58}
-                                      bg={"white"}
-                                      className={style.search}
-                                      m={1.5}
-                                    />
-                                  </Center>
+                                <Center>
+                                  <Input
+                                    type="text"
+                                    required
+                                    w={650}
+                                    h={58}
+                                    bg={"white"}
+                                    className={style.search}
+                                    m={1.5}
+                                  />
+                                </Center>
                               </Flex>
                             </Center>
                           </Flex>
 
-                          
+
 
                         </VStack>
                       </AccordionPanel>
@@ -1026,26 +1014,26 @@ export default function CreateGroup() {
 
                       <AccordionPanel>
                         <VStack>
-                          
+
                           <Flex w={1024}>
-                            
+
                             <Center w={62} >
-                              <Center 
+                              <Center
                                 // red
                                 // bg={'#EA4545'} 
                                 bg={'#72994C'}
                                 rounded="50">
                                 {/* <Minus size={32} */}
                                 <Plus size={32}
-                              />
+                                />
                               </Center>
                             </Center>
-                            
+
                             <Center>
                               <Flex bg={"#535353"} borderRadius={10} minW={900}>
                                 <Box p={2} w={238}>
                                   <Input
-                                    className={style.Topic3} 
+                                    className={style.Topic3}
                                     pl={2}
                                     h={58}
                                     placeholder={"Link title"}
@@ -1057,22 +1045,22 @@ export default function CreateGroup() {
                                   borderRightWidth={3}
                                 />
 
-                                  <Center>
-                                    <Input
-                                      type="text"
-                                      required
-                                      w={650}
-                                      h={58}
-                                      bg={"white"}
-                                      className={style.search}
-                                      m={1.5}
-                                    />
-                                  </Center>
+                                <Center>
+                                  <Input
+                                    type="text"
+                                    required
+                                    w={650}
+                                    h={58}
+                                    bg={"white"}
+                                    className={style.search}
+                                    m={1.5}
+                                  />
+                                </Center>
                               </Flex>
                             </Center>
                           </Flex>
 
-                          
+
 
                         </VStack>
                       </AccordionPanel>
@@ -1216,6 +1204,7 @@ export default function CreateGroup() {
           <Spacer />
 
           <Box minW={400} bg={"gray.300"}></Box>
+
         </Flex>
       </Box>
     </SSRProvider>
