@@ -30,6 +30,7 @@ import { getBlob } from "firebase/storage";
 import Head from "next/head";
 import {
   Box,
+  Button,
   Flex,
   Center,
   Square,
@@ -60,6 +61,8 @@ import {
   CaretRight,
   Plus,
   Minus,
+  FacebookLogo,
+  DiscordLogo,
 } from "phosphor-react";
 import GroupSidebar from "../components/GroupSidebar";
 
@@ -100,6 +103,11 @@ export default function CreateGroup() {
   const [bannerBlob, setBannerBlob] = useState("");
   const [durationsw, setDurationsw] = useState(true);
   const [Averagesw, setAveragesw] = useState(true);
+  const [Locationsw, setLocationsw] = useState(true);
+  const [Timelinesw, setTimelinesw] = useState(true);
+  const [Ratingsw, setRatingsw] = useState(true);
+  const [Triggersw, setTriggersw] = useState(true);
+  const [Rulesw, setRulesw] = useState(true);
 
   //ก็อปปี้บรรทัดบนไปวางเพิ่ม หรือเขียนเอง ลักษณะคือ const [state, setState] = useState(true) โดยที่ state คือชื่อตัวแปรที่จะใช้ เช่น durationsw ส่วน setstate คือฟังก์ชั่นที่ไว้ใช้เปลี่ยนค่าตัวแปร
 
@@ -174,8 +182,7 @@ export default function CreateGroup() {
                 className={style.tag}
                 m={1.5}
                 p={1}
-                maxW={600}
-              >
+                maxW={600}>
                 <Box>{tag}</Box>
                 <CloseButton
                   onClick={() => removeTags(index)}
@@ -184,8 +191,7 @@ export default function CreateGroup() {
                   color={"black"}
                   h={22}
                   w={22}
-                  m={1}
-                />
+                  m={1} />
               </Box>
             ))}
             <Input
@@ -195,8 +201,7 @@ export default function CreateGroup() {
               w={"auto"}
               className={style.search}
               maxW={650}
-              mt={1}
-            />
+              mt={1} />
           </Box>
         </Box>
       </Box>
@@ -224,36 +229,18 @@ export default function CreateGroup() {
           <Center bg={"#D5D5D5"} w={1024}>
             <VStack>
               <Center>
-              <Box>
+                <Box>
                   <Flex>
-                    <Center>
-                      <Circle
-                        as="button"
-                        _hover={{
-                          background: "gray",
-                        }}
-                        m={2}
-                      >
-                        <CaretLeft size={32} color={"Black"} />
-                      </Circle>
-                    </Center>
+
                     {/* <UploadImageModal
                       setBannerBlob={setBannerBlob}
                       BannerBlob={bannerBlob}
                     /> */}
-                    <Center w={928} h={522}>
+                    <Center w={928} h={522}
+                    //Module Uplode
+                    >
                     </Center>
-                    <Center>
-                      <Circle
-                        as="button"
-                        _hover={{
-                          background: "gray",
-                        }}
-                        m={2}
-                      >
-                        <CaretRight size={32} color={"Black"} />
-                      </Circle>
-                    </Center>
+
                   </Flex>
 
                   <Center
@@ -261,6 +248,7 @@ export default function CreateGroup() {
                     p={4}
                     borderTopRadius={10}
                     maxW={1024}
+                    w={1024}
                   >
                     <Flex>
                       <Center
@@ -309,7 +297,7 @@ export default function CreateGroup() {
                                 <Input
                                   type="text"
                                   value={communame}
-                                  onChange={(e) => {setCommuname(e.target.value);}}
+                                  onChange={(e) => { setCommuname(e.target.value); }}
                                   required
                                   w={650}
                                   h={46}
@@ -352,7 +340,7 @@ export default function CreateGroup() {
                                     bg={"white"}
                                     placeholder={"..."}
                                     className={style.search}
-                                    maxLength={4}/>
+                                    maxLength={4} />
                                 </Center>
                               </Flex>
 
@@ -438,7 +426,7 @@ export default function CreateGroup() {
 
                                 <Spacer
                                   borderRightColor={"white"}
-                                  borderRightWidth={3}/>
+                                  borderRightWidth={3} />
 
                                 <Center pl={1.5} pr={1.5}>
                                   <Select
@@ -474,7 +462,7 @@ export default function CreateGroup() {
 
                                 <Spacer
                                   borderRightColor={"white"}
-                                  borderRightWidth={3}/>
+                                  borderRightWidth={3} />
 
                                 <Center>
                                   <Container
@@ -511,8 +499,7 @@ export default function CreateGroup() {
                                 <Flex
                                   bg={"#535353"}
                                   borderRadius={10}
-                                  minW={"auto"}
-                                >
+                                  minW={"auto"}>
                                   <Box w={238} p={4}>
                                     <Box className={style.Topic2}>
                                       ระยะเวลา
@@ -521,8 +508,7 @@ export default function CreateGroup() {
 
                                   <Spacer
                                     borderRightColor={"white"}
-                                    borderRightWidth={3}
-                                  />
+                                    borderRightWidth={3} />
 
                                   <Center pl={1.5} pr={1.5}>
                                     <Input
@@ -532,26 +518,21 @@ export default function CreateGroup() {
                                       h={46}
                                       bg={"white"}
                                       color="black"
-                                    />
+                                      w={290} />
                                   </Center>
 
-                                  <Spacer />
-                                  
-                                  <Center>ถึง</Center>
-                                  
-                                  <Spacer />
-                                  
+                                  <Center className={style.Topic2} minW={55}>ถึง</Center>
+
                                   <Center pl={1.5} pr={1.5}>
                                     <Input
                                       type="datetime-local"
                                       isDisabled={!durationsw} //แล้วก็เพิ่มตรงนี้ ชื่อตัวแปรตาม state ที่สร้าง
                                       isRequired
                                       h={46}
+                                      w={290}
                                       bg={"white"}
-                                      color="black"
-                                    />
+                                      color="black" />
                                   </Center>
-
                                 </Flex>
                               </Flex>
                             </Center>
@@ -564,18 +545,17 @@ export default function CreateGroup() {
                               <Switch
                                 bg={'gray.500'}
                                 borderRadius={10}
+                                isChecked={Averagesw}
                                 onChange={() => setAveragesw(!Averagesw)}
                               />
                             </Center>
 
                             <Center>
-
                               <Flex maxW={900}>
                                 <Flex
                                   bg={"#535353"}
                                   borderRadius={10}
-                                  minW={"auto"}
-                                >
+                                  minW={"auto"}>
                                   <Box w={238} p={4}>
                                     <Box className={style.Topic2}>
                                       ระยะเวลาโดยประมาณ
@@ -584,8 +564,7 @@ export default function CreateGroup() {
 
                                   <Spacer
                                     borderRightColor={"white"}
-                                    borderRightWidth={3}
-                                  />
+                                    borderRightWidth={3} />
 
                                   <Input
                                     bg='white'
@@ -594,11 +573,12 @@ export default function CreateGroup() {
                                     w={480}
                                     h={46}
                                     color={'Black'}
+                                    isDisabled={!Averagesw}
                                   />
 
                                   <Spacer
                                     borderLeftColor={"white"}
-                                    borderLeftWidth={3}/>
+                                    borderLeftWidth={3} />
 
                                   <Center
                                     pl={1.5}
@@ -611,9 +591,9 @@ export default function CreateGroup() {
                                       size="lg"
                                       isDisabled={!Averagesw}
                                     >
-                                      <option>วัน(Day)</option>
-                                      <option>เดือน(Month)</option>
-                                      <option>ปี(Year)</option>
+                                      <option style={{ backgroundColor: 'White' }}>วัน(Day)</option>
+                                      <option style={{ backgroundColor: 'White' }}>เดือน(Month)</option>
+                                      <option style={{ backgroundColor: 'White' }}>ปี(Year)</option>
                                     </Select>
                                   </Center>
                                 </Flex>
@@ -627,6 +607,9 @@ export default function CreateGroup() {
                               <Switch
                                 bg={'gray.500'}
                                 borderRadius={10}
+                                isChecked={Locationsw}
+
+                                onChange={() => setLocationsw(!Locationsw)}
                               />
                             </Center>
 
@@ -638,12 +621,9 @@ export default function CreateGroup() {
                                   minW={"auto"}
                                   minH={"auto"}
                                 >
-                                  <Box w={238} p={2}>
-                                    <Box className={style.Topic} pl={2}>
-                                      Location
-                                    </Box>
-                                    <Box className={style.Topic2} pl={2}>
-                                      (สถานที่ภายในคอมมูนิตี้)
+                                  <Box w={238} p={4}>
+                                    <Box className={style.Topic2}>
+                                      สถานที่ภายในคอมมูนิตี้
                                     </Box>
                                   </Box>
 
@@ -656,7 +636,7 @@ export default function CreateGroup() {
                                     <Container
                                       minW={650}
                                       h="auto"
-                                      minH={58}
+                                      minH={46}
                                       bg={"white"}
                                       borderRadius={10}
                                       m={1.5}
@@ -685,31 +665,25 @@ export default function CreateGroup() {
                                   bg={"#535353"}
                                   borderRadius={10}
                                   minW={"auto"}
-                                  minH={"auto"}
-                                >
-                                  <Box w={238} p={2}>
-                                    <Box className={style.Topic} pl={2}>
-                                      Timeline
-                                    </Box>
-                                    <Box className={style.Topic2} pl={2}>
-                                      (ช่วงเวลาภายในคอมมูนิตี้)
+                                  minH={"auto"}>
+                                  <Box w={238} p={4}>
+                                    <Box className={style.Topic2}>
+                                      ช่วงเวลาภายในคอมมูนิตี้
                                     </Box>
                                   </Box>
 
                                   <Spacer
                                     borderRightColor={"white"}
-                                    borderRightWidth={3}
-                                  />
+                                    borderRightWidth={3} />
 
                                   <Center>
                                     <Container
                                       minW={650}
                                       h="auto"
-                                      minH={58}
+                                      minH={46}
                                       bg={"white"}
                                       borderRadius={10}
-                                      m={1.5}
-                                    >
+                                      m={1.5}>
                                       <Hashtag selectedTags={selectedTags} />
                                     </Container>
 
@@ -725,7 +699,10 @@ export default function CreateGroup() {
                               <Switch
                                 bg={'gray.500'}
                                 borderRadius={10}
+                                isChecked={Ratingsw}
+                                onChange={() => setRatingsw(!Ratingsw)}
                               />
+
                             </Center>
 
                             <Center>
@@ -734,38 +711,33 @@ export default function CreateGroup() {
                                 <Flex
                                   bg={"#535353"}
                                   borderRadius={10}
-                                  minW={"auto"}
-                                >
-                                  <Box w={238} p={2}>
-                                    <Box className={style.Topic} pl={2}>
-                                      Rating
-                                    </Box>
-                                    <Box className={style.Topic2} pl={2}>
-                                      (ระดับของเนื้อหา)
+                                  minW={"auto"}>
+                                  <Box w={238} p={4}>
+                                    <Box className={style.Topic2}>
+                                      ระดับของเนื้อหา
                                     </Box>
                                   </Box>
 
                                   <Spacer
                                     borderRightColor={"white"}
-                                    borderRightWidth={3}
-                                  />
+                                    borderRightWidth={3} />
 
                                   <Center pl={1.5} pr={1.5}>
                                     <Select
                                       isRequired
                                       w={650}
-                                      h={58}
+                                      h={46}
                                       bg={"white"}
                                       color="black"
                                       size="lg"
+                                      isDisabled={!Ratingsw}
                                     >
-                                      <option>G (เหมาะสำหรับทุกวัย)</option>
-                                      <option>R-13 (เหมาะสำหรับอายุ ๑๓ ปีขึ้นไป)</option>
-                                      <option>R-18 (เหมาะสำหรับอายุ ๑๘ ปีขึ้นไป)</option>
-                                      <option>NC-21 (ไม่เหมาะสำหรับเยาวชน)</option>
+                                      <option style={{ backgroundColor: 'White' }}>G (เหมาะสำหรับทุกวัย)</option>
+                                      <option style={{ backgroundColor: 'White' }}>R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)</option>
+                                      <option style={{ backgroundColor: 'White' }}>R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)</option>
+                                      <option style={{ backgroundColor: 'White' }}>NC-21 (ไม่เหมาะสำหรับเยาวชน)</option>
                                     </Select>
                                   </Center>
-
                                 </Flex>
                               </Flex>
                             </Center>
@@ -788,12 +760,9 @@ export default function CreateGroup() {
                                   minW={"auto"}
                                   minH={"auto"}
                                 >
-                                  <Box w={238} p={2}>
-                                    <Box className={style.Topic} pl={2}>
-                                      Trigger Warning
-                                    </Box>
-                                    <Box className={style.Topic2} pl={2}>
-                                      (คำเตือน)
+                                  <Box w={238} p={4}>
+                                    <Box className={style.Topic2}>
+                                      คำเตือน
                                     </Box>
                                   </Box>
 
@@ -806,11 +775,10 @@ export default function CreateGroup() {
                                     <Container
                                       minW={650}
                                       h="auto"
-                                      minH={58}
+                                      minH={46}
                                       bg={"white"}
                                       borderRadius={10}
-                                      m={1.5}
-                                    >
+                                      m={1.5}>
                                       <Hashtag selectedTags={selectedTags} />
                                     </Container>
 
@@ -826,6 +794,8 @@ export default function CreateGroup() {
                               <Switch
                                 bg={'gray.500'}
                                 borderRadius={10}
+                                isChecked={Rulesw}
+                                onChange={() => setRulesw(!Rulesw)}
                               />
                             </Center>
 
@@ -837,12 +807,9 @@ export default function CreateGroup() {
                                   minW={"auto"}
                                   minH={"auto"}
                                 >
-                                  <Box w={238} pt={4} pl={2}>
-                                    <Box className={style.Topic} pl={2}>
-                                      Rule & Agreeent
-                                    </Box>
-                                    <Box className={style.Topic2} pl={2}>
-                                      (กฎกติกาและข้อตกลง)
+                                  <Box w={238} p={4}>
+                                    <Box className={style.Topic2}>
+                                      กฎกติกาและข้อตกลง
                                     </Box>
                                   </Box>
 
@@ -860,6 +827,7 @@ export default function CreateGroup() {
                                       bg={"white"}
                                       className={style.search}
                                       m={1.5}
+                                      isDisabled={!Rulesw}
                                     />
                                   </Center>
                                 </Flex>
@@ -881,12 +849,9 @@ export default function CreateGroup() {
                                   minW={"auto"}
                                   minH={"auto"}
                                 >
-                                  <Box w={238} pt={4} pl={2}>
-                                    <Box className={style.Topic} pl={2}>
-                                      Discription
-                                    </Box>
-                                    <Box className={style.Topic2} pl={2}>
-                                      (คำอธิบาย)
+                                  <Box w={238} p={4}>
+                                    <Box className={style.Topic2}>
+                                      คำอธิบาย
                                     </Box>
                                   </Box>
 
@@ -921,76 +886,6 @@ export default function CreateGroup() {
                   </Accordion>
 
 
-                  {/* Other Link */}
-
-
-                  <Accordion allowMultiple>
-                    <AccordionItem maxW={1024} >
-                      <h2>
-                        <AccordionButton>
-                          <AccordionIcon color={"Black"} w={50} h={50} />
-
-                          <Box className={style.Accordion} color="Black">
-                            Other Link
-                          </Box>
-                        </AccordionButton>
-                      </h2>
-
-                      <AccordionPanel>
-                        <VStack>
-
-                          <Flex w={1024}>
-
-                            <Center w={62} >
-                              <Center
-                                // red
-                                // bg={'#EA4545'} 
-                                bg={'#72994C'}
-                                rounded="50">
-                                {/* <Minus size={32} */}
-                                <Plus size={32}
-                                />
-                              </Center>
-                            </Center>
-
-                            <Center>
-                              <Flex bg={"#535353"} borderRadius={10} minW={900}>
-                                <Box p={2} w={238}>
-                                  <Input
-                                    className={style.Topic3}
-                                    pl={2}
-                                    h={58}
-                                    placeholder={"Link title"}
-                                  />
-                                </Box>
-
-                                <Spacer
-                                  borderRightColor={"white"}
-                                  borderRightWidth={3}
-                                />
-
-                                <Center>
-                                  <Input
-                                    type="text"
-                                    required
-                                    w={650}
-                                    h={58}
-                                    bg={"white"}
-                                    className={style.search}
-                                    m={1.5}
-                                  />
-                                </Center>
-                              </Flex>
-                            </Center>
-                          </Flex>
-
-
-
-                        </VStack>
-                      </AccordionPanel>
-                    </AccordionItem>
-                  </Accordion>
-
                   {/* Registration */}
 
                   <Accordion allowMultiple>
@@ -1008,15 +903,15 @@ export default function CreateGroup() {
                       <AccordionPanel>
                         <VStack>
 
-                          <Flex w={1024}>
+                          {/* <Flex w={1024}>
 
                             <Center w={62} >
                               <Center
-                                // red
-                                // bg={'#EA4545'} 
+                                red
+                                bg={'#EA4545'} 
                                 bg={'#72994C'}
                                 rounded="50">
-                                {/* <Minus size={32} */}
+                                <Minus size={32}
                                 <Plus size={32}
                                 />
                               </Center>
@@ -1051,8 +946,295 @@ export default function CreateGroup() {
                                 </Center>
                               </Flex>
                             </Center>
-                          </Flex>
+                          </Flex> */}
 
+                          <Center>
+                            <Flex maxW={900}>
+                              <Flex
+                                bg={"#535353"}
+                                borderRadius={10}
+                                minW={"auto"}
+                                minH={"auto"}
+                              >
+                                <Box w={238} p={4}>
+                                  <Box className={style.Topic2}>
+                                    ลิงก์ลงทะเบียนตัวละคร
+                                  </Box>
+                                </Box>
+
+                                <Spacer
+                                  borderRightColor={"white"}
+                                  borderRightWidth={3}
+                                />
+
+                                <Center pl={1.5} pr={1.5}>
+                                  <Input
+                                    required
+                                    w={650}
+                                    h={46}
+                                    bg={"white"}
+                                    placeholder={"สำหรับลิงก์ฟอร์มวิ่ง"}
+                                    className={style.search}
+                                    type="url"
+                                    value={submitlink}
+                                    onChange={(e) => {
+                                      setSubmitlink(e.target.value);
+                                    }}
+                                  />
+                                </Center>
+                              </Flex>
+                            </Flex>
+                          </Center>
+
+                          <Center>
+                            <Flex maxW={900}>
+                              <Flex
+                                bg={"#535353"}
+                                borderRadius={10}
+                                minW={"auto"}
+                                minH={"auto"}
+                              >
+                                <Box w={238} p={4}>
+                                  <Box className={style.Topic2}>
+                                    ลิงก์ตรวจสอบตัวละคร
+                                  </Box>
+                                </Box>
+
+                                <Spacer
+                                  borderRightColor={"white"}
+                                  borderRightWidth={3}
+                                />
+
+                                <Center pl={1.5} pr={1.5}>
+                                  <Input
+                                    required
+                                    w={650}
+                                    h={46}
+                                    bg={"white"}
+                                    placeholder={"สำหรับตรวจสอบ"}
+                                    className={style.search}
+                                    type="url"
+                                    value={resultlink}
+                                    onChange={(e) => {
+                                      setResultlink(e.target.value);
+                                    }}
+                                  />
+                                </Center>
+                              </Flex>
+                            </Flex>
+                          </Center>
+
+                        </VStack>
+                      </AccordionPanel>
+                    </AccordionItem>
+                  </Accordion>
+
+                  {/* Other Link */}
+
+                  <Accordion allowMultiple>
+                    <AccordionItem maxW={1024} >
+                      <h2>
+                        <AccordionButton>
+                          <AccordionIcon color={"Black"} w={50} h={50} />
+
+                          <Box className={style.Accordion} color="Black">
+                            Other Link
+                          </Box>
+                        </AccordionButton>
+                      </h2>
+
+                      <AccordionPanel>
+                        <VStack>
+
+                          <Center>
+                            <Flex maxW={900}>
+                              <Flex
+                                bg={"#535353"}
+                                borderRadius={10}
+                                minW={"auto"}
+                                minH={"auto"}
+                              >
+                                <Box w={238} p={4}>
+                                  <Box className={style.Topic2}>
+                                    ลิงก์กลุ่มคอมมู
+                                  </Box>
+                                </Box>
+
+                                <Spacer
+                                  borderRightColor={"white"}
+                                  borderRightWidth={3}
+                                />
+
+                                <Center pl={1.5} pr={1.5}>
+                                  <Input
+                                    required
+                                    w={650}
+                                    h={46}
+                                    bg={"white"}
+                                    placeholder={"..."}
+                                    className={style.search}
+                                    type="url"
+                                    value={smlink}
+                                    onChange={(e) => {
+                                      setSmlink(e.target.value);
+                                    }}
+                                  />
+                                </Center>
+                              </Flex>
+                            </Flex>
+                          </Center>
+
+                          <Center>
+                            <Flex maxW={900}>
+                              <Flex
+                                bg={"#535353"}
+                                borderRadius={10}
+                                minW={"auto"}
+                                minH={"auto"}
+                              >
+                                <Box w={238} p={4}>
+                                  <Box className={style.Topic2}>
+                                    ลิงก์ข้อมูลคอมมู
+                                  </Box>
+                                </Box>
+
+                                <Spacer
+                                  borderRightColor={"white"}
+                                  borderRightWidth={3}
+                                />
+
+                                <Center pl={1.5} pr={1.5}>
+                                  <Input
+                                    required
+                                    w={650}
+                                    h={46}
+                                    bg={"white"}
+                                    placeholder={"..."}
+                                    className={style.search}
+                                    type="url"
+                                    value={doclink}
+                                    onChange={(e) => {
+                                      setDoclink(e.target.value);
+                                    }}
+                                  />
+                                </Center>
+                              </Flex>
+                            </Flex>
+                          </Center>
+
+                          <Center>
+                            <Flex maxW={900}>
+                              <Flex
+                                bg={"#535353"}
+                                borderRadius={10}
+                                minW={"auto"}
+                                minH={"auto"}
+                              >
+                                <Box w={238} p={4}>
+                                  <Box className={style.Topic2}>
+                                    ลิงก์ถามคำถาม
+                                  </Box>
+                                </Box>
+
+                                <Spacer
+                                  borderRightColor={"white"}
+                                  borderRightWidth={3}
+                                />
+
+                                <Center pl={1.5} pr={1.5}>
+                                  <Input
+                                    required
+                                    w={650}
+                                    h={46}
+                                    bg={"white"}
+                                    placeholder={"สำหรับ Q&A"}
+                                    className={style.search}
+                                    type="url"
+                                    value={qaasklink}
+                                    onChange={(e) => {
+                                      setQaasklink(e.target.value);
+                                    }}
+                                  />
+                                </Center>
+                              </Flex>
+                            </Flex>
+                          </Center>
+
+                          <Center>
+                            <Flex maxW={900}>
+                              <Flex
+                                bg={"#535353"}
+                                borderRadius={10}
+                                minW={"auto"}
+                                minH={"auto"}
+                              >
+                                <Box w={238} p={4}>
+                                  <Box className={style.Topic2}>
+                                    ลิงก์ตรวจสอบคำตอบ
+                                  </Box>
+                                </Box>
+
+                                <Spacer
+                                  borderRightColor={"white"}
+                                  borderRightWidth={3}
+                                />
+
+                                <Center pl={1.5} pr={1.5}>
+                                  <Input
+                                    required
+                                    w={650}
+                                    h={46}
+                                    bg={"white"}
+                                    placeholder={"สำหรับตรวจสอบ Q&A"}
+                                    className={style.search}
+                                    type="url"
+                                    value={qaanslink}
+                                    onChange={(e) => {
+                                      setQaanslink(e.target.value);
+                                    }}
+                                  />
+                                </Center>
+                              </Flex>
+                            </Flex>
+                          </Center>
+
+                          <Center>
+                            <Flex maxW={900}>
+                              <Flex
+                                bg={"#535353"}
+                                borderRadius={10}
+                                minW={"auto"}
+                                minH={"auto"}
+                              >
+                                <Box w={238} p={4}>
+                                  <Box className={style.Topic2}>
+                                    ช่องทางติดต่อ
+                                  </Box>
+                                </Box>
+
+                                <Spacer
+                                  borderRightColor={"white"}
+                                  borderRightWidth={3}
+                                />
+
+                                <Center pl={1.5} pr={1.5}>
+                                  <Input
+                                    required
+                                    w={650}
+                                    h={46}
+                                    bg={"white"}
+                                    placeholder={"สำหรับตรวจสอบ Q&A"}
+                                    className={style.setDescription}
+                                    type="url"
+                                    value={resultlink}
+                                    onChange={(e) => {
+                                      setResultlink(e.target.value);
+                                    }}
+                                  />
+                                </Center>
+                              </Flex>
+                            </Flex>
+                          </Center>
 
 
                         </VStack>
@@ -1060,135 +1242,24 @@ export default function CreateGroup() {
                     </AccordionItem>
                   </Accordion>
 
-                  <Row>
-                    <Col md={6}>
-                      <input
-                        type="radio"
-                        value="Private"
-                        name="Privacy"
-                        onChange={(e) => {
-                          setPrivacy(e.target.value);
-                        }}
-                      >
-                      </input>
+                  <Spacer h={10} />
 
-                      <label>
-                        <h6 className={style.radio}>ส่วนตัว</h6>
-                      </label>
+                  <Center>
+                    <Button
+                      onClick={HandleSubmit}
+                      color={'#FBBC43'}
+                      bg={'#343434'}
+                      fontFamily='Mitr'
+                      fontWeight={100}
+                      fontSize={20}
+                      h={50}
+                      w={150}
+                      mb={20}
+                    >
+                      สร้างคอมมู
+                    </Button>
+                  </Center>
 
-
-                      <input
-                        type="radio"
-                        value="Public"
-                        name="Privacy"
-                        onChange={(e) => {
-                          setPrivacy(e.target.value);
-                        }}
-                        checked
-                      ></input>
-                      <label>
-                        <h6 className={style.radio}>สาธารณะ</h6>
-                      </label>
-                    </Col>
-                  </Row>
-
-                  <Row md={12}>
-                    <label>
-                      <h4 className={style.label}>ลิงก์กลุ่มคอมมู</h4>
-                    </label>
-                    <input
-                      className={style.setDescription}
-                      type="url"
-                      value={smlink}
-                      onChange={(e) => {
-                        setSmlink(e.target.value);
-                      }}
-                    ></input>
-                  </Row>
-
-                  <Row md={12}>
-                    <label>
-                      <h4 className={style.label}>ลิงก์ด็อคคอมมู</h4>
-                    </label>
-                    <input
-                      className={style.setDescription}
-                      type="url"
-                      value={doclink}
-                      onChange={(e) => {
-                        setDoclink(e.target.value);
-                      }}
-                    ></input>
-                  </Row>
-                  <Row md={12}>
-                    <label>
-                      <h4 className={style.label}>ลิงค์ถามคำถาม</h4>
-                    </label>
-                    <input
-                      className={style.setDescription}
-                      type="url"
-                      value={qaasklink}
-                      onChange={(e) => {
-                        setQaasklink(e.target.value);
-                      }}
-                    ></input>
-                  </Row>
-                  <Row md={12}>
-                    <label>
-                      <h4 className={style.label}>ลิงก์ตอบคำถาม</h4>
-                    </label>
-                    <input
-                      className={style.setDescription}
-                      type="url"
-                      value={qaanslink}
-                      onChange={(e) => {
-                        setQaanslink(e.target.value);
-                      }}
-                    ></input>
-                  </Row>
-                  <Row md={12}>
-                    <label>
-                      <h4 className={style.label}>ลิงก์ลงทะเบียนตัวละคร</h4>
-                    </label>
-                    <input
-                      className={style.setDescription}
-                      type="url"
-                      value={submitlink}
-                      onChange={(e) => {
-                        setSubmitlink(e.target.value);
-                      }}
-                    ></input>
-                  </Row>
-                  <Row md={12}>
-                    <label>
-                      <h4 className={style.label}>ลิงก์ตรวจสอบผลการสมัคร</h4>
-                    </label>
-                    <input
-                      className={style.setDescription}
-                      type="url"
-                      value={resultlink}
-                      onChange={(e) => {
-                        setResultlink(e.target.value);
-                      }}
-                    ></input>
-                  </Row>
-                  <Row md={12}>
-                    <label>
-                      <h4 className={style.label}>ช่องทางติดต่อ</h4>
-                    </label>
-                    <input
-                      className={style.setDescription}
-                      type="url"
-                      value={contactlink}
-                      onChange={(e) => {
-                        setContactlink(e.target.value);
-                      }}
-                      required
-                    ></input>
-                  </Row>
-
-                  <button className={style.button} onClick={HandleSubmit}>
-                    สร้างคอมมู
-                  </button>
                 </Box>
               </Center>
             </VStack>
@@ -1196,10 +1267,52 @@ export default function CreateGroup() {
 
           <Spacer />
 
-          <Box minW={400} bg={"gray.300"}></Box>
+          <Box minW={400}></Box>
 
         </Flex>
+
+        <Center
+          bg={'#343434'}
+          h={180}
+        >
+          <Flex>
+            <Center>
+              <VStack m={5}>
+                <Box fontFamily={'mitr'}>Comuthor © 2022</Box>
+                <Flex>
+                  <FacebookLogo size={32} />
+                  <Spacer w={5} />
+                  <DiscordLogo size={32} />
+                </Flex>
+              </VStack>
+
+            </Center>
+
+            <Spacer borderRightColor={'#ffffff'} borderWidth={1} h={150} />
+
+            <Center>
+              <VStack fontFamily={'Mitr'} m={5}>
+                <Box >About us</Box>
+                <Box>Guide</Box>
+              </VStack>
+
+
+            </Center>
+
+            <Spacer borderRightColor={'#ffffff'} borderWidth={1} h={150} />
+
+            <Center>
+              <VStack m={5} fontFamily={'Mitr'}>
+                <Box>Policy</Box>
+                <Box>Term</Box>
+              </VStack>
+
+
+            </Center>
+          </Flex>
+        </Center>
       </Box>
     </SSRProvider>
+
   );
 }
