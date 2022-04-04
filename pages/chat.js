@@ -62,14 +62,14 @@ function chat() {
         <CustomNavbar />
         {chatText.map((data) => (
           <Box
-            alignSelf={(data.senderId = user.uid ? "right" : "left")}
+            alignSelf={(data.senderId == user.uid ? "right" : "left")}
             padding="20px"
             maxW={'30%'}
           >
             <Text fontSize={10}>{data.sender}</Text>
             <Text
               fontSize={20}
-              backgroundColor={(data.senderId = user.uid ? "blue" : "red")}
+              backgroundColor={(data.senderId == user.uid ? "blue" : "red")}
               rounded='5'
             >
               {data.text}
@@ -90,11 +90,7 @@ function chat() {
             width={"80%"}
             paddingRight="10px"
             onChange={(e) => setText(e.target.value)}
-            onKeyPress={(key)=>{
-                if (key.key == 'Enter'){
-                    handleSend
-                }
-            }}
+            onKeyUp={(event) => (event.key === "Enter" ? handleSend() : null)}
             value = {text}
           />
           <Button
