@@ -222,7 +222,7 @@ export default function CreateGroup() {
       <Box bg="#FDFDFD" maxW={1980}>
         <CustomNavbar />
         <Flex>
-          <GroupSidebar />
+          <Box minW={400}></Box>
 
           <Spacer />
 
@@ -1278,11 +1278,11 @@ export default function CreateGroup() {
           <Flex>
             <Center>
               <VStack m={5}>
-                <Box fontFamily={'mitr'}>Comuthor © 2022</Box>
+                <Box fontFamily={'mitr'} color={'#FFFFFF'}>Comuthor © 2022</Box>
                 <Flex>
-                  <FacebookLogo size={32} />
+                  <FacebookLogo size={32} color={'#FFFFFF'} />
                   <Spacer w={5} />
-                  <DiscordLogo size={32} />
+                  <DiscordLogo size={32} color={'#FFFFFF'}/>
                 </Flex>
               </VStack>
 
@@ -1291,7 +1291,7 @@ export default function CreateGroup() {
             <Spacer borderRightColor={'#ffffff'} borderWidth={1} h={150} />
 
             <Center>
-              <VStack fontFamily={'Mitr'} m={5}>
+              <VStack fontFamily={'Mitr'} m={5} color={'#FFFFFF'}>
                 <Box >About us</Box>
                 <Box>Guide</Box>
               </VStack>
@@ -1302,7 +1302,7 @@ export default function CreateGroup() {
             <Spacer borderRightColor={'#ffffff'} borderWidth={1} h={150} />
 
             <Center>
-              <VStack m={5} fontFamily={'Mitr'}>
+              <VStack m={5} fontFamily={'Mitr'} color={'#FFFFFF'}>
                 <Box>Policy</Box>
                 <Box>Term</Box>
               </VStack>

@@ -78,8 +78,7 @@ export default function Groups() {
             <CustomNavbar />
             
             <Flex>
-              <Box>
-                <GroupSidebar />
+              <Box w={400}>
               </Box>
 
               <Spacer />

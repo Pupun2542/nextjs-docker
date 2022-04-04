@@ -129,7 +129,7 @@ export default function Group() {
         <div></div>
         <Row>
           <Col md={2}>
-            <GroupSidebar />
+            
           </Col>
           <Col className={style.frombackground} md={8}>
             <img
