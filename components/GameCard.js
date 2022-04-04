@@ -33,32 +33,20 @@ function GameCard() {
 
   useEffect(() => {
     const Fetchdata = async () => {
-      if (bws == "mygroup") {
-        if (auth.currentUser) {
           const q = query(
             collection(db, "game"),
-            where("Creator", "==", auth.currentUser.uid )
+            // orderBy("createAt", "desc")
           );
           const QuerySnapshot = await getDocs(q);
           setGame(
             QuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
           );
           setLoading(false);
-        } else {
-          const q = query(
-            collection(db, "game"),
-            orderBy("createAt", "desc")
-          );
-          const QuerySnapshot = await getDocs(q);
-          setGame(
-            QuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-          );
-          setLoading(false);
-        }
+            console.log(game.length);
       };
-      Fetchdata();
-    }
-  }, [bws]);
+      return Fetchdata();
+    
+  });
 
   return (
     <Box bg={"#d4d4d4"}>
