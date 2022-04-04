@@ -12,7 +12,7 @@ import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useApp } from "../src/hook/local";
 import { useRouter } from "next/router";
-import { Box, Input, Button, Text } from "@chakra-ui/react";
+import { Box, Input, Button, Text, Flex } from "@chakra-ui/react";
 import CustomNavbar from "../components/navbar";
 
 function chat() {
@@ -34,10 +34,7 @@ function chat() {
 
   useEffect(() => {
     if (!loading && user) {
-      const q = query(
-        collection(db, "chat"),
-        orderBy("timeStamp")
-      );
+      const q = query(collection(db, "chat"), orderBy("timeStamp"));
       onSnapshot(q, (snapshot) => {
         setChatText(snapshot.docs.map((doc) => doc.data()));
         // console.log()
@@ -47,49 +44,57 @@ function chat() {
   }, [user, loading]);
 
   const handleSend = () => {
-      if (text){
-        addDoc(collection(db, "chat"), {
-            sender: user.displayName,
-            senderId: user.uid,
-            text: text,
-            timeStamp: serverTimestamp(),
-          });
-          setText("");
-      }
+    if (text) {
+      addDoc(collection(db, "chat"), {
+        sender: user.displayName,
+        senderId: user.uid,
+        text: text,
+        timeStamp: serverTimestamp(),
+      });
+      setText("");
+    }
   };
 
   if (user) {
     return (
       <Box>
         <CustomNavbar />
-        <Box overflowY={'auto'} maxH={820}>
+        <Box overflowY={"auto"} maxH={820}>
           {chatText.map((data) => (
-          
-          <Box
-            float={(data.senderId == user.uid ? "right" : "left")}
-            padding="20px"
-            maxW={'30%'}
-            maxH={500}
-          >
-            <Text fontSize={10}>{data.sender}</Text>
-            <Text
-              fontSize={20}
-              backgroundColor={(data.senderId == user.uid ? "blue.400" : "red.400")}
-              rounded='5'
+            <Flex
+              flexDirection={(data.senderId == user.uid ? "row-reverse" : "row")}
+            
+              alignItems={"center"}
+              padding="20px"
+              maxH={500}
             >
-              {data.text}
-            </Text>
-            {/* <Text fontSize={10}>{data.timeStamp.}</Text> */}
-          </Box>
-        ))}
-          </Box>
+              {data.senderId == user.uid ? (
+                <Box minW={100} maxW={400}>
+                  <Text fontSize={10}>{data.sender}</Text>
+                  <Text fontSize={20} backgroundColor={"blue.400"} rounded="5" padding={2}>
+                    {data.text}
+                  </Text>
+                </Box>
+              ) : (
+                <Box minW={100} maxW={400}>
+                  <Text fontSize={10}>{data.sender}</Text>
+                  <Text fontSize={20} backgroundColor={"red.400"} rounded="5" padding={2}>
+                    {data.text}
+                  </Text>
+                </Box>
+              )}
+
+              {/* <Text fontSize={10}>{data.timeStamp.}</Text> */}
+            </Flex>
+          ))}
+        </Box>
         <Box
           pos={"fixed"}
           bottom={0}
           width={"100%"}
           paddingBottom="10px"
           paddingLeft="5px"
-          bg={'#FFFFFF'}
+          bg={"#FFFFFF"}
         >
           <Input
             type="text"
@@ -97,7 +102,7 @@ function chat() {
             paddingRight="10px"
             onChange={(e) => setText(e.target.value)}
             onKeyUp={(event) => (event.key === "Enter" ? handleSend() : null)}
-            value = {text}
+            value={text}
             ml={10}
           />
           <Button
