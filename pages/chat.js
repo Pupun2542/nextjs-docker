@@ -7,6 +7,7 @@ import {
   orderBy,
   query,
   serverTimestamp,
+  
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -31,6 +32,8 @@ function chat() {
       router.push("/login");
     }
   }, [user, loading]);
+
+
 
   useEffect(() => {
     if (!loading && user) {
@@ -74,6 +77,8 @@ function chat() {
                   <Text fontSize={20} backgroundColor={"blue.400"} rounded="5" padding={2}>
                     {data.text}
                   </Text>
+                  {console.log()}
+                    {/* <Text fontSize={10}>{data.timeStamp.toDate()}</Text> */}
                 </Box>
               ) : (
                 <Box minW={100} maxW={400}>
@@ -81,10 +86,9 @@ function chat() {
                   <Text fontSize={20} backgroundColor={"red.400"} rounded="5" padding={2}>
                     {data.text}
                   </Text>
+                  {/* <Text fontSize={10}>{data.timeStamp.toDate()}</Text> */}
                 </Box>
               )}
-
-              {/* <Text fontSize={10}>{data.timeStamp.}</Text> */}
             </Flex>
           ))}
         </Box>
