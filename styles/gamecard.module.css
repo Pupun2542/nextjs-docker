@@ -1,0 +1,17 @@
+@font-face {
+    font-family: Mitr;
+    src: url('../assets/MITR-REGULAR.TTF');
+  }
+  /* font-family: Mitr; */
+
+.roomname{
+    font-family: Mitr;
+    font-size: 45px;
+}
+
+.box{
+    background-color: #7874a3;
+    height: 40px;
+    width: auto;
+    font-family: Mitr;
+}

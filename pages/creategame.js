@@ -49,11 +49,7 @@ const CreateGame = () => {
 
     const Submit = async (e) => {
         e.preventDefault();
-        if (!gamesubmit) {
-            setgamesubmit(
-                "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2Fimageplaceholder.png?alt=media&token=f5f9ea02-1b1d-404c-8fb4-4619892dc474"
-            );
-        }
+    
     
     const gameRef = await addDoc(collection(db, "game"),{
         creator: auth.currentUser.uid,
@@ -63,7 +59,6 @@ const CreateGame = () => {
         mayor: mayorrole
     });
     setNumberplayers("");
-    setSpecialroles("");
     setNameroom("");
     Router.push("/game/" + gameRef.id)
     };
