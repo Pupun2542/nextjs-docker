@@ -47,13 +47,15 @@ function chat() {
   }, [user, loading]);
 
   const handleSend = () => {
-    addDoc(collection(db, "chat"), {
-      sender: user.displayName,
-      senderId: user.uid,
-      text: text,
-      timeStamp: serverTimestamp(),
-    });
-    setText("");
+      if (text){
+        addDoc(collection(db, "chat"), {
+            sender: user.displayName,
+            senderId: user.uid,
+            text: text,
+            timeStamp: serverTimestamp(),
+          });
+          setText("");
+      }
   };
 
   if (user) {
