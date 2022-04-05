@@ -84,7 +84,7 @@ export default function CreateGroup() {
     return blob;
   };
 
-  const [tags, setTags] = useState([]);
+  const [genre, setGenre] = useState([]);
   const [hashtag, setHashtag] = useState("");
   const [communame, setCommuname] = useState("");
   const [maxplayer, setMaxplayer] = useState("");
@@ -108,6 +108,9 @@ export default function CreateGroup() {
   const [Ratingsw, setRatingsw] = useState(true);
   const [Triggersw, setTriggersw] = useState(true);
   const [Rulesw, setRulesw] = useState(true);
+  const [places, setPlaces] = useState([]);
+  const [times, setTimes] = useState([]);
+  const [TWs, setTWs] = useState([]);
 
   //ก็อปปี้บรรทัดบนไปวางเพิ่ม หรือเขียนเอง ลักษณะคือ const [state, setState] = useState(true) โดยที่ state คือชื่อตัวแปรที่จะใช้ เช่น durationsw ส่วน setstate คือฟังก์ชั่นที่ไว้ใช้เปลี่ยนค่าตัวแปร
 
@@ -126,7 +129,7 @@ export default function CreateGroup() {
       description: description,
       maxplayer: maxplayer,
       runtime: runtime,
-      genre: tags,
+      genre: genre,
       smlink: smlink,
       doclink: doclink,
       qaasklink: qaasklink,
@@ -139,7 +142,7 @@ export default function CreateGroup() {
       banner: bannerBlob,
       createAt: serverTimestamp(),
     });
-    setTags([]);
+    setGenre([]);
     setCommuname("");
     setMaxplayer("");
     setRegDate("");
@@ -161,14 +164,14 @@ export default function CreateGroup() {
 
   const Hashtag = (props) => {
     const removeTags = (indexToRemove) => {
-      setTags([...tags.filter((_, index) => index !== indexToRemove)]);
+      props.setState([...props.state.filter((_, index) => index !== indexToRemove)]);
     };
     const addTags = (event) => {
       let tag = event.target.value.replace(",", "");
       tag = tag.trim();
       if (tag !== "") {
-        setTags([...tags, tag]);
-        props.selectedTags([...tags, tag]);
+        props.setState([...props.state, tag]);
+        props.selectedTags([...props.state, tag]);
         event.target.value = "";
       }
     };
@@ -176,7 +179,7 @@ export default function CreateGroup() {
       <Box w={680} h={38}>
         <Box>
           <Box id="tags">
-            {tags.map((tag, index) => (
+            {props.state.map((tag, index) => (
               <Box
                 key={index}
                 className={style.tag}
@@ -200,6 +203,7 @@ export default function CreateGroup() {
               placeholder=" ใช้ , เพื่อแบ่งประเภท"
               w={"auto"}
               className={style.search}
+              isDisabled={props.isDisabled}
               maxW={650}
               mt={1} />
           </Box>
@@ -255,12 +259,12 @@ export default function CreateGroup() {
                         //จะเป็น Real-Time จากช่องพิมพ์ชื่อย่อคอมมู
                         p={2}
                         className={style.HeadingCreate2}>
-                        [____]
+                        {hashtag?'['+hashtag+']':'[____]'}
                       </Center>
                       <Center
                         //จะเป็น Real-Time จากช่องพิมพ์ชื่อคอมมู
                         className={style.HeadingCreate2}>
-                        ชื่อคอมมูนิตี้
+                        {communame? communame:'ชื่อคอมมูนิตี้'}
                       </Center>
                     </Flex>
                   </Center>
@@ -284,7 +288,7 @@ export default function CreateGroup() {
                             <Flex bg={"#535353"} borderRadius={10} minW={900}>
                               <Box p={4} w={238}>
                                 <Box className={style.Topic2} pl={0}>
-                                  ชื่อคอมมูนิตี้
+                                ชื่อคอมมูนิตี้
                                 </Box>
                               </Box>
 
@@ -473,7 +477,7 @@ export default function CreateGroup() {
                                     borderRadius={10}
                                     m={1.5}
                                   >
-                                    <Hashtag selectedTags={selectedTags} />
+                                    <Hashtag selectedTags={selectedTags} state={genre} setState={setGenre}/>
                                   </Container>
 
                                 </Center>
@@ -641,7 +645,7 @@ export default function CreateGroup() {
                                       borderRadius={10}
                                       m={1.5}
                                     >
-                                      <Hashtag selectedTags={selectedTags} />
+                                      <Hashtag selectedTags={selectedTags} state={places} setState={setPlaces} isDisabled={!Locationsw}/>
                                     </Container>
 
                                   </Center>
@@ -656,6 +660,8 @@ export default function CreateGroup() {
                               <Switch
                                 bg={'gray.500'}
                                 borderRadius={10}
+                                isChecked={Timelinesw}
+                                onChange={() => setTimelinesw(!Timelinesw)}
                               />
                             </Center>
 
@@ -684,7 +690,7 @@ export default function CreateGroup() {
                                       bg={"white"}
                                       borderRadius={10}
                                       m={1.5}>
-                                      <Hashtag selectedTags={selectedTags} />
+                                      <Hashtag selectedTags={selectedTags} state={times} setState={setTimes} isDisabled={!Timelinesw}/>
                                     </Container>
 
                                   </Center>
@@ -749,6 +755,8 @@ export default function CreateGroup() {
                               <Switch
                                 bg={'gray.500'}
                                 borderRadius={10}
+                                isChecked={Triggersw}
+                                onChange={() => setTriggersw(!Triggersw)}
                               />
                             </Center>
 
@@ -779,7 +787,7 @@ export default function CreateGroup() {
                                       bg={"white"}
                                       borderRadius={10}
                                       m={1.5}>
-                                      <Hashtag selectedTags={selectedTags} />
+                                      <Hashtag selectedTags={selectedTags} state={TWs} setState={setTWs} isDisabled={!Triggersw}/>
                                     </Container>
 
                                   </Center>

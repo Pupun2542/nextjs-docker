@@ -116,8 +116,8 @@ function CustomNavbar() {
     <>
       <Box bg="black" h="auto" w="auto" px={5}>
         <Flex h={20} alignItems={"center"} justifyContent={"space-between"}>
-          <Flex align={"center"} float={1}>
-            <Text className={style.Logonav}>Comuthor</Text>
+          <Flex align={"center"} float={1} cursor='pointer'>
+            <Text className={style.Logonav} onClick={()=>router.push("/")}>Comuthor</Text>
           </Flex>
           
           <Stack 
@@ -154,7 +154,8 @@ function CustomNavbar() {
                     minW={0}
                     minH={50}
                     title="Chats"
-                    isDisabled
+                    // isDisabled
+                    onClick={()=>router.push("/chat")}
                   >
                     <Center
                         bg="#FFC75A"
