@@ -27,6 +27,7 @@ import {    Box,
             Button} from "@chakra-ui/react"
 import { async } from "@firebase/util";
 import Link from "next/link";
+import { Check } from "phosphor-react";
 
 const CreateGame = () => {
 
@@ -44,8 +45,10 @@ const CreateGame = () => {
 
     const [numberplayers, setNumberplayers] = useState("");
     const [nameroom, setNameroom] = useState("");
-    const [seerrole, setSeerrole] = useState("");
-    const [mayorrole, setMayorrole] = useState("");
+    // const [seerrole, setSeerrole] = useState("");
+    // const [mayorrole, setMayorrole] = useState("");
+    const [checkSeer, setCheckSeer] = useState([false, false]);
+    const [checkMayor, setCheckMayor] = useState([false, false])
 
     const Submit = async (e) => {
         e.preventDefault();
@@ -55,8 +58,10 @@ const CreateGame = () => {
         creator: auth.currentUser.uid,
         name: nameroom,
         number: numberplayers,
-        seer: seerrole,
-        mayor: mayorrole
+        // seer: seerrole,
+        // mayor: mayorrole
+        seer: checkSeer,
+        mayor: checkMayor
     });
     setNumberplayers("");
     setNameroom("");
@@ -70,13 +75,13 @@ const CreateGame = () => {
                 <title>Comuthor | game</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
+            <Box>
             <CustomNavbar />
-                <h1> Creategame </h1>
-                <h4> สร้างเกม </h4>
+                <h1> Creategame | สร้างเกม </h1>
 
                 <p> ชื่อห้อง </p>
                 <Input 
-                    variant='flushed' 
+                    // variant='flushed' 
                     type="text"
                     value={nameroom}
                     onChange={(e) => {
@@ -112,18 +117,18 @@ const CreateGame = () => {
                     <Row>
                         <CheckboxGroup>
                             <Row>
-                                <Checkbox 
-                                    value={seerrole}
-                                    onClick={(e) => {
-                                        setSeerrole(e.target.value)
-                                    }}> Seer ผู้หยั่งรู้ </Checkbox>
+                                <Checkbox
+                                    // value={checkSeer}
+                                    isChecked={checkSeer}
+                                    onChange={() => setCheckSeer(!checkSeer)}
+                                    > Seer ผู้หยั่งรู้ </Checkbox>
                             </Row>
                             <Row>
-                            <Checkbox 
-                                value={mayorrole}
-                                onClick={(e) => {
-                                    setMayorrole(e.target.value)
-                                }}> Mayor นายอำเภอ </Checkbox>
+                            <Checkbox
+                                // value={checkMayor}
+                                isChecked={checkMayor}
+                                onChange={() => setCheckMayor(!checkMayor)}
+                                > Mayor นายอำเภอ </Checkbox>
                             </Row>
                         </CheckboxGroup>
                     </Row>
@@ -138,6 +143,7 @@ const CreateGame = () => {
                       สร้างห้อง
                     </Button>
                   </Center>
+                  </Box>
         </SSRProvider>
     )
 }

@@ -42,27 +42,21 @@ function GameCard() {
             QuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
           );
           setLoading(false);
-            console.log(game.length);
+            // console.log(game.length);
       };
       return Fetchdata();
     
   });
 
   return (
-    <Box bg={"#d4d4d4"}>
+    <Box>
       {!loading && game.map((value) => {
         return (
           <Flex
           onClick={() => {
             Router.push("/game/" + value.id);
           }}
-          bg={"#9A9A9A"}
-          mr={5}
-          ml={5}
-          mt={2}
-          mb={1.5}
-          h={'auto'}
-          borderRadius={10}
+          className={style.Box}
           _hover={{
             background:"#535353"
           }}
