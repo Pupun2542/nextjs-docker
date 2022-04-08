@@ -3,6 +3,7 @@ import {Container, Row, Col} from 'react-bootstrap'
 import CustomNavbar from '../components/navbar';
 import styles from "../styles/about.module.css" ;
 import Head from 'next/head';
+import {Box, Flex, Image} from '@chakra-ui/react'
 
 function about() {
   return (

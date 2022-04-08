@@ -36,6 +36,7 @@
     "react-firebase-hooks": "^4.0.1",
     "react-icons": "^4.3.1",
     "tabletop": "^1.6.3",
+    "use-sound": "^4.0.1",
     "xlsx": "^0.18.4",
     "yarn": "^1.22.17"
   }
