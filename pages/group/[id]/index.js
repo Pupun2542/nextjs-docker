@@ -31,6 +31,7 @@ import { useApp } from "../../../src/hook/local";
 import { UpdateUserPinGroup } from "../../../src/services/firestoreservice";
 import style from "../../../styles/groupdetail.module.css";
 import Head from "next/head";
+import { Box, Center, Flex, VStack, FacebookLogo, Spacer, DiscordLogo } from "@chakra-ui/react"
 
 export default function Group() {
   const app = useApp();
@@ -124,7 +125,54 @@ export default function Group() {
         <title>Comuthor</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <div className={style.background}>
+
+      <Box>
+
+
+        <Center
+          bg={'#343434'}
+          h={180}
+        >
+          <Flex>
+            <Center>
+              <VStack m={5}>
+                <Box fontFamily={'mitr'} color={'#FFFFFF'}>Comuthor © 2022</Box>
+                <Flex>
+                  <FacebookLogo size={32} color={'#FFFFFF'} />
+                  <Spacer w={5} />
+                  <DiscordLogo size={32} color={'#FFFFFF'}/>
+                </Flex>
+              </VStack>
+
+            </Center>
+
+            <Spacer borderRightColor={'#ffffff'} borderWidth={1} h={150} />
+
+            <Center>
+              <VStack fontFamily={'Mitr'} m={5} color={'#FFFFFF'}>
+                <Box >About us</Box>
+                <Box>Guide</Box>
+              </VStack>
+
+
+            </Center>
+
+            <Spacer borderRightColor={'#ffffff'} borderWidth={1} h={150} />
+
+            <Center>
+              <VStack m={5} fontFamily={'Mitr'} color={'#FFFFFF'}>
+                <Box>Policy</Box>
+                <Box>Term</Box>
+              </VStack>
+
+
+            </Center>
+          </Flex>
+        </Center>
+      </Box>
+
+
+      {/* <div className={style.background}>
         <CustomNavbar />
         <div></div>
         <Row>
@@ -248,7 +296,7 @@ export default function Group() {
                 Confirm
               </Button>
             </Modal.Footer>
-          </Modal>
+          </Modal> */}
     </SSRProvider>
   );
 }
