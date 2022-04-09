@@ -94,7 +94,7 @@ function chat() {
             <title>{pending>0? "("+pending+")" : ""} Comuthor</title>
           </Head>
         <CustomNavbar />
-        <Box overflowY={"auto"} maxH={820} onFocus={handleFocus} >
+        <Box overflowY={"auto"} maxH={820} onClick={handleFocus} >
           {chatText.map((data) => (
             <Flex
               flexDirection={(data.senderId == user.uid ? "row-reverse" : "row")}
@@ -140,7 +140,7 @@ function chat() {
             onKeyUp={(event) => (event.key === "Enter" ? handleSend() : null)}
             value={text}
             ml={10}
-            // onFocus={handleFocus}
+            onFocus={handleFocus}
           />
           <Button
             w="10%"
