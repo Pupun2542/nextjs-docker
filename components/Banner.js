@@ -1,10 +1,23 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Modal, Button } from "react-bootstrap";
+// import { Modal, Button } from "react-bootstrap";
 import { useDropzone } from "react-dropzone";
 import style from "../styles/banner.module.css";
 import Dropzone from "react-dropzone";
 import "cropperjs/dist/cropper.css";
 import { Cropper } from "react-cropper";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Box,
+  Image,
+  Button,
+  useDisclosure
+} from "@chakra-ui/react";
 
 export default function UploadImageModal({ setBannerBlob, BannerBlob }) {
   const [show, setShow] = useState(false);
@@ -14,8 +27,10 @@ export default function UploadImageModal({ setBannerBlob, BannerBlob }) {
     useDropzone({
       accept: "image/jpeg, image/png",
       maxFiles: 1,
-      maxSize: 1048486,
+      maxSize: 4194304,
     });
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isCropOpen, onOpen: onCropOpen, onClose: onCropClose } = useDisclosure();
 
   if (fileRejections.length > 0) {
     alert("ไม่สามารถอัพโหลดไฟล์ได้");
@@ -37,8 +52,8 @@ export default function UploadImageModal({ setBannerBlob, BannerBlob }) {
         reader.readAsDataURL(file);
       });
 
-      setShow(false);
-      setCropmodal(true);
+      onClose();
+      onCropOpen();
       // imageCropper();
     }
   }, [acceptedFiles]);
@@ -49,65 +64,74 @@ export default function UploadImageModal({ setBannerBlob, BannerBlob }) {
     const cropper = imageElement.cropper;
     // console.log(cropper.getCroppedCanvas().toDataURL());
     const cropped = cropper.getCroppedCanvas().toDataURL();
+    console.log(cropped);
     setImage(cropped);
-    setCropmodal(false);
+    onCropClose();
 
     setBannerBlob(cropped);
   };
-  console.log(image);
+  // console.log(image);
   return (
-    <div>
-      <div>
-        <img
+    <Box>
+      <Box>
+        <Image
           src={
             image
               ? image
-              : "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/group%2Fbanner%2FUploadBanner.jpg?alt=media&token=aad81eb7-7a07-4e8d-98aa-faa551116946"
+              : "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2Fimageplaceholder.png?alt=media&token=e3a54ee9-8d20-4471-8f4f-7157ac972757"
           }
           width={928}
           height={522}
           className={style.bannerPlaceholder}
-          onClick={() => {
-            setShow(true);
-          }}
-        ></img>
-      </div>
+          onClick={onOpen}
+        ></Image>
+      </Box>
 
       <Modal
-        show={show}
-        fullscreen={true}
-        onHide={() => {
-          setShow(false);
+        isOpen={isOpen} 
+        onClose={()=>{
+          onClose();
           fileRejections.pop();
           acceptedFiles.pop();
-        }}
+        }} 
+        size='xl'
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Upload Image</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+        <ModalOverlay/>
+        <ModalContent>
+          <ModalHeader>
+          Upload Image
+          </ModalHeader>
+          <ModalCloseButton/>
+          <ModalBody>
           <section className={style.dropareaContainer}>
             <div {...getRootProps()} className={style.dragdropArea}>
               <input {...getInputProps()} />
               <div className={style.dragdropArea}>
                 <h2>Drop image file here</h2>
-                <h4>ขนาดไม่เกิน 1MB</h4>
+                <h4>ขนาดไม่เกิน 4MB</h4>
               </div>
             </div>
           </section>
-        </Modal.Body>
-        <Modal.Footer>{/* <Button>Close</Button> */}</Modal.Footer>
+          </ModalBody>
+        </ModalContent>
       </Modal>
 
       <Modal
-        show={cropmodal}
-        fullscreen={true}
-        onHide={() => setCropmodal(false)}
+        isOpen={isCropOpen} 
+        onClose={()=>{
+          onCropClose();
+          fileRejections.pop();
+          acceptedFiles.pop();
+        }} 
+        size='xl'
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Crop Image</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+        <ModalOverlay/>
+        <ModalContent>
+          <ModalHeader>
+          Crop Image
+          </ModalHeader>
+          <ModalCloseButton/>
+          <ModalBody>
           <Cropper
             src={image}
             style={{ height: 400, width: "100%" }}
@@ -117,11 +141,12 @@ export default function UploadImageModal({ setBannerBlob, BannerBlob }) {
             // crop={onCrop}
             ref={cropperRef}
           />
-        </Modal.Body>
-        <Modal.Footer>
+          </ModalBody>
+          <ModalFooter>
           <Button onClick={onCrop}>ยืนยัน</Button>
-        </Modal.Footer>
+          </ModalFooter>
+        </ModalContent>
       </Modal>
-    </div>
+    </Box>
   );
 }
