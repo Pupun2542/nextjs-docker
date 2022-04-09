@@ -32,7 +32,6 @@ import { UpdateUserPinGroup } from "../../../src/services/firestoreservice";
 import style from "../../../styles/groupdetail.module.css";
 import Head from "next/head";
 import { Box, Center, Flex, VStack, Spacer } from "@chakra-ui/react"
-import {DiscordLogo, FacebookLogo} from 'phosphor-react'
 import Footer from "../../../components/footer";
 
 export default function Group() {
@@ -128,8 +127,23 @@ export default function Group() {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <Box>
-      <CustomNavbar />
+      <Box bg={'#FFFFFF'}>
+        <CustomNavbar />
+
+        <Flex>
+          <Box w={400} minH={1000} bg={'#F3F3F3'}></Box>
+          <Spacer bg={'#F3F3F3'}/>
+
+          <Flex w={1000} bg={'#FDFDFD'} boxShadow={'xs'}>
+            <Spacer />
+            <Center h={100} bg={'#FFFFFF'} w={850} boxShadow='dark-lg'>ffff</Center>
+            <Spacer />
+          </Flex>
+
+          <Spacer bg={'#F3F3F3'}/>
+          <Box w={400} minH={1000} bg={'#F3F3F3'}></Box>
+
+        </Flex>
 
         <Footer></Footer>
       </Box>
