@@ -99,7 +99,7 @@ function chat() {
 
         <VStack>
           <Flex>
-            <Box w={400}></Box>
+            {/* <Box w={400}></Box> */}
             <Spacer />
               <Box overflowY={"auto"} maxH={820} onFocus={handleFocus} bg={'gray.100'} w={1000} shadow='dark-lg'>
                 {chatText.map((data) => (
@@ -135,7 +135,7 @@ function chat() {
                         ))}
                       </Box>
             <Spacer />
-            <Box w={400}></Box>
+            {/* <Box w={400}></Box> */}
           </Flex>
           
           <Flex
@@ -145,9 +145,10 @@ function chat() {
             paddingBottom="10px"
             paddingLeft="5px"
             bg={"gray"}
+            justifyContent='center'
           >
-            <Spacer />
-            <Center w={1000}>
+            {/* <Spacer /> */}
+            <Center MaxW={3000} flexGrow='0.9' >
               <Input
               type="text"
               width={"100%"}
@@ -157,7 +158,7 @@ function chat() {
               value={text}
               mt={2}
               bg={'White'}
-              // onFocus={handleFocus}
+              onFocus={handleFocus}
               />
               <Button
                 w="10%"
@@ -169,7 +170,7 @@ function chat() {
                 Send
               </Button>
             </Center>
-            <Spacer/>
+            {/* <Spacer/> */}
 
           </Flex>
         </VStack>
