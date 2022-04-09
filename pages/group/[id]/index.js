@@ -31,7 +31,8 @@ import { useApp } from "../../../src/hook/local";
 import { UpdateUserPinGroup } from "../../../src/services/firestoreservice";
 import style from "../../../styles/groupdetail.module.css";
 import Head from "next/head";
-import { Box, Center, Flex, VStack, FacebookLogo, Spacer, DiscordLogo } from "@chakra-ui/react"
+import { Box, Center, Flex, VStack, Spacer } from "@chakra-ui/react"
+import {DiscordLogo, FacebookLogo} from 'phosphor-react'
 
 export default function Group() {
   const app = useApp();
@@ -119,7 +120,7 @@ export default function Group() {
   };
 
   return (
-    <SSRProvider>
+    <Box>
       <Head>
         <link rel="shortcut icon" href="../../../favicon.ico"></link>
         <title>Comuthor</title>
@@ -127,7 +128,7 @@ export default function Group() {
       </Head>
 
       <Box>
-
+      <CustomNavbar />
 
         <Center
           bg={'#343434'}
@@ -297,6 +298,6 @@ export default function Group() {
               </Button>
             </Modal.Footer>
           </Modal> */}
-    </SSRProvider>
+    </Box>
   );
 }
