@@ -24,6 +24,13 @@ import {
   Input,
   InputLeftElement,
   InputGroup,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
   } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import style from "../styles/navbar.module.css";
@@ -41,6 +48,7 @@ import {
   Chats,
   Bell,
   MagnifyingGlass,
+  PushPin,
 } from "phosphor-react";
 import { extendTheme } from '@chakra-ui/react'
 
@@ -256,7 +264,33 @@ function CustomNavbar() {
                   >
                     <Plus size={32} />
                   </MenuItem>
+
+                  <MenuItem
+                    minH="48px"
+                    as={"button"}
+                    title="Main Hall"
+                    onClick={onOpen}
+                  >
+                    <PushPin size={32} />
+                  </MenuItem>
                 </MenuList>
+
+                <Modal isOpen={isOpen} onClose={onClose}>
+                  <ModalOverlay />
+                  <ModalContent>
+                    <ModalHeader>My Pinned</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                      Press
+                    </ModalBody>
+
+                    <ModalFooter>
+                      <Button colorScheme='blue' mr={3} onClick={onClose}>
+                        Close
+                      </Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Modal>
 
                 {/* <Button onClick={toggleColorMode}>
                   {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
