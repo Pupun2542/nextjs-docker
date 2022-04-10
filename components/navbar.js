@@ -245,7 +245,7 @@ function CustomNavbar() {
                   </Center>
                 </MenuButton>
 
-                <MenuList bg={"#343434"} minWidth={"auto"} ml={-1}>
+                <MenuList bg={"#343434"} minWidth={"auto"} ml={-1} color={'white'}>
                   <MenuItem
                     minH="48px"
                     as={"a"}
@@ -293,7 +293,7 @@ function CustomNavbar() {
                       </Center>
                     </MenuButton>
 
-                    <MenuList bg={"#343434"} alignItems={"center"} mr={-4}>
+                    <MenuList bg={"#343434"} alignItems={"center"} mr={-4} color={'white'}>
                       <br />
 
                       <Center>

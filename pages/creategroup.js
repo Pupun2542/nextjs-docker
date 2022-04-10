@@ -300,6 +300,7 @@ export default function CreateGroup() {
                     borderTopRadius={10}
                     maxW={1024}
                     w={1024}
+                    color={'white'}
                   >
                     <Flex>
                       <Center
@@ -318,8 +319,8 @@ export default function CreateGroup() {
                     </Flex>
                   </Center>
 
-                  <Accordion allowMultiple>
-                    <AccordionItem maxW={1024}>
+                  <Accordion allowMultiple >
+                    <AccordionItem maxW={1024} >
                       <h2>
                         <AccordionButton>
                           <AccordionIcon color={"Black"} w={50} h={50} />
@@ -330,8 +331,8 @@ export default function CreateGroup() {
                         </AccordionButton>
                       </h2>
 
-                      <AccordionPanel>
-                        <VStack>
+                      <AccordionPanel color={'white'}>
+                        <VStack >
                           {/* Community Name */}
                           <Center w={1024}>
                             <Flex bg={"#535353"} borderRadius={10} minW={900}>
@@ -427,6 +428,7 @@ export default function CreateGroup() {
                                     bg={"white"}
                                     color="black"
                                     size="lg"
+                                    fontFamily={'Mitr'}
                                   >
                                     <option
                                       style={{ backgroundColor: "White" }}
@@ -501,6 +503,7 @@ export default function CreateGroup() {
                                     bg={"white"}
                                     color="black"
                                     size="lg"
+                                    fontFamily={'Mitr'}
                                   >
                                     <option
                                       style={{ backgroundColor: "White" }}
@@ -584,7 +587,7 @@ export default function CreateGroup() {
                                   minW={"auto"}
                                 >
                                   <Box w={238} p={4}>
-                                    <Box className={style.Topic2}>ระยะเวลา</Box>
+                                    <Box className={style.Topic2}>วันที่เริ่มเล่น</Box>
                                   </Box>
 
                                   <Spacer
@@ -600,26 +603,12 @@ export default function CreateGroup() {
                                       h={46}
                                       bg={"white"}
                                       color="black"
-                                      w={290}
+                                      w={650}
                                       onChange={(e)=>setStartDate(parseTime(e.target.value))}
+                                      fontFamily={'Mitr'}
                                     />
                                   </Center>
 
-                                  <Center className={style.Topic2} minW={55}>
-                                    ถึง
-                                  </Center>
-
-                                  <Center pl={1.5} pr={1.5}>
-                                    <Input
-                                      type="datetime-local"
-                                      isDisabled={!durationsw} //แล้วก็เพิ่มตรงนี้ ชื่อตัวแปรตาม state ที่สร้าง
-                                      isRequired
-                                      h={46}
-                                      w={290}
-                                      bg={"white"}
-                                      color="black"
-                                    />
-                                  </Center>
                                 </Flex>
                               </Flex>
                             </Center>
@@ -676,6 +665,7 @@ export default function CreateGroup() {
                                       color="black"
                                       size="lg"
                                       isDisabled={!Averagesw}
+                                      fontFamily={'Mitr'}
                                     >
                                       <option
                                         style={{ backgroundColor: "White" }}
@@ -840,6 +830,7 @@ export default function CreateGroup() {
                                       isDisabled={!Ratingsw}
                                       value={rating}
                                       onSelect={(e)=>setRating(e.target.value)}
+                                      fontFamily={'Mitr'}
                                     >
                                       <option
                                         style={{ backgroundColor: "White" }}
@@ -1021,7 +1012,7 @@ export default function CreateGroup() {
                         </AccordionButton>
                       </h2>
 
-                      <AccordionPanel>
+                      <AccordionPanel color={'white'}>
                         <VStack>
                           {/* <Flex w={1024}>
 
@@ -1162,7 +1153,7 @@ export default function CreateGroup() {
                         </AccordionButton>
                       </h2>
 
-                      <AccordionPanel>
+                      <AccordionPanel color={'white'}>
                         <VStack>
                           <Center>
                             <Flex maxW={900}>
