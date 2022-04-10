@@ -309,6 +309,7 @@ export default function Edit() {
                     borderTopRadius={10}
                     maxW={1024}
                     w={1024}
+                    color={'#FFFFFF'}
                   >
                     <Flex>
                       <Center
@@ -328,7 +329,7 @@ export default function Edit() {
                   </Center>
 
                   <Accordion allowMultiple>
-                    <AccordionItem maxW={1024}>
+                    <AccordionItem maxW={1024} color={'#FFFFFF'}>
                       <h2>
                         <AccordionButton>
                           <AccordionIcon color={"Black"} w={50} h={50} />
@@ -1018,7 +1019,7 @@ export default function Edit() {
                   {/* Registration */}
 
                   <Accordion allowMultiple>
-                    <AccordionItem maxW={1024}>
+                    <AccordionItem maxW={1024} color={'#FFFFFF'}> 
                       <h2>
                         <AccordionButton>
                           <AccordionIcon color={"Black"} w={50} h={50} />
@@ -1159,7 +1160,7 @@ export default function Edit() {
                   {/* Other Link */}
 
                   <Accordion allowMultiple>
-                    <AccordionItem maxW={1024}>
+                    <AccordionItem maxW={1024} color={'#FFFFFF'}>
                       <h2>
                         <AccordionButton>
                           <AccordionIcon color={"Black"} w={50} h={50} />
