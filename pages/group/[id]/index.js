@@ -343,8 +343,8 @@ export default function Group() {
                               bg={"white"}
                               w={550}
                               minH={63}
-                              pt={5}
-                              pl={5}
+                              pt={2}
+                              pl={3}
                               shadow={"base"}
                               borderRightRadius={10}
                             >
@@ -487,9 +487,170 @@ export default function Group() {
                           <Box fontSize={25} flex="1" textAlign="left">
                             Registration
                           </Box>
+
                         </AccordionButton>
                       </h2>
-                      <AccordionPanel pb={4}></AccordionPanel>
+                      <AccordionPanel pb={4}>
+                        {/* <Box pl={10}>ลงทะเบียนตัวละคร</Box> */}
+                        <VStack>
+                        <Flex w={750}>
+                            <Box
+                              bg={"white"}
+                              w={200}
+                              h={63}
+                              pt={5}
+                              pl={5}
+                              shadow={"base"}
+                              borderLeftRadius={10}
+                              borderRightColor={"gray.400"}
+                              borderRightWidth={3}
+                            >
+                              ลงทะเบียนตัวละคร
+                            </Box>
+                            <Box
+                              bg={"white"}
+                              w={550}
+                              h={63}
+                              pt={5}
+                              pl={5}
+                              shadow={"base"}
+                              borderRightRadius={10}
+                            >
+                            </Box>
+                          </Flex>
+
+                          <Flex ml={10} w={750}>
+                            <Box
+                              bg={"white"}
+                              w={200}
+                              h={63}
+                              pt={5}
+                              pl={5}
+                              shadow={"base"}
+                              borderLeftRadius={10}
+                              borderRightColor={"gray.400"}
+                              borderRightWidth={3}
+                            >
+                              ตรวจสอบตัวละคร
+                            </Box>
+                            <Box
+                              bg={"white"}
+                              w={550}
+                              h={63}
+                              pt={5}
+                              pl={5}
+                              shadow={"base"}
+                              borderRightRadius={10}
+                            >
+                            </Box>
+                          </Flex>
+
+                          <Flex ml={10} w={750}>
+                            <Box
+                              bg={"white"}
+                              w={200}
+                              h={63}
+                              pt={5}
+                              pl={5}
+                              shadow={"base"}
+                              borderLeftRadius={10}
+                              borderRightColor={"gray.400"}
+                              borderRightWidth={3}
+                            >
+                              ข้อมูลคอมมู
+                            </Box>
+                            <Box
+                              bg={"white"}
+                              w={550}
+                              h={63}
+                              pt={5}
+                              pl={5}
+                              shadow={"base"}
+                              borderRightRadius={10}
+                            >
+                            </Box>
+                          </Flex>
+
+                          <Flex ml={10} w={750}>
+                            <Box
+                              bg={"white"}
+                              w={200}
+                              h={63}
+                              pt={5}
+                              pl={5}
+                              shadow={"base"}
+                              borderLeftRadius={10}
+                              borderRightColor={"gray.400"}
+                              borderRightWidth={3}
+                            >
+                              คำถาม
+                            </Box>
+                            <Box
+                              bg={"white"}
+                              w={550}
+                              h={63}
+                              pt={5}
+                              pl={5}
+                              shadow={"base"}
+                              borderRightRadius={10}
+                            >
+                            </Box>
+                          </Flex>
+
+                          <Flex ml={10} w={750}>
+                            <Box
+                              bg={"white"}
+                              w={200}
+                              h={63}
+                              pt={5}
+                              pl={5}
+                              shadow={"base"}
+                              borderLeftRadius={10}
+                              borderRightColor={"gray.400"}
+                              borderRightWidth={3}
+                            >
+                              ตรวจสอบคำตอบ
+                            </Box>
+                            <Box
+                              bg={"white"}
+                              w={550}
+                              h={63}
+                              pt={5}
+                              pl={5}
+                              shadow={"base"}
+                              borderRightRadius={10}
+                            >
+                            </Box>
+                          </Flex>
+
+                          <Flex ml={10} w={750}>
+                            <Box
+                              bg={"white"}
+                              w={200}
+                              h={63}
+                              pt={5}
+                              pl={5}
+                              shadow={"base"}
+                              borderLeftRadius={10}
+                              borderRightColor={"gray.400"}
+                              borderRightWidth={3}
+                            >
+                              ช่องทางติดต่อ
+                            </Box>
+                            <Box
+                              bg={"white"}
+                              w={550}
+                              h={63}
+                              pt={5}
+                              pl={5}
+                              shadow={"base"}
+                              borderRightRadius={10}
+                            >
+                            </Box>
+                          </Flex>
+                        </VStack>
+
+                      </AccordionPanel>
                     </AccordionItem>
                   </Accordion>
                 </Flex>
