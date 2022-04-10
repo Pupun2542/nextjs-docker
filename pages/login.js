@@ -80,7 +80,7 @@ function Login() {
                   >
               <VStack>
                 <Center>
-                  <Center fontSize={40} fontWeight={1000}>
+                  <Center color={'#FFFFFF'} fontSize={40} fontWeight={1000}>
                     Sign In
                   </Center>
                 </Center>
@@ -171,7 +171,7 @@ function Login() {
                   h={200}
                   borderTopColor={'white'}
                   mt="100"
-                  borderWidth={2}
+                  borderTopWidth={2}
                 >
                   
                   <Center color={'#343434'}>
