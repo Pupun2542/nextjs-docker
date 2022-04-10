@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import {
   Box,
   Flex,
@@ -31,7 +31,7 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  } from "@chakra-ui/react";
+} from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import style from "../styles/navbar.module.css";
 import { useRouter } from "next/router";
@@ -50,7 +50,20 @@ import {
   MagnifyingGlass,
   PushPin,
 } from "phosphor-react";
-import { extendTheme } from '@chakra-ui/react'
+import { extendTheme } from "@chakra-ui/react";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  query,
+} from "firebase/firestore";
+import {
+  useCollection,
+  useCollectionDataOnce,
+  useCollectionOnce,
+} from "react-firebase-hooks/firestore";
 
 const NavLink = ({ children }) => (
   <Link
@@ -70,10 +83,40 @@ const NavLink = ({ children }) => (
 function CustomNavbar() {
   const app = getApp();
   const auth = getAuth(app);
+  const db = getFirestore(app);
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const [user, loading, error] = useAuthState(auth);
+  // const [data, setData] = useState([]);
+  // const [snapshot] = useCollectionOnce(
+  //   collection(db, "UserDetail", user.uid, "pinnedGroup")
+  // );
+
+  // useEffect(()=>{
+  //   if (user){
+  //     const QuerySnapshot = query(collection(db, "UserDetail", user.uid, "pinnedGroup"))
+  //     getDocs(QuerySnapshot).then(q=>{
+  //       console.log(q.docs)
+  //     })
+  //   }
+
+  // },[])
+
+  // useEffect(() => {
+  //   if (user && !loading) {
+  //     getDocs(collection(db, "UserDetail", user.uid, "pinnedGroup")).then(
+  //       (snapshot) => {
+  //         setData(
+  //           snapshot.docs.map((doc) => {
+  //             doc.data();
+  //           })
+  //         );
+  //       }
+  //     );
+  //   }
+  // },[user, loading]);
+
   const Loadthumbnail = () => {
     if (user) {
       return (
@@ -87,7 +130,8 @@ function CustomNavbar() {
             minH={0}
             _hover={{
               textDecoration: "none",
-            }}>
+            }}
+          >
             <Center bg="#6768AB" rounded={50} minHeight={38}>
               <Center px={0}>
                 <Avatar h={41} w={41} src={user.photoURL} />
@@ -123,29 +167,25 @@ function CustomNavbar() {
     <>
       <Box bg="black" h="auto" w="auto" px={5}>
         <Flex h={55} alignItems={"center"} justifyContent={"space-between"}>
-          <Flex align={"center"} float={1} cursor='pointer'>
-            <Text className={style.Logonav} onClick={()=>router.push("/")}>Comuthor</Text>
+          <Flex align={"center"} float={1} cursor="pointer">
+            <Text className={style.Logonav} onClick={() => router.push("/")}>
+              Comuthor
+            </Text>
           </Flex>
-          
-          <Stack 
-            spacing={4}
-            marginLeft='5'
-            bg="white"
-            rounded={10}
-          >
-            
-            <InputGroup
-              
-            >
-              <InputLeftElement
-                pointerEvents='none'
-                children={<MagnifyingGlass color='black'/>}
-            />
-              <Input placeholder='ค้นหาบน Comuthor' className={style.search} isDisabled/>
-            </InputGroup>
 
+          <Stack spacing={4} marginLeft="5" bg="white" rounded={10}>
+            <InputGroup>
+              <InputLeftElement
+                pointerEvents="none"
+                children={<MagnifyingGlass color="black" />}
+              />
+              <Input
+                placeholder="ค้นหาบน Comuthor"
+                className={style.search}
+                isDisabled
+              />
+            </InputGroup>
           </Stack>
-          
 
           <Spacer />
 
@@ -162,17 +202,17 @@ function CustomNavbar() {
                     minH={50}
                     title="Chats"
                     // isDisabled
-                    onClick={()=>router.push("/chat")}
+                    onClick={() => router.push("/chat")}
                   >
                     <Center
-                        bg="#FFC75A"
-                        minH={'38'} 
-                        minW={'38'} 
-                        rounded={50}
-                        size={50}
-                        padding={1}
-                      >
-                      <Chats size={32} color="#6768AB"/>
+                      bg="#FFC75A"
+                      minH={"38"}
+                      minW={"38"}
+                      rounded={50}
+                      size={50}
+                      padding={1}
+                    >
+                      <Chats size={32} color="#6768AB" />
                     </Center>
                   </MenuButton>
 
@@ -199,16 +239,15 @@ function CustomNavbar() {
                     cursor="pointer"
                     minW={0}
                     title="Notifications"
-                    
                   >
                     <Center
-                        bg="#FFC75A"
-                        minH={'38'} 
-                        minW={'38'} 
-                        rounded={50}
-                        size={40}
-                        padding={1}
-                      >
+                      bg="#FFC75A"
+                      minH={"38"}
+                      minW={"38"}
+                      rounded={50}
+                      size={40}
+                      padding={1}
+                    >
                       <Bell size={32} color="#6768AB" />
                     </Center>
                   </MenuButton>
@@ -237,16 +276,19 @@ function CustomNavbar() {
                     cursor="pointer"
                     title="Commu"
                     minH={41}
-                    minW={41}       
+                    minW={41}
                   >
-                    <UsersThree
-                      size={32}
-                      color="#6768AB"
-                    />
+                    <UsersThree size={32} color="#6768AB" />
                   </Center>
                 </MenuButton>
 
-                <MenuList bg={"#343434"} minWidth={"auto"} ml={-3} mt={-1} color={'white'}>
+                <MenuList
+                  bg={"#343434"}
+                  minWidth={"auto"}
+                  ml={-3}
+                  mt={-1}
+                  color={"white"}
+                >
                   <MenuItem
                     minH="48px"
                     as={"a"}
@@ -265,14 +307,14 @@ function CustomNavbar() {
                     <Plus size={32} />
                   </MenuItem>
 
-                  <MenuItem
+                  {/* <MenuItem
                     minH="48px"
                     as={"button"}
                     title="Main Hall"
                     onClick={onOpen}
                   >
                     <PushPin size={32} />
-                  </MenuItem>
+                  </MenuItem> */}
                 </MenuList>
 
                 <Modal isOpen={isOpen} onClose={onClose}>
@@ -281,11 +323,19 @@ function CustomNavbar() {
                     <ModalHeader>My Pinned</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                      Press
+                      {/* {console.log(snapshot.docs)} */}
+                      {/* {snapshot &&
+                        snapshot.docs.map((doc) => (
+                          <Text
+                            onClick={router.push("/group/" + doc.data().id)}
+                          >
+                            [{doc.data().tag}]{doc.data().name}
+                          </Text>
+                        ))} */}
                     </ModalBody>
 
                     <ModalFooter>
-                      <Button colorScheme='blue' mr={3} onClick={onClose}>
+                      <Button colorScheme="blue" mr={3} onClick={onClose}>
                         Close
                       </Button>
                     </ModalFooter>
@@ -310,8 +360,8 @@ function CustomNavbar() {
                     >
                       <Center
                         bg="#FFC75A"
-                        minH={'38'} 
-                        minW={'38'} 
+                        minH={"38"}
+                        minW={"38"}
                         rounded={50}
                         size={38}
                         padding={1}
@@ -320,7 +370,12 @@ function CustomNavbar() {
                       </Center>
                     </MenuButton>
 
-                    <MenuList bg={"#343434"} alignItems={"center"} mr={-4} color={'white'}>
+                    <MenuList
+                      bg={"#343434"}
+                      alignItems={"center"}
+                      mr={-4}
+                      color={"white"}
+                    >
                       <br />
 
                       <Center>
