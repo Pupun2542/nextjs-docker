@@ -53,12 +53,9 @@ import {
   NumberDecrementStepper,
   NumberIncrementStepper,
   Textarea,
-  Text
+  Text,
 } from "@chakra-ui/react";
-import {
-  FacebookLogo,
-  DiscordLogo,
-} from "phosphor-react";
+import { FacebookLogo, DiscordLogo } from "phosphor-react";
 
 export default function Edit() {
   const app = useApp();
@@ -67,7 +64,7 @@ export default function Edit() {
   const [user, loading, error] = useAuthState(auth);
   const Router = useRouter();
   const store = getStorage(app);
-  const {id} = Router.query
+  const { id } = Router.query;
 
   useEffect(() => {
     if (!loading && !user) {
@@ -120,7 +117,7 @@ export default function Edit() {
             alert("Unorthorized Access");
             Router.back();
           } else {
-            setGenre(data.genre); 
+            setGenre(data.genre);
             setCommuname(data.Name);
             setMaxplayer(data.maxplayer);
             setRegDate(data.regDate);
@@ -147,78 +144,74 @@ export default function Edit() {
       }
     }
   }, [user, loading, id]);
-  
-  
-  
-  
+
   const HandleSubmit = async (e) => {
     e.preventDefault();
-
-    if (communame && hashtag && description) {
-      await updateDoc(doc(db, "group", id), {
-        Name: communame,
-        Creator: auth.currentUser.uid,
-        Type: privacy,
-        tag: hashtag,
-        description: description,
-        maxplayer: maxplayer,
-        runtime: runtime,
-        genre: genre,
-        smlink: smlink,
-        doclink: doclink,
-        qaasklink: qaasklink,
-        qaanslink: qaanslink,
-        submitlink: submitlink,
-        resultlink: resultlink,
-        contactlink: contactlink,
-        regDate: regDate,
-        startDate: startDate,
-        // banner: bannerBlob,
-        place: places,
-        times: times,
-        tws: TWs,
-        rating: rating,
-        createAt: serverTimestamp(),
-      });
-
-      if (bannerBlob !== originBannerUrl) {
-        // setBannerBlob(
-        //   "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2Fimageplaceholder.png?alt=media&token=e3a54ee9-8d20-4471-8f4f-7157ac972757"
-        // );
-        const storageref = ref(
-          store,
-          `group/${docRef.id}/uploadImages/${auth.currentUser.uid}${Date.now()}`
-        );
-        uploadString(storageref, bannerBlob, "data_url").then((snapshot) => {
-          getDownloadURL(snapshot.ref).then((url) => {
-            updateDoc(docRef, { banner: url });
-          });
+    if (confirm("ยืนยันการแก้ไข?")) {
+      if (communame && hashtag && description) {
+        await updateDoc(doc(db, "group", id), {
+          Name: communame,
+          Creator: auth.currentUser.uid,
+          Type: privacy,
+          tag: hashtag,
+          description: description,
+          maxplayer: maxplayer,
+          runtime: runtime,
+          genre: genre,
+          smlink: smlink,
+          doclink: doclink,
+          qaasklink: qaasklink,
+          qaanslink: qaanslink,
+          submitlink: submitlink,
+          resultlink: resultlink,
+          contactlink: contactlink,
+          regDate: regDate,
+          startDate: startDate,
+          // banner: bannerBlob,
+          place: places,
+          times: times,
+          tws: TWs,
+          rating: rating,
+          createAt: serverTimestamp(),
         });
-      }
 
-      setGenre([]);
-      setCommuname("");
-      setMaxplayer("");
-      setRegDate("");
-      setRuntime("");
-      setStartDate("");
-      setSmlink("");
-      setDescription("");
-      setDoclink("");
-      setQaasklink("");
-      setQaanslink("");
-      setSubmitlink("");
-      setResultlink("");
-      setContactlink("");
-      setPrivacy("");
-      setBannerBlob(null);
-      setHashtag("");
-      setPlaces([]);
-      setTimes([]);
-      setTWs([]);
-      Router.push("/group/" + id);
-    } else {
-      alert("กรุณาใส่ชื่อ ชื่อย่อ และคำอธิบายคอมมู");
+        if (bannerBlob !== originBannerUrl.current) {
+          // console.log(bannerBlob, originBannerUrl)
+          const storageref = ref(
+            store,
+            `group/${id}/uploadImages/${auth.currentUser.uid}${Date.now()}`
+          );
+          uploadString(storageref, bannerBlob, "data_url").then((snapshot) => {
+            getDownloadURL(snapshot.ref).then((url) => {
+              updateDoc(doc(db, "group", id), { banner: url });
+            });
+          });
+        }
+
+        setGenre([]);
+        setCommuname("");
+        setMaxplayer("");
+        setRegDate("");
+        setRuntime("");
+        setStartDate("");
+        setSmlink("");
+        setDescription("");
+        setDoclink("");
+        setQaasklink("");
+        setQaanslink("");
+        setSubmitlink("");
+        setResultlink("");
+        setContactlink("");
+        setPrivacy("");
+        setBannerBlob(null);
+        setHashtag("");
+        setPlaces([]);
+        setTimes([]);
+        setTWs([]);
+        Router.push("/group/" + id);
+      } else {
+        alert("กรุณาใส่ชื่อ ชื่อย่อ และคำอธิบายคอมมู");
+      }
     }
   };
 
@@ -309,7 +302,7 @@ export default function Edit() {
                     borderTopRadius={10}
                     maxW={1024}
                     w={1024}
-                    color={'#FFFFFF'}
+                    color={"#FFFFFF"}
                   >
                     <Flex>
                       <Center
@@ -329,7 +322,7 @@ export default function Edit() {
                   </Center>
 
                   <Accordion allowMultiple>
-                    <AccordionItem maxW={1024} color={'#FFFFFF'}>
+                    <AccordionItem maxW={1024} color={"#FFFFFF"}>
                       <h2>
                         <AccordionButton>
                           <AccordionIcon color={"Black"} w={50} h={50} />
@@ -347,7 +340,10 @@ export default function Edit() {
                             <Flex bg={"#535353"} borderRadius={10} minW={900}>
                               <Box p={4} w={238}>
                                 <Box className={style.Topic2} pl={0}>
-                                  <Text float='left'>ชื่อคอมมูนิตี้</Text><Text color={'red'} float='left'>*</Text>
+                                  <Text float="left">ชื่อคอมมูนิตี้</Text>
+                                  <Text color={"red"} float="left">
+                                    *
+                                  </Text>
                                 </Box>
                               </Box>
 
@@ -384,7 +380,12 @@ export default function Edit() {
                               >
                                 <Box p={4} w={238}>
                                   <Box className={style.Topic2} pl={0}>
-                                  <Text float='left'>ชื่อย่อไม่เกิน 6 ตัวอักษร</Text><Text color={'red'} float='left'>*</Text>
+                                    <Text float="left">
+                                      ชื่อย่อไม่เกิน 6 ตัวอักษร
+                                    </Text>
+                                    <Text color={"red"} float="left">
+                                      *
+                                    </Text>
                                   </Box>
                                 </Box>
 
@@ -848,7 +849,9 @@ export default function Edit() {
                                       size="lg"
                                       isDisabled={!Ratingsw}
                                       value={rating}
-                                      onSelect={(e)=>setRating(e.target.value)}
+                                      onSelect={(e) =>
+                                        setRating(e.target.value)
+                                      }
                                     >
                                       <option
                                         style={{ backgroundColor: "White" }}
@@ -984,7 +987,10 @@ export default function Edit() {
                                   minH={"auto"}
                                 >
                                   <Box w={238} p={4} className={style.Topic2}>
-                                  <Text float='left'>คำอธิบาย</Text><Text color={'red'} float='left'>*</Text>
+                                    <Text float="left">คำอธิบาย</Text>
+                                    <Text color={"red"} float="left">
+                                      *
+                                    </Text>
                                   </Box>
 
                                   <Spacer
@@ -1019,7 +1025,7 @@ export default function Edit() {
                   {/* Registration */}
 
                   <Accordion allowMultiple>
-                    <AccordionItem maxW={1024} color={'#FFFFFF'}> 
+                    <AccordionItem maxW={1024} color={"#FFFFFF"}>
                       <h2>
                         <AccordionButton>
                           <AccordionIcon color={"Black"} w={50} h={50} />
@@ -1160,7 +1166,7 @@ export default function Edit() {
                   {/* Other Link */}
 
                   <Accordion allowMultiple>
-                    <AccordionItem maxW={1024} color={'#FFFFFF'}>
+                    <AccordionItem maxW={1024} color={"#FFFFFF"}>
                       <h2>
                         <AccordionButton>
                           <AccordionIcon color={"Black"} w={50} h={50} />
