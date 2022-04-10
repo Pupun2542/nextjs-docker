@@ -1,7 +1,7 @@
 import React from "react";
 import CustomNavbar from "../../../components/navbar";
 import style from "../../../styles/creategroup.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   getFirestore,
   collection,
@@ -81,7 +81,7 @@ export default function Edit() {
   const [maxplayer, setMaxplayer] = useState("");
   const [regDate, setRegDate] = useState("");
   const [runtime, setRuntime] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState("");
   const [description, setDescription] = useState("");
   const [smlink, setSmlink] = useState("");
   const [doclink, setDoclink] = useState("");
@@ -102,6 +102,8 @@ export default function Edit() {
   const [places, setPlaces] = useState([]);
   const [times, setTimes] = useState([]);
   const [TWs, setTWs] = useState([]);
+  const [rating, setRating] = useState("");
+  const originBannerUrl = useRef("");
 
   //ก็อปปี้บรรทัดบนไปวางเพิ่ม หรือเขียนเอง ลักษณะคือ const [state, setState] = useState(true) โดยที่ state คือชื่อตัวแปรที่จะใช้ เช่น durationsw ส่วน setstate คือฟังก์ชั่นที่ไว้ใช้เปลี่ยนค่าตัวแปร
 
@@ -118,12 +120,12 @@ export default function Edit() {
             alert("Unorthorized Access");
             Router.back();
           } else {
-            setTags(data.genre);
+            setGenre(data.genre); 
             setCommuname(data.Name);
             setMaxplayer(data.maxplayer);
             setRegDate(data.regDate);
             setRuntime(data.runtime);
-            setEndDate(data.endDate);
+            setStartDate(data.startDate);
             setSmlink(data.smlink);
             setDescription(data.description);
             setDoclink(data.doclink);
@@ -138,6 +140,8 @@ export default function Edit() {
             setPlaces(data.place);
             setTimes(data.times);
             setTWs(data.tws);
+            setRating(data.rating);
+            originBannerUrl.current = data.banner;
           }
         });
       }
@@ -151,7 +155,7 @@ export default function Edit() {
     e.preventDefault();
 
     if (communame && hashtag && description) {
-      const docRef = await addDoc(collection(db, "group"), {
+      await updateDoc(doc(db, "group", id), {
         Name: communame,
         Creator: auth.currentUser.uid,
         Type: privacy,
@@ -168,15 +172,16 @@ export default function Edit() {
         resultlink: resultlink,
         contactlink: contactlink,
         regDate: regDate,
-        endDate: endDate,
+        startDate: startDate,
         // banner: bannerBlob,
         place: places,
         times: times,
         tws: TWs,
+        rating: rating,
         createAt: serverTimestamp(),
       });
 
-      if (bannerBlob) {
+      if (bannerBlob !== originBannerUrl) {
         // setBannerBlob(
         //   "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2Fimageplaceholder.png?alt=media&token=e3a54ee9-8d20-4471-8f4f-7157ac972757"
         // );
@@ -189,11 +194,6 @@ export default function Edit() {
             updateDoc(docRef, { banner: url });
           });
         });
-      } else {
-        updateDoc(docRef, {
-          banner:
-            "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2Fimageplaceholder.png?alt=media&token=e3a54ee9-8d20-4471-8f4f-7157ac972757",
-        });
       }
 
       setGenre([]);
@@ -201,7 +201,7 @@ export default function Edit() {
       setMaxplayer("");
       setRegDate("");
       setRuntime("");
-      setEndDate("");
+      setStartDate("");
       setSmlink("");
       setDescription("");
       setDoclink("");
@@ -216,7 +216,7 @@ export default function Edit() {
       setPlaces([]);
       setTimes([]);
       setTWs([]);
-      Router.push("/group/" + docRef.id);
+      Router.push("/group/" + id);
     } else {
       alert("กรุณาใส่ชื่อ ชื่อย่อ และคำอธิบายคอมมู");
     }
@@ -846,6 +846,8 @@ export default function Edit() {
                                       color="black"
                                       size="lg"
                                       isDisabled={!Ratingsw}
+                                      value={rating}
+                                      onSelect={(e)=>setRating(e.target.value)}
                                     >
                                       <option
                                         style={{ backgroundColor: "White" }}

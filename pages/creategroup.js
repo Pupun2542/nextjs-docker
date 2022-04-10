@@ -99,7 +99,7 @@ export default function CreateGroup() {
   const [maxplayer, setMaxplayer] = useState("");
   const [regDate, setRegDate] = useState("");
   const [runtime, setRuntime] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState("");
   const [description, setDescription] = useState("");
   const [smlink, setSmlink] = useState("");
   const [doclink, setDoclink] = useState("");
@@ -120,9 +120,20 @@ export default function CreateGroup() {
   const [places, setPlaces] = useState([]);
   const [times, setTimes] = useState([]);
   const [TWs, setTWs] = useState([]);
+  const [rating, setRating] = useState("")
 
   //ก็อปปี้บรรทัดบนไปวางเพิ่ม หรือเขียนเอง ลักษณะคือ const [state, setState] = useState(true) โดยที่ state คือชื่อตัวแปรที่จะใช้ เช่น durationsw ส่วน setstate คือฟังก์ชั่นที่ไว้ใช้เปลี่ยนค่าตัวแปร
 
+  const parseTime = (localtime)=>{
+    // console.log(localtime);
+    const spdatetime = localtime.split("T");
+
+    const timebuild = spdatetime[0]+" เวลา "+spdatetime[1]
+    return timebuild
+  }
+  
+  
+  
   const HandleSubmit = async (e) => {
     e.preventDefault();
 
@@ -144,11 +155,13 @@ export default function CreateGroup() {
         resultlink: resultlink,
         contactlink: contactlink,
         regDate: regDate,
-        endDate: endDate,
+        // startDate: startDate,
         // banner: bannerBlob,
         place: places,
         times: times,
         tws: TWs,
+        startDate: startDate,
+        rating: rating,
         createAt: serverTimestamp(),
       });
 
@@ -177,7 +190,7 @@ export default function CreateGroup() {
       setMaxplayer("");
       setRegDate("");
       setRuntime("");
-      setEndDate("");
+      setStartDate("");
       setSmlink("");
       setDescription("");
       setDoclink("");
@@ -192,6 +205,8 @@ export default function CreateGroup() {
       setPlaces([]);
       setTimes([]);
       setTWs([]);
+      setStartDate("");
+      setRating("")
       Router.push("/group/" + docRef.id);
     } else {
       alert("กรุณาใส่ชื่อ ชื่อย่อ และคำอธิบายคอมมู");
@@ -586,6 +601,7 @@ export default function CreateGroup() {
                                       bg={"white"}
                                       color="black"
                                       w={290}
+                                      onChange={(e)=>setStartDate(parseTime(e.target.value))}
                                     />
                                   </Center>
 
@@ -822,6 +838,8 @@ export default function CreateGroup() {
                                       color="black"
                                       size="lg"
                                       isDisabled={!Ratingsw}
+                                      value={rating}
+                                      onSelect={(e)=>setRating(e.target.value)}
                                     >
                                       <option
                                         style={{ backgroundColor: "White" }}
