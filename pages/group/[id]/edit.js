@@ -1,6 +1,6 @@
 import React from "react";
-import CustomNavbar from "../components/navbar";
-import style from "../styles/creategroup.module.css";
+import CustomNavbar from "../../../components/navbar";
+import style from "../../../styles/creategroup.module.css";
 import { useState, useEffect } from "react";
 import {
   getFirestore,
@@ -11,17 +11,11 @@ import {
   updateDoc,
   doc,
 } from "firebase/firestore";
-import { getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import "../components/Banner";
-// import CaroselPreview from "../components/caroselPreview";
-import { useDropzone } from "react-dropzone";
-import { useApp } from "../src/hook/local";
-import { UpdateUserGroup } from "../src/services/firestoreservice";
+import { useApp } from "../../../src/hook/local";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
-import UploadImageModal from "../components/Banner";
-import { UploadBannerImage } from "../src/services/filestoreageservice";
+import UploadImageModal from "../../../components/Banner";
 import {
   getBlob,
   getDownloadURL,

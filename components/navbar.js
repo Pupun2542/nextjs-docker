@@ -128,13 +128,13 @@ function CustomNavbar() {
           >
             
             <InputGroup
-              isDisabled
+              
             >
               <InputLeftElement
                 pointerEvents='none'
                 children={<MagnifyingGlass color='black'/>}
             />
-              <Input placeholder='ค้นหาบน Comuthor' className={style.search}/>
+              <Input placeholder='ค้นหาบน Comuthor' className={style.search} isDisabled/>
             </InputGroup>
 
           </Stack>
@@ -192,7 +192,7 @@ function CustomNavbar() {
                     cursor="pointer"
                     minW={0}
                     title="Notifications"
-                    isDisabled
+                    
                   >
                     <Center
                         bg="#FFC75A"
