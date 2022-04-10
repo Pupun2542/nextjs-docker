@@ -79,6 +79,7 @@ export default function Group() {
   const [text, setText] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [user, loading, error] = useAuthState(auth);
+  const [color, setColor] = useState("");
 
   const { id } = Router.query;
   useEffect(() => {
@@ -90,6 +91,15 @@ export default function Group() {
               setData({ ...d.data(), CreatorName: staff.data().displayName });
             }
           });
+          if (d.data().rating === "NC-21 (ไม่เหมาะสำหรับเยาวชน)"){
+            setColor("#EA4545")
+          }else if(d.data().rating === "R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)"){
+            setColor("##FF912B")
+          }else if(d.data().rating === "R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)"){
+            setColor("#FBBC43")
+          }else{
+            setColor("#72994C")
+          }
         }else{
           alert("ไม่พบคอมมู");
           Router.back();
@@ -148,6 +158,16 @@ export default function Group() {
       alert("กรุณากรอกข้อมูลอีกครั้ง");
     }
   };
+
+  const outsidenavigate = (url) =>{
+    if(url.startsWith("https://")){
+      window.op = url;
+    }else if(url.startsWith("http://")){
+      location = url;
+    }else{
+      location = "https://"+url;
+    }
+  }
 
   return (
     <Box>
@@ -446,12 +466,12 @@ export default function Group() {
                             <Center
                               shadow={"base"}
                               borderRadius={10}
-                              bg={"#72994C"}
+                              bg={color}
                               w={240}
                               h={63}
                               p={5}
                             >
-                              Rate
+                              {data.rating?data.rating:"G (เหมาะสำหรับทุกวัย)"}
                             </Center>
                           </Flex>
 
@@ -460,7 +480,7 @@ export default function Group() {
                             <ModalContent fontFamily={"Mitr"}>
                               <ModalHeader>Rule&Agreement</ModalHeader>
                               <ModalCloseButton />
-                              <ModalBody>Push your Rule</ModalBody>
+                              <ModalBody>{data.rule? data.rule: "ไม่มีกฎและข้อตกลง"}</ModalBody>
                               <ModalFooter>
                                 <Button onClick={onClose}>Close</Button>
                               </ModalFooter>
@@ -473,6 +493,8 @@ export default function Group() {
                             h={63}
                             w={750}
                             borderRadius={10}
+                            onClick={data.smlink? ()=>outsidenavigate(data.smlink): ()=> alert("ไม่มีลิงค์กลุ่ม")}
+                            cursor='pointer'
                           >
                             Community Link
                           </Center>
@@ -516,6 +538,8 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
+                              {data.submitlink? (<a href={data.submitlink}>{data.submitlink}</a>): "ไม่มีลิงค์ลงทะเบียน"}
+                              
                             </Box>
                           </Flex>
 
@@ -542,6 +566,7 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
+                              {data.resultlink? (<a href={data.resultlink}>{data.resultlink}</a>): "ไม่มีลิงค์ตรวจสอบตัวละคร"}
                             </Box>
                           </Flex>
 
@@ -568,6 +593,7 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
+                              {data.doclink? (<a href={data.doclink}>{data.doclink}</a>): "ไม่มีลิงค์ข้อมูลคอมมู"}
                             </Box>
                           </Flex>
 
@@ -594,6 +620,7 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
+                              {data.qaasklink? (<a href={data.qaasklink}>{data.doclqaasklinkink}</a>): "ไม่มีลิงค์ถามคำถาม"}
                             </Box>
                           </Flex>
 
@@ -620,6 +647,7 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
+                              {data.qaanslink? (<a href={data.qaanslink}>{data.qaanslink}</a>): "ไม่มีลิงค์ตรวจสอบคำตอบ"}
                             </Box>
                           </Flex>
 
@@ -646,6 +674,7 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
+                              {data.contactlink? (<a href={data.contactlink}>{data.contactlink}</a>): "ไม่มีช่องทางติดต่อ"}
                             </Box>
                           </Flex>
                         </VStack>

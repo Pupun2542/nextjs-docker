@@ -97,7 +97,6 @@ export default function CreateGroup() {
   const [hashtag, setHashtag] = useState("");
   const [communame, setCommuname] = useState("");
   const [maxplayer, setMaxplayer] = useState("");
-  const [regDate, setRegDate] = useState("");
   const [runtime, setRuntime] = useState("");
   const [startDate, setStartDate] = useState("");
   const [description, setDescription] = useState("");
@@ -121,6 +120,9 @@ export default function CreateGroup() {
   const [times, setTimes] = useState([]);
   const [TWs, setTWs] = useState([]);
   const [rating, setRating] = useState("")
+  const [rule, setRule] = useState("")
+  const [averageTime, setAvergeTime] = useState("");
+  const [averageTimeUnit, setAvergeTimeUnit] = useState("");
 
   //ก็อปปี้บรรทัดบนไปวางเพิ่ม หรือเขียนเอง ลักษณะคือ const [state, setState] = useState(true) โดยที่ state คือชื่อตัวแปรที่จะใช้ เช่น durationsw ส่วน setstate คือฟังก์ชั่นที่ไว้ใช้เปลี่ยนค่าตัวแปร
 
@@ -155,13 +157,14 @@ export default function CreateGroup() {
         resultlink: resultlink,
         contactlink: contactlink,
         regDate: regDate,
-        // startDate: startDate,
-        // banner: bannerBlob,
         place: places,
         times: times,
         tws: TWs,
         startDate: startDate,
         rating: rating,
+        rule: rule,
+        averageTime: averageTime,
+        averageTimeUnit: averageTimeUnit,
         createAt: serverTimestamp(),
       });
 
@@ -188,9 +191,7 @@ export default function CreateGroup() {
       setGenre([]);
       setCommuname("");
       setMaxplayer("");
-      setRegDate("");
       setRuntime("");
-      setStartDate("");
       setSmlink("");
       setDescription("");
       setDoclink("");
@@ -206,7 +207,10 @@ export default function CreateGroup() {
       setTimes([]);
       setTWs([]);
       setStartDate("");
-      setRating("")
+      setRating("");
+      setRule("");
+      setAvergeTime("");
+      setAvergeTimeUnit("");
       Router.push("/group/" + docRef.id);
     } else {
       alert("กรุณาใส่ชื่อ ชื่อย่อ และคำอธิบายคอมมู");
@@ -420,7 +424,7 @@ export default function CreateGroup() {
                                   borderRightWidth={3}
                                 />
 
-                                <Center pl={1.5} pr={1.5}>
+<Center pl={1.5} pr={1.5}>
                                   <Select
                                     isRequired
                                     w={260}
@@ -428,15 +432,17 @@ export default function CreateGroup() {
                                     bg={"white"}
                                     color="black"
                                     size="lg"
-                                    fontFamily={'Mitr'}
+                                    defaultValue={"สาธารณะ"}
                                   >
                                     <option
                                       style={{ backgroundColor: "White" }}
+                                      value={"สาธารณะ"}
                                     >
                                       สาธารณะ
                                     </option>
                                     <option
                                       style={{ backgroundColor: "White" }}
+                                      value={"ส่วนตัว"}
                                     >
                                       ส่วนตัว
                                     </option>
@@ -650,6 +656,8 @@ export default function CreateGroup() {
                                     h={46}
                                     color={"Black"}
                                     isDisabled={!Averagesw}
+                                    value={averageTime}
+                                    onChange={(e)=>setAvergeTime(e.target.value)}
                                   />
 
                                   <Spacer
@@ -666,6 +674,7 @@ export default function CreateGroup() {
                                       size="lg"
                                       isDisabled={!Averagesw}
                                       fontFamily={'Mitr'}
+                                      onSelect={(e)=>setAvergeTimeUnit(e.target.value)}
                                     >
                                       <option
                                         style={{ backgroundColor: "White" }}
@@ -947,6 +956,8 @@ export default function CreateGroup() {
                                       className={style.search}
                                       m={1.5}
                                       isDisabled={!Rulesw}
+                                      value={rule}
+                                      onChange={(e)=>setRule(e.target.value)}
                                     />
                                   </Center>
                                 </Flex>

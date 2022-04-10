@@ -10,6 +10,7 @@ import {
   getDoc,
   updateDoc,
   doc,
+  setDoc,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { useApp } from "../../../src/hook/local";
@@ -101,6 +102,9 @@ export default function Edit() {
   const [TWs, setTWs] = useState([]);
   const [rating, setRating] = useState("");
   const originBannerUrl = useRef("");
+  const [rule, setRule] = useState("");
+  const [averageTime, setAvergeTime] = useState("");
+  const [averageTimeUnit, setAvergeTimeUnit] = useState("");
 
   //ก็อปปี้บรรทัดบนไปวางเพิ่ม หรือเขียนเอง ลักษณะคือ const [state, setState] = useState(true) โดยที่ state คือชื่อตัวแปรที่จะใช้ เช่น durationsw ส่วน setstate คือฟังก์ชั่นที่ไว้ใช้เปลี่ยนค่าตัวแปร
 
@@ -117,27 +121,30 @@ export default function Edit() {
             alert("Unorthorized Access");
             Router.back();
           } else {
-            setGenre(data.genre);
-            setCommuname(data.Name);
-            setMaxplayer(data.maxplayer);
-            setRegDate(data.regDate);
-            setRuntime(data.runtime);
-            setStartDate(data.startDate);
-            setSmlink(data.smlink);
-            setDescription(data.description);
-            setDoclink(data.doclink);
-            setQaasklink(data.qaasklink);
-            setQaanslink(data.qaanslink);
-            setSubmitlink(data.submitlink);
-            setResultlink(data.resultlink);
-            setContactlink(data.contactlink);
-            setPrivacy(data.Type);
-            setBannerBlob(data.banner);
-            setHashtag(data.tag);
-            setPlaces(data.place);
-            setTimes(data.times);
-            setTWs(data.tws);
-            setRating(data.rating);
+            setGenre(data.genre?data.genre: "");
+            setCommuname(data.Name?data.Name: "");
+            setMaxplayer(data.maxplayer?data.maxplayer: "");
+            setRegDate(data.regDate?data.regDate: "");
+            setRuntime(data.runtime?data.runtime: "");
+            setStartDate(data.startDate?data.startDate: "");
+            setSmlink(data.smlink?data.smlink: "");
+            setDescription(data.description?data.description: "");
+            setDoclink(data.doclink?data.doclink: "");
+            setQaasklink(data.qaasklink?data.qaasklink: "");
+            setQaanslink(data.qaanslink?data.qaanslink: "");
+            setSubmitlink(data.submitlink?data.submitlink: "");
+            setResultlink(data.resultlink?data.resultlink: "");
+            setContactlink(data.contactlink?data.contactlink: "");
+            setPrivacy(data.Type?data.Type: "");
+            setBannerBlob(data.banner?data.banner: "");
+            setHashtag(data.tag?data.tag: "");
+            setPlaces(data.place?data.place: []);
+            setTimes(data.times?data.times: []);
+            setTWs(data.tws?data.tws: []);
+            setRating(data.rating?data.rating: "");
+            setRule(data.rule?data.rule: "");
+            setAvergeTime(data.averageTime?data.averageTime: "");
+            setAvergeTimeUnit(data.averageTimeUnit?data.averageTimeUnit: "วัน(Day)");
             originBannerUrl.current = data.banner;
           }
         });
@@ -146,6 +153,34 @@ export default function Edit() {
   }, [user, loading, id]);
 
   const HandleSubmit = async (e) => {
+
+    // console.log(communame)
+    // console.log(auth.currentUser.uid)
+    // console.log(privacy)
+    // console.log(hashtag)
+    // console.log(description)
+    // console.log(maxplayer)
+    // console.log(runtime)
+    // console.log(genre)
+    // console.log(smlink)
+    // console.log(doclink)
+    // console.log(qaasklink)
+    // console.log(qaanslink)
+    // console.log(submitlink)
+    // console.log(resultlink)
+    // console.log(contactlink)
+    // console.log(regDate)
+    // console.log(startDate)
+    // console.log(places)
+    // console.log(times)
+    // console.log(TWs)
+    // console.log(rating)
+    // console.log(rule)
+    // console.log(averageTime)
+    // console.log(averageTimeUnit)
+    // console.log(bannerBlob, originBannerUrl.current, bannerBlob !== originBannerUrl.current)
+
+
     e.preventDefault();
     if (confirm("ยืนยันการแก้ไข?")) {
       if (communame && hashtag && description) {
@@ -167,16 +202,18 @@ export default function Edit() {
           contactlink: contactlink,
           regDate: regDate,
           startDate: startDate,
-          // banner: bannerBlob,
           place: places,
           times: times,
           tws: TWs,
           rating: rating,
+          rule:rule,
+          averageTime: averageTime,
+          averageTimeUnit: averageTimeUnit,
           createAt: serverTimestamp(),
         });
 
         if (bannerBlob !== originBannerUrl.current) {
-          // console.log(bannerBlob, originBannerUrl)
+          console.log(bannerBlob, originBannerUrl)
           const storageref = ref(
             store,
             `group/${id}/uploadImages/${auth.currentUser.uid}${Date.now()}`
@@ -208,6 +245,9 @@ export default function Edit() {
         setPlaces([]);
         setTimes([]);
         setTWs([]);
+        setRule("");
+        setAvergeTime("");
+        setAvergeTimeUnit("");
         Router.push("/group/" + id);
       } else {
         alert("กรุณาใส่ชื่อ ชื่อย่อ และคำอธิบายคอมมู");
@@ -438,14 +478,17 @@ export default function Edit() {
                                     bg={"white"}
                                     color="black"
                                     size="lg"
+                                    defaultValue={privacy?privacy:"สาธารณะ"}
                                   >
                                     <option
                                       style={{ backgroundColor: "White" }}
+                                      value={"สาธารณะ"}
                                     >
                                       สาธารณะ
                                     </option>
                                     <option
                                       style={{ backgroundColor: "White" }}
+                                      value={"ส่วนตัว"}
                                     >
                                       ส่วนตัว
                                     </option>
@@ -595,7 +638,7 @@ export default function Edit() {
                                   minW={"auto"}
                                 >
                                   <Box w={238} p={4}>
-                                    <Box className={style.Topic2}>ระยะเวลา</Box>
+                                    <Box className={style.Topic2}>วันที่เริ่มเล่น</Box>
                                   </Box>
 
                                   <Spacer
@@ -611,25 +654,12 @@ export default function Edit() {
                                       h={46}
                                       bg={"white"}
                                       color="black"
-                                      w={290}
+                                      w={650}
+                                      onChange={(e)=>setStartDate(parseTime(e.target.value))}
+                                      fontFamily={'Mitr'}
                                     />
                                   </Center>
 
-                                  <Center className={style.Topic2} minW={55}>
-                                    ถึง
-                                  </Center>
-
-                                  <Center pl={1.5} pr={1.5}>
-                                    <Input
-                                      type="datetime-local"
-                                      isDisabled={!durationsw} //แล้วก็เพิ่มตรงนี้ ชื่อตัวแปรตาม state ที่สร้าง
-                                      isRequired
-                                      h={46}
-                                      w={290}
-                                      bg={"white"}
-                                      color="black"
-                                    />
-                                  </Center>
                                 </Flex>
                               </Flex>
                             </Center>
@@ -671,6 +701,8 @@ export default function Edit() {
                                     h={46}
                                     color={"Black"}
                                     isDisabled={!Averagesw}
+                                    defaultValue={averageTime}
+                                    onChange={(e)=>setAvergeTime(e.target.value)}
                                   />
 
                                   <Spacer
@@ -686,19 +718,26 @@ export default function Edit() {
                                       color="black"
                                       size="lg"
                                       isDisabled={!Averagesw}
+                                      fontFamily={'Mitr'}
+                                      value={averageTimeUnit}
+                                      onChange={(e)=>setAvergeTimeUnit(e.target.value)}
+                                      defaultValue={averageTimeUnit?averageTimeUnit: "วัน(Day)"}
                                     >
                                       <option
                                         style={{ backgroundColor: "White" }}
+                                        value={"วัน(Day)"}
                                       >
                                         วัน(Day)
                                       </option>
                                       <option
                                         style={{ backgroundColor: "White" }}
+                                        value={"เดือน(Month)"}
                                       >
                                         เดือน(Month)
                                       </option>
                                       <option
                                         style={{ backgroundColor: "White" }}
+                                        value={"ปี(Year)"}
                                       >
                                         ปี(Year)
                                       </option>
@@ -848,28 +887,32 @@ export default function Edit() {
                                       color="black"
                                       size="lg"
                                       isDisabled={!Ratingsw}
-                                      value={rating}
-                                      onSelect={(e) =>
+                                      defaultValue={rating? rating: "G (เหมาะสำหรับทุกวัย)"}
+                                      onChange={(e) =>
                                         setRating(e.target.value)
                                       }
                                     >
                                       <option
                                         style={{ backgroundColor: "White" }}
+                                        value="G (เหมาะสำหรับทุกวัย)"
                                       >
                                         G (เหมาะสำหรับทุกวัย)
                                       </option>
                                       <option
                                         style={{ backgroundColor: "White" }}
+                                        value="R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)"
                                       >
                                         R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)
                                       </option>
                                       <option
                                         style={{ backgroundColor: "White" }}
+                                        value="R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)"
                                       >
                                         R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)
                                       </option>
                                       <option
                                         style={{ backgroundColor: "White" }}
+                                        value="NC-21 (ไม่เหมาะสำหรับเยาวชน)"
                                       >
                                         NC-21 (ไม่เหมาะสำหรับเยาวชน)
                                       </option>
@@ -968,6 +1011,8 @@ export default function Edit() {
                                       className={style.search}
                                       m={1.5}
                                       isDisabled={!Rulesw}
+                                      onChange={(e)=>setRule(e.target.value)}
+                                      value = {rule}
                                     />
                                   </Center>
                                 </Flex>
