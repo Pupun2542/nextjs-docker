@@ -79,14 +79,13 @@ function CustomNavbar() {
             minH={0}
             _hover={{
               textDecoration: "none",
-            }}
-          >
-            <Center bg="#6768AB" rounded={50} minHeight={50}>
+            }}>
+            <Center bg="#6768AB" rounded={50} minHeight={38}>
               <Center px={0}>
-                <Avatar minH={50} minW={50} src={user.photoURL} />
+                <Avatar h={41} w={41} src={user.photoURL} />
               </Center>
 
-              <Center width={"auto"} px={5}>
+              <Center width={"auto"} h={38} px={5}>
                 <p className={style.prName}>{user.displayName}</p>
               </Center>
             </Center>
@@ -115,7 +114,7 @@ function CustomNavbar() {
   return (
     <>
       <Box bg="black" h="auto" w="auto" px={5}>
-        <Flex h={20} alignItems={"center"} justifyContent={"space-between"}>
+        <Flex h={55} alignItems={"center"} justifyContent={"space-between"}>
           <Flex align={"center"} float={1} cursor='pointer'>
             <Text className={style.Logonav} onClick={()=>router.push("/")}>Comuthor</Text>
           </Flex>
@@ -159,8 +158,8 @@ function CustomNavbar() {
                   >
                     <Center
                         bg="#FFC75A"
-                        minH={'50'} 
-                        minW={'50'} 
+                        minH={'38'} 
+                        minW={'38'} 
                         rounded={50}
                         size={50}
                         padding={1}
@@ -196,8 +195,8 @@ function CustomNavbar() {
                   >
                     <Center
                         bg="#FFC75A"
-                        minH={'50'} 
-                        minW={'50'} 
+                        minH={'38'} 
+                        minW={'38'} 
                         rounded={50}
                         size={40}
                         padding={1}
@@ -221,22 +220,16 @@ function CustomNavbar() {
                       </MenuList> */}
 
               <Menu>
-                <MenuButton
-                  as={Button}
-                  bg="#FFC75A"
-                  rounded="full"
-                  variant="link"
-                  cursor="pointer"
-                  minW={50}
-                  minH={50}
-                  title="Commu"            
-                >
+                <MenuButton>
                   <Center
-                    minH={'50'} 
-                    minW={'50'} 
-                    rounded={50}
-                    size={40}
-                    padding={1}
+                    as={Button}
+                    bg="#FFC75A"
+                    rounded="full"
+                    variant="link"
+                    cursor="pointer"
+                    title="Commu"
+                    minH={41}
+                    minW={41}       
                   >
                     <UsersThree
                       size={32}
@@ -245,7 +238,7 @@ function CustomNavbar() {
                   </Center>
                 </MenuButton>
 
-                <MenuList bg={"#343434"} minWidth={"auto"} ml={-1}>
+                <MenuList bg={"#343434"} minWidth={"auto"} ml={-3} mt={-1} color={'white'}>
                   <MenuItem
                     minH="48px"
                     as={"a"}
@@ -283,17 +276,17 @@ function CustomNavbar() {
                     >
                       <Center
                         bg="#FFC75A"
-                        minH={'50'} 
-                        minW={'50'} 
+                        minH={'38'} 
+                        minW={'38'} 
                         rounded={50}
-                        size={40}
+                        size={38}
                         padding={1}
                       >
                         <DotsThreeVertical size={32} color="#6768AB" />
                       </Center>
                     </MenuButton>
 
-                    <MenuList bg={"#343434"} alignItems={"center"} mr={-4}>
+                    <MenuList bg={"#343434"} alignItems={"center"} mr={-4} color={'white'}>
                       <br />
 
                       <Center>

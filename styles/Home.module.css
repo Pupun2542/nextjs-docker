@@ -14,6 +14,10 @@
   src: url('../assets/MONTSERRATSUBRAYADA-BOLD.TTF');
 }
 
+.cardfunction {
+  box-shadow: #515259;
+}
+
 .container {
   padding: 0 2rem;
 }

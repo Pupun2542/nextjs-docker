@@ -6,235 +6,330 @@ import { Container, Row, Col, SSRProvider } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Head from "next/head";
 import Nav from "../components/newnav";
+import { 
+  Box, 
+  Center, 
+  Flex, 
+  VStack, 
+  Spacer,
+  Heading,
+  Button,
+  Tag,
+  TagLabel,
+  TagLeftIcon,
+  TagRightIcon,
+  TagCloseButton,
+  HStack,
+   } from "@chakra-ui/react"
+import Footer from "../components/footer";
+import {
+  UsersThree,
+  Chats,
+  Bell,
+  MagnifyingGlass,
+  UserList,
+  UserCirclePlus,
+  PushPin,
+  Sword,
+  Megaphone,
+  FacebookLogo,
+  DiscordLogo
+} from "phosphor-react";
 
 export default function Home() {
   return (
-    <div className={styles.presentHome}>
+
+    <Box bg={'#FFFFFF'}>
       <Head>
         <link rel="shortcut icon" href="favicon.ico"></link>
         <title>Comuthor</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
+
       <CustomNavbar />
-      <Container>
-        <Row>
-          <Col md={6}>
-            <div className={styles.nameComuthor}>Comuthor</div>
-            <div className={styles.texthome}>
-              เว็บไซต์คอมมูนิตี้โรลเพลย์เพื่อส่วนรวม
-            </div>
-            <div className={styles.textother}>
-              ...............................
-            </div>
-            <Row className={styles.texthome4}>
-              เริ่มเล่น เริ่มเขียน เริ่มสร้าง
-            </Row>
-            <Row className={styles.texthome5}>และเริ่มต้นใหม่ที่ COMUTHOR</Row>
-          </Col>
 
-          <Col md={6}>
-            <div className={styles.picfeather}>
-              <img src="Comuthor1.png" height={550} width={550}></img>
-            </div>
-          </Col>
-        </Row>
+      <Flex>
+        <Spacer />
+        <VStack w={1000} boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' fontFamily={'Mitr'}>
+          <Flex>
+            <Box w={400} m={5}>
+                <Spacer minH={30}/>
+                <Heading fontFamily={'Mitr'} fontSize={48} fontWeight={'bold'}>Comuthor</Heading>
+                <Box fontSize={24} fontWeight={600}>เว็บไซต์คอมมูนิตี้โรลเพลย์เพื่อส่วนรวม</Box>
+                <Box pl={8} pt={2}>
+                  แพล็ตฟอร์มสำหรับผู้สร้างสรรค์ผลงานประกอบการเล่น
+                </Box>
+                <Box>บทบาทสมมติ โดยมีระบบช่วยเหลือ สำหรับผู้ใช้งาน มีการจัดเก็บข้อมูลภายในคอมมูนิตี้ได้สะดวก เรียบร้อย เป็นระบบ ภายในเว็บไซต์เดียว</Box>
+                <Flex m={5}>
+                  <Spacer />
+                    <Button
+                      bg={'#FFC75A'} 
+                      borderRadius={10}
+                      borderWidth={3}
+                      borderColor={'black'} 
+                      h={54} 
+                      w={250}
+                      fontWeight={'bold'} 
+                      fontSize={24}
+                      > 
+                      Register !
+                    </Button>
+                  <Spacer />
+                </Flex>
+                
+            </Box>
+            
+            <Center h={400} w={400} m={5} borderRadius={1000} shadow={'inner'} bg={'#FDFDFD'}>
+              <Center h={350} w={350} borderRadius={1000} shadow={'inner'} bg={'#F5F5F5'}>
+                <Center h={315} w={315} borderRadius={1000} bg={'#E7E7E7'} shadow={'inner'}>
+                  <img src="Comuthor1.png" height={350} width={350}></img>
+                </Center>
+              </Center>
+            </Center>
+          </Flex>
 
-        <Row className={styles.padhome}>
-          <Col md={3}>
-            <div className={styles.pichome}>
-              <img src="online-community.png" height={200} width={200}></img>
-            </div>
-          </Col>
+          <VStack 
+            p={10} 
+            m={10} 
+            boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' 
+            w={825}
+            borderRadius={10}>
+          
+            <Flex>
+              <Tag   outlineColor={'#FBBC43'} color={'tomato'} borderRadius={10} mr={5} mt={2} size={'sm'} h={5}>
+                New
+              </Tag>
+              <Center fontSize={24} fontWeight={600}>Patch 0.5</Center>
+            </Flex>
+            
+            
+            <Center fontWeight={400} fontSize={16}>ประกาศอัพเดทครั้งใหม่! ปรับปรุงแก้ไขสีและรูปแบบของเว็บไซต์ รวมถึงเพิ่มเติมในส่วนของข้อมูลคอมมูนิตี้</Center>
+            
+            <Spacer />
 
-          <Col md={9}>
-            <div className={styles.texthome2}>
-              แพลตฟอร์มสำหรับผู้สร้างสรรค์ผลงาน ประกอบการเล่นบทบาทสมมติ
-            </div>
-            <div className={styles.texthome2}>
-              โดยมีระบบช่วยเหลือสำหรับผู้ใช้งาน
-              มีการจัดเก็บข้อมูลภายในคอมมูนิตี้ได้
-            </div>
-            <div className={styles.texthome2}>
-              สะดวก เรียบร้อย เป็นระบบระเบียบอยู่ภายในเว็บไซต์เดียว
-            </div>
-          </Col>
-        </Row>
-
-        <Row className={styles.padhome}>
-          <Col md={9}>
-            <div className={styles.texthome3}>
-              Comuthor หรือคอมมิวเธอร์ มาจาก Community ที่แปลว่ากลุ่มสังคม
-            </div>
-            <div className={styles.texthome3}>
-              ซึ่งใจที่นี้คือกลุ่มสังคมโรลเพลย์ และคำว่า Author
-              ที่หมายถึงผู้เขียน และ นักประพันธ์
-            </div>
-          </Col>
-
-          <Col md={3}>
-            <div className={styles.pichome}>
-              <img src="chat.png" height={200} width={200}></img>
-            </div>
-          </Col>
-        </Row>
-
-        <Row className={styles.padhome}>
-          <div className={styles.textpatch}>Patch 0: Starts!</div>
-          <div className={styles.textother}>
-            ในแพทช์นี้ เราจะมาทำความรู้จักกันก่อนนะ!!
-          </div>
-          <div className={styles.textother}>
-            ถ้าหากมีการอัพเดทใด ๆ เพิ่มเติมทางเราจะรีบประกาศให้ทุก ๆ
-            ท่านทราบให้เร็วที่สุดเลย!
-          </div>
-          <div className={styles.textdot}>.</div>
-          <div className={styles.textdot}>.</div>
-          <div className={styles.textdot}>.</div>
-          <div className={styles.textother}>
-            ในตอนนี้เราได้พัฒนาระบบพื้นฐานสำหรับเว็บไซต์และระบบพื้นฐานสำหรับคอมมูนิตี้เอาไว้ดังนี้
-          </div>
-          <div className={styles.textdot}>.</div>
-          <div className={styles.textdot}>.</div>
-
-          <Row>
-            <div className={styles.textHeader}>ระบบ Login และ Logout</div>
-            <div className={styles.textother}>
-              ทุก ๆ ท่านสามารถเข้าร่วมใช้งานเว็บไซต์ของเรา ได้โดยการ Sign in
-              with Google หรือ Facebook ได้ทันที
-              เพื่อความสะดวกสบายของผู้ใช้งานที่ไม่จำเป็นจะต้องสร้าง Account
-              ใหม่ให้ยุ่งยาก
-            </div>
-            <div className={styles.textother}>
-              ...............................
-            </div>
-            <div className={styles.textHeader}>
-              ระบบสร้างคอมมู และดูรายละเอียดของคอมมูต่าง ๆ
-            </div>
-            <div className={styles.textother}>
-              แม้จะยังเป็นแค่การวางรายละเอียดของคอมมูเอาไว้
-              แต่ในอนาคตเราจะพัฒนาให้ทุก ๆ
-              ท่านสามารถมีส่วนร่วมกับพวกเราได้ภายในเว็บไซต์เดียวอย่างแน่นอน
-            </div>
-            <div className={styles.textother}>
-              ...............................
-            </div>
-            <div className={styles.textHeader}>
-              แผนการพัฒนาเว็บไซต์ขั้นต่อไปในอนาคต
-            </div>
-            <div className={styles.textother}>
-              ในอนาคตอันใกล้นี้พวกเราจะทำให้เว็บไซต์ Comuthor
-            </div>
-            <div className={styles.textother}>
-              กลายเป็นพื้นที่ที่ทุก ๆ
-              ท่านสามารถเล่นและมีปฏิสัมพันธ์กันภายในคอมมูได้
-            </div>
-
-            <Col md={5}>
-              <Row>
-                <img src="Icon_1.svg" width={350} height={350}></img>
-                <div className={styles.textHeader}>
-                  การพูดคุยตอบโต้ภายในเว็บไซต์
-                </div>
-                <div className={styles.textHeader}>และภายในคอมมู</div>
-              </Row>
-
-              <Row>
-                <img src="icon_2.svg" width={350} height={350}></img>
-                <div className={styles.textHeader}>
-                  ระบบ Combat
-                  ที่สามารถจัดการการต่อสู้ของทุกท่านได้อย่างราบรื่นและสมดุล
-                </div>
-              </Row>
-            </Col>
-
-            <Col md={2}>
-              <img
-                className={styles.Dotline}
-                src="Dotline.svg"
-                width={200}
-                height={1000}
-              ></img>
-            </Col>
-
-            <Col md={5}>
-              <Row>
-                <img src="icon_3.svg" width={350} height={350}></img>
-                <div className={styles.textHeader}>
-                  การประกาศและประชาสัมพันธ์
-                </div>
-                <div className={styles.textHeader}>รวมถึงการแจ้งเตือนที่ดี</div>
-              </Row>
-
-              <Row>
-                <img src="icon_4.svg" width={350} height={350}></img>
-                <div className={styles.textHeader}>
-                  ระบบการจัดการตัวละครที่ทุก ๆ
-                  ท่านสามารถสร้างและจัดการสตอรี่ของลูก ๆ
-                  ของพวกท่านได้ภายในเว็บไซต์นี้
-                </div>
-              </Row>
-            </Col>
-            <div className={styles.textother}>
-              ดังนั้นช่วยอดใจรอกันไว้หน่อยนะ!
-            </div>
-
-            <div className={styles.textother}>
-              ...............................
-            </div>
-            <div className={styles.textother}>
-              ทางเราต้องขอขอบคุณทุก ๆ ท่านที่ให้ความสนใจเว็บไซต์ของพวกเราด้วยนะ!
-              พวกเราจะพยายามพัฒนาเว็บไซต์นี้กันอย่างสุดความสามารถเลยล่ะ!
-            </div>
-            <div className={styles.textother}>
-              ...............................
-            </div>
-            <div className={styles.textother}>
-              สามารถติดตามข่าวสารได้ที่ Page Facebook:{" "}
-              <a
-                href="https://www.facebook.com/ComuthorCorp"
-                className={styles.linkcomuthor}
+            <Flex w={550}>
+              
+              <VStack 
+                p={5} 
+                bg={'FDFDFD'} 
+                boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'
+                borderRadius={10}
+                w={170}
               >
-                Comuthor
-              </a>{" "}
-              หรือ Discord :{" "}
-              <a
-                className={styles.linkcomuthor}
-                href="https://discord.gg/K5xhJu6yM6"
+                <Center bg={'#6768AB'} color={'#FFC75A'} borderRadius={100} h={42} w={42}><UsersThree size={32}/></Center>
+                <Center fontWeight={500} fontSize={18}>Community</Center>
+                <Center fontWeight={400} fontSize={14}>โปรโมทและเข้าชม</Center>
+                <Center fontWeight={400} fontSize={14}>คอมมูนิตี้ได้ที่นี่</Center>
+              </VStack>
+
+              <Spacer />
+
+              <VStack 
+                p={5} 
+                bg={'FDFDFD'} 
+                boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'
+                borderRadius={10}
+                w={170}
               >
-                Comuthor Community
-              </a>
-            </div>
-            <div className={styles.textdot}>.</div>
-            <div className={styles.textother2}>
-              เรามาเริ่มเล่น เริ่มเขียน เริ่มสร้าง{" "}
-            </div>
-            <div className={styles.textother2}>
-              และเริ่มต้นใหม่ในบ้านหลังใหม่(กำลังก่อสร้าง)พร้อม ๆ กันเถอะนะ!
-            </div>
-          </Row>
-        </Row>
+                <Center bg={'#6768AB'} color={'#FFC75A'} borderRadius={100} h={42} w={42}><Bell size={32}/></Center>
+                <Center fontWeight={500} fontSize={18}>Notification</Center>
+                <Center fontWeight={400} fontSize={14}>coming soon..</Center>
+                {/* <Center fontWeight={400} fontSize={14}>และประกาศข่าวสาร</Center> */}
+              </VStack>
 
-        {/* <Row>เริ่มเล่น เริ่มเขียน เริ่มสร้าง เริ่มต้นใหม่ที่ Comuthor</Row> */}
-        {/* <Row>Patch?</Row> */}
+              <Spacer />
 
-        {/* <Row>All Feature</Row>
-        <Row>
-          <Row>Next Patch</Row>
-          <Row>
-            <Col>
-            <div>
-            Roleplay
-            </div>
-            <div>
-              <img src="icon_1.svg" height={200} width={200}></img>
-            </div>
-            </Col>
-            <Col>Function</Col>
-            <Col>Q/A</Col>
-            <Col>member</Col>
-          </Row> */}
-        {/* </Row> */}
-      </Container>
-    </div>
+              <VStack 
+                p={5} 
+                bg={'FDFDFD'} 
+                boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'
+                borderRadius={10}
+                w={170}
+              >
+                <Center bg={'#6768AB'} color={'#FFC75A'} borderRadius={100} h={42} w={42}><Chats size={32}/></Center>
+                <Center fontWeight={500} fontSize={18}>Chat</Center>
+                <Center fontWeight={400} fontSize={14}>กำลังทดสอบระบบ</Center>
+                {/* <Center fontWeight={400} fontSize={14}>ในคอมมูและส่วนตัว</Center> */}
+              </VStack>
+
+            </Flex>
+
+
+            {/* <Center maxW={750}>
+               <Flex  >
+                <VStack 
+                  bg={'FDFDFD'} 
+                  minW={190}
+                >
+                  <Center color={'#6768AB'}><UserList size={100}/></Center>
+                  <Center fontWeight={600} fontSize={24}>Vote</Center>
+                  <Center fontWeight={400} fontSize={14}>สามารถสร้างโพลโหวต</Center>
+                  <Center fontWeight={400} fontSize={14}>ภายในคอมมูนิตี้</Center>
+                </VStack>
+
+                <Spacer />
+
+                <VStack 
+                  bg={'FDFDFD'} 
+                  borderRadius={10}
+                  minW={210}
+                >
+                  <Center color={'#6768AB'}><UserCirclePlus size={100} /></Center>
+                  <Center fontWeight={600} fontSize={24}>Create Character</Center>
+                  <Center fontWeight={400} fontSize={14}>ระบบการจัดการตัวละคร</Center>
+                  <Center fontWeight={400} fontSize={14}>จัดสร้างและจัดการสตอรี่</Center>
+                </VStack>
+
+                <Spacer />
+
+                <VStack 
+                  bg={'FDFDFD'} 
+                  borderRadius={10}
+                  minW={190}
+                >
+                  <Center color={'#6768AB'}><MagnifyingGlass size={100} /></Center>
+                  <Center fontWeight={600} fontSize={24}>Search</Center>
+                  <Center fontWeight={400} fontSize={14}>สามารถค้นหา</Center>
+                  <Center fontWeight={400} fontSize={14}>ได้ตามความสนใจ</Center>
+                </VStack>
+
+                <Spacer />
+
+                <VStack 
+                  bg={'FDFDFD'} 
+                  borderRadius={10}
+                  minW={190}
+                >
+                  <Center color={'#6768AB'}><PushPin size={100} /></Center>
+                  <Center fontWeight={600} fontSize={24}>Pin</Center>
+                  <Center fontWeight={400} fontSize={14}>ปักหมุด</Center>
+                  <Center fontWeight={400} fontSize={14}>รับการแจ้งเตือน</Center>
+                </VStack>
+              </Flex> 
+            </Center> */}
+            
+          </VStack >
+
+          <Spacer />
+          <Spacer />
+          <VStack 
+            p={10} 
+            m={10} 
+            boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' 
+            w={825}
+            borderRadius={10}>
+  
+            <Center fontSize={24} fontWeight={600}>แผนการพัฒนาเว็บไซต์</Center>
+            
+            <Center fontWeight={400} fontSize={16}>ในอนาคตอันใกล้นี้พวกเราจะทำให้เว็บไซต์ Comuthor</Center>
+            <Center fontWeight={400} fontSize={16}>กลายเป็นพื้นที่ที่ทุก ๆ ท่านสามารถเล่นและมีปฏิสัมพันธ์กันภายในคอมมูได้</Center>
+            
+            <Spacer />
+
+            <Flex >
+              
+              <Center maxW={750}>
+                <Flex  >
+                  <VStack 
+                    bg={'FDFDFD'} 
+                    minW={190}
+                  >
+                    <Center color={'#6768AB'}><Sword size={100}/></Center>
+                    <Center fontWeight={400} fontSize={14}>ระบบจัดการการต่อสู้</Center>
+                    <Center fontWeight={400} fontSize={14}>ได้อย่างราบรื่นและสมดุล</Center>
+                  </VStack>
+
+                  <Spacer />
+
+                  <VStack 
+                    bg={'FDFDFD'} 
+                    borderRadius={10}
+                    minW={210}
+                  >
+                    <Center color={'#6768AB'}><Chats size={100} /></Center>
+                    <Center fontWeight={400} fontSize={14}>การพูดคุยโต้ตอบ</Center>
+                    <Center fontWeight={400} fontSize={14}>ภายในเว็บไซต์และคอมมูนิตี้</Center>
+                  </VStack>
+
+                  <Spacer />
+
+                  <VStack 
+                    bg={'FDFDFD'} 
+                    borderRadius={10}
+                    minW={190}
+                  >
+                    <Center color={'#6768AB'}><Megaphone size={100} /></Center>
+                    <Center fontWeight={400} fontSize={14}>การประกาศประชาสัมพันธ์</Center>
+                    <Center fontWeight={400} fontSize={14}>และแจ้งเตือนที่ดีภายในเว็บไซต์</Center>
+                  </VStack>
+
+                  <Spacer />
+
+                  <VStack 
+                    bg={'FDFDFD'} 
+                    borderRadius={10}
+                    minW={190}
+                  >
+                    <Center color={'#6768AB'}><UserCirclePlus size={100} /></Center>
+                    <Center fontWeight={400} fontSize={14}>ระบบการจัดการตัวละคร</Center>
+                    <Center fontWeight={400} fontSize={14}>จัดสร้างและจัดการสตอรี่</Center>
+                  </VStack>
+
+                  
+                </Flex> 
+              </Center>
+
+            </Flex>
+            
+          </VStack >
+
+          <Spacer />
+
+          <Center fontSize={20} fontWeight={400}>ช่องทางติดตามข่าวสาร</Center>
+
+          <Spacer />
+
+          <Flex w={600}>
+            <VStack 
+              p={5} 
+              bg={'FDFDFD'} 
+              boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'
+              borderRadius={10}
+              w={250}
+            >
+              <Center><FacebookLogo size={100} /></Center>
+              <Center fontWeight={500} fontSize={18}>Facebook Fanpage</Center>
+              <Center fontWeight={400} fontSize={14}>Comuthor</Center>
+              {/* <Center fontWeight={400} fontSize={14}>ในคอมมูและส่วนตัว</Center> */}
+            </VStack>
+            <Spacer />
+            <VStack 
+              p={5} 
+              bg={'FDFDFD'} 
+              boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'
+              borderRadius={10}
+              w={250}
+            >
+              <Center><DiscordLogo size={100}/></Center>
+              <Center fontWeight={500} fontSize={18}>Discord</Center>
+              <Center fontWeight={400} fontSize={14}>Comuthor Community</Center>
+              {/* <Center fontWeight={400} fontSize={14}>ในคอมมูและส่วนตัว</Center> */}
+            </VStack>
+
+          </Flex>
+
+          <Spacer />
+          <Spacer />
+
+          <Center fontWeight={400} fontSize={18}>ขอขอบคุณทุก ๆ ท่านที่ให้ความสนใจเว็บไซต์ของพวกเราด้วยนะ</Center>
+          <Center fontWeight={400} fontSize={18}>พวกเราจะพยายามพัฒนาเว็บไซต์นี้กันอย่างสุดความสามารถเลยล่ะ !</Center>
+          <Spacer />
+          <Spacer />
+        </VStack>
+
+        <Spacer />
+      </Flex>
+      <Footer></Footer>
+    </Box>
   );
 }

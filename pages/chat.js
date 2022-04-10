@@ -190,7 +190,7 @@ function chat() {
             bg={"gray"}
             justifyContent="center"
           >
-            {/* <Spacer /> */}
+            
             <Center flexGrow="0.9">
               <Input
                 type="text"
@@ -215,7 +215,6 @@ function chat() {
                 Send
               </Button>
             </Center>
-            {/* <Spacer/> */}
           </Flex>
         </VStack>
         )}
