@@ -5,7 +5,6 @@ import CustomNavbar from "../components/navbar";
 import { Container, Row, Col, SSRProvider } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Head from "next/head";
-import Nav from "../components/newnav";
 import { 
   Box, 
   Center, 

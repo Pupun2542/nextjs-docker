@@ -12,6 +12,7 @@ import {
   doc,
   deleteDoc,
   updateDoc,
+  setDoc,
 } from "firebase/firestore";
 import { getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
@@ -50,6 +51,7 @@ import {
   useDisclosure,
   Text,
   Button,
+  Input,
 } from "@chakra-ui/react";
 import Footer from "../../../components/footer";
 import {
@@ -64,86 +66,82 @@ export default function Group() {
   const db = getFirestore(app);
   const auth = getAuth(app);
   const Router = useRouter();
-  const [show, setShow] = useState(false);
+  // const [show, setShow] = useState(false);
+  const {
+    isOpen: isDelOpen,
+    onOpen: onDelOpen,
+    onClose: onDelClose,
+  } = useDisclosure();
 
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
   const [pin, setPin] = useState(false);
   const [text, setText] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [user, loading, error] = useAuthState(auth);
 
   const { id } = Router.query;
   useEffect(() => {
     const Fetchdata = async () => {
       getDoc(doc(db, "group", id)).then((d) => {
-        getDoc(doc(db, "userDetail", d.data().Creator)).then((staff) => {
-          if (staff.exists()) {
-            setData({ ...d.data(), CreatorName: staff.data().displayName });
-          }
-        });
-      });
-      getDoc(doc(db, "userDetail", auth.currentUser, "pinnedGroup", id)).then((snap)=>{
-        if (snap.exists()){
-          setPin(true)
+        if (d.exists()){
+          getDoc(doc(db, "userDetail", d.data().Creator)).then((staff) => {
+            if (staff.exists()) {
+              setData({ ...d.data(), CreatorName: staff.data().displayName });
+            }
+          });
+        }else{
+          alert("ไม่พบคอมมู");
+          Router.back();
         }
-      })
-      setLoading(false);
+      });
+      // setLoading(false);
     };
     if (id) Fetchdata();
-    
   }, [id]);
 
-  // useEffect(() => {
-  //   const l = async () => {
-  //     if (auth.currentUser) {
-  //       const d = await getDoc(doc(db, "userDetail", auth.currentUser.uid));
-  //       if (d.data().PinnedGroup) {
-  //         if (d.data().PinnedGroup.includes(id)) {
-  //           setPin(false);
-  //           console.log(pin);
-  //         }
-  //       }
-  //     }
-  //   };
-  //   l();
-  // }, [auth, id, pin]);
-
-
-
-  // const pinHandler = () => {
-  //   if (auth.currentUser) {
-  //     UpdateUserPinGroup(auth.currentUser.uid, id);
-  //     if (pin) {
-  //       setPin(false);
-  //     } else {
-  //       setPin(true);
-  //     }
-  //   } else {
-  //     alert("กรุณาล็อกอินเพื่อใช้ฟังก์ชั่นปักหมุด");
-  //   }
-  // };
-
-  const pinHandler = () =>{
-    if (auth.currentUser){
-
-      
-
+  useEffect(() => {
+    if (user) {
+      getDoc(doc(db, "userDetail", user.uid, "pinnedGroup", id)).then(
+        (snap) => {
+          if (snap.exists()) {
+            setPin(true);
+          }
+        }
+      );
     }
-  }
+  }, [user]);
+
+  const pinHandler = () => {
+    if (user) {
+      if (pin) {
+        deleteDoc(doc(db, "userDetail", user.uid, "pinnedGroup", id)).then(
+          () => {
+            setPin(false);
+          }
+        );
+      } else {
+        setDoc(doc(db, "userDetail", user.uid, "pinnedGroup", id), {
+          name: data.Name,
+          tag: data.tag,
+          id: id,
+        }).then(() => {
+          setPin(true);
+        });
+      }
+    }
+    // console.log("handledpin")
+  };
 
   const removehandler = () => {
-    console.log("remove");
-    if (auth.currentUser && auth.currentUser.uid == data.Creator) {
-      console.log("modal");
-      setShow(true);
-    } else {
-      // console.log(auth.currentUser, auth.currentUser.uid, data.Creator);
+    // console.log("remove");
+    if (user && user.uid == data.Creator) {
+      onDelOpen();
     }
   };
   const confirmRemove = () => {
     if (text == data.tag) {
       deleteDoc(doc(db, "group", id));
-      setShow(false);
       Router.push("/group");
     } else {
       // console.log(text, data.tag);
@@ -161,7 +159,7 @@ export default function Group() {
 
       <Box bg={"#FFFFFF"}>
         <CustomNavbar />
-        {!loading && data.Name &&(
+        {!loading && data.Name && (
           <Flex>
             {/* {console.log(data)} */}
             <Box w={400} minH={1000} bg={"#F3F3F3"}></Box>
@@ -185,7 +183,7 @@ export default function Group() {
                       />
 
                       <IconButton
-                        bg={pin? "yellow" : "white"}
+                        bg={pin ? "yellow" : "white"}
                         rounded="full"
                         h={38}
                         w={38}
@@ -207,36 +205,35 @@ export default function Group() {
                         icon={<CalendarBlank size={32} />}
                         isDisabled
                       />
-                      {auth.currentUser &&
-                        auth.currentUser.uid === data.Creator && (
-                          <Menu>
-                            <MenuButton
-                              bg={"white"}
-                              rounded="full"
-                              h={38}
-                              w={38}
-                              mt={2.5}
-                              mr={2.5}
-                              icon={<DotsThreeVertical size={32} />}
-                              as={IconButton}
-                            />
+                      {user && user.uid === data.Creator && (
+                        <Menu>
+                          <MenuButton
+                            bg={"white"}
+                            rounded="full"
+                            h={38}
+                            w={38}
+                            mt={2.5}
+                            mr={2.5}
+                            icon={<DotsThreeVertical size={32} />}
+                            as={IconButton}
+                          />
 
-                            <MenuList minW={20} fontFamily={"Mitr"}>
-                              <MenuItem _hover={{ background: "#E2E8F0" }}>
-                                <Text
-                                  onClick={() =>
-                                    Router.push("/group/" + id + "/edit")
-                                  }
-                                >
-                                  Edit
-                                </Text>
-                              </MenuItem>
-                              <MenuItem _hover={{ background: "#E2E8F0" }}>
-                                <Text>Delete</Text>
-                              </MenuItem>
-                            </MenuList>
-                          </Menu>
-                        )}
+                          <MenuList minW={20} fontFamily={"Mitr"}>
+                            <MenuItem _hover={{ background: "#E2E8F0" }}>
+                              <Text
+                                onClick={() =>
+                                  Router.push("/group/" + id + "/edit")
+                                }
+                              >
+                                Edit
+                              </Text>
+                            </MenuItem>
+                            <MenuItem _hover={{ background: "#E2E8F0" }}>
+                              <Text onClick={onDelOpen}>Delete</Text>
+                            </MenuItem>
+                          </MenuList>
+                        </Menu>
+                      )}
                     </Flex>
                   </Box>
                   <Spacer />
@@ -365,7 +362,7 @@ export default function Group() {
                                     </Box>
                                   ))
                                 : "ไม่มีหมวดหมู่"}
-                            </Box> 
+                            </Box>
                           </Flex>
 
                           <Flex ml={10} w={750}>
@@ -391,18 +388,15 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
-                              {data.tws? data.tws.length > 0
-                                ? data.tws.map((tw, index) => (
-                                    <Box
-                                      key={index}
-                                      float="left"
-                                    >
-                                      {tw}
-                                    </Box>
-                                  ))
-                                : "ไม่มีคำเตือน"
-                              : "ไม่มีคำเตือน"
-                              }
+                              {data.tws
+                                ? data.tws.length > 0
+                                  ? data.tws.map((tw, index) => (
+                                      <Box key={index} float="left">
+                                        {tw}
+                                      </Box>
+                                    ))
+                                  : "ไม่มีคำเตือน"
+                                : "ไม่มีคำเตือน"}
                             </Box>
                           </Flex>
 
@@ -429,7 +423,9 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
-                              {data.startDate? data.startDate: "ยังไม่ได้ลงวันเริ่มเล่น"}
+                              {data.startDate
+                                ? data.startDate
+                                : "ยังไม่ได้ลงวันเริ่มเล่น"}
                             </Box>
                           </Flex>
 
@@ -506,6 +502,21 @@ export default function Group() {
             </Box>
           </Flex>
         )}
+        <Modal onClose={onDelClose} isOpen={isDelOpen} isCentered>
+          <ModalOverlay />
+          <ModalContent fontFamily={"Mitr"}>
+            <ModalHeader>ยืนยันลบกลุ่ม</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Text>กรอกชื่อย่อของคอมมูเพื่อลบ</Text>
+              <Input type='text' value={text} onChange={(e)=>setText(e.target.value)} />
+            </ModalBody>
+            <ModalFooter>
+            <Button onClick={onClose}>ปิด</Button>
+              <Button onClick={confirmRemove}>ยืนยัน</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
 
         <Footer />
       </Box>
