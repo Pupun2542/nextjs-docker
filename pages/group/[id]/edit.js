@@ -1381,7 +1381,7 @@ export default function Edit() {
                       w={150}
                       mb={20}
                     >
-                      สร้างคอมมู
+                      ยืนยัน
                     </Button>
                   </Center>
                 </Box>
