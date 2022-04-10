@@ -11,6 +11,7 @@ import {
   getDocs,
   doc,
   deleteDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
@@ -67,7 +68,7 @@ export default function Group() {
 
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
-  const [pin, setPin] = useState(true);
+  const [pin, setPin] = useState(false);
   const [text, setText] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -76,53 +77,59 @@ export default function Group() {
     const Fetchdata = async () => {
       getDoc(doc(db, "group", id)).then((d) => {
         getDoc(doc(db, "userDetail", d.data().Creator)).then((staff) => {
-          if (staff.exists) {
+          if (staff.exists()) {
             setData({ ...d.data(), CreatorName: staff.data().displayName });
           }
         });
-
-        setLoading(false);
       });
+      getDoc(doc(db, "userDetail", auth.currentUser, "pinnedGroup", id)).then((snap)=>{
+        if (snap.exists()){
+          setPin(true)
+        }
+      })
+      setLoading(false);
     };
     if (id) Fetchdata();
+    
   }, [id]);
 
-  const editButtonHandler = () => {
-    Router.push("/group/" + id + "/edit");
-  };
+  // useEffect(() => {
+  //   const l = async () => {
+  //     if (auth.currentUser) {
+  //       const d = await getDoc(doc(db, "userDetail", auth.currentUser.uid));
+  //       if (d.data().PinnedGroup) {
+  //         if (d.data().PinnedGroup.includes(id)) {
+  //           setPin(false);
+  //           console.log(pin);
+  //         }
+  //       }
+  //     }
+  //   };
+  //   l();
+  // }, [auth, id, pin]);
 
-  useEffect(() => {
-    // console.log("effect");
-    const l = async () => {
-      // console.log(auth.currentUser,db);
-      if (auth.currentUser && db) {
-        // console.log("if1");
-        const d = await getDoc(doc(db, "userDetail", auth.currentUser.uid));
-        // console.log(auth.currentUser.uid);
-        if (d.data().PinnedGroup) {
-          // console.log("if2");
-          if (d.data().PinnedGroup.includes(id)) {
-            setPin(false);
-            console.log(pin);
-          }
-        }
-      }
-    };
-    l();
-  }, [auth, db, id, pin]);
 
-  const pinHandler = () => {
-    if (auth.currentUser) {
-      UpdateUserPinGroup(auth.currentUser.uid, id);
-      if (pin) {
-        setPin(false);
-      } else {
-        setPin(true);
-      }
-    } else {
-      alert("กรุณาล็อกอินเพื่อใช้ฟังก์ชั่นปักหมุด");
+
+  // const pinHandler = () => {
+  //   if (auth.currentUser) {
+  //     UpdateUserPinGroup(auth.currentUser.uid, id);
+  //     if (pin) {
+  //       setPin(false);
+  //     } else {
+  //       setPin(true);
+  //     }
+  //   } else {
+  //     alert("กรุณาล็อกอินเพื่อใช้ฟังก์ชั่นปักหมุด");
+  //   }
+  // };
+
+  const pinHandler = () =>{
+    if (auth.currentUser){
+
+      
+
     }
-  };
+  }
 
   const removehandler = () => {
     console.log("remove");
@@ -130,7 +137,7 @@ export default function Group() {
       console.log("modal");
       setShow(true);
     } else {
-      console.log(auth.currentUser, auth.currentUser.uid, data.Creator);
+      // console.log(auth.currentUser, auth.currentUser.uid, data.Creator);
     }
   };
   const confirmRemove = () => {
@@ -139,7 +146,7 @@ export default function Group() {
       setShow(false);
       Router.push("/group");
     } else {
-      console.log(text, data.tag);
+      // console.log(text, data.tag);
       alert("กรุณากรอกข้อมูลอีกครั้ง");
     }
   };
@@ -154,8 +161,9 @@ export default function Group() {
 
       <Box bg={"#FFFFFF"}>
         <CustomNavbar />
-        {data && (
+        {!loading && data.Name &&(
           <Flex>
+            {/* {console.log(data)} */}
             <Box w={400} minH={1000} bg={"#F3F3F3"}></Box>
             <Spacer bg={"#F3F3F3"} />
 
@@ -177,13 +185,14 @@ export default function Group() {
                       />
 
                       <IconButton
-                        bg={"white"}
+                        bg={pin? "yellow" : "white"}
                         rounded="full"
                         h={38}
                         w={38}
                         mt={2.5}
                         ml={2.5}
                         icon={<PushPin size={32} />}
+                        onClick={pinHandler}
                       />
 
                       <Spacer />
@@ -336,7 +345,7 @@ export default function Group() {
                             <Box
                               bg={"white"}
                               w={550}
-                              h={63}
+                              minH={63}
                               pt={5}
                               pl={5}
                               shadow={"base"}
@@ -344,19 +353,19 @@ export default function Group() {
                             >
                               {/* {console.log(data.genre)} */}
                               {data.genre.length > 0
-                                ? data.genre.map((genre) => (
+                                ? data.genre.map((genre, index) => (
                                     <Box
                                       key={index}
                                       className={style.tag}
-                                      m={1.5}
-                                      p={1}
+                                      marginLeft={2.5}
                                       maxW={600}
+                                      float={"left"}
                                     >
-                                      <Text>{genre}</Text>
+                                      {genre}
                                     </Box>
                                   ))
                                 : "ไม่มีหมวดหมู่"}
-                            </Box>
+                            </Box> 
                           </Flex>
 
                           <Flex ml={10} w={750}>
@@ -382,19 +391,18 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
-                              {data.tws.length > 0
-                                ? data.tws.map((tw) => (
+                              {data.tws? data.tws.length > 0
+                                ? data.tws.map((tw, index) => (
                                     <Box
                                       key={index}
-                                      className={style.tag}
-                                      m={1.5}
-                                      p={1}
-                                      maxW={600}
+                                      float="left"
                                     >
-                                      <Text>{tw}</Text>
+                                      {tw}
                                     </Box>
                                   ))
-                                : "ไม่มีคำเตือน"}
+                                : "ไม่มีคำเตือน"
+                              : "ไม่มีคำเตือน"
+                              }
                             </Box>
                           </Flex>
 
@@ -420,7 +428,9 @@ export default function Group() {
                               pl={5}
                               shadow={"base"}
                               borderRightRadius={10}
-                            ></Box>
+                            >
+                              {data.startDate? data.startDate: "ยังไม่ได้ลงวันเริ่มเล่น"}
+                            </Box>
                           </Flex>
 
                           <Flex ml={10} w={750}>
