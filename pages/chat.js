@@ -167,11 +167,13 @@ function chat() {
                   <Box fontFamily={"Mitr"}>
                     {doc.data().senderId == user.uid ? (
                       <Box minW={280} maxW={320} marginBottom={5}>
-                        <Text fontSize={10}>{doc.data().sender}</Text>
+                        <Text fontSize={12}>{doc.data().sender}</Text>
                         <Text
-                          fontSize={20}
+                          fontSize={16}
                           backgroundColor={"blue.100"}
                           rounded="5"
+                          fontFamily={'Mitr'}
+                          p={2}
                         >
                           {doc.data().text}
                         </Text>
@@ -180,11 +182,13 @@ function chat() {
                       </Box>
                     ) : (
                       <Box minW={280} maxW={320} marginBottom={5}>
-                        <Text fontSize={10}>{doc.data().sender}</Text>
+                        <Text fontSize={12}>{doc.data().sender}</Text>
                         <Text
-                          fontSize={20}
+                          fontSize={16}
+                          fontFamily='Mitr'
                           backgroundColor={"red.200"}
                           rounded="5"
+                          p={2}
                         >
                           {doc.data().text}
                         </Text>
