@@ -297,28 +297,29 @@ export default function Group() {
                               w={350}
                               h={70}
                               p={5}
+                              color={'white'}
                               shadow={"base"}
                             >
                               {data.privacy ? (
                                 data.privacy === "สาธารณะ" ? (
                                   <Flex flexDir={"column"} justifyContent="center">
-                                    <Text flex={1} textAlign='center'>Public</Text>
-                                    <Text flex={1} textAlign='center'>
+                                    <Text flex={1} textAlign='center' fontSize={20}>Public</Text>
+                                    <Text flex={1} textAlign='center' fontSize={12}>
                                       ทุกคนสามารถเข้าร่วมและเห็นการเคลื่อนไหวภายในกลุ่มได้
                                     </Text>
                                   </Flex>
                                 ) : (
                                   <Flex flexDir='column' justifyContent="center">
-                                    <Text flex={1} textAlign='center'>Private</Text>
-                                    <Text flex={1} textAlign='center'>
+                                    <Text flex={1} textAlign='center' fontSize={20}>Private</Text>
+                                    <Text flex={1} textAlign='center' fontSize={12}>
                                       คนเฉพาะกลุ่มเท่านั้นที่สามารถเข้าร่วมภายในกลุ่มได้
                                     </Text>
                                   </Flex>
                                 )
                               ) : (
                                 <Flex flexDir={"column"} justifyContent="center">
-                                  <Text flex={1} textAlign='center'>Public</Text>
-                                  <Text flex={1} textAlign='center'>
+                                  <Text flex={1} textAlign='center' fontSize={20}>Public</Text>
+                                  <Text flex={1} textAlign='center' fontSize={12}>
                                     ทุกคนสามารถเข้าร่วมและเห็นการเคลื่อนไหวภายในกลุ่มได้
                                   </Text>
                                 </Flex>
@@ -449,7 +450,7 @@ export default function Group() {
                               bg={"white"}
                               w={550}
                               minH={63}
-                              pt={2}
+                              pt={5}
                               pl={3}
                               shadow={"base"}
                               borderRightRadius={10}
@@ -488,7 +489,7 @@ export default function Group() {
                               bg={"white"}
                               w={550}
                               minH={63}
-                              pt={2}
+                              pt={5}
                               pl={3}
                               shadow={"base"}
                               borderRightRadius={10}
@@ -564,7 +565,7 @@ export default function Group() {
                                 bg={"white"}
                                 w={170}
                                 h={63}
-                                pt={5}
+                                pt={2}
                                 pl={5}
                                 shadow={"base"}
                                 borderRightRadius={10}

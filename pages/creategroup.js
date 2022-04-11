@@ -786,7 +786,7 @@ export default function CreateGroup() {
                                 >
                                   <Box w={238} p={4}>
                                     <Box className={style.Topic2}>
-                                      ช่วงเวลาภายในคอมมูนิตี้
+                                      ยุคสมัยของคอมมูนิตี้
                                     </Box>
                                   </Box>
 
