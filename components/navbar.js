@@ -90,6 +90,14 @@ function CustomNavbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const [user, loading, error] = useAuthState(auth);
+  const breakpoints = {
+    sm: '320px',
+    md: '768px',
+    lg: '960px',
+    xl: '1200px',
+    '2xl': '1536px',
+  }
+  const theme = extendTheme({ breakpoints })
   // const [data, setData] = useState([]);
   // const [snapshot] = useCollectionOnce(
   //   collection(db, "UserDetail", user.uid, "pinnedGroup")
@@ -139,9 +147,12 @@ function CustomNavbar() {
                 <Avatar h={41} w={41} src={user.photoURL} />
               </Center>
 
-              <Center width={"auto"} h={38} px={5}>
-                <p className={style.prName}>{user.displayName}</p>
-              </Center>
+              <Show above="lg">
+                <Center width={"auto"} h={38} px={5}>
+                  <p className={style.prName}>{user.displayName}</p>
+                </Center>
+              </Show>
+              
             </Center>
           </MenuButton>
         </Menu>
@@ -169,11 +180,15 @@ function CustomNavbar() {
     <>
       <Box bg="black" h="auto" w="auto" px={5}>
         <Flex h={55} alignItems={"center"} justifyContent={"space-between"}>
-          <Flex align={"center"} float={1} cursor="pointer">
-            <Text className={style.Logonav} onClick={() => router.push("/")}>
-              Comuthor
-            </Text>
-          </Flex>
+          
+          <Show above="md">
+            <Flex align={"center"} float={1} cursor="pointer">
+              <Text className={style.Logonav} onClick={() => router.push("/")}>
+                Comuthor
+              </Text>
+            </Flex>
+          </Show>
+          
           <Show above="md">
           <Stack spacing={4} marginLeft="5" bg="white" rounded={10}>
             <InputGroup>
