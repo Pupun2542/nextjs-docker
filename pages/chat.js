@@ -102,7 +102,7 @@ function chat() {
       setText("");
     }
     // setPending(pending+1)
-    play();
+    // play();
   };
 
   const handleFocus = () => {
