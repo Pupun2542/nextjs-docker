@@ -51,9 +51,7 @@ import {
   Bell,
   MagnifyingGlass,
   PushPin,
-  extendTheme,
 } from "phosphor-react";
-import { extendTheme } from "@chakra-ui/react";
 import {
   collection,
   doc,
@@ -98,7 +96,6 @@ function CustomNavbar() {
     xl: '1200px',
     '2xl': '1536px',
   }
-  const theme = extendTheme({ breakpoints })
   // const [data, setData] = useState([]);
   // const [snapshot] = useCollectionOnce(
   //   collection(db, "UserDetail", user.uid, "pinnedGroup")
