@@ -449,6 +449,34 @@ export default function Group() {
                           </Flex>
 
                           <Flex ml={10} w={750}>
+                            <Box
+                              bg={"white"}
+                              w={200}
+                              minH={63}
+                              pt={5}
+                              pl={5}
+                              shadow={"base"}
+                              borderLeftRadius={10}
+                              borderRightColor={"gray.400"}
+                              borderRightWidth={3}
+                            >
+                              คำอธิบาย
+                            </Box>
+                            <Box
+                              bg={"white"}
+                              w={550}
+                              minH={63}
+                              p={5}
+                              shadow={"base"}
+                              borderRightRadius={10}
+                            >
+                              "The quick brown fox jumps over the lazy dog" is an English-language pangram—a
+  sentence that contains all of the letters of the English alphabet. Owing to
+  its existence, Chakra was created.
+                            </Box>
+                          </Flex>
+
+                          <Flex ml={10} w={750}>
                             <Center
                               borderRadius={10}
                               bg={"#FBBC43"}
