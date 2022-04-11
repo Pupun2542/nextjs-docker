@@ -85,27 +85,27 @@ export default function Group() {
   useEffect(() => {
     const Fetchdata = async () => {
       getDoc(doc(db, "group", id)).then((d) => {
-        if (d.exists()){
+        if (d.exists()) {
           getDoc(doc(db, "userDetail", d.data().Creator)).then((staff) => {
             if (staff.exists()) {
               setData({ ...d.data(), CreatorName: staff.data().displayName });
             }
           });
-          
-          if (d.data().rating === "NC-21 (ไม่เหมาะสำหรับเยาวชน)"){
-            setColor("#EA4545")
+
+          if (d.data().rating === "NC-21 (ไม่เหมาะสำหรับเยาวชน)") {
+            setColor("#EA4545");
             // console.log(d.data().rating);
-          }else if(d.data().rating === "R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)"){
-            setColor("#FF912B")
+          } else if (d.data().rating === "R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)") {
+            setColor("#FF912B");
             // console.log(d.data().rating);
-          }else if(d.data().rating === "R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)"){
-            setColor("#FBBC43")
+          } else if (d.data().rating === "R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)") {
+            setColor("#FBBC43");
             // console.log(d.data().rating);
-          }else{
-            setColor("#72994C")
+          } else {
+            setColor("#72994C");
             // console.log(d.data().rating);
           }
-        }else{
+        } else {
           alert("ไม่พบคอมมู");
           Router.back();
         }
@@ -164,15 +164,15 @@ export default function Group() {
     }
   };
 
-  const outsidenavigate = (url) =>{
-    if(url.startsWith("https://")){
+  const outsidenavigate = (url) => {
+    if (url.startsWith("https://")) {
       window.op = url;
-    }else if(url.startsWith("http://")){
+    } else if (url.startsWith("http://")) {
       location = url;
-    }else{
-      location = "https://"+url;
+    } else {
+      location = "https://" + url;
     }
-  }
+  };
 
   return (
     <Box>
@@ -295,13 +295,34 @@ export default function Group() {
                               borderRadius={10}
                               bg={"#6768AB"}
                               w={350}
-                              h={63}
+                              h={70}
                               p={5}
-                              as={"button"}
-                              onClick={onOpen}
                               shadow={"base"}
                             >
-                              ความเป็นส่วนตัว
+                              {data.privacy ? (
+                                data.privacy === "สาธารณะ" ? (
+                                  <Flex flexDir={"column"} justifyContent="center">
+                                    <Text flex={1} textAlign='center'>Public</Text>
+                                    <Text flex={1} textAlign='center'>
+                                      ทุกคนสามารถเข้าร่วมและเห็นการเคลื่อนไหวภายในกลุ่มได้
+                                    </Text>
+                                  </Flex>
+                                ) : (
+                                  <Flex flexDir='column' justifyContent="center">
+                                    <Text flex={1} textAlign='center'>Private</Text>
+                                    <Text flex={1} textAlign='center'>
+                                      คนเฉพาะกลุ่มเท่านั้นที่สามารถเข้าร่วมภายในกลุ่มได้
+                                    </Text>
+                                  </Flex>
+                                )
+                              ) : (
+                                <Flex flexDir={"column"} justifyContent="center">
+                                  <Text flex={1} textAlign='center'>Public</Text>
+                                  <Text flex={1} textAlign='center'>
+                                    ทุกคนสามารถเข้าร่วมและเห็นการเคลื่อนไหวภายในกลุ่มได้
+                                  </Text>
+                                </Flex>
+                              )}
                             </Center>
                             <Spacer />
                             {/* <Center
@@ -317,7 +338,6 @@ export default function Group() {
                           </Flex>
 
                           <Flex ml={0} w={750}>
-                            
                             <Box
                               bg={"white"}
                               w={200}
@@ -525,9 +545,9 @@ export default function Group() {
                                 : "ไม่มีคำเตือน"}
                             </Box>
                           </Flex>
-                          
+
                           <Flex ml={10} w={750}>
-                            <Flex >
+                            <Flex>
                               <Box
                                 bg={"white"}
                                 w={200}
@@ -587,7 +607,6 @@ export default function Group() {
                               </Box>
                             </Flex>
                           </Flex>
-                          
 
                           <Flex ml={10} w={750}>
                             <Box
@@ -637,7 +656,9 @@ export default function Group() {
                               h={63}
                               p={5}
                             >
-                              {data.rating?data.rating:"G (เหมาะสำหรับทุกวัย)"}
+                              {data.rating
+                                ? data.rating
+                                : "G (เหมาะสำหรับทุกวัย)"}
                             </Center>
                           </Flex>
 
@@ -646,7 +667,9 @@ export default function Group() {
                             <ModalContent fontFamily={"Mitr"}>
                               <ModalHeader>Rule&Agreement</ModalHeader>
                               <ModalCloseButton />
-                              <ModalBody>{data.rule? data.rule: "ไม่มีกฎและข้อตกลง"}</ModalBody>
+                              <ModalBody>
+                                {data.rule ? data.rule : "ไม่มีกฎและข้อตกลง"}
+                              </ModalBody>
                               <ModalFooter>
                                 <Button onClick={onClose}>Close</Button>
                               </ModalFooter>
@@ -659,8 +682,12 @@ export default function Group() {
                             h={63}
                             w={750}
                             borderRadius={10}
-                            onClick={data.smlink? ()=>outsidenavigate(data.smlink): ()=> alert("ไม่มีลิงก์กลุ่ม")}
-                            cursor='pointer'
+                            onClick={
+                              data.smlink
+                                ? () => outsidenavigate(data.smlink)
+                                : () => alert("ไม่มีลิงก์กลุ่ม")
+                            }
+                            cursor="pointer"
                           >
                             Community Link
                           </Center>
@@ -675,13 +702,12 @@ export default function Group() {
                           <Box fontSize={25} flex="1" textAlign="left">
                             Registration
                           </Box>
-
                         </AccordionButton>
                       </h2>
                       <AccordionPanel pb={4}>
                         {/* <Box pl={10}>ลงทะเบียนตัวละคร</Box> */}
                         <VStack>
-                        <Flex w={750}>
+                          <Flex w={750}>
                             <Box
                               bg={"white"}
                               w={200}
@@ -704,8 +730,11 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
-                              {data.submitlink? (<a href={data.submitlink}>{data.submitlink}</a>): "ไม่มีลิงก์ลงทะเบียน"}
-                              
+                              {data.submitlink ? (
+                                <a href={data.submitlink}>{data.submitlink}</a>
+                              ) : (
+                                "ไม่มีลิงก์ลงทะเบียน"
+                              )}
                             </Box>
                           </Flex>
 
@@ -732,7 +761,11 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
-                              {data.resultlink? (<a href={data.resultlink}>{data.resultlink}</a>): "ไม่มีลิงก์ตรวจสอบตัวละคร"}
+                              {data.resultlink ? (
+                                <a href={data.resultlink}>{data.resultlink}</a>
+                              ) : (
+                                "ไม่มีลิงก์ตรวจสอบตัวละคร"
+                              )}
                             </Box>
                           </Flex>
 
@@ -759,7 +792,11 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
-                              {data.doclink? (<a href={data.doclink}>{data.doclink}</a>): "ไม่มีลิงก์ข้อมูลคอมมู"}
+                              {data.doclink ? (
+                                <a href={data.doclink}>{data.doclink}</a>
+                              ) : (
+                                "ไม่มีลิงก์ข้อมูลคอมมู"
+                              )}
                             </Box>
                           </Flex>
 
@@ -786,7 +823,11 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
-                              {data.qaasklink? (<a href={data.qaasklink}>{data.qaasklink}</a>): "ไม่มีลิงก์ถามคำถาม"}
+                              {data.qaasklink ? (
+                                <a href={data.qaasklink}>{data.qaasklink}</a>
+                              ) : (
+                                "ไม่มีลิงก์ถามคำถาม"
+                              )}
                             </Box>
                           </Flex>
 
@@ -813,7 +854,11 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
-                              {data.qaanslink? (<a href={data.qaanslink}>{data.qaanslink}</a>): "ไม่มีลิงก์ตรวจสอบคำตอบ"}
+                              {data.qaanslink ? (
+                                <a href={data.qaanslink}>{data.qaanslink}</a>
+                              ) : (
+                                "ไม่มีลิงก์ตรวจสอบคำตอบ"
+                              )}
                             </Box>
                           </Flex>
 
@@ -840,11 +885,16 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
-                              {data.contactlink? (<a href={data.contactlink}>{data.contactlink}</a>): "ไม่มีช่องทางติดต่อ"}
+                              {data.contactlink ? (
+                                <a href={data.contactlink}>
+                                  {data.contactlink}
+                                </a>
+                              ) : (
+                                "ไม่มีช่องทางติดต่อ"
+                              )}
                             </Box>
                           </Flex>
                         </VStack>
-
                       </AccordionPanel>
                     </AccordionItem>
                   </Accordion>
@@ -865,10 +915,14 @@ export default function Group() {
             <ModalCloseButton />
             <ModalBody>
               <Text>กรอกชื่อย่อของคอมมูเพื่อลบ</Text>
-              <Input type='text' value={text} onChange={(e)=>setText(e.target.value)} />
+              <Input
+                type="text"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+              />
             </ModalBody>
             <ModalFooter>
-            <Button onClick={onClose}>ปิด</Button>
+              <Button onClick={onClose}>ปิด</Button>
               <Button onClick={confirmRemove}>ยืนยัน</Button>
             </ModalFooter>
           </ModalContent>
