@@ -31,6 +31,8 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  Hide,
+  Show,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import style from "../styles/navbar.module.css";
@@ -172,7 +174,7 @@ function CustomNavbar() {
               Comuthor
             </Text>
           </Flex>
-
+          <Show above="md">
           <Stack spacing={4} marginLeft="5" bg="white" rounded={10}>
             <InputGroup>
               <InputLeftElement
@@ -186,6 +188,8 @@ function CustomNavbar() {
               />
             </InputGroup>
           </Stack>
+          </Show>
+          
 
           <Spacer />
 
