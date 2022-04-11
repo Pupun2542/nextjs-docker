@@ -51,6 +51,7 @@ import {
   Bell,
   MagnifyingGlass,
   PushPin,
+  extendTheme,
 } from "phosphor-react";
 import { extendTheme } from "@chakra-ui/react";
 import {
