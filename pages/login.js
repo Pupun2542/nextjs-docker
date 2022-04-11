@@ -106,7 +106,7 @@ function Login() {
                       w={300}
                       h={46}
                       borderRadius={10}
-                      onClick={google}
+                      onClick={facebook}
                       as='button'>
                       Sign In with Facebook
                     </Center>

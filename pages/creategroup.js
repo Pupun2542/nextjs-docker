@@ -424,7 +424,7 @@ export default function CreateGroup() {
                                   borderRightWidth={3}
                                 />
 
-<Center pl={1.5} pr={1.5}>
+                                <Center pl={1.5} pr={1.5}>
                                   <Select
                                     isRequired
                                     w={260}
@@ -433,6 +433,7 @@ export default function CreateGroup() {
                                     color="black"
                                     size="lg"
                                     defaultValue={"สาธารณะ"}
+                                    fontFamily={'Mitr'}
                                   >
                                     <option
                                       style={{ backgroundColor: "White" }}
@@ -830,7 +831,6 @@ export default function CreateGroup() {
 
                                   <Center pl={1.5} pr={1.5}>
                                     <Select
-                                      isRequired
                                       w={650}
                                       h={46}
                                       bg={"white"}
