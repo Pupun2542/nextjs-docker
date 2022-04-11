@@ -174,22 +174,21 @@ function CustomNavbar() {
               Comuthor
             </Text>
           </Flex>
-          <Show above="md">
-          <Stack spacing={4} marginLeft="5" bg="white" rounded={10}>
-            <InputGroup>
-              <InputLeftElement
-                pointerEvents="none"
-                children={<MagnifyingGlass color="black" />}
-              />
-              <Input
-                placeholder="ค้นหาบน Comuthor"
-                className={style.search}
-                isDisabled
-              />
-            </InputGroup>
-          </Stack>
-          </Show>
-          
+            <Stack spacing={4} marginLeft="5" bg="white" rounded={10}>
+              <Show above="md">
+              <InputGroup>
+                <InputLeftElement
+                  pointerEvents="none"
+                  children={<MagnifyingGlass color="black" />}
+                />
+                <Input
+                  placeholder="ค้นหาบน Comuthor"
+                  className={style.search}
+                  isDisabled
+                />
+              </InputGroup>
+              </Show>
+            </Stack>
 
           <Spacer />
 

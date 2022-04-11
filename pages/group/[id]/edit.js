@@ -105,6 +105,7 @@ export default function Edit() {
   const [rule, setRule] = useState("");
   const [averageTime, setAvergeTime] = useState("");
   const [averageTimeUnit, setAvergeTimeUnit] = useState("");
+  const [type, setType] = useState("");
 
   //ก็อปปี้บรรทัดบนไปวางเพิ่ม หรือเขียนเอง ลักษณะคือ const [state, setState] = useState(true) โดยที่ state คือชื่อตัวแปรที่จะใช้ เช่น durationsw ส่วน setstate คือฟังก์ชั่นที่ไว้ใช้เปลี่ยนค่าตัวแปร
 
@@ -135,7 +136,7 @@ export default function Edit() {
             setSubmitlink(data.submitlink?data.submitlink: "");
             setResultlink(data.resultlink?data.resultlink: "");
             setContactlink(data.contactlink?data.contactlink: "");
-            setPrivacy(data.Type?data.Type: "");
+            setPrivacy(data.privacy?data.privacy: "");
             setBannerBlob(data.banner?data.banner: "");
             setHashtag(data.tag?data.tag: "");
             setPlaces(data.place?data.place: []);
@@ -145,11 +146,13 @@ export default function Edit() {
             setRule(data.rule?data.rule: "");
             setAvergeTime(data.averageTime?data.averageTime: "");
             setAvergeTimeUnit(data.averageTimeUnit?data.averageTimeUnit: "วัน(Day)");
+            setType(data.Type?data.Type: "");
             originBannerUrl.current = data.banner;
           }
         });
       }
     }
+    console.log(user, loading, id)
   }, [user, loading, id]);
 
   const HandleSubmit = async (e) => {
@@ -187,7 +190,8 @@ export default function Edit() {
         await updateDoc(doc(db, "group", id), {
           Name: communame,
           Creator: auth.currentUser.uid,
-          Type: privacy,
+          Type: type,
+          privacy: privacy,
           tag: hashtag,
           description: description,
           maxplayer: maxplayer,
@@ -248,6 +252,7 @@ export default function Edit() {
         setRule("");
         setAvergeTime("");
         setAvergeTimeUnit("");
+        setType("");
         Router.push("/group/" + id);
       } else {
         alert("กรุณาใส่ชื่อ ชื่อย่อ และคำอธิบายคอมมู");
@@ -479,6 +484,7 @@ export default function Edit() {
                                     color="black"
                                     size="lg"
                                     defaultValue={privacy?privacy:"สาธารณะ"}
+                                    onChange={(e)=>setPrivacy(e.target.value)}
                                   >
                                     <option
                                       style={{ backgroundColor: "White" }}
@@ -548,31 +554,40 @@ export default function Edit() {
                                 />
 
                                 <Center pl={1.5} pr={1.5}>
-                                  <Select
+                                <Select
                                     isRequired
                                     w={260}
                                     h={46}
                                     bg={"white"}
                                     color="black"
                                     size="lg"
+                                    fontFamily={'Mitr'}
+                                    onChange={(e)=>setType(e.target.value)}
+                                    value={type?type:"Slow-Life"}
+                                    // value={type}
                                   >
+                                    {/* {console.log(type)} */}
                                     <option
                                       style={{ backgroundColor: "White" }}
+                                      value={"Slow-Life"}
                                     >
                                       Slow-Life
                                     </option>
                                     <option
                                       style={{ backgroundColor: "White" }}
+                                      value={"Vote for kill"}
                                     >
                                       Vote for kill
                                     </option>
                                     <option
                                       style={{ backgroundColor: "White" }}
+                                      value={"Survival"}
                                     >
                                       Survival
                                     </option>
                                     <option
                                       style={{ backgroundColor: "White" }}
+                                      value={"Slow-Survival"}
                                     >
                                       Slow-Survival
                                     </option>
@@ -887,7 +902,7 @@ export default function Edit() {
                                       color="black"
                                       size="lg"
                                       isDisabled={!Ratingsw}
-                                      defaultValue={rating? rating: "G (เหมาะสำหรับทุกวัย)"}
+                                      value={rating? rating: "G (เหมาะสำหรับทุกวัย)"}
                                       onChange={(e) =>
                                         setRating(e.target.value)
                                       }

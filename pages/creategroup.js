@@ -123,6 +123,7 @@ export default function CreateGroup() {
   const [rule, setRule] = useState("")
   const [averageTime, setAvergeTime] = useState("");
   const [averageTimeUnit, setAvergeTimeUnit] = useState("");
+  const [type, setType] = useState("");
 
   //ก็อปปี้บรรทัดบนไปวางเพิ่ม หรือเขียนเอง ลักษณะคือ const [state, setState] = useState(true) โดยที่ state คือชื่อตัวแปรที่จะใช้ เช่น durationsw ส่วน setstate คือฟังก์ชั่นที่ไว้ใช้เปลี่ยนค่าตัวแปร
 
@@ -143,7 +144,8 @@ export default function CreateGroup() {
       const docRef = await addDoc(collection(db, "group"), {
         Name: communame,
         Creator: auth.currentUser.uid,
-        Type: privacy,
+        Type: type,
+        privacy: privacy,
         tag: hashtag,
         description: description,
         maxplayer: maxplayer,
@@ -211,6 +213,7 @@ export default function CreateGroup() {
       setRule("");
       setAvergeTime("");
       setAvergeTimeUnit("");
+      setType("");
       Router.push("/group/" + docRef.id);
     } else {
       alert("กรุณาใส่ชื่อ ชื่อย่อ และคำอธิบายคอมมู");
@@ -511,24 +514,30 @@ export default function CreateGroup() {
                                     color="black"
                                     size="lg"
                                     fontFamily={'Mitr'}
+                                    onChange={(e)=>setType(e.target.value)}
+                                    defaultValue={"Slow-Life"}
                                   >
                                     <option
                                       style={{ backgroundColor: "White" }}
+                                      value={"Slow-Life"}
                                     >
                                       Slow-Life
                                     </option>
                                     <option
                                       style={{ backgroundColor: "White" }}
+                                      value={"Vote for kill"}
                                     >
                                       Vote for kill
                                     </option>
                                     <option
                                       style={{ backgroundColor: "White" }}
+                                      value={"Survival"}
                                     >
                                       Survival
                                     </option>
                                     <option
                                       style={{ backgroundColor: "White" }}
+                                      value={"Slow-Survival"}
                                     >
                                       Slow-Survival
                                     </option>

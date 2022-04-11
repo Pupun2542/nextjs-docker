@@ -91,14 +91,19 @@ export default function Group() {
               setData({ ...d.data(), CreatorName: staff.data().displayName });
             }
           });
+          
           if (d.data().rating === "NC-21 (ไม่เหมาะสำหรับเยาวชน)"){
             setColor("#EA4545")
+            // console.log(d.data().rating);
           }else if(d.data().rating === "R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)"){
-            setColor("##FF912B")
+            setColor("#FF912B")
+            // console.log(d.data().rating);
           }else if(d.data().rating === "R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)"){
             setColor("#FBBC43")
+            // console.log(d.data().rating);
           }else{
             setColor("#72994C")
+            // console.log(d.data().rating);
           }
         }else{
           alert("ไม่พบคอมมู");
@@ -341,7 +346,7 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
-                              {data.privacy ? data.privacy : "สาธารณะ"}
+                              {data.Type ? data.Type : "Slow-Life"}
                             </Box>
                           </Flex>
 
