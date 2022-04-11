@@ -517,7 +517,9 @@ export default function Edit() {
                                 />
 
                                 <Center pl={1.5} pr={1.5}>
-                                  <NumberInput w={130}>
+                                  <NumberInput w={130}
+                                    onChange={(e)=>setMaxplayer(e)}
+                                  >
                                     <NumberInputField
                                       bg={"white"}
                                       h={46}
