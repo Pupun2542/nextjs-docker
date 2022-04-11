@@ -62,7 +62,7 @@ import {
   NumberDecrementStepper,
   NumberIncrementStepper,
   Textarea,
-  Text
+  Text,
 } from "@chakra-ui/react";
 import {
   CaretLeft,
@@ -119,24 +119,22 @@ export default function CreateGroup() {
   const [places, setPlaces] = useState([]);
   const [times, setTimes] = useState([]);
   const [TWs, setTWs] = useState([]);
-  const [rating, setRating] = useState("")
-  const [rule, setRule] = useState("")
+  const [rating, setRating] = useState("");
+  const [rule, setRule] = useState("");
   const [averageTime, setAvergeTime] = useState("");
   const [averageTimeUnit, setAvergeTimeUnit] = useState("");
   const [type, setType] = useState("");
 
   //ก็อปปี้บรรทัดบนไปวางเพิ่ม หรือเขียนเอง ลักษณะคือ const [state, setState] = useState(true) โดยที่ state คือชื่อตัวแปรที่จะใช้ เช่น durationsw ส่วน setstate คือฟังก์ชั่นที่ไว้ใช้เปลี่ยนค่าตัวแปร
 
-  const parseTime = (localtime)=>{
+  const parseTime = (localtime) => {
     // console.log(localtime);
     const spdatetime = localtime.split("T");
 
-    const timebuild = spdatetime[0]+" เวลา "+spdatetime[1]
-    return timebuild
-  }
-  
-  
-  
+    const timebuild = spdatetime[0] + " เวลา " + spdatetime[1];
+    return timebuild;
+  };
+
   const HandleSubmit = async (e) => {
     e.preventDefault();
 
@@ -275,12 +273,6 @@ export default function CreateGroup() {
 
   return (
     <SSRProvider>
-      <Head>
-        <link rel="shortcut icon" href="favicon.ico"></link>
-        <title>Comuthor</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Head>
-
       <Box bg="#FDFDFD" maxW={1980}>
         <CustomNavbar />
         <Flex>
@@ -307,7 +299,7 @@ export default function CreateGroup() {
                     borderTopRadius={10}
                     maxW={1024}
                     w={1024}
-                    color={'white'}
+                    color={"white"}
                   >
                     <Flex>
                       <Center
@@ -326,8 +318,8 @@ export default function CreateGroup() {
                     </Flex>
                   </Center>
 
-                  <Accordion allowMultiple >
-                    <AccordionItem maxW={1024} >
+                  <Accordion allowMultiple>
+                    <AccordionItem maxW={1024}>
                       <h2>
                         <AccordionButton>
                           <AccordionIcon color={"Black"} w={50} h={50} />
@@ -338,14 +330,17 @@ export default function CreateGroup() {
                         </AccordionButton>
                       </h2>
 
-                      <AccordionPanel color={'white'}>
-                        <VStack >
+                      <AccordionPanel color={"white"}>
+                        <VStack>
                           {/* Community Name */}
                           <Center w={1024}>
                             <Flex bg={"#535353"} borderRadius={10} minW={900}>
                               <Box p={4} w={238}>
                                 <Box className={style.Topic2} pl={0}>
-                                  <Text float='left'>ชื่อคอมมูนิตี้</Text><Text color={'red'} float='left'>*</Text>
+                                  <Text float="left">ชื่อคอมมูนิตี้</Text>
+                                  <Text color={"red"} float="left">
+                                    *
+                                  </Text>
                                 </Box>
                               </Box>
 
@@ -382,7 +377,12 @@ export default function CreateGroup() {
                               >
                                 <Box p={4} w={238}>
                                   <Box className={style.Topic2} pl={0}>
-                                  <Text float='left'>ชื่อย่อไม่เกิน 6 ตัวอักษร</Text><Text color={'red'} float='left'>*</Text>
+                                    <Text float="left">
+                                      ชื่อย่อไม่เกิน 6 ตัวอักษร
+                                    </Text>
+                                    <Text color={"red"} float="left">
+                                      *
+                                    </Text>
                                   </Box>
                                 </Box>
 
@@ -436,7 +436,7 @@ export default function CreateGroup() {
                                     color="black"
                                     size="lg"
                                     defaultValue={"สาธารณะ"}
-                                    fontFamily={'Mitr'}
+                                    fontFamily={"Mitr"}
                                   >
                                     <option
                                       style={{ backgroundColor: "White" }}
@@ -513,8 +513,8 @@ export default function CreateGroup() {
                                     bg={"white"}
                                     color="black"
                                     size="lg"
-                                    fontFamily={'Mitr'}
-                                    onChange={(e)=>setType(e.target.value)}
+                                    fontFamily={"Mitr"}
+                                    onChange={(e) => setType(e.target.value)}
                                     defaultValue={"Slow-Life"}
                                   >
                                     <option
@@ -603,7 +603,9 @@ export default function CreateGroup() {
                                   minW={"auto"}
                                 >
                                   <Box w={238} p={4}>
-                                    <Box className={style.Topic2}>วันที่เริ่มเล่น</Box>
+                                    <Box className={style.Topic2}>
+                                      วันที่เริ่มเล่น
+                                    </Box>
                                   </Box>
 
                                   <Spacer
@@ -620,11 +622,12 @@ export default function CreateGroup() {
                                       bg={"white"}
                                       color="black"
                                       w={650}
-                                      onChange={(e)=>setStartDate(parseTime(e.target.value))}
-                                      fontFamily={'Mitr'}
+                                      onChange={(e) =>
+                                        setStartDate(parseTime(e.target.value))
+                                      }
+                                      fontFamily={"Mitr"}
                                     />
                                   </Center>
-
                                 </Flex>
                               </Flex>
                             </Center>
@@ -667,7 +670,9 @@ export default function CreateGroup() {
                                     color={"Black"}
                                     isDisabled={!Averagesw}
                                     value={averageTime}
-                                    onChange={(e)=>setAvergeTime(e.target.value)}
+                                    onChange={(e) =>
+                                      setAvergeTime(e.target.value)
+                                    }
                                   />
 
                                   <Spacer
@@ -683,8 +688,10 @@ export default function CreateGroup() {
                                       color="black"
                                       size="lg"
                                       isDisabled={!Averagesw}
-                                      fontFamily={'Mitr'}
-                                      onSelect={(e)=>setAvergeTimeUnit(e.target.value)}
+                                      fontFamily={"Mitr"}
+                                      onSelect={(e) =>
+                                        setAvergeTimeUnit(e.target.value)
+                                      }
                                     >
                                       <option
                                         style={{ backgroundColor: "White" }}
@@ -840,33 +847,43 @@ export default function CreateGroup() {
 
                                   <Center pl={1.5} pr={1.5}>
                                     <Select
+                                      isRequired
                                       w={650}
                                       h={46}
                                       bg={"white"}
                                       color="black"
                                       size="lg"
                                       isDisabled={!Ratingsw}
-                                      value={rating}
-                                      onSelect={(e)=>setRating(e.target.value)}
-                                      fontFamily={'Mitr'}
+                                      value={
+                                        rating
+                                          ? rating
+                                          : "G (เหมาะสำหรับทุกวัย)"
+                                      }
+                                      onChange={(e) =>
+                                        setRating(e.target.value)
+                                      }
                                     >
                                       <option
                                         style={{ backgroundColor: "White" }}
+                                        value="G (เหมาะสำหรับทุกวัย)"
                                       >
                                         G (เหมาะสำหรับทุกวัย)
                                       </option>
                                       <option
                                         style={{ backgroundColor: "White" }}
+                                        value="R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)"
                                       >
                                         R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)
                                       </option>
                                       <option
                                         style={{ backgroundColor: "White" }}
+                                        value="R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)"
                                       >
                                         R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)
                                       </option>
                                       <option
                                         style={{ backgroundColor: "White" }}
+                                        value="NC-21 (ไม่เหมาะสำหรับเยาวชน)"
                                       >
                                         NC-21 (ไม่เหมาะสำหรับเยาวชน)
                                       </option>
@@ -966,7 +983,7 @@ export default function CreateGroup() {
                                       m={1.5}
                                       isDisabled={!Rulesw}
                                       value={rule}
-                                      onChange={(e)=>setRule(e.target.value)}
+                                      onChange={(e) => setRule(e.target.value)}
                                     />
                                   </Center>
                                 </Flex>
@@ -986,7 +1003,10 @@ export default function CreateGroup() {
                                   minH={"auto"}
                                 >
                                   <Box w={238} p={4} className={style.Topic2}>
-                                  <Text float='left'>คำอธิบาย</Text><Text color={'red'} float='left'>*</Text>
+                                    <Text float="left">คำอธิบาย</Text>
+                                    <Text color={"red"} float="left">
+                                      *
+                                    </Text>
                                   </Box>
 
                                   <Spacer
@@ -1032,7 +1052,7 @@ export default function CreateGroup() {
                         </AccordionButton>
                       </h2>
 
-                      <AccordionPanel color={'white'}>
+                      <AccordionPanel color={"white"}>
                         <VStack>
                           {/* <Flex w={1024}>
 
@@ -1173,7 +1193,7 @@ export default function CreateGroup() {
                         </AccordionButton>
                       </h2>
 
-                      <AccordionPanel color={'white'}>
+                      <AccordionPanel color={"white"}>
                         <VStack>
                           <Center>
                             <Flex maxW={900}>
@@ -1352,12 +1372,12 @@ export default function CreateGroup() {
                                     w={650}
                                     h={46}
                                     bg={"white"}
-                                    placeholder={"สำหรับตรวจสอบ Q&A"}
-                                    className={style.setDescription}
+                                    placeholder={"ช่องทางติดต่อ"}
+                                    className={style.search}
                                     type="url"
-                                    value={resultlink}
+                                    value={contactlink}
                                     onChange={(e) => {
-                                      setResultlink(e.target.value);
+                                      setContactlink(e.target.value);
                                     }}
                                   />
                                 </Center>

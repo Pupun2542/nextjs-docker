@@ -122,41 +122,42 @@ export default function Edit() {
             alert("Unorthorized Access");
             Router.back();
           } else {
-            setGenre(data.genre?data.genre: "");
-            setCommuname(data.Name?data.Name: "");
-            setMaxplayer(data.maxplayer?data.maxplayer: "");
-            setRegDate(data.regDate?data.regDate: "");
-            setRuntime(data.runtime?data.runtime: "");
-            setStartDate(data.startDate?data.startDate: "");
-            setSmlink(data.smlink?data.smlink: "");
-            setDescription(data.description?data.description: "");
-            setDoclink(data.doclink?data.doclink: "");
-            setQaasklink(data.qaasklink?data.qaasklink: "");
-            setQaanslink(data.qaanslink?data.qaanslink: "");
-            setSubmitlink(data.submitlink?data.submitlink: "");
-            setResultlink(data.resultlink?data.resultlink: "");
-            setContactlink(data.contactlink?data.contactlink: "");
-            setPrivacy(data.privacy?data.privacy: "");
-            setBannerBlob(data.banner?data.banner: "");
-            setHashtag(data.tag?data.tag: "");
-            setPlaces(data.place?data.place: []);
-            setTimes(data.times?data.times: []);
-            setTWs(data.tws?data.tws: []);
-            setRating(data.rating?data.rating: "");
-            setRule(data.rule?data.rule: "");
-            setAvergeTime(data.averageTime?data.averageTime: "");
-            setAvergeTimeUnit(data.averageTimeUnit?data.averageTimeUnit: "วัน(Day)");
-            setType(data.Type?data.Type: "");
+            setGenre(data.genre ? data.genre : "");
+            setCommuname(data.Name ? data.Name : "");
+            setMaxplayer(data.maxplayer ? data.maxplayer : "");
+            setRegDate(data.regDate ? data.regDate : "");
+            setRuntime(data.runtime ? data.runtime : "");
+            setStartDate(data.startDate ? data.startDate : "");
+            setSmlink(data.smlink ? data.smlink : "");
+            setDescription(data.description ? data.description : "");
+            setDoclink(data.doclink ? data.doclink : "");
+            setQaasklink(data.qaasklink ? data.qaasklink : "");
+            setQaanslink(data.qaanslink ? data.qaanslink : "");
+            setSubmitlink(data.submitlink ? data.submitlink : "");
+            setResultlink(data.resultlink ? data.resultlink : "");
+            setContactlink(data.contactlink ? data.contactlink : "");
+            setPrivacy(data.privacy ? data.privacy : "");
+            setBannerBlob(data.banner ? data.banner : "");
+            setHashtag(data.tag ? data.tag : "");
+            setPlaces(data.place ? data.place : []);
+            setTimes(data.times ? data.times : []);
+            setTWs(data.tws ? data.tws : []);
+            setRating(data.rating ? data.rating : "");
+            setRule(data.rule ? data.rule : "");
+            setAvergeTime(data.averageTime ? data.averageTime : "");
+            setAvergeTimeUnit(
+              data.averageTimeUnit ? data.averageTimeUnit : "วัน(Day)"
+            );
+            setType(data.Type ? data.Type : "");
             originBannerUrl.current = data.banner;
           }
         });
       }
     }
-    console.log(user, loading, id)
+    console.log(user, loading, id);
   }, [user, loading, id]);
 
   const HandleSubmit = async (e) => {
-
     // console.log(communame)
     // console.log(auth.currentUser.uid)
     // console.log(privacy)
@@ -182,7 +183,6 @@ export default function Edit() {
     // console.log(averageTime)
     // console.log(averageTimeUnit)
     // console.log(bannerBlob, originBannerUrl.current, bannerBlob !== originBannerUrl.current)
-
 
     e.preventDefault();
     if (confirm("ยืนยันการแก้ไข?")) {
@@ -210,14 +210,14 @@ export default function Edit() {
           times: times,
           tws: TWs,
           rating: rating,
-          rule:rule,
+          rule: rule,
           averageTime: averageTime,
           averageTimeUnit: averageTimeUnit,
           createAt: serverTimestamp(),
         });
 
         if (bannerBlob !== originBannerUrl.current) {
-          console.log(bannerBlob, originBannerUrl)
+          console.log(bannerBlob, originBannerUrl);
           const storageref = ref(
             store,
             `group/${id}/uploadImages/${auth.currentUser.uid}${Date.now()}`
@@ -315,12 +315,6 @@ export default function Edit() {
 
   return (
     <Box>
-      <Head>
-        <link rel="shortcut icon" href="favicon.ico"></link>
-        <title>Comuthor</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Head>
-
       <Box bg="#FDFDFD" maxW={1980}>
         <CustomNavbar />
         <Flex>
@@ -483,8 +477,8 @@ export default function Edit() {
                                     bg={"white"}
                                     color="black"
                                     size="lg"
-                                    defaultValue={privacy?privacy:"สาธารณะ"}
-                                    onChange={(e)=>setPrivacy(e.target.value)}
+                                    defaultValue={privacy ? privacy : "สาธารณะ"}
+                                    onChange={(e) => setPrivacy(e.target.value)}
                                   >
                                     <option
                                       style={{ backgroundColor: "White" }}
@@ -554,16 +548,16 @@ export default function Edit() {
                                 />
 
                                 <Center pl={1.5} pr={1.5}>
-                                <Select
+                                  <Select
                                     isRequired
                                     w={260}
                                     h={46}
                                     bg={"white"}
                                     color="black"
                                     size="lg"
-                                    fontFamily={'Mitr'}
-                                    onChange={(e)=>setType(e.target.value)}
-                                    value={type?type:"Slow-Life"}
+                                    fontFamily={"Mitr"}
+                                    onChange={(e) => setType(e.target.value)}
+                                    value={type ? type : "Slow-Life"}
                                     // value={type}
                                   >
                                     {/* {console.log(type)} */}
@@ -653,7 +647,9 @@ export default function Edit() {
                                   minW={"auto"}
                                 >
                                   <Box w={238} p={4}>
-                                    <Box className={style.Topic2}>วันที่เริ่มเล่น</Box>
+                                    <Box className={style.Topic2}>
+                                      วันที่เริ่มเล่น
+                                    </Box>
                                   </Box>
 
                                   <Spacer
@@ -670,11 +666,12 @@ export default function Edit() {
                                       bg={"white"}
                                       color="black"
                                       w={650}
-                                      onChange={(e)=>setStartDate(parseTime(e.target.value))}
-                                      fontFamily={'Mitr'}
+                                      onChange={(e) =>
+                                        setStartDate(parseTime(e.target.value))
+                                      }
+                                      fontFamily={"Mitr"}
                                     />
                                   </Center>
-
                                 </Flex>
                               </Flex>
                             </Center>
@@ -717,7 +714,9 @@ export default function Edit() {
                                     color={"Black"}
                                     isDisabled={!Averagesw}
                                     defaultValue={averageTime}
-                                    onChange={(e)=>setAvergeTime(e.target.value)}
+                                    onChange={(e) =>
+                                      setAvergeTime(e.target.value)
+                                    }
                                   />
 
                                   <Spacer
@@ -733,10 +732,16 @@ export default function Edit() {
                                       color="black"
                                       size="lg"
                                       isDisabled={!Averagesw}
-                                      fontFamily={'Mitr'}
+                                      fontFamily={"Mitr"}
                                       value={averageTimeUnit}
-                                      onChange={(e)=>setAvergeTimeUnit(e.target.value)}
-                                      defaultValue={averageTimeUnit?averageTimeUnit: "วัน(Day)"}
+                                      onChange={(e) =>
+                                        setAvergeTimeUnit(e.target.value)
+                                      }
+                                      defaultValue={
+                                        averageTimeUnit
+                                          ? averageTimeUnit
+                                          : "วัน(Day)"
+                                      }
                                     >
                                       <option
                                         style={{ backgroundColor: "White" }}
@@ -902,7 +907,11 @@ export default function Edit() {
                                       color="black"
                                       size="lg"
                                       isDisabled={!Ratingsw}
-                                      value={rating? rating: "G (เหมาะสำหรับทุกวัย)"}
+                                      value={
+                                        rating
+                                          ? rating
+                                          : "G (เหมาะสำหรับทุกวัย)"
+                                      }
                                       onChange={(e) =>
                                         setRating(e.target.value)
                                       }
@@ -1026,8 +1035,8 @@ export default function Edit() {
                                       className={style.search}
                                       m={1.5}
                                       isDisabled={!Rulesw}
-                                      onChange={(e)=>setRule(e.target.value)}
-                                      value = {rule}
+                                      onChange={(e) => setRule(e.target.value)}
+                                      value={rule}
                                     />
                                   </Center>
                                 </Flex>
@@ -1416,12 +1425,12 @@ export default function Edit() {
                                     w={650}
                                     h={46}
                                     bg={"white"}
-                                    placeholder={"สำหรับตรวจสอบ Q&A"}
-                                    className={style.setDescription}
+                                    placeholder={"ช่องทางติดต่อ"}
+                                    className={style.search}
                                     type="url"
-                                    value={resultlink}
+                                    value={contactlink}
                                     onChange={(e) => {
-                                      setResultlink(e.target.value);
+                                      setContactlink(e.target.value);
                                     }}
                                   />
                                 </Center>

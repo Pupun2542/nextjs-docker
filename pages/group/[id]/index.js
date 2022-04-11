@@ -176,12 +176,6 @@ export default function Group() {
 
   return (
     <Box>
-      <Head>
-        <link rel="shortcut icon" href="../../../favicon.ico"></link>
-        <title>Comuthor</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Head>
-
       <Box bg={"#FFFFFF"}>
         <CustomNavbar />
         {!loading && data.Name && (

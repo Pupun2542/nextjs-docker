@@ -13,8 +13,8 @@ import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Grid, GridItem, VStack, Text, Box } from "@chakra-ui/react";
 import CustomNavbar from "../../../components/navbar";
-import SpreadsheetHandler from '/components/SpreadsheetHandler'
-import Tabletop from 'tabletop'
+// import SpreadsheetHandler from '/components/SpreadsheetHandler'
+// import Tabletop from 'tabletop'
 
 export default function Dashbord() {
   const router = useRouter();

@@ -39,12 +39,6 @@ export default function Home() {
   return (
 
     <Box bg={'#FFFFFF'}>
-      <Head>
-        <link rel="shortcut icon" href="favicon.ico"></link>
-        <title>Comuthor</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Head>
-
       <CustomNavbar />
 
       <Flex>
