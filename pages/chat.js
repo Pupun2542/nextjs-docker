@@ -129,21 +129,28 @@ function chat() {
         <CustomNavbar />
 
       {snapshot&&(
-        <VStack>
-          <Flex>
+        <VStack
+          display={'flex'}
+          flexDirection={'column'}
+          boxSizing='border-box'
+        >
+          <Flex
+            justifyContent={'center'}
+            // flexGrow={1}
+            w={'100%'}
+            // width={480}
+          >
             {/* <Box w={400}></Box> */}
-            <Show above="lg">
-              <Spacer />
-            </Show>
             
             <Box
               overflowY={"auto"}
-              minH={'810'}
+              minH={810}
               maxH={825}
               onClick={handleFocus}
               bg={"gray.100"}
-              minW={'320'}
+              minW={320}
               shadow="dark-lg"
+              flexGrow={0.5}
             >
               {snapshot.docs.map((doc,k) => ( 
                 <Flex
@@ -187,15 +194,12 @@ function chat() {
                 </Flex>
               ))}
             </Box>
-            <Show above="lg">
-              <Spacer />
-            </Show>
             {/* <Box w={400}></Box> */}
           </Flex>
 
           <Flex
-            pos={"fixed"}
-            bottom={0}
+            // pos={"fixed"}
+            // bottom={0}
             width={"100%"}
             paddingBottom="10px"
             paddingLeft="5px"
