@@ -290,7 +290,34 @@ export default function Group() {
                       </h2>
                       <AccordionPanel spacing={0}>
                         <VStack>
+                          <Flex ml={10} w={750}>
+                            <Center
+                              borderRadius={10}
+                              bg={"#FBBC43"}
+                              w={350}
+                              h={63}
+                              p={5}
+                              as={"button"}
+                              onClick={onOpen}
+                              shadow={"base"}
+                            >
+                              ความเป็นส่วนตัว
+                            </Center>
+                            <Spacer />
+                            {/* <Center
+                              shadow={"base"}
+                              borderRadius={10}
+                              bg={color}
+                              h={63}
+                              w={350}
+                              p={5}
+                            >
+                              {data.rating?data.rating:"G (เหมาะสำหรับทุกวัย)"}
+                            </Center> */}
+                          </Flex>
+
                           <Flex ml={0} w={750}>
+                            
                             <Box
                               bg={"white"}
                               w={200}
@@ -396,6 +423,86 @@ export default function Group() {
                               borderRightColor={"gray.400"}
                               borderRightWidth={3}
                             >
+                              สถานที่ภายในคอมมูนิตี้
+                            </Box>
+                            <Box
+                              bg={"white"}
+                              w={550}
+                              minH={63}
+                              pt={2}
+                              pl={3}
+                              shadow={"base"}
+                              borderRightRadius={10}
+                            >
+                              {/* {console.log(data.genre)} */}
+                              {data.genre.length > 0
+                                ? data.genre.map((genre, index) => (
+                                    <Box
+                                      key={index}
+                                      className={style.tag}
+                                      marginLeft={2.5}
+                                      maxW={600}
+                                      float={"left"}
+                                    >
+                                      {genre}
+                                    </Box>
+                                  ))
+                                : "ไม่มีหมวดหมู่"}
+                            </Box>
+                          </Flex>
+
+                          <Flex ml={10} w={750}>
+                            <Box
+                              bg={"white"}
+                              w={200}
+                              h={63}
+                              pt={5}
+                              pl={5}
+                              shadow={"base"}
+                              borderLeftRadius={10}
+                              borderRightColor={"gray.400"}
+                              borderRightWidth={3}
+                            >
+                              ยุคสมัยของคอมมูนิตี้
+                            </Box>
+                            <Box
+                              bg={"white"}
+                              w={550}
+                              minH={63}
+                              pt={2}
+                              pl={3}
+                              shadow={"base"}
+                              borderRightRadius={10}
+                            >
+                              {/* {console.log(data.genre)} */}
+                              {data.genre.length > 0
+                                ? data.genre.map((genre, index) => (
+                                    <Box
+                                      key={index}
+                                      className={style.tag}
+                                      marginLeft={2.5}
+                                      maxW={600}
+                                      float={"left"}
+                                    >
+                                      {genre}
+                                    </Box>
+                                  ))
+                                : "ไม่มีหมวดหมู่"}
+                            </Box>
+                          </Flex>
+
+                          <Flex ml={10} w={750}>
+                            <Box
+                              bg={"white"}
+                              w={200}
+                              h={63}
+                              pt={5}
+                              pl={5}
+                              shadow={"base"}
+                              borderLeftRadius={10}
+                              borderRightColor={"gray.400"}
+                              borderRightWidth={3}
+                            >
                               คำเตือน
                             </Box>
                             <Box
@@ -418,35 +525,69 @@ export default function Group() {
                                 : "ไม่มีคำเตือน"}
                             </Box>
                           </Flex>
-
+                          
                           <Flex ml={10} w={750}>
-                            <Box
-                              bg={"white"}
-                              w={200}
-                              h={63}
-                              pt={5}
-                              pl={5}
-                              shadow={"base"}
-                              borderLeftRadius={10}
-                              borderRightColor={"gray.400"}
-                              borderRightWidth={3}
-                            >
-                              วันที่เริ่มเล่น
-                            </Box>
-                            <Box
-                              bg={"white"}
-                              w={550}
-                              h={63}
-                              pt={5}
-                              pl={5}
-                              shadow={"base"}
-                              borderRightRadius={10}
-                            >
-                              {data.startDate
-                                ? data.startDate
-                                : "ยังไม่ได้ลงวันเริ่มเล่น"}
-                            </Box>
+                            <Flex >
+                              <Box
+                                bg={"white"}
+                                w={200}
+                                h={63}
+                                pt={5}
+                                pl={5}
+                                shadow={"base"}
+                                borderLeftRadius={10}
+                                borderRightColor={"gray.400"}
+                                borderRightWidth={3}
+                              >
+                                วันที่เริ่มเล่น
+                              </Box>
+                              <Box
+                                bg={"white"}
+                                w={170}
+                                h={63}
+                                pt={5}
+                                pl={5}
+                                shadow={"base"}
+                                borderRightRadius={10}
+                              >
+                                {data.startDate
+                                  ? data.startDate
+                                  : "ยังไม่ได้ลงวันเริ่มเล่น"}
+                              </Box>
+                            </Flex>
+
+                            <Spacer />
+
+                            <Flex>
+                              <Box
+                                bg={"white"}
+                                w={200}
+                                h={63}
+                                pt={5}
+                                pl={5}
+                                shadow={"base"}
+                                borderLeftRadius={10}
+                                borderRightColor={"gray.400"}
+                                borderRightWidth={3}
+                              >
+                                ระยะเวลาโดยประมาณ
+                              </Box>
+                              <Box
+                                bg={"white"}
+                                w={170}
+                                h={63}
+                                pt={5}
+                                pl={5}
+                                shadow={"base"}
+                                borderRightRadius={10}
+                              >
+                                {data.startDate
+                                  ? data.startDate
+                                  : "ยังไม่ได้ลงวันเริ่มเล่น"}
+                              </Box>
+                            </Flex>
                           </Flex>
+                          
 
                           <Flex ml={10} w={750}>
                             <Box
