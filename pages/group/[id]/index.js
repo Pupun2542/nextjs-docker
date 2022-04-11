@@ -470,9 +470,7 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
-                              "The quick brown fox jumps over the lazy dog" is an English-language pangram—a
-  sentence that contains all of the letters of the English alphabet. Owing to
-  its existence, Chakra was created.
+                              {data.description}
                             </Box>
                           </Flex>
 
@@ -520,7 +518,7 @@ export default function Group() {
                             h={63}
                             w={750}
                             borderRadius={10}
-                            onClick={data.smlink? ()=>outsidenavigate(data.smlink): ()=> alert("ไม่มีลิงค์กลุ่ม")}
+                            onClick={data.smlink? ()=>outsidenavigate(data.smlink): ()=> alert("ไม่มีลิงก์กลุ่ม")}
                             cursor='pointer'
                           >
                             Community Link
@@ -565,7 +563,7 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
-                              {data.submitlink? (<a href={data.submitlink}>{data.submitlink}</a>): "ไม่มีลิงค์ลงทะเบียน"}
+                              {data.submitlink? (<a href={data.submitlink}>{data.submitlink}</a>): "ไม่มีลิงก์ลงทะเบียน"}
                               
                             </Box>
                           </Flex>
@@ -593,7 +591,7 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
-                              {data.resultlink? (<a href={data.resultlink}>{data.resultlink}</a>): "ไม่มีลิงค์ตรวจสอบตัวละคร"}
+                              {data.resultlink? (<a href={data.resultlink}>{data.resultlink}</a>): "ไม่มีลิงก์ตรวจสอบตัวละคร"}
                             </Box>
                           </Flex>
 
@@ -620,7 +618,7 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
-                              {data.doclink? (<a href={data.doclink}>{data.doclink}</a>): "ไม่มีลิงค์ข้อมูลคอมมู"}
+                              {data.doclink? (<a href={data.doclink}>{data.doclink}</a>): "ไม่มีลิงก์ข้อมูลคอมมู"}
                             </Box>
                           </Flex>
 
@@ -647,7 +645,7 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
-                              {data.qaasklink? (<a href={data.qaasklink}>{data.doclqaasklinkink}</a>): "ไม่มีลิงค์ถามคำถาม"}
+                              {data.qaasklink? (<a href={data.qaasklink}>{data.qaasklink}</a>): "ไม่มีลิงก์ถามคำถาม"}
                             </Box>
                           </Flex>
 
@@ -674,7 +672,7 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
-                              {data.qaanslink? (<a href={data.qaanslink}>{data.qaanslink}</a>): "ไม่มีลิงค์ตรวจสอบคำตอบ"}
+                              {data.qaanslink? (<a href={data.qaanslink}>{data.qaanslink}</a>): "ไม่มีลิงก์ตรวจสอบคำตอบ"}
                             </Box>
                           </Flex>
 

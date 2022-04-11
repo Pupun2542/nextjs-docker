@@ -34,8 +34,10 @@ import {
   FacebookLogo,
   DiscordLogo
 } from "phosphor-react";
+import {useRouter} from 'Next/router'
 
 export default function Home() {
+  const router = useRouter();
   return (
 
     <Box bg={'#FFFFFF'}>
@@ -64,6 +66,7 @@ export default function Home() {
                       w={250}
                       fontWeight={'bold'} 
                       fontSize={24}
+                      onClick={()=>router.push("/login")}
                       > 
                       Register !
                     </Button>

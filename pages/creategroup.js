@@ -156,7 +156,7 @@ export default function CreateGroup() {
         submitlink: submitlink,
         resultlink: resultlink,
         contactlink: contactlink,
-        regDate: regDate,
+        // regDate: regDate,
         place: places,
         times: times,
         tws: TWs,

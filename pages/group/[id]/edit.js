@@ -77,7 +77,7 @@ export default function Edit() {
   const [hashtag, setHashtag] = useState("");
   const [communame, setCommuname] = useState("");
   const [maxplayer, setMaxplayer] = useState("");
-  const [regDate, setRegDate] = useState("");
+  // const [regDate, setRegDate] = useState("");
   const [runtime, setRuntime] = useState("");
   const [startDate, setStartDate] = useState("");
   const [description, setDescription] = useState("");
@@ -125,7 +125,7 @@ export default function Edit() {
             setGenre(data.genre ? data.genre : "");
             setCommuname(data.Name ? data.Name : "");
             setMaxplayer(data.maxplayer ? data.maxplayer : "");
-            setRegDate(data.regDate ? data.regDate : "");
+            // setRegDate(data.regDate ? data.regDate : "");
             setRuntime(data.runtime ? data.runtime : "");
             setStartDate(data.startDate ? data.startDate : "");
             setSmlink(data.smlink ? data.smlink : "");
@@ -204,7 +204,7 @@ export default function Edit() {
           submitlink: submitlink,
           resultlink: resultlink,
           contactlink: contactlink,
-          regDate: regDate,
+          // regDate: regDate,
           startDate: startDate,
           place: places,
           times: times,
@@ -232,7 +232,7 @@ export default function Edit() {
         setGenre([]);
         setCommuname("");
         setMaxplayer("");
-        setRegDate("");
+        // setRegDate("");
         setRuntime("");
         setStartDate("");
         setSmlink("");
