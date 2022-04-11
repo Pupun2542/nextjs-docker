@@ -293,7 +293,7 @@ export default function Group() {
                           <Flex ml={10} w={750}>
                             <Center
                               borderRadius={10}
-                              bg={"#FBBC43"}
+                              bg={"#6768AB"}
                               w={350}
                               h={63}
                               p={5}
