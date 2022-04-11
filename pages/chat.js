@@ -133,6 +133,7 @@ function chat() {
           display={'flex'}
           flexDirection={'column'}
           boxSizing='border-box'
+          spacing={0}
         >
           <Flex
             justifyContent={'center'}
