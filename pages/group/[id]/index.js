@@ -416,7 +416,7 @@ export default function Group() {
                               borderRightRadius={10}
                             >
                               {/* {console.log(data.genre)} */}
-                              {data.genre.length > 0
+                              {data.times && data.genre.length > 0
                                 ? data.genre.map((genre, index) => (
                                     <Box
                                       key={index}
@@ -455,7 +455,7 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
-                              {data.place.length > 0
+                              {data.times && data.place.length > 0
                                 ? data.place.map((genre, index) => (
                                     <Box
                                       key={index}
@@ -495,7 +495,7 @@ export default function Group() {
                               borderRightRadius={10}
                             >
                               {/* {console.log(data.genre)} */}
-                              {data.times.length > 0
+                              {data.times && data.times.length > 0
                                 ? data.times.map((genre, index) => (
                                     <Box
                                       key={index}
