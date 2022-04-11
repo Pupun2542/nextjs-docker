@@ -22,6 +22,7 @@ import {
   Spacer,
   VStack,
   Center,
+  Show,
 } from "@chakra-ui/react";
 import CustomNavbar from "../components/navbar";
 // import dynamic from 'next/dynamic'
@@ -47,6 +48,13 @@ function chat() {
   const [play] = useSound("/chatnoti.wav", { volume: 1.0 });
   const q = query(collection(db, "chat"), orderBy("timeStamp"));
   const [snapshot] = useCollection(q);
+  const breakpoints = {
+    sm: '320px',
+    md: '768px',
+    lg: '960px',
+    xl: '1200px',
+    '2xl': '1536px',
+  }
   
   // snapshot.docs.forEach((doc)=>console.log(doc))
   // console.log(snapshot)
@@ -124,13 +132,17 @@ function chat() {
         <VStack>
           <Flex>
             {/* <Box w={400}></Box> */}
-            <Spacer />
+            <Show above="lg">
+              <Spacer />
+            </Show>
+            
             <Box
               overflowY={"auto"}
-              maxH={820}
+              minH={'810'}
+              maxH={825}
               onClick={handleFocus}
               bg={"gray.100"}
-              w={1000}
+              minW={'320'}
               shadow="dark-lg"
             >
               {snapshot.docs.map((doc,k) => ( 
@@ -146,13 +158,12 @@ function chat() {
                   {/* {console.log()} */}
                   <Box fontFamily={"Mitr"}>
                     {doc.data().senderId == user.uid ? (
-                      <Box minW={"auto"} maxW={400} marginBottom={5}>
+                      <Box minW={280} maxW={320} marginBottom={5}>
                         <Text fontSize={10}>{doc.data().sender}</Text>
                         <Text
                           fontSize={20}
                           backgroundColor={"blue.100"}
                           rounded="5"
-                          padding={2}
                         >
                           {doc.data().text}
                         </Text>
@@ -160,13 +171,12 @@ function chat() {
                         {/* <Text fontSize={10}>{data.timeStamp.toDate()}</Text> */}
                       </Box>
                     ) : (
-                      <Box minW={"auto"} maxW={400} marginBottom={5}>
+                      <Box minW={280} maxW={320} marginBottom={5}>
                         <Text fontSize={10}>{doc.data().sender}</Text>
                         <Text
                           fontSize={20}
                           backgroundColor={"red.200"}
                           rounded="5"
-                          padding={2}
                         >
                           {doc.data().text}
                         </Text>
@@ -177,7 +187,9 @@ function chat() {
                 </Flex>
               ))}
             </Box>
-            <Spacer />
+            <Show above="lg">
+              <Spacer />
+            </Show>
             {/* <Box w={400}></Box> */}
           </Flex>
 
@@ -188,6 +200,7 @@ function chat() {
             paddingBottom="10px"
             paddingLeft="5px"
             bg={"gray"}
+            minW={320}
             justifyContent="center"
           >
             
@@ -211,6 +224,7 @@ function chat() {
                 onClick={handleSend}
                 marginLeft="10px"
                 mt={2}
+                mr={2}
               >
                 Send
               </Button>
