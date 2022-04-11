@@ -454,9 +454,8 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
-                              {/* {console.log(data.genre)} */}
                               {data.genre.length > 0
-                                ? data.genre.map((genre, index) => (
+                                ? data.place.map((genre, index) => (
                                     <Box
                                       key={index}
                                       className={style.tag}
@@ -496,7 +495,7 @@ export default function Group() {
                             >
                               {/* {console.log(data.genre)} */}
                               {data.genre.length > 0
-                                ? data.genre.map((genre, index) => (
+                                ? data.times.map((genre, index) => (
                                     <Box
                                       key={index}
                                       className={style.tag}
@@ -601,9 +600,9 @@ export default function Group() {
                                 shadow={"base"}
                                 borderRightRadius={10}
                               >
-                                {data.startDate
-                                  ? data.startDate
-                                  : "ยังไม่ได้ลงวันเริ่มเล่น"}
+                                {data.averageTime
+                                  ? data.averageTime+" "+data.averageTimeUnit
+                                  : "ไม่มีระยะเวลาโดยประมาณ"}
                               </Box>
                             </Flex>
                           </Flex>
