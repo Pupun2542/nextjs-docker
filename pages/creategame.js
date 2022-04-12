@@ -50,6 +50,7 @@ const CreateGame = () => {
         e.preventDefault();
 
         const gameRef = await addDoc(collection(db, "game"), {
+            creator: auth.currentUser.uid,
             Roomname: roomname,
             Number: numberofplayers,
             Seer: seer,
