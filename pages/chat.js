@@ -145,7 +145,7 @@ function chat() {
             
             <Box
               overflowY={"auto"}
-              minH={810}
+              // minH={810}
               maxH={825}
               onClick={handleFocus}
               bg={"gray.100"}

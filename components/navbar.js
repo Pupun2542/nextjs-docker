@@ -96,7 +96,7 @@ function CustomNavbar() {
     xl: '1200px',
     '2xl': '1536px',
   }
-  // const [data, setData] = useState([]);
+  const [data, setData] = useState([]);
   // const [snapshot] = useCollectionOnce(
   //   collection(db, "UserDetail", user.uid, "pinnedGroup")
   // );
@@ -109,21 +109,27 @@ function CustomNavbar() {
   //     })
   //   }
 
-  // },[])
+  // },[user])
 
-  // useEffect(() => {
-  //   if (user && !loading) {
-  //     getDocs(collection(db, "UserDetail", user.uid, "pinnedGroup")).then(
-  //       (snapshot) => {
-  //         setData(
-  //           snapshot.docs.map((doc) => {
-  //             doc.data();
-  //           })
-  //         );
-  //       }
-  //     );
-  //   }
-  // },[user, loading]);
+  useEffect(() => {
+    if (user && !loading) {
+      const QuerySnapshot = query(collection(db, "userDetail", user.uid, "pinnedGroup"))
+      getDocs(QuerySnapshot).then(
+        (snapshot) => {
+          setData(
+            snapshot.docs.map((doc) => doc.data())
+          );
+          // snapshot.docs.map((doc) => console.log(doc.data()))
+
+          // console.log( user.uid,snapshot.docs)
+        }
+      );
+    // getDoc(doc(db, "userDetail", user.uid)).then((snapshot)=>{
+    //   console.log(snapshot.data())
+    // })
+    }
+    
+  },[user, loading]);
 
   const Loadthumbnail = () => {
     if (user) {
@@ -324,14 +330,14 @@ function CustomNavbar() {
                     <Plus size={32} />
                   </MenuItem>
 
-                  {/* <MenuItem
+                  <MenuItem
                     minH="48px"
                     as={"button"}
                     title="Main Hall"
                     onClick={onOpen}
                   >
                     <PushPin size={32} />
-                  </MenuItem> */}
+                  </MenuItem>
                 </MenuList>
 
                 <Modal isOpen={isOpen} onClose={onClose}>
@@ -340,15 +346,15 @@ function CustomNavbar() {
                     <ModalHeader>My Pinned</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                      {/* {console.log(snapshot.docs)} */}
-                      {/* {snapshot &&
-                        snapshot.docs.map((doc) => (
+                      {data.length > 0 &&
+                        data.map((doc) => (
                           <Text
-                            onClick={router.push("/group/" + doc.data().id)}
+                            onClick={()=>router.push("/group/" + doc.id)}
+                            cursor={"pointer"}
                           >
-                            [{doc.data().tag}]{doc.data().name}
+                          [{doc.tag}]{doc.name}
                           </Text>
-                        ))} */}
+                        ))}
                     </ModalBody>
 
                     <ModalFooter>
