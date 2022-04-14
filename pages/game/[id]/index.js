@@ -51,6 +51,7 @@ import {
   Text,
   Button,
   Input,
+  HStack
 } from "@chakra-ui/react";
 // import Footer from "../../../components/footer";
 import {
@@ -86,19 +87,20 @@ const Game = () => {
                 <title> Comuthor | Werewolf </title>
             </Head>
 
-            <CustomNavbar />
-
-            <Flex h="900px">
-                <Box w="250px" bg="#FBBC43" color="white">
-                    <Text> ควบคุมผู้เล่น </Text>
+                <CustomNavbar />
+                <Center>
+            <Flex>
+                <Box  minWidth="200px" bg="#FBBC43" color="white">
+                    <Text align="center" > players </Text>
                 </Box>
-                <Box w="850px" bg="#EA4545" color="white">
-                    <Text> พื้นที่สำหรับเล่น </Text>
+                <Box minWidth="900px" bg="#EA4545" color="white">
+                    <Text align="center" > พื้นที่สำหรับเล่น </Text>
                 </Box>
-                <Box flex="1" bg="#72994C" color="white">
-                    <Text> พื้นที่สำหรับการแชท </Text>
+                <Box minWidth="350px" bg="#72994C" color="white">
+                    <Text align="center" > chat </Text>
                 </Box>
             </Flex>
+                </Center>
 
         </SSRProvider>
     );

@@ -17,9 +17,15 @@ import {
   Center,
   VStack,
   Wrap,
-  WrapItem
+  WrapItem,
+  Spacer,
+  Button,
+  Text,
+  Heading
 } from "@chakra-ui/react";
 import { async } from "@firebase/util";
+import { useAuthState } from "react-firebase-hooks/auth";
+// import { auth } from "firebase-admin";
 
 function GameCard() {
     const Router = useRouter();
@@ -27,10 +33,11 @@ function GameCard() {
 
     const app = useApp();
     const db = getFirestore(app);
-    // const auth = getAuth(app);
+    const auth = getAuth(app);
 
     const [ game, setGame ] = useState([]);
     const [ loading, setLoading ] = useState(true);
+    const [ user ] = useAuthState(auth)
 
     useEffect(() => {
         const Fetchdata = async () => {
@@ -47,36 +54,78 @@ function GameCard() {
         return Fetchdata();
     });
 
+    // function CheckPlayer() {
+    //   {!loading && game.map((value) => {
+    //     if ( !user )
+    //   })}
+    // }
+
+
     return (
-        <Box>
+        <Box >
             {!loading && game.map((value) => {
                 return (
-                    <Flex
-          onClick={() => {
-            Router.push("/game/" + value.id);
-          }}
-            //className={style.Box}
-          _hover={{
-            background:"#535353"
-          }}
-          cursor="pointer"
-          >
-          <VStack ml={5}>
-            <Box
-            // className={style.roomname}
-            color="black"
-            maxW={606}
-            w={556}
-            >
-              <Box>
-                {value.Roomname}
-              </Box>
-            </Box>
-          </VStack>
-          </Flex>
+                  
+                  <Box
+                    bg={'fdfdfd'}
+                    boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'
+                    borderRadius={10}
+                    marginTop='3'
+                    marginBottom='3'
+                    padding={2}
+                  >
+                  <Flex>
+                    <Box p="3" mr="400" >
+                      <Text> {value.Roomname} </Text>
+                    </Box>
+                    <Spacer />
+                    <Box
+                      marginRight={3}
+                      marginTop={3}
+                    >
+                      <Text>  / {value.Number} คน </Text>
+                    </Box>
+                    <Box>
+                      <Button mr="4" 
+                        alignItems="center"
+                        onClick={() => {
+                            Router.push("/game/" + value.id);
+                          }}
+                          cursor="pointer"
+                          borderRadius={10}
+                          marginTop={1}
+                      >
+                        เข้าห้องโลดด
+                      </Button>
+                    </Box>
+                  </Flex>
+                  </Box>
                 )
             })}
         </Box>
     )
 }
 export default GameCard;
+
+// {value.Roomname}
+
+// onClick={() => {
+//   Router.push("/game/" + value.id);
+// }}
+
+//   onClick={() => {
+//       Router.push("/game/" + value.id);
+//     }}
+//     borderRadius={10}
+//     variant="outline"
+//     borderWidth={2}
+//     borderColor={'black'}
+//     alignSelf="left"
+//     cursor="pointer"
+//     _hover={{
+//       background:"#c4c4c4"
+//     }}
+//     p={2}
+// >
+//     เข้าห้องโลดด
+// </Button>

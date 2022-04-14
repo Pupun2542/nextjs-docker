@@ -20,7 +20,7 @@ import { useRouter } from "next/router";
 import GroupSidebar from "../../components/GroupSidebar";
 import { useApp } from "../../src/hook/local";
 import GroupCard from "../../components/GroupCard";
-import style from "../../styles/group.module.css";
+// import style from "../../styles/group.module.css";
 import Head from "next/head";
 import { 
   Box,
@@ -28,8 +28,10 @@ import {
   Spacer,
   Center,
   Button,
+  VStack,
  } from '@chakra-ui/react';
  import GameCard from "../../components/GameCard";
+ import Footer from "../../components/footer";
 
  const Game = () => {
 
@@ -55,10 +57,19 @@ import {
              </Head>
 
              <CustomNavbar />
-
+            <Center>
+             <Flex>
+                 <Spacer />
+             </Flex>
+             <VStack w={1000} boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' fontFamily={'Mitr'}>
              <Box>
                 <GameCard />
              </Box>
+             </VStack>
+             </Center>
+
+            <Footer />
+
          </SSRProvider>
      );
  }
