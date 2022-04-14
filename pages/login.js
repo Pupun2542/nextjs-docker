@@ -21,7 +21,6 @@ import {
   FacebookLogo,
   DiscordLogo,
 } from "phosphor-react";
-import { Model } from "tabletop";
 
 function Login() {
   const app = getApp();
