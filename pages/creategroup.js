@@ -235,11 +235,12 @@ export default function CreateGroup() {
     };
     return (
       <Box w={680} h={38}>
-        <Box>
+        <Box >
           <Box id="tags">
             {props.state.map((tag, index) => (
               <Box key={index} className={style.tag} m={1.5} p={1} maxW={600}>
-                <Box>{tag}</Box>
+                <Box>
+                  {tag}</Box>
                 <CloseButton
                   onClick={() => removeTags(index)}
                   rounded={50}
