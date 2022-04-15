@@ -65,6 +65,7 @@ import {
   useCollectionDataOnce,
   useCollectionOnce,
 } from "react-firebase-hooks/firestore";
+import ChatBox from "./chat";
 
 const NavLink = ({ children }) => (
   <Link
@@ -444,6 +445,7 @@ function CustomNavbar() {
           </Flex>
         </Flex>
       </Box>
+      <ChatBox/>
     </>
   );
 }
