@@ -14,17 +14,12 @@ import {
   updateDoc,
   doc,
 } from "firebase/firestore";
-import { getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import "../components/Banner";
-// import CaroselPreview from "../components/caroselPreview";
-import { useDropzone } from "react-dropzone";
 import { useApp } from "../src/hook/local";
-import { UpdateUserGroup } from "../src/services/firestoreservice";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
 import UploadImageModal from "../components/Banner";
-import { UploadBannerImage } from "../src/services/filestoreageservice";
 import {
   getBlob,
   getDownloadURL,
@@ -33,8 +28,7 @@ import {
   uploadBytes,
   uploadString,
 } from "firebase/storage";
-// import { Blob } from "node:buffer";
-import Head from "next/head";
+
 import {
   Box,
   Button,
@@ -124,6 +118,7 @@ export default function CreateGroup() {
   const [averageTime, setAvergeTime] = useState("");
   const [averageTimeUnit, setAvergeTimeUnit] = useState("");
   const [type, setType] = useState("");
+
 
   //ก็อปปี้บรรทัดบนไปวางเพิ่ม หรือเขียนเอง ลักษณะคือ const [state, setState] = useState(true) โดยที่ state คือชื่อตัวแปรที่จะใช้ เช่น durationsw ส่วน setstate คือฟังก์ชั่นที่ไว้ใช้เปลี่ยนค่าตัวแปร
 
@@ -273,15 +268,14 @@ export default function CreateGroup() {
   };
 
   return (
-    <SSRProvider>
       <Box bg="#FDFDFD" maxW={1980}>
         <CustomNavbar />
-        <Flex>
-          <Box minW={400}></Box>
+        <Flex justifyContent={'center'}>
+          {/* <Box minW={400}></Box>
 
-          <Spacer />
+          <Spacer /> */}
 
-          <Center bg={"#D5D5D5"} w={1024}>
+          <Center bg={"#D5D5D5"} MaxW={1024}>
             <VStack>
               <Center>
                 <Box>
@@ -298,8 +292,7 @@ export default function CreateGroup() {
                     bg={"#535353"}
                     p={4}
                     borderTopRadius={10}
-                    maxW={1024}
-                    w={1024}
+                    // maxW={1024}
                     color={"white"}
                   >
                     <Flex>
@@ -1412,9 +1405,9 @@ export default function CreateGroup() {
             </VStack>
           </Center>
 
-          <Spacer />
+          {/* <Spacer />
 
-          <Box minW={400}></Box>
+          <Box minW={400}></Box> */}
         </Flex>
 
         <Center bg={"#343434"} h={180}>
@@ -1452,6 +1445,5 @@ export default function CreateGroup() {
           </Flex>
         </Center>
       </Box>
-    </SSRProvider>
   );
 }
