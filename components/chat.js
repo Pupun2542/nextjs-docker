@@ -1,28 +1,40 @@
 import React from "react";
-import { Box, Flex, IconButton, useDisclosure } from "@chakra-ui/react";
+import { Box, Flex, IconButton, useDisclosure, Center } from "@chakra-ui/react";
 import { Chats } from "phosphor-react";
 
 export default function ChatBox() {
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
     // console.log(isOpen)
   return (
-    <Box position="fixed" right={3} bottom={0}>
-      <IconButton
+    <Flex position="fixed" right={3} bottom={3}>
+      
+      <Box
+        display={isOpen ? "flex" : "none"} 
+        background="tomato"
+        width={340}
+        height={455}
+        float='left' 
+        position='fixed'
+        bottom={0}
+        right={20}
+        
+      >
+        
+      </Box>
+
+      <Center
         background="#343434"
         rounded={100}
-        bottom={3}
         color={"white"}
-        w={16}
-        h={16}
-        justifyContent={"center"}
-        alignContent={"center"}
-        icon={<Chats size={48} />}
+        w={50}
+        h={50}
         _hover={{
           backgroundColor: "#4D4D88",
         }}
-        onClick={onToggle}
-      />
-      <Box display={isOpen ? "flex" : "none"} background="#343434" width={500} height={550} float="left"></Box>
-    </Box>
+        onClick={onToggle}>
+        <Chats size={32} />
+      </Center>
+
+    </Flex>
   );
 }
