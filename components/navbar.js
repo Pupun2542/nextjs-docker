@@ -33,6 +33,8 @@ import {
   ModalCloseButton,
   Hide,
   Show,
+  Badge,
+  IconButton,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import style from "../styles/navbar.module.css";
@@ -51,6 +53,8 @@ import {
   Bell,
   MagnifyingGlass,
   PushPin,
+  Minus,
+  X,
 } from "phosphor-react";
 import {
   collection,
@@ -58,14 +62,19 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  onSnapshot,
+  orderBy,
   query,
+  where,
 } from "firebase/firestore";
 import {
   useCollection,
   useCollectionDataOnce,
   useCollectionOnce,
+  useDocumentDataOnce,
+  useDocumentOnce,
 } from "react-firebase-hooks/firestore";
-import ChatBox from "./chat";
+// import ChatBox from "./chat";
 
 const NavLink = ({ children }) => (
   <Link
@@ -91,46 +100,54 @@ function CustomNavbar() {
   const router = useRouter();
   const [user, loading, error] = useAuthState(auth);
   const breakpoints = {
-    sm: '320px',
-    md: '768px',
-    lg: '960px',
-    xl: '1200px',
-    '2xl': '1536px',
-  }
+    sm: "320px",
+    md: "768px",
+    lg: "960px",
+    xl: "1200px",
+    "2xl": "1536px",
+  };
   const [data, setData] = useState([]);
-  // const [snapshot] = useCollectionOnce(
-  //   collection(db, "UserDetail", user.uid, "pinnedGroup")
-  // );
+  const [chatTab, setChatTab] = useState([]);
 
-  // useEffect(()=>{
-  //   if (user){
-  //     const QuerySnapshot = query(collection(db, "UserDetail", user.uid, "pinnedGroup"))
-  //     getDocs(QuerySnapshot).then(q=>{
-  //       console.log(q.docs)
-  //     })
+  // useEffect(() => {
+  //   if (user && !loading) {
+  //     const QuerySnapshot = query(
+  //       collection(db, "userDetail", user.uid, "pinnedGroup")
+  //     );
+  //     getDocs(QuerySnapshot).then((snapshot) => {
+  //       setData(snapshot.docs().map((doc) => doc));
+  //     });
   //   }
+  // }, [user, loading]);
 
-  // },[user])
+  // useEffect(() => {
+  //   if (user && !loading) {
+  //     const QuerySnapshot = query(
+  //       collection(
+  //         db,
+  //         "userDetail",
+  //         user.uid,
+  //         "chatMessage",
+  //         where("readed", "==", "unread"),
+  //         orderBy("timestamp", "asc")
+  //       )
+  //     );
 
-  useEffect(() => {
-    if (user && !loading) {
-      const QuerySnapshot = query(collection(db, "userDetail", user.uid, "pinnedGroup"))
-      getDocs(QuerySnapshot).then(
-        (snapshot) => {
-          setData(
-            snapshot.docs.map((doc) => doc.data())
-          );
-          // snapshot.docs.map((doc) => console.log(doc.data()))
-
-          // console.log( user.uid,snapshot.docs)
-        }
-      );
-    // getDoc(doc(db, "userDetail", user.uid)).then((snapshot)=>{
-    //   console.log(snapshot.data())
-    // })
-    }
-    
-  },[user, loading]);
+  //     const unsubscribe = onSnapshot(QuerySnapshot, (snapshot) => {
+  //       let unreadtab = [];
+  //       snapshot.docChanges().map((doc) => {
+  //         if (doc.type == "added") {
+  //           const id = doc.data().chatroom;
+  //           if (!unreadtab.includes(id) && unreadtab.length < 5) {
+  //             unreadtab = [...unreadtab, id];
+  //           }
+  //         }
+  //       });
+  //       setUnreadMessage(unreadtab);
+  //     });
+  //     return () => unsubscribe();
+  //   }
+  // }, [user, loading]);
 
   const Loadthumbnail = () => {
     if (user) {
@@ -157,7 +174,6 @@ function CustomNavbar() {
                   <p className={style.prName}>{user.displayName}</p>
                 </Center>
               </Show>
-              
             </Center>
           </MenuButton>
         </Menu>
@@ -185,7 +201,6 @@ function CustomNavbar() {
     <>
       <Box bg="black" h="auto" w="auto" px={5}>
         <Flex h={55} alignItems={"center"} justifyContent={"space-between"}>
-          
           <Show above="md">
             <Flex align={"center"} float={1} cursor="pointer">
               <Text className={style.Logonav} onClick={() => router.push("/")}>
@@ -193,23 +208,22 @@ function CustomNavbar() {
               </Text>
             </Flex>
           </Show>
-          
+
           <Show above="md">
-          <Stack spacing={4} marginLeft="5" bg="white" rounded={10}>
-            <InputGroup>
-              <InputLeftElement
-                pointerEvents="none"
-                children={<MagnifyingGlass color="black" />}
-              />
-              <Input
-                placeholder="ค้นหาบน Comuthor"
-                className={style.search}
-                isDisabled
-              />
-            </InputGroup>
-          </Stack>
+            <Stack spacing={4} marginLeft="5" bg="white" rounded={10}>
+              <InputGroup>
+                <InputLeftElement
+                  pointerEvents="none"
+                  children={<MagnifyingGlass color="black" />}
+                />
+                <Input
+                  placeholder="ค้นหาบน Comuthor"
+                  className={style.search}
+                  isDisabled
+                />
+              </InputGroup>
+            </Stack>
           </Show>
-          
 
           <Spacer />
 
@@ -334,7 +348,7 @@ function CustomNavbar() {
                   <MenuItem
                     minH="48px"
                     as={"button"}
-                    title="Main Hall"
+                    title="Pin"
                     onClick={onOpen}
                   >
                     <PushPin size={32} />
@@ -350,10 +364,10 @@ function CustomNavbar() {
                       {data.length > 0 &&
                         data.map((doc) => (
                           <Text
-                            onClick={()=>router.push("/group/" + doc.id)}
+                            onClick={() => router.push("/group/" + doc.id)}
                             cursor={"pointer"}
                           >
-                          [{doc.tag}]{doc.name}
+                            [{doc.tag}]{doc.name}
                           </Text>
                         ))}
                     </ModalBody>
@@ -416,7 +430,7 @@ function CustomNavbar() {
 
                       <MenuDivider />
                       {/* <MenuItem>Your Servers</MenuItem> */}
-                      <MenuItem className={style.prName} isDisabled>
+                      <MenuItem className={style.prName} onClick={()=>router.push("/profile/"+user.uid)}>
                         Account Settings
                       </MenuItem>
                       <MenuItem
@@ -445,9 +459,160 @@ function CustomNavbar() {
           </Flex>
         </Flex>
       </Box>
-      <ChatBox/>
+      {chatTab.length > 0 ? (
+        chatTab.map((tab) => (
+          <Flex position="fixed" right={3} bottom={0} alignItems="flex-end">
+            <ChatIcon
+              tab={tab}
+              user={user.uid}
+              setChatTab={setChatTab}
+              chatTab={chatTab}
+              db={db}
+            />
+          </Flex>
+        ))
+      ) : (
+        <></>
+      )}
     </>
   );
 }
+const ChatIcon = ({ tab, user, setChatTab, db, chatTab }) => {
+  const QueryUnreadedSnapshot = query(
+    collection(db, "userDetail", user, "chatMessage"),
+    where("readed", "==", false)
+  );
+  const [unreadedSnapshot] = useCollection(QueryUnreadedSnapshot);
+  const unreadnum = unreadedSnapshot.docs.length;
+
+  const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
+
+  return (
+    <>
+      {unreadnum &&
+        unreadnum.length >
+          0(
+            <Center
+              float="left"
+              background="#343434"
+              rounded={100}
+              color={"white"}
+              w={50}
+              h={50}
+              _hover={{
+                backgroundColor: "#4D4D88",
+              }}
+              onClick={onToggle}
+              marginBottom="3"
+            >
+              <Chats size={32} />
+              <Badge>{unreadnum}</Badge>
+            </Center>
+          )}
+      {isOpen && (
+        <ChatBox
+          tab={tab}
+          user={user}
+          onClose={onClose}
+          setTab={setChatTab}
+          isOpen={isOpen}
+          db={db}
+          chatTab={chatTab}
+        />
+      )}
+    </>
+  );
+};
+
+const ChatBox = ({ tab, user, onClose, setTab, isOpen, db, chatTab }) => {
+  const [chatRoomData] = useDocumentDataOnce(doc(db, "chatrooms", tab));
+  const QuerySnapshot = query(collection(db, "chatrooms", tab, "message"));
+  const [snapshot] = useCollection(QuerySnapshot);
+  const removetab = () => {
+    setTab([...chatTab.filter((v, i) => v != tab)]);
+    onClose();
+  };
+
+  return (
+    <Box
+      display={isOpen ? "flex" : "none"}
+      background="tomato"
+      width={340}
+      height={455}
+      float="left"
+      marginRight={5}
+    >
+      <Box>
+        <Image
+          src={chatRoomData.thumbnail}
+          w={25}
+          h={25}
+          rounded="full"
+          float="left"
+          marginLeft={5}
+        />
+        <Box>{chatRoomData.name}</Box>
+        <IconButton
+          onClick={onClose}
+          icon={<Minus size={32} weight="bold" />}
+          float={"left"}
+        />
+        <IconButton
+          onClick={removetab}
+          icon={<X size={32} weight="bold" />}
+          float={"left"}
+        />
+
+        <Box overflowY="scroll">
+          {snapshot.docs.map((doc, k) => (
+            <Flex
+              flexDirection={
+                doc.data().senderId == user.uid ? "row-reverse" : "row"
+              }
+              key={k}
+              alignItems={"center"}
+              padding="20px"
+              maxH={500}
+            >
+              {/* {console.log()} */}
+              <Box fontFamily={"Mitr"}>
+                {doc.data().senderId == user.uid ? (
+                  <Box minW={280} maxW={320} marginBottom={5}>
+                    <Text fontSize={12}>{doc.data().sender}</Text>
+                    <Text
+                      fontSize={16}
+                      backgroundColor={"blue.100"}
+                      rounded="5"
+                      fontFamily={"Mitr"}
+                      p={2}
+                    >
+                      {doc.data().text}
+                    </Text>
+                    {console.log()}
+                    {/* <Text fontSize={10}>{data.timeStamp.toDate()}</Text> */}
+                  </Box>
+                ) : (
+                  <Box minW={280} maxW={320} marginBottom={5}>
+                    <Text fontSize={12}>{doc.data().sender}</Text>
+                    <Text
+                      fontSize={16}
+                      fontFamily="Mitr"
+                      backgroundColor={"red.200"}
+                      rounded="5"
+                      p={2}
+                    >
+                      {doc.data().text}
+                    </Text>
+                    {/* <Text fontSize={10}>{data.timeStamp.toDate()}</Text> */}
+                  </Box>
+                )}
+              </Box>
+            </Flex>
+          ))}
+        </Box>
+      </Box>
+    </Box>
+  );
+};
 
 export default CustomNavbar;
