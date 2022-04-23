@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef,
+} from "react";
 import {
   Box,
   Flex,
@@ -28,7 +34,9 @@ import {
   query,
   where,
   addDoc,
-  serverTimestamp
+  serverTimestamp,
+  writeBatch,
+  limit,
 } from "firebase/firestore";
 import { Minus, X } from "phosphor-react";
 
@@ -171,14 +179,15 @@ const ChatBox = ({ atab, user, onClose, isOpen, db }) => {
     changeTab(atab);
   }, []);
   const [msg, setMsg] = useState("");
-  // console.log(tabState)
+  const unrededref = useRef(false);
 
   const [chatRoomData, loading, error] = useDocumentDataOnce(
     doc(db, "chatrooms", tabState.opentab)
   );
   const [name, setName] = useState("");
   const QuerySnapshot = query(
-    collection(db, "chatrooms", tabState.opentab, "message"), orderBy("timeStamp")
+    collection(db, "chatrooms", tabState.opentab, "message"),
+    orderBy("timeStamp")
   );
   const [snapshot, loadingsnapshot, errorsnapshot] =
     useCollection(QuerySnapshot);
@@ -192,7 +201,7 @@ const ChatBox = ({ atab, user, onClose, isOpen, db }) => {
     // console.log(chatRoomData,loading)
     if (!loading && chatRoomData) {
       if (chatRoomData.type == "private") {
-        const member = chatRoomData.member.filter((v, i) => v != user.uid)[0];
+        const member = chatRoomData.member.find((v) => v != user.uid);
         const filteredname = userData.find(
           (v) => v.userId == member
         ).displayName;
@@ -206,23 +215,63 @@ const ChatBox = ({ atab, user, onClose, isOpen, db }) => {
     }
   }, [chatRoomData, loading]);
 
-  // console.log(loading)
+  useEffect(() => {
+    if (!snapshot.docs[0].data().readedby.includes(user.uid)) {
+      unrededref.current = true;
+    }
+  });
 
-  const onChatSent = () =>{
+  const onChatSent = () => {
     if (msg) {
       addDoc(collection(db, "chatrooms", tabState.opentab, "message"), {
         sender: user.displayName,
         senderId: user.uid,
         text: msg,
-        timeStamp: serverTimestamp(),
+        timestamp: serverTimestamp(),
+        readedby: [user.uid],
       });
       setMsg("");
     }
-  }
-  const handleFocus = () =>{
-    
+  };
+  const handleFocus = () => {
+    if (unrededref) {
+      const q = query(
+        collection(db, "userDetail", user.uid, "chatMessage"),
+        where(senderId, "!=", user.uid),
+        limit(50)
+      );
+      getDocs(q).then((docs) => {
+        if (docs) {
+          const batch = writeBatch();
+          docs.docs.map((doc) => {
+            batch.update(doc.ref, { readed: true });
+          });
+          batch.commit();
+        }
+      });
+      const q2 = query(
+        collection(db, "chatrooms", tabState.opentab, "message"),
+        orderBy("timestamp", "asc"),
+        limit(50)
+      );
+      getDocs(q2).then((docs) => {
+        const newdocs = docs.docs.filter(
+          (v, i) => !v.data().readedby.includes(user.uid)
+        );
+        if (newdocs) {
+          const batch = writeBatch();
+          docs.docs.map((doc) => {
+            batch.update(doc.ref, {
+              readedby: [...doc.data().readedby, user.uid],
+            });
+          });
+          batch.commit();
+        }
+      });
+    }
+
     // console.log("focus")
-  }
+  };
 
   if (loading) {
     return <></>;
@@ -240,80 +289,89 @@ const ChatBox = ({ atab, user, onClose, isOpen, db }) => {
       justifyContent="space-between"
     >
       {/* <Box width="100%"> */}
-        <Box justifyContent="space-between" id="headerbox">
-          <Image
-            src={chatRoomData.thumbnail}
-            w={25}
-            h={25}
-            rounded="full"
-            float="left"
-            marginLeft={5}
+      <Box justifyContent="space-between" id="headerbox">
+        <Image
+          src={chatRoomData.thumbnail}
+          w={25}
+          h={25}
+          rounded="full"
+          float="left"
+          marginLeft={5}
+        />
+        <Box float="left">{name}</Box>
+        <Box float="left">
+          <IconButton
+            onClick={onClose}
+            icon={<Minus size={24} weight="bold" />}
+            float={"left"}
           />
-          <Box float="left">{name}</Box>
-          <Box float="left">
-            <IconButton
-              onClick={onClose}
-              icon={<Minus size={24} weight="bold" />}
-              float={"left"}
-            />
-            <IconButton
-              onClick={remove}
-              icon={<X size={24} weight="bold" />}
-              float={"left"}
-            />
-          </Box>
+          <IconButton
+            onClick={remove}
+            icon={<X size={24} weight="bold" />}
+            float={"left"}
+          />
         </Box>
+      </Box>
 
-        <Box overflowY="auto" id="msgbox" alignSelf={'stretch'} flexGrow='1'>
-          {snapshot &&
-            snapshot.docs.map((doc, k) => (
-              <Flex
-                flexDirection={
-                  doc.data().senderId == user.uid ? "row-reverse" : "row"
-                }
-                key={k}
-                alignSelf={"flex-end"}
-                padding="5px"
-                // maxH={500}
-              >
-                <Box fontFamily={"Mitr"}>
-                  {doc.data().senderId == user.uid ? (
-                    <Box minW={280} maxW={320} marginBottom={5}>
-                      <Text fontSize={12}>{doc.data().sender}</Text>
-                      <Text
-                        fontSize={16}
-                        backgroundColor={"blue.100"}
-                        rounded="5"
-                        fontFamily={"Mitr"}
-                        p={2}
-                      >
-                        {doc.data().text}
-                      </Text>
-                    </Box>
-                  ) : (
-                    <Box minW={280} maxW={320} marginBottom={5}>
-                      <Text fontSize={12}>{doc.data().sender}</Text>
-                      <Text
-                        fontSize={16}
-                        fontFamily="Mitr"
-                        backgroundColor={"red.200"}
-                        rounded="5"
-                        p={2}
-                      >
-                        {doc.data().text}
-                      </Text>
-                    </Box>
-                  )}
-                </Box>
-              </Flex>
-            ))}
-        </Box>
+      <Box overflowY="auto" id="msgbox" alignSelf={"stretch"} flexGrow="1">
+        {snapshot &&
+          snapshot.docs.map((doc, k) => (
+            <Flex
+              flexDirection={
+                doc.data().senderId == user.uid ? "row-reverse" : "row"
+              }
+              key={k}
+              alignSelf={"flex-end"}
+              padding="5px"
+              // maxH={500}
+            >
+              <Box fontFamily={"Mitr"}>
+                {doc.data().senderId == user.uid ? (
+                  <Box minW={280} maxW={320} marginBottom={5}>
+                    <Text fontSize={12}>{doc.data().sender}</Text>
+                    <Text
+                      fontSize={16}
+                      backgroundColor={"blue.100"}
+                      rounded="5"
+                      fontFamily={"Mitr"}
+                      p={2}
+                    >
+                      {doc.data().text}
+                    </Text>
+                  </Box>
+                ) : (
+                  <Box minW={280} maxW={320} marginBottom={5}>
+                    <Text fontSize={12}>{doc.data().sender}</Text>
+                    <Text
+                      fontSize={16}
+                      fontFamily="Mitr"
+                      backgroundColor={"red.200"}
+                      rounded="5"
+                      p={2}
+                    >
+                      {doc.data().text}
+                    </Text>
+                  </Box>
+                )}
+              </Box>
+            </Flex>
+          ))}
+      </Box>
       {/* </Box> */}
       <Box flexDir="row" justifyContent="space-between">
-          <Input w="65%" marginLeft={5} value={msg} onChange={(e)=>setMsg(e.target.value)} onFocus={handleFocus} />
-          <Button float="right" marginRight={5} onClick={onChatSent}>
-            send
-          </Button>
+        <Input
+          w="65%"
+          marginLeft={5}
+          value={msg}
+          onChange={(e) => setMsg(e.target.value)}
+          onFocus={handleFocus}
+          onKeyUp={(event) =>
+            event.key === "Enter" ? onChatSent() : null
+          }
+        />
+        <Button float="right" marginRight={5} onClick={onChatSent}>
+          send
+        </Button>
       </Box>
     </Box>
   );

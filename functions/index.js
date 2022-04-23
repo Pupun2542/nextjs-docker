@@ -53,7 +53,7 @@ exports.onChatAdd = functions.firestore
                   .add({
                     chatroom: parentData.data().id,
                     message: snap.data().text,
-                    name: name,
+                    name: snap.data().sender,
                     timestamp: snap.data().timeStamp,
                     readed: false,
                   })

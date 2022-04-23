@@ -67,7 +67,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { useApp, useNotifications } from "../src/hook/local";
+import { useApp, useNotifications, useUser } from "../src/hook/local";
 // import ChatBox from "./chat";
 
 const NavLink = ({ children }) => (
@@ -91,7 +91,6 @@ function CustomNavbar() {
   // const db = getFirestore(app);
   const {app, auth, db} = useApp();
   const { notidata, chatNotiData } = useNotifications()
-  useNotifications()
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   // const { isOpen: isNotiOpen, onOpen: onNotiOpen, onClose: onNotiClose } = useDisclosure();
@@ -108,6 +107,7 @@ function CustomNavbar() {
   const [data, setData] = useState([]);
   const [unreadChat, setUnreadChat] = useState([]);
   const [unreadnoti, setUnreadnoti] = useState([]);
+  // const userdata = useUser()
   // const 
 
   useEffect(() => {
@@ -245,8 +245,8 @@ function CustomNavbar() {
                   {chatNotiData?
                     chatNotiData.map((data)=>(
                       <Box>
-                        <Image src={data.thumbnail} sizes={16} rounded />
-                        <Text>{data.type == 'private'? data.sender : data.chatname}</Text>
+                        {/* <Image src={data.thumbnail} sizes={16} rounded /> */}
+                        <Text>{data.name}</Text>
                         <Text>{data.message}</Text>
                       </Box>
                     ))
