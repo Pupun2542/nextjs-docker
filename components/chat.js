@@ -176,7 +176,8 @@ const ChatBox = ({ atab, user, onClose, isOpen, db }) => {
   // const tabHead = fetch("/api/getuserdetail",{method: POST, body: {uid} })
   const { tabState, addTab, removeTab, changeTab } = useTab();
   useEffect(() => {
-    changeTab(atab);
+    // changeTab(atab);
+    console.log(tabState.opentab)
   }, []);
   const [msg, setMsg] = useState("");
   const unrededref = useRef(false);
@@ -187,7 +188,7 @@ const ChatBox = ({ atab, user, onClose, isOpen, db }) => {
   const [name, setName] = useState("");
   const QuerySnapshot = query(
     collection(db, "chatrooms", tabState.opentab, "message"),
-    orderBy("timeStamp")
+    orderBy("timestamp")
   );
   const [snapshot, loadingsnapshot, errorsnapshot] =
     useCollection(QuerySnapshot);
@@ -216,9 +217,14 @@ const ChatBox = ({ atab, user, onClose, isOpen, db }) => {
   }, [chatRoomData, loading]);
 
   useEffect(() => {
-
+    if (snapshot){
+      console.log(snapshot.docs);
+    }
+    
     if (snapshot&&snapshot.docs[0]&&!snapshot.docs[0].data().readedby.includes(user.uid)) {
       unrededref.current = true;
+    }else {
+      unrededref.current = false;
     }
   },[snapshot]);
 
@@ -238,12 +244,12 @@ const ChatBox = ({ atab, user, onClose, isOpen, db }) => {
     if (unrededref) {
       const q = query(
         collection(db, "userDetail", user.uid, "chatMessage"),
-        where(senderId, "!=", user.uid),
+        where('senderId', "!=", user.uid),
         limit(50)
       );
       getDocs(q).then((docs) => {
         if (docs) {
-          const batch = writeBatch();
+          const batch = writeBatch(db);
           docs.docs.map((doc) => {
             batch.update(doc.ref, { readed: true });
           });
@@ -260,7 +266,7 @@ const ChatBox = ({ atab, user, onClose, isOpen, db }) => {
           (v, i) => !v.data().readedby.includes(user.uid)
         );
         if (newdocs) {
-          const batch = writeBatch();
+          const batch = writeBatch(db);
           docs.docs.map((doc) => {
             batch.update(doc.ref, {
               readedby: [...doc.data().readedby, user.uid],
