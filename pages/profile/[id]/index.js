@@ -67,7 +67,7 @@ export default function profile() {
             //         roomId = doc.data().id
             //     }
             // });
-            const docId = docs.docs.find((v)=> v.data().member.include(id));
+            const docId = docs.docs.find((v)=> v.data().member.includes(id));
             if (docId){
               roomId = docId.data().id;
             }else{

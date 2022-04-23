@@ -216,10 +216,11 @@ const ChatBox = ({ atab, user, onClose, isOpen, db }) => {
   }, [chatRoomData, loading]);
 
   useEffect(() => {
-    if (!snapshot.docs[0].data().readedby.includes(user.uid)) {
+
+    if (snapshot&&snapshot.docs[0]&&!snapshot.docs[0].data().readedby.includes(user.uid)) {
       unrededref.current = true;
     }
-  });
+  },[snapshot]);
 
   const onChatSent = () => {
     if (msg) {
