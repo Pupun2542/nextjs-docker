@@ -244,13 +244,14 @@ const ChatBox = ({ atab, user, onClose, isOpen, db }) => {
     if (unrededref) {
       const q = query(
         collection(db, "userDetail", user.uid, "chatMessage"),
-        where('senderId', "!=", user.uid),
         limit(50)
       );
       getDocs(q).then((docs) => {
         if (docs) {
+          // console.log(docs.docs())
           const batch = writeBatch(db);
           docs.docs.map((doc) => {
+            console.log(doc.data());
             batch.update(doc.ref, { readed: true });
           });
           batch.commit();
