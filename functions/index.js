@@ -32,7 +32,7 @@ exports.onChatAdd = functions.firestore
   .onCreate((snap, context) => {
     console.log(context.params);
     functions.logger.log("chatroomid " + context.params.chatRoomId);
-    db.doc() // `chatrooms/${context.params.chatRoomId}`
+    db.doc(`chatrooms/${context.params.chatRoomId}`)
       .get()
       .then((parentData) => {
         functions.logger.log("parentdata " + parentData.data());
@@ -49,12 +49,13 @@ exports.onChatAdd = functions.firestore
                 name = parentData.data().name;
               }
               if (parentData.data().type === "private") {
+                functions.logger.log("timestamp " + snap.data().timestamp);
                 db.collection(`userDetail/${target}/chatMessage`)
                   .add({
                     chatroom: parentData.data().id,
                     message: snap.data().text,
                     name: snap.data().sender,
-                    timestamp: snap.data().timeStamp,
+                    timestamp: snap.data().timestamp,
                     readed: false,
                   })
                   .then();
@@ -65,7 +66,7 @@ exports.onChatAdd = functions.firestore
                     chatroom: parentData.data().id,
                     message: snap.data().text,
                     name: name,
-                    timestamp: snap.data().timeStamp,
+                    timestamp: snap.data().timestamp,
                     readed: false,
                   })
                   .then();

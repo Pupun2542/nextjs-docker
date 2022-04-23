@@ -267,10 +267,11 @@ const ChatBox = ({ atab, user, onClose, isOpen, db }) => {
         );
         if (newdocs) {
           const batch = writeBatch(db);
-          docs.docs.map((doc) => {
-            batch.update(doc.ref, {
-              readedby: [...doc.data().readedby, user.uid],
-            });
+          newdocs.map((doc) => {
+            // batch.update(doc.ref, {
+            //   readedby: [...doc.data().readedby, user.uid],
+            // });
+            // console.log(doc.data().readedby.includes(user.uid))
           });
           batch.commit();
         }
