@@ -32,11 +32,8 @@ import {
 
 
 export default function Groups() {
-  const app = useApp();
-  const db = getFirestore(app);
-  const auth = getAuth(app);
+  const {app, auth, db} = useApp();
   const Router = useRouter();
-  // const [data, setData] = useState([]);
 
   const CurrentUser = () => {
     const [user, loading, error] = useAuthState(auth);
@@ -49,9 +46,7 @@ export default function Groups() {
 
     if (loading) {
       return (
-        <SSRProvider>
           <CustomNavbar />
-        </SSRProvider>
       );
     }
     if (error) {
@@ -64,16 +59,7 @@ export default function Groups() {
 
     if (user) {
       return (
-        <SSRProvider>
           <Box bg="#FDFDFD">
-            <Head>
-              <link rel="shortcut icon" href="favicon.ico"></link>
-              <title>Comuthor</title>
-              <meta
-                name="viewport"
-                content="initial-scale=1.0, width=device-width"
-              />
-            </Head>
 
             <CustomNavbar />
             
@@ -96,7 +82,6 @@ export default function Groups() {
               </Box>
             </Flex>
           </Box>
-        </SSRProvider>
       );
     }
     return <></>;

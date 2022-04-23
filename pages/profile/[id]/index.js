@@ -34,9 +34,10 @@ export default function profile() {
 
   const router = useRouter();
   const { id } = router.query;
-  const app = useApp();
-  const db = getFirestore(app);
-  const auth = getAuth(app);
+  // const app = useApp();
+  // const db = getFirestore(app);
+  // const auth = getAuth(app);
+  const {app, auth, db} = useApp();
   const [user, loading, error] = useAuthState(auth);
   const [userDetail, setUserDetail] = useState(null);
   const [newtab, setNewtab] = useState("");
@@ -60,19 +61,34 @@ export default function profile() {
     getDocs(query(collection(db, "chatrooms"), where("member", "array-contains", user.uid), where("type","==", "private"))).then((docs)=>{
         
         if (!docs.empty){
-            docs.docs.map(doc=>{
-                // console.log(doc.data())
-                if (doc.data().member.includes(id)){
-                    roomId = doc.data().id
-                }
-            });
+            // docs.docs.map(doc=>{
+            //     // console.log(doc.data())
+            //     if (doc.data().member.includes(id)){
+            //         roomId = doc.data().id
+            //     }
+            // });
+            const docId = docs.docs.find((v)=> v.data().member.include(id));
+            if (docId){
+              roomId = docId.data().id;
+            }else{
+              addDoc(collection(db, "chatrooms"),{ 
+                member: [user.uid, id],
+                type: "private",
+            }).then((created)=>{
+                roomId = created.id
+                updateDoc(doc(db, "chatrooms", created.id), {
+                    id: created.id,
+                }).then(()=>console.log("updated"))
+            })
+            }
+            
+            
             // console.log("not empty")
         }else{
             // console.log("empty")
             addDoc(collection(db, "chatrooms"),{ 
                 member: [user.uid, id],
                 type: "private",
-                thumbnail: [user.photoURL]
             }).then((created)=>{
                 // console.log("created")
                 roomId = created.id

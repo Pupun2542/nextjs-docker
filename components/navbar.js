@@ -67,6 +67,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import { useApp, useNotifications } from "../src/hook/local";
 // import ChatBox from "./chat";
 
 const NavLink = ({ children }) => (
@@ -85,11 +86,16 @@ const NavLink = ({ children }) => (
 );
 
 function CustomNavbar() {
-  const app = getApp();
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+  // const app = getApp();
+  // const auth = getAuth(app);
+  // const db = getFirestore(app);
+  const {app, auth, db} = useApp();
+  const { notidata, chatNotiData } = useNotifications()
+  useNotifications()
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  // const { isOpen: isNotiOpen, onOpen: onNotiOpen, onClose: onNotiClose } = useDisclosure();
+  // const { isOpen: isChatOpen, onOpen: onChatOpen, onClose: onChatClose } = useDisclosure();
   const router = useRouter();
   const [user, loading, error] = useAuthState(auth);
   const breakpoints = {
@@ -100,7 +106,9 @@ function CustomNavbar() {
     "2xl": "1536px",
   };
   const [data, setData] = useState([]);
-  const [chatTab, setChatTab] = useState([]);
+  const [unreadChat, setUnreadChat] = useState([]);
+  const [unreadnoti, setUnreadnoti] = useState([]);
+  // const 
 
   useEffect(() => {
     if (user && !loading) {
@@ -115,6 +123,17 @@ function CustomNavbar() {
       });
     }
   }, [user, loading]);
+
+  useEffect(()=>{
+    if (chatNotiData.length>0){
+      setUnreadChat(chatNotiData.filter((v,i)=> v.readed == false));
+    }
+  },[chatNotiData])
+  useEffect(()=>{
+    if (notidata.length>0){
+      setUnreadnoti(notidata.filter((v,i)=> v.readed == false));
+    }
+  },[notidata])
 
   const Loadthumbnail = () => {
     if (user) {
@@ -207,7 +226,8 @@ function CustomNavbar() {
                     minH={50}
                     title="Chats"
                     // isDisabled
-                    onClick={() => router.push("/chat")}
+
+                    // onClick={() => router.push("/chat")}
                   >
                     <Center
                       bg="#FFC75A"
@@ -219,7 +239,22 @@ function CustomNavbar() {
                     >
                       <Chats size={32} color="#6768AB" />
                     </Center>
+                    {unreadChat.length>0&&(<Badge bg="red" rounded={100} pos="absolute" top={0} left={6}>{unreadChat.length}</Badge>)}
                   </MenuButton>
+                  <Box>
+                  {chatNotiData?
+                    chatNotiData.map((data)=>(
+                      <Box>
+                        <Image src={data.thumbnail} sizes={16} rounded />
+                        <Text>{data.type == 'private'? data.sender : data.chatname}</Text>
+                        <Text>{data.message}</Text>
+                      </Box>
+                    ))
+                  :(
+                    <></>
+                  )}
+                  </Box>
+                  
 
                   {/* <MenuList minWidth={"auto"} ml={-1}>
 
@@ -254,7 +289,10 @@ function CustomNavbar() {
                       padding={1}
                     >
                       <Bell size={32} color="#6768AB" />
+                      {unreadnoti.length>0&&(<Badge bg="red" rounded={100} pos="absolute" top={0} left={6}>{unreadnoti.length}</Badge>)}
+                      
                     </Center>
+                    
                   </MenuButton>
                 </Menu>
               )}

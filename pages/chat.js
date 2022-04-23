@@ -34,9 +34,10 @@ import Head from "next/head";
 import { useCollection } from 'react-firebase-hooks/firestore'
 
 function chat() {
-  const app = useApp();
-  const db = getFirestore(app);
-  const auth = getAuth(app);
+  const {app, auth, db} = useApp();
+  // const app = useApp();
+  // const db = getFirestore(app);
+  // const auth = getAuth(app);
   const router = useRouter();
 
   const [text, setText] = useState("");

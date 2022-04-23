@@ -62,9 +62,10 @@ import {
 } from "phosphor-react";
 
 export default function Group() {
-  const app = useApp();
-  const db = getFirestore(app);
-  const auth = getAuth(app);
+  // const app = useApp();
+  // const db = getFirestore(app);
+  // const auth = getAuth(app);
+  const {app, auth, db} = useApp();
   const Router = useRouter();
   // const [show, setShow] = useState(false);
   const {

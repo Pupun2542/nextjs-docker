@@ -29,9 +29,10 @@ import {
 import { Flag, Handshake, HouseLine, PushPin } from "phosphor-react";
 
 function GroupSidebar() {
-  const app = useApp();
-  const db = getFirestore(app);
-  const auth = getAuth(app);
+  const {app, auth, db} = useApp();
+  // const app = useApp();
+  // const db = getFirestore(app);
+  // const auth = getAuth(app);
   const [commu, setCommu] = useState([]);
   const [loading, setLoading] = useState(true);
   const Router = useRouter();

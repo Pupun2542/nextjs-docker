@@ -69,9 +69,10 @@ import {
 import GroupSidebar from "../components/GroupSidebar";
 
 export default function CreateGroup() {
-  const app = useApp();
-  const db = getFirestore(app);
-  const auth = getAuth(app);
+  const {app, auth, db} = useApp();
+  // const app = useApp();
+  // const db = getFirestore(app);
+  // const auth = getAuth(app);
   const [user, loading, error] = useAuthState(auth);
   const Router = useRouter();
   const store = getStorage(app);

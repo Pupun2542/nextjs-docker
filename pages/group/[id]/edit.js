@@ -59,9 +59,10 @@ import {
 import { FacebookLogo, DiscordLogo } from "phosphor-react";
 
 export default function Edit() {
-  const app = useApp();
-  const db = getFirestore(app);
-  const auth = getAuth(app);
+  // const app = useApp();
+  // const db = getFirestore(app);
+  // const auth = getAuth(app);
+  const {app, auth, db} = useApp();
   const [user, loading, error] = useAuthState(auth);
   const Router = useRouter();
   const store = getStorage(app);

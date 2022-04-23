@@ -32,9 +32,11 @@ function GroupCard() {
   const Router = useRouter();
   const { bws } = Router.query;
 
-  const app = useApp();
-  const db = getFirestore(app);
-  const auth = getAuth(app);
+  const {app, auth, db} = useApp();
+
+  // const app = useApp();
+  // const db = getFirestore(app);
+  // const auth = getAuth(app);
   const [commu, setCommu] = useState([]);
   const [loading, setLoading] = useState(true);
 

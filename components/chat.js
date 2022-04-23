@@ -165,6 +165,7 @@ const ChatIcon = ({ user, db, atab }) => {
 
 const ChatBox = ({ atab, user, onClose, isOpen, db }) => {
   const userData = useUser();
+  // const tabHead = fetch("/api/getuserdetail",{method: POST, body: {uid} })
   const { tabState, addTab, removeTab, changeTab } = useTab();
   useEffect(() => {
     changeTab(atab);
@@ -217,6 +218,10 @@ const ChatBox = ({ atab, user, onClose, isOpen, db }) => {
       });
       setMsg("");
     }
+  }
+  const handleFocus = () =>{
+    
+    // console.log("focus")
   }
 
   if (loading) {
@@ -305,7 +310,7 @@ const ChatBox = ({ atab, user, onClose, isOpen, db }) => {
         </Box>
       {/* </Box> */}
       <Box flexDir="row" justifyContent="space-between">
-          <Input w="65%" marginLeft={5} value={msg} onChange={(e)=>setMsg(e.target.value)} />
+          <Input w="65%" marginLeft={5} value={msg} onChange={(e)=>setMsg(e.target.value)} onFocus={handleFocus} />
           <Button float="right" marginRight={5} onClick={onChatSent}>
             send
           </Button>
