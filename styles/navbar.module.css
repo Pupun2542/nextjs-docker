@@ -16,13 +16,9 @@
 
 .Logonav{
   /* Comuthor */
-
 /* position: absolute; */
-width: auto;
-height: auto;
 /* left: 23px;
 top: 15px; */
-
 /* font logo */
 
 font-family: Mitr;
@@ -30,6 +26,8 @@ font-style: normal;
 font-weight: 700;
 font-size: 30px;
 line-height: 38px;
+;
+
 
 /* white */
 

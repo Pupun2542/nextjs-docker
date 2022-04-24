@@ -197,7 +197,7 @@ function CustomNavbar() {
             
 
           <Hide below="md">
-            <Stack spacing={4} marginLeft="5" bg="white" rounded={10} borderWidth={2} borderColor={'black'}>
+            <Stack marginLeft="5" bg="white" rounded={10} borderWidth={2} borderColor={'black'}>
               <InputGroup>
                 <InputLeftElement 
                   pointerEvents="none"
@@ -223,12 +223,7 @@ function CustomNavbar() {
                     variant="link"
                     cursor="pointer"
                     minW={0}
-                    minH={50}
                     title="Chats"
-                    borderColor={'black'}
-                    borderWidth={'50'}
-                    // isDisabled
-                    // onClick={() => router.push("/chat")}
                   >
                     <Center
                       bg="white"
@@ -244,32 +239,20 @@ function CustomNavbar() {
                     {unreadChat.length>0&&(<Badge bg="red" rounded={100} pos="absolute" top={0} left={6}>{unreadChat.length}</Badge>)}
                   </MenuButton>
                   
-                  <Box>
-                  {chatNotiData?
-                    chatNotiData.map((data)=>(
-                      <Box>
-                        {/* <Image src={data.thumbnail} sizes={16} rounded /> */}
-                        <Text>{data.name}</Text>
-                        <Text>{data.message}</Text>
-                      </Box>
-                    ))
-                  :(
-                    <></>
-                  )}
-                  </Box>
+                  {/* <Box>
+                    {chatNotiData?
+                      chatNotiData.map((data)=>(
+                        <Box> */}
+                          {/* <Image src={data.thumbnail} sizes={16} rounded /> */}
+                          {/* <Text>{data.name}</Text>
+                          <Text>{data.message}</Text>
+                        </Box>
+                      ))
+                    :(
+                      <></>
+                    )}
+                  </Box> */}
                   
-
-                  {/* <MenuList minWidth={"auto"} ml={-1}>
-
-                        <MenuItem minH="48px" as={"a"} href="#" title='Main Hall'>
-                          <House size={32} /> 
-                        </MenuItem>
-
-                        <MenuItem minH="48px" as={"a"} href="#" title='Create Commu'>
-                          <Plus size={32} />
-                        </MenuItem>
-                        
-                      </MenuList> */}
                 </Menu>
               )}
 
