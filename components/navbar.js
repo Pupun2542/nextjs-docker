@@ -67,7 +67,8 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { useApp, useNotifications, useUser } from "../src/hook/local";
+import { useApp, useNotifications, useUser, useTab } from "../src/hook/local";
+import { Chatsidebar } from "./chat";
 // import ChatBox from "./chat";
 
 const NavLink = ({ children }) => (
@@ -90,11 +91,12 @@ function CustomNavbar() {
   // const auth = getAuth(app);
   // const db = getFirestore(app);
   const {app, auth, db} = useApp();
-  const { notidata, chatNotiData } = useNotifications()
+  const { notidata, chatNotiData } = useNotifications();
+  const { tabState, addTab, removeTab, changeTab } = useTab();
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // const { isOpen: isNotiOpen, onOpen: onNotiOpen, onClose: onNotiClose } = useDisclosure();
-  // const { isOpen: isChatOpen, onOpen: onChatOpen, onClose: onChatClose } = useDisclosure();
+  const { isOpen: isNotiOpen, onOpen: onNotiOpen, onClose: onNotiClose, onToggle: onNotiToggle } = useDisclosure();
+  const { isOpen: isChatOpen, onOpen: onChatOpen, onClose: onChatClose, onToggle: onChatToggle } = useDisclosure();
   const router = useRouter();
   const [user, loading, error] = useAuthState(auth);
   const breakpoints = {
@@ -126,6 +128,7 @@ function CustomNavbar() {
 
   useEffect(()=>{
     if (chatNotiData.length>0){
+      console.log(chatNotiData);
       setUnreadChat(chatNotiData.filter((v,i)=> v.readed == false));
     }
   },[chatNotiData])
@@ -227,7 +230,7 @@ function CustomNavbar() {
                     title="Chats"
                     // isDisabled
 
-                    // onClick={() => router.push("/chat")}
+                    // onClick={onChatToggle}
                   >
                     <Center
                       bg="#FFC75A"
@@ -241,19 +244,25 @@ function CustomNavbar() {
                     </Center>
                     {unreadChat.length>0&&(<Badge bg="red" rounded={100} pos="absolute" top={0} left={6}>{unreadChat.length}</Badge>)}
                   </MenuButton>
-                  <Box>
-                  {chatNotiData?
+                  {/* <Box display={isChatOpen? "fixed" : "none"} top={20} width={200} height={300}>  */}
+                  <MenuList>
+                  {chatNotiData.length>0?
                     chatNotiData.map((data)=>(
-                      <Box>
-                        {/* <Image src={data.thumbnail} sizes={16} rounded /> */}
+                      <MenuItem 
+                        minH="50px"
+                        onClick={()=>changeTab(data.chatroom)}
+                      >
+                        <Image src={data.thumbnail} sizes={16} rounded />
                         <Text>{data.name}</Text>
                         <Text>{data.message}</Text>
-                      </Box>
+                      </MenuItem>
                     ))
                   :(
                     <></>
                   )}
-                  </Box>
+                  </MenuList>
+
+                  {/* </Box> */}
                   
 
                   {/* <MenuList minWidth={"auto"} ml={-1}>
@@ -465,6 +474,7 @@ function CustomNavbar() {
           </Flex>
         </Flex>
       </Box>
+      <Chatsidebar user={user} db={db} />
     </>
   );
 }
