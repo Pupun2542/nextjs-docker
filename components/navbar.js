@@ -92,7 +92,7 @@ function CustomNavbar() {
   // const db = getFirestore(app);
   const {app, auth, db} = useApp();
   const { notidata, chatNotiData } = useNotifications();
-  const { tabState, addTab, removeTab, changeTab } = useTab();
+  const { tabState, addTab, removeTab, changeTab, closeTab } = useTab();
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: isNotiOpen, onOpen: onNotiOpen, onClose: onNotiClose, onToggle: onNotiToggle } = useDisclosure();
@@ -153,14 +153,14 @@ function CustomNavbar() {
               textDecoration: "none",
             }}
           >
-            <Center bg="#6768AB" rounded={50} minHeight={38}>
+            <Center bg="white" rounded={50} minHeight={38} borderWidth={2} borderColor={'black'}>
               <Center px={0}>
                 <Avatar h={41} w={41} src={user.photoURL} />
               </Center>
 
               <Show above="lg">
-                <Center width={"auto"} h={38} px={5}>
-                  <p className={style.prName}>{user.displayName}</p>
+                <Center width={"auto"} h={41} px={5}>
+                  <Center fontFamily={'Mitr'} fontWeight={150} color={'black'}>{user.displayName}</Center>
                 </Center>
               </Show>
             </Center>
@@ -188,20 +188,21 @@ function CustomNavbar() {
 
   return (
     <>
-      <Box bg="black" h="auto" w="auto" px={5}>
+      <Box bg="#4C4D88" h="auto" w="auto" px={5}>
         <Flex h={55} alignItems={"center"} justifyContent={"space-between"}>
-          {/* <Show above="md"> */}
+          <Hide below="md">
             <Flex align={"center"} float={1} cursor="pointer">
-              <Text className={style.Logonav} onClick={() => router.push("/")}>
+              <Text className={style.Logonav} borderStyle={'black'} onClick={() => router.push("/")}>
                 Comuthor
               </Text>
             </Flex>
-          {/* </Show> */}
+          </Hide>  
+            
 
-          <Show above="md">
-            <Stack spacing={4} marginLeft="5" bg="white" rounded={10}>
+          <Hide below="md">
+            <Stack marginLeft="5" bg="white" rounded={10} borderWidth={2} borderColor={'black'}>
               <InputGroup>
-                <InputLeftElement
+                <InputLeftElement 
                   pointerEvents="none"
                   children={<MagnifyingGlass color="black" />}
                 />
@@ -212,7 +213,7 @@ function CustomNavbar() {
                 />
               </InputGroup>
             </Stack>
-          </Show>
+          </Hide>
 
           <Spacer />
 
@@ -221,68 +222,46 @@ function CustomNavbar() {
               {user && (
                 <Menu>
                   <MenuButton
-                    as={Button}
                     rounded="full"
                     variant="link"
                     cursor="pointer"
                     minW={0}
-                    minH={50}
                     title="Chats"
-                    // isDisabled
-
-                    // onClick={onChatToggle}
                   >
                     <Center
-                      bg="#FFC75A"
+                      bg="white"
                       minH={"38"}
                       minW={"38"}
                       rounded={50}
                       size={50}
-                      padding={1}
+                      borderColor={'black'}
+                      borderWidth={2}
                     >
-                      <Chats size={32} color="#6768AB" />
+                      <Chats size={28} color="black" />
                     </Center>
                     {unreadChat.length>0&&(<Badge bg="red" rounded={100} pos="absolute" top={0} left={6}>{unreadChat.length}</Badge>)}
                   </MenuButton>
-                  {/* <Box display={isChatOpen? "fixed" : "none"} top={20} width={200} height={300}>  */}
-                  <MenuList>
-                  {chatNotiData.length>0?
-                    chatNotiData.map((data)=>(
-                      <MenuItem 
-                        minH="50px"
-                        onClick={()=>changeTab(data.chatroom)}
-                      >
-                        <Image src={data.thumbnail} sizes={16} rounded />
-                        <Text>{data.name}</Text>
-                        <Text>{data.message}</Text>
-                      </MenuItem>
-                    ))
-                  :(
-                    <></>
-                  )}
-                  </MenuList>
-
-                  {/* </Box> */}
                   
-
-                  {/* <MenuList minWidth={"auto"} ml={-1}>
-
-                        <MenuItem minH="48px" as={"a"} href="#" title='Main Hall'>
-                          <House size={32} /> 
-                        </MenuItem>
-
-                        <MenuItem minH="48px" as={"a"} href="#" title='Create Commu'>
-                          <Plus size={32} />
-                        </MenuItem>
-                        
-                      </MenuList> */}
+                  <Box overflowY={'auto'} w="70" h="150" bg="gray">
+                    {chatNotiData?
+                      chatNotiData.map((data)=>(
+                        <Box h="30" bg="yellow" w="100%" > 
+                          <Image src={data.thumbnail} sizes={16} rounded />
+                           <Text>{data.name}</Text>
+                          <Text>{data.message}</Text>
+                        </Box>
+                      ))
+                    :(
+                      <></>
+                    )}
+                  </Box>
+                  
                 </Menu>
               )}
 
               {user && (
                 <Menu>
                   <MenuButton
-                    as={Button}
                     rounded="full"
                     variant="link"
                     cursor="pointer"
@@ -290,14 +269,15 @@ function CustomNavbar() {
                     title="Notifications"
                   >
                     <Center
-                      bg="#FFC75A"
+                      bg="white"
                       minH={"38"}
                       minW={"38"}
                       rounded={50}
                       size={40}
-                      padding={1}
+                      borderColor={'black'}
+                      borderWidth={2}
                     >
-                      <Bell size={32} color="#6768AB" />
+                      <Bell size={28} color="black" />
                       {unreadnoti.length>0&&(<Badge bg="red" rounded={100} pos="absolute" top={0} left={6}>{unreadnoti.length}</Badge>)}
                       
                     </Center>
@@ -318,34 +298,39 @@ function CustomNavbar() {
                         
                       </MenuList> */}
 
-              <Menu>
+              <Menu >
                 <MenuButton>
                   <Center
-                    as={Button}
-                    bg="#FFC75A"
+                    bg="white"
                     rounded="full"
                     variant="link"
                     cursor="pointer"
                     title="Commu"
-                    minH={41}
-                    minW={41}
+                    minH={38}
+                    minW={38}
+                    borderColor={'black'}
+                    borderWidth={2}
                   >
-                    <UsersThree size={32} color="#6768AB" />
+                    <UsersThree size={28} color="black" />
                   </Center>
                 </MenuButton>
 
                 <MenuList
-                  bg={"#343434"}
+                  bg={"#6768AB"}
                   minWidth={"auto"}
                   ml={-3}
                   mt={-1}
-                  color={"white"}
+                  color={"black"}
+                  
                 >
                   <MenuItem
                     minH="48px"
                     as={"a"}
                     href="/group"
                     title="Main Hall"
+                    _hover={{
+                      backgroundColor: 'gray.400'
+                    }}
                   >
                     <House size={32} />
                   </MenuItem>
@@ -355,6 +340,9 @@ function CustomNavbar() {
                     as={"a"}
                     href="/creategroup"
                     title="Create Commu"
+                    _hover={{
+                      backgroundColor: 'gray.400'
+                    }}
                   >
                     <Plus size={32} />
                   </MenuItem>
@@ -364,6 +352,9 @@ function CustomNavbar() {
                     as={"button"}
                     title="Pin"
                     onClick={onOpen}
+                    _hover={{
+                      backgroundColor: 'gray.400'
+                    }}
                   >
                     <PushPin size={32} />
                   </MenuItem>
@@ -404,7 +395,6 @@ function CustomNavbar() {
                 {user && (
                   <Menu>
                     <MenuButton
-                      as={Button}
                       rounded="full"
                       variant="link"
                       cursor="pointer"
@@ -412,19 +402,21 @@ function CustomNavbar() {
                       title="Account"
                     >
                       <Center
-                        bg="#FFC75A"
+                        bg="white"
                         minH={"38"}
                         minW={"38"}
                         rounded={50}
                         size={38}
                         padding={1}
+                        borderColor={'black'}
+                        borderWidth={2}
                       >
-                        <DotsThreeVertical size={32} color="#6768AB" />
+                        <DotsThreeVertical size={28} color="black" />
                       </Center>
                     </MenuButton>
 
                     <MenuList
-                      bg={"#343434"}
+                      bg={"#6768AB"}
                       alignItems={"center"}
                       mr={-4}
                       color={"white"}
@@ -438,19 +430,29 @@ function CustomNavbar() {
                       <br />
 
                       <Center>
-                        <p className={style.prName}>{user.displayName}</p>
+                        <Box className={style.prName}>{user.displayName}</Box>
                       </Center>
 
                       <br />
 
                       <MenuDivider />
                       {/* <MenuItem>Your Servers</MenuItem> */}
-                      <MenuItem className={style.prName} onClick={()=>router.push("/profile/"+user.uid)}>
+                      <MenuItem 
+                        className={style.prName}
+                        _hover={{
+                          backgroundColor: 'gray.400'
+                        }} 
+                        onClick={()=>router.push("/profile/"+user.uid)}
+                      >
+
                         Account Settings
                       </MenuItem>
                       <MenuItem
                         className={style.prName}
                         onClick={() => router.push("/logout")}
+                        _hover={{
+                          backgroundColor: 'gray.400'
+                        }}
                       >
                         Logout
                       </MenuItem>
