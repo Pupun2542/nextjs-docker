@@ -90,13 +90,23 @@ function CustomNavbar() {
   // const app = getApp();
   // const auth = getAuth(app);
   // const db = getFirestore(app);
-  const {app, auth, db} = useApp();
+  const { app, auth, db } = useApp();
   const { notidata, chatNotiData } = useNotifications();
   const { tabState, addTab, removeTab, changeTab, closeTab } = useTab();
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isOpen: isNotiOpen, onOpen: onNotiOpen, onClose: onNotiClose, onToggle: onNotiToggle } = useDisclosure();
-  const { isOpen: isChatOpen, onOpen: onChatOpen, onClose: onChatClose, onToggle: onChatToggle } = useDisclosure();
+  const {
+    isOpen: isNotiOpen,
+    onOpen: onNotiOpen,
+    onClose: onNotiClose,
+    onToggle: onNotiToggle,
+  } = useDisclosure();
+  const {
+    isOpen: isChatOpen,
+    onOpen: onChatOpen,
+    onClose: onChatClose,
+    onToggle: onChatToggle,
+  } = useDisclosure();
   const router = useRouter();
   const [user, loading, error] = useAuthState(auth);
   const breakpoints = {
@@ -110,8 +120,8 @@ function CustomNavbar() {
   const [unreadChat, setUnreadChat] = useState([]);
   const [unreadnoti, setUnreadnoti] = useState([]);
   // const userdata = useUser()
-  // const 
-
+  // const
+  // console.log(isChatOpen);
   useEffect(() => {
     if (user && !loading) {
       const QuerySnapshot = query(
@@ -119,24 +129,24 @@ function CustomNavbar() {
       );
       getDocs(QuerySnapshot).then((snapshot) => {
         // console.log(snapshot.docs)
-        if (snapshot.size > 0){
+        if (snapshot.size > 0) {
           setData(snapshot.docs.map((doc) => doc.data()));
         }
       });
     }
   }, [user, loading]);
 
-  useEffect(()=>{
-    if (chatNotiData.length>0){
+  useEffect(() => {
+    if (chatNotiData.length > 0) {
       console.log(chatNotiData);
-      setUnreadChat(chatNotiData.filter((v,i)=> v.readed == false));
+      setUnreadChat(chatNotiData.filter((v, i) => v.readed == false));
     }
-  },[chatNotiData])
-  useEffect(()=>{
-    if (notidata.length>0){
-      setUnreadnoti(notidata.filter((v,i)=> v.readed == false));
+  }, [chatNotiData]);
+  useEffect(() => {
+    if (notidata.length > 0) {
+      setUnreadnoti(notidata.filter((v, i) => v.readed == false));
     }
-  },[notidata])
+  }, [notidata]);
 
   const Loadthumbnail = () => {
     if (user) {
@@ -153,14 +163,22 @@ function CustomNavbar() {
               textDecoration: "none",
             }}
           >
-            <Center bg="white" rounded={50} minHeight={38} borderWidth={2} borderColor={'black'}>
+            <Center
+              bg="white"
+              rounded={50}
+              minHeight={38}
+              borderWidth={2}
+              borderColor={"black"}
+            >
               <Center px={0}>
                 <Avatar h={41} w={41} src={user.photoURL} />
               </Center>
 
               <Show above="lg">
                 <Center width={"auto"} h={41} px={5}>
-                  <Center fontFamily={'Mitr'} fontWeight={150} color={'black'}>{user.displayName}</Center>
+                  <Center fontFamily={"Mitr"} fontWeight={150} color={"black"}>
+                    {user.displayName}
+                  </Center>
                 </Center>
               </Show>
             </Center>
@@ -188,21 +206,30 @@ function CustomNavbar() {
 
   return (
     <>
-      <Box bg="#4C4D88" h="auto" w="auto" px={5}>
+      <Box bg="#4C4D88" h="auto" w="100%" px={5} pos="fixed" >
         <Flex h={55} alignItems={"center"} justifyContent={"space-between"}>
           <Hide below="md">
             <Flex align={"center"} float={1} cursor="pointer">
-              <Text className={style.Logonav} borderStyle={'black'} onClick={() => router.push("/")}>
+              <Text
+                className={style.Logonav}
+                borderStyle={"black"}
+                onClick={() => router.push("/")}
+              >
                 Comuthor
               </Text>
             </Flex>
-          </Hide>  
-            
+          </Hide>
 
           <Hide below="md">
-            <Stack marginLeft="5" bg="white" rounded={10} borderWidth={2} borderColor={'black'}>
+            <Stack
+              marginLeft="5"
+              bg="white"
+              rounded={10}
+              borderWidth={2}
+              borderColor={"black"}
+            >
               <InputGroup>
-                <InputLeftElement 
+                <InputLeftElement
                   pointerEvents="none"
                   children={<MagnifyingGlass color="black" />}
                 />
@@ -220,45 +247,42 @@ function CustomNavbar() {
           <Flex alignItems={"center"}>
             <Stack direction={"row"} spacing={2}>
               {user && (
-                <Menu>
-                  <MenuButton
-                    rounded="full"
-                    variant="link"
-                    cursor="pointer"
-                    minW={0}
-                    title="Chats"
-                  >
-                    <Center
-                      bg="white"
-                      minH={"38"}
-                      minW={"38"}
-                      rounded={50}
-                      size={50}
-                      borderColor={'black'}
-                      borderWidth={2}
+                <>
+                  <Menu>
+                    <MenuButton
+                      rounded="full"
+                      variant="link"
+                      cursor="pointer"
+                      minW={0}
+                      title="Chats"
+                      onClick={onChatToggle}
                     >
-                      <Chats size={28} color="black" />
-                    </Center>
-                    {unreadChat.length>0&&(<Badge bg="red" rounded={100} pos="absolute" top={0} left={6}>{unreadChat.length}</Badge>)}
-                  </MenuButton>
-                  
-                  <Box overflowY={'auto'} w="70" h="150" bg="gray">
-                    {chatNotiData?
-                      chatNotiData.map((data)=>(
-                        <Box h="30" bg="yellow" w="100%" > 
-                          <Image src={data.thumbnail} sizes={16} rounded />
-                           <Text>{data.name}</Text>
-                          <Text>{data.message}</Text>
-                        </Box>
-                      ))
-                    :(
-                      <></>
-                    )}
-                  </Box>
-                  
-                </Menu>
+                      <Center
+                        bg="white"
+                        minH={"38"}
+                        minW={"38"}
+                        rounded={50}
+                        size={50}
+                        borderColor={"black"}
+                        borderWidth={2}
+                      >
+                        <Chats size={28} color="black" />
+                      </Center>
+                      {unreadChat.length > 0 && (
+                        <Badge
+                          bg="red"
+                          rounded={100}
+                          pos="absolute"
+                          top={0}
+                          left={6}
+                        >
+                          {unreadChat.length}
+                        </Badge>
+                      )}
+                    </MenuButton>
+                  </Menu>
+                </>
               )}
-
               {user && (
                 <Menu>
                   <MenuButton
@@ -274,14 +298,22 @@ function CustomNavbar() {
                       minW={"38"}
                       rounded={50}
                       size={40}
-                      borderColor={'black'}
+                      borderColor={"black"}
                       borderWidth={2}
                     >
                       <Bell size={28} color="black" />
-                      {unreadnoti.length>0&&(<Badge bg="red" rounded={100} pos="absolute" top={0} left={6}>{unreadnoti.length}</Badge>)}
-                      
+                      {unreadnoti.length > 0 && (
+                        <Badge
+                          bg="red"
+                          rounded={100}
+                          pos="absolute"
+                          top={0}
+                          left={6}
+                        >
+                          {unreadnoti.length}
+                        </Badge>
+                      )}
                     </Center>
-                    
                   </MenuButton>
                 </Menu>
               )}
@@ -298,7 +330,7 @@ function CustomNavbar() {
                         
                       </MenuList> */}
 
-              <Menu >
+              <Menu>
                 <MenuButton>
                   <Center
                     bg="white"
@@ -308,7 +340,7 @@ function CustomNavbar() {
                     title="Commu"
                     minH={38}
                     minW={38}
-                    borderColor={'black'}
+                    borderColor={"black"}
                     borderWidth={2}
                   >
                     <UsersThree size={28} color="black" />
@@ -321,7 +353,6 @@ function CustomNavbar() {
                   ml={-3}
                   mt={-1}
                   color={"black"}
-                  
                 >
                   <MenuItem
                     minH="48px"
@@ -329,7 +360,7 @@ function CustomNavbar() {
                     href="/group"
                     title="Main Hall"
                     _hover={{
-                      backgroundColor: 'gray.400'
+                      backgroundColor: "gray.400",
                     }}
                   >
                     <House size={32} />
@@ -341,7 +372,7 @@ function CustomNavbar() {
                     href="/creategroup"
                     title="Create Commu"
                     _hover={{
-                      backgroundColor: 'gray.400'
+                      backgroundColor: "gray.400",
                     }}
                   >
                     <Plus size={32} />
@@ -353,7 +384,7 @@ function CustomNavbar() {
                     title="Pin"
                     onClick={onOpen}
                     _hover={{
-                      backgroundColor: 'gray.400'
+                      backgroundColor: "gray.400",
                     }}
                   >
                     <PushPin size={32} />
@@ -367,7 +398,7 @@ function CustomNavbar() {
                     <ModalCloseButton />
                     <ModalBody>
                       {data.length > 0 &&
-                        data.map((doc,k) => (
+                        data.map((doc, k) => (
                           <Text
                             onClick={() => router.push("/group/" + doc.id)}
                             cursor={"pointer"}
@@ -408,7 +439,7 @@ function CustomNavbar() {
                         rounded={50}
                         size={38}
                         padding={1}
-                        borderColor={'black'}
+                        borderColor={"black"}
                         borderWidth={2}
                       >
                         <DotsThreeVertical size={28} color="black" />
@@ -437,21 +468,20 @@ function CustomNavbar() {
 
                       <MenuDivider />
                       {/* <MenuItem>Your Servers</MenuItem> */}
-                      <MenuItem 
+                      <MenuItem
                         className={style.prName}
                         _hover={{
-                          backgroundColor: 'gray.400'
-                        }} 
-                        onClick={()=>router.push("/profile/"+user.uid)}
+                          backgroundColor: "gray.400",
+                        }}
+                        onClick={() => router.push("/profile/" + user.uid)}
                       >
-
                         Account Settings
                       </MenuItem>
                       <MenuItem
                         className={style.prName}
                         onClick={() => router.push("/logout")}
                         _hover={{
-                          backgroundColor: 'gray.400'
+                          backgroundColor: "gray.400",
                         }}
                       >
                         Logout
@@ -477,9 +507,30 @@ function CustomNavbar() {
         </Flex>
       </Box>
       <Chatsidebar user={user} db={db} />
+      <Box
+        overflowY={"auto"}
+        w="300px"
+        h="600px"
+        bg="gray"
+        pos="fixed"
+        top="55px"
+        right="100px"
+        display={isChatOpen? "initial" : "none"}
+      >
+        {chatNotiData ? (
+          chatNotiData.map((data) => (
+            <Box h="30" bg="yellow" w="100%">
+              <Image src={data.thumbnail} sizes={16} rounded />
+              <Text>{data.name}</Text>
+              <Text>{data.message}</Text>
+            </Box>
+          ))
+        ) : (
+          <></>
+        )}
+      </Box>
     </>
   );
 }
-
 
 export default CustomNavbar;

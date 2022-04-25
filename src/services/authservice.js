@@ -13,16 +13,16 @@ export function SignInwithGoogle(){
     // const { setLoginPhoto } = useContext(ProfileContext);
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider).then(
-        (v)=>{
+        // (v)=>{
             // console.log(v)
-            initializeUserDb(v.user)
-        }
+            // initializeUserDb(v.user)
+        // }
     );
 }
 export async function SignInWithFacebook(){
     const provider = new FacebookAuthProvider();
     signInWithPopup(auth, provider).then(
-        (v)=>{initializeUserDb(v.user)}
+        // (v)=>{initializeUserDb(v.user)}
     );
 }
 export async function Logout(){

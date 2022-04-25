@@ -16,9 +16,10 @@ import {
   Button,
   FormControl,
   Text,
+  Badge,
 } from "@chakra-ui/react";
 import { Chats } from "phosphor-react";
-import { useApp, useUser, useTab } from "../src/hook/local";
+import { useApp, useUser, useTab, useNotifications } from "../src/hook/local";
 import {
   useCollection,
   useDocumentDataOnce,
@@ -37,6 +38,7 @@ import {
   serverTimestamp,
   writeBatch,
   limit,
+  runTransaction,
 } from "firebase/firestore";
 import { Minus, X } from "phosphor-react";
 
@@ -44,6 +46,7 @@ import { Minus, X } from "phosphor-react";
 
 export const Chatsidebar = ({ user, db, forcedopenTab }) => {
   const { tabState, addTab, removeTab, changeTab } = useTab();
+  const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
   useEffect(() => {
     console.log(tabState, forcedopenTab);
     if (
@@ -57,6 +60,7 @@ export const Chatsidebar = ({ user, db, forcedopenTab }) => {
     }
   }, [forcedopenTab]);
 
+  console.log(tabState.opentab.length);
   useEffect(() => {
     if (user) {
       const QuerySnapshot = query(
@@ -77,49 +81,69 @@ export const Chatsidebar = ({ user, db, forcedopenTab }) => {
       return () => unsubscribe();
     }
   }, [user]);
-
+  console.log("tabState.othertab ",tabState.othertab)
   return (
-    <Flex
-      position="fixed"
-      right={3}
-      bottom={0}
-      alignItems="flex-end"
-      flexDirection="column"
-    >
-      {tabState &&
-        tabState.othertab.map((atab, k) => (
-          <ChatIcon
-            user={user}
-            db={db}
-            atab={atab}
-            key={k}
-            // setTab={addTab}
-            // chatTab={tab}
-          />
-        ))}
-    </Flex>
+    <Box position="fixed" right={3} bottom={0} alignItems="flex-end">
+      <Flex flexDirection="column" float='right'>
+        {tabState &&
+          tabState.othertab.length > 0 &&
+          tabState.othertab.map((atab, k) => (
+            <ChatIcon
+              user={user}
+              db={db}
+              atab={atab}
+              key={k}
+              // setTab={addTab}
+              // chatTab={tab}
+            />
+          ))}
+      </Flex>
+      {/* {isOpen && ( */}
+      <ChatBox
+        // atab={atab}
+        user={user}
+        onClose={onClose}
+        // setTab={setTab}
+        isOpen={isOpen}
+        db={db}
+        // chatTab={chatTab}
+      />
+      {/* )} */}
+    </Box>
   );
 };
 
 const ChatIcon = ({ user, db, atab }) => {
   const { tabState, addTab, removeTab, changeTab } = useTab();
   // const [chatTab, setChatTab] = useState([]);
-  const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
+  // const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
   // console.log(db, user);
-  const QueryUnreadedSnapshot = query(
-    collection(db, "userDetail", user.uid, "chatMessage"),
-    where("readed", "==", false)
-  );
-  const [unreadedSnapshot] = useCollection(QueryUnreadedSnapshot);
-  const unreadnum = unreadedSnapshot ? unreadedSnapshot.docs.length : 0;
+  // const QueryUnreadedSnapshot = query(
+  //   collection(db, "userDetail", user.uid, "chatMessage"),
+  //   where("readed", "==", false)
+  // );
+  // const [unreadedSnapshot] = useCollection(QueryUnreadedSnapshot);
+  // console.log("Icon" + );
+
+  const { notidata, chatNotiData } = useNotifications();
+  const [unreadnum, setUnreadnum] = useState(0);
+  // const unreadnum = 0;
+  useEffect(() => {
+    const unreadedchat = chatNotiData.filter((v, i) => v.readed == false);
+    unreadedchat = unreadedchat.filter((v, i) => v.chatRoom == atab);
+    setUnreadnum(unreadedchat.length);
+  }, [chatNotiData]);
+
+  // const unreadnum = unreadedSnapshot ? unreadedSnapshot.docs.length : 0;
   // const unreadnum = 0;
   const onIconClicked = () => {
     changeTab(atab);
-    onToggle();
+    console.log("opentab" + atab);
+    // onToggle();
   };
 
   return (
-    <Box>
+    <Box float={'right'}>
       <Center
         float="left"
         background="#343434"
@@ -134,11 +158,11 @@ const ChatIcon = ({ user, db, atab }) => {
         marginBottom="3"
       >
         <Chats size={32} />
+        <Text>{atab}</Text>
         {/* <Badge>{unreadnum}</Badge> */}
       </Center>
       {/* {unreadnum &&
-        unreadnum.length >
-          0&&(
+            (
             <Center
               float="left"
               background="#343434"
@@ -156,7 +180,7 @@ const ChatIcon = ({ user, db, atab }) => {
               <Badge>{unreadnum}</Badge>
             </Center>
           )} */}
-      {isOpen && (
+      {/* {isOpen && (
         <ChatBox
           atab={atab}
           user={user}
@@ -166,36 +190,62 @@ const ChatIcon = ({ user, db, atab }) => {
           db={db}
           // chatTab={chatTab}
         />
-      )}
+      )} */}
     </Box>
   );
 };
 
-const ChatBox = ({ atab, user, onClose, isOpen, db }) => {
+const ChatBox = ({ atab, user, db }) => {
+  const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
   const userData = useUser();
-  // const tabHead = fetch("/api/getuserdetail",{method: POST, body: {uid} })
-  const { tabState, addTab, removeTab, changeTab } = useTab();
-  useEffect(() => {
-    // changeTab(atab);
-    console.log(tabState.opentab)
-  }, []);
+  const { tabState, addTab, removeTab, changeTab, CloseTab } = useTab();
   const [msg, setMsg] = useState("");
   const unrededref = useRef(false);
+  console.log("currentopen1 " + tabState.opentab);
+  useEffect(() => {
+    console.log("currentopen2 " + tabState.opentab);
+    if (tabState.opentab != "") {
+      onOpen();
+    }
+  }, [tabState]);
 
-  const [chatRoomData, loading, error] = useDocumentDataOnce(
-    doc(db, "chatrooms", tabState.opentab)
-  );
+  const chatRoomData = useMemo(() => {
+    if (tabState.opentab != "") {
+      getDoc(doc(db, "chatrooms", tabState.opentab)).then((doc) => {
+        return doc.data();
+      });
+    }
+    return "";
+  }, [tabState.opentab]);
+
+  // const [chatRoomData, loading, error] = useDocumentDataOnce(
+  //   doc(db, "chatrooms", tabState.opentab)
+  // );
   const [name, setName] = useState("");
-  const QuerySnapshot = query(
-    collection(db, "chatrooms", tabState.opentab, "message"),
-    orderBy("timestamp")
-  );
-  const [snapshot, loadingsnapshot, errorsnapshot] =
-    useCollection(QuerySnapshot);
+  const [snapshot, setSnapshot] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (tabState.opentab != "") {
+      const QuerySnapshot = query(
+        collection(db, "chatrooms", tabState.opentab, "message"),
+        orderBy("timestamp")
+      );
+      const unsubscribe = onSnapshot(QuerySnapshot, (snap) => {
+        setSnapshot(snap);
+        setLoading(false);
+      });
+      return () => unsubscribe();
+    }
+  }, [tabState.opentab]);
+
+  // const [snapshot, loadingsnapshot, errorsnapshot] =
+  //   useCollection(QuerySnapshot);
   const remove = () => {
     // setTab([...chatTab.filter((v, i) => v != tab)]);
     removeTab(tabState.opentab);
-    changeTab("");
+    // changeTab("");
+    CloseTab();
     onClose();
   };
   useEffect(() => {
@@ -208,7 +258,6 @@ const ChatBox = ({ atab, user, onClose, isOpen, db }) => {
         ).displayName;
         console.log(filteredname);
         setName(filteredname);
-
         // name = member[0];
       } else {
         setName(chatRoomData.name);
@@ -217,16 +266,20 @@ const ChatBox = ({ atab, user, onClose, isOpen, db }) => {
   }, [chatRoomData, loading]);
 
   useEffect(() => {
-    if (snapshot){
-      console.log(snapshot.docs);
-    }
-    
-    if (snapshot&&snapshot.docs[0]&&!snapshot.docs[0].data().readedby.includes(user.uid)) {
+    // if (snapshot) {
+    //   console.log(snapshot.docs);
+    // }
+
+    if (
+      snapshot &&
+      snapshot.docs[0] &&
+      !snapshot.docs[0].data().readedby.includes(user.uid)
+    ) {
       unrededref.current = true;
-    }else {
+    } else {
       unrededref.current = false;
     }
-  },[snapshot]);
+  }, [snapshot]);
 
   const onChatSent = () => {
     if (msg) {
@@ -240,43 +293,56 @@ const ChatBox = ({ atab, user, onClose, isOpen, db }) => {
       setMsg("");
     }
   };
-  const handleFocus = () => {
+  const handleFocus = async () => {
     if (unrededref) {
-      const q = query(
-        collection(db, "userDetail", user.uid, "chatMessage"),
-        limit(50)
-      );
-      getDocs(q).then((docs) => {
-        if (docs) {
-          // console.log(docs.docs())
-          const batch = writeBatch(db);
-          docs.docs.map((doc) => {
-            console.log(doc.data());
-            batch.update(doc.ref, { readed: true });
-          });
-          batch.commit();
-        }
-      });
-      const q2 = query(
-        collection(db, "chatrooms", tabState.opentab, "message"),
-        orderBy("timestamp", "asc"),
-        limit(50)
-      );
-      getDocs(q2).then((docs) => {
-        const newdocs = docs.docs.filter(
-          (v, i) => !v.data().readedby.includes(user.uid)
-        );
-        if (newdocs) {
-          const batch = writeBatch(db);
-          newdocs.map((doc) => {
-            // batch.update(doc.ref, {
-            //   readedby: [...doc.data().readedby, user.uid],
-            // });
-            // console.log(doc.data().readedby.includes(user.uid))
-          });
-          batch.commit();
-        }
-      });
+      const userDocRef = doc(db, "userDetail", user.uid, "chatmessage", tabState.opentab)
+      // const groupDocRef = doc(db, "chatrooms", tabState.opentab, "message", tabState.opentab)
+      try {
+        await runTransaction(db, async (transaction)=>{
+          await transaction.get(userDocRef);
+          transaction.update(userDocRef,{
+            readed: true,
+          })
+        })
+
+      }catch (e) {
+        console.log("update fail ", e)
+      }
+      // const q = query(
+      //   collection(db, "userDetail", user.uid, "chatmessage"),
+      //   limit(50)
+      // );
+      // getDocs(q).then((docs) => {
+      //   if (docs) {
+      //     // console.log(docs.docs())
+      //     const batch = writeBatch(db);
+      //     docs.docs.map((doc) => {
+      //       console.log("unread ", doc.data());
+      //       batch.update(doc.ref, { readed: true });
+      //     });
+      //     batch.commit();
+      //   }
+      // });
+      // const q2 = query(
+      //   collection(db, "chatrooms", tabState.opentab, "message"),
+      //   orderBy("timestamp", "asc"),
+      //   limit(50)
+      // );
+      // getDocs(q2).then((docs) => {
+      //   const newdocs = docs.docs.filter(
+      //     (v, i) => !v.data().readedby.includes(user.uid)
+      //   );
+      //   if (newdocs) {
+      //     const batch = writeBatch(db);
+      //     newdocs.map((doc) => {
+      //       batch.update(doc.ref, {
+      //         readedby: [...doc.data().readedby, user.uid],
+      //       });
+      //       console.log(doc.data().readedby.includes(user.uid));
+      //     });
+      //     batch.commit();
+      //   }
+      // });
     }
 
     // console.log("focus")
@@ -374,9 +440,7 @@ const ChatBox = ({ atab, user, onClose, isOpen, db }) => {
           value={msg}
           onChange={(e) => setMsg(e.target.value)}
           onFocus={handleFocus}
-          onKeyUp={(event) =>
-            event.key === "Enter" ? onChatSent() : null
-          }
+          onKeyUp={(event) => (event.key === "Enter" ? onChatSent() : null)}
         />
         <Button float="right" marginRight={5} onClick={onChatSent}>
           send

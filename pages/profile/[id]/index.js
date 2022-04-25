@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useApp } from "../../../src/hook/local";
+import { useApp, useTab } from "../../../src/hook/local";
 import {
     addDoc,
     collection,
@@ -31,7 +31,7 @@ import CustomNavbar from "../../../components/navbar";
 import { Chatsidebar } from "../../../components/chat";
 
 export default function profile() {
-
+  const { tabState, addTab, removeTab, changeTab, CloseTab } = useTab();
   const router = useRouter();
   const { id } = router.query;
   // const app = useApp();
@@ -40,7 +40,7 @@ export default function profile() {
   const {app, auth, db} = useApp();
   const [user, loading, error] = useAuthState(auth);
   const [userDetail, setUserDetail] = useState(null);
-  const [newtab, setNewtab] = useState("");
+  // const [newtab, setNewtab] = useState("");
 
   useEffect(() => {
     // console.log(id);
@@ -97,17 +97,18 @@ export default function profile() {
                 }).then(()=>console.log("updated"))
             })
         }
+        changeTab(roomId);
         // console.log(roomId)
-        setNewtab(roomId)
-        setTimeout(()=>setNewtab(""),500)
+        // setNewtab(roomId)
+        // setTimeout(()=>setNewtab(""),500)
     })
   }
   return (
     <Box>
       <CustomNavbar />
-      {user&&(
+      {/* {user&&(
         <Chatsidebar db={db} user={user} forcedopenTab={newtab}/>
-      )}
+      )} */}
       <Flex flexGrow={0.8} justifyContent="center">
         {/* <Spacer /> */}
         <VStack bg={"tomato"} minH={914}>

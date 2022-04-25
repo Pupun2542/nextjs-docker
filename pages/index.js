@@ -45,7 +45,7 @@ export default function Home() {
 
       <Flex>
         <Spacer />
-        <VStack w={1000} boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' fontFamily={'Mitr'}>
+        <VStack w={1000} boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' fontFamily={'Mitr'} marginTop={55}>
           <Flex>
             <Box w={400} m={5}>
                 <Spacer minH={30}/>

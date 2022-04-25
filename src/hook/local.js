@@ -12,11 +12,15 @@ import {
   collection,
   getDocs,
   getFirestore,
+  limit,
   onSnapshot,
   orderBy,
   query,
+  where,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+import useSound from "use-sound";
 
 const AppContext = createContext();
 const UserContext = createContext();
@@ -58,32 +62,63 @@ const initialState = {
 const tabReducer = (state, action) => {
   switch (action.type) {
     case "addTab":
-      console.log("addTab");
-      if (state.othertab.length < 5) {
-        console.log("fewer 5");
-        return {
-          ...state,
-          othertab: [...state.othertab, action.payload],
-        };
-      } else {
-        const newtab = state.othertab.filter((v, i) => v != state.othertab[0]);
-        console.log("more than 5");
-        return {
-          ...state,
-          othertab: [...newtab, action.payload],
-        };
-      }
+      // console.log("addTab");
+      // if (state.othertab.length < 5) {
+      //   console.log("fewer 5");
+      //   return {
+      //     ...state,
+      //     othertab: [...state.othertab, action.payload],
+      //   };
+      // } else {
+      //   const newtab = state.othertab.filter((v, i) => v != state.othertab[0]);
+      //   console.log("more than 5");
+      //   return {
+      //     ...state,
+      //     othertab: [...newtab, action.payload],
+      //   };
+      // }
+      return {
+        ...state,
+        othertab: [...state.othertab, action.payload],
+      };
 
     case "removeTab":
       const newtab = state.othertab.filter((v, i) => v != action.payload);
+      console.log("removetab");
       return {
         ...state,
         othertab: newtab,
       };
     case "changeOpenTab":
+      if (!state.othertab.includes(action.payload)) {
+        // if (!state.othertab.length < 5){
+        //   return {
+        //     ...state,
+        //     opentab: action.payload,
+        //     othertab: [...state.othertab, action.payload],
+        //   }
+        // } else {
+        //   const newtab = state.othertab.filter((v, i) => v != state.othertab[0]);
+        //   return {
+        //     ...state,
+        //     othertab: [...newtab, action.payload],
+        //     opentab: action.payload,
+        //   };
+        // }
+        return {
+          ...state,
+          opentab: action.payload,
+          othertab: [...state.othertab, action.payload],
+        };
+      }
       return {
         ...state,
         opentab: action.payload,
+      };
+    case "closeOpenTab":
+      return {
+        ...state,
+        opentab: "",
       };
   }
 };
@@ -100,12 +135,17 @@ export const OpenChatTabProvider = ({ children }) => {
     tabDispatcher({ type: "removeTab", payload });
   };
   const changeTab = (payload) => {
+    // console.log(tabState.opentab,payload)
     tabDispatcher({ type: "changeOpenTab", payload });
+  };
+  const CloseTab = () => {
+    // console.log(tabState.opentab,payload)
+    tabDispatcher({ type: "closeOpenTab" });
   };
 
   return (
     <OpenedChatContext.Provider
-      value={{ tabState, addTab, removeTab, changeTab }}
+      value={{ tabState, addTab, removeTab, changeTab, CloseTab }}
     >
       {children}
     </OpenedChatContext.Provider>
@@ -115,30 +155,61 @@ export const OpenChatTabProvider = ({ children }) => {
 export const NotificationProvider = ({ children }) => {
   const [notidata, setNotidata] = useState([]);
   const [chatNotiData, setChatNotidata] = useState([]);
-  useState(() => {
-    if (auth.currentUser) {
+  const [user, loading, error] = useAuthState(auth);
+  const [play] = useSound("/chatnoti.wav", { volume: 1.0 });
+  useEffect(() => {
+    if (!loading && user) {
       const q = query(
-        collection(db, "userDetail", auth.currentUser.uid, "notification"),
-        orderBy("timestamp")
+        collection(db, "userDetail", user.uid, "notification"),
+        orderBy("timestamp", "desc"),
+        limit(20)
       );
       const unsubscribe = onSnapshot(q, (snapshot) => {
         setNotidata(snapshot.docs.map((doc) => doc.data()));
       });
       return () => unsubscribe();
     }
-  }, [auth.currentUser]);
-  useState(() => {
-    if (auth.currentUser) {
+  }, [loading, user]);
+  useEffect(() => {
+    console.log(user);
+    if (!loading && user) {
       const q = query(
-        collection(db, "userDetail", auth.currentUser.uid, "chatMessage"),
-        orderBy("timestamp")
+        collection(db, "userDetail", user.uid, "chatmessage"),
+        orderBy("timestamp", "desc"),
+        limit(50)
       );
       const unsubscribe = onSnapshot(q, (snapshot) => {
         setChatNotidata(snapshot.docs.map((doc) => doc.data()));
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === "modified" && change.doc.data().readed == false) {
+            play();
+          }
+        });
+
+        // console.log(snapshot.docChanges);
+        // snapshot.docChanges().map((docs) => {
+        //   if (snapshot.docChanges().length < 5) {
+        //     console.log(docs.doc.data());
+        //   }
+        // });
+        // let tosent = [];
+        // let existingname = [];
+        // const filtered = snapshot.docs.filter(
+        //   (v, i) => v.data().sender != user.displayName
+        // );
+        // filtered.map((doc) => {
+        //   if (!existingname.includes(doc.data().sender)) {
+        //     existingname = [...existingname, doc.data().sender];
+        //     tosent = [...tosent, doc.data()];
+        //   }
+        // });
+        // setChatNotidata(tosent);
+        // console.log(snapshot.docs.map((doc) => doc.data()));
+        // snapshot.docs.map((doc) => {console.log(doc.data())})
       });
       return () => unsubscribe();
     }
-  }, [auth.currentUser]);
+  }, [loading, user]);
 
   return (
     <NotificationContext.Provider value={{ notidata, chatNotiData }}>
