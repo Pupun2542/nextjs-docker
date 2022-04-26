@@ -37,7 +37,7 @@ function about() {
               <Box paddingRight={100} width={500} paddingLeft={100} >
               <Image src='daruma.png' height={100}  width={100} />
               <Text fontFamily={'Mitr'} fontSize="16px"> Mr.Daruma </Text>
-              <Text fontFamily={'Mitr'} fontSize="16px"> Co-founder Developer </Text>
+              <Text fontFamily={'Mitr'} fontSize="16px"> Co-founder and Front-end Developer </Text>
             </Box>
             <Box paddingRight={100} width={500} paddingLeft={100} >
               <Image src='Yuu.png' height={100}  width={100} />
@@ -58,12 +58,12 @@ function about() {
             align="center"
           >
             <Box paddingRight={100} paddingLeft={50} width={500} >
-              <Image src='Comuthor1.png' height={100}  width={100} />
-              <Text fontFamily={'Mitr'} fontSize="16px"> คุณปั้น </Text>
+              <Image src='pun.png' height={100}  width={100} />
+              <Text fontFamily={'Mitr'} fontSize="16px"> WeFailedTheRodina </Text>
               <Text fontFamily={'Mitr'} fontSize="16px"> Back-end Developer </Text>
             </Box>
               <Box paddingRight={100} width={500} paddingLeft={100} >
-              <Image src='Comuthor1.png' height={100}  width={100} />
+              <Image src='CV.jpg' height={100}  width={100} borderRadius="full" />
               <Text fontFamily={'Mitr'} fontSize="16px"> CreatorVerse Official </Text>
               <Text fontFamily={'Mitr'} fontSize="16px"> Project Adviser </Text>
             </Box>
@@ -91,7 +91,7 @@ function about() {
               <Text fontFamily={'Mitr'} fontSize="16px"> Developer and Graphic Designer (UX&UI) </Text>
             </Box>
               <Box paddingRight={100} width={500} paddingLeft={100} >
-              <Image src='natthara.png' height={110}  width={110} />
+              <Image src='natthara.png' height={110}  width={110} borderRadius="full" />
               <Text fontFamily={'Mitr'} fontSize="16px"> Nxttharx </Text>
               <Text fontFamily={'Mitr'} fontSize="16px"> Developer </Text>
             </Box>
@@ -124,9 +124,9 @@ function about() {
               <Text fontFamily={'Mitr'} fontSize="16px"> Developer </Text>
             </Box>
             <Box paddingRight={50} width={500} paddingLeft={100} >
-              <Image src='Comuthor1.png' height={100}  width={100}  borderRadius="full" />
+              {/* <Image src='Comuthor1.png' height={100}  width={100}  borderRadius="full" />
               <Text fontFamily={'Mitr'} fontSize="16px"> คุณไอซ์ </Text>
-              <Text fontFamily={'Mitr'} fontSize="16px"> เห็นใน Doc ประชุม </Text>
+              <Text fontFamily={'Mitr'} fontSize="16px"> เห็นใน Doc ประชุม </Text> */}
             </Box>
           </Flex>
           </Box>
