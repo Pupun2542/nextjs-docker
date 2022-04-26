@@ -119,8 +119,8 @@ function about() {
               <Text fontFamily={'Mitr'} fontSize="16px"> Graphic Designer (UX&UI) </Text>
             </Box>
               <Box paddingRight={100} width={500} paddingLeft={100} >
-              <Image src='Comuthor1.png' height={110}  width={110} />
-              <Text fontFamily={'Mitr'} fontSize="16px"> คุณมะเหมี่ยว </Text>
+              <Image src='mm.png' height={110}  width={110} borderRadius="full" />
+              <Text fontFamily={'Mitr'} fontSize="16px"> 7ess </Text>
               <Text fontFamily={'Mitr'} fontSize="16px"> Developer </Text>
             </Box>
             <Box paddingRight={50} width={500} paddingLeft={100} >
