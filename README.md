@@ -1,7 +1,7 @@
 
 
 <p align="center">
-<img alt="Comuthor Icon" src="//pubilc/Comuthor1.png">
+<img alt="Comuthor Icon" src="https://github.com/Pupun2542/nextjs-docker/blob/main/public/Comuthor1.png?raw=true">
 <h1>Comuthor</h1>
 </p>
 <p align="center">
