@@ -1,7 +1,7 @@
 
 
 <p align="center">
-<img alt="Comuthor Icon" src="pubilc/Comuthor1.png">
+<img alt="Comuthor Icon" src="//pubilc/Comuthor1.png">
 <h1>Comuthor</h1>
 </p>
 <p align="center">
