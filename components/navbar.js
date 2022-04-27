@@ -141,10 +141,16 @@ function CustomNavbar() {
   useEffect(() => {
     if (chatNotiData.length > 0) {
       console.log(chatNotiData);
-      const unreadedItem = chatNotiData.filter((v, i) => !v.readedby.includes(user.uid));
-      if (unreadedItem.length > 0){
+      const unreadedItem = chatNotiData.filter(
+        (v, i) => !v.readedby.includes(user.uid)
+      );
+      if (unreadedItem.length > 0) {
         play();
       }
+      // if (tabState.openTab == ""){
+      //   console.log(unreadedItem[0].data().id)
+      // changeTab(unreadedItem[0].data().id);
+      // }
       setUnreadChat(unreadedItem);
     }
   }, [chatNotiData]);
@@ -521,11 +527,11 @@ function CustomNavbar() {
         pos="fixed"
         top="55px"
         right="100px"
-        display={isChatOpen? "initial" : "none"}
+        display={isChatOpen ? "initial" : "none"}
       >
         {chatNotiData ? (
           chatNotiData.map((data) => (
-            <Box bg="yellow" w="100%" onClick={()=>changeTab(data.id)}>
+            <Box bg="yellow" w="100%" onClick={() => changeTab(data.id)}>
               <Image src={data.thumbnail} sizes={16} rounded />
               <Text>{data.sender}</Text>
               <Text>{data.lastmsg}</Text>

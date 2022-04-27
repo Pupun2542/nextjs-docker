@@ -182,27 +182,6 @@ export const NotificationProvider = ({ children }) => {
       const unsubscribe = onSnapshot(q, (snapshot) => {
         // console.log(snapshot.docs)
         setChatNotidata(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-
-        // console.log(snapshot.docChanges);
-        // snapshot.docChanges().map((docs) => {
-        //   if (snapshot.docChanges().length < 5) {
-        //     console.log(docs.doc.data());
-        //   }
-        // });
-        // let tosent = [];
-        // let existingname = [];
-        // const filtered = snapshot.docs.filter(
-        //   (v, i) => v.data().sender != user.displayName
-        // );
-        // filtered.map((doc) => {
-        //   if (!existingname.includes(doc.data().sender)) {
-        //     existingname = [...existingname, doc.data().sender];
-        //     tosent = [...tosent, doc.data()];
-        //   }
-        // });
-        // setChatNotidata(tosent);
-        // console.log(snapshot.docs.map((doc) => doc.data()));
-        // snapshot.docs.map((doc) => {console.log(doc.data())})
       });
       return () => unsubscribe();
     }
