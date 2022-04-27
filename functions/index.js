@@ -28,59 +28,59 @@ exports.onNotificationAdd = functions.firestore
     }
   });
 
-exports.onChatAdd = functions.firestore
-  .document("chatrooms/{chatRoomId}/message/{messageId}")
-  .onCreate((snap, context) => {
-    db.doc(`chatrooms/${context.params.chatRoomId}`)
-      .get()
-      .then((parentData) => {
-        functions.logger.log("data: ", parentData.data());
-        if (parentData.data().member.length > 0) {
-          for (const target of parentData.data().member) {
-            functions.logger.log("target: ", target);
-            const TrRef = db.doc(
-              `userDetail/${target}/chatmessage/${context.params.chatRoomId}`
-            );
-            let readed = false;
-            if (snap.data().senderId == target) {
-              readed = true;
-            }
-            TrRef.update({
-              lastmsg: snap.data().text,
-              sender: snap.data().sender,
-              senderId: snap.data().senderId,
-              timestamp: snap.data().timestamp,
-              readed: readed,
-            }).catch(() => {
-              if (
-                parentData.data().type == "private" ||
-                parentData.data().type == "chara"
-              ) {
-                TrRef.set({
-                  lastmsg: snap.data().text,
-                  sender: snap.data().sender,
-                  senderId: snap.data().senderId,
-                  timestamp: snap.data().timestamp,
-                  readed: readed,
-                  type: parentData.data().type,
-                });
-              } else {
-                TrRef.set({
-                  thumbnail: parentData.data().thumbnail,
-                  name: parentData.data().name,
-                  lastmsg: snap.data().text,
-                  sender: snap.data().sender,
-                  senderId: snap.data().senderId,
-                  timestamp: snap.data().timestamp,
-                  readed: readed,
-                  type: parentData.data().type,
-                });
-              }
-            });
-          }
-        }
-      });
-  });
+// exports.onChatAdd = functions.firestore
+//   .document("chatrooms/{chatRoomId}/message/{messageId}")
+//   .onCreate((snap, context) => {
+//     db.doc(`chatrooms/${context.params.chatRoomId}`)
+//       .get()
+//       .then((parentData) => {
+//         functions.logger.log("data: ", parentData.data());
+//         if (parentData.data().member.length > 0) {
+//           for (const target of parentData.data().member) {
+//             functions.logger.log("target: ", target);
+//             const TrRef = db.doc(
+//               `userDetail/${target}/chatmessage/${context.params.chatRoomId}`
+//             );
+//             let readed = false;
+//             if (snap.data().senderId == target) {
+//               readed = true;
+//             }
+//             TrRef.update({
+//               lastmsg: snap.data().text,
+//               sender: snap.data().sender,
+//               senderId: snap.data().senderId,
+//               timestamp: snap.data().timestamp,
+//               readed: readed,
+//             }).catch(() => {
+//               if (
+//                 parentData.data().type == "private" ||
+//                 parentData.data().type == "chara"
+//               ) {
+//                 TrRef.set({
+//                   lastmsg: snap.data().text,
+//                   sender: snap.data().sender,
+//                   senderId: snap.data().senderId,
+//                   timestamp: snap.data().timestamp,
+//                   readed: readed,
+//                   type: parentData.data().type,
+//                 });
+//               } else {
+//                 TrRef.set({
+//                   thumbnail: parentData.data().thumbnail,
+//                   name: parentData.data().name,
+//                   lastmsg: snap.data().text,
+//                   sender: snap.data().sender,
+//                   senderId: snap.data().senderId,
+//                   timestamp: snap.data().timestamp,
+//                   readed: readed,
+//                   type: parentData.data().type,
+//                 });
+//               }
+//             });
+//           }
+//         }
+//       });
+//   });
 
 // db.runTransaction((transaction) => {
 //   for (const target of parentData.data().member) {
@@ -282,36 +282,36 @@ exports.onUserCreated = functions.auth.user().onCreate((user) => {
     .then();
 });
 
-exports.onMessageStatusChange = functions.firestore
-  .document("userDetail/{userId}/chatmessage/{roomId}")
-  .onUpdate((snap, context) => {
-    if (
-      snap.before.data().readed &&
-      snap.before.data().readed == true &&
-      snap.after.data().readed == false
-    ) {
-      try {
-        db.runTransaction((transaction) => {
-          const trRef = db
-            .collection(`chatrooms/${context.params.roomId}/message/`)
-            .limit(500);
-          // const TrQuery =
-          transaction.get(trRef).then((docs) => {
-            const filteredDoc = docs.docs.filter(
-              (v, i) => !v.data().readedby.includes(context.params.userId)
-            );
-            filteredDoc.map((doc) => {
-              transaction.update(
-                db.doc(`chatrooms/${context.params.roomId}/message/${doc.id}`),
-                {
-                  readedby: [...doc.data.readedby, context.params.userId],
-                }
-              );
-            });
-          });
-        });
-      } catch (e) {
-        functions.logger.error("cannot update readedby : ", e);
-      }
-    }
-  });
+// exports.onMessageStatusChange = functions.firestore
+//   .document("userDetail/{userId}/chatmessage/{roomId}")
+//   .onUpdate((snap, context) => {
+//     if (
+//       snap.before.data().readed &&
+//       snap.before.data().readed == true &&
+//       snap.after.data().readed == false
+//     ) {
+//       try {
+//         db.runTransaction((transaction) => {
+//           const trRef = db
+//             .collection(`chatrooms/${context.params.roomId}/message/`)
+//             .limit(500);
+//           // const TrQuery =
+//           transaction.get(trRef).then((docs) => {
+//             const filteredDoc = docs.docs.filter(
+//               (v, i) => !v.data().readedby.includes(context.params.userId)
+//             );
+//             filteredDoc.map((doc) => {
+//               transaction.update(
+//                 db.doc(`chatrooms/${context.params.roomId}/message/${doc.id}`),
+//                 {
+//                   readedby: [...doc.data.readedby, context.params.userId],
+//                 }
+//               );
+//             });
+//           });
+//         });
+//       } catch (e) {
+//         functions.logger.error("cannot update readedby : ", e);
+//       }
+//     }
+//   });
