@@ -67,10 +67,13 @@ export default function profile() {
             //         roomId = doc.data().id
             //     }
             // });
+            //ถ้าเจอ doc
             const docId = docs.docs.find((v)=> v.data().member.includes(id));
             if (docId){
-              roomId = docId.data().id;
+              //ถ้า doc เป็นของเราจริงๆ
+              changeTab(docId.data().id);
             }else{
+              //ถ้าไม่ใช่
               addDoc(collection(db, "chatrooms"),{ 
                 member: [user.uid, id],
                 type: "private",
@@ -78,7 +81,7 @@ export default function profile() {
                 roomId = created.id
                 updateDoc(doc(db, "chatrooms", created.id), {
                     id: created.id,
-                }).then(()=>console.log("updated"))
+                }).then(()=>changeTab(created.id))
             })
             }
             // console.log("not empty")
@@ -90,12 +93,13 @@ export default function profile() {
             }).then((created)=>{
                 // console.log("created")
                 roomId = created.id
+                changeTab(roomId);
                 updateDoc(doc(db, "chatrooms", created.id), {
                     id: created.id,
-                }).then(()=>console.log("updated"))
+                }).then(()=>changeTab(created.id))
             })
         }
-        changeTab(roomId);
+        
         // console.log(roomId)
         // setNewtab(roomId)
         // setTimeout(()=>setNewtab(""),500)
