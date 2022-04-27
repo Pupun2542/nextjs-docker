@@ -1,57 +1,42 @@
-# With Docker
 
-This examples shows how to use Docker with Next.js based on the [deployment documentation](https://nextjs.org/docs/deployment#docker-image). Additionally, it contains instructions for deploying to Google Cloud Run. However, you can use any container-based deployment host.
 
-## How to use
+<p align="center">
+<img alt="Comuthor Icon" src="https://github.com/Pupun2542/nextjs-docker/blob/main/public/Comuthor1.png?raw=true">
+<h1>Comuthor</h1>
+</p>
+<p align="center">
+<img alt="GitHub language count" src="https://img.shields.io/github/languages/count/Pupun2542/nextjs-docker">
+<img alt="GitHub top language" src="https://img.shields.io/github/languages/top/Pupun2542/nextjs-docker">
+<img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/Pupun2542/nextjs-docker">
+<img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/w/Pupun2542/nextjs-docker">
+<img alt="GitHub contributors" src="https://img.shields.io/github/contributors/Pupun2542/nextjs-docker">
+  
+</p>
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
 
-```bash
-npx create-next-app --example with-docker nextjs-docker
-# or
-yarn create next-app --example with-docker nextjs-docker
-```
+## About
 
-## Using Docker
+Comuthor.com is an opensource website for roleplaying in Thailand, currently in active development, it is a domestic platform alternative to Facebook, Twitter and Discord. With related functions, such as posts, comments, chats, group creating, systems that allow roleplayers to do more complex roleplaying on the website and management screens for staff.
 
-1. [Install Docker](https://docs.docker.com/get-docker/) on your machine.
-1. Build your container: `docker build -t nextjs-docker .`.
-1. Run your container: `docker run -p 3000:3000 nextjs-docker`.
+Comuthor.com first published its Phase 0 on Feb 22nd, and Phase 0.5 on Apr 12th. These releases are feasibility study for next major update, Phase 1, which is scheduled to be released in May22th 2022
 
-You can view your images created with `docker images`.
+## Features
+* **Lorem ipsum** —   dolor sit amet, consectetur adipiscing elit.
 
-## Deploying to Google Cloud Run
 
-The `start` script in `package.json` has been modified to accept a `PORT` environment variable (for compatibility with Google Cloud Run).
 
-1. Install the [Google Cloud SDK](https://cloud.google.com/sdk/docs/install) so you can use `gcloud` on the command line.
-1. Run `gcloud auth login` to log in to your account.
-1. [Create a new project](https://cloud.google.com/run/docs/quickstarts/build-and-deploy) in Google Cloud Run (e.g. `nextjs-docker`). Ensure billing is turned on.
-1. Build your container image using Cloud Build: `gcloud builds submit --tag gcr.io/PROJECT-ID/helloworld --project PROJECT-ID`. This will also enable Cloud Build for your project.
-1. Deploy to Cloud Run: `gcloud run deploy --image gcr.io/PROJECT-ID/helloworld --project PROJECT-ID --platform managed`. Choose a region of your choice.
+##  Built With
 
-   - You will be prompted for the service name: press Enter to accept the default name, `helloworld`.
-   - You will be prompted for [region](https://cloud.google.com/run/docs/quickstarts/build-and-deploy#follow-cloud-run): select the region of your choice, for example `us-central1`.
-   - You will be prompted to **allow unauthenticated invocations**: respond `y`.
+- [React](#) --- ...
 
-Or click the button below, authorize the script, and select the project and region when prompted:
+- [chakra-ui](#) --- ...
 
-[![Run on Google Cloud](https://deploy.cloud.run/button.svg)](https://deploy.cloud.run/?git_repo=https://github.com/vercel/next.js.git&dir=examples/with-docker)
+- [phosphor](#) --- ...
 
-## Running Locally
 
-First, run the development server:
+##  The Comuthor Team
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+The original Comuthor code contributors can be found in [**AUTHORS.MD**](docs/AUTHORS.md).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+##  Copyright / License
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ut venenatis tortor. Aenean efficitur, diam in varius efficitur, nunc velit facilisis arcu, nec congue ante neque a massa. Nunc eleifend sit amet velit quis vehicula.
