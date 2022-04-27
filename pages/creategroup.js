@@ -83,11 +83,6 @@ export default function CreateGroup() {
     }
   }, [user, loading]);
 
-  const getplaceholder = async () => {
-    const blob = await getBlob("group/banner/UploadBanner.jpg");
-    return blob;
-  };
-
   const [genre, setGenre] = useState([]);
   const [hashtag, setHashtag] = useState("");
   const [communame, setCommuname] = useState("");
@@ -97,6 +92,7 @@ export default function CreateGroup() {
   const [description, setDescription] = useState("");
   const [smlink, setSmlink] = useState("");
   const [doclink, setDoclink] = useState("");
+  const [docfile, setDocfile] = useState(null);
   const [qaasklink, setQaasklink] = useState("");
   const [qaanslink, setQaanslink] = useState("");
   const [submitlink, setSubmitlink] = useState("");
@@ -120,6 +116,18 @@ export default function CreateGroup() {
   const [averageTimeUnit, setAvergeTimeUnit] = useState("");
   const [type, setType] = useState("");
 
+  const uploadTotemporaryPDF = (setState, data) =>{
+    const storageref = ref(
+      store,
+      `group/${user.uid}/temporary/${auth.currentUser.uid}${Date.now()}.pdf`
+    );
+    uploadBytes(storageref, data).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        setState(url)
+      });
+    });
+  }
+
 
   //ก็อปปี้บรรทัดบนไปวางเพิ่ม หรือเขียนเอง ลักษณะคือ const [state, setState] = useState(true) โดยที่ state คือชื่อตัวแปรที่จะใช้ เช่น durationsw ส่วน setstate คือฟังก์ชั่นที่ไว้ใช้เปลี่ยนค่าตัวแปร
 
@@ -136,9 +144,9 @@ export default function CreateGroup() {
 
     if (communame && hashtag && description) {
       const docRef = await addDoc(collection(db, "group"), {
-        Name: communame,
-        Creator: auth.currentUser.uid,
-        Type: type,
+        name: communame,
+        creator: auth.currentUser.uid,
+        type: type,
         privacy: privacy,
         tag: hashtag,
         description: description,
@@ -164,6 +172,8 @@ export default function CreateGroup() {
         createAt: serverTimestamp(),
       });
 
+      let toUpdate = {};
+
       if (bannerBlob) {
         // setBannerBlob(
         //   "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2Fimageplaceholder.png?alt=media&token=e3a54ee9-8d20-4471-8f4f-7157ac972757"
@@ -174,7 +184,8 @@ export default function CreateGroup() {
         );
         uploadString(storageref, bannerBlob, "data_url").then((snapshot) => {
           getDownloadURL(snapshot.ref).then((url) => {
-            updateDoc(docRef, { banner: url });
+            // updateDoc(docRef, { banner: url });
+            toUpdate = {...toUpdate, banner: url};
           });
         });
       } else {
@@ -183,7 +194,21 @@ export default function CreateGroup() {
             "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2Fimageplaceholder.png?alt=media&token=e3a54ee9-8d20-4471-8f4f-7157ac972757",
         });
       }
-
+      if (doclink != ""){
+        const storageref = ref(
+          store,
+          `group/${docRef.id}/documents/mainDocument.pdf`
+        );
+        uploadBytes(storageref, docfile).then((snapshot) => {
+          getDownloadURL(snapshot.ref).then((url) => {
+            toUpdate = {...toUpdate, doclink: url};
+          });
+        });
+      }
+      if (!Object.keys(obj).length === 0){
+        updateDoc(docRef, toUpdate);
+      }
+      
       setGenre([]);
       setCommuname("");
       setMaxplayer("");
@@ -208,6 +233,7 @@ export default function CreateGroup() {
       setAvergeTime("");
       setAvergeTimeUnit("");
       setType("");
+      setDocfile(null)
       Router.push("/group/" + docRef.id);
     } else {
       alert("กรุณาใส่ชื่อ ชื่อย่อ และคำอธิบายคอมมู");
@@ -268,7 +294,12 @@ export default function CreateGroup() {
     console.log(tags);
   };
 
-  return (
+  if (loading){
+    <Text>Loding User</Text>
+  }
+
+  if (user){
+    return (
       <Box bg="#FDFDFD" maxW={1980}>
         <CustomNavbar />
         <Flex justifyContent={'center'}>
@@ -276,7 +307,7 @@ export default function CreateGroup() {
 
           <Spacer /> */}
 
-          <Center bg={"#D5D5D5"} MaxW={1024}>
+          <Center bg={"#D5D5D5"} MaxW={1024} marginTop={55}>
             <VStack>
               <Center>
                 <Box>
@@ -1249,16 +1280,18 @@ export default function CreateGroup() {
 
                                 <Center pl={1.5} pr={1.5}>
                                   <Input
+                                    
                                     required
                                     w={650}
                                     h={46}
                                     bg={"white"}
                                     placeholder={"..."}
                                     className={style.search}
-                                    type="url"
+                                    type="file"
                                     value={doclink}
                                     onChange={(e) => {
-                                      setDoclink(e.target.value);
+                                      uploadTotemporaryPDF(setDoclink, e.target.files[0])
+                                      setDocfile(e.target.files[0])
                                     }}
                                   />
                                 </Center>
@@ -1447,4 +1480,6 @@ export default function CreateGroup() {
         </Center>
       </Box>
   );
+  }
+  return (<></>)
 }
