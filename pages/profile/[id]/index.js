@@ -81,8 +81,6 @@ export default function profile() {
                 }).then(()=>console.log("updated"))
             })
             }
-            
-            
             // console.log("not empty")
         }else{
             // console.log("empty")

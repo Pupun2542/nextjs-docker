@@ -62,7 +62,7 @@ export default function Edit() {
   // const app = useApp();
   // const db = getFirestore(app);
   // const auth = getAuth(app);
-  const {app, auth, db} = useApp();
+  const { app, auth, db } = useApp();
   const [user, loading, error] = useAuthState(auth);
   const Router = useRouter();
   const store = getStorage(app);
@@ -84,6 +84,7 @@ export default function Edit() {
   const [description, setDescription] = useState("");
   const [smlink, setSmlink] = useState("");
   const [doclink, setDoclink] = useState("");
+  const [docfile, setDocfile] = useState(null);
   const [qaasklink, setQaasklink] = useState("");
   const [qaanslink, setQaanslink] = useState("");
   const [submitlink, setSubmitlink] = useState("");
@@ -118,13 +119,13 @@ export default function Edit() {
         getDoc(doc(db, "group", id)).then((v) => {
           const data = v.data();
 
-          if (user.uid != data.Creator) {
-            console.log(data.Creator + " ", user);
+          if (user.uid != data.creator) {
+            console.log(data.creator + " ", user);
             alert("Unorthorized Access");
             Router.back();
           } else {
             setGenre(data.genre ? data.genre : "");
-            setCommuname(data.Name ? data.Name : "");
+            setCommuname(data.name ? data.name : "");
             setMaxplayer(data.maxplayer ? data.maxplayer : "");
             // setRegDate(data.regDate ? data.regDate : "");
             setRuntime(data.runtime ? data.runtime : "");
@@ -149,7 +150,7 @@ export default function Edit() {
             setAvergeTimeUnit(
               data.averageTimeUnit ? data.averageTimeUnit : "วัน(Day)"
             );
-            setType(data.Type ? data.Type : "");
+            setType(data.type ? data.type : "");
             originBannerUrl.current = data.banner;
           }
         });
@@ -189,9 +190,9 @@ export default function Edit() {
     if (confirm("ยืนยันการแก้ไข?")) {
       if (communame && hashtag && description) {
         await updateDoc(doc(db, "group", id), {
-          Name: communame,
-          Creator: auth.currentUser.uid,
-          Type: type,
+          name: communame,
+          creator: auth.currentUser.uid,
+          type: type,
           privacy: privacy,
           tag: hashtag,
           description: description,
@@ -216,9 +217,9 @@ export default function Edit() {
           averageTimeUnit: averageTimeUnit,
           createAt: serverTimestamp(),
         });
-
+        let toUpdate = {};
         if (bannerBlob !== originBannerUrl.current) {
-          console.log(bannerBlob, originBannerUrl);
+          // console.log(bannerBlob, originBannerUrl);
           const storageref = ref(
             store,
             `group/${id}/uploadImages/${auth.currentUser.uid}${Date.now()}`
@@ -226,9 +227,28 @@ export default function Edit() {
           uploadString(storageref, bannerBlob, "data_url").then((snapshot) => {
             getDownloadURL(snapshot.ref).then((url) => {
               updateDoc(doc(db, "group", id), { banner: url });
+              // toUpdate = { ...toUpdate, banner: url };
             });
           });
         }
+        if (docfile) {
+          // console.log(store)
+          const storageref = ref(
+            store,
+            `group/${id}/documents/mainDocument.pdf`
+          );
+          console.log(storageref)
+          uploadBytes(storageref, docfile).then((snapshot) => {
+            getDownloadURL(snapshot.ref).then((url) => {
+              // toUpdate = { ...toUpdate, doclink: url };
+              updateDoc(doc(db, "group", id), { doclink: url });
+            });
+          });
+        }
+        // console.log("tosendLength",Object.keys(toUpdate).length)
+        // if (!Object.keys(toUpdate).length === 0) {
+        //   updateDoc(doc(db, "group", id), toUpdate);
+        // }
 
         setGenre([]);
         setCommuname("");
@@ -254,6 +274,7 @@ export default function Edit() {
         setAvergeTime("");
         setAvergeTimeUnit("");
         setType("");
+        setDocfile(null);
         Router.push("/group/" + id);
       } else {
         alert("กรุณาใส่ชื่อ ชื่อย่อ และคำอธิบายคอมมู");
@@ -518,8 +539,9 @@ export default function Edit() {
                                 />
 
                                 <Center pl={1.5} pr={1.5}>
-                                  <NumberInput w={130}
-                                    onChange={(e)=>setMaxplayer(e)}
+                                  <NumberInput
+                                    w={130}
+                                    onChange={(e) => setMaxplayer(e)}
                                   >
                                     <NumberInputField
                                       bg={"white"}
@@ -1316,10 +1338,11 @@ export default function Edit() {
                                     bg={"white"}
                                     placeholder={"..."}
                                     className={style.search}
-                                    type="url"
-                                    value={doclink}
+                                    type="file"
+                                    // value={doclink}
                                     onChange={(e) => {
-                                      setDoclink(e.target.value);
+                                      // uploadTotemporaryPDF(setDoclink, e.target.files[0])
+                                      setDocfile(e.target.files[0]);
                                     }}
                                   />
                                 </Center>

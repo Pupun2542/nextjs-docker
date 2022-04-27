@@ -69,6 +69,7 @@ import {
 } from "firebase/firestore";
 import { useApp, useNotifications, useUser, useTab } from "../src/hook/local";
 import { Chatsidebar } from "./chat";
+import useSound from "use-sound";
 // import ChatBox from "./chat";
 
 const NavLink = ({ children }) => (
@@ -119,6 +120,7 @@ function CustomNavbar() {
   const [data, setData] = useState([]);
   const [unreadChat, setUnreadChat] = useState([]);
   const [unreadnoti, setUnreadnoti] = useState([]);
+  const [play] = useSound("/chatnoti.wav", { volume: 1.0 });
   // const userdata = useUser()
   // const
   // console.log(isChatOpen);
@@ -139,7 +141,11 @@ function CustomNavbar() {
   useEffect(() => {
     if (chatNotiData.length > 0) {
       console.log(chatNotiData);
-      setUnreadChat(chatNotiData.filter((v, i) => v.readed == false));
+      const unreadedItem = chatNotiData.filter((v, i) => !v.readedby.includes(user.uid));
+      if (unreadedItem.length > 0){
+        play();
+      }
+      setUnreadChat(unreadedItem);
     }
   }, [chatNotiData]);
   useEffect(() => {
@@ -206,7 +212,7 @@ function CustomNavbar() {
 
   return (
     <>
-      <Box bg="#4C4D88" h="auto" w="100%" px={5} pos="fixed" >
+      <Box bg="#4C4D88" h="auto" w="100%" px={5} pos="fixed" zIndex={10000}>
         <Flex h={55} alignItems={"center"} justifyContent={"space-between"}>
           <Hide below="md">
             <Flex align={"center"} float={1} cursor="pointer">
@@ -519,10 +525,10 @@ function CustomNavbar() {
       >
         {chatNotiData ? (
           chatNotiData.map((data) => (
-            <Box h="30" bg="yellow" w="100%">
+            <Box bg="yellow" w="100%" onClick={()=>changeTab(data.id)}>
               <Image src={data.thumbnail} sizes={16} rounded />
-              <Text>{data.name}</Text>
-              <Text>{data.message}</Text>
+              <Text>{data.sender}</Text>
+              <Text>{data.lastmsg}</Text>
             </Box>
           ))
         ) : (

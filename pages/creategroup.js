@@ -116,17 +116,17 @@ export default function CreateGroup() {
   const [averageTimeUnit, setAvergeTimeUnit] = useState("");
   const [type, setType] = useState("");
 
-  const uploadTotemporaryPDF = (setState, data) =>{
-    const storageref = ref(
-      store,
-      `group/${user.uid}/temporary/${auth.currentUser.uid}${Date.now()}.pdf`
-    );
-    uploadBytes(storageref, data).then((snapshot) => {
-      getDownloadURL(snapshot.ref).then((url) => {
-        setState(url)
-      });
-    });
-  }
+  // const uploadTotemporaryPDF = (setState, data) =>{
+  //   const storageref = ref(
+  //     store,
+  //     `group/${user.uid}/temporary/${auth.currentUser.uid}${Date.now()}.pdf`
+  //   );
+  //   uploadBytes(storageref, data).then((snapshot) => {
+  //     getDownloadURL(snapshot.ref).then((url) => {
+  //       setState(url)
+  //     });
+  //   });
+  // }
 
 
   //ก็อปปี้บรรทัดบนไปวางเพิ่ม หรือเขียนเอง ลักษณะคือ const [state, setState] = useState(true) โดยที่ state คือชื่อตัวแปรที่จะใช้ เช่น durationsw ส่วน setstate คือฟังก์ชั่นที่ไว้ใช้เปลี่ยนค่าตัวแปร
@@ -154,7 +154,7 @@ export default function CreateGroup() {
         runtime: runtime,
         genre: genre,
         smlink: smlink,
-        doclink: doclink,
+        // doclink: doclink,
         qaasklink: qaasklink,
         qaanslink: qaanslink,
         submitlink: submitlink,
@@ -175,39 +175,35 @@ export default function CreateGroup() {
       let toUpdate = {};
 
       if (bannerBlob) {
-        // setBannerBlob(
-        //   "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2Fimageplaceholder.png?alt=media&token=e3a54ee9-8d20-4471-8f4f-7157ac972757"
-        // );
         const storageref = ref(
           store,
           `group/${docRef.id}/uploadImages/${auth.currentUser.uid}${Date.now()}`
         );
         uploadString(storageref, bannerBlob, "data_url").then((snapshot) => {
           getDownloadURL(snapshot.ref).then((url) => {
-            // updateDoc(docRef, { banner: url });
+            updateDoc(docRef, { banner: url });
             toUpdate = {...toUpdate, banner: url};
           });
         });
       } else {
-        updateDoc(docRef, {
-          banner:
-            "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2Fimageplaceholder.png?alt=media&token=e3a54ee9-8d20-4471-8f4f-7157ac972757",
-        });
+        toUpdate = {...toUpdate, banner: "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2Fimageplaceholder.png?alt=media&token=e3a54ee9-8d20-4471-8f4f-7157ac972757"};
       }
-      if (doclink != ""){
+      if (docfile){
         const storageref = ref(
           store,
           `group/${docRef.id}/documents/mainDocument.pdf`
         );
         uploadBytes(storageref, docfile).then((snapshot) => {
           getDownloadURL(snapshot.ref).then((url) => {
-            toUpdate = {...toUpdate, doclink: url};
+            // toUpdate = {...toUpdate, doclink: url};
+            updateDoc(docRef, { doclink: url });
           });
         });
       }
-      if (!Object.keys(obj).length === 0){
-        updateDoc(docRef, toUpdate);
-      }
+      // console.log("tosendLength",Object.keys(toUpdate).length)
+      // if (!Object.keys(toUpdate).length === 0){
+      //   updateDoc(docRef, toUpdate);
+      // }
       
       setGenre([]);
       setCommuname("");
@@ -1288,9 +1284,9 @@ export default function CreateGroup() {
                                     placeholder={"..."}
                                     className={style.search}
                                     type="file"
-                                    value={doclink}
+                                    // value={doclink}
                                     onChange={(e) => {
-                                      uploadTotemporaryPDF(setDoclink, e.target.files[0])
+                                      // uploadTotemporaryPDF(setDoclink, e.target.files[0])
                                       setDocfile(e.target.files[0])
                                     }}
                                   />

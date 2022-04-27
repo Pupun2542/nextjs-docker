@@ -39,6 +39,8 @@ import {
   writeBatch,
   limit,
   runTransaction,
+  updateDoc,
+  arrayUnion,
 } from "firebase/firestore";
 import { Minus, X } from "phosphor-react";
 
@@ -48,7 +50,7 @@ export const Chatsidebar = ({ user, db, forcedopenTab }) => {
   const { tabState, addTab, removeTab, changeTab } = useTab();
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
   useEffect(() => {
-    console.log(tabState, forcedopenTab);
+    // console.log(tabState, forcedopenTab);
     if (
       forcedopenTab &&
       tabState &&
@@ -60,7 +62,7 @@ export const Chatsidebar = ({ user, db, forcedopenTab }) => {
     }
   }, [forcedopenTab]);
 
-  console.log(tabState.opentab.length);
+  // console.log(tabState.opentab.length);
   useEffect(() => {
     if (user) {
       const QuerySnapshot = query(
@@ -81,10 +83,10 @@ export const Chatsidebar = ({ user, db, forcedopenTab }) => {
       return () => unsubscribe();
     }
   }, [user]);
-  console.log("tabState.othertab ",tabState.othertab)
+  // console.log("tabState.othertab ", tabState.othertab);
   return (
     <Box position="fixed" right={3} bottom={0} alignItems="flex-end">
-      <Flex flexDirection="column" float='right'>
+      <Flex flexDirection="column" float="right">
         {tabState &&
           tabState.othertab.length > 0 &&
           tabState.othertab.map((atab, k) => (
@@ -138,12 +140,12 @@ const ChatIcon = ({ user, db, atab }) => {
   // const unreadnum = 0;
   const onIconClicked = () => {
     changeTab(atab);
-    console.log("opentab" + atab);
+    // console.log("opentab" + atab);
     // onToggle();
   };
 
   return (
-    <Box float={'right'}>
+    <Box float={"right"}>
       <Center
         float="left"
         background="#343434"
@@ -201,9 +203,9 @@ const ChatBox = ({ atab, user, db }) => {
   const { tabState, addTab, removeTab, changeTab, CloseTab } = useTab();
   const [msg, setMsg] = useState("");
   const unrededref = useRef(false);
-  console.log("currentopen1 " + tabState.opentab);
+  // console.log("currentopen1 " + tabState.opentab);
   useEffect(() => {
-    console.log("currentopen2 " + tabState.opentab);
+    // console.log("currentopen2 " + tabState.opentab);
     if (tabState.opentab != "") {
       onOpen();
     }
@@ -256,7 +258,7 @@ const ChatBox = ({ atab, user, db }) => {
         const filteredname = userData.find(
           (v) => v.userId == member
         ).displayName;
-        console.log(filteredname);
+        // console.log(filteredname);
         setName(filteredname);
         // name = member[0];
       } else {
@@ -281,32 +283,40 @@ const ChatBox = ({ atab, user, db }) => {
     }
   }, [snapshot]);
 
-  const onChatSent = () => {
+  const onChatSent = async () => {
     if (msg) {
-      addDoc(collection(db, "chatrooms", tabState.opentab, "message"), {
+      console.log(doc(db, "chatrooms", tabState.opentab));
+      await updateDoc(doc(db, "chatrooms", tabState.opentab), {
+        lastmsg: msg,
+        sender: user.displayName,
+        senderId: user.uid,
+        readedby: [user.uid],
+        timestamp: serverTimestamp(),
+      })
+        .then(() => console.log('updated'))
+        .catch((e) => console.log(e));
+      await addDoc(collection(db, "chatrooms", tabState.opentab, "message"), {
         sender: user.displayName,
         senderId: user.uid,
         text: msg,
         timestamp: serverTimestamp(),
-        readedby: [user.uid],
       });
       setMsg("");
     }
   };
   const handleFocus = async () => {
     if (unrededref) {
-      const userDocRef = doc(db, "userDetail", user.uid, "chatmessage", tabState.opentab)
+      const userDocRef = doc(db, "chatrooms", tabState.opentab);
       // const groupDocRef = doc(db, "chatrooms", tabState.opentab, "message", tabState.opentab)
       try {
-        await runTransaction(db, async (transaction)=>{
-          await transaction.get(userDocRef);
-          transaction.update(userDocRef,{
-            readed: true,
-          })
-        })
-
-      }catch (e) {
-        console.log("update fail ", e)
+        await runTransaction(db, async (transaction) => {
+          const data = await transaction.get(userDocRef);
+          transaction.update(userDocRef, {
+            readedby: arrayUnion(user.uid),
+          });
+        });
+      } catch (e) {
+        console.log("update fail ", e);
       }
       // const q = query(
       //   collection(db, "userDetail", user.uid, "chatmessage"),

@@ -84,7 +84,7 @@ const tabReducer = (state, action) => {
 
     case "removeTab":
       const newtab = state.othertab.filter((v, i) => v != action.payload);
-      console.log("removetab");
+      // console.log("removetab");
       return {
         ...state,
         othertab: newtab,
@@ -156,7 +156,6 @@ export const NotificationProvider = ({ children }) => {
   const [notidata, setNotidata] = useState([]);
   const [chatNotiData, setChatNotidata] = useState([]);
   const [user, loading, error] = useAuthState(auth);
-  const [play] = useSound("/chatnoti.wav", { volume: 1.0 });
   useEffect(() => {
     if (!loading && user) {
       const q = query(
@@ -171,20 +170,18 @@ export const NotificationProvider = ({ children }) => {
     }
   }, [loading, user]);
   useEffect(() => {
-    console.log(user);
+    // console.log(user);
     if (!loading && user) {
+      // console.log(user.uid)
       const q = query(
-        collection(db, "userDetail", user.uid, "chatmessage"),
+        collection(db, "chatrooms"),
+        where("member", 'array-contains', user.uid),
         orderBy("timestamp", "desc"),
         limit(50)
       );
       const unsubscribe = onSnapshot(q, (snapshot) => {
-        setChatNotidata(snapshot.docs.map((doc) => doc.data()));
-        snapshot.docChanges().forEach((change) => {
-          if (change.type === "modified" && change.doc.data().readed == false) {
-            play();
-          }
-        });
+        // console.log(snapshot.docs)
+        setChatNotidata(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
 
         // console.log(snapshot.docChanges);
         // snapshot.docChanges().map((docs) => {

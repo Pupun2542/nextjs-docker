@@ -92,6 +92,7 @@ export default function Group() {
   useEffect(() => {
     const Fetchdata = async () => {
       getDoc(doc(db, "group", id)).then((d) => {
+        
         if (d.exists()) {
           getDoc(doc(db, "userDetail", d.data().creator)).then((staff) => {
             if (staff.exists()) {
@@ -113,6 +114,7 @@ export default function Group() {
             // console.log(d.data().rating);
           }
         } else {
+          console.log(d);
           alert("ไม่พบคอมมู");
           Router.back();
         }
