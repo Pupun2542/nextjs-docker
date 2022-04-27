@@ -267,21 +267,21 @@ const ChatBox = ({ atab, user, db }) => {
     }
   }, [chatRoomData, loading]);
 
-  useEffect(() => {
-    // if (snapshot) {
-    //   console.log(snapshot.docs);
-    // }
+  // useEffect(() => {
+  //   if (snapshot) {
+  //     console.log(snapshot.docs[0].data());
+  //   }
 
-    if (
-      snapshot &&
-      snapshot.docs[0] &&
-      !snapshot.docs[0].data().readedby.includes(user.uid)
-    ) {
-      unrededref.current = true;
-    } else {
-      unrededref.current = false;
-    }
-  }, [snapshot]);
+  //   if (
+  //     snapshot &&
+  //     snapshot.docs[0] &&
+  //     !snapshot.docs[0].data().readedby.includes(user.uid)
+  //   ) {
+  //     unrededref.current = true;
+  //   } else {
+  //     unrededref.current = false;
+  //   }
+  // }, [snapshot]);
 
   const onChatSent = async () => {
     if (msg) {
@@ -305,7 +305,7 @@ const ChatBox = ({ atab, user, db }) => {
     }
   };
   const handleFocus = async () => {
-    if (unrededref) {
+    // if (unrededref) {
       const userDocRef = doc(db, "chatrooms", tabState.opentab);
       // const groupDocRef = doc(db, "chatrooms", tabState.opentab, "message", tabState.opentab)
       try {
@@ -318,50 +318,11 @@ const ChatBox = ({ atab, user, db }) => {
       } catch (e) {
         console.log("update fail ", e);
       }
-      // const q = query(
-      //   collection(db, "userDetail", user.uid, "chatmessage"),
-      //   limit(50)
-      // );
-      // getDocs(q).then((docs) => {
-      //   if (docs) {
-      //     // console.log(docs.docs())
-      //     const batch = writeBatch(db);
-      //     docs.docs.map((doc) => {
-      //       console.log("unread ", doc.data());
-      //       batch.update(doc.ref, { readed: true });
-      //     });
-      //     batch.commit();
-      //   }
-      // });
-      // const q2 = query(
-      //   collection(db, "chatrooms", tabState.opentab, "message"),
-      //   orderBy("timestamp", "asc"),
-      //   limit(50)
-      // );
-      // getDocs(q2).then((docs) => {
-      //   const newdocs = docs.docs.filter(
-      //     (v, i) => !v.data().readedby.includes(user.uid)
-      //   );
-      //   if (newdocs) {
-      //     const batch = writeBatch(db);
-      //     newdocs.map((doc) => {
-      //       batch.update(doc.ref, {
-      //         readedby: [...doc.data().readedby, user.uid],
-      //       });
-      //       console.log(doc.data().readedby.includes(user.uid));
-      //     });
-      //     batch.commit();
-      //   }
-      // });
-    }
-
-    // console.log("focus")
   };
 
   if (loading) {
     return <></>;
   }
-  // console.log(chatRoomData)
   return (
     <Box
       display={isOpen ? "flex" : "none"}
