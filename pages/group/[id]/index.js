@@ -87,9 +87,9 @@ export default function Group() {
     const Fetchdata = async () => {
       getDoc(doc(db, "group", id)).then((d) => {
         if (d.exists()) {
-          getDoc(doc(db, "userDetail", d.data().Creator)).then((staff) => {
+          getDoc(doc(db, "userDetail", d.data().creator)).then((staff) => {
             if (staff.exists()) {
-              setData({ ...d.data(), CreatorName: staff.data().displayName });
+              setData({ ...d.data(), creatorName: staff.data().displayName });
             }
           });
 
@@ -138,7 +138,7 @@ export default function Group() {
         );
       } else {
         setDoc(doc(db, "userDetail", user.uid, "pinnedGroup", id), {
-          name: data.Name,
+          name: data.name,
           tag: data.tag,
           id: id,
         }).then(() => {
@@ -179,7 +179,7 @@ export default function Group() {
     <Box>
       <Box bg={"#FFFFFF"}>
         <CustomNavbar />
-        {!loading && data.Name && (
+        {!loading && data.name && (
           <Flex>
             {/* {console.log(data)} */}
             <Box w={400} minH={1000} bg={"#F3F3F3"}></Box>
@@ -270,7 +270,7 @@ export default function Group() {
                   fontSize={22}
                 >
                   {data.tag ? data.tag : "ชื่อย่อคอมมู"} |{" "}
-                  {data.Name ? data.Name : "ชื่อคอมมู"}
+                  {data.name ? data.name : "ชื่อคอมมู"}
                 </Center>
 
                 <Flex bg={"#F3F3F3"} shadow={"base"}>
@@ -389,7 +389,7 @@ export default function Group() {
                               shadow={"base"}
                               borderRightRadius={10}
                             >
-                              {data.Type ? data.Type : "Slow-Life"}
+                              {data.type ? data.type : "Slow-Life"}
                             </Box>
                           </Flex>
 
