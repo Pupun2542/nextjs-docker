@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useApp, useTab } from "../../../src/hook/local";
 import {
-    addDoc,
-    collection,
+  addDoc,
+  collection,
   doc,
   DocumentSnapshot,
   getDoc,
@@ -37,7 +37,7 @@ export default function profile() {
   // const app = useApp();
   // const db = getFirestore(app);
   // const auth = getAuth(app);
-  const {app, auth, db} = useApp();
+  const { app, auth, db } = useApp();
   const [user, loading, error] = useAuthState(auth);
   const [userDetail, setUserDetail] = useState(null);
   // const [newtab, setNewtab] = useState("");
@@ -56,53 +56,53 @@ export default function profile() {
     loaduserDetail();
   }, [loading, id]);
 
-  const handleMessage = ()=>{
+  const handleMessage = () => {
     let roomId = "";
-    getDocs(query(collection(db, "chatrooms"), where("member", "array-contains", user.uid), where("type","==", "private"))).then((docs)=>{
-        
-        if (!docs.empty){
-            // docs.docs.map(doc=>{
-            //     // console.log(doc.data())
-            //     if (doc.data().member.includes(id)){
-            //         roomId = doc.data().id
-            //     }
-            // });
-            //ถ้าเจอ doc
-            const docId = docs.docs.find((v)=> v.data().member.includes(id));
-            if (docId){
-              //ถ้า doc เป็นของเราจริงๆ
-              changeTab(docId.data().id);
-            }else{
-              //ถ้าไม่ใช่
-              addDoc(collection(db, "chatrooms"),{ 
-                member: [user.uid, id],
-                type: "private",
-            }).then((created)=>{
-                roomId = created.id
-                updateDoc(doc(db, "chatrooms", created.id), {
-                    id: created.id,
-                }).then(()=>changeTab(created.id))
-            })
-            }
-            // console.log("not empty")
-        }else{
-            // console.log("empty")
-            addDoc(collection(db, "chatrooms"),{ 
-                member: [user.uid, id],
-                type: "private",
-            }).then((created)=>{
-                // console.log("created")
-                roomId = created.id
-                changeTab(roomId);
-                updateDoc(doc(db, "chatrooms", created.id), {
-                    id: created.id,
-                }).then(()=>changeTab(created.id))
-            })
+    getDocs(query(collection(db, "chatrooms"), where("member", "array-contains", user.uid), where("type", "==", "private"))).then((docs) => {
+
+      if (!docs.empty) {
+        // docs.docs.map(doc=>{
+        //     // console.log(doc.data())
+        //     if (doc.data().member.includes(id)){
+        //         roomId = doc.data().id
+        //     }
+        // });
+        //ถ้าเจอ doc
+        const docId = docs.docs.find((v) => v.data().member.includes(id));
+        if (docId) {
+          //ถ้า doc เป็นของเราจริงๆ
+          changeTab(docId.data().id);
+        } else {
+          //ถ้าไม่ใช่
+          addDoc(collection(db, "chatrooms"), {
+            member: [user.uid, id],
+            type: "private",
+          }).then((created) => {
+            roomId = created.id
+            updateDoc(doc(db, "chatrooms", created.id), {
+              id: created.id,
+            }).then(() => changeTab(created.id))
+          })
         }
-        
-        // console.log(roomId)
-        // setNewtab(roomId)
-        // setTimeout(()=>setNewtab(""),500)
+        // console.log("not empty")
+      } else {
+        // console.log("empty")
+        addDoc(collection(db, "chatrooms"), {
+          member: [user.uid, id],
+          type: "private",
+        }).then((created) => {
+          // console.log("created")
+          roomId = created.id
+          changeTab(roomId);
+          updateDoc(doc(db, "chatrooms", created.id), {
+            id: created.id,
+          }).then(() => changeTab(created.id))
+        })
+      }
+
+      // console.log(roomId)
+      // setNewtab(roomId)
+      // setTimeout(()=>setNewtab(""),500)
     })
   }
   return (
@@ -129,6 +129,8 @@ export default function profile() {
             >
               Avatar
             </Center>
+
+
             <Flex bg={"red.200"} w={770} m={2} p={2}>
               {userDetail && (
                 <Text fontFamily={"Mitr"} fontSize={30}>
@@ -136,14 +138,16 @@ export default function profile() {
                 </Text>
               )}
               <Spacer />
-              <Stack direction="row" spacing={4}>
+
+              {user.uid == id ? (<Button>Edit</Button>) : (<Stack direction="row" spacing={4}>
                 <Button colorScheme="teal" variant="solid" position='initial'>
                   Add Friend
                 </Button>
                 <Button colorScheme="teal" variant="outline" onClick={handleMessage} position='initial'>
                   Message
                 </Button>
-              </Stack>
+              </Stack>)}
+
             </Flex>
           </Flex>
         </VStack>
