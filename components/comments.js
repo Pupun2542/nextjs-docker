@@ -26,8 +26,9 @@ import {
   Divider,
   useDisclosure,
   Button,
+  IconButton,
 } from "@chakra-ui/react";
-import { Heart, Option } from "phosphor-react";
+import { Heart, DotsThreeVertical, ChatCenteredText } from "phosphor-react";
 
 export const Comments = ({ id }) => {
   const { app, auth, db } = useApp();
@@ -58,11 +59,12 @@ export const Comments = ({ id }) => {
       <Box
         marginLeft="100px"
         marginRight="100px"
-        marginTop="30px"
+        marginTop="20px"
         marginBottom="50px"
+        fontFamily={'Mitr'}
       >
         <Text fontSize={32} fontWeight={"bold"}>
-          Comment Section
+          ความคิดเห็น - [number]
         </Text>
         <Box>
           <Input
@@ -96,7 +98,7 @@ export const Comments = ({ id }) => {
       marginBottom="50px"
     >
       <Text fontSize={32} fontWeight={"bold"}>
-        Comment Section
+        ความคิดเห็น - [number]
       </Text>
       <Box>
         <Input
@@ -113,6 +115,7 @@ export const Comments = ({ id }) => {
           placeholder="Write Something"
           height="45px"
           backgroundColor="gray.100"
+          mb={2.5}
         />
       </Box>
       Loading
@@ -143,6 +146,7 @@ export const Comments = ({ id }) => {
           placeholder="Write Something"
           height="45px"
           backgroundColor="gray.100"
+          mb={2.5}
         />
       </Box>
     </Box>
@@ -175,17 +179,19 @@ const Commentpost = ({ cdoc, id }) => {
   };
 
   return (
-    <Flex width="100%" backgroundColor="tomato" marginTop="10px">
-      <Box flexGrow={1}>
-        <Image src={cdoc.data().thumbnail} />
+    <Flex p={2.5} fontFamily={'Mitr'} width="100%" backgroundColor="#FFFFFF" boxShadow='0 0 2px #000000' borderRadius={10} marginTop="10px">
+      <Box flexGrow={1} w={110} pl={2.5} pr={2.5}>
+        <Image src={cdoc.data().thumbnail} rounded={'full'} />
       </Box>
 
-      <Flex flexDir="column" flexGrow={10}>
+      <Flex flexDir="column" flexGrow={10} >
         <Flex justifyContent="space-between">
-          <Text>
+
+          <Text fontSize={20}>
             {cdoc.data().displayName ? cdoc.data().displayName : "placeholder"}
           </Text>
-          <Text>
+
+          <Text fontSize={10} mt={3} color={"GrayText"}>
             {cdoc.data().timestamp
               ? parseDate(cdoc.data().timestamp)
               : "01/01/1970:00.00"}
@@ -193,22 +199,54 @@ const Commentpost = ({ cdoc, id }) => {
             {/* 01/01/1970:00.00 */}
           </Text>
         </Flex>
+
         <Divider />
-        <Box>
+
+        <Box fontSize={14} minW={'600'} w={'auto'} maxW={600}>
           <Text>{cdoc.data().message ? cdoc.data().message : ""}</Text>
         </Box>
+
         <Box>
-          <Button onClick={HandleLove} backgroundColor={cdoc.data().love.includes(auth.currentUser.uid)? "red" : "white"}>
-            <Heart size={16} color={"red"} />
-            {cdoc.data().love ? cdoc.data().love.length : "0"}
+          <Button
+            m={2}
+            p={2}
+            w={'auto'}
+            onClick={HandleLove}
+            // backgroundColor={cdoc.data().love.includes(auth.currentUser.uid)? "red.400" : "white"}
+            _hover={{
+              backgroundColor: 'gray.100'
+            }}
+          >
+            <Box p={1}>
+              <Heart
+                size={16}
+                color={"red"}
+                weight={cdoc.data().love.includes(auth.currentUser.uid) ? "fill" : "regular"}
+              />
+            </Box>
+
+            <Box p={1}>
+              {cdoc.data().love ? cdoc.data().love.length : "0"}
+            </Box>
+
           </Button>
-          <Button onClick={onToggle}>{reply}</Button>
+
+          <Button onClick={onToggle}>
+            <Box p={1}>
+              <ChatCenteredText size={16} color="#000000" />
+            </Box>
+
+            <Box p={1}>
+              {reply}
+            </Box>
+
+          </Button>
         </Box>
         {isOpen && <Reply id={id} commentId={cdoc.id} setReply={setReply} />}
       </Flex>
-      <Box flexGrow={1}>
-        <Option size={32} />
-      </Box>
+
+      <IconButton m={2.5} h={10} w={10} borderRadius={100} icon={<DotsThreeVertical size={30} />} />
+
     </Flex>
   );
 };
@@ -255,19 +293,20 @@ const Reply = ({ id, setReply, commentId }) => {
     return (
       <Box>
         {snapshot.docs.map((doc, k) => (
-          <Flex width="100%" backgroundColor="tomato" marginTop="10px" key={k}>
-            <Box flexGrow={1}>
-              <Image src={doc.data().thumbnail} />
+          <Flex width="100%" borderRadius={10} boxShadow='0 0 2px #000000' marginTop="10px" key={k}>
+
+            <Box flexGrow={1} w={110} >
+              <Image m={2.5} rounded={'full'} src={doc.data().thumbnail} />
             </Box>
 
-            <Flex flexDir="column" flexGrow={10}>
+            <Flex flexDir="column" flexGrow={10} p={2.5}>
               <Flex justifyContent="space-between">
-                <Text>
+                <Text fontSize={20}>
                   {doc.data().displayName
                     ? doc.data().displayName
                     : "placeholder"}
                 </Text>
-                <Text>
+                <Text fontSize={10} mt={3} color={"GrayText"}>
                   {doc.data().timestamp
                     ? parseDate(doc.data().timestamp)
                     : "01/01/1970:00.00"}
@@ -275,20 +314,32 @@ const Reply = ({ id, setReply, commentId }) => {
                   {/* 01/01/1970:00.00 */}
                 </Text>
               </Flex>
+
               <Divider />
-              <Box>
+
+              <Box m={1} minW={440} w={'100%'} maxW={440} fontSize={14}>
                 <Text>{doc.data().message ? doc.data().message : ""}</Text>
               </Box>
+
               <Box>
-                <Button onClick={()=>HandleLove(doc.id, doc)} backgroundColor={doc.data().love.includes(auth.currentUser.uid)? "red" : "white"}>
-                  <Heart size={16} color="red" />
-                  {doc.data().love ? doc.data().love.length : "0"}
+                <Button onClick={() => HandleLove(doc.id, doc)}>
+                  <Box p={1}>
+                    <Heart 
+                      size={16} 
+                      color={'red'} 
+                      weight={doc.data().love.includes(auth.currentUser.uid) ? 'fill' : 'regular'}
+                    />
+                  </Box>
+
+                  <Box p={1}>
+                    {doc.data().love ? doc.data().love.length : "0"}
+                  </Box>
+
                 </Button>
               </Box>
             </Flex>
-            <Box flexGrow={1}>
-              <Option size={32} />
-            </Box>
+
+            <IconButton m={2.5} h={10} w={10} borderRadius={100} icon={<DotsThreeVertical size={30} />} />
           </Flex>
         ))}
         <Box>
@@ -306,6 +357,7 @@ const Reply = ({ id, setReply, commentId }) => {
             placeholder="Write Something"
             height="45px"
             backgroundColor="gray.100"
+            mt={1.5}
           />
         </Box>
       </Box>
@@ -332,21 +384,21 @@ const Reply = ({ id, setReply, commentId }) => {
   );
 };
 
-const parseDate = (seconds)=>{
-    // const date = new Date()
-    // date.setMilliseconds(seconds)
-    const date = seconds.toDate()
-    // const formatted = `${date.getDate()}/${date.getMonth()+1}/${date.getYear()} [${date.getHours()}:${date.getMinutes()}]`;
-    const formatted = date.toLocaleDateString("th-TH",{
-        day: 'numeric',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-    })
-    const spdate = formatted.split(' ');
-    const formatted2 = `${spdate[0]} [${spdate[1]}]`
-    // console.log(formatted2)
-    return formatted2;
-    // console.log(seconds.toDate());
+const parseDate = (seconds) => {
+  // const date = new Date()
+  // date.setMilliseconds(seconds)
+  const date = seconds.toDate()
+  // const formatted = `${date.getDate()}/${date.getMonth()+1}/${date.getYear()} [${date.getHours()}:${date.getMinutes()}]`;
+  const formatted = date.toLocaleDateString("th-TH", {
+    day: 'numeric',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+  const spdate = formatted.split(' ');
+  const formatted2 = `${spdate[0]} [${spdate[1]}]`
+  // console.log(formatted2)
+  return formatted2;
+  // console.log(seconds.toDate());
 }
