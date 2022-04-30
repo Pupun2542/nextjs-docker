@@ -139,7 +139,7 @@ export default function profile() {
               )}
               <Spacer />
 
-              {user.uid == id ? (<Button>Edit</Button>) : (<Stack direction="row" spacing={4}>
+              {user && user.uid == id ? (<Button>Edit</Button>) : (<Stack direction="row" spacing={4}>
                 <Button colorScheme="teal" variant="solid" position='initial'>
                   Add Friend
                 </Button>
