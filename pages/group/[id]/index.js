@@ -66,6 +66,7 @@ import {
   CalendarBlank,
   DotsThreeVertical,
 } from "phosphor-react";
+import { Comments } from "../../../components/comments";
 
 export default function Group() {
   // const app = useApp();
@@ -993,12 +994,19 @@ export default function Group() {
                   </TabPanels>
                 </Tabs>
               </VStack>
+              <Box>
+                <Comments id={id}/>
+              </Box>
+              
+              {/* <Text>TEST 1234</Text> */}
             </Box>
 
             <Spacer bg={"#F3F3F3"} />
             <Box w={400} minH={1000} bg={"#F3F3F3"}>
               {" "}
             </Box>
+            
+            
           </Flex>
         )}
         <Modal onClose={onDelClose} isOpen={isDelOpen} isCentered>

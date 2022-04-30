@@ -63,7 +63,7 @@ export default function Groups() {
 
             <CustomNavbar />
             
-            <Flex>
+            <Flex paddingTop={55}>
               <Box w={400}>
               </Box>
 
