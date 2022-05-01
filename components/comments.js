@@ -10,6 +10,8 @@ import {
   arrayRemove,
   arrayUnion,
   collection,
+  deleteDoc,
+  deleteField,
   doc,
   increment,
   orderBy,
@@ -29,6 +31,10 @@ import {
   IconButton,
   InputGroup,
   InputRightElement,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
 import {
   Heart,
@@ -37,11 +43,17 @@ import {
   ImageSquare,
   X,
 } from "phosphor-react";
-import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
+import {
+  getStorage,
+  ref,
+  uploadString,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 
 export const Comments = ({ id }) => {
   const { app, auth, db } = useApp();
-  const store = getStorage();
+  const store = getStorage(app);
   const q = query(
     collection(db, "group", id, "comments"),
     orderBy("timestamp", "desc")
@@ -58,6 +70,7 @@ export const Comments = ({ id }) => {
         store,
         `group/${id}/comments/${auth.currentUser.uid}${Date.now()}`
       );
+      console.log(storeRef.name);
       uploadString(storeRef, image, "data_url").then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
           addDoc(collection(db, "group", id, "comments"), {
@@ -68,6 +81,7 @@ export const Comments = ({ id }) => {
             timestamp: serverTimestamp(),
             love: [],
             imageURL: url,
+            imageRef: storeRef.fullPath,
           });
         });
       });
@@ -238,14 +252,35 @@ const Commentpost = ({ cdoc, id }) => {
   const { app, auth, db } = useApp();
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
   const [reply, setReply] = useState(0);
+  const [message, setMessage] = useState(cdoc.data().message);
+  const checkMessage = useRef("");
+  const [image, setImage] = useState(null);
+  const store = getStorage(app);
+  // const inputFileRef = useRef(null);
+  const checkImage = useRef("");
   const [coll] = useCollectionOnce(
     collection(db, "group", id, "comments", cdoc.id, "reply")
   );
+  const [editMode, setEditMode] = useState(false);
   useEffect(() => {
     if (coll && !coll.empty) {
       setReply(coll.size);
     }
   }, [coll]);
+
+  document.onkeydown = (e) => {
+    if (e.key == "Escape" && editMode) {
+      setEditMode(false);
+    }
+  };
+
+  useEffect(() => {
+    if (cdoc.data().imageURL) {
+      // checkImage.current = cdoc.data().imageURL;
+      setImage(cdoc.data().imageURL);
+    }
+    checkMessage.current = cdoc.data().message;
+  }, [cdoc]);
 
   const HandleLove = () => {
     if (cdoc.data().love.includes(auth.currentUser.uid)) {
@@ -258,6 +293,61 @@ const Commentpost = ({ cdoc, id }) => {
       });
     }
   };
+
+  const handleEdit = () => {
+    // if (image != checkImage.current) {
+    // console.log(image, checkImage.current);
+    // if (image) {
+    //   const storeRef = ref(store, cdoc.data().imageRef);
+    //   uploadString(storeRef, image, "data_url").then((snapshot) => {
+    //     getDownloadURL(snapshot.ref).then((url) => {
+    //       updateDoc(doc(db, "group", id, "comments", cdoc.id), {
+    //         message: message,
+    //       });
+    //     });
+    //   });
+    // } else {
+    //   deleteObject(ref(store, cdoc.data().imageRef)).then(() => {
+    //     updateDoc(doc(db, "group", id, "comments", cdoc.id), {
+    //       imageURL: deleteField(),
+    //       imageRef: deleteField(),
+    //       message: message,
+    //     });
+    //   });
+    // }
+    // } else if (message != checkMessage) {
+    updateDoc(doc(db, "group", id, "comments", cdoc.id), {
+      message: message,
+    });
+    // }
+    setEditMode(false);
+  };
+
+  const handleDelete = () => {
+    if (confirm("ยืนยันการลบข้อความ")) {
+      if (cdoc.data().imageRef) {
+        deleteObject(ref(store, cdoc.data().imageRef)).then();
+      }
+      deleteDoc(doc(db, "group", id, "comments", cdoc.id)).then();
+      setImage(null);
+      setMessage("");
+      setReply(0);
+    }
+  };
+
+  // const handleFile = () => {
+  //   inputFileRef.current.click();
+  // };
+
+  // const handleUploadFile = (e) => {
+  //   const reader = new FileReader();
+  //   reader.onload = () => {
+  //     if (reader.readyState === 2) {
+  //       setImage(reader.result);
+  //     }
+  //   };
+  //   reader.readAsDataURL(e.target.files[0]);
+  // };
 
   return (
     <Flex
@@ -283,17 +373,82 @@ const Commentpost = ({ cdoc, id }) => {
             {cdoc.data().timestamp
               ? parseDate(cdoc.data().timestamp)
               : "01/01/1970:00.00"}
-            {/* {console.log(doc.data().timestamp)} */}
-            {/* 01/01/1970:00.00 */}
           </Text>
         </Flex>
 
         <Divider />
+        {editMode ? (
+          // <InputGroup>
+          <Input
+            onKeyDown={(e) => {
+              // console.log(e.key)
+              if (e.key == "Enter" && !e.shiftKey) {
+                // console.log('message sent')
+                handleEdit();
+              } else if (e.key == "Escape") {
+                if (image != checkImage.current) {
+                  setImage(checkImage.current);
+                }
+                setEditMode(false);
+              }
+            }}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            width="100%"
+            placeholder="Write Something"
+            height="45px"
+            backgroundColor="gray.100"
+            mb={2.5}
+          />
+        ) : (
+          //  <InputRightElement>
+          //   <IconButton
+          //     paddingTop={1}
+          //     h={15}
+          //     w={11}
+          //     borderRadius={100}
+          //     onClick={handleFile}
+          //     icon={<ImageSquare size={32} weight="bold" />}
+          //   />
+          // </InputRightElement>
+          // </InputGroup>
+          <Box fontSize={14} minW={"600"} w={"auto"} maxW={600}>
+            <Text>{cdoc.data().message ? cdoc.data().message : ""}</Text>
+          </Box>
+        )}
+        {/* <Input
+          type="file"
+          id="file"
+          ref={inputFileRef}
+          display="none"
+          onChange={(e) => handleUploadFile(e)}
+        /> */}
 
-        <Box fontSize={14} minW={"600"} w={"auto"} maxW={600}>
-          <Text>{cdoc.data().message ? cdoc.data().message : ""}</Text>
-        </Box>
-        {cdoc.data().imageURL ? (<Image src={cdoc.data().imageURL} width="250px" height="250px" />) : (<></>)}
+        {image ? (
+          <>
+            <Box pos={"relative"}>
+              <Image src={image ? image : ""} width="250px" height="250px" />
+
+              {/* Edit รูป */}
+
+              {/* {editMode ? (
+                <IconButton
+                  icon={<X size={16} color="black" />}
+                  position="absolute"
+                  top={0}
+                  left={200}
+                  backgroundColor="transparent"
+                  _hover={{ backgroundColor: "transparent" }}
+                  onClick={() => setImage(null)}
+                ></IconButton>
+              ) : (
+                <></>
+              )} */}
+            </Box>
+          </>
+        ) : (
+          <></>
+        )}
 
         <Box>
           <Button
@@ -331,14 +486,28 @@ const Commentpost = ({ cdoc, id }) => {
         </Box>
         {isOpen && <Reply id={id} commentId={cdoc.id} setReply={setReply} />}
       </Flex>
-
-      <IconButton
+      <Menu>
+        <MenuButton m={2.5} h={10} w={10} borderRadius={100}>
+          <DotsThreeVertical size={30} />
+        </MenuButton>
+        <MenuList>
+          {auth.currentUser.uid == cdoc.data().userId ? (
+            <>
+              <MenuItem onClick={() => setEditMode(true)}>Edit</MenuItem>
+              <MenuItem onClick={handleDelete}>Delete</MenuItem>
+            </>
+          ) : (
+            <MenuItem>Report</MenuItem>
+          )}
+        </MenuList>
+      </Menu>
+      {/* <IconButton
         m={2.5}
         h={10}
         w={10}
         borderRadius={100}
         icon={<DotsThreeVertical size={30} />}
-      />
+      /> */}
     </Flex>
   );
 };
@@ -372,84 +541,13 @@ const Reply = ({ id, setReply, commentId }) => {
     setMessage("");
   };
 
-  const HandleLove = (replyId, cdoc) => {
-    if (cdoc.data().love.includes(auth.currentUser.uid)) {
-      updateDoc(doc(db, "group", id, "comments", commentId, "reply", replyId), {
-        love: arrayRemove(auth.currentUser.uid),
-      });
-    } else {
-      updateDoc(doc(db, "group", id, "comments", commentId, "reply", replyId), {
-        love: arrayUnion(auth.currentUser.uid),
-      });
-    }
-  };
-
   if (snapshot) {
     return (
       <Box>
         {snapshot.docs.map((doc, k) => (
-          <Flex
-            width="100%"
-            borderRadius={10}
-            boxShadow="0 0 2px #000000"
-            marginTop="10px"
-            key={k}
-          >
-            <Box flexGrow={1} w={110}>
-              <Image m={2.5} rounded={"full"} src={doc.data().thumbnail} />
-            </Box>
-
-            <Flex flexDir="column" flexGrow={10} p={2.5}>
-              <Flex justifyContent="space-between">
-                <Text fontSize={20}>
-                  {doc.data().displayName
-                    ? doc.data().displayName
-                    : "placeholder"}
-                </Text>
-                <Text fontSize={10} mt={3} color={"GrayText"}>
-                  {doc.data().timestamp
-                    ? parseDate(doc.data().timestamp)
-                    : "01/01/1970:00.00"}
-                  {/* {console.log(doc.data().timestamp)} */}
-                  {/* 01/01/1970:00.00 */}
-                </Text>
-              </Flex>
-
-              <Divider />
-
-              <Box m={1} minW={440} w={"100%"} maxW={440} fontSize={14}>
-                <Text>{doc.data().message ? doc.data().message : ""}</Text>
-              </Box>
-
-              <Box>
-                <Button onClick={() => HandleLove(doc.id, doc)}>
-                  <Box p={1}>
-                    <Heart
-                      size={16}
-                      color={"red"}
-                      weight={
-                        doc.data().love.includes(auth.currentUser.uid)
-                          ? "fill"
-                          : "regular"
-                      }
-                    />
-                  </Box>
-
-                  <Box p={1}>
-                    {doc.data().love ? doc.data().love.length : "0"}
-                  </Box>
-                </Button>
-              </Box>
-            </Flex>
-
-            <IconButton
-              m={2.5}
-              h={10}
-              w={10}
-              borderRadius={100}
-              icon={<DotsThreeVertical size={30} />}
-            />
-          </Flex>
+          <>
+            <ReplyPost cdoc={doc} commentId={commentId} id={id} key={k} />
+          </>
         ))}
         <Box>
           <Input
@@ -490,6 +588,180 @@ const Reply = ({ id, setReply, commentId }) => {
         backgroundColor="gray.100"
       />
     </Box>
+  );
+};
+
+const ReplyPost = ({ cdoc, commentId, id }) => {
+  const { app, auth, db } = useApp();
+  const [editMode, setEditMode] = useState(false);
+  const [message, setMessage] = useState(cdoc.data().message);
+  const checkMessage = useRef("");
+
+  useEffect(() => {
+    if (cdoc.data().imageURL) {
+      // checkImage.current = cdoc.data().imageURL;
+      setImage(cdoc.data().imageURL);
+    }
+    checkMessage.current = cdoc.data().message;
+  }, [cdoc]);
+
+  document.onkeydown = (e) => {
+    if (e.key == "Escape" && editMode) {
+      setEditMode(false);
+    }
+  };
+
+  const handleEdit = () => {
+    // if (image != checkImage.current) {
+    // console.log(image, checkImage.current);
+    // if (image) {
+    //   const storeRef = ref(store, cdoc.data().imageRef);
+    //   uploadString(storeRef, image, "data_url").then((snapshot) => {
+    //     getDownloadURL(snapshot.ref).then((url) => {
+    //       updateDoc(doc(db, "group", id, "comments", cdoc.id), {
+    //         message: message,
+    //       });
+    //     });
+    //   });
+    // } else {
+    //   deleteObject(ref(store, cdoc.data().imageRef)).then(() => {
+    //     updateDoc(doc(db, "group", id, "comments", cdoc.id), {
+    //       imageURL: deleteField(),
+    //       imageRef: deleteField(),
+    //       message: message,
+    //     });
+    //   });
+    // }
+    // } else if (message != checkMessage) {
+    updateDoc(doc(db, "group", id, "comments", commentId, "reply", cdoc.id), {
+      message: message,
+    });
+    // }
+    setEditMode(false);
+  };
+
+  const handleDelete = () => {
+    if (confirm("ยืนยันการลบข้อความ")) {
+      // if (cdoc.data().imageRef) {
+      //   deleteObject(ref(store, cdoc.data().imageRef)).then();
+      // }
+      deleteDoc(
+        doc(db, "group", id, "comments", commentId, "reply", cdoc.id)
+      ).then();
+      // setImage(null);
+      setMessage("");
+    }
+  };
+
+  const HandleLove = () => {
+    if (cdoc.data().love.includes(auth.currentUser.uid)) {
+      updateDoc(doc(db, "group", id, "comments", commentId, "reply", cdoc.id), {
+        love: arrayRemove(auth.currentUser.uid),
+      });
+    } else {
+      updateDoc(doc(db, "group", id, "comments", commentId, "reply", cdoc.id), {
+        love: arrayUnion(auth.currentUser.uid),
+      });
+    }
+  };
+
+  return (
+    <Flex
+      width="100%"
+      borderRadius={10}
+      boxShadow="0 0 2px #000000"
+      marginTop="10px"
+    >
+      <Box flexGrow={1} w={110}>
+        <Image m={2.5} rounded={"full"} src={cdoc.data().thumbnail} />
+      </Box>
+
+      <Flex flexDir="column" flexGrow={10} p={2.5}>
+        <Flex justifyContent="space-between">
+          <Text fontSize={20}>
+            {cdoc.data().displayName ? cdoc.data().displayName : "placeholder"}
+          </Text>
+          <Text fontSize={10} mt={3} color={"GrayText"}>
+            {cdoc.data().timestamp
+              ? parseDate(cdoc.data().timestamp)
+              : "01/01/1970:00.00"}
+            {/* {console.log(doc.data().timestamp)} */}
+            {/* 01/01/1970:00.00 */}
+          </Text>
+        </Flex>
+
+        <Divider />
+        {editMode ? (
+          // <InputGroup>
+          <Input
+            onKeyDown={(e) => {
+              // console.log(e.key)
+              if (e.key == "Enter" && !e.shiftKey) {
+                // console.log('message sent')
+                handleEdit();
+              } else if (e.key == "Escape") {
+                setEditMode(false);
+              }
+            }}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            width="100%"
+            placeholder="Write Something"
+            height="45px"
+            backgroundColor="gray.100"
+            mb={2.5}
+          />
+        ) : (
+          //  <InputRightElement>
+          //   <IconButton
+          //     paddingTop={1}
+          //     h={15}
+          //     w={11}
+          //     borderRadius={100}
+          //     onClick={handleFile}
+          //     icon={<ImageSquare size={32} weight="bold" />}
+          //   />
+          // </InputRightElement>
+          // </InputGroup>
+          <Box m={1} minW={440} w={"100%"} maxW={440} fontSize={14}>
+            <Text>{cdoc.data().message ? cdoc.data().message : ""}</Text>
+          </Box>
+        )}
+
+        <Box>
+          <Button onClick={HandleLove}>
+            <Box p={1}>
+              <Heart
+                size={16}
+                color={"red"}
+                weight={
+                  cdoc.data().love.includes(auth.currentUser.uid)
+                    ? "fill"
+                    : "regular"
+                }
+              />
+            </Box>
+
+            <Box p={1}>{cdoc.data().love ? cdoc.data().love.length : "0"}</Box>
+          </Button>
+        </Box>
+      </Flex>
+      <Menu>
+        <MenuButton m={2.5} h={10} w={10} borderRadius={100}>
+          <DotsThreeVertical size={30} />
+        </MenuButton>
+        <MenuList>
+          {auth.currentUser.uid == cdoc.data().userId ? (
+            <>
+              <MenuItem onClick={() => setEditMode(true)}>Edit</MenuItem>
+              <MenuItem onClick={handleDelete}>Delete</MenuItem>
+            </>
+          ) : (
+            <MenuItem>Report</MenuItem>
+          )}
+        </MenuList>
+      </Menu>
+    </Flex>
   );
 };
 
