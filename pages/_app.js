@@ -15,14 +15,14 @@ function MyApp({ Component, pageProps }) {
     <ChakraProvider>
       <AppProvider>
         <NotificationProvider>
-          <UserProvider>
+          {/* <UserProvider> */}
             <OpenChatTabProvider>
               <Head>
                 <title>Comuthor</title>
               </Head>
               <Component {...pageProps} />
             </OpenChatTabProvider>
-          </UserProvider>
+          {/* </UserProvider> */}
         </NotificationProvider>
       </AppProvider>
     </ChakraProvider>
