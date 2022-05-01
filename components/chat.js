@@ -49,18 +49,18 @@ import { Minus, X } from "phosphor-react";
 export const Chatsidebar = ({ user, db, forcedopenTab }) => {
   const { tabState, addTab, removeTab, changeTab } = useTab();
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
-  useEffect(() => {
-    // console.log(tabState, forcedopenTab);
-    if (
-      forcedopenTab &&
-      tabState &&
-      !tabState.othertab.includes(forcedopenTab)
-    ) {
-      // console.log("inside")
-      addTab(forcedopenTab);
-      // changeTab(forcedopenTab)
-    }
-  }, [forcedopenTab]);
+  // useEffect(() => {
+  //   // console.log(tabState, forcedopenTab);
+  //   if (
+  //     forcedopenTab &&
+  //     tabState &&
+  //     !tabState.othertab.includes(forcedopenTab)
+  //   ) {
+  //     // console.log("inside")
+  //     addTab(forcedopenTab);
+  //     // changeTab(forcedopenTab)
+  //   }
+  // }, [forcedopenTab]);
 
   // console.log(tabState.opentab.length);
   useEffect(() => {

@@ -99,7 +99,7 @@ const tabReducer = (state, action) => {
 
 export const OpenChatTabProvider = ({ children }) => {
   const [tabState, tabDispatcher] = useReducer(tabReducer, initialState);
-
+  console.log(tabState)
   // const { tab } = tabState;
 
   const addTab = (payload) => {

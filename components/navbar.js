@@ -285,6 +285,7 @@ function CustomNavbar() {
                       minW={0}
                       title="Chats"
                       onClick={onChatToggle}
+                      position="relative"
                     >
                       <Center
                         bg="white"
@@ -386,7 +387,7 @@ function CustomNavbar() {
                   <MenuItem
                     minH="48px"
                     as={"a"}
-                    href="/group"
+                    onClick={() => router.push("/group")}
                     title="Main Hall"
                     _hover={{
                       backgroundColor: "gray.400",
@@ -398,7 +399,7 @@ function CustomNavbar() {
                   <MenuItem
                     minH="48px"
                     as={"a"}
-                    href="/creategroup"
+                    onClick={() => router.push("/creategroup")}
                     title="Create Commu"
                     _hover={{
                       backgroundColor: "gray.400",
@@ -560,35 +561,76 @@ const ChatNotiIcon = ({ data, user }) => {
   const { tabState, addTab, removeTab, changeTab, closeTab } = useTab();
   // let thumbnail;
   // let name;
-  const [display, setDisplay] = useState({ thumbnail: null, name: null  });
+  const [display, setDisplay] = useState({
+    thumbnail: null,
+    name: null,
+  });
 
-  useEffect(()=>{
+  useEffect(() => {
     if (data.type == "private" || data.type == "chara") {
-    
       const filteredname = data.memberDetail.find((v) => v.uid != user.uid);
-      console.log(filteredname)
+      // console.log(filteredname)
       const thumbnail = filteredname.photoURL;
       const name = filteredname.displayName;
-      setDisplay({thumbnail: thumbnail, name: name})
+      console.log(filteredname);
+      setDisplay({ thumbnail: thumbnail, name: name });
     } else {
       const thumbnail = data.thumbnail;
       const name = data.name;
-      setDisplay({thumbnail: thumbnail, name: name})
+      console.log(timestamp);
+      setDisplay({ thumbnail: thumbnail, name: name });
     }
-  },[data, user])
+  }, [data, user]);
 
+  const caltime = () => {
+    // console.log(data.timestamp)
+    const now = new Date(Date.now());
+    const sentdate = data.timestamp.toDate();
+
+    // const nowYear = now.getFullYear();
+    // const nowMonth = now.getMonth();
+
+    const minusDate = now - sentdate;
+    console.log(now.getFullYear() - sentdate.getFullYear());
+
+    if (
+      now.getFullYear() - sentdate.getFullYear() > 0 &&
+      Math.floor(minusDate / (30 * 3600 * 1000)) > 30
+    ) {
+      return now.getFullYear() - sentdate.getFullYear() + " ปี";
+    } else if (
+      now.getMonth() - sentdate.getMonth() > 0 &&
+      Math.floor(minusDate / (30 * 3600 * 1000)) > 30
+    ) {
+      return now.getMonth() - sentdate.getMonth() + " เดือน";
+    } else if (Math.floor(minusDate / (3600 * 1000)) > 0) {
+      return Math.floor(minusDate / (3600 * 1000)) + " ชั่วโมง";
+    } else if (Math.floor(minusDate / (60 * 1000)) > 0) {
+      return Math.floor(minusDate / (60 * 1000)) + " นาที";
+    } else {
+      return Math.floor(minusDate / 1000) + " วินาที";
+    }
+  };
 
   // console.log(name)
   return (
-    <Box
-      bg="yellow"
-      w="100%"
-      onClick={() => changeTab(data.id)}
-      marginTop="5px"
-    >
-      <Image src={display.thumbnail} sizes={16} rounded />
-      <Text>{display.name}</Text>
-      <Text>{data.lastmsg}</Text>
+    <Box w="100%" onClick={() => changeTab(data.id)} marginTop="5px" cursor='pointer'>
+      <Flex justifyContent='space-between' marginLeft={2} marginRight={2}>
+        <Flex justifyContent="start">
+          <Image
+            src={display.thumbnail}
+            height="48px"
+            weight="48px"
+            rounded={100}
+            marginRight="15px"
+          />
+          <Box>
+            <Text>{display.name}</Text>
+            <Text> {data.senderId == user.uid ? "คุณ: " : ""} {data.lastmsg}</Text>
+          </Box>
+        </Flex>
+        <Text>{caltime()}</Text>
+      </Flex>
     </Box>
   );
 };
