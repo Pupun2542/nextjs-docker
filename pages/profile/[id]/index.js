@@ -26,6 +26,12 @@ import {
   Stack,
   Button,
   useDisclosure,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+  Divider,
 } from "@chakra-ui/react";
 import CustomNavbar from "../../../components/navbar";
 import { Chatsidebar } from "../../../components/chat";
@@ -111,17 +117,17 @@ export default function profile() {
       {/* {user&&(
         <Chatsidebar db={db} user={user} forcedopenTab={newtab}/>
       )} */}
-      <Flex flexGrow={0.8} justifyContent="center">
+      <Flex flexGrow={0.8} justifyContent="center" pt={55}>
         {/* <Spacer /> */}
-        <VStack bg={"tomato"} minH={914}>
+        <VStack bg={'#EBEBEB'} minH={914} spacing={0} >
           <Center bg={"wheat"} width="100%" h={400} fontSize={30}>
             Cover
           </Center>
-          <Flex>
+          <Flex bg={'white'} boxShadow={'base'}>
             <Center
               w={150}
               h={150}
-              bg="white"
+              bg="blue.100"
               rounded={100}
               m={2}
               mt={-20}
@@ -132,11 +138,19 @@ export default function profile() {
 
 
             <Flex bg={"red.200"} w={770} m={2} p={2}>
-              {userDetail && (
-                <Text fontFamily={"Mitr"} fontSize={30}>
-                  {userDetail.displayName}
-                </Text>
-              )}
+              <Flex flexDir={'column'} fontFamily={'Mitr'} w={'75%'}>
+                {userDetail && (
+
+                  <Box fontFamily={"Mitr"} fontSize={30}>
+                    {userDetail.displayName}
+                  </Box>
+
+                )}
+                <Box bg={'tomato'}>
+                  เมื่อร่างกายได้ทิ้งดิ่งสู่เบื้องล่างตามแรงดึงดูดของโลก ระหว่างนั้นกลับรู้สึกวูบโหวงจนต้องเปล่งเสียงร้องออกมาด้วยความตกใจ น่าแปลกว่าแทนที่ผิวจะได้สัมผัสกับน้ำที่เน่า
+                </Box>
+              </Flex>
+
               <Spacer />
 
               {user && user.uid == id ? (<Button>Edit</Button>) : (<Stack direction="row" spacing={4}>
@@ -150,6 +164,36 @@ export default function profile() {
 
             </Flex>
           </Flex>
+
+          <Tabs w={'100%'} bg={'tomato2'} isFitted  spacing={0}>
+            <TabList borderColor={'black'} p={2}>
+              <Tab _selected={{color:'white', bg:'#9A9AB0'}} borderRadius={10}>Timeline</Tab>
+              <Tab _selected={{color:'white', bg:'#9A9AB0'}} borderRadius={10}>Community</Tab>
+              <Tab _selected={{color:'white', bg:'#9A9AB0'}} borderRadius={10}>Original Character</Tab>
+              <Tab _selected={{color:'white', bg:'#9A9AB0'}} borderRadius={10}>About me</Tab>
+              <Tab _selected={{color:'white', bg:'#9A9AB0'}} borderRadius={10}>Friend</Tab>
+            </TabList>
+
+            {/* <Divider  color={'black'}/> */}
+
+            <TabPanels>
+              <TabPanel>
+                <p>one!</p>
+              </TabPanel>
+              <TabPanel>
+                <p>two!</p>
+              </TabPanel>
+              <TabPanel>
+                <p>two!</p>
+              </TabPanel>
+              <TabPanel>
+                <p>two!</p>
+              </TabPanel>
+              <TabPanel>
+                <p>Friend</p>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
         </VStack>
         {/* <Spacer /> */}
       </Flex>
