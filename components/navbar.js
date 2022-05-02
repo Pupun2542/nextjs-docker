@@ -67,10 +67,10 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { useApp, useNotifications, useUser, useTab } from "../src/hook/local";
+import { useApp, useNotifications, useTab } from "../src/hook/local";
 import { Chatsidebar } from "./chat";
 import useSound from "use-sound";
-// import ChatBox from "./chat";
+// import { useLocalStorage } from "../src/hook/uselocalstorage";
 
 const NavLink = ({ children }) => (
   <Link
@@ -93,7 +93,6 @@ function CustomNavbar() {
   // const db = getFirestore(app);
   const { app, auth, db } = useApp();
   const { notidata, chatNotiData } = useNotifications();
-  const { tabState, addTab, removeTab, changeTab, closeTab } = useTab();
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -121,9 +120,8 @@ function CustomNavbar() {
   const [unreadChat, setUnreadChat] = useState([]);
   const [unreadnoti, setUnreadnoti] = useState([]);
   const [play] = useSound("/chatnoti.wav", { volume: 1.0 });
-  // const userdata = useUser()
-  // const
-  // console.log(isChatOpen);
+  const { tabState, addTab, removeTab, changeTab, closeTab } = useTab();
+
   useEffect(() => {
     if (user && !loading) {
       const QuerySnapshot = query(
@@ -140,7 +138,7 @@ function CustomNavbar() {
 
   useEffect(() => {
     if (chatNotiData.length > 0) {
-      console.log(chatNotiData);
+      // console.log(chatNotiData);
       const unreadedItem = chatNotiData.filter(
         (v, i) => !v.readedby.includes(user.uid)
       );
@@ -153,12 +151,31 @@ function CustomNavbar() {
       // }
       setUnreadChat(unreadedItem);
     }
+    // console.log(chatNotiData)
   }, [chatNotiData]);
   useEffect(() => {
     if (notidata.length > 0) {
       setUnreadnoti(notidata.filter((v, i) => v.readed == false));
     }
   }, [notidata]);
+
+  // useEffect(()=>{
+  //   const openedTab = window.localStorage.getItem("openedTab");
+  //   const otherTab = JSON.parse(window.localStorage.getItem("otherTab"));
+
+  //   if (otherTab) {
+  //     otherTab.forEach(element => {
+  //       addTab(element)
+  //     });
+  //     if (openedTab){
+  //       changeTab(openedTab)
+  //     }
+  //   }
+  // },[])
+  // useEffect(()=>{
+  //   console.log(tabState.othertab);
+  //   window.localStorage.setItem("otherTab", JSON.stringify(tabState.othertab))
+  // },[tabState.othertab])
 
   const Loadthumbnail = () => {
     if (user) {
@@ -268,6 +285,7 @@ function CustomNavbar() {
                       minW={0}
                       title="Chats"
                       onClick={onChatToggle}
+                      position="relative"
                     >
                       <Center
                         bg="white"
@@ -369,7 +387,7 @@ function CustomNavbar() {
                   <MenuItem
                     minH="48px"
                     as={"a"}
-                    href="/group"
+                    onClick={() => router.push("/group")}
                     title="Main Hall"
                     _hover={{
                       backgroundColor: "gray.400",
@@ -381,7 +399,7 @@ function CustomNavbar() {
                   <MenuItem
                     minH="48px"
                     as={"a"}
-                    href="/creategroup"
+                    onClick={() => router.push("/creategroup")}
                     title="Create Commu"
                     _hover={{
                       backgroundColor: "gray.400",
@@ -530,13 +548,7 @@ function CustomNavbar() {
         display={isChatOpen ? "initial" : "none"}
       >
         {chatNotiData ? (
-          chatNotiData.map((data) => (
-            <Box bg="yellow" w="100%" onClick={() => changeTab(data.id)}>
-              <Image src={data.thumbnail} sizes={16} rounded />
-              <Text>{data.sender}</Text>
-              <Text>{data.lastmsg}</Text>
-            </Box>
-          ))
+          chatNotiData.map((data) => <ChatNotiIcon data={data} user={user} />)
         ) : (
           <></>
         )}
@@ -544,5 +556,83 @@ function CustomNavbar() {
     </>
   );
 }
+
+const ChatNotiIcon = ({ data, user }) => {
+  const { tabState, addTab, removeTab, changeTab, closeTab } = useTab();
+  // let thumbnail;
+  // let name;
+  const [display, setDisplay] = useState({
+    thumbnail: null,
+    name: null,
+  });
+
+  useEffect(() => {
+    if (data.type == "private" || data.type == "chara") {
+      const filteredname = data.memberDetail.find((v) => v.uid != user.uid);
+      // console.log(filteredname)
+      const thumbnail = filteredname.photoURL;
+      const name = filteredname.displayName;
+      console.log(filteredname);
+      setDisplay({ thumbnail: thumbnail, name: name });
+    } else {
+      const thumbnail = data.thumbnail;
+      const name = data.name;
+      console.log(timestamp);
+      setDisplay({ thumbnail: thumbnail, name: name });
+    }
+  }, [data, user]);
+
+  const caltime = () => {
+    // console.log(data.timestamp)
+    const now = new Date(Date.now());
+    const sentdate = data.timestamp.toDate();
+
+    // const nowYear = now.getFullYear();
+    // const nowMonth = now.getMonth();
+
+    const minusDate = now - sentdate;
+    console.log(now.getFullYear() - sentdate.getFullYear());
+
+    if (
+      now.getFullYear() - sentdate.getFullYear() > 0 &&
+      Math.floor(minusDate / (30 * 3600 * 1000)) > 30
+    ) {
+      return now.getFullYear() - sentdate.getFullYear() + " ปี";
+    } else if (
+      now.getMonth() - sentdate.getMonth() > 0 &&
+      Math.floor(minusDate / (30 * 3600 * 1000)) > 30
+    ) {
+      return now.getMonth() - sentdate.getMonth() + " เดือน";
+    } else if (Math.floor(minusDate / (3600 * 1000)) > 0) {
+      return Math.floor(minusDate / (3600 * 1000)) + " ชั่วโมง";
+    } else if (Math.floor(minusDate / (60 * 1000)) > 0) {
+      return Math.floor(minusDate / (60 * 1000)) + " นาที";
+    } else {
+      return Math.floor(minusDate / 1000) + " วินาที";
+    }
+  };
+
+  // console.log(name)
+  return (
+    <Box w="100%" onClick={() => changeTab(data.id)} marginTop="5px" cursor='pointer'>
+      <Flex justifyContent='space-between' marginLeft={2} marginRight={2}>
+        <Flex justifyContent="start">
+          <Image
+            src={display.thumbnail}
+            height="48px"
+            weight="48px"
+            rounded={100}
+            marginRight="15px"
+          />
+          <Box>
+            <Text>{display.name}</Text>
+            <Text> {data.senderId == user.uid ? "คุณ: " : ""} {data.lastmsg}</Text>
+          </Box>
+        </Flex>
+        <Text>{caltime()}</Text>
+      </Flex>
+    </Box>
+  );
+};
 
 export default CustomNavbar;

@@ -19,7 +19,7 @@ import {
   Badge,
 } from "@chakra-ui/react";
 import { Chats } from "phosphor-react";
-import { useApp, useUser, useTab, useNotifications } from "../src/hook/local";
+import { useApp, useTab, useNotifications } from "../src/hook/local";
 import {
   useCollection,
   useDocumentDataOnce,
@@ -49,18 +49,18 @@ import { Minus, X } from "phosphor-react";
 export const Chatsidebar = ({ user, db, forcedopenTab }) => {
   const { tabState, addTab, removeTab, changeTab } = useTab();
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
-  useEffect(() => {
-    // console.log(tabState, forcedopenTab);
-    if (
-      forcedopenTab &&
-      tabState &&
-      !tabState.othertab.includes(forcedopenTab)
-    ) {
-      // console.log("inside")
-      addTab(forcedopenTab);
-      // changeTab(forcedopenTab)
-    }
-  }, [forcedopenTab]);
+  // useEffect(() => {
+  //   // console.log(tabState, forcedopenTab);
+  //   if (
+  //     forcedopenTab &&
+  //     tabState &&
+  //     !tabState.othertab.includes(forcedopenTab)
+  //   ) {
+  //     // console.log("inside")
+  //     addTab(forcedopenTab);
+  //     // changeTab(forcedopenTab)
+  //   }
+  // }, [forcedopenTab]);
 
   // console.log(tabState.opentab.length);
   useEffect(() => {
@@ -129,16 +129,34 @@ const ChatIcon = ({ user, db, atab }) => {
 
   const { notidata, chatNotiData } = useNotifications();
   const [unreadnum, setUnreadnum] = useState(0);
+  const [thumbnail, setThumbnail] = useState("");
   // const unreadnum = 0;
   useEffect(() => {
-    const unreadedchat = chatNotiData.filter((v, i) => v.readed == false);
-    unreadedchat = unreadedchat.filter((v, i) => v.chatRoom == atab);
-    setUnreadnum(unreadedchat.length);
+    console.log(chatNotiData)
+    if (chatNotiData  && chatNotiData.length > 0) {
+      const tabDetail = chatNotiData.find((v) => v.id == atab);
+      if (tabDetail.type == "private" || tabDetail.type == "chara") {
+        const filteredname = tabDetail.memberDetail.find(
+          (v) => v.uid != user.uid
+        );
+        // console.log(filteredname)
+        const thumbnail = filteredname.photoURL;
+        setThumbnail(thumbnail);
+      } else {
+        const thumbnail = tabDetail.thumbnail;
+        setThumbnail(thumbnail);
+      }
+    }
+
+    // const unreadedchat = chatNotiData.filter((v, i) => v.readed == false);
+    // unreadedchat = unreadedchat.filter((v, i) => v.chatRoom == atab);
+    // setUnreadnum(unreadedchat.length);
   }, [chatNotiData]);
 
   // const unreadnum = unreadedSnapshot ? unreadedSnapshot.docs.length : 0;
   // const unreadnum = 0;
   const onIconClicked = () => {
+    // window.localStorage.setItem("openTab", atab);
     changeTab(atab);
     // console.log("opentab" + atab);
     // onToggle();
@@ -148,7 +166,7 @@ const ChatIcon = ({ user, db, atab }) => {
     <Box float={"right"}>
       <Center
         float="left"
-        background="#343434"
+        background="transparent"
         rounded={100}
         color={"white"}
         w={50}
@@ -159,8 +177,9 @@ const ChatIcon = ({ user, db, atab }) => {
         onClick={onIconClicked}
         marginBottom="3"
       >
-        <Chats size={32} />
-        <Text>{atab}</Text>
+        <Image src={thumbnail} w="100%" h="100%" rounded={100} />
+        {/* <Chats size={32} /> */}
+        {/* <Text>{atab}</Text> */}
         {/* <Badge>{unreadnum}</Badge> */}
       </Center>
       {/* {unreadnum &&
@@ -199,7 +218,7 @@ const ChatIcon = ({ user, db, atab }) => {
 
 const ChatBox = ({ atab, user, db }) => {
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
-  const userData = useUser();
+  // const userData = useUser();
   const { tabState, addTab, removeTab, changeTab, CloseTab } = useTab();
   const [msg, setMsg] = useState("");
   const unrededref = useRef(false);
@@ -210,22 +229,36 @@ const ChatBox = ({ atab, user, db }) => {
       onOpen();
     }
   }, [tabState]);
+  const [chatRoomData, setChatRoomData] = useState(null);
 
-  const chatRoomData = useMemo(() => {
+  useEffect(() => {
     if (tabState.opentab != "") {
       getDoc(doc(db, "chatrooms", tabState.opentab)).then((doc) => {
-        return doc.data();
+        // return doc.data();
+        setChatRoomData(doc.data());
       });
     }
-    return "";
   }, [tabState.opentab]);
 
-  // const [chatRoomData, loading, error] = useDocumentDataOnce(
+  // const chatRoomData = useMemo(() => {
+  //   if (tabState.opentab != "") {
+  //     getDoc(doc(db, "chatrooms", tabState.opentab)).then((doc) => {
+  //       return doc.data();
+  //     });
+  //   }
+  //   return "";
+  // }, [tabState.opentab]);
+  // console.log(tabState.opentab);
+  // const [chatRoomData, error] = useDocumentDataOnce(
   //   doc(db, "chatrooms", tabState.opentab)
   // );
-  const [name, setName] = useState("");
+  // const [name, setName] = useState("");
   const [snapshot, setSnapshot] = useState("");
   const [loading, setLoading] = useState(true);
+  const [chatRoomDetail, setChatRoomDetail] = useState({
+    name: null,
+    thumbnail: null,
+  });
 
   useEffect(() => {
     if (tabState.opentab != "") {
@@ -243,29 +276,33 @@ const ChatBox = ({ atab, user, db }) => {
 
   // const [snapshot, loadingsnapshot, errorsnapshot] =
   //   useCollection(QuerySnapshot);
+  useEffect(() => {
+    // console.log(chatRoomData,loading)
+    if (!loading && chatRoomData) {
+      if (chatRoomData.type == "private") {
+        // console.log(chatRoomData)
+        const member = chatRoomData.memberDetail.find((v) => v.uid != user.uid);
+        setChatRoomDetail({
+          name: member.displayName,
+          thumbnail: member.photoURL,
+        });
+      } else {
+        setChatRoomDetail({
+          name: chatRoomData.name,
+          thumbnail: chatRoomData.thumbnail,
+        });
+      }
+    }
+  }, [chatRoomData, loading]);
+
   const remove = () => {
+    // window.localStorage.removeItem("openTab");
     // setTab([...chatTab.filter((v, i) => v != tab)]);
     removeTab(tabState.opentab);
     // changeTab("");
     CloseTab();
     onClose();
   };
-  useEffect(() => {
-    // console.log(chatRoomData,loading)
-    if (!loading && chatRoomData) {
-      if (chatRoomData.type == "private") {
-        const member = chatRoomData.member.find((v) => v != user.uid);
-        const filteredname = userData.find(
-          (v) => v.userId == member
-        ).displayName;
-        // console.log(filteredname);
-        setName(filteredname);
-        // name = member[0];
-      } else {
-        setName(chatRoomData.name);
-      }
-    }
-  }, [chatRoomData, loading]);
 
   // useEffect(() => {
   //   if (snapshot) {
@@ -293,7 +330,7 @@ const ChatBox = ({ atab, user, db }) => {
         readedby: [user.uid],
         timestamp: serverTimestamp(),
       })
-        .then(() => console.log('updated'))
+        .then(() => console.log("updated"))
         .catch((e) => console.log(e));
       await addDoc(collection(db, "chatrooms", tabState.opentab, "message"), {
         sender: user.displayName,
@@ -306,18 +343,18 @@ const ChatBox = ({ atab, user, db }) => {
   };
   const handleFocus = async () => {
     // if (unrededref) {
-      const userDocRef = doc(db, "chatrooms", tabState.opentab);
-      // const groupDocRef = doc(db, "chatrooms", tabState.opentab, "message", tabState.opentab)
-      try {
-        await runTransaction(db, async (transaction) => {
-          const data = await transaction.get(userDocRef);
-          transaction.update(userDocRef, {
-            readedby: arrayUnion(user.uid),
-          });
+    const userDocRef = doc(db, "chatrooms", tabState.opentab);
+    // const groupDocRef = doc(db, "chatrooms", tabState.opentab, "message", tabState.opentab)
+    try {
+      await runTransaction(db, async (transaction) => {
+        const data = await transaction.get(userDocRef);
+        transaction.update(userDocRef, {
+          readedby: arrayUnion(user.uid),
         });
-      } catch (e) {
-        console.log("update fail ", e);
-      }
+      });
+    } catch (e) {
+      console.log("update fail ", e);
+    }
   };
 
   if (loading) {
@@ -337,14 +374,14 @@ const ChatBox = ({ atab, user, db }) => {
       {/* <Box width="100%"> */}
       <Box justifyContent="space-between" id="headerbox">
         <Image
-          src={chatRoomData.thumbnail}
+          src={chatRoomDetail.thumbnail}
           w={25}
           h={25}
           rounded="full"
           float="left"
           marginLeft={5}
         />
-        <Box float="left">{name}</Box>
+        <Box float="left">{chatRoomDetail.name}</Box>
         <Box float="left">
           <IconButton
             onClick={onClose}

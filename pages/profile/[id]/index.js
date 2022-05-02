@@ -64,8 +64,13 @@ export default function profile() {
 
   const handleMessage = () => {
     let roomId = "";
-    getDocs(query(collection(db, "chatrooms"), where("member", "array-contains", user.uid), where("type", "==", "private"))).then((docs) => {
-
+    getDocs(
+      query(
+        collection(db, "chatrooms"),
+        where("member", "array-contains", user.uid),
+        where("type", "==", "private")
+      )
+    ).then((docs) => {
       if (!docs.empty) {
         // docs.docs.map(doc=>{
         //     // console.log(doc.data())
@@ -82,35 +87,59 @@ export default function profile() {
           //ถ้าไม่ใช่
           addDoc(collection(db, "chatrooms"), {
             member: [user.uid, id],
+            memberDetail: [
+              {
+                uid: user.uid,
+                displayName: user.displayName,
+                photoURL: user.photoURL,
+              },
+              {
+                uid: id,
+                displayName: userDetail.displayName,
+                photoURL: userDetail.photoURL,
+              },
+            ],
             type: "private",
           }).then((created) => {
-            roomId = created.id
+            roomId = created.id;
             updateDoc(doc(db, "chatrooms", created.id), {
               id: created.id,
-            }).then(() => changeTab(created.id))
-          })
+            }).then(() => changeTab(created.id));
+          });
         }
         // console.log("not empty")
       } else {
         // console.log("empty")
         addDoc(collection(db, "chatrooms"), {
           member: [user.uid, id],
+          memberDetail: [
+            {
+              uid: user.uid,
+              displayName: user.displayName,
+              photoURL: user.photoURL,
+            },
+            {
+              uid: id,
+              displayName: userDetail.displayName,
+              photoURL: userDetail.photoURL,
+            },
+          ],
           type: "private",
         }).then((created) => {
           // console.log("created")
-          roomId = created.id
+          roomId = created.id;
           changeTab(roomId);
           updateDoc(doc(db, "chatrooms", created.id), {
             id: created.id,
-          }).then(() => changeTab(created.id))
-        })
+          }).then(() => changeTab(created.id));
+        });
       }
 
       // console.log(roomId)
       // setNewtab(roomId)
       // setTimeout(()=>setNewtab(""),500)
-    })
-  }
+    });
+  };
   return (
     <Box>
       <CustomNavbar />
@@ -136,7 +165,6 @@ export default function profile() {
               Avatar
             </Center>
 
-
             <Flex bg={"red.200"} w={770} m={2} p={2}>
               <Flex flexDir={'column'} fontFamily={'Mitr'} w={'75%'}>
                 {userDetail && (
@@ -153,15 +181,23 @@ export default function profile() {
 
               <Spacer />
 
-              {user && user.uid == id ? (<Button>Edit</Button>) : (<Stack direction="row" spacing={4}>
-                <Button colorScheme="teal" variant="solid" position='initial'>
-                  Add Friend
-                </Button>
-                <Button colorScheme="teal" variant="outline" onClick={handleMessage} position='initial'>
-                  Message
-                </Button>
-              </Stack>)}
-
+              {user && user.uid == id ? (
+                <Button>Edit</Button>
+              ) : (
+                <Stack direction="row" spacing={4}>
+                  <Button colorScheme="teal" variant="solid" position="initial">
+                    Add Friend
+                  </Button>
+                  <Button
+                    colorScheme="teal"
+                    variant="outline"
+                    onClick={handleMessage}
+                    position="initial"
+                  >
+                    Message
+                  </Button>
+                </Stack>
+              )}
             </Flex>
           </Flex>
 

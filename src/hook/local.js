@@ -39,20 +39,20 @@ export const AppProvider = ({ children }) => {
   );
 };
 
-export const UserProvider = ({ children }) => {
-  const [data, setData] = useState([]);
+// export const UserProvider = ({ children }) => {
+//   const [data, setData] = useState([]);
 
-  // useMemo(()=>{
-  useEffect(() => {
-    getDocs(collection(db, "userDetail")).then((docs) => {
-      setData(docs.docs.map((doc) => doc.data()));
-    });
-  }, []);
+//   // useMemo(()=>{
+//   useEffect(() => {
+//     getDocs(collection(db, "userDetail")).then((docs) => {
+//       setData(docs.docs.map((doc) => doc.data()));
+//     });
+//   }, []);
 
-  // },[db])
+//   // },[db])
 
-  return <UserContext.Provider value={data}>{children}</UserContext.Provider>;
-};
+//   return <UserContext.Provider value={data}>{children}</UserContext.Provider>;
+// };
 
 const initialState = {
   opentab: "",
@@ -62,49 +62,23 @@ const initialState = {
 const tabReducer = (state, action) => {
   switch (action.type) {
     case "addTab":
-      // console.log("addTab");
-      // if (state.othertab.length < 5) {
-      //   console.log("fewer 5");
-      //   return {
-      //     ...state,
-      //     othertab: [...state.othertab, action.payload],
-      //   };
-      // } else {
-      //   const newtab = state.othertab.filter((v, i) => v != state.othertab[0]);
-      //   console.log("more than 5");
-      //   return {
-      //     ...state,
-      //     othertab: [...newtab, action.payload],
-      //   };
-      // }
-      return {
-        ...state,
-        othertab: [...state.othertab, action.payload],
-      };
+      if (!state.othertab.includes(action.payload)){
+        return {
+          ...state,
+          othertab: [...state.othertab, action.payload],
+        };
+      }
 
     case "removeTab":
       const newtab = state.othertab.filter((v, i) => v != action.payload);
       // console.log("removetab");
+      // window.localStorage.removeItem(action.payload)
       return {
         ...state,
         othertab: newtab,
       };
     case "changeOpenTab":
       if (!state.othertab.includes(action.payload)) {
-        // if (!state.othertab.length < 5){
-        //   return {
-        //     ...state,
-        //     opentab: action.payload,
-        //     othertab: [...state.othertab, action.payload],
-        //   }
-        // } else {
-        //   const newtab = state.othertab.filter((v, i) => v != state.othertab[0]);
-        //   return {
-        //     ...state,
-        //     othertab: [...newtab, action.payload],
-        //     opentab: action.payload,
-        //   };
-        // }
         return {
           ...state,
           opentab: action.payload,
@@ -125,7 +99,7 @@ const tabReducer = (state, action) => {
 
 export const OpenChatTabProvider = ({ children }) => {
   const [tabState, tabDispatcher] = useReducer(tabReducer, initialState);
-
+  console.log(tabState)
   // const { tab } = tabState;
 
   const addTab = (payload) => {
@@ -180,7 +154,7 @@ export const NotificationProvider = ({ children }) => {
         limit(50)
       );
       const unsubscribe = onSnapshot(q, (snapshot) => {
-        // console.log(snapshot.docs)
+        console.log(snapshot.docs)
         setChatNotidata(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
       });
       return () => unsubscribe();
@@ -196,5 +170,5 @@ export const NotificationProvider = ({ children }) => {
 
 export const useTab = () => useContext(OpenedChatContext);
 export const useApp = () => useContext(AppContext);
-export const useUser = () => useContext(UserContext);
+// export const useUser = () => useContext(UserContext);
 export const useNotifications = () => useContext(NotificationContext);
