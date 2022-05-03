@@ -34,8 +34,6 @@ import {
   Button,
   Flex,
   Center,
-  Square,
-  Circle,
   Container,
   Spacer,
   Accordion,
@@ -43,7 +41,6 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
-  Stack,
   VStack,
   Input,
   Select,
@@ -57,25 +54,30 @@ import {
   NumberIncrementStepper,
   Textarea,
   Text,
+  IconButton,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
 } from "@chakra-ui/react";
 import {
-  CaretLeft,
-  CaretRight,
   Plus,
   Minus,
-  FacebookLogo,
-  DiscordLogo,
+  ArrowRight,
 } from "phosphor-react";
 import GroupSidebar from "../components/GroupSidebar";
+import Footer from "../components/footer";
 
 export default function CreateGroup() {
-  const {app, auth, db} = useApp();
-  // const app = useApp();
-  // const db = getFirestore(app);
-  // const auth = getAuth(app);
+  const { app, auth, db } = useApp();
   const [user, loading, error] = useAuthState(auth);
   const Router = useRouter();
   const store = getStorage(app);
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   useEffect(() => {
     if (!loading && !user) {
@@ -115,21 +117,6 @@ export default function CreateGroup() {
   const [averageTime, setAvergeTime] = useState("");
   const [averageTimeUnit, setAvergeTimeUnit] = useState("");
   const [type, setType] = useState("");
-
-  // const uploadTotemporaryPDF = (setState, data) =>{
-  //   const storageref = ref(
-  //     store,
-  //     `group/${user.uid}/temporary/${auth.currentUser.uid}${Date.now()}.pdf`
-  //   );
-  //   uploadBytes(storageref, data).then((snapshot) => {
-  //     getDownloadURL(snapshot.ref).then((url) => {
-  //       setState(url)
-  //     });
-  //   });
-  // }
-
-
-  //ก็อปปี้บรรทัดบนไปวางเพิ่ม หรือเขียนเอง ลักษณะคือ const [state, setState] = useState(true) โดยที่ state คือชื่อตัวแปรที่จะใช้ เช่น durationsw ส่วน setstate คือฟังก์ชั่นที่ไว้ใช้เปลี่ยนค่าตัวแปร
 
   const parseTime = (localtime) => {
     // console.log(localtime);
@@ -182,13 +169,13 @@ export default function CreateGroup() {
         uploadString(storageref, bannerBlob, "data_url").then((snapshot) => {
           getDownloadURL(snapshot.ref).then((url) => {
             updateDoc(docRef, { banner: url });
-            toUpdate = {...toUpdate, banner: url};
+            toUpdate = { ...toUpdate, banner: url };
           });
         });
       } else {
-        toUpdate = {...toUpdate, banner: "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2Fimageplaceholder.png?alt=media&token=e3a54ee9-8d20-4471-8f4f-7157ac972757"};
+        toUpdate = { ...toUpdate, banner: "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2Fimageplaceholder.png?alt=media&token=e3a54ee9-8d20-4471-8f4f-7157ac972757" };
       }
-      if (docfile){
+      if (docfile) {
         const storageref = ref(
           store,
           `group/${docRef.id}/documents/mainDocument.pdf`
@@ -204,7 +191,7 @@ export default function CreateGroup() {
       // if (!Object.keys(toUpdate).length === 0){
       //   updateDoc(docRef, toUpdate);
       // }
-      
+
       setGenre([]);
       setCommuname("");
       setMaxplayer("");
@@ -252,13 +239,12 @@ export default function CreateGroup() {
       }
     };
     return (
-      <Box w={680} h={38}>
+      <Box w={150} h={38}>
         <Box >
           <Box id="tags">
             {props.state.map((tag, index) => (
-              <Box key={index} className={style.tag} m={1.5} p={1} maxW={600}>
-                <Box>
-                  {tag}</Box>
+              <Box key={index} className={style.tag} m={1.5} p={1} maxW={200}>
+                <Box>{tag}</Box>
                 <CloseButton
                   onClick={() => removeTags(index)}
                   rounded={50}
@@ -274,11 +260,11 @@ export default function CreateGroup() {
               type="text"
               onKeyUp={(event) => (event.key === "," ? addTags(event) : null)}
               placeholder=" ใช้ , เพื่อแบ่งประเภท"
-              w={"auto"}
+              w={'auto'}
               className={style.search}
               isDisabled={props.isDisabled}
               border="hidden"
-              maxW={650}
+              maxW={200}
               mt={1}
             />
           </Box>
@@ -290,1192 +276,1282 @@ export default function CreateGroup() {
     console.log(tags);
   };
 
-  if (loading){
+  if (loading) {
     <Text>Loding User</Text>
   }
 
-  if (user){
+  if (user) {
     return (
-      <Box bg="#FDFDFD" maxW={1980}>
+      <Box bg="#FFFFFF">
         <CustomNavbar />
-        <Flex justifyContent={'center'}>
-          {/* <Box minW={400}></Box>
+        <Flex justifyContent={'center'} >
+          <Box
+            w={400}
+            minH={1000}
+            bg={"#F3F3F3"}
+            boxShadow={'0 0 3px #000000'}
+          >
+          </Box>
+          <Spacer bg={"#F3F3F3"} />
 
-          <Spacer /> */}
+          <VStack w={1000} spacing={0}>
+            <Flex
+              h={'58'}
+              width={850}
+              bg={"#6768AB"}
+              marginTop={55}
+              boxShadow={'0 0 3px #000000'}
+            >
+            </Flex>
 
-          <Center bg={"#D5D5D5"} MaxW={1024} marginTop={55}>
-            <VStack>
-              <Center>
-                <Box>
-                  <Center>
-                    <Flex>
-                      <UploadImageModal
-                        setBannerBlob={setBannerBlob}
-                        BannerBlob={bannerBlob}
-                      />
-                    </Flex>
-                  </Center>
+            <Flex boxShadow={'0 0 3px #000000'}>
+              <UploadImageModal
+                setBannerBlob={setBannerBlob}
+                BannerBlob={bannerBlob}
+              />
+            </Flex>
 
-                  <Center
-                    bg={"#535353"}
-                    p={4}
-                    borderTopRadius={10}
-                    // maxW={1024}
-                    color={"white"}
-                  >
-                    <Flex>
-                      <Center
-                        //จะเป็น Real-Time จากช่องพิมพ์ชื่อย่อคอมมู
-                        p={2}
-                        className={style.HeadingCreate2}
-                      >
-                        {hashtag ? "[" + hashtag + "]" : "[____]"}
-                      </Center>
-                      <Center
-                        //จะเป็น Real-Time จากช่องพิมพ์ชื่อคอมมู
-                        className={style.HeadingCreate2}
-                      >
-                        {communame ? communame : "ชื่อคอมมูนิตี้"}
-                      </Center>
-                    </Flex>
-                  </Center>
+            <Flex
+              h={'auto'}
+              color={'white'}
+              width={850}
+              bg={"#6768AB"}
+              borderTopRadius={5}
+              boxShadow={'0 0 3px #000000'}
+            >
+              <Spacer />
+              <Center
+                //จะเป็น Real-Time จากช่องพิมพ์ชื่อย่อคอมมู
+                p={2}
+                className={style.HeadingCreate2}
+              >
+                {hashtag ? "[" + hashtag + "]" : "[____]"}
+              </Center>
 
-                  <Accordion allowMultiple>
-                    <AccordionItem maxW={1024}>
-                      <h2>
-                        <AccordionButton>
-                          <AccordionIcon color={"Black"} w={50} h={50} />
+              <Center
+                //จะเป็น Real-Time จากช่องพิมพ์ชื่อคอมมู
+                className={style.HeadingCreate2}
+              >
+                {communame ? communame : "ชื่อคอมมูนิตี้"}
+              </Center>
+              <Spacer />
+            </Flex>
 
-                          <Box className={style.Accordion} color="Black">
-                            Basic Information
+            <VStack boxShadow={'0 0 3px #000000'} spacing={0}>
+              <Accordion allowMultiple >
+                <AccordionItem minW={850} bg={'#F3F3F3'}>
+                  <h2>
+                    <AccordionButton>
+                      <AccordionIcon color={"Black"} w={50} h={50} />
+
+                      <Box className={style.Accordion} color="Black">
+                        Basic Information
+                      </Box>
+                    </AccordionButton>
+                  </h2>
+
+                  {/* Community Name */}
+
+                  <AccordionPanel color={"white"}>
+                    <VStack>
+                      <Center w={800}>
+                        <Flex
+                          bg={'White'}
+                          borderRadius={10}
+                          minW={700}
+                          boxShadow='0 0 3px #000000'
+                        >
+                          <Box p={4} w={200}>
+                            <Box className={style.Topic2} pl={0}>
+                              <Text float="left" color={'black'}>ชื่อคอมมูนิตี้</Text>
+                              <Text color={"red"} float="left">&nbsp;*</Text>
+                            </Box>
                           </Box>
-                        </AccordionButton>
-                      </h2>
 
-                      <AccordionPanel color={"white"}>
-                        <VStack>
-                          {/* Community Name */}
-                          <Center w={1024}>
-                            <Flex bg={"#535353"} borderRadius={10} minW={900}>
-                              <Box p={4} w={238}>
-                                <Box className={style.Topic2} pl={0}>
-                                  <Text float="left">ชื่อคอมมูนิตี้</Text>
-                                  <Text color={"red"} float="left">
-                                    *
-                                  </Text>
+                          <Spacer
+                            borderRightColor={"#C4C4C4"}
+                            borderRightWidth={3}
+                          />
+
+                          <Center pl={1.5} pr={1.5}>
+                            <Input
+                              type="text"
+                              value={communame}
+                              onChange={(e) => {
+                                setCommuname(e.target.value);
+                              }}
+                              required
+                              w={485}
+                              h={46}
+                              bg={"white"}
+                              placeholder={"..."}
+                              className={style.search}
+                            />
+                          </Center>
+                        </Flex>
+                      </Center>
+
+                      {/* Name Tag */}
+
+                      <Center>
+                        <Flex minW={700}>
+                          <Flex
+                            bg={"white"}
+                            borderRadius={10}
+                            minW={"auto"}
+                            color={'black'}
+                            boxShadow='0 0 3px #000000'
+                          >
+                            <Box p={4} w={200}>
+                              <Flex className={style.Topic2} pl={0}>
+                                <Text float="left">
+                                  ชื่อย่อ
+                                </Text>
+                                <Text color={"red"} float="left">
+                                  *
+                                </Text>
+                                <Text fontSize={12} pt={2}>&nbsp;(ไม่เกิน 6 ตัวอักษร)</Text>
+                              </Flex>
+                            </Box>
+
+                            <Spacer
+                              borderRightColor={"#C4C4C4"}
+                              borderRightWidth={3}
+                            />
+
+                            <Center pl={1.5} pr={1.5}>
+                              <Input
+                                type="text"
+                                value={hashtag}
+                                onChange={(e) => {
+                                  setHashtag(e.target.value);
+                                }}
+                                required
+                                w={100}
+                                h={46}
+                                bg={"white"}
+                                placeholder={"..."}
+                                className={style.search}
+                                maxLength={6}
+                              />
+                            </Center>
+                          </Flex>
+
+                          <Spacer />
+
+                          <Flex
+                            bg={"white"}
+                            borderRadius={10}
+                            minW={"10"}
+                            boxShadow='0 0 3px #000000'
+                          >
+                            <Box p={4} w={200}>
+                              <Box className={style.Topic2}>
+                                ความเป็นส่วนตัว
+                              </Box>
+                            </Box>
+
+                            <Spacer
+                              borderRightColor={"#C4C4C4"}
+                              borderRightWidth={3}
+                            />
+
+                            <Center pl={1.5} pr={1.5}>
+                              <Select
+                                isRequired
+                                w={160}
+                                h={46}
+                                bg={"white"}
+                                color="black"
+                                size="lg"
+                                defaultValue={"สาธารณะ"}
+                                fontFamily={"Mitr"}
+                              >
+                                <option
+                                  style={{ backgroundColor: "White" }}
+                                  value={"สาธารณะ"}
+                                >
+                                  สาธารณะ
+                                </option>
+
+                                <option
+                                  style={{ backgroundColor: "White" }}
+                                  value={"ส่วนตัว"}
+                                >
+                                  ส่วนตัว
+                                </option>
+
+                              </Select>
+                            </Center>
+                          </Flex>
+                        </Flex>
+                      </Center>
+
+                      <Center>
+                        <Flex minW={700}>
+                          <Flex
+                            bg={"white"}
+                            borderRadius={10}
+                            minW={"auto"}
+                            boxShadow='0 0 3px #000000'
+                          >
+                            <Box p={4} w={200}>
+                              <Box className={style.Topic2}>
+                                จำนวนผู้เล่น
+                              </Box>
+                            </Box>
+
+                            <Spacer
+                              borderRightColor={"#C4C4C4"}
+                              borderRightWidth={3}
+                            />
+
+                            <Center pl={1.5} pr={1.5}>
+                              <NumberInput w={100} onChange={(e) => setMaxplayer(e)}>
+                                <NumberInputField
+                                  bg={"white"}
+                                  h={46}
+                                  color={"black"}
+                                  fontFamily={'Mitr'}
+                                />
+                                <NumberInputStepper>
+                                  <NumberIncrementStepper color="black" />
+                                  <NumberDecrementStepper color="black" />
+                                </NumberInputStepper>
+                              </NumberInput>
+                            </Center>
+                          </Flex>
+
+                          <Spacer />
+
+                          <Flex
+                            bg={"white"}
+                            borderRadius={10}
+                            minW={"10"}
+                            boxShadow='0 0 3px #000000'
+                          >
+                            <Box p={4} w={200}>
+                              <Box className={style.Topic2}>ประเภท</Box>
+                            </Box>
+
+                            <Spacer
+                              borderRightColor={"#C4C4C4"}
+                              borderRightWidth={3}
+                            />
+
+                            <Center pl={1.5} pr={1.5}>
+                              <Select
+                                isRequired
+                                w={160}
+                                h={46}
+                                bg={"white"}
+                                color="black"
+                                size="lg"
+                                fontFamily={"Mitr"}
+                                onChange={(e) => setType(e.target.value)}
+                                defaultValue={"Slow-Life"}
+                              >
+                                <option
+                                  style={{ backgroundColor: "White" }}
+                                  value={"Slow-Life"}
+                                >
+                                  Slow-Life
+                                </option>
+                                <option
+                                  style={{ backgroundColor: "White" }}
+                                  value={"Vote for kill"}
+                                >
+                                  Vote for kill
+                                </option>
+                                <option
+                                  style={{ backgroundColor: "White" }}
+                                  value={"Survival"}
+                                >
+                                  Survival
+                                </option>
+                                <option
+                                  style={{ backgroundColor: "White" }}
+                                  value={"Slow-Survival"}
+                                >
+                                  Slow-Survival
+                                </option>
+                              </Select>
+                            </Center>
+                          </Flex>
+                        </Flex>
+                      </Center>
+
+                      <Center>
+                        <Flex>
+                          <Flex
+                            bg={"white"}
+                            borderRadius={10}
+                            maxW={700}
+                            minH={"auto"}
+                            boxShadow='0 0 3px #000000'
+                          >
+                            <Box w={200} p={4}>
+                              <Box className={style.Topic2}>หมวดหมู่</Box>
+                            </Box>
+
+                            <Spacer
+                              borderRightColor={"#C4C4C4"}
+                              borderRightWidth={3}
+                            />
+
+                            <Center>
+                              <Container
+                                minW={485}
+                                h="auto"
+                                minH={46}
+                                bg={"white"}
+                                borderRadius={10}
+                                m={1.5}
+                              >
+                                <Hashtag
+                                  selectedTags={selectedTags}
+                                  state={genre}
+                                  setState={setGenre}
+                                />
+                              </Container>
+                            </Center>
+                          </Flex>
+                        </Flex>
+                      </Center>
+
+                      <Flex w={800}>
+                        <Center w={50}>
+                          <Switch
+                            bg={"gray.500"}
+                            borderRadius={10}
+                            isChecked={durationsw}
+                            onChange={() => setDurationsw(!durationsw)}
+                          //เพิ่ม 2 บรรทัดบน ตัวแปรให้ตรงกับที่สร้าง 1 state ต่อ 1 component
+                          />
+                        </Center>
+
+                        <Center>
+                          <Flex maxW={700}>
+                            <Flex
+                              bg={"white"}
+                              borderRadius={10}
+                              minW={"auto"}
+                              boxShadow='0 0 3px #000000'
+                            >
+                              <Box w={200} p={4}>
+                                <Box className={style.Topic2}>
+                                  วันที่เริ่มเล่น
                                 </Box>
                               </Box>
 
                               <Spacer
-                                borderRightColor={"white"}
+                                borderRightColor={'#C4C4C4'}
                                 borderRightWidth={3}
                               />
 
                               <Center pl={1.5} pr={1.5}>
                                 <Input
-                                  type="text"
-                                  value={communame}
-                                  onChange={(e) => {
-                                    setCommuname(e.target.value);
-                                  }}
-                                  required
-                                  w={650}
+                                  type="datetime-local"
+                                  isDisabled={!durationsw} //แล้วก็เพิ่มตรงนี้ ชื่อตัวแปรตาม state ที่สร้าง
+                                  isRequired
                                   h={46}
                                   bg={"white"}
-                                  placeholder={"..."}
+                                  color="black"
+                                  w={485}
+                                  onChange={(e) =>
+                                    setStartDate(parseTime(e.target.value))
+                                  }
+                                  fontFamily={"Mitr"}
+                                />
+                              </Center>
+                            </Flex>
+                          </Flex>
+                        </Center>
+
+                      </Flex>
+
+                      <Flex w={800}>
+                        <Center w={50}>
+                          <Switch
+                            bg={"gray.500"}
+                            borderRadius={10}
+                            isChecked={Averagesw}
+                            onChange={() => setAveragesw(!Averagesw)}
+                          />
+                        </Center>
+
+                        <Center>
+                          <Flex maxW={700}>
+                            <Flex
+                              bg={"white"}
+                              borderRadius={10}
+                              minW={"auto"}
+                              boxShadow='0 0 3px #000000'
+                            >
+                              <Box w={200} p={4}>
+                                <Box className={style.Topic2}>
+                                  ระยะเวลาโดยประมาณ
+                                </Box>
+                              </Box>
+
+                              <Spacer
+                                borderRightColor={"#C4C4C4"}
+                                borderRightWidth={3}
+                              />
+
+                              <Input
+                                bg="white"
+                                m={1.5}
+                                borderRadius={10}
+                                w={310}
+                                h={46}
+                                color={"Black"}
+                                isDisabled={!Averagesw}
+                                value={averageTime}
+                                onChange={(e) =>
+                                  setAvergeTime(e.target.value)
+                                }
+                              />
+
+                              <Spacer
+                                borderLeftColor={"#C4C4C4"}
+                                borderLeftWidth={3}
+                              />
+
+                              <Center pl={1.5} pr={1.5}>
+                                <Select
+                                  isRequired
+                                  h={46}
+                                  w={160}
+                                  bg={"white"}
+                                  color="black"
+                                  size="lg"
+                                  isDisabled={!Averagesw}
+                                  fontFamily={"Mitr"}
+                                  onSelect={(e) =>
+                                    setAvergeTimeUnit(e.target.value)
+                                  }
+                                >
+                                  <option
+                                    style={{ backgroundColor: "White" }}
+                                  >
+                                    วัน(Day)
+                                  </option>
+                                  <option
+                                    style={{ backgroundColor: "White" }}
+                                  >
+                                    เดือน(Month)
+                                  </option>
+                                  <option
+                                    style={{ backgroundColor: "White" }}
+                                  >
+                                    ปี(Year)
+                                  </option>
+                                </Select>
+                              </Center>
+                            </Flex>
+                          </Flex>
+                        </Center>
+
+                      </Flex>
+
+                      <Flex w={800}>
+                        <Center w={50}>
+                          <Switch
+                            bg={"gray.500"}
+                            borderRadius={10}
+                            isChecked={Locationsw}
+                            onChange={() => setLocationsw(!Locationsw)}
+                          />
+                        </Center>
+
+                        <Center>
+                          <Flex maxW={700}>
+                            <Flex
+                              bg={"white"}
+                              borderRadius={10}
+                              minW={"auto"}
+                              minH={"auto"}
+                              boxShadow='0 0 3px #000000'
+                            >
+                              <Box w={200} p={4}>
+                                <Box className={style.Topic2}>
+                                  สถานที่ภายในคอมมูนิตี้
+                                </Box>
+                              </Box>
+
+                              <Spacer
+                                borderRightColor={"#C4C4C4"}
+                                borderRightWidth={3}
+                              />
+
+                              <Center>
+                                <Container
+                                  minW={485}
+                                  h="auto"
+                                  minH={46}
+                                  bg={"white"}
+                                  borderRadius={10}
+                                  m={1.5}
+                                >
+                                  <Hashtag
+                                    selectedTags={selectedTags}
+                                    state={places}
+                                    setState={setPlaces}
+                                    isDisabled={!Locationsw}
+                                  />
+                                </Container>
+                              </Center>
+                            </Flex>
+                          </Flex>
+                        </Center>
+                      </Flex>
+
+                      <Flex w={800}>
+                        <Center w={50}>
+                          <Switch
+                            bg={"gray.500"}
+                            borderRadius={10}
+                            isChecked={Timelinesw}
+                            onChange={() => setTimelinesw(!Timelinesw)}
+                          />
+                        </Center>
+
+                        <Center>
+                          <Flex maxW={700}>
+                            <Flex
+                              bg={"white"}
+                              borderRadius={10}
+                              minW={"auto"}
+                              minH={"auto"}
+                              boxShadow='0 0 3px #000000'
+                            >
+                              <Box w={200} p={4}>
+                                <Box className={style.Topic2}>
+                                  ยุคสมัยของคอมมูนิตี้
+                                </Box>
+                              </Box>
+
+                              <Spacer
+                                borderRightColor={"#C4C4C4"}
+                                borderRightWidth={3}
+                              />
+
+                              <Center>
+                                <Container
+                                  minW={485}
+                                  h="auto"
+                                  minH={46}
+                                  bg={"white"}
+                                  borderRadius={10}
+                                  m={1.5}
+                                >
+                                  <Hashtag
+                                    selectedTags={selectedTags}
+                                    state={times}
+                                    setState={setTimes}
+                                    isDisabled={!Timelinesw}
+                                  />
+                                </Container>
+                              </Center>
+                            </Flex>
+                          </Flex>
+                        </Center>
+                      </Flex>
+
+                      <Flex w={800}>
+                        <Center w={50}>
+                          <Switch
+                            bg={"gray.500"}
+                            borderRadius={10}
+                            isChecked={Ratingsw}
+                            onChange={() => setRatingsw(!Ratingsw)}
+                          />
+                        </Center>
+
+                        <Center>
+                          <Flex maxW={700}>
+                            <Flex
+                              bg={"white"}
+                              borderRadius={10}
+                              minW={"auto"}
+                              boxShadow='0 0 3px #000000'
+                            >
+                              <Box w={200} p={4}>
+                                <Box className={style.Topic2}>
+                                  ระดับของเนื้อหา
+                                </Box>
+                              </Box>
+
+                              <Spacer
+                                borderRightColor={"#C4C4C4"}
+                                borderRightWidth={3}
+                              />
+
+                              <Center pl={1.5} pr={1.5}>
+                                <Select
+                                  isRequired
+                                  w={485}
+                                  h={46}
+                                  bg={"white"}
+                                  color="black"
+                                  size="lg"
+                                  isDisabled={!Ratingsw}
+                                  value={
+                                    rating
+                                      ? rating
+                                      : "G (เหมาะสำหรับทุกวัย)"
+                                  }
+                                  onChange={(e) =>
+                                    setRating(e.target.value)
+                                  }
+                                >
+                                  <option
+                                    style={{ backgroundColor: "White" }}
+                                    value="G (เหมาะสำหรับทุกวัย)"
+                                  >
+                                    G (เหมาะสำหรับทุกวัย)
+                                  </option>
+                                  <option
+                                    style={{ backgroundColor: "White" }}
+                                    value="R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)"
+                                  >
+                                    R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)
+                                  </option>
+                                  <option
+                                    style={{ backgroundColor: "White" }}
+                                    value="R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)"
+                                  >
+                                    R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)
+                                  </option>
+                                  <option
+                                    style={{ backgroundColor: "White" }}
+                                    value="NC-21 (ไม่เหมาะสำหรับเยาวชน)"
+                                  >
+                                    NC-21 (ไม่เหมาะสำหรับเยาวชน)
+                                  </option>
+                                </Select>
+                              </Center>
+                            </Flex>
+                          </Flex>
+                        </Center>
+                      </Flex>
+
+                      <Flex w={800}>
+                        <Center w={50}>
+                          <Switch
+                            bg={"gray.500"}
+                            borderRadius={10}
+                            isChecked={Triggersw}
+                            onChange={() => setTriggersw(!Triggersw)}
+                          />
+                        </Center>
+
+                        <Center>
+                          <Flex maxW={700}>
+                            <Flex
+                              bg={"white"}
+                              borderRadius={10}
+                              minW={"auto"}
+                              minH={"auto"}
+                              boxShadow='0 0 3px #000000'
+                            >
+                              <Box w={200} p={4}>
+                                <Box className={style.Topic2}>คำเตือน</Box>
+                              </Box>
+
+                              <Spacer
+                                borderRightColor={"#C4C4C4"}
+                                borderRightWidth={3}
+                              />
+
+                              <Center>
+                                <Container
+                                  minW={485}
+                                  h="auto"
+                                  minH={46}
+                                  bg={"white"}
+                                  borderRadius={10}
+                                  m={1.5}
+                                >
+                                  <Hashtag
+                                    selectedTags={selectedTags}
+                                    state={TWs}
+                                    setState={setTWs}
+                                    isDisabled={!Triggersw}
+                                  />
+                                </Container>
+                              </Center>
+                            </Flex>
+                          </Flex>
+                        </Center>
+                      </Flex>
+
+                      <Flex w={800}>
+                        <Center w={50}>
+                          <Switch
+                            bg={"gray.500"}
+                            borderRadius={10}
+                            isChecked={Rulesw}
+                            onChange={() => setRulesw(!Rulesw)}
+                          />
+                        </Center>
+
+                        <Center>
+                          <Flex maxW={700}>
+                            <Flex
+                              bg={"white"}
+                              borderRadius={10}
+                              minW={"auto"}
+                              minH={"auto"}
+                              boxShadow='0 0 3px #000000'
+                            >
+                              <Box w={200} p={4}>
+                                <Box className={style.Topic2}>
+                                  กฎกติกาและข้อตกลง
+                                </Box>
+                              </Box>
+
+                              <Spacer
+                                borderRightColor={"#C4C4C4"}
+                                borderRightWidth={3}
+                              />
+
+                              <Center>
+                                <Textarea
+                                  type="text"
+                                  required
+                                  w={485}
+                                  h={100}
+                                  bg={"white"}
                                   className={style.search}
+                                  m={1.5}
+                                  isDisabled={!Rulesw}
+                                  value={rule}
+                                  onChange={(e) => setRule(e.target.value)}
                                 />
                               </Center>
                             </Flex>
-                          </Center>
+                          </Flex>
+                        </Center>
+                      </Flex>
 
-                          {/* Name Tag */}
-                          <Center>
-                            <Flex maxW={900}>
-                              <Flex
-                                bg={"#535353"}
-                                borderRadius={10}
-                                minW={"auto"}
-                              >
-                                <Box p={4} w={238}>
-                                  <Box className={style.Topic2} pl={0}>
-                                    <Text float="left">
-                                      ชื่อย่อไม่เกิน 6 ตัวอักษร
-                                    </Text>
-                                    <Text color={"red"} float="left">
-                                      *
-                                    </Text>
-                                  </Box>
-                                </Box>
+                      <Flex w={800}>
+                        <Center w={50}></Center>
 
-                                <Spacer
-                                  borderRightColor={"white"}
-                                  borderRightWidth={3}
-                                />
+                        <Center>
+                          <Flex maxW={700}>
+                            <Flex
+                              bg={"white"}
+                              borderRadius={10}
+                              minW={"auto"}
+                              minH={"auto"}
+                              boxShadow='0 0 3px #000000'
+                            >
+                              <Box w={200} p={4} className={style.Topic2}>
+                                <Text float="left">คำอธิบาย</Text>
+                                <Text color={"red"} float="left">
+                                  &nbsp;*
+                                </Text>
+                              </Box>
 
-                                <Center pl={1.5} pr={1.5}>
-                                  <Input
-                                    type="text"
-                                    value={hashtag}
-                                    onChange={(e) => {
-                                      setHashtag(e.target.value);
-                                    }}
-                                    required
-                                    w={130}
-                                    h={46}
-                                    bg={"white"}
-                                    placeholder={"..."}
-                                    className={style.search}
-                                    maxLength={6}
-                                  />
-                                </Center>
-                              </Flex>
-
-                              <Spacer w={50} />
-
-                              <Flex
-                                bg={"#535353"}
-                                borderRadius={10}
-                                minW={"10"}
-                              >
-                                <Box p={4} w={238}>
-                                  <Box className={style.Topic2}>
-                                    ความเป็นส่วนตัว
-                                  </Box>
-                                </Box>
-
-                                <Spacer
-                                  borderRightColor={"white"}
-                                  borderRightWidth={3}
-                                />
-
-                                <Center pl={1.5} pr={1.5}>
-                                  <Select
-                                    isRequired
-                                    w={260}
-                                    h={46}
-                                    bg={"white"}
-                                    color="black"
-                                    size="lg"
-                                    defaultValue={"สาธารณะ"}
-                                    fontFamily={"Mitr"}
-                                  >
-                                    <option
-                                      style={{ backgroundColor: "White" }}
-                                      value={"สาธารณะ"}
-                                    >
-                                      สาธารณะ
-                                    </option>
-                                    <option
-                                      style={{ backgroundColor: "White" }}
-                                      value={"ส่วนตัว"}
-                                    >
-                                      ส่วนตัว
-                                    </option>
-                                  </Select>
-                                </Center>
-                              </Flex>
-                            </Flex>
-                          </Center>
-
-                          <Center>
-                            <Flex maxW={900}>
-                              <Flex
-                                bg={"#535353"}
-                                borderRadius={10}
-                                minW={"auto"}
-                              >
-                                <Box p={4} w={238}>
-                                  <Box className={style.Topic2}>
-                                    จำนวนผู้เล่น
-                                  </Box>
-                                </Box>
-
-                                <Spacer
-                                  borderRightColor={"white"}
-                                  borderRightWidth={3}
-                                />
-
-                                <Center pl={1.5} pr={1.5}>
-                                  <NumberInput w={130} onChange={(e)=>setMaxplayer(e)}>
-                                    <NumberInputField
-                                      bg={"white"}
-                                      h={46}
-                                      color={"black"}
-                                    />
-                                    <NumberInputStepper>
-                                      <NumberIncrementStepper color="black" />
-                                      <NumberDecrementStepper color="black" />
-                                    </NumberInputStepper>
-                                  </NumberInput>
-                                </Center>
-                              </Flex>
-
-                              <Spacer w={50} />
-
-                              <Flex
-                                bg={"#535353"}
-                                borderRadius={10}
-                                minW={"10"}
-                              >
-                                <Box p={4} w={238}>
-                                  <Box className={style.Topic2}>ประเภท</Box>
-                                </Box>
-
-                                <Spacer
-                                  borderRightColor={"white"}
-                                  borderRightWidth={3}
-                                />
-
-                                <Center pl={1.5} pr={1.5}>
-                                  <Select
-                                    isRequired
-                                    w={260}
-                                    h={46}
-                                    bg={"white"}
-                                    color="black"
-                                    size="lg"
-                                    fontFamily={"Mitr"}
-                                    onChange={(e) => setType(e.target.value)}
-                                    defaultValue={"Slow-Life"}
-                                  >
-                                    <option
-                                      style={{ backgroundColor: "White" }}
-                                      value={"Slow-Life"}
-                                    >
-                                      Slow-Life
-                                    </option>
-                                    <option
-                                      style={{ backgroundColor: "White" }}
-                                      value={"Vote for kill"}
-                                    >
-                                      Vote for kill
-                                    </option>
-                                    <option
-                                      style={{ backgroundColor: "White" }}
-                                      value={"Survival"}
-                                    >
-                                      Survival
-                                    </option>
-                                    <option
-                                      style={{ backgroundColor: "White" }}
-                                      value={"Slow-Survival"}
-                                    >
-                                      Slow-Survival
-                                    </option>
-                                  </Select>
-                                </Center>
-                              </Flex>
-                            </Flex>
-                          </Center>
-
-                          <Center>
-                            <Flex maxW={900}>
-                              <Flex
-                                bg={"#535353"}
-                                borderRadius={10}
-                                minW={"auto"}
-                                minH={"auto"}
-                              >
-                                <Box w={238} p={4}>
-                                  <Box className={style.Topic2}>หมวดหมู่</Box>
-                                </Box>
-
-                                <Spacer
-                                  borderRightColor={"white"}
-                                  borderRightWidth={3}
-                                />
-
-                                <Center>
-                                  <Container
-                                    minW={650}
-                                    h="auto"
-                                    minH={46}
-                                    bg={"white"}
-                                    borderRadius={10}
-                                    m={1.5}
-                                  >
-                                    <Hashtag
-                                      selectedTags={selectedTags}
-                                      state={genre}
-                                      setState={setGenre}
-                                    />
-                                  </Container>
-                                </Center>
-                              </Flex>
-                            </Flex>
-                          </Center>
-
-                          <Flex w={1024}>
-                            <Center w={62}>
-                              <Switch
-                                bg={"gray.500"}
-                                borderRadius={10}
-                                isChecked={durationsw}
-                                onChange={() => setDurationsw(!durationsw)}
-                                //เพิ่ม 2 บรรทัดบน ตัวแปรให้ตรงกับที่สร้าง 1 state ต่อ 1 component
+                              <Spacer
+                                borderRightColor={"#C4C4C4"}
+                                borderRightWidth={3}
                               />
-                            </Center>
 
-                            <Center>
-                              <Flex maxW={900}>
-                                <Flex
-                                  bg={"#535353"}
-                                  borderRadius={10}
-                                  minW={"auto"}
-                                >
-                                  <Box w={238} p={4}>
-                                    <Box className={style.Topic2}>
-                                      วันที่เริ่มเล่น
-                                    </Box>
-                                  </Box>
-
-                                  <Spacer
-                                    borderRightColor={"white"}
-                                    borderRightWidth={3}
-                                  />
-
-                                  <Center pl={1.5} pr={1.5}>
-                                    <Input
-                                      type="datetime-local"
-                                      isDisabled={!durationsw} //แล้วก็เพิ่มตรงนี้ ชื่อตัวแปรตาม state ที่สร้าง
-                                      isRequired
-                                      h={46}
-                                      bg={"white"}
-                                      color="black"
-                                      w={650}
-                                      onChange={(e) =>
-                                        setStartDate(parseTime(e.target.value))
-                                      }
-                                      fontFamily={"Mitr"}
-                                    />
-                                  </Center>
-                                </Flex>
-                              </Flex>
-                            </Center>
-                          </Flex>
-
-                          <Flex w={1024}>
-                            <Center w={62}>
-                              <Switch
-                                bg={"gray.500"}
-                                borderRadius={10}
-                                isChecked={Averagesw}
-                                onChange={() => setAveragesw(!Averagesw)}
-                              />
-                            </Center>
-
-                            <Center>
-                              <Flex maxW={900}>
-                                <Flex
-                                  bg={"#535353"}
-                                  borderRadius={10}
-                                  minW={"auto"}
-                                >
-                                  <Box w={238} p={4}>
-                                    <Box className={style.Topic2}>
-                                      ระยะเวลาโดยประมาณ
-                                    </Box>
-                                  </Box>
-
-                                  <Spacer
-                                    borderRightColor={"white"}
-                                    borderRightWidth={3}
-                                  />
-
-                                  <Input
-                                    bg="white"
-                                    m={1.5}
-                                    borderRadius={10}
-                                    w={480}
-                                    h={46}
-                                    color={"Black"}
-                                    isDisabled={!Averagesw}
-                                    value={averageTime}
-                                    onChange={(e) =>
-                                      setAvergeTime(e.target.value)
-                                    }
-                                  />
-
-                                  <Spacer
-                                    borderLeftColor={"white"}
-                                    borderLeftWidth={3}
-                                  />
-
-                                  <Center pl={1.5} pr={1.5}>
-                                    <Select
-                                      isRequired
-                                      h={46}
-                                      bg={"white"}
-                                      color="black"
-                                      size="lg"
-                                      isDisabled={!Averagesw}
-                                      fontFamily={"Mitr"}
-                                      onSelect={(e) =>
-                                        setAvergeTimeUnit(e.target.value)
-                                      }
-                                    >
-                                      <option
-                                        style={{ backgroundColor: "White" }}
-                                      >
-                                        วัน(Day)
-                                      </option>
-                                      <option
-                                        style={{ backgroundColor: "White" }}
-                                      >
-                                        เดือน(Month)
-                                      </option>
-                                      <option
-                                        style={{ backgroundColor: "White" }}
-                                      >
-                                        ปี(Year)
-                                      </option>
-                                    </Select>
-                                  </Center>
-                                </Flex>
-                              </Flex>
-                            </Center>
-                          </Flex>
-
-                          <Flex w={1024}>
-                            <Center w={62}>
-                              <Switch
-                                bg={"gray.500"}
-                                borderRadius={10}
-                                isChecked={Locationsw}
-                                onChange={() => setLocationsw(!Locationsw)}
-                              />
-                            </Center>
-
-                            <Center>
-                              <Flex maxW={900}>
-                                <Flex
-                                  bg={"#535353"}
-                                  borderRadius={10}
-                                  minW={"auto"}
-                                  minH={"auto"}
-                                >
-                                  <Box w={238} p={4}>
-                                    <Box className={style.Topic2}>
-                                      สถานที่ภายในคอมมูนิตี้
-                                    </Box>
-                                  </Box>
-
-                                  <Spacer
-                                    borderRightColor={"white"}
-                                    borderRightWidth={3}
-                                  />
-
-                                  <Center>
-                                    <Container
-                                      minW={650}
-                                      h="auto"
-                                      minH={46}
-                                      bg={"white"}
-                                      borderRadius={10}
-                                      m={1.5}
-                                    >
-                                      <Hashtag
-                                        selectedTags={selectedTags}
-                                        state={places}
-                                        setState={setPlaces}
-                                        isDisabled={!Locationsw}
-                                      />
-                                    </Container>
-                                  </Center>
-                                </Flex>
-                              </Flex>
-                            </Center>
-                          </Flex>
-
-                          <Flex w={1024}>
-                            <Center w={62}>
-                              <Switch
-                                bg={"gray.500"}
-                                borderRadius={10}
-                                isChecked={Timelinesw}
-                                onChange={() => setTimelinesw(!Timelinesw)}
-                              />
-                            </Center>
-
-                            <Center>
-                              <Flex maxW={900}>
-                                <Flex
-                                  bg={"#535353"}
-                                  borderRadius={10}
-                                  minW={"auto"}
-                                  minH={"auto"}
-                                >
-                                  <Box w={238} p={4}>
-                                    <Box className={style.Topic2}>
-                                      ยุคสมัยของคอมมูนิตี้
-                                    </Box>
-                                  </Box>
-
-                                  <Spacer
-                                    borderRightColor={"white"}
-                                    borderRightWidth={3}
-                                  />
-
-                                  <Center>
-                                    <Container
-                                      minW={650}
-                                      h="auto"
-                                      minH={46}
-                                      bg={"white"}
-                                      borderRadius={10}
-                                      m={1.5}
-                                    >
-                                      <Hashtag
-                                        selectedTags={selectedTags}
-                                        state={times}
-                                        setState={setTimes}
-                                        isDisabled={!Timelinesw}
-                                      />
-                                    </Container>
-                                  </Center>
-                                </Flex>
-                              </Flex>
-                            </Center>
-                          </Flex>
-
-                          <Flex w={1024}>
-                            <Center w={62}>
-                              <Switch
-                                bg={"gray.500"}
-                                borderRadius={10}
-                                isChecked={Ratingsw}
-                                onChange={() => setRatingsw(!Ratingsw)}
-                              />
-                            </Center>
-
-                            <Center>
-                              <Flex maxW={900}>
-                                <Flex
-                                  bg={"#535353"}
-                                  borderRadius={10}
-                                  minW={"auto"}
-                                >
-                                  <Box w={238} p={4}>
-                                    <Box className={style.Topic2}>
-                                      ระดับของเนื้อหา
-                                    </Box>
-                                  </Box>
-
-                                  <Spacer
-                                    borderRightColor={"white"}
-                                    borderRightWidth={3}
-                                  />
-
-                                  <Center pl={1.5} pr={1.5}>
-                                    <Select
-                                      isRequired
-                                      w={650}
-                                      h={46}
-                                      bg={"white"}
-                                      color="black"
-                                      size="lg"
-                                      isDisabled={!Ratingsw}
-                                      value={
-                                        rating
-                                          ? rating
-                                          : "G (เหมาะสำหรับทุกวัย)"
-                                      }
-                                      onChange={(e) =>
-                                        setRating(e.target.value)
-                                      }
-                                    >
-                                      <option
-                                        style={{ backgroundColor: "White" }}
-                                        value="G (เหมาะสำหรับทุกวัย)"
-                                      >
-                                        G (เหมาะสำหรับทุกวัย)
-                                      </option>
-                                      <option
-                                        style={{ backgroundColor: "White" }}
-                                        value="R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)"
-                                      >
-                                        R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)
-                                      </option>
-                                      <option
-                                        style={{ backgroundColor: "White" }}
-                                        value="R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)"
-                                      >
-                                        R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)
-                                      </option>
-                                      <option
-                                        style={{ backgroundColor: "White" }}
-                                        value="NC-21 (ไม่เหมาะสำหรับเยาวชน)"
-                                      >
-                                        NC-21 (ไม่เหมาะสำหรับเยาวชน)
-                                      </option>
-                                    </Select>
-                                  </Center>
-                                </Flex>
-                              </Flex>
-                            </Center>
-                          </Flex>
-
-                          <Flex w={1024}>
-                            <Center w={62}>
-                              <Switch
-                                bg={"gray.500"}
-                                borderRadius={10}
-                                isChecked={Triggersw}
-                                onChange={() => setTriggersw(!Triggersw)}
-                              />
-                            </Center>
-
-                            <Center>
-                              <Flex maxW={900}>
-                                <Flex
-                                  bg={"#535353"}
-                                  borderRadius={10}
-                                  minW={"auto"}
-                                  minH={"auto"}
-                                >
-                                  <Box w={238} p={4}>
-                                    <Box className={style.Topic2}>คำเตือน</Box>
-                                  </Box>
-
-                                  <Spacer
-                                    borderRightColor={"white"}
-                                    borderRightWidth={3}
-                                  />
-
-                                  <Center>
-                                    <Container
-                                      minW={650}
-                                      h="auto"
-                                      minH={46}
-                                      bg={"white"}
-                                      borderRadius={10}
-                                      m={1.5}
-                                    >
-                                      <Hashtag
-                                        selectedTags={selectedTags}
-                                        state={TWs}
-                                        setState={setTWs}
-                                        isDisabled={!Triggersw}
-                                      />
-                                    </Container>
-                                  </Center>
-                                </Flex>
-                              </Flex>
-                            </Center>
-                          </Flex>
-
-                          <Flex w={1024}>
-                            <Center w={62}>
-                              <Switch
-                                bg={"gray.500"}
-                                borderRadius={10}
-                                isChecked={Rulesw}
-                                onChange={() => setRulesw(!Rulesw)}
-                              />
-                            </Center>
-
-                            <Center>
-                              <Flex maxW={900}>
-                                <Flex
-                                  bg={"#535353"}
-                                  borderRadius={10}
-                                  minW={"auto"}
-                                  minH={"auto"}
-                                >
-                                  <Box w={238} p={4}>
-                                    <Box className={style.Topic2}>
-                                      กฎกติกาและข้อตกลง
-                                    </Box>
-                                  </Box>
-
-                                  <Spacer
-                                    borderRightColor={"white"}
-                                    borderRightWidth={3}
-                                  />
-
-                                  <Center>
-                                    <Textarea
-                                      type="text"
-                                      required
-                                      w={650}
-                                      h={100}
-                                      bg={"white"}
-                                      className={style.search}
-                                      m={1.5}
-                                      isDisabled={!Rulesw}
-                                      value={rule}
-                                      onChange={(e) => setRule(e.target.value)}
-                                    />
-                                  </Center>
-                                </Flex>
-                              </Flex>
-                            </Center>
-                          </Flex>
-
-                          <Flex w={1024}>
-                            <Center w={62}></Center>
-
-                            <Center>
-                              <Flex maxW={900}>
-                                <Flex
-                                  bg={"#535353"}
-                                  borderRadius={10}
-                                  minW={"auto"}
-                                  minH={"auto"}
-                                >
-                                  <Box w={238} p={4} className={style.Topic2}>
-                                    <Text float="left">คำอธิบาย</Text>
-                                    <Text color={"red"} float="left">
-                                      *
-                                    </Text>
-                                  </Box>
-
-                                  <Spacer
-                                    borderRightColor={"white"}
-                                    borderRightWidth={3}
-                                  />
-
-                                  <Center>
-                                    <Textarea
-                                      type="text"
-                                      required
-                                      w={650}
-                                      h={200}
-                                      bg={"white"}
-                                      className={style.search}
-                                      m={1.5}
-                                      value={description}
-                                      onChange={(e) => {
-                                        setDescription(e.target.value);
-                                      }}
-                                    />
-                                  </Center>
-                                </Flex>
-                              </Flex>
-                            </Center>
-                          </Flex>
-                        </VStack>
-                      </AccordionPanel>
-                    </AccordionItem>
-                  </Accordion>
-
-                  {/* Registration */}
-
-                  <Accordion allowMultiple>
-                    <AccordionItem maxW={1024}>
-                      <h2>
-                        <AccordionButton>
-                          <AccordionIcon color={"Black"} w={50} h={50} />
-
-                          <Box className={style.Accordion} color="Black">
-                            Registration
-                          </Box>
-                        </AccordionButton>
-                      </h2>
-
-                      <AccordionPanel color={"white"}>
-                        <VStack>
-                          {/* <Flex w={1024}>
-
-                            <Center w={62} >
-                              <Center
-                                red
-                                bg={'#EA4545'} 
-                                bg={'#72994C'}
-                                rounded="50">
-                                <Minus size={32}
-                                <Plus size={32}
+                              <Center>
+                                <Textarea
+                                  type="text"
+                                  required
+                                  w={485}
+                                  h={200}
+                                  bg={"white"}
+                                  className={style.search}
+                                  m={1.5}
+                                  value={description}
+                                  onChange={(e) => {
+                                    setDescription(e.target.value);
+                                  }}
                                 />
                               </Center>
-                            </Center>
+                            </Flex>
+                          </Flex>
+                        </Center>
+                      </Flex>
+
+                      <Flex w={800}>
+                        <Center w={50}></Center>
+
+                        <Center>
+                          <Flex maxW={700}>
+                            <Flex
+                              bg={"white"}
+                              borderRadius={10}
+                              minW={"auto"}
+                              minH={"auto"}
+                              boxShadow='0 0 3px #000000'
+                            >
+                              <Box w={200} p={4} className={style.Topic2}>
+                                <Text float="left">เอกสารคอมมู</Text>
+                                <Text color={"red"} float="left">
+                                  &nbsp;*
+                                </Text>
+                                <Text color={"red"} fontSize={13} mt={1} float="left">
+                                  &nbsp;(pdf)
+                                </Text>
+                              </Box>
+
+                              <Spacer
+                                borderRightColor={"#C4C4C4"}
+                                borderRightWidth={3}
+                              />
+
+                              <Center>
+                                <Input
+                                  required
+                                  w={485}
+                                  bg={"white"}
+                                  className={style.search}
+                                  m={1.5}
+                                  p={1}
+
+                                  type="file"
+                                  // value={doclink}
+                                  onChange={(e) => {
+                                    // uploadTotemporaryPDF(setDoclink, e.target.files[0])
+                                    setDocfile(e.target.files[0])
+                                  }}
+                                />
+                              </Center>
+                            </Flex>
+                          </Flex>
+                        </Center>
+                      </Flex>
+                    </VStack>
+                  </AccordionPanel>
+                </AccordionItem>
+              </Accordion>
+
+              {/* Registration */}
+
+              <Accordion allowMultiple>
+                <AccordionItem minW={850} bg={'#F3F3F3'}>
+                  <Flex>
+                    <AccordionButton>
+                      <AccordionIcon color={"Black"} w={50} h={50} />
+
+                      <Box className={style.Accordion} color="Black">
+                        Registration
+                      </Box>
+                    </AccordionButton>
+                  </Flex>
+
+                  <AccordionPanel fontFamily={'Mitr'} color={"white"}>
+                    <VStack>
+
+                      <Flex ml={100} w={'100%'}>
+                        <Box fontSize={18} color={'black'}>ลงทะเบียนตัวละคร</Box>
+
+                        <Spacer />
+
+                        <IconButton mr={50} icon={<Plus size={24} />} size="auto" p={1} color={'white'} bg={'#72994C'} rounded="50" />
+                      </Flex>
+
+                      <Flex w={800}>
+
+                        <Center w={50} >
+                          <IconButton icon={<Minus size={24} />} size="auto" p={1} color={'white'} bg={'#F86F6F'} rounded="50" />
+                        </Center>
+
+                        <VStack>
+                          <Flex
+                            bg={"white"}
+                            color={'black'}
+                            borderRadius={10}
+                            minW={200}
+                            boxShadow='0 0 3px #000000'
+                          >
+                            <Box p={2} w={200}>
+                              <Input
+                                className={style.Topic3}
+                                pl={2}
+                                placeholder={"หัวข้อการรับสมัคร"}
+                              />
+                            </Box>
+
+                            <Spacer
+                              borderRightColor={"#C4C4C4"}
+                              borderRightWidth={3}
+                            />
 
                             <Center>
-                              <Flex bg={"#535353"} borderRadius={10} minW={900}>
-                                <Box p={2} w={238}>
-                                  <Input
-                                    className={style.Topic3}
-                                    pl={2}
-                                    h={58}
-                                    placeholder={"Link title"}
-                                  />
-                                </Box>
-
-                                <Spacer
-                                  borderRightColor={"white"}
-                                  borderRightWidth={3}
-                                />
-
-                                <Center>
-                                  <Input
-                                    type="text"
-                                    required
-                                    w={650}
-                                    h={58}
-                                    bg={"white"}
-                                    className={style.search}
-                                    m={1.5}
-                                  />
-                                </Center>
-                              </Flex>
+                              <Input
+                                type="text"
+                                required
+                                w={485}
+                                bg={"white"}
+                                className={style.search}
+                                m={1.5}
+                                placeholder={'text'}
+                              />
                             </Center>
-                          </Flex> */}
+                          </Flex>
 
-                          <Center>
-                            <Flex maxW={900}>
-                              <Flex
-                                bg={"#535353"}
-                                borderRadius={10}
-                                minW={"auto"}
-                                minH={"auto"}
-                              >
-                                <Box w={238} p={4}>
-                                  <Box className={style.Topic2}>
-                                    ลิงก์ลงทะเบียนตัวละคร
-                                  </Box>
-                                </Box>
-
-                                <Spacer
-                                  borderRightColor={"white"}
-                                  borderRightWidth={3}
-                                />
-
-                                <Center pl={1.5} pr={1.5}>
-                                  <Input
-                                    required
-                                    w={650}
-                                    h={46}
-                                    bg={"white"}
-                                    placeholder={"สำหรับลิงก์ฟอร์มวิ่ง"}
-                                    className={style.search}
-                                    type="url"
-                                    value={submitlink}
-                                    onChange={(e) => {
-                                      setSubmitlink(e.target.value);
-                                    }}
-                                  />
-                                </Center>
-                              </Flex>
-                            </Flex>
-                          </Center>
-
-                          <Center>
-                            <Flex maxW={900}>
-                              <Flex
-                                bg={"#535353"}
-                                borderRadius={10}
-                                minW={"auto"}
-                                minH={"auto"}
-                              >
-                                <Box w={238} p={4}>
-                                  <Box className={style.Topic2}>
-                                    ลิงก์ตรวจสอบตัวละคร
-                                  </Box>
-                                </Box>
-
-                                <Spacer
-                                  borderRightColor={"white"}
-                                  borderRightWidth={3}
-                                />
-
-                                <Center pl={1.5} pr={1.5}>
-                                  <Input
-                                    required
-                                    w={650}
-                                    h={46}
-                                    bg={"white"}
-                                    placeholder={"สำหรับตรวจสอบ"}
-                                    className={style.search}
-                                    type="url"
-                                    value={resultlink}
-                                    onChange={(e) => {
-                                      setResultlink(e.target.value);
-                                    }}
-                                  />
-                                </Center>
-                              </Flex>
-                            </Flex>
-                          </Center>
                         </VStack>
-                      </AccordionPanel>
-                    </AccordionItem>
-                  </Accordion>
+                      </Flex>
 
-                  {/* Other Link */}
-
-                  <Accordion allowMultiple>
-                    <AccordionItem maxW={1024}>
-                      <h2>
-                        <AccordionButton>
-                          <AccordionIcon color={"Black"} w={50} h={50} />
-
-                          <Box className={style.Accordion} color="Black">
-                            Other Link
+                      <Flex height={'auto'}>
+                        <Center w={89}>
+                          <VStack spacing={0} >
+                            <Box w={'22px'} borderColor={'#636363'} height={'5'} borderLeftWidth={3} ></Box>
+                            <Box
+                              borderColor={'#636363'}
+                              borderBottomLeftRadius={10}
+                              borderBottomStyle={'solid'}
+                              borderBottomWidth={3}
+                              borderLeftWidth={3}
+                              height={'10px'}
+                              w={'22px'}
+                              borderLeftStyle={'solid'}
+                            ></Box>
+                          </VStack>
+                        </Center>
+                        <Flex
+                          bg={"white"}
+                          color={'black'}
+                          borderRadius={10}
+                          minW={200}
+                          boxShadow='0 0 3px #000000'
+                        >
+                          <Box mt={1.5} p={2} w={196}>
+                            วันที่และเวลา
                           </Box>
-                        </AccordionButton>
-                      </h2>
 
-                      <AccordionPanel color={"white"}>
+                          <Spacer
+                            borderRightColor={"#C4C4C4"}
+                            borderRightWidth={3}
+                          />
+
+                          <Flex w={412}>
+                            <Input
+                              type="date"
+                              required
+                              bg={"white"}
+                              className={style.search}
+                              m={1.5}
+                            />
+
+                            <Center>
+                              <ArrowRight size={30} color="#000000" />
+                            </Center>
+
+                            <Input
+                              type="date"
+                              required
+                              bg={"white"}
+                              className={style.search}
+                              m={1.5}
+                              placeholder={'link'}
+                            />
+
+                          </Flex>
+                        </Flex>
+
+                      </Flex>
+
+                      <Flex height={'auto'} color={'white'}>
+                        <Center w={89}>
+                          <VStack spacing={0} >
+                            <Box w={'22px'} borderColor={'#636363'} height={'5'} borderLeftWidth={3} ></Box>
+                            <Box
+                              borderColor={'#636363'}
+                              borderBottomLeftRadius={10}
+                              borderBottomStyle={'solid'}
+                              borderBottomWidth={3}
+                              borderLeftWidth={3}
+                              height={'10px'}
+                              w={'22px'}
+                              borderLeftStyle={'solid'}
+                            ></Box>
+                          </VStack>
+                        </Center>
+                        <Flex
+                          bg={"white"}
+                          color={'black'}
+                          borderRadius={10}
+                          minW={200}
+                          boxShadow='0 0 3px #000000'
+                        >
+                          <Box mt={1.5} p={2} w={196}>
+                            ลิงก์ลงทะเบียน
+                          </Box>
+
+                          <Spacer
+                            borderRightColor={"#C4C4C4"}
+                            borderRightWidth={3}
+                          />
+
+                          <Box w={412}>
+                            <Input
+                              type="text"
+                              required
+                              w={400}
+                              bg={"white"}
+                              className={style.search}
+                              m={1.5}
+                              placeholder={'link'}
+                            />
+                          </Box>
+                        </Flex>
+
+
+                      </Flex>
+
+                      <Flex w={'100%'}>
+                        <Box ml={55} fontSize={18} color={'black'}>ตรวจสถานะการรับสมัคร</Box>
+
+                        <Spacer />
+
+                        <IconButton icon={<Plus size={24} />} size="auto" p={1} color={'white'} bg={'#72994C'} rounded="50" />
+                      </Flex>
+
+                      <Flex w={800}>
+
+                        <Center w={50} >
+                          <IconButton icon={<Minus size={24} />} size="auto" p={1} color={'white'} bg={'#F86F6F'} rounded="50" />
+                        </Center>
+
                         <VStack>
-                          <Center>
-                            <Flex maxW={900}>
-                              <Flex
-                                bg={"#535353"}
-                                borderRadius={10}
-                                minW={"auto"}
-                                minH={"auto"}
-                              >
-                                <Box w={238} p={4}>
-                                  <Box className={style.Topic2}>
-                                    ลิงก์กลุ่มคอมมู
-                                  </Box>
-                                </Box>
+                          <Flex
+                            bg={"white"}
+                            color={'black'}
+                            borderRadius={10}
+                            minW={200}
+                            boxShadow='0 0 3px #000000'
+                          >
+                            <Box p={2} w={200}>
+                              <Input
+                                className={style.Topic3}
+                                pl={2}
+                                placeholder={"หัวข้อการตรวจ"}
+                              />
+                            </Box>
 
-                                <Spacer
-                                  borderRightColor={"white"}
-                                  borderRightWidth={3}
-                                />
+                            <Spacer
+                              borderRightColor={"#C4C4C4"}
+                              borderRightWidth={3}
+                            />
 
-                                <Center pl={1.5} pr={1.5}>
-                                  <Input
-                                    required
-                                    w={650}
-                                    h={46}
-                                    bg={"white"}
-                                    placeholder={"..."}
-                                    className={style.search}
-                                    type="url"
-                                    value={smlink}
-                                    onChange={(e) => {
-                                      setSmlink(e.target.value);
-                                    }}
-                                  />
-                                </Center>
-                              </Flex>
-                            </Flex>
-                          </Center>
+                            <Center>
+                              <Input
+                                type="text"
+                                required
+                                w={485}
+                                bg={"white"}
+                                className={style.search}
+                                m={1.5}
+                                placeholder={'text'}
+                              />
+                            </Center>
+                          </Flex>
 
-                          <Center>
-                            <Flex maxW={900}>
-                              <Flex
-                                bg={"#535353"}
-                                borderRadius={10}
-                                minW={"auto"}
-                                minH={"auto"}
-                              >
-                                <Box w={238} p={4}>
-                                  <Box className={style.Topic2}>
-                                    ลิงก์ข้อมูลคอมมู
-                                  </Box>
-                                </Box>
-
-                                <Spacer
-                                  borderRightColor={"white"}
-                                  borderRightWidth={3}
-                                />
-
-                                <Center pl={1.5} pr={1.5}>
-                                  <Input
-                                    
-                                    required
-                                    w={650}
-                                    h={46}
-                                    bg={"white"}
-                                    placeholder={"..."}
-                                    className={style.search}
-                                    type="file"
-                                    // value={doclink}
-                                    onChange={(e) => {
-                                      // uploadTotemporaryPDF(setDoclink, e.target.files[0])
-                                      setDocfile(e.target.files[0])
-                                    }}
-                                  />
-                                </Center>
-                              </Flex>
-                            </Flex>
-                          </Center>
-
-                          <Center>
-                            <Flex maxW={900}>
-                              <Flex
-                                bg={"#535353"}
-                                borderRadius={10}
-                                minW={"auto"}
-                                minH={"auto"}
-                              >
-                                <Box w={238} p={4}>
-                                  <Box className={style.Topic2}>
-                                    ลิงก์ถามคำถาม
-                                  </Box>
-                                </Box>
-
-                                <Spacer
-                                  borderRightColor={"white"}
-                                  borderRightWidth={3}
-                                />
-
-                                <Center pl={1.5} pr={1.5}>
-                                  <Input
-                                    required
-                                    w={650}
-                                    h={46}
-                                    bg={"white"}
-                                    placeholder={"สำหรับ Q&A"}
-                                    className={style.search}
-                                    type="url"
-                                    value={qaasklink}
-                                    onChange={(e) => {
-                                      setQaasklink(e.target.value);
-                                    }}
-                                  />
-                                </Center>
-                              </Flex>
-                            </Flex>
-                          </Center>
-
-                          <Center>
-                            <Flex maxW={900}>
-                              <Flex
-                                bg={"#535353"}
-                                borderRadius={10}
-                                minW={"auto"}
-                                minH={"auto"}
-                              >
-                                <Box w={238} p={4}>
-                                  <Box className={style.Topic2}>
-                                    ลิงก์ตรวจสอบคำตอบ
-                                  </Box>
-                                </Box>
-
-                                <Spacer
-                                  borderRightColor={"white"}
-                                  borderRightWidth={3}
-                                />
-
-                                <Center pl={1.5} pr={1.5}>
-                                  <Input
-                                    required
-                                    w={650}
-                                    h={46}
-                                    bg={"white"}
-                                    placeholder={"สำหรับตรวจสอบ Q&A"}
-                                    className={style.search}
-                                    type="url"
-                                    value={qaanslink}
-                                    onChange={(e) => {
-                                      setQaanslink(e.target.value);
-                                    }}
-                                  />
-                                </Center>
-                              </Flex>
-                            </Flex>
-                          </Center>
-
-                          <Center>
-                            <Flex maxW={900}>
-                              <Flex
-                                bg={"#535353"}
-                                borderRadius={10}
-                                minW={"auto"}
-                                minH={"auto"}
-                              >
-                                <Box w={238} p={4}>
-                                  <Box className={style.Topic2}>
-                                    ช่องทางติดต่อ
-                                  </Box>
-                                </Box>
-
-                                <Spacer
-                                  borderRightColor={"white"}
-                                  borderRightWidth={3}
-                                />
-
-                                <Center pl={1.5} pr={1.5}>
-                                  <Input
-                                    required
-                                    w={650}
-                                    h={46}
-                                    bg={"white"}
-                                    placeholder={"ช่องทางติดต่อ"}
-                                    className={style.search}
-                                    type="url"
-                                    value={contactlink}
-                                    onChange={(e) => {
-                                      setContactlink(e.target.value);
-                                    }}
-                                  />
-                                </Center>
-                              </Flex>
-                            </Flex>
-                          </Center>
                         </VStack>
-                      </AccordionPanel>
-                    </AccordionItem>
-                  </Accordion>
+                      </Flex>
 
-                  <Spacer h={10} />
+                      <Flex height={'auto'}>
+                        <Center w={89}>
+                          <VStack spacing={0} >
+                            <Box w={'22px'} borderColor={'#636363'} height={'5'} borderLeftWidth={3} ></Box>
+                            <Box
+                              borderColor={'#636363'}
+                              borderBottomLeftRadius={10}
+                              borderBottomStyle={'solid'}
+                              borderBottomWidth={3}
+                              borderLeftWidth={3}
+                              height={'10px'}
+                              w={'22px'}
+                              borderLeftStyle={'solid'}
+                            ></Box>
+                          </VStack>
+                        </Center>
+                        <Flex
+                          bg={"white"}
+                          color={'black'}
+                          borderRadius={10}
+                          minW={200}
+                          boxShadow='0 0 3px #000000'
+                        >
+                          <Box mt={1.5} p={2} w={196}>
+                            วันที่และเวลา
+                          </Box>
 
-                  <Center>
-                    <Button
-                      onClick={HandleSubmit}
-                      color={"#FBBC43"}
-                      bg={"#343434"}
-                      fontFamily="Mitr"
-                      fontWeight={100}
-                      fontSize={20}
-                      h={50}
-                      w={150}
-                      mb={20}
-                    >
-                      สร้างคอมมู
-                    </Button>
-                  </Center>
-                </Box>
-              </Center>
+                          <Spacer
+                            borderRightColor={"#C4C4C4"}
+                            borderRightWidth={3}
+                          />
+
+                          <Flex w={412}>
+                            <Input
+                              type="date"
+                              required
+                              bg={"white"}
+                              className={style.search}
+                              m={1.5}
+                              placeholder={'link'}
+                            />
+
+                            <Center>
+                              <ArrowRight size={30} color="#000000" />
+                            </Center>
+
+                            <Input
+                              type="date"
+                              required
+                              bg={"white"}
+                              className={style.search}
+                              m={1.5}
+                              placeholder={'link'}
+                            />
+
+                          </Flex>
+                        </Flex>
+
+                      </Flex>
+
+                      <Flex height={'auto'} color={'white'}>
+                        <Center w={89}>
+                          <VStack spacing={0} >
+                            <Box w={'22px'} borderColor={'#636363'} height={'5'} borderLeftWidth={3} ></Box>
+                            <Box
+                              borderColor={'#636363'}
+                              borderBottomLeftRadius={10}
+                              borderBottomStyle={'solid'}
+                              borderBottomWidth={3}
+                              borderLeftWidth={3}
+                              height={'10px'}
+                              w={'22px'}
+                              borderLeftStyle={'solid'}
+                            ></Box>
+                          </VStack>
+                        </Center>
+                        <Flex
+                          bg={"white"}
+                          color={'black'}
+                          borderRadius={10}
+                          minW={200}
+                          boxShadow='0 0 3px #000000'
+                        >
+                          <Box mt={1.5} p={2} w={196}>
+                            ลิงก์
+                          </Box>
+
+                          <Spacer
+                            borderRightColor={"#C4C4C4"}
+                            borderRightWidth={3}
+                          />
+
+                          <Box w={412}>
+                            <Input
+                              type="text"
+                              required
+                              w={400}
+                              bg={"white"}
+                              className={style.search}
+                              m={1.5}
+                              placeholder={'link'}
+                            />
+                          </Box>
+                        </Flex>
+
+                      </Flex>
+
+                    </VStack>
+                  </AccordionPanel>
+                </AccordionItem>
+              </Accordion>
             </VStack>
-          </Center>
 
-          {/* <Spacer />
+            <Flex w={800} p={10}>
+              <Button
+                color={"#000000"}
+                bg={"#FFC75A"}
+                fontFamily="Mitr"
+                fontWeight={700}
+                fontSize={20}
+                borderWidth={3}
+                borderColor={'#000000'}
+                h={50}
+                w={150}
+                onClick={onOpen}
+              >
+                เพิ่มผู้ดูแล
+              </Button>
 
-          <Box minW={400}></Box> */}
+              <Spacer />
+
+              <Button
+                color={"#000000"}
+                bg={"#FFC75A"}
+                fontFamily="Mitr"
+                fontWeight={700}
+                fontSize={20}
+                borderWidth={3}
+                borderColor={'#000000'}
+                h={50}
+                w={150}
+              >
+                เพิ่มรูปย่อ
+              </Button>
+
+              <Spacer />
+
+              <Button
+                onClick={HandleSubmit}
+                color={"#FBBC43"}
+                bg={"#343434"}
+                fontFamily="Mitr"
+                fontWeight={700}
+                fontSize={20}
+                borderWidth={3}
+                borderColor={'#000000'}
+                h={50}
+                w={150}
+              >
+                สร้างคอมมู
+              </Button>
+            </Flex>
+
+          </VStack>
+
+          <Spacer bg={"#F3F3F3"} />
+
+          <Box w={400} minH={1000} bg={"#F3F3F3"}></Box>
         </Flex>
 
-        <Center bg={"#343434"} h={180}>
-          <Flex>
-            <Center>
-              <VStack m={5}>
-                <Box fontFamily={"mitr"} color={"#FFFFFF"}>
-                  Comuthor © 2022
-                </Box>
-                <Flex>
-                  <FacebookLogo size={32} color={"#FFFFFF"} />
-                  <Spacer w={5} />
-                  <DiscordLogo size={32} color={"#FFFFFF"} />
-                </Flex>
-              </VStack>
-            </Center>
+        {/* module zone */}
 
-            <Spacer borderRightColor={"#ffffff"} borderWidth={1} h={150} />
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Modal Title</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              Test
+            </ModalBody>
 
-            <Center>
-              <VStack fontFamily={"Mitr"} m={5} color={"#FFFFFF"}>
-                <Box>About us</Box>
-                <Box>Guide</Box>
-              </VStack>
-            </Center>
+            <ModalFooter>
+              <Button colorScheme='blue' mr={3} onClick={onClose}>
+                Close
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
 
-            <Spacer borderRightColor={"#ffffff"} borderWidth={1} h={150} />
 
-            <Center>
-              <VStack m={5} fontFamily={"Mitr"} color={"#FFFFFF"}>
-                <Box>Policy</Box>
-                <Box>Term</Box>
-              </VStack>
-            </Center>
-          </Flex>
-        </Center>
+        <Footer></Footer>
       </Box>
-  );
+    );
   }
   return (<></>)
 }

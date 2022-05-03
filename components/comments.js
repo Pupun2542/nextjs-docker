@@ -361,9 +361,9 @@ const Commentpost = ({ cdoc, id }) => {
       borderRadius={10}
       marginTop="10px"
     >
-      <Box flexGrow={1} w={110} pl={2.5} pr={2.5}>
-        <Image src={cdoc.data().thumbnail} rounded={"full"} />
-      </Box>
+      <Center flexGrow={1} w={75} h={70} mr={2.5}>
+        <Image maxW={70} src={cdoc.data().thumbnail} rounded={"full"} />
+      </Center>
 
       <Flex flexDir="column" flexGrow={10}>
         <Flex justifyContent="space-between">
@@ -414,7 +414,7 @@ const Commentpost = ({ cdoc, id }) => {
           //   />
           // </InputRightElement>
           // </InputGroup>
-          <Box fontSize={14} minW={"600"} w={"auto"} maxW={600}>
+          <Box fontSize={14} minW={"625"} w={"auto"} maxW={600}>
             <Text>{cdoc.data().message ? cdoc.data().message : ""}</Text>
           </Box>
         )}
@@ -454,7 +454,8 @@ const Commentpost = ({ cdoc, id }) => {
 
         <Box>
           <Button
-            m={2}
+            mt={2}
+            mr={2}
             p={2}
             w={"auto"}
             onClick={HandleLove}
@@ -478,7 +479,8 @@ const Commentpost = ({ cdoc, id }) => {
             <Box p={1}>{cdoc.data().love ? cdoc.data().love.length : "0"}</Box>
           </Button>
 
-          <Button onClick={onToggle}>
+          <Button mt={2}
+            mr={2} onClick={onToggle}>
             <Box p={1}>
               <ChatCenteredText size={16} color="#000000" />
             </Box>
@@ -503,13 +505,6 @@ const Commentpost = ({ cdoc, id }) => {
           )}
         </MenuList>
       </Menu>
-      {/* <IconButton
-        m={2.5}
-        h={10}
-        w={10}
-        borderRadius={100}
-        icon={<DotsThreeVertical size={30} />}
-      /> */}
     </Flex>
   );
 };
@@ -671,8 +666,9 @@ const ReplyPost = ({ cdoc, commentId, id }) => {
 
     <Flex>
       <VStack spacing={0} mt={5} mr={5} >
-        <Box w={'22px'} height={'50'} borderLeftWidth={3} ></Box>
+        <Box w={'22px'} borderColor={'#636363'} height={'50'} borderLeftWidth={3} ></Box>
         <Box
+          borderColor={'#636363'}
           borderBottomLeftRadius={10}
           borderBottomStyle={'solid'}
           borderBottomWidth={3}
@@ -690,9 +686,9 @@ const ReplyPost = ({ cdoc, commentId, id }) => {
         marginTop="10px"
       >
 
-        <Box flexGrow={1} w={110}>
-          <Image m={2.5} rounded={"full"} src={cdoc.data().thumbnail} />
-        </Box>
+        <Center flexGrow={1} w={75} h={70} m={2.5}>
+          <Image m={2.5} maxW={70} rounded={"full"} src={cdoc.data().thumbnail} />
+        </Center>
 
         <Flex flexDir="column" w={440} flexGrow={10} p={2.5}>
           <Flex justifyContent="space-between">
@@ -748,7 +744,7 @@ const ReplyPost = ({ cdoc, commentId, id }) => {
 
           <Box>
             <Button onClick={HandleLove}>
-              <Box p={1}>
+              <Box>
                 <Heart
                   size={16}
                   color={"red"}
