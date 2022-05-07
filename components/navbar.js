@@ -383,6 +383,7 @@ function CustomNavbar() {
                   ml={-3}
                   mt={-1}
                   color={"black"}
+                  cursor="pointer"
                 >
                   <MenuItem
                     minH="48px"
@@ -548,7 +549,7 @@ function CustomNavbar() {
         display={isChatOpen ? "initial" : "none"}
       >
         {chatNotiData ? (
-          chatNotiData.map((data) => <ChatNotiIcon data={data} user={user} />)
+          chatNotiData.map((data, k) => <ChatNotiIcon data={data} user={user} key={k} />)
         ) : (
           <></>
         )}
@@ -585,6 +586,7 @@ const ChatNotiIcon = ({ data, user }) => {
   const caltime = () => {
     // console.log(data.timestamp)
     const now = new Date(Date.now());
+    console.log(data)
     const sentdate = data.timestamp.toDate();
 
     // const nowYear = now.getFullYear();
@@ -629,7 +631,9 @@ const ChatNotiIcon = ({ data, user }) => {
             <Text> {data.senderId == user.uid ? "คุณ: " : ""} {data.lastmsg}</Text>
           </Box>
         </Flex>
-        <Text>{caltime()}</Text>
+        {data.timestamp&&(
+          <Text>{caltime()}</Text>
+        )}
       </Flex>
     </Box>
   );

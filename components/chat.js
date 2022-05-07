@@ -17,9 +17,16 @@ import {
   FormControl,
   Text,
   Badge,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
 } from "@chakra-ui/react";
 import { Chats } from "phosphor-react";
-import { useApp, useTab, useNotifications } from "../src/hook/local";
+import { useApp, useTab, useNotifications, useUser } from "../src/hook/local";
 import {
   useCollection,
   useDocumentDataOnce,
@@ -43,6 +50,12 @@ import {
   arrayUnion,
 } from "firebase/firestore";
 import { Minus, X } from "phosphor-react";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadString,
+} from "firebase/storage";
 
 // const userData = useUser()
 
@@ -63,26 +76,26 @@ export const Chatsidebar = ({ user, db, forcedopenTab }) => {
   // }, [forcedopenTab]);
 
   // console.log(tabState.opentab.length);
-  useEffect(() => {
-    if (user) {
-      const QuerySnapshot = query(
-        collection(db, "userDetail", user.uid, "chatMessage"),
-        where("readed", "==", "unread"),
-        orderBy("timestamp", "asc")
-      );
+  // useEffect(() => {
+  //   if (user) {
+  //     const QuerySnapshot = query(
+  //       collection(db, "userDetail", user.uid, "chatMessage"),
+  //       where("readed", "==", "unread"),
+  //       orderBy("timestamp", "asc")
+  //     );
 
-      const unsubscribe = onSnapshot(QuerySnapshot, (snapshot) => {
-        // let unreadtab = [];
-        snapshot.docChanges().map((doc) => {
-          if (doc.type == "added") {
-            const id = doc.data().chatroom;
-            addTab(id);
-          }
-        });
-      });
-      return () => unsubscribe();
-    }
-  }, [user]);
+  //     const unsubscribe = onSnapshot(QuerySnapshot, (snapshot) => {
+  //       // let unreadtab = [];
+  //       snapshot.docChanges().map((doc) => {
+  //         if (doc.type == "added") {
+  //           const id = doc.data().chatroom;
+  //           addTab(id);
+  //         }
+  //       });
+  //     });
+  //     return () => unsubscribe();
+  //   }
+  // }, [user]);
   // console.log("tabState.othertab ", tabState.othertab);
   return (
     <Box position="fixed" right={3} bottom={0} alignItems="flex-end">
@@ -132,8 +145,8 @@ const ChatIcon = ({ user, db, atab }) => {
   const [thumbnail, setThumbnail] = useState("");
   // const unreadnum = 0;
   useEffect(() => {
-    console.log(chatNotiData)
-    if (chatNotiData  && chatNotiData.length > 0) {
+    console.log(chatNotiData);
+    if (chatNotiData && chatNotiData.length > 0) {
       const tabDetail = chatNotiData.find((v) => v.id == atab);
       if (tabDetail.type == "private" || tabDetail.type == "chara") {
         const filteredname = tabDetail.memberDetail.find(
@@ -216,15 +229,16 @@ const ChatIcon = ({ user, db, atab }) => {
   );
 };
 
-const ChatBox = ({ atab, user, db }) => {
+const ChatBox = ({ atab, user }) => {
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
-  // const userData = useUser();
+  const { app, auth, db } = useApp();
+  const [image, setImage] = useState(null);
+  const store = getStorage(app);
+  const getUser = useUser()
   const { tabState, addTab, removeTab, changeTab, CloseTab } = useTab();
   const [msg, setMsg] = useState("");
   const unrededref = useRef(false);
-  // console.log("currentopen1 " + tabState.opentab);
   useEffect(() => {
-    // console.log("currentopen2 " + tabState.opentab);
     if (tabState.opentab != "") {
       onOpen();
     }
@@ -239,20 +253,6 @@ const ChatBox = ({ atab, user, db }) => {
       });
     }
   }, [tabState.opentab]);
-
-  // const chatRoomData = useMemo(() => {
-  //   if (tabState.opentab != "") {
-  //     getDoc(doc(db, "chatrooms", tabState.opentab)).then((doc) => {
-  //       return doc.data();
-  //     });
-  //   }
-  //   return "";
-  // }, [tabState.opentab]);
-  // console.log(tabState.opentab);
-  // const [chatRoomData, error] = useDocumentDataOnce(
-  //   doc(db, "chatrooms", tabState.opentab)
-  // );
-  // const [name, setName] = useState("");
   const [snapshot, setSnapshot] = useState("");
   const [loading, setLoading] = useState(true);
   const [chatRoomDetail, setChatRoomDetail] = useState({
@@ -280,11 +280,12 @@ const ChatBox = ({ atab, user, db }) => {
     // console.log(chatRoomData,loading)
     if (!loading && chatRoomData) {
       if (chatRoomData.type == "private") {
-        // console.log(chatRoomData)
-        const member = chatRoomData.memberDetail.find((v) => v.uid != user.uid);
+        console.log("Chatbox")
+        const opp = chatRoomData.member.find((v) => v != user.uid);
+        const memberDetail = getUser(opp)
         setChatRoomDetail({
-          name: member.displayName,
-          thumbnail: member.photoURL,
+          name: memberDetail.displayName,
+          thumbnail: memberDetail.photoURL,
         });
       } else {
         setChatRoomDetail({
@@ -304,25 +305,9 @@ const ChatBox = ({ atab, user, db }) => {
     onClose();
   };
 
-  // useEffect(() => {
-  //   if (snapshot) {
-  //     console.log(snapshot.docs[0].data());
-  //   }
-
-  //   if (
-  //     snapshot &&
-  //     snapshot.docs[0] &&
-  //     !snapshot.docs[0].data().readedby.includes(user.uid)
-  //   ) {
-  //     unrededref.current = true;
-  //   } else {
-  //     unrededref.current = false;
-  //   }
-  // }, [snapshot]);
-
   const onChatSent = async () => {
     if (msg) {
-      console.log(doc(db, "chatrooms", tabState.opentab));
+      // console.log(doc(db, "chatrooms", tabState.opentab));
       await updateDoc(doc(db, "chatrooms", tabState.opentab), {
         lastmsg: msg,
         sender: user.displayName,
@@ -330,7 +315,7 @@ const ChatBox = ({ atab, user, db }) => {
         readedby: [user.uid],
         timestamp: serverTimestamp(),
       })
-        .then(() => console.log("updated"))
+        .then()
         .catch((e) => console.log(e));
       await addDoc(collection(db, "chatrooms", tabState.opentab, "message"), {
         sender: user.displayName,
@@ -339,6 +324,29 @@ const ChatBox = ({ atab, user, db }) => {
         timestamp: serverTimestamp(),
       });
       setMsg("");
+    }
+    if (image) {
+      const storeRef = ref(
+        store,
+        `chatrooms/${tabState.opentab}/${auth.currentUser.uid}${Date.now()}`
+      );
+      // console.log(storeRef.name);
+      const snapshot = await uploadString(storeRef, image, "data_url");
+      const url = await getDownloadURL(snapshot.ref);
+      await addDoc(collection(db, "chatrooms", tabState.opentab, "message"), {
+        sender: user.displayName,
+        senderId: user.uid,
+        image: url,
+        timestamp: serverTimestamp(),
+      });
+      await updateDoc(doc(db, "chatrooms", tabState.opentab), {
+        lastmsg: user.displayName + " ได้ส่งรูป",
+        sender: user.displayName,
+        senderId: user.uid,
+        readedby: [user.uid],
+        timestamp: serverTimestamp(),
+      });
+      setImage(null);
     }
   };
   const handleFocus = async () => {
@@ -354,6 +362,18 @@ const ChatBox = ({ atab, user, db }) => {
       });
     } catch (e) {
       console.log("update fail ", e);
+    }
+  };
+
+  const handleImagePaste = (e) => {
+    if (e.clipboardData.files[0]) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setImage(reader.result);
+        }
+      };
+      reader.readAsDataURL(e.clipboardData.files[0]);
     }
   };
 
@@ -398,49 +418,24 @@ const ChatBox = ({ atab, user, db }) => {
 
       <Box overflowY="auto" id="msgbox" alignSelf={"stretch"} flexGrow="1">
         {snapshot &&
-          snapshot.docs.map((doc, k) => (
-            <Flex
-              flexDirection={
-                doc.data().senderId == user.uid ? "row-reverse" : "row"
-              }
-              key={k}
-              alignSelf={"flex-end"}
-              padding="5px"
-              // maxH={500}
-            >
-              <Box fontFamily={"Mitr"}>
-                {doc.data().senderId == user.uid ? (
-                  <Box minW={280} maxW={320} marginBottom={5}>
-                    <Text fontSize={12}>{doc.data().sender}</Text>
-                    <Text
-                      fontSize={16}
-                      backgroundColor={"blue.100"}
-                      rounded="5"
-                      fontFamily={"Mitr"}
-                      p={2}
-                    >
-                      {doc.data().text}
-                    </Text>
-                  </Box>
-                ) : (
-                  <Box minW={280} maxW={320} marginBottom={5}>
-                    <Text fontSize={12}>{doc.data().sender}</Text>
-                    <Text
-                      fontSize={16}
-                      fontFamily="Mitr"
-                      backgroundColor={"red.200"}
-                      rounded="5"
-                      p={2}
-                    >
-                      {doc.data().text}
-                    </Text>
-                  </Box>
-                )}
-              </Box>
-            </Flex>
-          ))}
+          snapshot.docs.map((doc, k) => <ChatItem doc={doc} user={user} />)}
       </Box>
-      {/* </Box> */}
+
+      {image && (
+        <Box pos="relative">
+          <Image src={image} w={150} h={150} />
+          <IconButton
+            icon={<X size={16} color="black" />}
+            position="absolute"
+            top={0}
+            left={100}
+            backgroundColor="transparent"
+            _hover={{ backgroundColor: "transparent" }}
+            onClick={() => setImage(null)}
+          ></IconButton>
+        </Box>
+      )}
+
       <Box flexDir="row" justifyContent="space-between">
         <Input
           w="65%"
@@ -449,11 +444,94 @@ const ChatBox = ({ atab, user, db }) => {
           onChange={(e) => setMsg(e.target.value)}
           onFocus={handleFocus}
           onKeyUp={(event) => (event.key === "Enter" ? onChatSent() : null)}
+          onPaste={handleImagePaste}
         />
-        <Button float="right" marginRight={5} onClick={onChatSent}>
+        <Button
+          float="right"
+          marginRight={5}
+          onClick={onChatSent}
+          disabled={!(msg || image)}
+        >
           send
         </Button>
       </Box>
     </Box>
+  );
+};
+
+const ChatItem = ({ doc, user }) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const getUser  = useUser()
+  const [userDetail, setUserDetail] = useState({})
+  
+  useEffect(()=>{
+    console.log("ChatItem")
+    setUserDetail(getUser(doc.data().senderId))
+  },[])
+
+
+  return (
+    <Flex
+      flexDirection={doc.data().senderId == user.uid ? "row-reverse" : "row"}
+      alignSelf={"flex-end"}
+      padding="5px"
+      // maxH={500}
+    >
+      <Box fontFamily={"Mitr"}>
+        {doc.data().senderId == user.uid ? (
+          <Box minW={280} maxW={320} marginBottom={5}>
+            <Text fontSize={12}>{userDetail.displayName}</Text>
+            {doc.data().text&& (
+              <Text
+                fontSize={16}
+                backgroundColor={"blue.100"}
+                rounded="5"
+                fontFamily={"Mitr"}
+                p={2}
+              >
+                {doc.data().text}
+              </Text>
+            )}
+            {doc.data().image && (
+              <Image src={doc.data().image} w="150px" h="150px" objectFit="cover" onClick={() => setModalOpen(true)} />
+            )}
+          </Box>
+        ) : (
+          <Box minW={280} maxW={320} marginBottom={5}>
+            <Text fontSize={12}>{userDetail.displayName}</Text>
+            {doc.data().text&& (
+              <Text
+                fontSize={16}
+                fontFamily="Mitr"
+                backgroundColor={"red.200"}
+                rounded="5"
+                p={2}
+              >
+                {doc.data().text}
+              </Text>
+            )}
+
+            {doc.data().image && (
+              <Image
+                src={doc.data().image}
+                w={250}
+                h={250}
+                objectFit="cover"
+                onClick={() => setModalOpen(true)}
+              />
+            )}
+          </Box>
+        )}
+      </Box>
+      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} size="md">
+        <ModalOverlay bg="blackAlpha.100" opacity="40%" backdropBlur="6px" />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalBody>
+            <Image src={doc.data().image} sizes="2xl" />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </Flex>
   );
 };
