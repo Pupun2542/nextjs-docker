@@ -43,6 +43,8 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  Center,
+  VStack,
 } from "@chakra-ui/react";
 import {
   Heart,
@@ -455,9 +457,9 @@ const Commentpost = ({ cdoc, id }) => {
       borderRadius={10}
       marginTop="10px"
     >
-      <Box flexGrow={1} w={110} pl={2.5} pr={2.5}>
-        <Image src={cdoc.data().thumbnail} rounded={"full"} />
-      </Box>
+      <Center flexGrow={1} w={75} h={70} mr={2.5}>
+        <Image maxW={70} src={cdoc.data().thumbnail} rounded={"full"} />
+      </Center>
 
       <Flex flexDir="column" flexGrow={10}>
         <Flex justifyContent="space-between">
@@ -508,7 +510,7 @@ const Commentpost = ({ cdoc, id }) => {
           //   />
           // </InputRightElement>
           // </InputGroup>
-          <Box fontSize={14} minW={"600"} w={"auto"} maxW={600}>
+          <Box fontSize={14} minW={"625"} w={"auto"} maxW={600}>
             <Text whiteSpace="pre-line">{cdoc.data().message ? cdoc.data().message : ""}</Text>
           </Box>
         )}
@@ -570,7 +572,8 @@ const Commentpost = ({ cdoc, id }) => {
 
         <Box>
           <Button
-            m={2}
+            mt={2}
+            mr={2}
             p={2}
             w={"auto"}
             onClick={HandleLove}
@@ -594,7 +597,8 @@ const Commentpost = ({ cdoc, id }) => {
             <Box p={1}>{cdoc.data().love ? cdoc.data().love.length : "0"}</Box>
           </Button>
 
-          <Button onClick={onToggle}>
+          <Button mt={2}
+            mr={2} onClick={onToggle}>
             <Box p={1}>
               <ChatCenteredText size={16} color="#000000" />
             </Box>
@@ -619,13 +623,6 @@ const Commentpost = ({ cdoc, id }) => {
           )}
         </MenuList>
       </Menu>
-      {/* <IconButton
-        m={2.5}
-        h={10}
-        w={10}
-        borderRadius={100}
-        icon={<DotsThreeVertical size={30} />}
-      /> */}
     </Flex>
   );
 };
@@ -784,102 +781,123 @@ const ReplyPost = ({ cdoc, commentId, id }) => {
   };
 
   return (
-    <Flex
-      width="100%"
-      borderRadius={10}
-      boxShadow="0 0 2px #000000"
-      marginTop="10px"
-    >
-      <Box flexGrow={1} w={110}>
-        <Image m={2.5} rounded={"full"} src={cdoc.data().thumbnail} />
-      </Box>
 
-      <Flex flexDir="column" flexGrow={10} p={2.5}>
-        <Flex justifyContent="space-between">
-          <Text fontSize={20}>
-            {cdoc.data().displayName ? cdoc.data().displayName : "placeholder"}
-          </Text>
-          <Text fontSize={10} mt={3} color={"GrayText"}>
-            {cdoc.data().timestamp
-              ? parseDate(cdoc.data().timestamp)
-              : "01/01/1970:00.00"}
-            {/* {console.log(doc.data().timestamp)} */}
-            {/* 01/01/1970:00.00 */}
-          </Text>
+    <Flex>
+      <VStack spacing={0} mt={5} mr={5} >
+        <Box w={'22px'} borderColor={'#636363'} height={'50'} borderLeftWidth={3} ></Box>
+        <Box
+          borderColor={'#636363'}
+          borderBottomLeftRadius={10}
+          borderBottomStyle={'solid'}
+          borderBottomWidth={3}
+          borderLeftWidth={3}
+          height={'45px'}
+          w={'22px'}
+          borderLeftStyle={'solid'}
+        ></Box>
+      </VStack>
+
+      <Flex
+        width="100%"
+        borderRadius={10}
+        boxShadow="0 0 2px #000000"
+        marginTop="10px"
+      >
+
+        <Center flexGrow={1} w={75} h={70} m={2.5}>
+          <Image m={2.5} maxW={70} rounded={"full"} src={cdoc.data().thumbnail} />
+        </Center>
+
+        <Flex flexDir="column" w={440} flexGrow={10} p={2.5}>
+          <Flex justifyContent="space-between">
+            <Text fontSize={20}>
+              {cdoc.data().displayName ? cdoc.data().displayName : "placeholder"}
+            </Text>
+            <Text fontSize={10} mt={3} color={"GrayText"}>
+              {cdoc.data().timestamp
+                ? parseDate(cdoc.data().timestamp)
+                : "01/01/1970:00.00"}
+              {/* {console.log(doc.data().timestamp)} */}
+              {/* 01/01/1970:00.00 */}
+            </Text>
+          </Flex>
+
+          <Divider />
+          {editMode ? (
+            // <InputGroup>
+            <Input
+              onKeyDown={(e) => {
+                // console.log(e.key)
+                if (e.key == "Enter" && !e.shiftKey) {
+                  // console.log('message sent')
+                  handleEdit();
+                } else if (e.key == "Escape") {
+                  setEditMode(false);
+                }
+              }}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              width="100%"
+              placeholder="Write Something"
+              height="45px"
+              backgroundColor="gray.100"
+              mb={2.5}
+            />
+          ) : (
+            //  <InputRightElement>
+            //   <IconButton
+            //     paddingTop={1}
+            //     h={15}
+            //     w={11}
+            //     borderRadius={100}
+            //     onClick={handleFile}
+            //     icon={<ImageSquare size={32} weight="bold" />}
+            //   />
+            // </InputRightElement>
+            // </InputGroup>
+            <Box m={1} minW={440} w={"100%"} maxW={440} fontSize={14}>
+              <Text>{cdoc.data().message ? cdoc.data().message : ""}</Text>
+            </Box>
+          )}
+
+          <Box>
+            <Button onClick={HandleLove}>
+              <Box>
+                <Heart
+                  size={16}
+                  color={"red"}
+                  weight={
+                    cdoc.data().love.includes(auth.currentUser.uid)
+                      ? "fill"
+                      : "regular"
+                  }
+                />
+              </Box>
+
+              <Box p={1}>{cdoc.data().love ? cdoc.data().love.length : "0"}</Box>
+            </Button>
+          </Box>
         </Flex>
 
-        <Divider />
-        {editMode ? (
-          // <InputGroup>
-          <Input
-            onKeyDown={(e) => {
-              // console.log(e.key)
-              if (e.key == "Enter" && !e.shiftKey) {
-                // console.log('message sent')
-                handleEdit();
-              } else if (e.key == "Escape") {
-                setEditMode(false);
-              }
-            }}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            width="100%"
-            placeholder="Write Something"
-            height="45px"
-            backgroundColor="gray.100"
-            mb={2.5}
-          />
-        ) : (
-          //  <InputRightElement>
-          //   <IconButton
-          //     paddingTop={1}
-          //     h={15}
-          //     w={11}
-          //     borderRadius={100}
-          //     onClick={handleFile}
-          //     icon={<ImageSquare size={32} weight="bold" />}
-          //   />
-          // </InputRightElement>
-          // </InputGroup>
-          <Box m={1} minW={440} w={"100%"} maxW={440} fontSize={14}>
-            <Text>{cdoc.data().message ? cdoc.data().message : ""}</Text>
-          </Box>
-        )}
-
-        <Box>
-          <Button onClick={HandleLove}>
-            <Box p={1}>
-              <Heart
-                size={16}
-                color={"red"}
-                weight={
-                  cdoc.data().love.includes(auth.currentUser.uid)
-                    ? "fill"
-                    : "regular"
-                }
-              />
-            </Box>
-
-            <Box p={1}>{cdoc.data().love ? cdoc.data().love.length : "0"}</Box>
-          </Button>
-        </Box>
+        <Menu>
+          <MenuButton m={2.5} h={10} w={10} borderRadius={100}>
+            <DotsThreeVertical size={30} />
+          </MenuButton>
+          <MenuList>
+            {auth.currentUser.uid == cdoc.data().userId ? (
+              <>
+                <MenuItem onClick={() => setEditMode(true)}>Edit</MenuItem>
+                <MenuItem onClick={handleDelete}>Delete</MenuItem>
+              </>
+            ) : (
+              <MenuItem>Report</MenuItem>
+            )}
+          </MenuList>
+        </Menu>
       </Flex>
-      <Menu>
-        <MenuButton m={2.5} h={10} w={10} borderRadius={100}>
-          <DotsThreeVertical size={30} />
-        </MenuButton>
-        <MenuList>
-          {auth.currentUser.uid == cdoc.data().userId ? (
-            <>
-              <MenuItem onClick={() => setEditMode(true)}>Edit</MenuItem>
-              <MenuItem onClick={handleDelete}>Delete</MenuItem>
-            </>
-          ) : (
-            <MenuItem>Report</MenuItem>
-          )}
-        </MenuList>
-      </Menu>
     </Flex>
+
+
   );
 };
 
