@@ -35,6 +35,14 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  Textarea,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
   Center,
   VStack,
 } from "@chakra-ui/react";
@@ -65,8 +73,10 @@ export const Comments = ({ id }) => {
   const [message, setMessage] = useState("");
   const [image, setImage] = useState(null);
   const inputFileRef = useRef(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const handleMessage = () => {
+    const tosent = message.replace(/(?:\\[\r\n])+/g, "</br>");
     if (image) {
       const storeRef = ref(
         store,
@@ -79,7 +89,7 @@ export const Comments = ({ id }) => {
             thumbnail: auth.currentUser.photoURL,
             displayName: auth.currentUser.displayName,
             userId: auth.currentUser.uid,
-            message: message,
+            message: tosent,
             timestamp: serverTimestamp(),
             love: [],
             imageURL: url,
@@ -110,11 +120,21 @@ export const Comments = ({ id }) => {
     };
     reader.readAsDataURL(e.target.files[0]);
   };
-
   const handleFile = () => {
     inputFileRef.current.click();
   };
-
+  const handleImagePaste = (e) => {
+    if (e.clipboardData.files[0]) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setImage(reader.result);
+        }
+      };
+      reader.readAsDataURL(e.clipboardData.files[0]);
+    }
+  };
+  // console.log(message)
   if (snapshot) {
     //   console.log(snapshot.size)
     return (
@@ -126,11 +146,15 @@ export const Comments = ({ id }) => {
         fontFamily={"Mitr"}
       >
         <Text fontSize={32} fontWeight={"bold"}>
-          ความคิดเห็น - [number]
+          ความคิดเห็น - [{snapshot.docs.length}]
         </Text>
         <Box>
           <InputGroup>
-            <Input
+            <Textarea
+              // as="p"
+              // contentEditable="true"
+              resize="none"
+              minHeight={11}
               onKeyDown={(e) => {
                 // console.log(e.key)
                 if (e.key == "Enter" && !e.shiftKey) {
@@ -144,6 +168,7 @@ export const Comments = ({ id }) => {
               placeholder="Write Something"
               height="45px"
               backgroundColor="gray.100"
+              onPaste={handleImagePaste}
             />
             <InputRightElement>
               <IconButton
@@ -165,7 +190,13 @@ export const Comments = ({ id }) => {
           />
           {image ? (
             <Box pos={"relative"}>
-              <Image src={image} width="250px" height="250px" />
+              <Image
+                src={image}
+                width="250px"
+                height="250px"
+                onClick={() => setModalOpen(true)}
+                objectFit="cover"
+              />
               <IconButton
                 icon={<X size={16} color="black" />}
                 position="absolute"
@@ -175,6 +206,23 @@ export const Comments = ({ id }) => {
                 _hover={{ backgroundColor: "transparent" }}
                 onClick={() => setImage(null)}
               ></IconButton>
+              <Modal
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+                size="md"
+              >
+                <ModalOverlay
+                  bg="blackAlpha.100"
+                  opacity="40%"
+                  backdropBlur="6px"
+                />
+                <ModalContent>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <Image src={image} />
+                  </ModalBody>
+                </ModalContent>
+              </Modal>
             </Box>
           ) : (
             <></>
@@ -194,27 +242,6 @@ export const Comments = ({ id }) => {
       marginTop="30px"
       marginBottom="50px"
     >
-      <Text fontSize={32} fontWeight={"bold"}>
-        ความคิดเห็น - [number]
-      </Text>
-      <Box>
-        <Input
-          onKeyDown={(e) => {
-            // console.log(e.key)
-            if (e.key == "Enter" && !e.shiftKey) {
-              // console.log('message sent')
-              handleMessage();
-            }
-          }}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          width="100%"
-          placeholder="Write Something"
-          height="45px"
-          backgroundColor="gray.100"
-          mb={2.5}
-        />
-      </Box>
       Loading
     </Box>;
   }
@@ -222,30 +249,96 @@ export const Comments = ({ id }) => {
     <Box
       marginLeft="100px"
       marginRight="100px"
-      marginTop="30px"
+      marginTop="20px"
       marginBottom="50px"
+      fontFamily={"Mitr"}
     >
       <Text fontSize={32} fontWeight={"bold"}>
-        Comment Section
+        ความคิดเห็น - [0]
       </Text>
       <Box>
+        <InputGroup>
+          <Textarea
+            // as="p"
+            // contentEditable="true"
+            resize="none"
+            minHeight={11}
+            onKeyDown={(e) => {
+              // console.log(e.key)
+              if (e.key == "Enter" && !e.shiftKey) {
+                // console.log('message sent')
+                handleMessage();
+              }
+            }}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            width="100%"
+            placeholder="Write Something"
+            height="45px"
+            backgroundColor="gray.100"
+            onPaste={handleImagePaste}
+          />
+          <InputRightElement>
+            <IconButton
+              paddingTop={1}
+              h={15}
+              w={11}
+              borderRadius={100}
+              onClick={handleFile}
+              icon={<ImageSquare size={32} weight="bold" />}
+            />
+          </InputRightElement>
+        </InputGroup>
         <Input
-          onKeyDown={(e) => {
-            // console.log(e.key)
-            if (e.key == "Enter" && !e.shiftKey) {
-              // console.log('message sent')
-              handleMessage();
-            }
-          }}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          width="100%"
-          placeholder="Write Something"
-          height="45px"
-          backgroundColor="gray.100"
-          mb={2.5}
+          type="file"
+          id="file"
+          ref={inputFileRef}
+          display="none"
+          onChange={(e) => handleUploadFile(e)}
         />
+        {image ? (
+          <Box pos={"relative"}>
+            <Image
+              src={image}
+              width="250px"
+              height="250px"
+              onClick={() => setModalOpen(true)}
+              objectFit="cover"
+            />
+            <IconButton
+              icon={<X size={16} color="black" />}
+              position="absolute"
+              top={0}
+              left={200}
+              backgroundColor="transparent"
+              _hover={{ backgroundColor: "transparent" }}
+              onClick={() => setImage(null)}
+            ></IconButton>
+            <Modal
+              isOpen={modalOpen}
+              onClose={() => setModalOpen(false)}
+              size="md"
+            >
+              <ModalOverlay
+                bg="blackAlpha.300"
+                backdropFilter="blur(10px) hue-rotate(90deg)"
+              />
+              <ModalContent>
+                <ModalCloseButton />
+                <ModalBody>
+                  <Image src={image} />
+                </ModalBody>
+              </ModalContent>
+            </Modal>
+          </Box>
+        ) : (
+          <></>
+        )}
       </Box>
+
+      {snapshot&&snapshot.docs.map((doc, k) => (
+        <Commentpost cdoc={doc} id={id} key={k} />
+      ))}
     </Box>
   );
 };
@@ -258,6 +351,7 @@ const Commentpost = ({ cdoc, id }) => {
   const checkMessage = useRef("");
   const [image, setImage] = useState(null);
   const store = getStorage(app);
+  const [modalOpen, setModalOpen] = useState(false);
   // const inputFileRef = useRef(null);
   const checkImage = useRef("");
   const [coll] = useCollectionOnce(
@@ -280,6 +374,8 @@ const Commentpost = ({ cdoc, id }) => {
     if (cdoc.data().imageURL) {
       // checkImage.current = cdoc.data().imageURL;
       setImage(cdoc.data().imageURL);
+    }else {
+      setImage("");
     }
     checkMessage.current = cdoc.data().message;
   }, [cdoc]);
@@ -327,13 +423,13 @@ const Commentpost = ({ cdoc, id }) => {
 
   const handleDelete = () => {
     if (confirm("ยืนยันการลบข้อความ")) {
+      setImage(null);
+      setMessage("");
+      setReply(0);
       if (cdoc.data().imageRef) {
         deleteObject(ref(store, cdoc.data().imageRef)).then();
       }
       deleteDoc(doc(db, "group", id, "comments", cdoc.id)).then();
-      setImage(null);
-      setMessage("");
-      setReply(0);
     }
   };
 
@@ -415,7 +511,7 @@ const Commentpost = ({ cdoc, id }) => {
           // </InputRightElement>
           // </InputGroup>
           <Box fontSize={14} minW={"625"} w={"auto"} maxW={600}>
-            <Text>{cdoc.data().message ? cdoc.data().message : ""}</Text>
+            <Text whiteSpace="pre-line">{cdoc.data().message ? cdoc.data().message : ""}</Text>
           </Box>
         )}
         {/* <Input
@@ -429,7 +525,13 @@ const Commentpost = ({ cdoc, id }) => {
         {image ? (
           <>
             <Box pos={"relative"}>
-              <Image src={image ? image : ""} width="250px" height="250px" />
+              <Image
+                objectFit="cover"
+                src={image ? image : ""}
+                width="250px"
+                height="250px"
+                onClick={() => setModalOpen(true)}
+              />
 
               {/* Edit รูป */}
 
@@ -447,6 +549,22 @@ const Commentpost = ({ cdoc, id }) => {
                 <></>
               )} */}
             </Box>
+            <Modal
+              isOpen={modalOpen}
+              onClose={() => setModalOpen(false)}
+              size="md"
+            >
+              <ModalOverlay
+                bg="blackAlpha.300"
+                backdropFilter="blur(10px) hue-rotate(90deg)"
+              />
+              <ModalContent>
+                <ModalCloseButton />
+                <ModalBody>
+                  <Image src={image} />
+                </ModalBody>
+              </ModalContent>
+            </Modal>
           </>
         ) : (
           <></>

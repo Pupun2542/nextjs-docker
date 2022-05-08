@@ -10,6 +10,7 @@ import { firebaseConfig } from "../config/firebase.config";
 import { initializeApp } from "firebase/app";
 import {
   collection,
+  getDoc,
   getDocs,
   getFirestore,
   limit,
@@ -17,6 +18,7 @@ import {
   orderBy,
   query,
   where,
+  doc,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -39,20 +41,6 @@ export const AppProvider = ({ children }) => {
   );
 };
 
-// export const UserProvider = ({ children }) => {
-//   const [data, setData] = useState([]);
-
-//   // useMemo(()=>{
-//   useEffect(() => {
-//     getDocs(collection(db, "userDetail")).then((docs) => {
-//       setData(docs.docs.map((doc) => doc.data()));
-//     });
-//   }, []);
-
-//   // },[db])
-
-//   return <UserContext.Provider value={data}>{children}</UserContext.Provider>;
-// };
 
 const initialState = {
   opentab: "",
@@ -99,7 +87,7 @@ const tabReducer = (state, action) => {
 
 export const OpenChatTabProvider = ({ children }) => {
   const [tabState, tabDispatcher] = useReducer(tabReducer, initialState);
-  console.log(tabState)
+  // console.log(tabState)
   // const { tab } = tabState;
 
   const addTab = (payload) => {
@@ -168,7 +156,62 @@ export const NotificationProvider = ({ children }) => {
   );
 };
 
+const initialUser = {
+  data: {},
+}
+
+ const userReducer = (state, action) => {
+  switch (action.type) {
+    case "addUser":
+      return {
+        ...state,
+        data: {...state.data, [action.uid]:action.payload}
+      }
+  }
+ }
+
+ export const UserProvider = ({ children }) => {
+  const [data, DataDispatcher] = useReducer(userReducer, initialUser)
+  
+  const getUser = async (uid) => {
+    console.log("getUser: ", uid)
+    console.log("data: ", data)
+    const userDetail = data.data[uid];
+    if (userDetail){
+      console.log("found")
+      return userDetail
+    } else {
+      console.log("not found, searching")
+      const docdata = await getDoc(doc(db, "userDetail", uid))
+      console.log("searching: ", docdata)
+      if (docdata.exists){
+        console.log("found: ", docdata)
+        const payload = docdata.data();
+        DataDispatcher({ type: "addUser", payload });
+        return payload
+      }
+    }
+    console.log("not found, not found")
+    return null
+  }
+
+  // useMemo(()=>{
+  // useEffect(() => {
+  //   getDocs(collection(db, "userDetail")).then((docs) => {
+  //     setData(docs.docs.map((doc) => doc.data()));
+  //   });
+  // }, []);
+
+  // },[db])
+
+  return <UserContext.Provider value={getUser}>{children}</UserContext.Provider>;
+};
+
+
+
+
+
 export const useTab = () => useContext(OpenedChatContext);
 export const useApp = () => useContext(AppContext);
-// export const useUser = () => useContext(UserContext);
+export const useUser = () => useContext(UserContext);
 export const useNotifications = () => useContext(NotificationContext);

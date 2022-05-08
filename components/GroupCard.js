@@ -109,7 +109,7 @@ function GroupCard() {
                   w={556}
                 >
                   <Box>
-                    [{value.tag}]{value.Name}
+                    [{value.tag}]{value.name}
                   </Box>
                 </Box>
 
