@@ -16,7 +16,7 @@ function about() {
       <CustomNavbar />
       <Center>
         <Box w="1500" boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' fontFamily={'Mitr'} >
-        <Text fontFamily={'Mitr'} fontSize="40px" align="center" fontWeight='bold' paddingTop={10} > About us </Text>
+        <Text fontFamily={'Mitr'} fontSize="40px" align="center" fontWeight='bold' paddingTop={10} mt={10} > About us </Text>
         <Text fontFamily={'Mitr'} fontSize="20px" align="center" > รายชื่อทีมงาน </Text>
         <Container>
       <Row>
