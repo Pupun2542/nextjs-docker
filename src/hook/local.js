@@ -41,7 +41,6 @@ export const AppProvider = ({ children }) => {
   );
 };
 
-
 const initialState = {
   opentab: "",
   othertab: [],
@@ -50,7 +49,7 @@ const initialState = {
 const tabReducer = (state, action) => {
   switch (action.type) {
     case "addTab":
-      if (!state.othertab.includes(action.payload)){
+      if (!state.othertab.includes(action.payload)) {
         return {
           ...state,
           othertab: [...state.othertab, action.payload],
@@ -137,13 +136,15 @@ export const NotificationProvider = ({ children }) => {
       // console.log(user.uid)
       const q = query(
         collection(db, "chatrooms"),
-        where("member", 'array-contains', user.uid),
+        where("member", "array-contains", user.uid),
         orderBy("timestamp", "desc"),
         limit(50)
       );
       const unsubscribe = onSnapshot(q, (snapshot) => {
-        console.log(snapshot.docs)
-        setChatNotidata(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+        console.log(snapshot.docs);
+        setChatNotidata(
+          snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+        );
       });
       return () => unsubscribe();
     }
@@ -157,43 +158,72 @@ export const NotificationProvider = ({ children }) => {
 };
 
 const initialUser = {
-  data: {},
-}
+  data: [],
+};
 
- const userReducer = (state, action) => {
+const userReducer = (state, action) => {
   switch (action.type) {
     case "addUser":
+      console.log(state.data, action.userDetail)
       return {
         ...state,
-        data: {...state.data, [action.uid]:action.payload}
-      }
+        // data: {...state.data, [action.uid]:action.payload}
+        data: [...state.data, ...action.userDetail],
+      };
   }
- }
+};
 
- export const UserProvider = ({ children }) => {
-  const [data, DataDispatcher] = useReducer(userReducer, initialUser)
-  
+export const UserProvider = ({ children }) => {
+  const [data, DataDispatcher] = useReducer(userReducer, initialUser);
+
   const getUser = async (uid) => {
-    console.log("getUser: ", uid)
-    console.log("data: ", data)
-    const userDetail = data.data[uid];
-    if (userDetail){
-      console.log("found")
-      return userDetail
-    } else {
-      console.log("not found, searching")
-      const docdata = await getDoc(doc(db, "userDetail", uid))
-      console.log("searching: ", docdata)
-      if (docdata.exists){
-        console.log("found: ", docdata)
-        const payload = docdata.data();
-        DataDispatcher({ type: "addUser", payload });
-        return payload
+    if (uid.length > 0) {
+      let users = [];
+      uid.map((id) => {
+        const user = data.data.find((v) => v.uid == id);
+        if (user){
+          users = [...users, user];
+        }
+      });
+      if (users.length <= 0) {
+        const docData = await getDocs(
+          query(collection(db, "userDetail"), where("uid", "in", uid))
+        );
+        let userDetail = [];
+        if (!docData.empty) {
+          userDetail = docData.docs.map((doc) => doc.data());
+          DataDispatcher({ type: "addUser", userDetail });
+          console.log("new:", userDetail)
+          return userDetail;
+        }
+        
+      } else {
+        console.log("found: ",users)
+        return users;
       }
     }
-    console.log("not found, not found")
-    return null
-  }
+    return undefined;
+    // console.log("getUser: ", uid)
+    // console.log("data: ", data)
+    // const userDetail = data.data[uid];
+    // if (userDetail){
+    //   console.log("found")
+    //   return userDetail
+    // } else {
+    //   console.log("not found, searching")
+
+    //   const docdata = await getDoc(doc(db, "userDetail", uid))
+    //   console.log("searching: ", docdata)
+    //   if (docdata.exists){
+    //     console.log("found: ", docdata)
+    //     const payload = docdata.data();
+    //     DataDispatcher({ type: "addUser", payload });
+    //     return payload
+    //   }
+    // }
+    // console.log("not found, not found")
+    return null;
+  };
 
   // useMemo(()=>{
   // useEffect(() => {
@@ -204,12 +234,10 @@ const initialUser = {
 
   // },[db])
 
-  return <UserContext.Provider value={getUser}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={getUser}>{children}</UserContext.Provider>
+  );
 };
-
-
-
-
 
 export const useTab = () => useContext(OpenedChatContext);
 export const useApp = () => useContext(AppContext);

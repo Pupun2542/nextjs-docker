@@ -238,6 +238,14 @@ const ChatBox = ({ atab, user }) => {
   const { tabState, addTab, removeTab, changeTab, CloseTab } = useTab();
   const [msg, setMsg] = useState("");
   const unrededref = useRef(false);
+  const [snapshot, setSnapshot] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [chatRoomDetail, setChatRoomDetail] = useState({
+    name: null,
+    thumbnail: null,
+    members: [],
+  });
+
   useEffect(() => {
     if (tabState.opentab != "") {
       onOpen();
@@ -251,14 +259,9 @@ const ChatBox = ({ atab, user }) => {
         // return doc.data();
         setChatRoomData(doc.data());
       });
+      setLoading(false);
     }
   }, [tabState.opentab]);
-  const [snapshot, setSnapshot] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [chatRoomDetail, setChatRoomDetail] = useState({
-    name: null,
-    thumbnail: null,
-  });
 
   useEffect(() => {
     if (tabState.opentab != "") {
@@ -268,29 +271,45 @@ const ChatBox = ({ atab, user }) => {
       );
       const unsubscribe = onSnapshot(QuerySnapshot, (snap) => {
         setSnapshot(snap);
-        setLoading(false);
       });
       return () => unsubscribe();
     }
   }, [tabState.opentab]);
 
+  // useEffect(()=> {
+  //   if (snapshot&&!loading){
+  //     if (snapshot.docChanges)
+  //     setChatRoomDetail({...chatRoomData, s})
+  //   }
+    
+  //   // setUserDetail(getUser(doc.data().senderId))
+  // },[snapshot])
+
+  
+
   // const [snapshot, loadingsnapshot, errorsnapshot] =
   //   useCollection(QuerySnapshot);
-  useEffect(() => {
-    // console.log(chatRoomData,loading)
+  useEffect( async () => {
+    console.log(chatRoomData,loading)
     if (!loading && chatRoomData) {
+      const members = await getUser(chatRoomData.member); 
       if (chatRoomData.type == "private") {
         console.log("Chatbox")
-        const opp = chatRoomData.member.find((v) => v != user.uid);
-        const memberDetail = getUser(opp)
+        // const opp = chatRoomData.member.find((v) => v != user.uid);
+        // const memberDetail = getUser(opp)
+        //doc.data()
+        console.log(members.uid, user.uid)
+        const opp = members.find(v=>v.uid != user.uid)
         setChatRoomDetail({
-          name: memberDetail.displayName,
-          thumbnail: memberDetail.photoURL,
+          name: opp.displayName,
+          thumbnail: opp.photoURL,
+          members: members
         });
       } else {
         setChatRoomDetail({
           name: chatRoomData.name,
           thumbnail: chatRoomData.thumbnail,
+          members: members
         });
       }
     }
@@ -376,7 +395,7 @@ const ChatBox = ({ atab, user }) => {
       reader.readAsDataURL(e.clipboardData.files[0]);
     }
   };
-
+  // console.log(Object.keys(chatRoomDetail), Object.keys(chatRoomDetail).length > 0)
   if (loading) {
     return <></>;
   }
@@ -417,8 +436,8 @@ const ChatBox = ({ atab, user }) => {
       </Box>
 
       <Box overflowY="auto" id="msgbox" alignSelf={"stretch"} flexGrow="1">
-        {snapshot &&
-          snapshot.docs.map((doc, k) => <ChatItem doc={doc} user={user} />)}
+        {snapshot &&Object.keys(chatRoomDetail).length > 0 &&
+          snapshot.docs.map((doc, k) => <ChatItem doc={doc} user={user} members={chatRoomDetail.members} />)}
       </Box>
 
       {image && (
@@ -459,28 +478,23 @@ const ChatBox = ({ atab, user }) => {
   );
 };
 
-const ChatItem = ({ doc, user }) => {
+const ChatItem = ({ doc, user, members }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const getUser  = useUser()
-  const [userDetail, setUserDetail] = useState({})
-  
-  useEffect(()=>{
-    console.log("ChatItem")
-    setUserDetail(getUser(doc.data().senderId))
-  },[])
-
+  // const [userDetail, setUserDetail] = useState({})
+  console.log("member", members)
+  const sender = members.find(v=>v.uid == doc.data().senderId);
 
   return (
     <Flex
-      flexDirection={doc.data().senderId == user.uid ? "row-reverse" : "row"}
+      flexDirection={sender.uid == user.uid ? "row-reverse" : "row"}
       alignSelf={"flex-end"}
       padding="5px"
       // maxH={500}
     >
       <Box fontFamily={"Mitr"}>
-        {doc.data().senderId == user.uid ? (
+        {sender.uid == user.uid ? (
           <Box minW={280} maxW={320} marginBottom={5}>
-            <Text fontSize={12}>{userDetail.displayName}</Text>
+            <Text fontSize={12}>{sender.displayName}</Text>
             {doc.data().text&& (
               <Text
                 fontSize={16}
@@ -498,7 +512,7 @@ const ChatItem = ({ doc, user }) => {
           </Box>
         ) : (
           <Box minW={280} maxW={320} marginBottom={5}>
-            <Text fontSize={12}>{userDetail.displayName}</Text>
+            <Text fontSize={12}>{sender.displayName}</Text>
             {doc.data().text&& (
               <Text
                 fontSize={16}
