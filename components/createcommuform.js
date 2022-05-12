@@ -66,103 +66,167 @@ import {
   DiscordLogo,
 } from "phosphor-react";
 
-export const Createcommuform = ({data}) => {
-    const {app, auth, db} = useApp();
-    const store = getStorage(app);
-    const [user, loading, error] = useAuthState(auth);
-    const [fieldvalue, setFieldvalue] = useState({
-        hashtag: "",
-        communame: "",
-        maxplayer: 0,
-        runtime: "",
-        startDate: "",
-        description: "",
-        SMlink: "",
-        docfile: null,
-        qaasklink: "",
-        qaanslink: "",
-        submitlink: "",
-        resultlink: "",
-        contactlink: "",
-        startDate: "",
-        rating: "",
-        rule: "",
-        averageTime: "",
-        averageTimeUnit: "",
-        type= "",
-        privacy: "",
-    });
-    const [bannerBlob, setBannerBlob] = useState(null);
-    const [genre, setGenre] = useState([]);
-    const [places, setPlaces] = useState([]);
-    const [times, setTimes] = useState([]);
-    const [TWs, setTWs] = useState([]);
-    const [configvalue, setConfigValue] = useState({
-        durationsw: true,
-        Averagesw: true,
-        Locationsw: true,
-        Timelinesw: true,
-        Ratingsw: true,
-        Triggersw: true,
-        Rulesw: true,
-    })
-    useEffect(()=>{
-        setFieldvalue({
-            hashtag: data.tag,
-            communame: data.name,
-            maxplayer: data.maxplayer,
-            runtime: data.runtime,
-            startDate: data.startDate,
-            description: data.description,
-            SMlink: data.SMlink,
-            docfile: data.docfile,
-            qaasklink: data.qaasklink,
-            qaanslink: data.qaanslink,
-            submitlink: data.submitlink,
-            resultlink: data.resultlink,
-            contactlink: data.contactlink,
-            startDate: data.startDate,
-            rating: data.rating,
-            rule: data.rule,
-            averageTime: data.averageTime,
-            averageTimeUnit: data.averageTimeUnit,
-            type: data.type,
-            privacy: data.privacy,
-        })
+export const Createcommuform = ({ data }) => {
+  const { app, auth, db } = useApp();
+  const store = getStorage(app);
+  const [fieldvalue, setFieldvalue] = useState({
+    hashtag: "",
+    communame: "",
+    maxplayer: 0,
+    runtime: "",
+    startDate: "",
+    description: "",
+    smlink: "",
+    docfile: null,
+    qaasklink: "",
+    qaanslink: "",
+    submitlink: "",
+    resultlink: "",
+    contactlink: "",
+    startdate: "",
+    startdateraw: "",
+    rating: "",
+    rule: "",
+    averagetime: "",
+    averagetimeunit: "",
+    type: "",
+    privacy: "",
+  });
+  const [bannerBlob, setBannerBlob] = useState(null);
+  const [genre, setGenre] = useState([]);
+  const [places, setPlaces] = useState([]);
+  const [times, setTimes] = useState([]);
+  const [TWs, setTWs] = useState([]);
+  const [configvalue, setConfigValue] = useState({
+    durationsw: true,
+    Averagesw: true,
+    Locationsw: true,
+    Timelinesw: true,
+    Ratingsw: true,
+    Triggersw: true,
+    Rulesw: true,
+  });
+  useEffect(() => {
+    if (data){
+      setFieldvalue({
+        hashtag: data.tag,
+        communame: data.name,
+        maxplayer: data.maxplayer,
+        runtime: data.runtime,
+        startDate: data.startDate,
+        description: data.description,
+        smlink: data.SMlink,
+        docfile: data.docfile,
+        qaasklink: data.qaasklink,
+        qaanslink: data.qaanslink,
+        submitlink: data.submitlink,
+        resultlink: data.resultlink,
+        contactlink: data.contactlink,
+        startDate: data.startDate,
+        rating: data.rating,
+        rule: data.rule,
+        averageTime: data.averageTime,
+        averageTimeUnit: data.averageTimeUnit,
+        type: data.type,
+        privacy: data.privacy,
+      });
+      if (data.config){
         setConfigValue({
-            durationsw: data.config.durationsw,
-            Averagesw: data.config.Averagesw,
-            Locationsw: data.config.Locationsw,
-            Timelinesw: data.config.Timelinesw,
-            Ratingsw: data.config.Ratingsw,
-            Triggersw: data.config.Triggersw,
-            Rulesw: data.config.Rulesw,
-        })
-        setGenre(data.genre);
-        setPlaces(data.place);
-        setTimes(data.times);
-        setTWs(data.tws);
-    },[data])
+          durationsw: (data.config.durationsw? data.config.durationsw : true),
+          Averagesw: (data.config.durationsw? data.config.Averagesw : true),
+          Locationsw: (data.config.durationsw? data.config.Locationsw : true),
+          Timelinesw: (data.config.durationsw? data.config.Timelinesw : true),
+          Ratingsw: (data.config.durationsw? data.config.Ratingsw : true),
+          Triggersw: (data.config.durationsw? data.config.Triggersw : true),
+          Rulesw: (data.config.durationsw? data.config.Rulesw : true),
+        });
+      }
+      setGenre(data.genre);
+      setPlaces(data.place);
+      setTimes(data.times);
+      setTWs(data.tws);
+    }
+  }, [data]);
 
-    const Hashtag = (props) => {
-        const removeTags = (indexToRemove) => {
-          props.setState([
-            ...props.state.filter((_, index) => index !== indexToRemove),
-          ]);
-        };
-        const addTags = (event) => {
-          let tag = event.target.value.replace(",", "");
-          tag = tag.trim();
-          if (tag !== "") {
-            props.setState([...props.state, tag]);
-            // props.selectedTags([...props.state, tag]);
-            event.target.value = "";
-          }
-        };
-  return (
-    <Box bg="#FDFDFD" maxW={1980}>
-        <CustomNavbar />
-        <Flex justifyContent={'center'}>
+  const Hashtag = (props) => {
+    const removeTags = (indexToRemove) => {
+      props.setState([
+        ...props.state.filter((_, index) => index !== indexToRemove),
+      ]);
+    };
+    const addTags = (event) => {
+      let tag = event.target.value.replace(",", "");
+      tag = tag.trim();
+      if (tag !== "") {
+        props.setState([...props.state, tag]);
+        // props.selectedTags([...props.state, tag]);
+        event.target.value = "";
+      }
+    };
+    return (
+      <Box w={150} h={38} float={'left'}>
+        <Box>
+          <Box id="tags">
+            {props.state.map((tag, index) => (
+              <Box key={index} className={style.tag} m={1.5} p={1} maxW={200} float='left'>
+                <Box>{tag}</Box>
+                <CloseButton
+                  onClick={() => removeTags(index)}
+                  rounded={50}
+                  bg="white"
+                  color={"black"}
+                  h={22}
+                  w={22}
+                  m={1}
+                />
+              </Box>
+            ))}
+            <Input
+              type="text"
+              onKeyUp={(event) => (event.key === "," ? addTags(event) : null)}
+              placeholder=" ใช้ , เพื่อแบ่งประเภท"
+              w={'auto'}
+              className={style.search}
+              isDisabled={props.isDisabled}
+              border="hidden"
+              maxW={200}
+              mt={1}
+              float='left'
+            />
+          </Box>
+        </Box>
+      </Box>
+    );
+  }
+    const parseTime = (localtime) => {
+      // console.log(localtime);
+      const spdatetime = localtime.split("T");
+
+      const timebuild = spdatetime[0] + " เวลา " + spdatetime[1];
+      return timebuild;
+    };
+
+    const parseRawTime = (localtime) => {
+      const spdatetime = localtime.split("T");
+      const spdate = spdatetime[0].split("/");
+      const sptime = spdatetime[1].split(":");
+
+      const timebuild = new Date();
+      // timebuild.setDate(spdate[0]);
+      // timebuild.setMonth(spdate[1]+1);
+      timebuild.setFullYear(spdate[2], spdate[1] + 1, spdate[0]);
+      timebuild.setHours(sptime[0], sptime[0]);
+
+      console.log(timebuild);
+      return timebuild;
+    };
+
+    const HandleSubmit = () =>{
+      console.log('submit')
+    }
+
+    return (
+        <Flex justifyContent={"center"}>
           {/* <Box minW={400}></Box>
 
           <Spacer /> */}
@@ -193,13 +257,17 @@ export const Createcommuform = ({data}) => {
                         p={2}
                         className={style.HeadingCreate2}
                       >
-                        {fieldvalue.hashtag ? "[" + fieldvalue.hashtag + "]" : "[____]"}
+                        {fieldvalue.hashtag
+                          ? "[" + fieldvalue.hashtag + "]"
+                          : "[____]"}
                       </Center>
                       <Center
                         //จะเป็น Real-Time จากช่องพิมพ์ชื่อคอมมู
                         className={style.HeadingCreate2}
                       >
-                        {fieldvalue.communame ? fieldvalue.communame : "ชื่อคอมมูนิตี้"}
+                        {fieldvalue.communame
+                          ? fieldvalue.communame
+                          : "ชื่อคอมมูนิตี้"}
                       </Center>
                     </Flex>
                   </Center>
@@ -240,7 +308,10 @@ export const Createcommuform = ({data}) => {
                                   type="text"
                                   value={fieldvalue.communame}
                                   onChange={(e) => {
-                                      setFieldvalue({...fieldvalue, 'communame': e.target.value })
+                                    setFieldvalue({
+                                      ...fieldvalue,
+                                      communame: e.target.value,
+                                    });
                                     // setCommuname(e.target.value);
                                   }}
                                   required
@@ -281,9 +352,13 @@ export const Createcommuform = ({data}) => {
                                 <Center pl={1.5} pr={1.5}>
                                   <Input
                                     type="text"
-                                    value={hashtag}
+                                    value={fieldvalue.hashtag}
                                     onChange={(e) => {
-                                      setHashtag(e.target.value);
+                                      setFieldvalue({
+                                        ...fieldvalue,
+                                        hashtag: e.target.value,
+                                      });
+                                      // setHashtag(e.target.value);
                                     }}
                                     required
                                     w={130}
@@ -315,6 +390,7 @@ export const Createcommuform = ({data}) => {
                                 />
 
                                 <Center pl={1.5} pr={1.5}>
+                                  {/* ยังไม่มีให้เลือก */}
                                   <Select
                                     isRequired
                                     w={260}
@@ -362,7 +438,15 @@ export const Createcommuform = ({data}) => {
                                 />
 
                                 <Center pl={1.5} pr={1.5}>
-                                  <NumberInput w={130} onChange={(e)=>setMaxplayer(e)}>
+                                  <NumberInput
+                                    w={130}
+                                    onChange={(e) =>
+                                      setFieldvalue({
+                                        ...fieldvalue,
+                                        maxplayer: e,
+                                      })
+                                    }
+                                  >
                                     <NumberInputField
                                       bg={"white"}
                                       h={46}
@@ -401,7 +485,9 @@ export const Createcommuform = ({data}) => {
                                     color="black"
                                     size="lg"
                                     fontFamily={"Mitr"}
-                                    onChange={(e) => setType(e.target.value)}
+                                    onChange={(e) =>
+                                      setFieldvalue({ ...fieldvalue, type: e })
+                                    }
                                     defaultValue={"Slow-Life"}
                                   >
                                     <option
@@ -461,7 +547,7 @@ export const Createcommuform = ({data}) => {
                                     m={1.5}
                                   >
                                     <Hashtag
-                                      selectedTags={selectedTags}
+                                      // selectedTags={selectedTags}
                                       state={genre}
                                       setState={setGenre}
                                     />
@@ -476,8 +562,13 @@ export const Createcommuform = ({data}) => {
                               <Switch
                                 bg={"gray.500"}
                                 borderRadius={10}
-                                isChecked={durationsw}
-                                onChange={() => setDurationsw(!durationsw)}
+                                isChecked={configvalue.durationsw}
+                                onChange={() =>
+                                  setConfigValue({
+                                    ...configvalue,
+                                    durationsw: !configvalue.durationsw,
+                                  })
+                                }
                                 //เพิ่ม 2 บรรทัดบน ตัวแปรให้ตรงกับที่สร้าง 1 state ต่อ 1 component
                               />
                             </Center>
@@ -503,15 +594,24 @@ export const Createcommuform = ({data}) => {
                                   <Center pl={1.5} pr={1.5}>
                                     <Input
                                       type="datetime-local"
-                                      isDisabled={!durationsw} //แล้วก็เพิ่มตรงนี้ ชื่อตัวแปรตาม state ที่สร้าง
+                                      isDisabled={!configvalue.durationsw} //แล้วก็เพิ่มตรงนี้ ชื่อตัวแปรตาม state ที่สร้าง
                                       isRequired
                                       h={46}
                                       bg={"white"}
                                       color="black"
                                       w={650}
-                                      onChange={(e) =>
-                                        setStartDate(parseTime(e.target.value))
-                                      }
+                                      onChange={(e) => {
+                                        setFieldvalue({
+                                          ...fieldvalue,
+                                          startdate: parseTime(e.target.value),
+                                        });
+                                        setFieldvalue({
+                                          ...fieldvalue,
+                                          startdateraw: parseRawTime(
+                                            e.target.value
+                                          ),
+                                        });
+                                      }}
                                       fontFamily={"Mitr"}
                                     />
                                   </Center>
@@ -525,8 +625,13 @@ export const Createcommuform = ({data}) => {
                               <Switch
                                 bg={"gray.500"}
                                 borderRadius={10}
-                                isChecked={Averagesw}
-                                onChange={() => setAveragesw(!Averagesw)}
+                                isChecked={configvalue.Averagesw}
+                                onChange={() =>
+                                  setConfigValue({
+                                    ...configvalue,
+                                    Averagesw: !configvalue.Averagesw,
+                                  })
+                                }
                               />
                             </Center>
 
@@ -555,10 +660,15 @@ export const Createcommuform = ({data}) => {
                                     w={480}
                                     h={46}
                                     color={"Black"}
-                                    isDisabled={!Averagesw}
-                                    value={averageTime}
-                                    onChange={(e) =>
-                                      setAvergeTime(e.target.value)
+                                    isDisabled={!configvalue.Averagesw}
+                                    value={fieldvalue.averagetime}
+                                    onChange={
+                                      (e) =>
+                                        setFieldvalue({
+                                          ...fieldvalue,
+                                          averagetime: e.target.value,
+                                        })
+                                      // setAvergeTime(e.target.value)
                                     }
                                   />
 
@@ -574,10 +684,14 @@ export const Createcommuform = ({data}) => {
                                       bg={"white"}
                                       color="black"
                                       size="lg"
-                                      isDisabled={!Averagesw}
+                                      isDisabled={!configvalue.Averagesw}
                                       fontFamily={"Mitr"}
-                                      onSelect={(e) =>
-                                        setAvergeTimeUnit(e.target.value)
+                                      value={fieldvalue.averagetimeunit}
+                                      onChange={(e) =>
+                                        setFieldvalue({
+                                          ...fieldvalue,
+                                          averagetimeunit: e.target.value,
+                                        })
                                       }
                                     >
                                       <option
@@ -607,8 +721,13 @@ export const Createcommuform = ({data}) => {
                               <Switch
                                 bg={"gray.500"}
                                 borderRadius={10}
-                                isChecked={Locationsw}
-                                onChange={() => setLocationsw(!Locationsw)}
+                                isChecked={configvalue.Locationsw}
+                                onChange={() =>
+                                  setConfigValue({
+                                    ...configvalue,
+                                    Locationsw: !configvalue.Locationsw,
+                                  })
+                                }
                               />
                             </Center>
 
@@ -641,10 +760,9 @@ export const Createcommuform = ({data}) => {
                                       m={1.5}
                                     >
                                       <Hashtag
-                                        selectedTags={selectedTags}
                                         state={places}
                                         setState={setPlaces}
-                                        isDisabled={!Locationsw}
+                                        isDisabled={!configvalue.Locationsw}
                                       />
                                     </Container>
                                   </Center>
@@ -658,8 +776,13 @@ export const Createcommuform = ({data}) => {
                               <Switch
                                 bg={"gray.500"}
                                 borderRadius={10}
-                                isChecked={Timelinesw}
-                                onChange={() => setTimelinesw(!Timelinesw)}
+                                isChecked={configvalue.Timelinesw}
+                                onChange={() =>
+                                  setConfigValue({
+                                    ...configvalue,
+                                    Timelinesw: !configvalue.Timelinesw,
+                                  })
+                                }
                               />
                             </Center>
 
@@ -692,10 +815,9 @@ export const Createcommuform = ({data}) => {
                                       m={1.5}
                                     >
                                       <Hashtag
-                                        selectedTags={selectedTags}
                                         state={times}
                                         setState={setTimes}
-                                        isDisabled={!Timelinesw}
+                                        isDisabled={!configvalue.Timelinesw}
                                       />
                                     </Container>
                                   </Center>
@@ -709,8 +831,13 @@ export const Createcommuform = ({data}) => {
                               <Switch
                                 bg={"gray.500"}
                                 borderRadius={10}
-                                isChecked={Ratingsw}
-                                onChange={() => setRatingsw(!Ratingsw)}
+                                isChecked={configvalue.Ratingsw}
+                                onChange={() =>
+                                  setConfigValue({
+                                    ...configvalue,
+                                    Ratingsw: !configvalue.Ratingsw,
+                                  })
+                                }
                               />
                             </Center>
 
@@ -740,14 +867,17 @@ export const Createcommuform = ({data}) => {
                                       bg={"white"}
                                       color="black"
                                       size="lg"
-                                      isDisabled={!Ratingsw}
+                                      isDisabled={!configvalue.Ratingsw}
                                       value={
-                                        rating
-                                          ? rating
+                                        fieldvalue.rating
+                                          ? fieldvalue.rating
                                           : "G (เหมาะสำหรับทุกวัย)"
                                       }
                                       onChange={(e) =>
-                                        setRating(e.target.value)
+                                        setFieldvalue({
+                                          ...fieldvalue,
+                                          averagetimeunit: e.target.value,
+                                        })
                                       }
                                     >
                                       <option
@@ -786,8 +916,13 @@ export const Createcommuform = ({data}) => {
                               <Switch
                                 bg={"gray.500"}
                                 borderRadius={10}
-                                isChecked={Triggersw}
-                                onChange={() => setTriggersw(!Triggersw)}
+                                isChecked={configvalue.Triggersw}
+                                onChange={() =>
+                                  setConfigValue({
+                                    ...configvalue,
+                                    Triggersw: !configvalue.Triggersw,
+                                  })
+                                }
                               />
                             </Center>
 
@@ -818,10 +953,9 @@ export const Createcommuform = ({data}) => {
                                       m={1.5}
                                     >
                                       <Hashtag
-                                        selectedTags={selectedTags}
                                         state={TWs}
                                         setState={setTWs}
-                                        isDisabled={!Triggersw}
+                                        isDisabled={!configvalue.Triggersw}
                                       />
                                     </Container>
                                   </Center>
@@ -835,8 +969,13 @@ export const Createcommuform = ({data}) => {
                               <Switch
                                 bg={"gray.500"}
                                 borderRadius={10}
-                                isChecked={Rulesw}
-                                onChange={() => setRulesw(!Rulesw)}
+                                isChecked={configvalue.Rulesw}
+                                onChange={() =>
+                                  setConfigValue({
+                                    ...configvalue,
+                                    Rulesw: !configvalue.Rulesw,
+                                  })
+                                }
                               />
                             </Center>
 
@@ -868,9 +1007,14 @@ export const Createcommuform = ({data}) => {
                                       bg={"white"}
                                       className={style.search}
                                       m={1.5}
-                                      isDisabled={!Rulesw}
-                                      value={rule}
-                                      onChange={(e) => setRule(e.target.value)}
+                                      isDisabled={!configvalue.Rulesw}
+                                      value={fieldvalue.rule}
+                                      onChange={(e) =>
+                                        setFieldvalue({
+                                          ...fieldvalue,
+                                          rule: e.target.value,
+                                        })
+                                      }
                                     />
                                   </Center>
                                 </Flex>
@@ -910,9 +1054,12 @@ export const Createcommuform = ({data}) => {
                                       bg={"white"}
                                       className={style.search}
                                       m={1.5}
-                                      value={description}
+                                      value={fieldvalue.description}
                                       onChange={(e) => {
-                                        setDescription(e.target.value);
+                                        setFieldvalue({
+                                          ...fieldvalue,
+                                          description: e.target.value,
+                                        });
                                       }}
                                     />
                                   </Center>
@@ -1014,9 +1161,12 @@ export const Createcommuform = ({data}) => {
                                     placeholder={"สำหรับลิงก์ฟอร์มวิ่ง"}
                                     className={style.search}
                                     type="url"
-                                    value={submitlink}
+                                    value={fieldvalue.submitlink}
                                     onChange={(e) => {
-                                      setSubmitlink(e.target.value);
+                                      setFieldvalue({
+                                        ...fieldvalue,
+                                        submitlink: e.target.value,
+                                      });
                                     }}
                                   />
                                 </Center>
@@ -1052,9 +1202,12 @@ export const Createcommuform = ({data}) => {
                                     placeholder={"สำหรับตรวจสอบ"}
                                     className={style.search}
                                     type="url"
-                                    value={resultlink}
+                                    value={fieldvalue.resultlink}
                                     onChange={(e) => {
-                                      setResultlink(e.target.value);
+                                      setFieldvalue({
+                                        ...fieldvalue,
+                                        resultlink: e.target.value,
+                                      });
                                     }}
                                   />
                                 </Center>
@@ -1110,9 +1263,12 @@ export const Createcommuform = ({data}) => {
                                     placeholder={"..."}
                                     className={style.search}
                                     type="url"
-                                    value={smlink}
+                                    value={fieldvalue.smlink}
                                     onChange={(e) => {
-                                      setSmlink(e.target.value);
+                                      setFieldvalue({
+                                        ...fieldvalue,
+                                        smlink: e.target.value,
+                                      });
                                     }}
                                   />
                                 </Center>
@@ -1141,7 +1297,6 @@ export const Createcommuform = ({data}) => {
 
                                 <Center pl={1.5} pr={1.5}>
                                   <Input
-                                    
                                     required
                                     w={650}
                                     h={46}
@@ -1152,7 +1307,11 @@ export const Createcommuform = ({data}) => {
                                     // value={doclink}
                                     onChange={(e) => {
                                       // uploadTotemporaryPDF(setDoclink, e.target.files[0])
-                                      setDocfile(e.target.files[0])
+                                      setFieldvalue({
+                                        ...fieldvalue,
+                                        docfile: e.target.files[0],
+                                      });
+                                      // setDocfile(e.target.files[0])
                                     }}
                                   />
                                 </Center>
@@ -1188,9 +1347,13 @@ export const Createcommuform = ({data}) => {
                                     placeholder={"สำหรับ Q&A"}
                                     className={style.search}
                                     type="url"
-                                    value={qaasklink}
+                                    value={fieldvalue.qaasklink}
                                     onChange={(e) => {
-                                      setQaasklink(e.target.value);
+                                      setFieldvalue({
+                                        ...fieldvalue,
+                                        qaasklink: e.target.value,
+                                      });
+                                      // setQaasklink(e.target.value);
                                     }}
                                   />
                                 </Center>
@@ -1226,9 +1389,13 @@ export const Createcommuform = ({data}) => {
                                     placeholder={"สำหรับตรวจสอบ Q&A"}
                                     className={style.search}
                                     type="url"
-                                    value={qaanslink}
+                                    value={fieldvalue.qaanslink}
                                     onChange={(e) => {
-                                      setQaanslink(e.target.value);
+                                      setFieldvalue({
+                                        ...fieldvalue,
+                                        qaanslink: e.target.value,
+                                      });
+                                      // setQaanslink(e.target.value);
                                     }}
                                   />
                                 </Center>
@@ -1264,9 +1431,12 @@ export const Createcommuform = ({data}) => {
                                     placeholder={"ช่องทางติดต่อ"}
                                     className={style.search}
                                     type="url"
-                                    value={contactlink}
+                                    value={fieldvalue.contactlink}
                                     onChange={(e) => {
-                                      setContactlink(e.target.value);
+                                      setFieldvalue({
+                                        ...fieldvalue,
+                                        contactlink: e.target.value,
+                                      });
                                     }}
                                   />
                                 </Center>
@@ -1304,41 +1474,5 @@ export const Createcommuform = ({data}) => {
 
           <Box minW={400}></Box> */}
         </Flex>
-
-        <Center bg={"#343434"} h={180}>
-          <Flex>
-            <Center>
-              <VStack m={5}>
-                <Box fontFamily={"mitr"} color={"#FFFFFF"}>
-                  Comuthor © 2022
-                </Box>
-                <Flex>
-                  <FacebookLogo size={32} color={"#FFFFFF"} />
-                  <Spacer w={5} />
-                  <DiscordLogo size={32} color={"#FFFFFF"} />
-                </Flex>
-              </VStack>
-            </Center>
-
-            <Spacer borderRightColor={"#ffffff"} borderWidth={1} h={150} />
-
-            <Center>
-              <VStack fontFamily={"Mitr"} m={5} color={"#FFFFFF"}>
-                <Box>About us</Box>
-                <Box>Guide</Box>
-              </VStack>
-            </Center>
-
-            <Spacer borderRightColor={"#ffffff"} borderWidth={1} h={150} />
-
-            <Center>
-              <VStack m={5} fontFamily={"Mitr"} color={"#FFFFFF"}>
-                <Box>Policy</Box>
-                <Box>Term</Box>
-              </VStack>
-            </Center>
-          </Flex>
-        </Center>
-      </Box>
-  )
-}
+    );
+  };
