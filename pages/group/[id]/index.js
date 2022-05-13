@@ -21,7 +21,7 @@ import { async } from "@firebase/util";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
 import GroupSidebar from "../../../components/GroupSidebar";
-import { useApp } from "../../../src/hook/local";
+import { useApp, useUser } from "../../../src/hook/local";
 import { UpdateUserPinGroup } from "../../../src/services/firestoreservice";
 import style from "../../../styles/groupdetail.module.css";
 import Head from "next/head";
@@ -57,7 +57,7 @@ import {
   TabPanels,
   Tab,
   TabPanel,
-  AspectRatio
+  AspectRatio,
 } from "@chakra-ui/react";
 import Footer from "../../../components/footer";
 import {
@@ -68,7 +68,27 @@ import {
 } from "phosphor-react";
 import { Comments } from "../../../components/comments";
 
-export default function Group() {
+export async function getServerSideProps(context) {
+  // const { app, auth, db } = useApp();
+  // const getuser = useUser();
+  const { params } = context;
+  const { id } = params;
+  const res = await fetch(`http://localhost:8080/api/group/${id}`)
+  const data = await res.json()
+  // let data;
+
+  // const snapshot = await getDoc(doc(db, "group", id));
+  // if (snapshot.exists) {
+  //   data = snapshot.data();
+  //   const creator = await getuser(data.creator);
+  //   if (creator) {
+  //     data = { ...data, creatorName: creator.displayName };
+  //   }
+  // }
+  return { props: { data } };
+}
+
+export default function Group({ data }) {
   // const app = useApp();
   // const db = getFirestore(app);
   // const auth = getAuth(app);
@@ -82,7 +102,7 @@ export default function Group() {
   } = useDisclosure();
 
   // const [loading, setLoading] = useState(true);
-  const [data, setData] = useState({});
+  // const [data, setData] = useState({});
   const [pin, setPin] = useState(false);
   const [text, setText] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -90,40 +110,56 @@ export default function Group() {
   const [color, setColor] = useState("");
 
   const { id } = Router.query;
-  useEffect(() => {
-    const Fetchdata = async () => {
-      getDoc(doc(db, "group", id)).then((d) => {
-        
-        if (d.exists()) {
-          getDoc(doc(db, "userDetail", d.data().creator)).then((staff) => {
-            if (staff.exists()) {
-              setData({ ...d.data(), creatorName: staff.data().displayName });
-            }
-          });
+  // useEffect(() => {
+  // const Fetchdata = async () => {
+  //   getDoc(doc(db, "group", id)).then((d) => {
 
-          if (d.data().rating === "NC-21 (ไม่เหมาะสำหรับเยาวชน)") {
-            setColor("#EA4545");
-            // console.log(d.data().rating);
-          } else if (d.data().rating === "R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)") {
-            setColor("#FF912B");
-            // console.log(d.data().rating);
-          } else if (d.data().rating === "R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)") {
-            setColor("#FBBC43");
-            // console.log(d.data().rating);
-          } else {
-            setColor("#72994C");
-            // console.log(d.data().rating);
-          }
-        } else {
-          console.log(d);
-          alert("ไม่พบคอมมู");
-          Router.back();
-        }
-      });
-      // setLoading(false);
-    };
-    if (id) Fetchdata();
-  }, [id]);
+  //     if (d.exists()) {
+  //       getDoc(doc(db, "userDetail", d.data().creator)).then((staff) => {
+  //         if (staff.exists()) {
+  //           setData({ ...d.data(), creatorName: staff.data().displayName });
+  //         }
+  //       });
+
+  //       if (d.data().rating === "NC-21 (ไม่เหมาะสำหรับเยาวชน)") {
+  //         setColor("#EA4545");
+  //         // console.log(d.data().rating);
+  //       } else if (d.data().rating === "R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)") {
+  //         setColor("#FF912B");
+  //         // console.log(d.data().rating);
+  //       } else if (d.data().rating === "R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)") {
+  //         setColor("#FBBC43");
+  //         // console.log(d.data().rating);
+  //       } else {
+  //         setColor("#72994C");
+  //         // console.log(d.data().rating);
+  //       }
+  //     } else {
+  //       console.log(d);
+  //       alert("ไม่พบคอมมู");
+  //       Router.back();
+  //     }
+  //   });
+  //   // setLoading(false);
+  // };
+  // if (id) Fetchdata();
+  // }, []);
+
+  useEffect(() => {
+    if (data.rating === "NC-21 (ไม่เหมาะสำหรับเยาวชน)") {
+      setColor("#EA4545");
+      // console.log(data.rating);
+    } else if (data.rating === "R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)") {
+      setColor("#FF912B");
+      // console.log(d.data().rating);
+    } else if (data.rating === "R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)") {
+      setColor("#FBBC43");
+      // console.log(d.data().rating);
+    } else {
+      setColor("#72994C");
+      // console.log(d.data().rating);
+    }
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -973,16 +1009,16 @@ export default function Group() {
                     </TabPanel>
                     <TabPanel>
                       <Center ml={-4} w={850} bg={"tomato"} h={500}>
-                          <Box
-                            position={'static'}
-                            as="iframe"
-                            src={data.doclink+"#toolbar=0"}
-                            alt="demo"
-                            w={850}
-                            h={500}
-                            // maxH={"75%"}
-                            // maxW={"70%"}
-                          />
+                        <Box
+                          position={"static"}
+                          as="iframe"
+                          src={data.doclink + "#toolbar=0"}
+                          alt="demo"
+                          w={850}
+                          h={500}
+                          // maxH={"75%"}
+                          // maxW={"70%"}
+                        />
                         {/* <Box
                           as="iframe"
                           src={data.doclink}
@@ -995,9 +1031,9 @@ export default function Group() {
                 </Tabs>
               </VStack>
               <Box>
-                <Comments id={id}/>
+                <Comments id={id} />
               </Box>
-              
+
               {/* <Text>TEST 1234</Text> */}
             </Box>
 
@@ -1005,8 +1041,6 @@ export default function Group() {
             <Box w={400} minH={1000} bg={"#F3F3F3"}>
               {" "}
             </Box>
-            
-            
           </Flex>
         )}
         <Modal onClose={onDelClose} isOpen={isDelOpen} isCentered>
