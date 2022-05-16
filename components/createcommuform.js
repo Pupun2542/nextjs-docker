@@ -303,7 +303,7 @@ export const Createcommuform = ({ data }) => {
                                 borderRightWidth={3}
                               />
 
-                              <Center pl={1.5} pr={1.5}>
+                              <Center pl={1.5} pr={1.5} position="relative">
                                 <Input
                                   type="text"
                                   value={fieldvalue.communame}
@@ -321,6 +321,16 @@ export const Createcommuform = ({ data }) => {
                                   placeholder={"..."}
                                   className={style.search}
                                 />
+                                {/* <Box minH={10} maxH={50} w={60} display={fieldvalue.communame ? "contents" : "none"} zIndex={50} position="absolute">
+                                  <Box _hover={{backgroundColor: "lightgray"}} onClick={()=> setFieldvalue({...fieldvalue, communame: "ABCD"})}>
+                                    <Text fontSize={10}>ABCD</Text>
+                                    <Text fontSize={8} color="GrayText">ABCD</Text>
+                                  </Box>
+                                  <Box _hover={{backgroundColor: "lightgray"}} onClick={()=> setFieldvalue({...fieldvalue, communame: "DEFG"})}>
+                                    <Text fontSize={10}>DEFG</Text>
+                                    <Text fontSize={8} color="GrayText">DEFG</Text>
+                                  </Box>
+                                </Box> */}
                               </Center>
                             </Flex>
                           </Center>
