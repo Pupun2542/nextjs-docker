@@ -39,7 +39,23 @@ import {
 
 function dashboard() {
   return (
-    <Box>
+    <Box
+      overflowY={'auto'}
+      // maxH={'960'}
+      maxH={929}
+      css={{
+        '&::-webkit-scrollbar': {
+          width: '4px',
+        },
+        '&::-webkit-scrollbar-track': {
+          width: '6px',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          background: '#727272',
+          borderRadius: '24px',
+        },
+      }}
+    >
       <CustomNavbar />
 
       <Flex pt={55} fontFamily={'mitr'}>
@@ -91,10 +107,10 @@ function dashboard() {
 
             <Tabs w={'100%'} maxW={800} isFitted variant='enclosed'>
               <TabList mb='1em'>
-                <Tab _selected={{ color: 'white', bg: '#9A9AB0' }}>Post</Tab>
-                <Tab _selected={{ color: 'white', bg: '#9A9AB0' }}>Gallery</Tab>
-                <Tab _selected={{ color: 'white', bg: '#9A9AB0' }}>Member</Tab>
-                <Tab _selected={{ color: 'white', bg: '#9A9AB0' }}>Setting</Tab>
+                <Tab _selected={{ color: 'white', bg: '#9A9AB0', margin: '2', borderRadius: '10' }}>Post</Tab>
+                <Tab _selected={{ color: 'white', bg: '#9A9AB0', margin: '2', borderRadius: '10' }}>Gallery</Tab>
+                <Tab _selected={{ color: 'white', bg: '#9A9AB0', margin: '2', borderRadius: '10' }}>Member</Tab>
+                <Tab _selected={{ color: 'white', bg: '#9A9AB0', margin: '2', borderRadius: '10' }}>Setting</Tab>
               </TabList>
 
               <TabPanels>
@@ -190,9 +206,7 @@ function dashboard() {
                             <Button leftIcon={<ChatCenteredText />} color='black' width={'100%'} fontSize={16} fontWeight={'light'} boxShadow={'base'} variant='solid'>
                               100
                             </Button>
-                            <Button leftIcon={<Eye />} color='black' width={'40%'} fontSize={16} fontWeight={'light'} boxShadow={'base'} variant='solid'>
-                              100
-                            </Button>
+
                           </HStack>
 
                           <Flex mt={3} p={2} boxShadow={'base'} w={'100%'}>
@@ -225,9 +239,7 @@ function dashboard() {
                                 <Button leftIcon={<ChatCenteredText />} color='black' width={'100%'} fontSize={16} fontWeight={'light'} boxShadow={'base'} variant='solid'>
                                   100
                                 </Button>
-                                <Button leftIcon={<Eye />} color='black' width={'40%'} fontSize={16} fontWeight={'light'} boxShadow={'base'} variant='solid'>
-                                  100
-                                </Button>
+
                               </HStack>
 
                             </Box>
@@ -286,9 +298,7 @@ function dashboard() {
                             <Button leftIcon={<ChatCenteredText />} color='black' width={'100%'} fontSize={16} fontWeight={'light'} boxShadow={'base'} variant='solid'>
                               100
                             </Button>
-                            <Button leftIcon={<Eye />} color='black' width={'40%'} fontSize={16} fontWeight={'light'} boxShadow={'base'} variant='solid'>
-                              100
-                            </Button>
+
                           </HStack>
 
                           <Flex mt={3} p={2} boxShadow={'base'} w={'100%'}>
@@ -317,9 +327,7 @@ function dashboard() {
                                 <Button leftIcon={<ChatCenteredText />} color='black' width={'100%'} fontSize={16} fontWeight={'light'} boxShadow={'base'} variant='solid'>
                                   100
                                 </Button>
-                                <Button leftIcon={<Eye />} color='black' width={'40%'} fontSize={16} fontWeight={'light'} boxShadow={'base'} variant='solid'>
-                                  100
-                                </Button>
+
                               </HStack>
 
                             </Box>
@@ -376,14 +384,7 @@ function dashboard() {
             </Tabs>
           </VStack>
 
-
         </Box>
-
-
-
-
-
-
 
         <Spacer />
       </Flex>
