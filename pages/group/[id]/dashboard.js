@@ -42,13 +42,13 @@ function dashboard() {
     <Box
       overflowY={'auto'}
       // maxH={'960'}
-      maxH={929}
+      maxH={'100vh'}
       css={{
         '&::-webkit-scrollbar': {
-          width: '4px',
+          width: '8px',
         },
         '&::-webkit-scrollbar-track': {
-          width: '6px',
+          width: '8px',
         },
         '&::-webkit-scrollbar-thumb': {
           background: '#727272',
