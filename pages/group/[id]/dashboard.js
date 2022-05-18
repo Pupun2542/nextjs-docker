@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CustomNavbar from "../../../components/navbar";
 
 import {
@@ -38,7 +38,18 @@ import {
 } from "phosphor-react";
 import { GroupPost } from '../../../components/groupcomponents/post';
 
+// export async function getServerSideProps() {
+  // const { params } = context;
+  // const { id } = params;
+  // const res = await fetch(`${process.env.NEXT_USE_API_URL}/api/group/${id}`);
+  // const data = "";
+  // console.log("rerender")
+//   return { props: { data } };
+// }
+
 function dashboard() {
+  const [heart, setHeart] = useState(0);
+  // console.log("test test")
   return (
     <Box
       overflowY={'auto'}
@@ -129,9 +140,9 @@ function dashboard() {
                       <Megaphone size={42} />
                     </Center>
 
-                    <Box w={'81%'} p={4}>คราวหน้าอย่า Flip อีกนะ</Box>
+                    <Box w={'81%'} p={4}>{heart}</Box>
 
-                    <Center w={'65'} color={'gray.500'}>เพิ่มเติม</Center>
+                    <Center w={'65'} color={'gray.500'} onClick={()=> setHeart(heart+1)} >เพิ่มเติม</Center>
                   </Flex>
                       {/* กล่องข้อความ */}
                   <Flex mt={3} p={2} boxShadow={'base'} bg={'white'} borderRadius={10}>
