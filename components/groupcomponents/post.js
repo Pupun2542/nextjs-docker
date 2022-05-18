@@ -10,13 +10,15 @@ import {
   Button,
   Spacer,
   IconButton,
-  Input
+  Input,
+  Textarea
 } from "@chakra-ui/react";
 import {
   Heart,
   ChatCenteredText,
   Eye,
   DotsThreeVertical,
+  ImageSquare
 } from "phosphor-react";
 import { GroupComment } from "./comment";
 
@@ -102,7 +104,24 @@ export const GroupPost = ({ post }) => {
               I
             </Center>
           </Box>
-          <Input placeholder="Basic usage" w={"100%"} />
+          <Textarea    
+            resize="none"
+            minHeight={11}
+            width="100%"
+            placeholder="Write Something"
+            height="42"
+            backgroundColor="gray.100"
+            // onKeyDown={(e) => {
+            //   // console.log(e.key)
+            //   if (e.key == "Enter" && !e.shiftKey) {
+            //     // console.log('message sent')
+            //     handleMessage();
+            //   }
+            // }}
+          />
+          <Box pl={2}>
+            <IconButton rounded={"full"} icon={<ImageSquare size={28} />} />
+          </Box>
         </Flex>
       </Box>
       <IconButton rounded={"full"} icon={<DotsThreeVertical size={28} />} />

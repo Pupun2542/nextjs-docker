@@ -56,17 +56,6 @@ export const GroupReply = ({ reply }) => {
             >
               100
             </Button>
-            <Button
-              leftIcon={<ChatCenteredText />}
-              color="black"
-              width={"100%"}
-              fontSize={16}
-              fontWeight={"light"}
-              boxShadow={"base"}
-              variant="solid"
-            >
-              100
-            </Button>
           </HStack>
         </Box>
 
