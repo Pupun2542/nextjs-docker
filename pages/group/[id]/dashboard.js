@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import CustomNavbar from "../../../components/navbar";
 
 import {
@@ -20,162 +20,351 @@ import {
   TabPanels,
   TabPanel,
   Input,
-  HStack,
-  Tag,
-  IconButton,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Textarea,
   Button,
-  Divider,
+  Text,
+  Image
 } from "@chakra-ui/react";
 
+import { Info, Megaphone } from "phosphor-react";
+import { GroupPost } from "../../../components/groupcomponents/post";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useApp } from "../../../src/hook/local";
+import { useRouter } from "next/router";
 import {
-  DotsThreeVertical,
-  Info,
-  Megaphone,
-  Image,
-  Heart,
-  ChatCenteredText,
-  Eye,
-} from "phosphor-react";
-import { GroupPost } from '../../../components/groupcomponents/post';
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  limit,
+  orderBy,
+  where,
+} from "firebase/firestore";
 
 // export async function getServerSideProps() {
-  // const { params } = context;
-  // const { id } = params;
-  // const res = await fetch(`${process.env.NEXT_USE_API_URL}/api/group/${id}`);
-  // const data = "";
-  // console.log("rerender")
+// const { params } = context;
+// const { id } = params;
+// const res = await fetch(`${process.env.NEXT_USE_API_URL}/api/group/${id}`);
+// const data = "";
+// console.log("rerender")
 //   return { props: { data } };
 // }
 
 function dashboard() {
-  const [heart, setHeart] = useState(0);
-  // console.log("test test")
-  return (
-    <Box
-      overflowY={'auto'}
-      // maxH={'960'}
-      maxH={'100vh'}
-      css={{
-        '&::-webkit-scrollbar': {
-          width: '8px',
-        },
-        '&::-webkit-scrollbar-track': {
-          width: '8px',
-        },
-        '&::-webkit-scrollbar-thumb': {
-          background: '#727272',
-          borderRadius: '24px',
-        },
-      }}
-    >
-      <CustomNavbar />
+  const [data, setData] = useState(undefined);
+  const [orderby, setOrderby] = useState("lastactive");
+  const [loadLimit, selLoadlimit] = useState(20);
+  const { app, auth, db } = useApp();
+  const [user, userLoading, error] = useAuthState(auth);
+  const Router = useRouter();
+  const { id } = Router.query;
+  const [message, setMessage] = useState("");
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [image, setImage] = useState([]);
+  const pasteInputRef = useRef(undefined);
 
-      <Flex pt={55} fontFamily={'mitr'}>
-        <Spacer />
+  useEffect(() => {
+    const fetchdata = async () => {
+      const snapshot = await getDoc(doc(db, "group", id));
+      if (snapshot.exists) {
+        const rawdata = snapshot.data();
+        const postSnapshot = await getDocs(
+          collection(db, "group"),
+          orderBy(orderby, "desc"),
+          limit(loadLimit)
+        );
+        if (!postSnapshot.empty) {
+          const postdata = postSnapshot.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          }));
+          rawdata = { ...rawdata, post: postdata };
+          setData(rawdata);
+        }
+      } else {
+        alert("ไม่พบคอมมู");
+        Router.back();
+      }
+    };
+    if (user && !userLoading) {
+      fetchdata();
+    }
+  }, [user, userLoading]);
 
-        <Box bg={'#F3F3F3'} minH={896} h={'auto'} minW={800} maxW={800} boxShadow='base'>
-          <VStack spacing={0}>
-            <Flex>
-              <Center color={'white'} minWidth={778} pl={22} fontWeight={'700'} minH={75} fontSize={28} bg={'#6768AB'} >
-                {/* [LTLEC]Land of the lustrous : Eternity cycle */}
-                [123456] Name Community
-              </Center>
+  useEffect(() => {
+    if (user && data && data.member) {
+      console.log(data);
+      const isMember = data.member.find((v) => v == user.uid);
+      if (!isMember) {
+        Router.push(`/group/${id}`);
+      }
+      // if (find)
+    }
+  }, [data, user]);
 
-              <Box bg={'#6768AB'} >
-                <Popover bg={'#6768AB'} >
-                  <PopoverTrigger>
-                    <Info color='#FFC75A' size={22} weight="fill" />
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <PopoverArrow />
-                    <PopoverCloseButton />
-                    <PopoverHeader>Confirmation!</PopoverHeader>
-                    <PopoverBody maxH={500} overflowY={'auto'}
-                      css={{
-                        '&::-webkit-scrollbar': {
-                          width: '4px',
-                        },
-                        '&::-webkit-scrollbar-track': {
-                          width: '6px',
-                        },
-                        '&::-webkit-scrollbar-thumb': {
-                          background: '#727272',
-                          borderRadius: '24px',
-                        },
-                      }}
-                    >
-                      Are you sure you want to have that milkshake?
-                      What is Lorem Ipsum?
-                      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+  const handleImagePaste = () =>{
+    if (e.clipboardData.files[0]) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          if (image.length < 4 ){
+            setImage([...image, reader.result]);
+          } else {
+            alert("ใส่รูปได้ไม่เกิน 4 รูปต่อ 1 โพสต์");
+          }
+        }
+      };
+      reader.readAsDataURL(e.clipboardData.files[0]);
+    }
+  }
 
-                      Why do we use it?
-                      It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-                    </PopoverBody>
-                  </PopoverContent>
-                </Popover>
-              </Box>
+  if (data) {
+    return (
+      <Box
+        overflowY={"auto"}
+        // maxH={'960'}
+        maxH={"100vh"}
+        css={{
+          "&::-webkit-scrollbar": {
+            width: "8px",
+          },
+          "&::-webkit-scrollbar-track": {
+            width: "8px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "#727272",
+            borderRadius: "24px",
+          },
+        }}
+      >
+        <CustomNavbar />
 
-            </Flex>
+        <Flex pt={55} fontFamily={"mitr"}>
+          <Spacer />
 
-            <Tabs w={'100%'} maxW={800} isFitted variant='enclosed'>
-              {/* หัว tab */}
-              <TabList mb='1em'>
-                <Tab _selected={{ color: 'white', bg: '#9A9AB0', margin: '2', borderRadius: '10' }}>Post</Tab>
-                <Tab _selected={{ color: 'white', bg: '#9A9AB0', margin: '2', borderRadius: '10' }}>Gallery</Tab>
-                <Tab _selected={{ color: 'white', bg: '#9A9AB0', margin: '2', borderRadius: '10' }}>Member</Tab>
-                <Tab _selected={{ color: 'white', bg: '#9A9AB0', margin: '2', borderRadius: '10' }}>Setting</Tab>
-              </TabList>
+          <Box
+            bg={"#F3F3F3"}
+            minH={896}
+            h={"auto"}
+            minW={800}
+            maxW={800}
+            boxShadow="base"
+          >
+            <VStack spacing={0}>
+              <Flex>
+                <Center
+                  color={"white"}
+                  minWidth={778}
+                  pl={22}
+                  fontWeight={"700"}
+                  minH={75}
+                  fontSize={28}
+                  bg={"#6768AB"}
+                >
+                  {/* [LTLEC]Land of the lustrous : Eternity cycle */}[
+                  {data.tag}] {data.name}
+                </Center>
 
-              <TabPanels>
-                <TabPanel >
-                  {/* ประกาศ */}
-                  <Flex
-                    w={'100%'}
-                    bg={'white'}
-                    boxShadow='base'
-                    h={55}
-                    borderRadius={10}
+                <Box bg={"#6768AB"}>
+                  <Popover bg={"#6768AB"}>
+                    <PopoverTrigger>
+                      <Info color="#FFC75A" size={22} weight="fill" />
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <PopoverArrow />
+                      <PopoverCloseButton />
+                      <PopoverBody
+                        maxH={500}
+                        overflowY={"auto"}
+                        css={{
+                          "&::-webkit-scrollbar": {
+                            width: "4px",
+                          },
+                          "&::-webkit-scrollbar-track": {
+                            width: "6px",
+                          },
+                          "&::-webkit-scrollbar-thumb": {
+                            background: "#727272",
+                            borderRadius: "24px",
+                          },
+                        }}
+                      >
+                        {data.desciption
+                          ? data.desciption
+                          : "ไม่มีคำอธิบายคอมมู"}
+                      </PopoverBody>
+                    </PopoverContent>
+                  </Popover>
+                </Box>
+              </Flex>
+
+              <Tabs w={"100%"} maxW={800} isFitted variant="enclosed">
+                {/* หัว tab */}
+                <TabList mb="1em">
+                  <Tab
+                    _selected={{
+                      color: "white",
+                      bg: "#9A9AB0",
+                      margin: "2",
+                      borderRadius: "10",
+                    }}
                   >
-                    <Center borderRightRadius={10} bg={'#FBBC43'} w={65} transform={'auto'} scaleX={'-1'} color={'#FFFFFF'}>
-                      <Megaphone size={42} />
-                    </Center>
+                    Post
+                  </Tab>
+                  <Tab
+                    _selected={{
+                      color: "white",
+                      bg: "#9A9AB0",
+                      margin: "2",
+                      borderRadius: "10",
+                    }}
+                  >
+                    Gallery
+                  </Tab>
+                  <Tab
+                    _selected={{
+                      color: "white",
+                      bg: "#9A9AB0",
+                      margin: "2",
+                      borderRadius: "10",
+                    }}
+                  >
+                    Member
+                  </Tab>
+                  <Tab
+                    _selected={{
+                      color: "white",
+                      bg: "#9A9AB0",
+                      margin: "2",
+                      borderRadius: "10",
+                    }}
+                  >
+                    Setting
+                  </Tab>
+                </TabList>
 
-                    <Box w={'81%'} p={4}>{heart}</Box>
+                <TabPanels>
+                  <TabPanel>
+                    {/* ประกาศ */}
+                    <Flex
+                      w={"100%"}
+                      bg={"white"}
+                      boxShadow="base"
+                      h={55}
+                      borderRadius={10}
+                    >
+                      <Center
+                        borderRightRadius={10}
+                        bg={"#FBBC43"}
+                        w={65}
+                        transform={"auto"}
+                        scaleX={"-1"}
+                        color={"#FFFFFF"}
+                      >
+                        <Megaphone size={42} />
+                      </Center>
 
-                    <Center w={'65'} color={'gray.500'} onClick={()=> setHeart(heart+1)} >เพิ่มเติม</Center>
-                  </Flex>
-                      {/* กล่องข้อความ */}
-                  <Flex mt={3} p={2} boxShadow={'base'} bg={'white'} borderRadius={10}>
-                    <Center mr={2} rounded={'100%'} h={42} w={42} bg={'gray.500'}>I</Center>
-                    <Input placeholder='Basic usage' w={'93%'} />
-                  </Flex>
-                  {/* โพสต์ */}
-                  <GroupPost/>
+                      <Box w={"81%"} p={4}></Box>
 
-                </TabPanel>
+                      <Center w={"65"} color={"gray.500"}>
+                        เพิ่มเติม
+                      </Center>
+                    </Flex>
+                    {/* กล่องข้อความ */}
+                    <Flex
+                      mt={3}
+                      p={2}
+                      boxShadow={"base"}
+                      bg={"white"}
+                      borderRadius={10}
+                    >
+                      <Center
+                        mr={2}
+                        rounded={"100%"}
+                        h={42}
+                        w={42}
+                        bg={"gray.500"}
+                      >
+                        I
+                      </Center>
+                      <Text w="93%" onClick={onOpen}>
+                        {message ? message : "Something"}
+                      </Text>
+                      {/* <Input placeholder='Basic usage' w={'93%'} /> */}
+                    </Flex>
+                    {/* โพสต์ */}
+                    <GroupPost />
 
-                <TabPanel>
-                  <p>Gallery!</p>
-                </TabPanel>
+                    <Modal isOpen={isOpen} onClose={onClose}>
+                      <ModalOverlay
+                        bg="blackAlpha.300"
+                        backdropFilter="blur(10px) hue-rotate(90deg)"
+                      />
+                      <ModalContent>
+                        <ModalHeader>Create Post</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                          <Textarea
+                            onChange={(e) => setMessage(e.target.value)}
+                            value={message}
+                            onPaste={handleImagePaste}
+                          />
+                          <Input display='hidden' type="file" ref={pasteInputRef} />
+                          {image&&(
+                            <Box>
+                              <Box></Box>
+                              <Box display={image.length > 2 ? "initial" : "none"} ></Box>
+                            </Box>
+                          )}
+                        </ModalBody>
 
-                <TabPanel>
-                  <p>Member!</p>
-                </TabPanel>
+                        <ModalFooter>
+                          <Button colorScheme="blue" mr={3} onClick={onClose}>
+                            Close
+                          </Button>
+                          <Button variant="ghost">Secondary Action</Button>
+                        </ModalFooter>
+                      </ModalContent>
+                    </Modal>
+                  </TabPanel>
 
-                <TabPanel>
-                  <p>Setting!</p>
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
-          </VStack>
+                  <TabPanel>
+                    <p>Gallery!</p>
+                  </TabPanel>
 
-        </Box>
+                  <TabPanel>
+                    <p>Member!</p>
+                  </TabPanel>
 
-        <Spacer />
-      </Flex>
+                  <TabPanel>
+                    <p>Setting!</p>
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+            </VStack>
+          </Box>
 
-    </Box>
-  )
+          <Spacer />
+        </Flex>
+      </Box>
+    );
+  } else {
+    return (
+      <>
+        <CustomNavbar />
+        Loading
+      </>
+    );
+  }
 }
+// console.log("test test")
 
-export default dashboard
+export default dashboard;
