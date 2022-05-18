@@ -36,6 +36,7 @@ import {
   ChatCenteredText,
   Eye,
 } from "phosphor-react";
+import { GroupPost } from '../../../components/groupcomponents/post';
 
 function dashboard() {
   return (
@@ -106,6 +107,7 @@ function dashboard() {
             </Flex>
 
             <Tabs w={'100%'} maxW={800} isFitted variant='enclosed'>
+              {/* หัว tab */}
               <TabList mb='1em'>
                 <Tab _selected={{ color: 'white', bg: '#9A9AB0', margin: '2', borderRadius: '10' }}>Post</Tab>
                 <Tab _selected={{ color: 'white', bg: '#9A9AB0', margin: '2', borderRadius: '10' }}>Gallery</Tab>
@@ -115,6 +117,7 @@ function dashboard() {
 
               <TabPanels>
                 <TabPanel >
+                  {/* ประกาศ */}
                   <Flex
                     w={'100%'}
                     bg={'white'}
@@ -130,242 +133,13 @@ function dashboard() {
 
                     <Center w={'65'} color={'gray.500'}>เพิ่มเติม</Center>
                   </Flex>
-
+                      {/* กล่องข้อความ */}
                   <Flex mt={3} p={2} boxShadow={'base'} bg={'white'} borderRadius={10}>
                     <Center mr={2} rounded={'100%'} h={42} w={42} bg={'gray.500'}>I</Center>
                     <Input placeholder='Basic usage' w={'93%'} />
                   </Flex>
-
-                  <Flex mt={3} p={2} boxShadow={'base'} bg={'white'} borderRadius={10}>
-                    <Box w={'6%'}>
-                      <Center mr={2} rounded={'100%'} h={42} w={42} bg={'gray.500'}>I</Center>
-                    </Box>
-                    <Box pl={2} pr={2} w={'90%'}>
-                      <HStack spacing={4}>
-                        <Box>Name Character</Box>
-
-                        <Tag variant='solid' colorScheme='gray'>
-                          Day 1
-                        </Tag>
-
-                        <Tag variant='solid' colorScheme='gray'>
-                          Cut scene
-                        </Tag>
-                      </HStack>
-
-                      <HStack spacing={4} fontSize={14} color={'GrayText'}>
-                        <Box >Name profile</Box>
-                        <Box>Timestamp</Box>
-                      </HStack>
-
-                      <Divider mb={2} />
-
-                      <Box>"สวัสดีชาวโลก เรามาอย่างสันติ" เขาเอ่ยออกมาด้วยความสนุกสนาน โดยไม่อ่านบรรยากาศใด ๆ และแน่นอนว่าเขาเองก็มาพร้อมกับชายที่หน้าตาเหมือนกับเขาด้วยเช่นเดียวกัน</Box>
-
-                      <Center mt={3} w={'100%'} borderRadius={10} boxShadow={'base'}>
-                        <Image size={300} color="#100e0e" weight="light" />
-                      </Center>
-
-                      <HStack spacing={4} fontSize={14} color={'GrayText'} pt={2}>
-                        <Button leftIcon={<Heart />} color='black' width={'40%'} fontSize={16} fontWeight={'light'} boxShadow={'base'} variant='solid'>
-                          100
-                        </Button>
-                        <Button leftIcon={<ChatCenteredText />} color='black' width={'100%'} fontSize={16} fontWeight={'light'} boxShadow={'base'} variant='solid'>
-                          100
-                        </Button>
-                        <Button leftIcon={<Eye />} color='black' width={'40%'} fontSize={16} fontWeight={'light'} boxShadow={'base'} variant='solid'>
-                          100
-                        </Button>
-                      </HStack>
-
-                      <Flex mt={3} p={2} boxShadow={'base'} w={'100%'}>
-
-                        <Box w={'7%'}>
-                          <Center mr={2} rounded={'100%'} h={42} w={42} bg={'gray.500'}>
-                            I
-                          </Center>
-                        </Box>
-
-
-                        <Box pl={2} pr={2} w={'90%'}>
-                          <HStack spacing={4}>
-                            <Box ml={2}>Name Character</Box>
-                            <Spacer />
-                            <Box color={'gray.500'} fontSize={14}>Timestamp</Box>
-
-                          </HStack>
-
-                          <Divider />
-
-                          <Box m={2}>"บอกแล้วว่าบ้านแตกแล้ว จบ ๆ งานเลี้ยงจบแล้ว" ชายหน้าเหมือนอีกคนเอ่ยตามออกมา พลางคว้าคอเสื้อของชายข้าง ๆ เขาให้ทำตัวสงบลง </Box>
-
-                          <HStack spacing={4} fontSize={14} color={'GrayText'} pt={2}>
-                            <Button leftIcon={<Heart />} color='black' width={'40%'} fontSize={16} fontWeight={'light'} boxShadow={'base'} variant='solid'>
-                              100
-                            </Button>
-                            <Button leftIcon={<ChatCenteredText />} color='black' width={'100%'} fontSize={16} fontWeight={'light'} boxShadow={'base'} variant='solid'>
-                              100
-                            </Button>
-
-                          </HStack>
-
-                          <Flex mt={3} p={2} boxShadow={'base'} w={'100%'}>
-                            <Box w={'8%'}>
-                              <Center mr={2} rounded={'100%'} h={42} w={42} bg={'gray.500'}>
-                                I
-                              </Center>
-                            </Box>
-
-                            <Box pl={2} pr={2} w={'84.5%'}>
-                              <HStack spacing={4}>
-                                <Box ml={2}>Name Character</Box>
-                                <Spacer />
-                                <Box color={'gray.500'} fontSize={14}>Timestamp</Box>
-
-                              </HStack>
-
-                              <Divider />
-
-                              <Box m={2}>ว้าย ๆ ไอ้หมอนี่หน้าตาคุ้น ๆ แฮะ</Box>
-
-                              <Center mt={3} w={'100%'} borderRadius={10} boxShadow={'base'}>
-                                <Image size={300} color="#100e0e" weight="light" />
-                              </Center>
-
-                              <HStack spacing={4} fontSize={14} color={'GrayText'} pt={2}>
-                                <Button leftIcon={<Heart />} color='black' width={'40%'} fontSize={16} fontWeight={'light'} boxShadow={'base'} variant='solid'>
-                                  100
-                                </Button>
-                                <Button leftIcon={<ChatCenteredText />} color='black' width={'100%'} fontSize={16} fontWeight={'light'} boxShadow={'base'} variant='solid'>
-                                  100
-                                </Button>
-
-                              </HStack>
-
-                            </Box>
-
-                            <IconButton rounded={'full'} icon={<DotsThreeVertical size={28} />} />
-
-                          </Flex>
-
-
-                          <Flex mt={2}>
-                            <Box w={'8%'} mr={1}>
-                              <Center mr={2} rounded={'100%'} h={42} w={42} bg={'gray.500'}>
-                                I
-                              </Center>
-                            </Box>
-                            <Input placeholder='Basic usage' w={'100%'} />
-                          </Flex>
-
-                        </Box>
-
-
-
-                        <IconButton rounded={'full'} icon={<DotsThreeVertical size={28} />} />
-
-                      </Flex>
-
-                      <Flex mt={3} p={2} boxShadow={'base'} w={'100%'}>
-
-                        <Box w={'7%'}>
-                          <Center mr={2} rounded={'100%'} h={42} w={42} bg={'gray.500'}>
-                            I
-                          </Center>
-                        </Box>
-
-
-                        <Box pl={2} pr={2} w={'90%'}>
-                          <HStack spacing={4}>
-                            <Box ml={2}>Name Character</Box>
-                            <Spacer />
-                            <Box color={'gray.500'} fontSize={14}>Timestamp</Box>
-
-                          </HStack>
-
-                          <Divider />
-
-                          <Box m={2}>"พอเถอะ อานนท์ เรามาจบงานเลี้ยงอย่างสันติเถิดหนา" </Box>
-
-                          <Center mt={3} w={'100%'} borderRadius={10} boxShadow={'base'}>
-                            <Image size={300} color="#100e0e" weight="light" />
-                          </Center>
-
-                          <HStack spacing={4} fontSize={14} color={'GrayText'} pt={2}>
-                            <Button leftIcon={<Heart />} color='black' width={'40%'} fontSize={16} fontWeight={'light'} boxShadow={'base'} variant='solid'>
-                              100
-                            </Button>
-                            <Button leftIcon={<ChatCenteredText />} color='black' width={'100%'} fontSize={16} fontWeight={'light'} boxShadow={'base'} variant='solid'>
-                              100
-                            </Button>
-
-                          </HStack>
-
-                          <Flex mt={3} p={2} boxShadow={'base'} w={'100%'}>
-                            <Box w={'8%'}>
-                              <Center mr={2} rounded={'100%'} h={42} w={42} bg={'gray.500'}>
-                                I
-                              </Center>
-                            </Box>
-
-                            <Box pl={2} pr={2} w={'84.5%'}>
-                              <HStack spacing={4}>
-                                <Box ml={2}>Name Character</Box>
-                                <Spacer />
-                                <Box color={'gray.500'} fontSize={14}>Timestamp</Box>
-
-                              </HStack>
-
-                              <Divider />
-
-                              <Box m={2}>"สวัสดีชาวโลก เรามาอย่างสันติ" เขาเอ่ยออกมาด้วยความสนุกสนาน โดยไม่อ่านบรรยากาศใด ๆ</Box>
-
-                              <HStack spacing={4} fontSize={14} color={'GrayText'} pt={2}>
-                                <Button leftIcon={<Heart />} color='black' width={'40%'} fontSize={16} fontWeight={'light'} boxShadow={'base'} variant='solid'>
-                                  100
-                                </Button>
-                                <Button leftIcon={<ChatCenteredText />} color='black' width={'100%'} fontSize={16} fontWeight={'light'} boxShadow={'base'} variant='solid'>
-                                  100
-                                </Button>
-
-                              </HStack>
-
-                            </Box>
-
-                            <IconButton rounded={'full'} icon={<DotsThreeVertical size={28} />} />
-
-                          </Flex>
-
-
-                          <Flex mt={2}>
-                            <Box w={'8%'} mr={1}>
-                              <Center mr={2} rounded={'100%'} h={42} w={42} bg={'gray.500'}>
-                                I
-                              </Center>
-                            </Box>
-                            <Input placeholder='Basic usage' w={'100%'} />
-                          </Flex>
-
-                        </Box>
-
-
-
-                        <IconButton rounded={'full'} icon={<DotsThreeVertical size={28} />} />
-
-                      </Flex>
-
-                      <Flex mt={2}>
-                        <Box w={'8%'} mr={1}>
-                          <Center mr={2} rounded={'100%'} h={42} w={42} bg={'gray.500'}>
-                            I
-                          </Center>
-                        </Box>
-                        <Input placeholder='Basic usage' w={'100%'} />
-                      </Flex>
-
-                    </Box>
-                    <IconButton rounded={'full'} icon={<DotsThreeVertical size={28} />} />
-                  </Flex>
+                  {/* โพสต์ */}
+                  <GroupPost/>
 
                 </TabPanel>
 
