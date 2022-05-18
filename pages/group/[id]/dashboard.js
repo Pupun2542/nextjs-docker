@@ -319,7 +319,7 @@ function dashboard() {
                             value={message}
                             onPaste={handleImagePaste}
                           />
-                          <Input mt={2} display='hidden' type="file" ref={pasteInputRef} />
+                          <Input mt={2} p={2} h={'auto'} display='hidden' type="file" ref={pasteInputRef} />
                           {image&&(
                             <Box >
                               <Box ></Box>
