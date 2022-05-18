@@ -111,12 +111,12 @@ function dashboard() {
     }
   }, [data, user]);
 
-  const handleImagePaste = () =>{
+  const handleImagePaste = () => {
     if (e.clipboardData.files[0]) {
       const reader = new FileReader();
       reader.onload = () => {
         if (reader.readyState === 2) {
-          if (image.length < 4 ){
+          if (image.length < 4) {
             setImage([...image, reader.result]);
           } else {
             alert("ใส่รูปได้ไม่เกิน 4 รูปต่อ 1 โพสต์");
@@ -320,9 +320,9 @@ function dashboard() {
                             onPaste={handleImagePaste}
                           />
                           <Input mt={2} p={2} h={'auto'} display='hidden' type="file" ref={pasteInputRef} />
-                          {image&&(
+                          {image && (
                             <Box >
-                              <Box ></Box>
+                              <Box></Box>
                               <Box display={image.length > 2 ? "initial" : "none"} ></Box>
                             </Box>
                           )}
