@@ -31,7 +31,8 @@ import {
   Textarea,
   Button,
   Text,
-  Image
+  Image,
+  Divider
 } from "@chakra-ui/react";
 
 import { Info, Megaphone } from "phosphor-react";
@@ -311,27 +312,22 @@ function dashboard() {
                       <ModalContent>
                         <ModalHeader>Create Post</ModalHeader>
                         <ModalCloseButton />
+                        <Divider />
                         <ModalBody>
                           <Textarea
                             onChange={(e) => setMessage(e.target.value)}
                             value={message}
                             onPaste={handleImagePaste}
                           />
-                          <Input display='hidden' type="file" ref={pasteInputRef} />
+                          <Input mt={2} display='hidden' type="file" ref={pasteInputRef} />
                           {image&&(
-                            <Box>
-                              <Box></Box>
+                            <Box >
+                              <Box ></Box>
                               <Box display={image.length > 2 ? "initial" : "none"} ></Box>
                             </Box>
                           )}
                         </ModalBody>
 
-                        <ModalFooter>
-                          <Button colorScheme="blue" mr={3} onClick={onClose}>
-                            Close
-                          </Button>
-                          <Button variant="ghost">Secondary Action</Button>
-                        </ModalFooter>
                       </ModalContent>
                     </Modal>
                   </TabPanel>
