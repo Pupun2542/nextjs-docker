@@ -1,9 +1,6 @@
 import React from "react";
-import CustomNavbar from "../components/navbar";
-import style from "../styles/creategroup.module.css";
+import style from "../../styles/creategroup.module.css";
 import { useState, useEffect } from "react";
-import { FileUploader } from "react-drag-drop-files";
-import "bootstrap/dist/css/bootstrap.min.css";
 import {
   getFirestore,
   collection,
@@ -14,11 +11,11 @@ import {
   doc,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import "../components/Banner";
-import { useApp } from "../src/hook/local";
+import "../Banner";
+import { useApp } from "../../src/hook/local";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
-import UploadImageModal from "../components/Banner";
+import UploadImageModal from "../Banner";
 import {
   getBlob,
   getDownloadURL,
@@ -66,6 +63,8 @@ import {
   DiscordLogo,
   ArrowRight,
 } from "phosphor-react";
+import { Regisform } from "./regisform";
+import { Checkform } from "./checkform";
 
 export const Createcommuform = ({ data }) => {
   const { app, auth, db } = useApp();
@@ -92,6 +91,13 @@ export const Createcommuform = ({ data }) => {
     averagetimeunit: "",
     type: "",
     privacy: "",
+    registrationlink: [],
+  statuschecklink:[{
+      name:"",
+      fromdate:"",
+      todate:"",
+      link:""
+  }],
   });
   const [bannerBlob, setBannerBlob] = useState(null);
   const [genre, setGenre] = useState([]);
@@ -238,6 +244,26 @@ export const Createcommuform = ({ data }) => {
 
   const HandleSubmit = () => {
     console.log('submit')
+  }
+
+  const addRegisLink = () =>{
+    
+    setFieldvalue({...fieldvalue, registrationlink: [...fieldvalue.registrationlink, {
+      name:"",
+      fromdate:"",
+      todate:"",
+      link:"",
+  }]})
+  }
+
+  const deleteRegisLink = (index) =>{
+    const newState = fieldvalue.registrationlink.filter((v,i)=> index!==i )
+    setFieldvalue({...fieldvalue, registrationlink: newState})
+  }
+
+  const setRegisLink = (index, data) =>{
+    const newState = fieldvalue.registrationlink.map((v,i)=>i==index? data : v);
+    setFieldvalue({...fieldvalue, registrationlink: newState})
   }
 
   return (
@@ -1049,154 +1075,15 @@ export const Createcommuform = ({ data }) => {
                       rounded={'full'}
                       bg={'#72994C'}
                       size={'xs'}
+                      onClick={addRegisLink}
                     />
                   </Flex>
 
 
-                  <Flex w={'100%'}>
-                    <Center w={50}>
-                      <IconButton
-                        colorScheme='blue'
-                        aria-label='Search database'
-                        icon={<Minus />}
-                        rounded={'full'}
-                        bg={'#EA4545'}
-                        size={'xs'}
-                      />
-                    </Center>
-                    <Flex w={'100%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
-
-                      <Box
-                        p={4}
-                        minW={180}
-                        borderRightColor={'#C4C4C4'}
-                        borderRightWidth={3}
-                      >
-                        <Box>
-                          <Text float="left">หัวข้อการรับสมัคร</Text>
-                        </Box>
-                      </Box>
-
-                      <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
-                        <Input
-                          type="text"
-
-                          w={'100%'}
-                          h={46}
-                          bg={"white"}
-                          placeholder={"ยกตัวอย่างเช่น วิ่งควายเพื่อ..."}
-                        />
-                      </Center>
-                    </Flex>
-                    <Center w={50}></Center>
-                  </Flex>
-
-                  <Flex w={'100%'}>
-                    <VStack w={50} spacing={0}>
-                      <Box
-                        mt={2.5}
-                        h={5}
-                        w={3.5}
-                        borderLeftWidth={3}
-                        borderLeftColor='gray.400'
-                      ></Box>
-                      <Box
-                        borderBottomLeftRadius={10}
-                        borderLeftWidth={3}
-                        borderBottomWidth={3}
-                        borderColor='gray.400'
-                        h={2}
-                        w={3.5}
-                      ></Box>
-                    </VStack>
-                    <Flex w={'100%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
-
-                      <Center></Center>
-
-                      <Box
-                        p={4}
-                        minW={180}
-                        borderRightColor={'#C4C4C4'}
-                        borderRightWidth={3}
-                      >
-                        <Box>
-                          <Text float="left">วันที่และเวลา</Text>
-                        </Box>
-                      </Box>
-
-                      <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
-                        <Input
-                          type="date"
-                          w={'100%'}
-                          h={46}
-                          bg={"white"}
-                          placeholder={"ยกตัวอย่างเช่น วิ่งควายเพื่อ..."}
-                        />
-                      </Center>
-
-                      <Center>
-                        <ArrowRight size={26} color="#100e0e" weight="bold" />
-                      </Center>
-
-
-                      <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
-                        <Input
-                          type="date"
-                          w={'100%'}
-                          h={46}
-                          bg={"white"}
-                          placeholder={"ยกตัวอย่างเช่น วิ่งควายเพื่อ..."}
-                        />
-                      </Center>
-                    </Flex>
-                    <Center w={50}></Center>
-                  </Flex>
-
-                  <Flex w={'100%'}>
-                    <VStack w={50} spacing={0}>
-                      <Box
-                        mt={2.5}
-                        h={5}
-                        w={3.5}
-                        borderLeftWidth={3}
-                        borderLeftColor='gray.400'
-                      ></Box>
-                      <Box
-                        borderBottomLeftRadius={10}
-                        borderLeftWidth={3}
-                        borderBottomWidth={3}
-                        borderColor='gray.400'
-                        h={2}
-                        w={3.5}
-                      ></Box>
-                    </VStack>
-                    <Flex w={'100%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
-
-                      <Center></Center>
-
-                      <Box
-                        p={4}
-                        minW={180}
-                        borderRightColor={'#C4C4C4'}
-                        borderRightWidth={3}
-                      >
-                        <Box>
-                          <Text float="left">ลิงก์</Text>
-                        </Box>
-                      </Box>
-
-                      <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
-                        <Input
-                          type="text"
-                          w={'100%'}
-                          h={46}
-                          bg={"white"}
-                          placeholder={"www.etc.com"}
-                        />
-                      </Center>
-                    </Flex>
-                    <Center w={50}></Center>
-                  </Flex>
+                  {fieldvalue.registrationlink.map((item, index)=>(
+                    <Regisform item={item} onDelete={()=>deleteRegisLink(index)} onChange={(data)=>setRegisLink(index, data)} />
+                  ))}
+                  
 
                   <Flex w={'100%'} m={2}>
                     <Center w={50}></Center>
@@ -1212,149 +1099,8 @@ export const Createcommuform = ({ data }) => {
                     />
                   </Flex>
 
-
-                  <Flex w={'100%'}>
-                    <Center w={50}>
-                      <IconButton
-                        colorScheme='blue'
-                        aria-label='Search database'
-                        icon={<Minus />}
-                        rounded={'full'}
-                        bg={'#EA4545'}
-                        size={'xs'}
-                      />
-                    </Center>
-                    <Flex w={'100%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
-
-                      <Box
-                        p={4}
-                        minW={180}
-                        borderRightColor={'#C4C4C4'}
-                        borderRightWidth={3}
-                      >
-                        <Box>
-                          <Text float="left">หัวข้อการตรวจสอบ</Text>
-                        </Box>
-                      </Box>
-
-                      <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
-                        <Input
-                          type="text"
-
-                          w={'100%'}
-                          h={46}
-                          bg={"white"}
-                          placeholder={"ยกตัวอย่างเช่น สำหรับวิ่ง VIP..."}
-                        />
-                      </Center>
-                    </Flex>
-                    <Center w={50}></Center>
-                  </Flex>
-
-                  <Flex w={'100%'}>
-                    <VStack w={50} spacing={0}>
-                      <Box
-                        mt={2.5}
-                        h={5}
-                        w={3.5}
-                        borderLeftWidth={3}
-                        borderLeftColor='gray.400'
-                      ></Box>
-                      <Box
-                        borderBottomLeftRadius={10}
-                        borderLeftWidth={3}
-                        borderBottomWidth={3}
-                        borderColor='gray.400'
-                        h={2}
-                        w={3.5}
-                      ></Box>
-                    </VStack>
-                    <Flex w={'100%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
-
-                      <Center></Center>
-
-                      <Box
-                        p={4}
-                        minW={180}
-                        borderRightColor={'#C4C4C4'}
-                        borderRightWidth={3}
-                      >
-                        <Box>
-                          <Text float="left">วันที่และเวลา</Text>
-                        </Box>
-                      </Box>
-
-                      <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
-                        <Input
-                          type="date"
-                          w={'100%'}
-                          h={46}
-                          bg={"white"}
-                        />
-                      </Center>
-
-                      <Center>
-                        <ArrowRight size={26} color="#100e0e" weight="bold" />
-                      </Center>
-
-
-                      <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
-                        <Input
-                          type="date"
-                          w={'100%'}
-                          h={46}
-                          bg={"white"}
-                        />
-                      </Center>
-                    </Flex>
-                    <Center w={50}></Center>
-                  </Flex>
-
-                  <Flex w={'100%'}>
-                    <VStack w={50} spacing={0}>
-                      <Box
-                        mt={2.5}
-                        h={5}
-                        w={3.5}
-                        borderLeftWidth={3}
-                        borderLeftColor='gray.400'
-                      ></Box>
-                      <Box
-                        borderBottomLeftRadius={10}
-                        borderLeftWidth={3}
-                        borderBottomWidth={3}
-                        borderColor='gray.400'
-                        h={2}
-                        w={3.5}
-                      ></Box>
-                    </VStack>
-                    <Flex w={'100%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
-
-                      <Center></Center>
-
-                      <Box
-                        p={4}
-                        minW={180}
-                        borderRightColor={'#C4C4C4'}
-                        borderRightWidth={3}
-                      >
-                        <Box>
-                          <Text float="left">ลิงก์</Text>
-                        </Box>
-                      </Box>
-
-                      <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
-                        <Input
-                          type="text"
-                          w={'100%'}
-                          h={46}
-                          bg={"white"}
-                          placeholder={"www.etc.com"}
-                        />
-                      </Center>
-                    </Flex>
-                    <Center w={50}></Center>
-                  </Flex>
+                  <Checkform/>
+                  
 
 
                   {/* <Center>

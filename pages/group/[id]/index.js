@@ -783,7 +783,7 @@ export default function Group() {
                                     // data.smlink
                                     //   ? () => outsidenavigate(data.smlink)
                                     //   : () => alert("ไม่มีลิงก์กลุ่ม")
-                                    Router.push(`/group/${id}/dashboard`)
+                                    ()=>Router.push(`/group/${id}/dashboard`)
                                   }
                                   cursor="pointer"
                                 >

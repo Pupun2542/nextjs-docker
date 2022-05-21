@@ -2,9 +2,7 @@ import React from "react";
 import CustomNavbar from "../components/navbar";
 import style from "../styles/creategroup.module.css";
 import { useState, useEffect } from "react";
-import { FileUploader } from "react-drag-drop-files";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Row, Col, Carousel, SSRProvider } from "react-bootstrap";
 import {
   getFirestore,
   collection,
@@ -71,7 +69,7 @@ import {
 } from "phosphor-react";
 import GroupSidebar from "../components/GroupSidebar";
 import Footer from "../components/footer";
-import { Createcommuform } from "../components/createcommuform";
+import { Createcommuform } from "../components/commuforms/createcommuform";
 
 export default function CreateGroup() {
   const { app, auth, db } = useApp();
