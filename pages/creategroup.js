@@ -281,9 +281,29 @@ export default function CreateGroup() {
 
   if (user) {
     return (
-      <Box bg="#FFFFFF">
+      <Box 
+        bg="#FFFFFF"
+        overflowY={"auto"}
+        // maxH={'960'}
+        maxH={"100vh"}
+        css={{
+          "&::-webkit-scrollbar": {
+            width: "8px",
+          },
+          "&::-webkit-scrollbar-track": {
+            width: "8px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "#727272",
+            borderRadius: "24px",
+          },
+        }}
+      >
         <CustomNavbar />
-        <Createcommuform/>
+        <Box pt={50}>
+          <Createcommuform />
+        </Box>
+        
 
         {/* module zone */}
 
