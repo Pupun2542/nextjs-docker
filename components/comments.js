@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useApp } from "../src/hook/local";
+import { useApp, useUser } from "../src/hook/local";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {
   useCollection,
@@ -86,8 +86,8 @@ export const Comments = ({ id }) => {
       uploadString(storeRef, image, "data_url").then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
           addDoc(collection(db, "group", id, "comments"), {
-            thumbnail: auth.currentUser.photoURL,
-            displayName: auth.currentUser.displayName,
+            // thumbnail: auth.currentUser.photoURL,
+            // displayName: auth.currentUser.displayName,
             userId: auth.currentUser.uid,
             message: tosent,
             timestamp: serverTimestamp(),
@@ -99,12 +99,13 @@ export const Comments = ({ id }) => {
       });
     } else {
       addDoc(collection(db, "group", id, "comments"), {
-        thumbnail: auth.currentUser.photoURL,
-        displayName: auth.currentUser.displayName,
+        // thumbnail: auth.currentUser.photoURL,
+        // displayName: auth.currentUser.displayName,
         userId: auth.currentUser.uid,
         message: message,
         timestamp: serverTimestamp(),
         love: [],
+        comment: 0
       });
     }
     setMessage("");
@@ -352,17 +353,20 @@ const Commentpost = ({ cdoc, id }) => {
   const [image, setImage] = useState(null);
   const store = getStorage(app);
   const [modalOpen, setModalOpen] = useState(false);
-  // const inputFileRef = useRef(null);
-  const checkImage = useRef("");
-  const [coll] = useCollectionOnce(
-    collection(db, "group", id, "comments", cdoc.id, "reply")
-  );
   const [editMode, setEditMode] = useState(false);
-  useEffect(() => {
-    if (coll && !coll.empty) {
-      setReply(coll.size);
-    }
-  }, [coll]);
+  const checkImage = useRef("");
+  const getUser = useUser()
+  const commentdoc = cdoc.data();
+  commentdoc = {...commentdoc, creator: getUser([commentdoc.userId])}
+  // const inputFileRef = useRef(null);
+  // const [coll] = useCollectionOnce(
+  //   collection(db, "group", id, "comments", cdoc.id, "reply")
+  // );
+  // useEffect(() => {
+  //   if (coll && !coll.empty) {
+  //     setReply(coll.size);
+  //   }
+  // }, [coll]);
 
   document.onkeydown = (e) => {
     if (e.key == "Escape" && editMode) {
@@ -458,18 +462,18 @@ const Commentpost = ({ cdoc, id }) => {
       marginTop="10px"
     >
       <Center flexGrow={1} w={75} h={70} mr={2.5}>
-        <Image maxW={70} src={cdoc.data().thumbnail} rounded={"full"} />
+        <Image maxW={70} src={commentdoc.creator.thumbnail} rounded={"full"} />
       </Center>
 
       <Flex flexDir="column" flexGrow={10}>
         <Flex justifyContent="space-between">
           <Text fontSize={20}>
-            {cdoc.data().displayName ? cdoc.data().displayName : "placeholder"}
+            {commentdoc.creator.displayName ? commentdoc.creator.displayName : "placeholder"}
           </Text>
 
           <Text fontSize={10} mt={3} color={"GrayText"}>
-            {cdoc.data().timestamp
-              ? parseDate(cdoc.data().timestamp)
+            {commentdoc.timestamp
+              ? parseDate(commentdoc.timestamp)
               : "01/01/1970:00.00"}
           </Text>
         </Flex>
@@ -511,7 +515,7 @@ const Commentpost = ({ cdoc, id }) => {
           // </InputRightElement>
           // </InputGroup>
           <Box fontSize={14} minW={"625"} w={"auto"} maxW={600}>
-            <Text whiteSpace="pre-line">{cdoc.data().message ? cdoc.data().message : ""}</Text>
+            <Text whiteSpace="pre-line">{commentdoc.message ? commentdoc.message : ""}</Text>
           </Box>
         )}
         {/* <Input
@@ -587,14 +591,14 @@ const Commentpost = ({ cdoc, id }) => {
                 size={16}
                 color={"red"}
                 weight={
-                  cdoc.data().love.includes(auth.currentUser.uid)
+                  commentdoc.love.includes(auth.currentUser.uid)
                     ? "fill"
                     : "regular"
                 }
               />
             </Box>
 
-            <Box p={1}>{cdoc.data().love ? cdoc.data().love.length : "0"}</Box>
+            <Box p={1}>{commentdoc.love ? commentdoc.love.length : "0"}</Box>
           </Button>
 
           <Button mt={2}
@@ -613,7 +617,7 @@ const Commentpost = ({ cdoc, id }) => {
           <DotsThreeVertical size={30} />
         </MenuButton>
         <MenuList>
-          {auth.currentUser.uid == cdoc.data().userId ? (
+          {auth.currentUser.uid == commentdoc.userId ? (
             <>
               <MenuItem onClick={() => setEditMode(true)}>Edit</MenuItem>
               <MenuItem onClick={handleDelete}>Delete</MenuItem>
@@ -628,18 +632,20 @@ const Commentpost = ({ cdoc, id }) => {
 };
 
 const Reply = ({ id, setReply, commentId }) => {
+  
   const { app, auth, db } = useApp();
-  const [snapshot, loading, error] = useCollection(
-    query(
-      collection(db, "group", id, "comments", commentId, "reply"),
-      orderBy("timestamp", "asc")
-    )
-  );
-  useEffect(() => {
-    if (!loading && !snapshot.empty) {
-      setReply(snapshot.size);
-    }
-  }, [loading, snapshot]);
+  // const [snapshot, loading, error] = useCollection(
+  //   query(
+  //     collection(db, "group", id, "comments", commentId, "reply"),
+  //     orderBy("timestamp", "asc")
+  //   )
+  // );
+  // // console.log(id, commentId, snapshot)
+  // useEffect(() => {
+  //   if (!loading && snapshot && !snapshot.empty) {
+  //     setReply(snapshot.size);
+  //   }
+  // }, [loading, snapshot]);
 
   const [message, setMessage] = useState("");
 
@@ -652,6 +658,7 @@ const Reply = ({ id, setReply, commentId }) => {
       message: message,
       timestamp: serverTimestamp(),
       love: [],
+      comment: 0
     });
     setMessage("");
   };

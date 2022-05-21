@@ -32,21 +32,23 @@ import {
   Button,
   Text,
   Image,
-  Divider
+  Divider,
 } from "@chakra-ui/react";
 
 import { Info, Megaphone } from "phosphor-react";
 import { GroupPost } from "../../../components/groupcomponents/post";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useApp } from "../../../src/hook/local";
+import { useApp, useUser } from "../../../src/hook/local";
 import { useRouter } from "next/router";
 import {
+  addDoc,
   collection,
   doc,
   getDoc,
   getDocs,
   limit,
   orderBy,
+  serverTimestamp,
   where,
 } from "firebase/firestore";
 
@@ -71,6 +73,8 @@ function dashboard() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [image, setImage] = useState([]);
   const pasteInputRef = useRef(undefined);
+  const getUser = useUser();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchdata = async () => {
@@ -78,7 +82,8 @@ function dashboard() {
       if (snapshot.exists) {
         const rawdata = snapshot.data();
         const postSnapshot = await getDocs(
-          collection(db, "group"),
+          collection(db, "posts"),
+          where("groupId", "==", id),
           orderBy(orderby, "desc"),
           limit(loadLimit)
         );
@@ -86,10 +91,12 @@ function dashboard() {
           const postdata = postSnapshot.docs.map((doc) => ({
             ...doc.data(),
             id: doc.id,
+            creator: getUser(doc.data().uid),
           }));
           rawdata = { ...rawdata, post: postdata };
-          setData(rawdata);
         }
+        setData(rawdata);
+        setLoading(false);
       } else {
         alert("ไม่พบคอมมู");
         Router.back();
@@ -98,7 +105,7 @@ function dashboard() {
     if (user && !userLoading) {
       fetchdata();
     }
-  }, [user, userLoading]);
+  }, [user, userLoading, orderby, loadLimit]);
 
   useEffect(() => {
     if (user && data && data.member) {
@@ -125,9 +132,28 @@ function dashboard() {
       };
       reader.readAsDataURL(e.clipboardData.files[0]);
     }
+  };
+  function isEmptyOrSpaces(str) {
+    return str === null || str.match(/^ *$/) !== null;
   }
 
-  if (data) {
+  const handleSent = () => {
+    if (!isEmptyOrSpaces(message)) {
+      const body = {
+        uid: user.uid,
+        message: message,
+        timestamp: serverTimestamp(),
+        love: 0,
+        imageUrl: image,
+        comment: 0,
+        lastactive: serverTimestamp(),
+        groupId: id,
+      };
+      addDoc(collection(db, "posts"), body);
+    }
+  };
+  console.log(loading, data);
+  if (!loading && data) {
     return (
       <Box
         overflowY={"auto"}
@@ -171,7 +197,7 @@ function dashboard() {
                   bg={"#6768AB"}
                 >
                   {/* [LTLEC]Land of the lustrous : Eternity cycle */}[
-                  {data.tag}] {data.name}
+                  {data?.tag}] {data?.name}
                 </Center>
 
                 <Box bg={"#6768AB"}>
@@ -287,22 +313,20 @@ function dashboard() {
                       bg={"white"}
                       borderRadius={10}
                     >
-                      <Center
+                      <Image
                         mr={2}
                         rounded={"100%"}
                         h={42}
                         w={42}
-                        bg={"gray.500"}
-                      >
-                        I
-                      </Center>
+                        src={user.photoURL}
+                      />
                       <Text w="93%" onClick={onOpen}>
                         {message ? message : "Something"}
                       </Text>
                       {/* <Input placeholder='Basic usage' w={'93%'} /> */}
                     </Flex>
                     {/* โพสต์ */}
-                    <GroupPost />
+                    <GroupPost post={data.post} />
 
                     <Modal isOpen={isOpen} onClose={onClose}>
                       <ModalOverlay
@@ -319,15 +343,23 @@ function dashboard() {
                             value={message}
                             onPaste={handleImagePaste}
                           />
-                          <Input mt={2} p={2} h={'auto'} display='hidden' type="file" ref={pasteInputRef} />
+                          <Input
+                            mt={2}
+                            p={2}
+                            h={"auto"}
+                            display="hidden"
+                            type="file"
+                            ref={pasteInputRef}
+                          />
                           {image && (
-                            <Box >
+                            <Box>
                               <Box></Box>
-                              <Box display={image.length > 2 ? "initial" : "none"} ></Box>
+                              <Box
+                                display={image.length > 2 ? "initial" : "none"}
+                              ></Box>
                             </Box>
                           )}
                         </ModalBody>
-
                       </ModalContent>
                     </Modal>
                   </TabPanel>

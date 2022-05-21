@@ -780,9 +780,10 @@ export default function Group() {
                                   w={750}
                                   borderRadius={10}
                                   onClick={
-                                    data.smlink
-                                      ? () => outsidenavigate(data.smlink)
-                                      : () => alert("ไม่มีลิงก์กลุ่ม")
+                                    // data.smlink
+                                    //   ? () => outsidenavigate(data.smlink)
+                                    //   : () => alert("ไม่มีลิงก์กลุ่ม")
+                                    Router.push(`/group/${id}/dashboard`)
                                   }
                                   cursor="pointer"
                                 >
