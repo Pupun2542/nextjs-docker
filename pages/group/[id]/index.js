@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import CustomNavbar from "../../../components/navbar";
 import "../../../styles/creategroup.module.css";
 import {
@@ -21,7 +21,7 @@ import { async } from "@firebase/util";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
 import GroupSidebar from "../../../components/GroupSidebar";
-import { useApp } from "../../../src/hook/local";
+import { useApp, useUser } from "../../../src/hook/local";
 import { UpdateUserPinGroup } from "../../../src/services/firestoreservice";
 import style from "../../../styles/groupdetail.module.css";
 import Head from "next/head";
@@ -57,7 +57,16 @@ import {
   TabPanels,
   Tab,
   TabPanel,
-  AspectRatio
+  AspectRatio,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverAnchor,
 } from "@chakra-ui/react";
 import Footer from "../../../components/footer";
 import {
@@ -68,39 +77,47 @@ import {
 } from "phosphor-react";
 import { Comments } from "../../../components/comments";
 
+// export async function getServerSideProps(context) {
+//   const { params } = context;
+//   const { id } = params;
+//   const res = await fetch(`${process.env.NEXT_USE_API_URL}/api/group/${id}`);
+//   const data = await res.json();
+//   return { props: { data } };
+// }
+
 export default function Group() {
-  // const app = useApp();
-  // const db = getFirestore(app);
-  // const auth = getAuth(app);
+  //{ data }
+  const [data, setData] = useState(undefined)
   const { app, auth, db } = useApp();
   const Router = useRouter();
-  // const [show, setShow] = useState(false);
   const {
     isOpen: isDelOpen,
     onOpen: onDelOpen,
     onClose: onDelClose,
   } = useDisclosure();
-
-  // const [loading, setLoading] = useState(true);
-  const [data, setData] = useState({});
+  // const [data, setData] = useState(undefined);
   const [pin, setPin] = useState(false);
   const [text, setText] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [user, loading, error] = useAuthState(auth);
+  const [user] = useAuthState(auth);
   const [color, setColor] = useState("");
+  const [loading, setLoading] = useState(true)
+  const getUser = useUser();
+  const buttonRef = useRef(null);
 
   const { id } = Router.query;
   useEffect(() => {
     const Fetchdata = async () => {
       getDoc(doc(db, "group", id)).then((d) => {
-        
         if (d.exists()) {
-          getDoc(doc(db, "userDetail", d.data().creator)).then((staff) => {
-            if (staff.exists()) {
-              setData({ ...d.data(), creatorName: staff.data().displayName });
-            }
-          });
+          // console.log(d.data());
+          setData({ ...d.data(), creator: getUser([d.data().creator]) });
+          // getDoc(doc(db, "userDetail", d.data().creator)).then((staff) => {
+          //   if (staff.exists()) {
+          //     setData({ ...d.data(), creator: staff.data().displayName });
 
+          //   }
+          // });
           if (d.data().rating === "NC-21 (ไม่เหมาะสำหรับเยาวชน)") {
             setColor("#EA4545");
             // console.log(d.data().rating);
@@ -114,13 +131,13 @@ export default function Group() {
             setColor("#72994C");
             // console.log(d.data().rating);
           }
+          setLoading(false)
         } else {
           console.log(d);
           alert("ไม่พบคอมมู");
           Router.back();
         }
       });
-      // setLoading(false);
     };
     if (id) Fetchdata();
   }, [id]);
@@ -160,7 +177,7 @@ export default function Group() {
 
   const removehandler = () => {
     // console.log("remove");
-    if (user && user.uid == data.creator) {
+    if (user && user.uid == data.creator.uid) {
       onDelOpen();
     }
   };
@@ -188,7 +205,7 @@ export default function Group() {
     <Box>
       <Box bg={"#FFFFFF"}>
         <CustomNavbar />
-        {!loading && data.name && (
+        {!loading && data && (
           <Flex>
             {/* {console.log(data)} */}
             <Box w={400} minH={1000} bg={"#F3F3F3"}></Box>
@@ -234,34 +251,50 @@ export default function Group() {
                         icon={<CalendarBlank size={32} />}
                         isDisabled
                       />
-                      {user && user.uid === data.creator && (
-                        <Menu>
-                          <MenuButton
-                            bg={"white"}
-                            rounded="full"
-                            h={38}
-                            w={38}
-                            mt={2.5}
-                            mr={2.5}
-                            icon={<DotsThreeVertical size={32} />}
-                            as={IconButton}
-                          />
+                      {user && user.uid === data.creator.uid && (
+                        <Box>
+                          <Menu>
+                            <MenuButton
+                              bg={"white"}
+                              rounded="full"
+                              h={38}
+                              w={38}
+                              mt={2.5}
+                              mr={2.5}
+                              icon={<DotsThreeVertical size={32} />}
+                              as={IconButton}
+                            />
 
-                          <MenuList minW={20} fontFamily={"Mitr"}>
-                            <MenuItem _hover={{ background: "#E2E8F0" }}>
-                              <Text
-                                onClick={() =>
-                                  Router.push("/group/" + id + "/edit")
-                                }
-                              >
-                                Edit
-                              </Text>
-                            </MenuItem>
-                            <MenuItem _hover={{ background: "#E2E8F0" }}>
-                              <Text onClick={onDelOpen}>Delete</Text>
-                            </MenuItem>
-                          </MenuList>
-                        </Menu>
+                            <MenuList minW={20} fontFamily={"Mitr"}>
+                              <MenuItem _hover={{ background: "#E2E8F0" }}>
+                                <Text
+                                  onClick={() =>
+                                    Router.push("/group/" + id + "/edit")
+                                  }
+                                >
+                                  Edit
+                                </Text>
+                              </MenuItem>
+                              <MenuItem _hover={{ background: "#E2E8F0" }}>
+                                <Text onClick={onDelOpen}>Delete</Text>
+                              </MenuItem>
+                            </MenuList>
+                          </Menu>
+                          <Popover>
+                            <PopoverTrigger>
+                              <IconButton icon={<DotsThreeVertical size={32} />} as="button" ref={buttonRef} />
+                            </PopoverTrigger>
+                            <PopoverContent width={400} >
+                              <PopoverArrow />
+                              <PopoverCloseButton />
+                              <PopoverHeader>Description</PopoverHeader>
+                              <PopoverBody maxH={500} overflowY="auto">
+                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.""Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?""But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?"
+                              </PopoverBody>
+                            </PopoverContent>
+                          </Popover>
+
+                        </Box>
                       )}
                     </Flex>
                   </Box>
@@ -474,16 +507,16 @@ export default function Group() {
                                     {/* {console.log(data.genre)} */}
                                     {data.times && data.genre.length > 0
                                       ? data.genre.map((genre, index) => (
-                                          <Box
-                                            key={index}
-                                            className={style.tag}
-                                            marginLeft={2.5}
-                                            maxW={600}
-                                            float={"left"}
-                                          >
-                                            {genre}
-                                          </Box>
-                                        ))
+                                        <Box
+                                          key={index}
+                                          className={style.tag}
+                                          marginLeft={2.5}
+                                          maxW={600}
+                                          float={"left"}
+                                        >
+                                          {genre}
+                                        </Box>
+                                      ))
                                       : "ไม่มีหมวดหมู่"}
                                   </Box>
                                 </Flex>
@@ -513,16 +546,16 @@ export default function Group() {
                                   >
                                     {data.times && data.place.length > 0
                                       ? data.place.map((genre, index) => (
-                                          <Box
-                                            key={index}
-                                            className={style.tag}
-                                            marginLeft={2.5}
-                                            maxW={600}
-                                            float={"left"}
-                                          >
-                                            {genre}
-                                          </Box>
-                                        ))
+                                        <Box
+                                          key={index}
+                                          className={style.tag}
+                                          marginLeft={2.5}
+                                          maxW={600}
+                                          float={"left"}
+                                        >
+                                          {genre}
+                                        </Box>
+                                      ))
                                       : "ไม่มีหมวดหมู่"}
                                   </Box>
                                 </Flex>
@@ -553,16 +586,16 @@ export default function Group() {
                                     {/* {console.log(data.genre)} */}
                                     {data.times && data.times.length > 0
                                       ? data.times.map((genre, index) => (
-                                          <Box
-                                            key={index}
-                                            className={style.tag}
-                                            marginLeft={2.5}
-                                            maxW={600}
-                                            float={"left"}
-                                          >
-                                            {genre}
-                                          </Box>
-                                        ))
+                                        <Box
+                                          key={index}
+                                          className={style.tag}
+                                          marginLeft={2.5}
+                                          maxW={600}
+                                          float={"left"}
+                                        >
+                                          {genre}
+                                        </Box>
+                                      ))
                                       : "ไม่มีหมวดหมู่"}
                                   </Box>
                                 </Flex>
@@ -593,10 +626,10 @@ export default function Group() {
                                     {data.tws
                                       ? data.tws.length > 0
                                         ? data.tws.map((tw, index) => (
-                                            <Box key={index} float="left">
-                                              {tw}
-                                            </Box>
-                                          ))
+                                          <Box key={index} float="left">
+                                            {tw}
+                                          </Box>
+                                        ))
                                         : "ไม่มีคำเตือน"
                                       : "ไม่มีคำเตือน"}
                                   </Box>
@@ -659,8 +692,8 @@ export default function Group() {
                                     >
                                       {data.averageTime
                                         ? data.averageTime +
-                                          " " +
-                                          data.averageTimeUnit
+                                        " " +
+                                        data.averageTimeUnit
                                         : "ไม่มีระยะเวลาโดยประมาณ"}
                                     </Box>
                                   </Flex>
@@ -747,9 +780,10 @@ export default function Group() {
                                   w={750}
                                   borderRadius={10}
                                   onClick={
-                                    data.smlink
-                                      ? () => outsidenavigate(data.smlink)
-                                      : () => alert("ไม่มีลิงก์กลุ่ม")
+                                    // data.smlink
+                                    //   ? () => outsidenavigate(data.smlink)
+                                    //   : () => alert("ไม่มีลิงก์กลุ่ม")
+                                    ()=>Router.push(`/group/${id}/dashboard`)
                                   }
                                   cursor="pointer"
                                 >
@@ -973,16 +1007,16 @@ export default function Group() {
                     </TabPanel>
                     <TabPanel>
                       <Center ml={-4} w={850} bg={"tomato"} h={500}>
-                          <Box
-                            position={'static'}
-                            as="iframe"
-                            src={data.doclink+"#toolbar=0"}
-                            alt="demo"
-                            w={850}
-                            h={500}
-                            // maxH={"75%"}
-                            // maxW={"70%"}
-                          />
+                        <Box
+                          position={"static"}
+                          as="iframe"
+                          src={data.doclink + "#toolbar=0"}
+                          alt="demo"
+                          w={850}
+                          h={500}
+                        // maxH={"75%"}
+                        // maxW={"70%"}
+                        />
                         {/* <Box
                           as="iframe"
                           src={data.doclink}
@@ -995,9 +1029,9 @@ export default function Group() {
                 </Tabs>
               </VStack>
               <Box>
-                <Comments id={id}/>
+                <Comments id={id} />
               </Box>
-              
+
               {/* <Text>TEST 1234</Text> */}
             </Box>
 
@@ -1005,8 +1039,6 @@ export default function Group() {
             <Box w={400} minH={1000} bg={"#F3F3F3"}>
               {" "}
             </Box>
-            
-            
           </Flex>
         )}
         <Modal onClose={onDelClose} isOpen={isDelOpen} isCentered>

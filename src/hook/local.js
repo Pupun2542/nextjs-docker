@@ -28,6 +28,8 @@ const AppContext = createContext();
 const UserContext = createContext();
 const OpenedChatContext = createContext({});
 const NotificationContext = createContext({});
+const GroupNotiHeaderContext = createContext();
+const CharaContext = createContext();
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -203,37 +205,103 @@ export const UserProvider = ({ children }) => {
       }
     }
     return undefined;
-    // console.log("getUser: ", uid)
-    // console.log("data: ", data)
-    // const userDetail = data.data[uid];
-    // if (userDetail){
-    //   console.log("found")
-    //   return userDetail
-    // } else {
-    //   console.log("not found, searching")
-
-    //   const docdata = await getDoc(doc(db, "userDetail", uid))
-    //   console.log("searching: ", docdata)
-    //   if (docdata.exists){
-    //     console.log("found: ", docdata)
-    //     const payload = docdata.data();
-    //     DataDispatcher({ type: "addUser", payload });
-    //     return payload
-    //   }
-    // }
-    // console.log("not found, not found")
-    return null;
   };
+  return (
+    <UserContext.Provider value={getUser}>{children}</UserContext.Provider>
+  );
+};
 
-  // useMemo(()=>{
-  // useEffect(() => {
-  //   getDocs(collection(db, "userDetail")).then((docs) => {
-  //     setData(docs.docs.map((doc) => doc.data()));
-  //   });
-  // }, []);
+const initialGroup = {
+  data: [],
+};
 
-  // },[db])
+const groupNotiReducer = (state, action) => {
+  switch (action.type) {
+    case "addGroup":
+      // console.log(state.data, action.userDetail)
+      return {
+        ...state,
+        // data: {...state.data, [action.uid]:action.payload}
+        data: [...state.data, ...action.tosend],
+      };
+  }
+};
 
+export const groupNotiProvider = ({ children }) => {
+  const [data, DataDispatcher] = useReducer(groupNotiReducer, initialGroup);
+
+  const getGroupHeader = async (groupId) => {
+
+    const group = data.data.find(v=>v.groupId == groupId);
+    if (group) {
+      return group
+    } else {
+      const snapshot = await getDoc(doc(db, "group", groupId));
+      if (snapshot.exists){
+        const res = snapshot.data()
+        const tosend = {
+          name: res.communame,
+          thumbnail: res.banner,
+          groupId: groupId
+        }
+        DataDispatcher({ type: "addUser", tosend })
+        return tosend;
+      }
+      return undefined;
+    }
+  };
+  return (
+    <UserContext.Provider value={getGroupHeader}>{children}</UserContext.Provider>
+  );
+};
+
+const initialchara = {
+  data: [],
+};
+
+const charaReducer = (state, action) => {
+  switch (action.type) {
+    case "addUser":
+      console.log(state.data, action.userDetail)
+      return {
+        ...state,
+        // data: {...state.data, [action.uid]:action.payload}
+        data: [...state.data, ...action.userDetail],
+      };
+  }
+};
+
+export const charaProvider = ({ children }) => {
+  const [data, DataDispatcher] = useReducer(charaReducer, initialchara);
+
+  const getUser = async (cid, groupId) => {
+    if (cid.length > 0) {
+      let users = [];
+      cid.map((id) => {
+        const user = data.data.find((v) => v.cid == id);
+        if (user){
+          users = [...users, user];
+        }
+      });
+      if (users.length <= 0) { 
+        const docData = await getDocs(
+          query(collection(db, "userDetail"), where("cid", "in", cid))
+        );
+        let userDetail = [];
+        if (!docData.empty) {
+          userDetail = docData.docs.map((doc) => doc.data());
+          DataDispatcher({ type: "addUser", userDetail });
+          console.log("new:", userDetail)
+          return userDetail;
+        }
+        
+      } else {
+        console.log("found: ",users)
+        return users;
+      }
+    }
+    return undefined;
+  };
   return (
     <UserContext.Provider value={getUser}>{children}</UserContext.Provider>
   );
@@ -243,3 +311,5 @@ export const useTab = () => useContext(OpenedChatContext);
 export const useApp = () => useContext(AppContext);
 export const useUser = () => useContext(UserContext);
 export const useNotifications = () => useContext(NotificationContext);
+export const useGroupHeader = () => useContext(GroupNotiHeaderContext);
+export const useChara = () => useContext(CharaContext);

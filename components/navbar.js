@@ -378,12 +378,14 @@ function CustomNavbar() {
                 </MenuButton>
 
                 <MenuList
-                  bg={"#6768AB"}
+                  bg={"white"}
                   minWidth={"auto"}
                   ml={-3}
                   mt={-1}
                   color={"black"}
                   cursor="pointer"
+                  borderColor={'black'}
+                  borderWidth={2}
                 >
                   <MenuItem
                     minH="48px"
@@ -391,7 +393,7 @@ function CustomNavbar() {
                     onClick={() => router.push("/group")}
                     title="Main Hall"
                     _hover={{
-                      backgroundColor: "gray.400",
+                      backgroundColor: "gray.200",
                     }}
                   >
                     <House size={32} />
@@ -403,7 +405,7 @@ function CustomNavbar() {
                     onClick={() => router.push("/creategroup")}
                     title="Create Commu"
                     _hover={{
-                      backgroundColor: "gray.400",
+                      backgroundColor: "gray.200",
                     }}
                   >
                     <Plus size={32} />
@@ -415,7 +417,7 @@ function CustomNavbar() {
                     title="Pin"
                     onClick={onOpen}
                     _hover={{
-                      backgroundColor: "gray.400",
+                      backgroundColor: "gray.200",
                     }}
                   >
                     <PushPin size={32} />
@@ -478,21 +480,24 @@ function CustomNavbar() {
                     </MenuButton>
 
                     <MenuList
-                      bg={"#6768AB"}
+                      bg={"#FFFFFF"}
                       alignItems={"center"}
                       mr={-4}
-                      color={"white"}
+                      color={"black"}
+                      borderWidth={3}
+                      borderColor={'black'}
+                      w={100}
                     >
                       <br />
 
                       <Center>
-                        <Avatar size={"2xl"} src={user.photoURL} />
+                        <Avatar borderWidth={3} borderColor={'black'} size={"2xl"} src={user.photoURL} />
                       </Center>
 
                       <br />
 
                       <Center>
-                        <Box className={style.prName}>{user.displayName}</Box>
+                        <Box fontSize={20} fontWeight={'semibold'}>{user.displayName}</Box>
                       </Center>
 
                       <br />
@@ -502,7 +507,7 @@ function CustomNavbar() {
                       <MenuItem
                         className={style.prName}
                         _hover={{
-                          backgroundColor: "gray.400",
+                          backgroundColor: "gray.300",
                         }}
                         onClick={() => router.push("/profile/" + user.uid)}
                       >
@@ -512,7 +517,7 @@ function CustomNavbar() {
                         className={style.prName}
                         onClick={() => router.push("/logout")}
                         _hover={{
-                          backgroundColor: "gray.400",
+                          backgroundColor: "gray.300",
                         }}
                       >
                         Logout
