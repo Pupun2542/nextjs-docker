@@ -6,6 +6,7 @@ import {
   OpenChatTabProvider,
   NotificationProvider,
 } from "../src/hook/local";
+import { useMediaQuery } from '@chakra-ui/react';
 import { ChakraProvider } from "@chakra-ui/react";
 import Head from "next/head";
 
