@@ -65,6 +65,7 @@ import {
 } from "phosphor-react";
 import { Regisform } from "./regisform";
 import { Checkform } from "./checkform";
+import axios from "axios";
 
 export const Createcommuform = ({ data }) => {
   const { app, auth, db } = useApp();
@@ -78,10 +79,6 @@ export const Createcommuform = ({ data }) => {
     description: "",
     smlink: "",
     docfile: null,
-    qaasklink: "",
-    qaanslink: "",
-    submitlink: "",
-    resultlink: "",
     contactlink: "",
     startdate: "",
     startdateraw: "",
@@ -92,12 +89,7 @@ export const Createcommuform = ({ data }) => {
     type: "",
     privacy: "",
     registrationlink: [],
-  statuschecklink:[{
-      name:"",
-      fromdate:"",
-      todate:"",
-      link:""
-  }],
+    statuschecklink:[],
   });
   const [bannerBlob, setBannerBlob] = useState(null);
   const [genre, setGenre] = useState([]);
@@ -124,10 +116,6 @@ export const Createcommuform = ({ data }) => {
         description: data.description,
         smlink: data.SMlink,
         docfile: data.docfile,
-        qaasklink: data.qaasklink,
-        qaanslink: data.qaanslink,
-        submitlink: data.submitlink,
-        resultlink: data.resultlink,
         contactlink: data.contactlink,
         startDate: data.startDate,
         rating: data.rating,
@@ -152,6 +140,7 @@ export const Createcommuform = ({ data }) => {
       setPlaces(data.place);
       setTimes(data.times);
       setTWs(data.tws);
+      setBannerBlob(data.banner)
     }
   }, [data]);
 
@@ -228,6 +217,7 @@ export const Createcommuform = ({ data }) => {
   };
 
   const parseRawTime = (localtime) => {
+    console.log(localtime);
     const spdatetime = localtime.split("T");
     const spdate = spdatetime[0].split("/");
     const sptime = spdatetime[1].split(":");
@@ -243,7 +233,21 @@ export const Createcommuform = ({ data }) => {
   };
 
   const HandleSubmit = () => {
-    console.log('submit')
+    const body = {
+      ...fieldvalue,
+      genre: genre,
+      places: places,
+      times: times,
+      TWs: TWs,
+      bannerBlob: bannerBlob,
+    }
+    console.log(body)
+    if (data){
+      axios.post(`${process.env.NEXT_USE_API_URL}/api/group/update/${data.id}`, JSON.stringify(body));
+    } else {
+      // console.log(process.env)
+      // axios.post(`https://localhost:8080/api/group/create`, JSON.stringify(body));
+    }
   }
 
   const addRegisLink = () =>{
@@ -264,6 +268,25 @@ export const Createcommuform = ({ data }) => {
   const setRegisLink = (index, data) =>{
     const newState = fieldvalue.registrationlink.map((v,i)=>i==index? data : v);
     setFieldvalue({...fieldvalue, registrationlink: newState})
+  }
+  const addCheckLink = () =>{
+    
+    setFieldvalue({...fieldvalue, statuschecklink: [...fieldvalue.statuschecklink, {
+      name:"",
+      fromdate:"",
+      todate:"",
+      link:"",
+  }]})
+  }
+
+  const deleteCheckLink = (index) =>{
+    const newState = fieldvalue.statuschecklink.filter((v,i)=> index!==i )
+    setFieldvalue({...fieldvalue, statuschecklink: newState})
+  }
+
+  const setCheckLink = (index, data) =>{
+    const newState = fieldvalue.statuschecklink.map((v,i)=>i==index? data : v);
+    setFieldvalue({...fieldvalue, statuschecklink: newState})
   }
 
   return (
@@ -509,7 +532,7 @@ export const Createcommuform = ({ data }) => {
                           size="lg"
                           fontFamily={"Mitr"}
                           onChange={(e) =>
-                            setFieldvalue({ ...fieldvalue, type: e })
+                            setFieldvalue({ ...fieldvalue, type: e.target.value })
                           }
                           defaultValue={"Slow-Life"}
                         >
@@ -871,7 +894,7 @@ export const Createcommuform = ({ data }) => {
                           onChange={(e) =>
                             setFieldvalue({
                               ...fieldvalue,
-                              averagetimeunit: e.target.value,
+                              rating: e.target.value,
                             })
                           }
                         >
@@ -1096,12 +1119,13 @@ export const Createcommuform = ({ data }) => {
                       rounded={'full'}
                       bg={'#72994C'}
                       size={'xs'}
+                      onClick={addCheckLink}
                     />
                   </Flex>
 
-                  <Checkform/>
-                  
-
+                  {fieldvalue.statuschecklink.map((item, index)=>(
+                    <Checkform item={item} onDelete={()=>deleteCheckLink(index)} onChange={(data)=>setCheckLink(index, data)}/>
+                  ))}
 
                   {/* <Center>
                     <Flex maxW={900}>
