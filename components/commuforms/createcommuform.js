@@ -1,20 +1,8 @@
 import React from "react";
 import style from "../../styles/creategroup.module.css";
 import { useState, useEffect } from "react";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  serverTimestamp,
-  setDoc,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
-import { getAuth } from "firebase/auth";
 import "../Banner";
 import { useApp } from "../../src/hook/local";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useRouter } from "next/router";
 import UploadImageModal from "../Banner";
 import {
   getBlob,
@@ -66,16 +54,18 @@ import {
 import { Regisform } from "./regisform";
 import { Checkform } from "./checkform";
 import axios from "axios";
+import { useRouter } from 'next/router'
+import { creategroup } from "../../src/services/firestoreservice";
 
-export const Createcommuform = ({ data }) => {
+export const Createcommuform = ({ data, uid }) => {
   const { app, auth, db } = useApp();
   const store = getStorage(app);
+  const Router = useRouter();
   const [fieldvalue, setFieldvalue] = useState({
     hashtag: "",
     communame: "",
     maxplayer: 0,
     runtime: "",
-    startDate: "",
     description: "",
     smlink: "",
     docfile: null,
@@ -90,6 +80,7 @@ export const Createcommuform = ({ data }) => {
     privacy: "",
     registrationlink: [],
     statuschecklink:[],
+    creator: uid
   });
   const [bannerBlob, setBannerBlob] = useState(null);
   const [genre, setGenre] = useState([]);
@@ -112,18 +103,18 @@ export const Createcommuform = ({ data }) => {
         communame: data.name,
         maxplayer: data.maxplayer,
         runtime: data.runtime,
-        startDate: data.startDate,
         description: data.description,
         smlink: data.SMlink,
-        docfile: data.docfile,
+        // docfile: data.docfile,
         contactlink: data.contactlink,
-        startDate: data.startDate,
+        startdate: data.startDate,
         rating: data.rating,
         rule: data.rule,
         averageTime: data.averageTime,
         averageTimeUnit: data.averageTimeUnit,
         type: data.type,
         privacy: data.privacy,
+        creator: data.creator
       });
       if (data.config) {
         setConfigValue({
@@ -232,7 +223,7 @@ export const Createcommuform = ({ data }) => {
     return timebuild;
   };
 
-  const HandleSubmit = () => {
+  const HandleSubmit = async () => {
     const body = {
       ...fieldvalue,
       genre: genre,
@@ -240,13 +231,20 @@ export const Createcommuform = ({ data }) => {
       times: times,
       TWs: TWs,
       bannerBlob: bannerBlob,
+      config: configvalue
     }
     console.log(body)
     if (data){
-      axios.post(`${process.env.NEXT_USE_API_URL}/api/group/update/${data.id}`, JSON.stringify(body));
+      // const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/api/group/update/${data.id}`, body);
+      // console.log(res.status)
     } else {
+      creategroup(body);
       // console.log(process.env)
-      // axios.post(`https://localhost:8080/api/group/create`, JSON.stringify(body));
+      // const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/api/group/create`, body);
+      // if (res.status == 200){
+      //   console.log(res.data)
+      //   // Router.push(res.)
+      // }
     }
   }
 

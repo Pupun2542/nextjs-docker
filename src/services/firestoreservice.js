@@ -14,6 +14,7 @@ import {
 } from "firebase/firestore";
 import { getApp } from "firebase/app";
 import { useApp } from "../hook/local";
+import { UploadBannerImage, UploadDoc } from "./filestoreageservice";
 // import { db } from "./firebaseadminservice";
 
 const app = getApp();
@@ -90,14 +91,36 @@ export async function UpdateUserPinGroup(user, groupId) {
   }
 }
 
-export async function initializeUserDb(user) {
-  // console.log(user)
-  const ref = doc(db, "userDetail", user.uid);
-  const docsnap = await getDoc(ref);
-  if (!docsnap.exists()) {
-    await setDoc(ref, {
-      userId: user.uid,
-      displayName: user.displayName
-    });
-  }
+export async function creategroup(body) {
+  const docref = addDoc(collection(db, "group"), {
+    "name": data.communame,
+    "creator": data.creator,
+    "type": data.type,
+    "privacy": data.privacy,
+    "tag": data.hashtag,
+    "description": data.description,
+    "maxplayer": data.maxplayer,
+    "genre": data.genre,
+    "contactlink": data.contactlink,
+    "place": data.places,
+    "times": data.times,
+    "tws": data.TWs,
+    "startDate": data.startdate,
+    "startDateRaw": data.startdateraw,
+    "rating": data.rating,
+    "rule": data.rule,
+    "averageTime": data.averagetime,
+    "averageTimeUnit": data.averagetimeunit,
+    "createAt": serverTimestamp(),
+    "config": data.config,
+    "lastpush": serverTimestamp(),
+    "viewer": [],
+    "love": [],
+    "members": [data.creator],
+    "staff": [data.creator], 
+    "registrationlink": data.registrationlink,
+    "statuschecklink":data.statuschecklink,
+  })
+  const bannerurl = await UploadBannerImage(data.banner, data.creator, docref);
+  const docurl = await UploadDoc();
 }

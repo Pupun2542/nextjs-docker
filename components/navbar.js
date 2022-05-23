@@ -578,12 +578,12 @@ const ChatNotiIcon = ({ data, user }) => {
       // console.log(filteredname)
       const thumbnail = filteredname.photoURL;
       const name = filteredname.displayName;
-      console.log(filteredname);
+      // console.log(filteredname);
       setDisplay({ thumbnail: thumbnail, name: name });
     } else {
       const thumbnail = data.thumbnail;
       const name = data.name;
-      console.log(timestamp);
+      // console.log(timestamp);
       setDisplay({ thumbnail: thumbnail, name: name });
     }
   }, [data, user]);
@@ -591,14 +591,14 @@ const ChatNotiIcon = ({ data, user }) => {
   const caltime = () => {
     // console.log(data.timestamp)
     const now = new Date(Date.now());
-    console.log(data)
+    // console.log(data)
     const sentdate = data.timestamp.toDate();
 
     // const nowYear = now.getFullYear();
     // const nowMonth = now.getMonth();
 
     const minusDate = now - sentdate;
-    console.log(now.getFullYear() - sentdate.getFullYear());
+    // console.log(now.getFullYear() - sentdate.getFullYear());
 
     if (
       now.getFullYear() - sentdate.getFullYear() > 0 &&

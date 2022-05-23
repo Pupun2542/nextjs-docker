@@ -108,6 +108,7 @@ export default function Group() {
   const { id } = Router.query;
   useEffect(() => {
     const Fetchdata = async () => {
+      console.log("Fetchdata")
       getDoc(doc(db, "group", id)).then((d) => {
         if (d.exists()) {
           // console.log(d.data());
@@ -133,9 +134,9 @@ export default function Group() {
           }
           setLoading(false)
         } else {
-          console.log(d);
+          console.log(d.exists(),d);
           alert("ไม่พบคอมมู");
-          Router.back();
+          // Router.back();
         }
       });
     };

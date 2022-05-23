@@ -77,9 +77,10 @@ export default function UploadImageModal({ setBannerBlob, BannerBlob }) {
         <Image
           src={
             image
-            ? image
-            : "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2Fimageplaceholder.png?alt=media&token=e3a54ee9-8d20-4471-8f4f-7157ac972757"
+            // ? image
+            // : "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2Fimageplaceholder.png?alt=media&token=e3a54ee9-8d20-4471-8f4f-7157ac972757"
           }
+          fallbackSrc="https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2Fimageplaceholder.png?alt=media&token=e3a54ee9-8d20-4471-8f4f-7157ac972757"
           width={850}
           height={478}
           className={style.bannerPlaceholder}

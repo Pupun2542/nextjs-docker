@@ -184,10 +184,6 @@ export default function CreateGroup() {
           });
         });
       }
-      // console.log("tosendLength",Object.keys(toUpdate).length)
-      // if (!Object.keys(toUpdate).length === 0){
-      //   updateDoc(docRef, toUpdate);
-      // }
 
       setGenre([]);
       setCommuname("");
@@ -220,58 +216,7 @@ export default function CreateGroup() {
     }
   };
 
-  const Hashtag = (props) => {
-    const removeTags = (indexToRemove) => {
-      props.setState([
-        ...props.state.filter((_, index) => index !== indexToRemove),
-      ]);
-    };
-    const addTags = (event) => {
-      let tag = event.target.value.replace(",", "");
-      tag = tag.trim();
-      if (tag !== "") {
-        props.setState([...props.state, tag]);
-        props.selectedTags([...props.state, tag]);
-        event.target.value = "";
-      }
-    };
-    return (
-      <Box w={150} h={38}>
-        <Box >
-          <Box id="tags">
-            {props.state.map((tag, index) => (
-              <Box key={index} className={style.tag} m={1.5} p={1} maxW={200}>
-                <Box>{tag}</Box>
-                <CloseButton
-                  onClick={() => removeTags(index)}
-                  rounded={50}
-                  bg="white"
-                  color={"black"}
-                  h={22}
-                  w={22}
-                  m={1}
-                />
-              </Box>
-            ))}
-            <Input
-              type="text"
-              onKeyUp={(event) => (event.key === "," ? addTags(event) : null)}
-              placeholder=" ใช้ , เพื่อแบ่งประเภท"
-              w={'auto'}
-              className={style.search}
-              isDisabled={props.isDisabled}
-              border="hidden"
-              maxW={200}
-              mt={1}
-            />
-          </Box>
-        </Box>
-      </Box>
-    );
-  };
-  const selectedTags = (tags) => {
-    console.log(tags);
-  };
+
 
   if (loading) {
     <Text>Loding User</Text>
@@ -299,7 +244,7 @@ export default function CreateGroup() {
       >
         <CustomNavbar />
         <Box pt={50}>
-          <Createcommuform />
+          <Createcommuform uid={user.uid} />
         </Box>
         
 
