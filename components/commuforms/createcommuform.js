@@ -79,7 +79,7 @@ export const Createcommuform = ({ data, uid }) => {
     type: "",
     privacy: "",
     registrationlink: [],
-    statuschecklink:[],
+    statuschecklink: [],
     creator: uid
   });
   const [bannerBlob, setBannerBlob] = useState(null);
@@ -234,21 +234,21 @@ export const Createcommuform = ({ data, uid }) => {
       config: configvalue
     }
     console.log(body)
-    if (data){
-      
+    if (data) {
+
       // const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/api/group/update/${data.id}`, body);
       // console.log(res.status)
     } else {
-      if (body.bannerBlob && body.bannerBlob !== ""){
-        const sp = body.bannerBlob.split(";",1);
-        const sp2 = sp[0].split(":",1);
+      if (body.bannerBlob && body.bannerBlob !== "") {
+        const sp = body.bannerBlob.split(";", 1);
+        const sp2 = sp[0].split(":", 1);
         const contenttype = sp2[1]
 
-        const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/api/store/upload`, {bannerBlob: bannerBlob}, {headers:{"content-type": contenttype}});
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/api/store/upload`, { bannerBlob: bannerBlob }, { headers: { "content-type": contenttype } });
         console.log(res);
       }
-      
-      
+
+
       // creategroup(body);
       // console.log(process.env)
       // const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/api/group/create`, body);
@@ -259,43 +259,47 @@ export const Createcommuform = ({ data, uid }) => {
     }
   }
 
-  const addRegisLink = () =>{
-    
-    setFieldvalue({...fieldvalue, registrationlink: [...fieldvalue.registrationlink, {
-      name:"",
-      fromdate:"",
-      todate:"",
-      link:"",
-  }]})
+  const addRegisLink = () => {
+
+    setFieldvalue({
+      ...fieldvalue, registrationlink: [...fieldvalue.registrationlink, {
+        name: "",
+        fromdate: "",
+        todate: "",
+        link: "",
+      }]
+    })
   }
 
-  const deleteRegisLink = (index) =>{
-    const newState = fieldvalue.registrationlink.filter((v,i)=> index!==i )
-    setFieldvalue({...fieldvalue, registrationlink: newState})
+  const deleteRegisLink = (index) => {
+    const newState = fieldvalue.registrationlink.filter((v, i) => index !== i)
+    setFieldvalue({ ...fieldvalue, registrationlink: newState })
   }
 
-  const setRegisLink = (index, data) =>{
-    const newState = fieldvalue.registrationlink.map((v,i)=>i==index? data : v);
-    setFieldvalue({...fieldvalue, registrationlink: newState})
+  const setRegisLink = (index, data) => {
+    const newState = fieldvalue.registrationlink.map((v, i) => i == index ? data : v);
+    setFieldvalue({ ...fieldvalue, registrationlink: newState })
   }
-  const addCheckLink = () =>{
-    
-    setFieldvalue({...fieldvalue, statuschecklink: [...fieldvalue.statuschecklink, {
-      name:"",
-      fromdate:"",
-      todate:"",
-      link:"",
-  }]})
+  const addCheckLink = () => {
+
+    setFieldvalue({
+      ...fieldvalue, statuschecklink: [...fieldvalue.statuschecklink, {
+        name: "",
+        fromdate: "",
+        todate: "",
+        link: "",
+      }]
+    })
   }
 
-  const deleteCheckLink = (index) =>{
-    const newState = fieldvalue.statuschecklink.filter((v,i)=> index!==i )
-    setFieldvalue({...fieldvalue, statuschecklink: newState})
+  const deleteCheckLink = (index) => {
+    const newState = fieldvalue.statuschecklink.filter((v, i) => index !== i)
+    setFieldvalue({ ...fieldvalue, statuschecklink: newState })
   }
 
-  const setCheckLink = (index, data) =>{
-    const newState = fieldvalue.statuschecklink.map((v,i)=>i==index? data : v);
-    setFieldvalue({...fieldvalue, statuschecklink: newState})
+  const setCheckLink = (index, data) => {
+    const newState = fieldvalue.statuschecklink.map((v, i) => i == index ? data : v);
+    setFieldvalue({ ...fieldvalue, statuschecklink: newState })
   }
 
   return (
@@ -1074,6 +1078,49 @@ export const Createcommuform = ({ data, uid }) => {
                     <Center w={50}></Center>
                   </Flex>
 
+                  {/* PDF */}
+
+                  <Flex w={'100%'}>
+                    <Center w={50}></Center>
+                    <Flex w={'100%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
+
+                      <Box
+                        p={4}
+                        minW={180}
+                        borderRightColor={'#C4C4C4'}
+                        borderRightWidth={3}
+                      >
+                        <Box>
+                          <Text float="left">เอกสารของคอมมู</Text>
+                          <Text color={"red"} float="lef
+                          t">
+                            *
+                          </Text>
+                        </Box>
+                      </Box>
+
+                      <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
+                        <Input
+                          type="text"
+                          // value={fieldvalue.communame}
+                          // onChange={(e) => {
+                          //   setFieldvalue({
+                          //     ...fieldvalue,
+                          //     communame: e.target.value,
+                          //   });
+                          //   // setCommuname(e.target.value);
+                          // }}
+                          required
+                          w={'100%'}
+                          h={46}
+                          bg={"white"}
+                          placeholder={"..."}
+                        />
+                      </Center>
+                    </Flex>
+                    <Center w={50}></Center>
+                  </Flex>
+
                 </VStack>
               </AccordionPanel>
             </AccordionItem>
@@ -1112,10 +1159,10 @@ export const Createcommuform = ({ data, uid }) => {
                   </Flex>
 
 
-                  {fieldvalue.registrationlink.map((item, index)=>(
-                    <Regisform item={item} onDelete={()=>deleteRegisLink(index)} onChange={(data)=>setRegisLink(index, data)} />
+                  {fieldvalue.registrationlink.map((item, index) => (
+                    <Regisform item={item} onDelete={() => deleteRegisLink(index)} onChange={(data) => setRegisLink(index, data)} />
                   ))}
-                  
+
 
                   <Flex w={'100%'} m={2}>
                     <Center w={50}></Center>
@@ -1132,8 +1179,8 @@ export const Createcommuform = ({ data, uid }) => {
                     />
                   </Flex>
 
-                  {fieldvalue.statuschecklink.map((item, index)=>(
-                    <Checkform item={item} onDelete={()=>deleteCheckLink(index)} onChange={(data)=>setCheckLink(index, data)}/>
+                  {fieldvalue.statuschecklink.map((item, index) => (
+                    <Checkform item={item} onDelete={() => deleteCheckLink(index)} onChange={(data) => setCheckLink(index, data)} />
                   ))}
 
                   {/* <Center>

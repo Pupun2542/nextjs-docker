@@ -53,7 +53,7 @@ export default function Home() {
   return (
 
     <Box
-      bg={'#FFFFFF'}
+      bg={'#F3F3F3'}
       justifySelf={'center'}
       textAlign={['center', 'left']}
     >
@@ -61,7 +61,7 @@ export default function Home() {
 
       <Flex>
         <Spacer />
-        <VStack w={[500, 1000]} boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' fontFamily={'Mitr'} marginTop={55}>
+        <VStack bg={'white'} w={[500, 1000]} boxShadow='Base' fontFamily={'Mitr'} marginTop={55}>
           <Flex
             align="center"
             justify={{ base: "center", md: "space-around", xl: "space-between" }}
@@ -74,7 +74,9 @@ export default function Home() {
               <Box pl={[0, 8]} pt={2} textAlign={['center', 'left']}>
                 แพล็ตฟอร์มสำหรับผู้สร้างสรรค์ผลงานประกอบการเล่น
               </Box>
-              <Box textAlign={['center', 'left']}>บทบาทสมมติ โดยมีระบบช่วยเหลือ สำหรับผู้ใช้งาน มีการจัดเก็บข้อมูลภายในคอมมูนิตี้ได้สะดวก เรียบร้อย เป็นระบบ ภายในเว็บไซต์เดียว</Box>
+              <Box textAlign={['center', 'left']}>
+                บทบาทสมมติ โดยมีระบบช่วยเหลือ สำหรับผู้ใช้งาน มีการจัดเก็บข้อมูลภายในคอมมูนิตี้ได้<b>สะดวก เรียบร้อย เป็นระบบ</b> ภายในเว็บไซต์เดียว
+              </Box>
               <Flex m={5}>
                 <Spacer />
                 <Button
@@ -107,19 +109,22 @@ export default function Home() {
           <VStack
             p={10}
             m={10}
-            boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'
+            boxShadow='base'
+            bg={'#FAFAFA'}
             w={[275, 413, 825]}
             borderRadius={10}>
 
+            {/* Preview Commu Card */}
+
             <Flex>
-              <Tag outlineColor={'#FBBC43'} color={'tomato'} borderRadius={10} mr={5} mt={2} size={'sm'} h={5}>
+              <Tag outlineColor={'#FBBC43'} bg={'white'} color={'tomato'} borderRadius={10} mr={5} mt={2} size={'sm'} h={5}>
                 New
               </Tag>
-              <Center fontSize={24} fontWeight={600}>Patch 0.5</Center>
+              <Center fontSize={24} fontWeight={600}>Patch 1</Center>
             </Flex>
 
 
-            <Center fontWeight={400} fontSize={16}>ประกาศอัพเดทครั้งใหม่! ปรับปรุงแก้ไขสีและรูปแบบของเว็บไซต์ รวมถึงเพิ่มเติมในส่วนของข้อมูลคอมมูนิตี้</Center>
+            <Center fontWeight={400} fontSize={16}>ประกาศอัพเดทครั้งใหม่! เพิ่มเติมระบบภายในคอมมูนิตี้ให้หลากหลายมากขึ้น</Center>
 
             <Spacer />
 
@@ -127,13 +132,15 @@ export default function Home() {
               align="center"
               justify={{ base: "center", md: "space-around", xl: "space-between" }}
               direction={{ base: "column-reverse", md: "row" }}
+              w={'100%'}
             >
               <VStack
                 p={5}
-                bg={'FDFDFD'}
-                boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'
+                bg={'white'}
+                boxShadow='base'
                 borderRadius={10}
                 w={170}
+                h={180}
               >
                 <Center bg={'#6768AB'} color={'#FFC75A'} borderRadius={100} h={42} w={42}><UsersThree size={32} /></Center>
                 <Center fontWeight={500} fontSize={18}>Community</Center>
@@ -145,10 +152,11 @@ export default function Home() {
 
               <VStack
                 p={5}
-                bg={'FDFDFD'}
-                boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'
+                bg={'white'}
+                boxShadow='base'
                 borderRadius={10}
                 w={170}
+                h={180}
               >
                 <Center bg={'#6768AB'} color={'#FFC75A'} borderRadius={100} h={42} w={42}><Bell size={32} /></Center>
                 <Center fontWeight={500} fontSize={18}>Notification</Center>
@@ -160,10 +168,11 @@ export default function Home() {
 
               <VStack
                 p={5}
-                bg={'FDFDFD'}
-                boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'
+                bg={'white'}
+                boxShadow='base'
                 borderRadius={10}
                 w={170}
+                h={180}
               >
                 <Center bg={'#6768AB'} color={'#FFC75A'} borderRadius={100} h={42} w={42}><Chats size={32} /></Center>
                 <Center fontWeight={500} fontSize={18}>Chat</Center>
@@ -173,140 +182,11 @@ export default function Home() {
 
             </Flex>
 
-
-            {/* <Center maxW={750}>
-               <Flex  >
-                <VStack 
-                  bg={'FDFDFD'} 
-                  minW={190}
-                >
-                  <Center color={'#6768AB'}><UserList size={100}/></Center>
-                  <Center fontWeight={600} fontSize={24}>Vote</Center>
-                  <Center fontWeight={400} fontSize={14}>สามารถสร้างโพลโหวต</Center>
-                  <Center fontWeight={400} fontSize={14}>ภายในคอมมูนิตี้</Center>
-                </VStack>
-
-                <Spacer />
-
-                <VStack 
-                  bg={'FDFDFD'} 
-                  borderRadius={10}
-                  minW={210}
-                >
-                  <Center color={'#6768AB'}><UserCirclePlus size={100} /></Center>
-                  <Center fontWeight={600} fontSize={24}>Create Character</Center>
-                  <Center fontWeight={400} fontSize={14}>ระบบการจัดการตัวละคร</Center>
-                  <Center fontWeight={400} fontSize={14}>จัดสร้างและจัดการสตอรี่</Center>
-                </VStack>
-
-                <Spacer />
-
-                <VStack 
-                  bg={'FDFDFD'} 
-                  borderRadius={10}
-                  minW={190}
-                >
-                  <Center color={'#6768AB'}><MagnifyingGlass size={100} /></Center>
-                  <Center fontWeight={600} fontSize={24}>Search</Center>
-                  <Center fontWeight={400} fontSize={14}>สามารถค้นหา</Center>
-                  <Center fontWeight={400} fontSize={14}>ได้ตามความสนใจ</Center>
-                </VStack>
-
-                <Spacer />
-
-                <VStack 
-                  bg={'FDFDFD'} 
-                  borderRadius={10}
-                  minW={190}
-                >
-                  <Center color={'#6768AB'}><PushPin size={100} /></Center>
-                  <Center fontWeight={600} fontSize={24}>Pin</Center>
-                  <Center fontWeight={400} fontSize={14}>ปักหมุด</Center>
-                  <Center fontWeight={400} fontSize={14}>รับการแจ้งเตือน</Center>
-                </VStack>
-              </Flex> 
-            </Center> */}
+            <Flex></Flex>
 
           </VStack >
 
           <Spacer />
-          <Spacer />
-          <VStack
-            p={10}
-            m={10}
-            boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'
-            w={[275, 413, 825]}
-            borderRadius={10}>
-
-            <Center fontSize={24} fontWeight={600}>แผนการพัฒนาเว็บไซต์</Center>
-
-            <Center fontWeight={400} fontSize={16}>ในอนาคตอันใกล้นี้พวกเราจะทำให้เว็บไซต์ Comuthor</Center>
-            <Center fontWeight={400} fontSize={16}>กลายเป็นพื้นที่ที่ทุก ๆ ท่านสามารถเล่นและมีปฏิสัมพันธ์กันภายในคอมมูได้</Center>
-
-            <Spacer />
-
-            <Flex
-            >
-
-              <Center maxW={750}>
-                <Flex
-                  align="center"
-                  justify={{ base: "center", md: "space-around", xl: "space-between" }}
-                  direction={{ base: "column", md: "row" }}
-                >
-                  <VStack
-                    bg={'FDFDFD'}
-                    minW={190}
-                  >
-                    <Center color={'#6768AB'}><Sword size={100} /></Center>
-                    <Center fontWeight={400} fontSize={14}>ระบบจัดการการต่อสู้</Center>
-                    <Center fontWeight={400} fontSize={14}>ได้อย่างราบรื่นและสมดุล</Center>
-                  </VStack>
-
-                  <Spacer />
-
-                  <VStack
-                    bg={'FDFDFD'}
-                    borderRadius={10}
-                    minW={210}
-                  >
-                    <Center color={'#6768AB'}><Chats size={100} /></Center>
-                    <Center fontWeight={400} fontSize={14}>การพูดคุยโต้ตอบ</Center>
-                    <Center fontWeight={400} fontSize={14}>ภายในเว็บไซต์และคอมมูนิตี้</Center>
-                  </VStack>
-
-                  <Spacer />
-
-                  <VStack
-                    bg={'FDFDFD'}
-                    borderRadius={10}
-                    minW={190}
-                  >
-                    <Center color={'#6768AB'}><Megaphone size={100} /></Center>
-                    <Center fontWeight={400} fontSize={14}>การประกาศประชาสัมพันธ์</Center>
-                    <Center fontWeight={400} fontSize={14}>และแจ้งเตือนที่ดีภายในเว็บไซต์</Center>
-                  </VStack>
-
-                  <Spacer />
-
-                  <VStack
-                    bg={'FDFDFD'}
-                    borderRadius={10}
-                    minW={190}
-                  >
-                    <Center color={'#6768AB'}><UserCirclePlus size={100} /></Center>
-                    <Center fontWeight={400} fontSize={14}>ระบบการจัดการตัวละคร</Center>
-                    <Center fontWeight={400} fontSize={14}>จัดสร้างและจัดการสตอรี่</Center>
-                  </VStack>
-
-
-                </Flex>
-              </Center>
-
-            </Flex>
-
-          </VStack >
-
           <Spacer />
 
           <Center fontSize={20} fontWeight={400}>ช่องทางติดตามข่าวสาร</Center>
@@ -319,34 +199,37 @@ export default function Home() {
             direction={{ base: "column", md: "row" }}>
             <VStack
               p={5}
-              bg={'FDFDFD'}
-              boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'
+              bg={'#FAFAFA'}
+              boxShadow='base'
               borderRadius={10}
               w={275}
             >
-              <Center><FacebookLogo size={100} /></Center>
+              <Center><FacebookLogo size={100} color="#343434" weight="fill" /></Center>
               <Hide below='md'>
                 <Center fontWeight={500} fontSize={18} overflow={"hidden"} >Facebook Fanpage</Center>
               </Hide>
-              <Center fontWeight={400} fontSize={14}>Comuthor</Center>
-              {/* <Center fontWeight={400} fontSize={14}>ในคอมมูและส่วนตัว</Center> */}
+              <Center
+                fontWeight={400}
+                fontSize={14}
+              >
+                Comuthor
+              </Center>
             </VStack>
             <Spacer />
             <VStack
               p={5}
-              bg={'FDFDFD'}
-              boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'
+              bg={'#FAFAFA'}
+              boxShadow='base'
               borderRadius={10}
               w={275}
             >
 
-              <Center><DiscordLogo size={100} /></Center>
+              <Center><DiscordLogo size={100} color="#343434" weight="fill" /></Center>
               <Hide below='md'>
                 <Center fontWeight={500} fontSize={18}>Discord</Center>
               </Hide>
               <Center fontWeight={400} fontSize={14}>Comuthor Community</Center>
 
-              {/* <Center fontWeight={400} fontSize={14}>ในคอมมูและส่วนตัว</Center> */}
             </VStack>
 
           </Flex>

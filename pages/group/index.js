@@ -22,17 +22,18 @@ import { useApp } from "../../src/hook/local";
 import GroupCard from "../../components/GroupCard";
 import style from "../../styles/group.module.css";
 import Head from "next/head";
-import { 
+import {
   Box,
   Flex,
   Spacer,
   Center,
   Button,
- } from '@chakra-ui/react';
+} from '@chakra-ui/react';
+import Footer from "../../components/footer";
 
 
 export default function Groups() {
-  const {app, auth, db} = useApp();
+  const { app, auth, db } = useApp();
   const Router = useRouter();
 
   const CurrentUser = () => {
@@ -46,7 +47,7 @@ export default function Groups() {
 
     if (loading) {
       return (
-          <CustomNavbar />
+        <CustomNavbar />
       );
     }
     if (error) {
@@ -59,29 +60,46 @@ export default function Groups() {
 
     if (user) {
       return (
-          <Box bg="#FDFDFD">
+        <Box
+          bg="#F3F3F3"
+          overflowY={"auto"}
+          // maxH={'960'}
+          minH={950}
+          maxH={"100vh"}
+          css={{
+            "&::-webkit-scrollbar": {
+              width: "8px",
+            },
+            "&::-webkit-scrollbar-track": {
+              width: "8px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              background: "#727272",
+              borderRadius: "24px",
+            },
+          }}
+        >
 
-            <CustomNavbar />
-            
-            <Flex paddingTop={55}>
-              <Box w={400}>
-              </Box>
+          <CustomNavbar />
 
-              <Spacer />
+          <Flex paddingTop={55}>
+            <Box w={400}>
+            </Box>
 
-              <Center
-                w={1000}
-              >
-                <GroupCard />
-              </Center>
-              
-              <Spacer />
-              
-              <Box w={400}>
-              
-              </Box>
-            </Flex>
-          </Box>
+            <Spacer />
+
+            <Center w={1000} bg={'#FFFFFF'} boxShadow={'base'}>
+              <GroupCard />
+            </Center>
+
+            <Spacer />
+
+            <Box w={400}>
+
+            </Box>
+          </Flex>
+          <Footer />
+        </Box>
       );
     }
     return <></>;
