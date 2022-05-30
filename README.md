@@ -1,8 +1,10 @@
 
 
 <p align="center">
-<img alt="Comuthor Icon" src="https://github.com/Pupun2542/nextjs-docker/blob/main/public/Comuthor1.png?raw=true">
 <h1>Comuthor</h1>
+</p>
+<p align="center">
+<img alt="Comuthor Icon" src="https://github.com/Pupun2542/nextjs-docker/blob/main/public/Comuthor1.png?raw=true" height="200">
 </p>
 <p align="center">
 <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/Pupun2542/nextjs-docker">
@@ -24,15 +26,17 @@ Comuthor.com first published its Phase 0 on Feb 22nd, and Phase 0.5 on Apr 12th.
 * **Lorem ipsum** —   dolor sit amet, consectetur adipiscing elit.
 
 
-
 ##  Built With
 
-- [React](#) --- ...
+- [React](https://reactjs.org) --- A JavaScript library for building user interfaces
 
-- [chakra-ui](#) --- ...
+- [Next.js](#) --- Web development framework built on top of Node.js.
 
-- [phosphor](#) --- ...
+- [Chakra UI](https://chakra-ui.com) --- A set of accessible, reusable, and composable React components.
 
+- [Phosphor Icons](https://phosphoricons.com) --- A flexible icon family for interfaces, diagrams, presentations — whatever, really.
+
+- [Firebase](https://firebase.google.com) --- App development platform backed by Google and trusted by millions of businesses around the world.
 
 ##  The Comuthor Team
 
