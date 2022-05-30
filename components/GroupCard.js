@@ -32,7 +32,7 @@ function GroupCard() {
   const Router = useRouter();
   const { bws } = Router.query;
 
-  const {app, auth, db} = useApp();
+  const { app, auth, db } = useApp();
 
   // const app = useApp();
   // const db = getFirestore(app);
@@ -89,7 +89,7 @@ function GroupCard() {
               h={'auto'}
               borderRadius={10}
               _hover={{
-                background:"#535353"
+                background: "#535353"
               }}
               // as="button"
               cursor="pointer"
@@ -100,7 +100,7 @@ function GroupCard() {
               >
                 <img src={value.banner} height="216" width="384"></img>
               </Center>
-              
+
               <VStack ml={5}>
                 <Box
                   className={style.Communame}
@@ -120,12 +120,12 @@ function GroupCard() {
                 >
                   {value.genre.map((tag) => {
                     return <WrapItem
-                              bg={"#6768AB"}
-                              className={style.genre}
-                              m={1}
-                              borderRadius={10}
-                              p={2}
-                          >{tag}</WrapItem>;
+                      bg={"#6768AB"}
+                      className={style.genre}
+                      m={1}
+                      borderRadius={10}
+                      p={2}
+                    >{tag}</WrapItem>;
                   })}
                 </Wrap>
               </VStack>

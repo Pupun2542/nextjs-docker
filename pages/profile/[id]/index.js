@@ -32,6 +32,12 @@ import {
   Tab,
   TabPanel,
   Divider,
+  Editable,
+  EditableInput,
+  EditableTextarea,
+  EditablePreview,
+  Wrap,
+  WrapItem,
 } from "@chakra-ui/react";
 import CustomNavbar from "../../../components/navbar";
 import { Chatsidebar } from "../../../components/chat";
@@ -141,7 +147,7 @@ export default function profile() {
     });
   };
   return (
-    <Box>
+    <Box fontFamily={'Mitr'}>
       <CustomNavbar />
       {/* {user&&(
         <Chatsidebar db={db} user={user} forcedopenTab={newtab}/>
@@ -201,32 +207,161 @@ export default function profile() {
             </Flex>
           </Flex>
 
-          <Tabs w={'100%'} bg={'tomato2'} isFitted  spacing={0}>
-            <TabList borderColor={'black'} p={2}>
-              <Tab _selected={{color:'white', bg:'#9A9AB0'}} borderRadius={10}>Timeline</Tab>
-              <Tab _selected={{color:'white', bg:'#9A9AB0'}} borderRadius={10}>Community</Tab>
-              <Tab _selected={{color:'white', bg:'#9A9AB0'}} borderRadius={10}>Original Character</Tab>
-              <Tab _selected={{color:'white', bg:'#9A9AB0'}} borderRadius={10}>About me</Tab>
-              <Tab _selected={{color:'white', bg:'#9A9AB0'}} borderRadius={10}>Friend</Tab>
+          <Tabs w={'100%'} bg={'tomato2'} isFitted spacing={0}>
+            <TabList borderColor={'gray.400'} p={2}>
+              <Tab _selected={{ color: 'white', bg: '#9A9AB0' }} borderRadius={10}>About me</Tab>
+              <Tab _selected={{ color: 'white', bg: '#9A9AB0' }} isDisabled borderRadius={10}>Timeline</Tab>
+              <Tab _selected={{ color: 'white', bg: '#9A9AB0' }} isDisabled borderRadius={10}>Original Character</Tab>
+              <Tab _selected={{ color: 'white', bg: '#9A9AB0' }} isDisabled borderRadius={10}>Friend</Tab>
+              <Tab _selected={{ color: 'white', bg: '#9A9AB0' }} isDisabled borderRadius={10}>Bookshelf</Tab>
             </TabList>
 
             {/* <Divider  color={'black'}/> */}
 
             <TabPanels>
+
+              {/* About */}
+              <TabPanel>
+                <Box fontSize={24} fontWeight={'extrabold'} ml={5}>การโรลเพลย์</Box>
+
+                <VStack bg={'white'} width={'100%'} borderRadius={10} boxShadow={'base'}>
+                  <Flex p={3} w={'100%'}>
+
+                    <Center maxWidth={150} w={'100%'}>
+                      สไตล์การเล่น
+                    </Center>
+
+                    <Divider ml={2} mr={2} orientation="vertical" />
+
+                    <Wrap>
+                      <WrapItem>
+                        <Flex bg={'gray.400'} borderRadius={10} p={1.5} boxShadow={'base'}>
+                          <Center ml={2} mr={2} >สายวาด</Center>
+                          <Editable bg={'white'} w={53} borderRadius={10} pl={1} pr={1} pt={0.5} pb={0.5} defaultValue='100%'>
+                            <EditablePreview />
+                            <EditableInput />
+                          </Editable>
+                        </Flex>
+                      </WrapItem>
+
+                      <WrapItem>
+                        <Flex bg={'gray.400'} borderRadius={10} p={1.5} boxShadow={'base'}>
+                          <Center ml={2} mr={2} >สายโรลเพลย์ยาว</Center>
+                          <Editable bg={'white'} w={53} borderRadius={10} pl={1} pr={1} pt={0.5} pb={0.5} defaultValue='100%'>
+                            <EditablePreview />
+                            <EditableInput w={50} />
+                          </Editable>
+                        </Flex>
+                      </WrapItem>
+
+                      <WrapItem>
+                        <Flex bg={'gray.400'} borderRadius={10} p={1.5} boxShadow={'base'}>
+                          <Center ml={2} mr={2} >สายโรลเพลย์สั้น</Center>
+                          <Editable bg={'white'} w={53} borderRadius={10} pl={1} pr={1} pt={0.5} pb={0.5} defaultValue='100%'>
+                            <EditablePreview />
+                            <EditableInput w={50} />
+                          </Editable>
+                        </Flex>
+                      </WrapItem>
+
+                      <WrapItem>
+                        <Flex bg={'gray.400'} borderRadius={10} p={1.5} boxShadow={'base'}>
+                          <Center ml={2} mr={2} >สายเวิ่นสตอรี่</Center>
+                          <Editable bg={'white'} w={53} borderRadius={10} pl={1} pr={1} pt={0.5} pb={0.5} defaultValue='100%'>
+                            <EditablePreview />
+                            <EditableInput w={50} />
+                          </Editable>
+                        </Flex>
+                      </WrapItem>
+
+                      <WrapItem>
+                        <Flex bg={'gray.400'} borderRadius={10} p={1.5} boxShadow={'base'}>
+                          <Center ml={2} mr={2} >สายฟิคชั่น</Center>
+                          <Editable bg={'white'} w={53} borderRadius={10} pl={1} pr={1} pt={0.5} pb={0.5} defaultValue='100%'>
+                            <EditablePreview />
+                            <EditableInput w={50} />
+                          </Editable>
+                        </Flex>
+                      </WrapItem>
+                    </Wrap>
+
+                  </Flex>
+
+                  <Flex p={3} w={'100%'}>
+
+                    <Center maxWidth={150} w={'100%'}>
+                      สไตล์การเล่น
+                    </Center>
+
+                    <Divider ml={2} mr={2} orientation="vertical" />
+
+                    <Wrap>
+                      <WrapItem>
+                        <Flex bg={'gray.400'} borderRadius={10} p={1.5} boxShadow={'base'}>
+                          <Center ml={2} mr={2} >คอเมดี้</Center>
+                          <Editable bg={'white'} w={53} borderRadius={10} pl={1} pr={1} pt={0.5} pb={0.5} defaultValue='100%'>
+                            <EditablePreview />
+                            <EditableInput />
+                          </Editable>
+                        </Flex>
+                      </WrapItem>
+
+                      <WrapItem>
+                        <Flex bg={'gray.400'} borderRadius={10} p={1.5} boxShadow={'base'}>
+                          <Center ml={2} mr={2} >ดราม่า</Center>
+                          <Editable bg={'white'} w={53} borderRadius={10} pl={1} pr={1} pt={0.5} pb={0.5} defaultValue='100%'>
+                            <EditablePreview />
+                            <EditableInput w={50} />
+                          </Editable>
+                        </Flex>
+                      </WrapItem>
+
+                      <WrapItem>
+                        <Flex bg={'gray.400'} borderRadius={10} p={1.5} boxShadow={'base'}>
+                          <Center ml={2} mr={2} >อีโรติก</Center>
+                          <Editable bg={'white'} w={53} borderRadius={10} pl={1} pr={1} pt={0.5} pb={0.5} defaultValue='100%'>
+                            <EditablePreview />
+                            <EditableInput w={50} />
+                          </Editable>
+                        </Flex>
+                      </WrapItem>
+
+                      <WrapItem>
+                        <Flex bg={'gray.400'} borderRadius={10} p={1.5} boxShadow={'base'}>
+                          <Center ml={2} mr={2} >มิตรภาพ</Center>
+                          <Editable bg={'white'} w={53} borderRadius={10} pl={1} pr={1} pt={0.5} pb={0.5} defaultValue='100%'>
+                            <EditablePreview />
+                            <EditableInput w={50} />
+                          </Editable>
+                        </Flex>
+                      </WrapItem>
+
+                    </Wrap>
+
+                  </Flex>
+                </VStack>
+
+                
+              </TabPanel>
+
+              {/* Timeline */}
               <TabPanel>
                 <p>one!</p>
               </TabPanel>
+
+              {/* OC */}
               <TabPanel>
                 <p>two!</p>
               </TabPanel>
+
+              {/* Friend */}
               <TabPanel>
-                <p>two!</p>
+                <p>Friens Zone</p>
               </TabPanel>
+
+              {/* Bookshelf */}
               <TabPanel>
-                <p>two!</p>
-              </TabPanel>
-              <TabPanel>
-                <p>Friend</p>
+                <p>?</p>
               </TabPanel>
             </TabPanels>
           </Tabs>
