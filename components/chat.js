@@ -62,6 +62,7 @@ import {
 export const Chatsidebar = ({ user, db, forcedopenTab }) => {
   const { tabState, addTab, removeTab, changeTab } = useTab();
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
+  console.log(user);
   // useEffect(() => {
   //   // console.log(tabState, forcedopenTab);
   //   if (
@@ -240,11 +241,7 @@ const ChatBox = ({ atab, user }) => {
   const unrededref = useRef(false);
   const [snapshot, setSnapshot] = useState("");
   const [loading, setLoading] = useState(true);
-  const [chatRoomDetail, setChatRoomDetail] = useState({
-    name: null,
-    thumbnail: null,
-    members: [],
-  });
+  const [chatRoomDetail, setChatRoomDetail] = useState(undefined);
 
   useEffect(() => {
     if (tabState.opentab != "") {
@@ -275,22 +272,8 @@ const ChatBox = ({ atab, user }) => {
       return () => unsubscribe();
     }
   }, [tabState.opentab]);
-
-  // useEffect(()=> {
-  //   if (snapshot&&!loading){
-  //     if (snapshot.docChanges)
-  //     setChatRoomDetail({...chatRoomData, s})
-  //   }
-    
-  //   // setUserDetail(getUser(doc.data().senderId))
-  // },[snapshot])
-
-  
-
-  // const [snapshot, loadingsnapshot, errorsnapshot] =
-  //   useCollection(QuerySnapshot);
   useEffect( async () => {
-    console.log(chatRoomData,loading)
+    console.log(user)
     if (!loading && chatRoomData) {
       const members = await getUser(chatRoomData.member); 
       if (chatRoomData.type == "private") {
@@ -298,7 +281,7 @@ const ChatBox = ({ atab, user }) => {
         // const opp = chatRoomData.member.find((v) => v != user.uid);
         // const memberDetail = getUser(opp)
         //doc.data()
-        console.log(members.uid, user.uid)
+        console.log(members, user.uid)
         const opp = members.find(v=>v.uid != user.uid)
         setChatRoomDetail({
           name: opp.displayName,
@@ -396,92 +379,95 @@ const ChatBox = ({ atab, user }) => {
     }
   };
   // console.log(Object.keys(chatRoomDetail), Object.keys(chatRoomDetail).length > 0)
-  if (loading) {
-    return <></>;
+
+  if (chatRoomDetail){
+    return (
+      <Box
+        display={isOpen ? "flex" : "none"}
+        background="gray"
+        width={340}
+        height={455}
+        float="left"
+        marginRight={5}
+        flexDirection="column"
+        justifyContent="space-between"
+      >
+        {/* <Box width="100%"> */}
+        <Box justifyContent="space-between" id="headerbox">
+          <Image
+            src={chatRoomDetail.thumbnail}
+            w={25}
+            h={25}
+            rounded="full"
+            float="left"
+            marginLeft={5}
+          />
+          <Box float="left">{chatRoomDetail.name}</Box>
+          <Box float="left">
+            <IconButton
+              onClick={onClose}
+              icon={<Minus size={24} weight="bold" />}
+              float={"left"}
+            />
+            <IconButton
+              onClick={remove}
+              icon={<X size={24} weight="bold" />}
+              float={"left"}
+            />
+          </Box>
+        </Box>
+  
+        <Box overflowY="auto" id="msgbox" alignSelf={"stretch"} flexGrow="1">
+          {snapshot&&chatRoomDetail &&Object.keys(chatRoomDetail).length > 0 &&
+            snapshot.docs.map((doc, k) => <ChatItem doc={doc} user={user} members={chatRoomDetail.members} />)}
+        </Box>
+  
+        {image && (
+          <Box pos="relative">
+            <Image src={image} w={150} h={150} />
+            <IconButton
+              icon={<X size={16} color="black" />}
+              position="absolute"
+              top={0}
+              left={100}
+              backgroundColor="transparent"
+              _hover={{ backgroundColor: "transparent" }}
+              onClick={() => setImage(null)}
+            ></IconButton>
+          </Box>
+        )}
+  
+        <Box flexDir="row" justifyContent="space-between">
+          <Input
+            w="65%"
+            marginLeft={5}
+            value={msg}
+            onChange={(e) => setMsg(e.target.value)}
+            onFocus={handleFocus}
+            onKeyUp={(event) => (event.key === "Enter" ? onChatSent() : null)}
+            onPaste={handleImagePaste}
+          />
+          <Button
+            float="right"
+            marginRight={5}
+            onClick={onChatSent}
+            disabled={!(msg || image)}
+          >
+            send
+          </Button>
+        </Box>
+      </Box>
+    );
   }
-  return (
-    <Box
-      display={isOpen ? "flex" : "none"}
-      background="gray"
-      width={340}
-      height={455}
-      float="left"
-      marginRight={5}
-      flexDirection="column"
-      justifyContent="space-between"
-    >
-      {/* <Box width="100%"> */}
-      <Box justifyContent="space-between" id="headerbox">
-        <Image
-          src={chatRoomDetail.thumbnail}
-          w={25}
-          h={25}
-          rounded="full"
-          float="left"
-          marginLeft={5}
-        />
-        <Box float="left">{chatRoomDetail.name}</Box>
-        <Box float="left">
-          <IconButton
-            onClick={onClose}
-            icon={<Minus size={24} weight="bold" />}
-            float={"left"}
-          />
-          <IconButton
-            onClick={remove}
-            icon={<X size={24} weight="bold" />}
-            float={"left"}
-          />
-        </Box>
-      </Box>
-
-      <Box overflowY="auto" id="msgbox" alignSelf={"stretch"} flexGrow="1">
-        {snapshot &&Object.keys(chatRoomDetail).length > 0 &&
-          snapshot.docs.map((doc, k) => <ChatItem doc={doc} user={user} members={chatRoomDetail.members} />)}
-      </Box>
-
-      {image && (
-        <Box pos="relative">
-          <Image src={image} w={150} h={150} />
-          <IconButton
-            icon={<X size={16} color="black" />}
-            position="absolute"
-            top={0}
-            left={100}
-            backgroundColor="transparent"
-            _hover={{ backgroundColor: "transparent" }}
-            onClick={() => setImage(null)}
-          ></IconButton>
-        </Box>
-      )}
-
-      <Box flexDir="row" justifyContent="space-between">
-        <Input
-          w="65%"
-          marginLeft={5}
-          value={msg}
-          onChange={(e) => setMsg(e.target.value)}
-          onFocus={handleFocus}
-          onKeyUp={(event) => (event.key === "Enter" ? onChatSent() : null)}
-          onPaste={handleImagePaste}
-        />
-        <Button
-          float="right"
-          marginRight={5}
-          onClick={onChatSent}
-          disabled={!(msg || image)}
-        >
-          send
-        </Button>
-      </Box>
-    </Box>
-  );
+    return <></>;
+  
 };
 
 const ChatItem = ({ doc, user, members }) => {
   const [modalOpen, setModalOpen] = useState(false);
   // const [userDetail, setUserDetail] = useState({})
   console.log("member", members)
+  console.log("snapshot", doc)
   const sender = members.find(v=>v.uid == doc.data().senderId);
 
   return (
