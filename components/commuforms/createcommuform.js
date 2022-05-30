@@ -235,10 +235,21 @@ export const Createcommuform = ({ data, uid }) => {
     }
     console.log(body)
     if (data){
+      
       // const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/api/group/update/${data.id}`, body);
       // console.log(res.status)
     } else {
-      creategroup(body);
+      if (body.bannerBlob && body.bannerBlob !== ""){
+        const sp = body.bannerBlob.split(";",1);
+        const sp2 = sp[0].split(":",1);
+        const contenttype = sp2[1]
+
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/api/store/upload`, {bannerBlob: bannerBlob}, {headers:{"content-type": contenttype}});
+        console.log(res);
+      }
+      
+      
+      // creategroup(body);
       // console.log(process.env)
       // const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/api/group/create`, body);
       // if (res.status == 200){
