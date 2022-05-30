@@ -68,7 +68,7 @@ import {
   where,
 } from "firebase/firestore";
 import { useApp, useNotifications, useTab } from "../src/hook/local";
-import { Chatsidebar } from "./chat";
+import { Chatsidebar } from "./chat/Chatsidebar";
 import useSound from "use-sound";
 // import { useLocalStorage } from "../src/hook/uselocalstorage";
 
