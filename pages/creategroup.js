@@ -70,6 +70,7 @@ import {
 import GroupSidebar from "../components/GroupSidebar";
 import Footer from "../components/footer";
 import { Createcommuform } from "../components/commuforms/createcommuform";
+import axios from "axios";
 
 export default function CreateGroup() {
   const { app, auth, db } = useApp();
@@ -81,6 +82,15 @@ export default function CreateGroup() {
   useEffect(() => {
     if (!loading && !user) {
       Router.push("/login");
+    } else {
+      if (user){
+        user.getIdToken().then((token)=>{
+          // console.log(`token : ${token}`);
+          axios.get(`${process.env.NEXT_PUBLIC_USE_API_URL}/`,{headers: {'authorization': token}}).then(
+            (res)=> console.log(res)
+          )
+        })
+      }
     }
   }, [user, loading]);
 
