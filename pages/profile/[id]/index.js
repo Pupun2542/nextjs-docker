@@ -40,7 +40,6 @@ import {
   WrapItem,
 } from "@chakra-ui/react";
 import CustomNavbar from "../../../components/navbar";
-import { Chatsidebar } from "../../../components/chat";
 
 export default function profile() {
   const { tabState, addTab, removeTab, changeTab, CloseTab } = useTab();
