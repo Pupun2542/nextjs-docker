@@ -61,6 +61,8 @@ export const Createcommuform = ({ data, uid }) => {
   const { app, auth, db } = useApp();
   const store = getStorage(app);
   const Router = useRouter();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isCropOpen, onOpen: onCropOpen, onClose: onCropClose } = useDisclosure();
   const [fieldvalue, setFieldvalue] = useState({
     hashtag: "",
     communame: "",

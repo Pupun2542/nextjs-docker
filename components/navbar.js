@@ -547,10 +547,13 @@ function CustomNavbar() {
         overflowY={"auto"}
         w="300px"
         h="600px"
-        bg="gray"
+        bg="white"
         pos="fixed"
         top="55px"
-        right="100px"
+        right="85px"
+        borderWidth={3}
+        borderColor='black'
+        borderRadius={10}
         display={isChatOpen ? "initial" : "none"}
       >
         {chatNotiData ? (
@@ -621,7 +624,15 @@ const ChatNotiIcon = ({ data, user }) => {
 
   // console.log(name)
   return (
-    <Box w="100%" onClick={() => changeTab(data.id)} marginTop="5px" cursor='pointer'>
+    <Box
+      w="100%"
+      bg={'tomato'}
+      onClick={() => changeTab(data.id)}
+      mt="5px"
+      p={2}
+      fontFamily={'Mitr'}
+      cursor='pointer'
+    >
       <Flex justifyContent='space-between' marginLeft={2} marginRight={2}>
         <Flex justifyContent="start">
           <Image
@@ -636,7 +647,7 @@ const ChatNotiIcon = ({ data, user }) => {
             <Text> {data.senderId == user.uid ? "คุณ: " : ""} {data.lastmsg}</Text>
           </Box>
         </Flex>
-        {data.timestamp&&(
+        {data.timestamp && (
           <Text>{caltime()}</Text>
         )}
       </Flex>
