@@ -546,21 +546,33 @@ function CustomNavbar() {
       <Box
         overflowY={"auto"}
         w="300px"
-        h="600px"
+        h="auto"
         bg="white"
         pos="fixed"
         top="55px"
         right="85px"
-        borderWidth={3}
+        borderWidth={2}
         borderColor='black'
         borderRadius={10}
         display={isChatOpen ? "initial" : "none"}
+        zIndex={10000}
       >
-        {chatNotiData ? (
+        <Box bg={'gray.100'} p={2}>Chat</Box>
+        <Box w={'100%'}>
+          {chatNotiData ? (
           chatNotiData.map((data, k) => <ChatNotiIcon data={data} user={user} key={k} />)
         ) : (
           <></>
         )}
+        </Box>
+        
+        <Center 
+        pt={'2.5'} 
+        pb={'2.5'}
+        _hover={{
+          bg:'gray.200'
+        }}
+        >ดูแชททั้งหมด</Center>
       </Box>
     </>
   );
@@ -626,12 +638,16 @@ const ChatNotiIcon = ({ data, user }) => {
   return (
     <Box
       w="100%"
-      bg={'tomato'}
+      // bg={'tomato'}
       onClick={() => changeTab(data.id)}
-      mt="5px"
+      mt="2.5px"
+      mb={'2.5px'}
       p={2}
       fontFamily={'Mitr'}
       cursor='pointer'
+      _hover={{
+        bg:'gray.200'
+      }}
     >
       <Flex justifyContent='space-between' marginLeft={2} marginRight={2}>
         <Flex justifyContent="start">

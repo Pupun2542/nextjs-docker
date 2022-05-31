@@ -237,7 +237,10 @@ export const ChatBox = ({ atab, user }) => {
     return (
       <Box
         display={isOpen ? "flex" : "none"}
-        background="gray"
+        background="white"
+        borderColor={'black'}
+        borderWidth={2}
+        borderTopRadius={10}
         width={340}
         height={455}
         float="left"
@@ -246,31 +249,55 @@ export const ChatBox = ({ atab, user }) => {
         justifyContent="space-between"
       >
         {/* <Box width="100%"> */}
-        <Box justifyContent="space-between" id="headerbox">
+        <Box bg={'gray.50'} justifyContent="space-between" borderTopRadius={10} id="headerbox">
           <Image
             src={chatRoomDetail.thumbnail}
-            w={25}
-            h={25}
+            w={31}
+            h={31}
             rounded="full"
             float="left"
-            marginLeft={5}
+            margin={1}
           />
-          <Box float="left">{chatRoomDetail.name}</Box>
-          <Box float="left">
+          <Box float="left" marginLeft={2} marginTop={2}>{chatRoomDetail.name}</Box>
+          <Box float="right">
             <IconButton
+              size={'sm'}
               onClick={onClose}
-              icon={<Minus size={24} weight="bold" />}
+              icon={<Minus size={10} weight="bold" />}
               float={"left"}
+              m={1}
+              mr={-0.5}
+              rounded={'full'}
             />
             <IconButton
+              rounded={'full'}
+              m={1}
+              size={'sm'}
               onClick={remove}
-              icon={<X size={24} weight="bold" />}
+              icon={<X size={10} weight="bold" />}
               float={"left"}
             />
           </Box>
         </Box>
 
-        <Box overflowY="auto" id="msgbox" alignSelf={"stretch"} flexGrow="1">
+        <Box 
+          overflowY="auto" 
+          id="msgbox" 
+          alignSelf={"stretch"} 
+          flexGrow="1"
+          css={{
+            "&::-webkit-scrollbar": {
+              width: "8px",
+            },
+            "&::-webkit-scrollbar-track": {
+              width: "8px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              background: "#727272",
+              borderRadius: "24px",
+            },
+          }}
+        >
           {snapshot &&
             chatRoomDetail &&
             Object.keys(chatRoomDetail).length > 0 &&
