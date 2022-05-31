@@ -180,23 +180,32 @@ export const UserProvider = ({ children }) => {
 
   const getUser = async (uid) => {
     if (uid.length > 0) {
+      console.log("recieved", uid)
+      console.log("stored ", data)
       let users = [];
+      let newuid = uid;
       uid.map((id) => {
         const user = data.data.find((v) => v.uid == id);
         if (user){
           users = [...users, user];
+          console.log("found ", users)
+          newuid = newuid.filter((v,i)=>v!=id);
         }
       });
-      if (users.length <= 0) {
-        const docData = await getDocs(
-          query(collection(db, "userDetail"), where("uid", "in", uid))
-        );
+
+      if (newuid.length > 0) {
+        console.log(users.length, uid.length)
+
+        let docData = await getDocs(
+            query(collection(db, "userDetail"), where("uid", "in", newuid))
+          );
         let userDetail = [];
         if (!docData.empty) {
           userDetail = docData.docs.map((doc) => doc.data());
           DataDispatcher({ type: "addUser", userDetail });
           console.log("new:", userDetail)
-          return userDetail;
+          users = [...users, ...userDetail]
+          return users;
         }
         
       } else {
