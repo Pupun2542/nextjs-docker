@@ -76,7 +76,6 @@ export const ChatItem = ({ doc, user, members }) => {
                     backgroundColor={"red.100"}
                     rounded="5"
                     p={2}
-                    minW={20}
                     width='auto'
                     maxWidth={250}
                   >
