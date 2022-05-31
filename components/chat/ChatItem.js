@@ -70,6 +70,7 @@ export const ChatItem = ({ doc, user, members }) => {
               <Box>
                 {doc.data().text && (
                   <Text
+                  float={'left'}
                     fontSize={16}
                     fontFamily="Mitr"
                     backgroundColor={"red.100"}
