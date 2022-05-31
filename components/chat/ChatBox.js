@@ -49,62 +49,7 @@ export const ChatBox = ({ atab, user }) => {
   const [loading, setLoading] = useState(true);
   const [chatRoomDetail, setChatRoomDetail] = useState(undefined);
   const [previouschat, setPreviouschat] = useState("");
-  //   const [chatRoomData, setChatRoomData] = useState(null);
-
-  //   useEffect(() => {
-  //     if (tabState.opentab != "") {
-  //       getDoc(doc(db, "chatrooms", tabState.opentab)).then((doc) => {
-  //         // return doc.data();
-  //         setChatRoomData(doc.data());
-  //       });
-  //       setLoading(false);
-  //     }
-  //   }, [tabState.opentab]);
-
-  //   useEffect(() => {
-  //     if (tabState.opentab != "") {
-  //       const QuerySnapshot = query(
-  //         collection(db, "chatrooms", tabState.opentab, "message"),
-  //         orderBy("timestamp")
-  //       );
-  //       const unsubscribe = onSnapshot(QuerySnapshot, (snap) => {
-  //         setSnapshot(snap);
-  //       });
-  //       return () => unsubscribe();
-  //     }
-  //   }, [tabState.opentab]);
-  //   useEffect(async () => {
-  //     console.log(user);
-  //     if (!loading && chatRoomData) {
-  //       console.log(chatRoomData.member);
-  //       const members = await getUser(chatRoomData.member);
-  //       if (chatRoomData.type == "private") {
-  //         console.log("Chatbox");
-  //         // const opp = chatRoomData.member.find((v) => v != user.uid);
-  //         // const memberDetail = getUser(opp)
-  //         //doc.data()
-  //         console.log(members, user.uid);
-  //         const opp = members.find((v) => v.uid != user.uid);
-  //         setChatRoomDetail({
-  //           name: opp.displayName,
-  //           thumbnail: opp.photoURL,
-  //           members: members,
-  //         });
-  //       } else {
-  //         setChatRoomDetail({
-  //           name: chatRoomData.name,
-  //           thumbnail: chatRoomData.thumbnail,
-  //           members: members,
-  //         });
-  //       }
-  //     }
-  //   }, [chatRoomData, loading, tabState.opentab]);
-
-  //   useEffect(() => {
-  //     if (tabState.opentab != "") {
-  //       onOpen();
-  //     }
-  //   }, [tabState]);
+  const messagesEndRef = useRef(null)
 
   useEffect(() => {
     const getChatRoomDetail = async () => {
@@ -147,9 +92,16 @@ export const ChatBox = ({ atab, user }) => {
         setSnapshot(snap);
       });
       setPreviouschat(tabState.opentab);
+      
       return () => unsubscribe();
     }
   }, [tabState]);
+
+  useEffect(()=>{
+    if (!loading && chatRoomDetail && previouschat == tabState.opentab) {
+      messagesEndRef.current?.scrollIntoView();
+    }
+  },[loading, chatRoomDetail, previouschat, tabState, snapshot])
 
   const remove = () => {
     // window.localStorage.removeItem("openTab");
@@ -232,7 +184,7 @@ export const ChatBox = ({ atab, user }) => {
     }
   };
   // console.log(Object.keys(chatRoomDetail), Object.keys(chatRoomDetail).length > 0)
-  console.log(loading, chatRoomDetail, previouschat, tabState.opentab);
+  // console.log(loading, chatRoomDetail, previouschat, tabState.opentab);
   if (!loading && chatRoomDetail && previouschat == tabState.opentab) {
     return (
       <Box
@@ -309,6 +261,7 @@ export const ChatBox = ({ atab, user }) => {
                 members={chatRoomDetail.members}
               />
             ))}
+            <div ref={messagesEndRef}></div>
         </Box>
 
         {image && (
