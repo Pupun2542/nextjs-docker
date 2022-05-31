@@ -30,7 +30,7 @@ export const ChatItem = ({ doc, user, members }) => {
       >
         <Box fontFamily={"Mitr"}>
           {sender.uid == user.uid ? (
-            <VStack align={'stretch'} float={'right'} minW={280} maxW={320} marginBottom={0}>
+            <VStack align={'stretch'} spacing={0} float={'right'} minW={280} maxW={320} marginBottom={0}>
               <Box>
                 <Text float={'right'} fontSize={12}>{sender.displayName}</Text>
               </Box>
@@ -43,7 +43,8 @@ export const ChatItem = ({ doc, user, members }) => {
                     rounded="5"
                     fontFamily={"Mitr"}
                     p={2}
-                    w={250}
+                    w={'auto'}
+                    maxW={250}
                   >
                     {doc.data().text}
                   </Text>
@@ -61,30 +62,39 @@ export const ChatItem = ({ doc, user, members }) => {
             </VStack>
 
           ) : (
-            <Box minW={280} maxW={320} marginBottom={5}>
-              <Text fontSize={12}>{sender.displayName}</Text>
-              {doc.data().text && (
-                <Text
-                  fontSize={16}
-                  fontFamily="Mitr"
-                  backgroundColor={"red.200"}
-                  rounded="5"
-                  p={2}
-                >
-                  {doc.data().text}
-                </Text>
-              )}
+            <VStack float={'left'} spacing={0} align={'stretch'} minW={280} maxW={320} marginBottom={0}>
+              <Box>
+                <Text fontSize={12}>{sender.displayName}</Text>
+              </Box>
 
-              {doc.data().image && (
-                <Image
-                  src={doc.data().image}
-                  w={250}
-                  h={250}
-                  objectFit="cover"
-                  onClick={() => setModalOpen(true)}
-                />
-              )}
-            </Box>
+              <Box>
+                {doc.data().text && (
+                  <Text
+                    fontSize={16}
+                    fontFamily="Mitr"
+                    backgroundColor={"red.100"}
+                    rounded="5"
+                    p={2}
+                    minW={20}
+                    width='auto'
+                    maxWidth={250}
+                  >
+                    {doc.data().text}
+                  </Text>
+                )}
+
+                {doc.data().image && (
+                  <Image
+                    src={doc.data().image}
+                    w={250}
+                    h={250}
+                    objectFit="cover"
+                    onClick={() => setModalOpen(true)}
+                  />
+                )}
+              </Box>
+
+            </VStack>
           )}
         </Box>
 

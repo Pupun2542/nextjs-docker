@@ -6,7 +6,7 @@ export const Chatsidebar = ({ user, db, forcedopenTab }) => {
   const { tabState, addTab, removeTab, changeTab } = useTab();
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
   return (
-    <Box position="fixed" right={3} bottom={0} alignItems="flex-end">
+    <Box position="fixed" right={3} zIndex={10000} bottom={0} alignItems="flex-end">
       <Flex flexDirection="column" float="right">
         {tabState &&
           tabState.othertab.length > 0 &&

@@ -555,7 +555,7 @@ function CustomNavbar() {
         borderColor='black'
         borderRadius={10}
         display={isChatOpen ? "initial" : "none"}
-        zIndex={10000}
+        zIndex={20000}
       >
         <Box bg={'gray.100'} p={2}>Chat</Box>
         <Box w={'100%'}>

@@ -326,10 +326,11 @@ export const ChatBox = ({ atab, user }) => {
           </Box>
         )}
 
-        <Box flexDir="row" justifyContent="space-between">
+        <Box flexDir="row" justifyContent="space-between" p={1}> 
           <Input
-            w="65%"
-            marginLeft={5}
+            fontFamily={'Mitr'}
+            w="70%"
+            marginLeft={2}
             value={msg}
             onChange={(e) => setMsg(e.target.value)}
             onFocus={handleFocus}
@@ -338,7 +339,7 @@ export const ChatBox = ({ atab, user }) => {
           />
           <Button
             float="right"
-            marginRight={5}
+            marginRight={2}
             onClick={onChatSent}
             disabled={!(msg || image)}
           >
