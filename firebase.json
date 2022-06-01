@@ -1,22 +1,4 @@
 {
-  "hosting": {
-    "public": "public",
-    "cleanUrls": true,
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "run": {
-          "serviceId": "comuthor-web",
-          "region": "asia-southeast1"
-        }
-      }
-    ]
-  },
   "functions": {
     "predeploy": [
       "npm --prefix \"$RESOURCE_DIR\" run lint"
@@ -35,6 +17,9 @@
     },
     "ui": {
       "enabled": true
+    },
+    "hosting": {
+      "port": 5000
     }
   }
 }

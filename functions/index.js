@@ -9,6 +9,7 @@ const { createGroup, updateGroup, deleteGroup, getAllGroup, addPlayer, addPendin
 const { db } = require("./utils/admin");
 const authmw = require("./utils/auth");
 const cors = require("cors");
+const { createPost, updatePost, deletePost, lovePost, unlovePost } = require("./handlers/posts");
 
 // The Firebase Admin SDK to access Firestore.
 
@@ -39,11 +40,11 @@ app.post("/group/:id/love", authmw, groupLove);
 app.post("/group/:id/unlove", authmw, groupUnlove);
 app.get("/group/:gid", authmw, groupUnlove);
 app.get("/groups", authmw, getAllGroup);
-app.post("/post/create");
-app.post("/post/:pid/update");
-app.post("/post/:pid/delete");
-app.post("/post/:pid/love");
-app.post("/post/:pid/unlove");
+app.post("/post/:gid/create", authmw, createPost);
+app.post("/post/:gid/:pid/update", authmw, updatePost);
+app.post("/post/:gid/:pid/delete", authmw, deletePost);
+app.post("/post/:gid/:pid/love", authmw, lovePost);
+app.post("/post/:gid/:pid/unlove", authmw, unlovePost);
 app.get("/post/:gid");
 app.get("/post/:gid/post/:pid");
 app.post("/post/:pid/comment/create");
@@ -60,6 +61,7 @@ app.post("/post/:pid/comment/:cid/reply/:rid/unlove");
 app.get("/post/:pid/comment/:cid/reply");
 app.get("/user/:uid");
 app.post("/user/:uid/update/");
+app.post("/utils/upload");
 
 exports.api = functions.region("asia-southeast1").https.onRequest(app);
 
