@@ -141,6 +141,8 @@ export default function Home() {
                 borderRadius={10}
                 w={170}
                 h={180}
+                mt={'2.5'}
+                mb={'2.5'}
               >
                 <Center bg={'#6768AB'} color={'#FFC75A'} borderRadius={100} h={42} w={42}><UsersThree size={32} /></Center>
                 <Center fontWeight={500} fontSize={18}>Community</Center>
@@ -182,7 +184,66 @@ export default function Home() {
 
             </Flex>
 
-            <Flex></Flex>
+            <Flex
+              align="center"
+              justify={{ base: "center", md: "space-around", xl: "space-between" }}
+              direction={{ base: "column-reverse", md: "row" }}
+              w={'100%'}
+            >
+              {/* <VStack
+                p={5}
+                borderRadius={10}
+              // w={170}
+              // h={180}
+              >
+                <UserList size={100} color="#6768AB" weight="fill" />
+                <Center fontWeight={'extrabold'} fontSize={22}>Vote</Center>
+                <Center fontWeight={400} fontSize={14}>สามารถสร้างโพลล์โหวต</Center>
+                <Center fontWeight={400} fontSize={14}>ภายในคอมมูนิตี้</Center>
+              </VStack>
+
+              <Spacer />
+
+              <VStack
+                p={5}
+                borderRadius={10}
+              // w={170}
+              // h={180}
+              >
+                <UserCirclePlus size={100} color="#6768AB" weight="fill" />
+                <Center fontWeight={'extrabold'} fontSize={22}>Create Character</Center>
+                <Center fontWeight={400} fontSize={14}>ระบบการจัดการตัวละคร</Center>
+                <Center fontWeight={400} fontSize={14}>จัดสร้างและจัดการสตอรี่</Center>
+              </VStack> */}
+
+              {/* <Spacer /> */}
+
+              <VStack
+                p={5}
+                borderRadius={10}
+              // w={170}
+              // h={180}
+              >
+                <MagnifyingGlass size={100} color="#6768AB" weight="fill" />
+                <Center fontWeight={'extrabold'} fontSize={22}>Search</Center>
+                <Center fontWeight={400} fontSize={14}>สามารถค้นหา</Center>
+                <Center fontWeight={400} fontSize={14}>ได้ตามความสนใจ</Center>
+              </VStack>
+
+              {/* <Spacer /> */}
+
+              <VStack
+                p={5}
+                borderRadius={10}
+              // w={170}
+              // h={180}
+              >
+                <PushPin size={100} color="#6768AB" weight="fill" />
+                <Center fontWeight={'extrabold'} fontSize={22}>Pin</Center>
+                <Center fontWeight={400} fontSize={14}>ปักหมุด</Center>
+                <Center fontWeight={400} fontSize={14}>รับการแจ้งเตือน</Center>
+              </VStack>
+            </Flex>
 
           </VStack >
 
