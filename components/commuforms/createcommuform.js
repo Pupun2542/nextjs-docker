@@ -41,6 +41,16 @@ import {
   Textarea,
   Text,
   HStack,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Tooltip,
+  Divider,
 } from "@chakra-ui/react";
 import {
   CaretLeft,
@@ -50,6 +60,7 @@ import {
   FacebookLogo,
   DiscordLogo,
   ArrowRight,
+  Hash,
 } from "phosphor-react";
 import { Regisform } from "./regisform";
 import { Checkform } from "./checkform";
@@ -61,8 +72,8 @@ export const Createcommuform = ({ data, uid }) => {
   const { app, auth, db } = useApp();
   const store = getStorage(app);
   const Router = useRouter();
-  // const { isOpen, onOpen, onClose } = useDisclosure();
-  // const { isOpen: isCropOpen, onOpen: onCropOpen, onClose: onCropClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isCropPicOpen, onOpen: onCropPicOpen, onClose: onCropPicClose } = useDisclosure();
   const [fieldvalue, setFieldvalue] = useState({
     hashtag: "",
     communame: "",
@@ -1273,7 +1284,7 @@ export const Createcommuform = ({ data, uid }) => {
 
           <HStack justifyContent={'center'} spacing={50} m={5}>
             <Button
-              // onClick={HandleSubmit}
+              onClick={onOpen}
               color={"black"}
               bg={"#FFC75A"}
               fontFamily="Mitr"
@@ -1289,7 +1300,7 @@ export const Createcommuform = ({ data, uid }) => {
             </Button>
 
             <Button
-              // onClick={HandleSubmit}
+              onClick={onCropPicOpen}
               color={"black"}
               bg={"#FFC75A"}
               fontFamily="Mitr"
@@ -1323,7 +1334,128 @@ export const Createcommuform = ({ data, uid }) => {
         </Box>
       </Center>
 
+      {/* modal Administator */}
 
+      <Modal size={'xl'} blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent fontFamily={'Mitr'}>
+          <ModalHeader>จัดการผู้ดูแล</ModalHeader>
+          <ModalCloseButton rounded={'full'} />
+          <ModalBody>
+
+            <Flex w={'100%'}>
+              <Center
+                w={70}
+                h={70}
+                rounded={'full'}
+                bg={'green.100'}
+              >
+                L
+              </Center>
+              <Box mt={3} w={'83%'}>
+                <Text fontSize={18} w={'100%'} maxW={350} ml='2'>
+                  Luke Earthrunner
+                </Text>
+                <Text ml='2'>
+                  Owner
+                </Text>
+              </Box>
+              <Box float={'right'} w={'3%'}>
+                <Tooltip float={'right'} hasArrow label='UID:...' bg='gray.300' color='black'>
+                  <Hash />
+                </Tooltip>
+              </Box>
+
+            </Flex>
+
+            <Flex mt={5}>
+              <Input mr={1} />
+              <Button bg='#FFC75A'>เพิ่มผู้ดูแล</Button>
+            </Flex>
+
+            <Divider mt={2} />
+
+            <Box mt={2} fontSize={22} fontWeight={'bold'}>
+              รายชื่อผู้ดูแล
+            </Box>
+
+            <Flex mt={3}>
+              <Center
+                w={50}
+                h={50}
+                rounded={'full'}
+                bg={'yellow.200'}
+              >
+                R
+              </Center>
+
+              <Box mt={0} w={'83%'}>
+                <Text fontSize={18} w={'100%'} maxW={350} ml='2'>
+                  Rudvik Stormsearch
+                </Text>
+
+                <Flex>
+                  <Select variant='filled' h={25} ml={2} w={'25%'} placeholder='Staff'>
+                    <option value='option1'>Option 1</option>
+                    <option value='option2'>Option 2</option>
+                    <option value='option3'>Option 3</option>
+                  </Select>
+
+                  <Box p={1} float={'right'} w={'3%'}>
+                    <Tooltip float={'right'} hasArrow label='UID:...' bg='gray.300' color='black'>
+                      <Hash />
+                    </Tooltip>
+                  </Box>
+                </Flex>
+
+              </Box>
+
+              <IconButton
+                rounded={'full'}
+                size='xs'
+                mt={3.5}
+                variant='outline'
+                colorScheme='teal'
+                icon={<Minus />}
+                _hover={{
+                  bg: 'red'
+                }}
+              />
+            </Flex>
+
+
+
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} >
+              บันทึก
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      {/* modal Croppic */}
+
+      <Modal blockScrollOnMount={false} isOpen={isCropPicOpen} onClose={onCropPicClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Modal Title</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text fontWeight='bold' mb='1rem'>
+              You can scroll the content behind the moon
+            </Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={onClose}>
+              Close
+            </Button>
+            <Button variant='ghost'>Secondary Action</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 
     </Flex>
   );
