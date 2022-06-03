@@ -88,7 +88,7 @@ exports.updateGroup = (req, res) => {
       res.status(400).send("cannot update group : ", e);
     });
   } else {
-    res.status(403).send("forbidden");
+    res.status(401).send("unauthorized");
   }
 };
 
@@ -100,14 +100,18 @@ exports.deleteGroup = (req, res) => {
         .then((doc)=>{
           if (doc.exists) {
             if (doc.data().staff.includes(req.user.uid)) {
-              doc.ref.delete()
+              return doc.ref.delete()
                   .then(() => {
-                    res.status(200).send("delete group sucessful");
+                    return res.status(200).send("delete group sucessful");
                   })
                   .catch((e) => {
-                    res.status(400).send("cannot delete group : ", e);
+                    return res.status(400).send("cannot delete group : ", e);
                   });
+            } else {
+              return res.status(401).send("unauthorized");
             }
+          } else {
+            return res.status(404).send("group not found");
           }
         });
   }
@@ -120,16 +124,18 @@ exports.addPlayer = (req, res)=>{
     db.collection("group").doc(req.params.id).get().then((doc)=>{
       if (doc.exists) {
         if (doc.data().staff.includes(user)) {
-          doc.ref.update({
+          return doc.ref.update({
             "member": admin.firestore.FieldValue.arrayUnion(id),
           }).then(()=>{
-            sendNotifications(doc.data().staff, "007", user, doc.data().name, id);
+            sendNotifications(doc.data().staff, "007", user, doc.data().name, id, `${doc.id}`);
             return res.status(200).send("add new member success");
           }).catch((e)=>{
             return res.status(400).send("cannot add new member : ", e);
           });
         }
+        return res.status(401).send("unauthorized");
       }
+      return res.status(404).send("group not found");
     });
   }
 };

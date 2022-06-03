@@ -1,4 +1,6 @@
+/* eslint-disable max-len */
 const {db, admin} = require("../utils/admin");
+const {sendNotifications} = require("../utils/notifications");
 
 exports.createPost = (req, res) =>{
   if (req.user) {
@@ -10,22 +12,15 @@ exports.createPost = (req, res) =>{
           "message": req.body.message,
           "timestamp": admin.firestore.FieldValue.serverTimestamp(),
           "love": 0,
-          "imageUrl": req.body.imageUrl,
+          "imageUrl": (req.body.imageUrl? req.body.imageUrl: []),
           "comment": 0,
-          "follower": [],
+          "follower": [user],
           "lastactive": admin.firestore.FieldValue.serverTimestamp(),
           "groupId": req.params.gid,
           "charaId": req.body.charaId,
-          "viewer": [],
-        }).then(()=>{
-          db.collection("notifications").add({
-            reviever: doc.data().member,
-            notitype: "101",
-            triggerer: user,
-            group: doc.data().name,
-            object: "",
-            timestamp: admin.firestore.FieldValue.serverTimestamp(),
-          });
+          "viewer": [user],
+        }).then((ref)=>{
+          sendNotifications(doc.data().member, "101", user, doc.data().name, "", `${doc.id}/${ref.id}`);
           return res.status(200).send("create post success");
         }).catch((e)=>{
           return res.status(400).send("create post not success ", e);
@@ -87,14 +82,7 @@ exports.lovePost = (req, res) =>{
           "love": admin.firestore.FieldValue.arrayUnion(req.user.uid),
         }).then(()=>{
           groupref.get().then((gdoc)=>{
-            db.collection("notifications").add({
-              reviever: doc.data().uid,
-              notitype: "104",
-              triggerer: user,
-              group: gdoc.data().name,
-              object: "",
-              timestamp: admin.firestore.FieldValue.serverTimestamp(),
-            });
+            sendNotifications(doc.data().uid, "104", user, gdoc.data().name, "", `${doc.id}/${req.params.pid}`);
           });
           return res.status(200).send("update post success");
         }). catch((e)=>{

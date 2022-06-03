@@ -10,6 +10,9 @@ const { db } = require("./utils/admin");
 const authmw = require("./utils/auth");
 const cors = require("cors");
 const { createPost, updatePost, deletePost, lovePost, unlovePost, getPost, getAllPost } = require("./handlers/posts");
+const { createComment, updateComment, deleteComment, loveComment, unloveComment, getAllComment } = require("./handlers/comments");
+const { createReply, updateReply, deleteReply, loveReply, unloveReply, getAllReply } = require("./handlers/replies");
+const { getuser } = require("./handlers/user");
 
 // The Firebase Admin SDK to access Firestore.
 
@@ -47,21 +50,21 @@ app.post("/post/:gid/:pid/love", authmw, lovePost);
 app.post("/post/:gid/:pid/unlove", authmw, unlovePost);
 app.get("/post/:gid", authmw, getAllPost);
 app.get("/post/:gid/post/:pid", authmw, getPost);
-app.post("/post/:pid/comment/create");
-app.post("/post/:pid/comment/:cid/update");
-app.post("/post/:pid/comment/:cid/delete");
-app.post("/post/:pid/comment/:cid/love");
-app.post("/post/:pid/comment/:cid/unlove");
-app.get("/post/:pid/comment");
-app.post("/post/:pid/comment/:cid/reply/create");
-app.post("/post/:pid/comment/:cid/reply/:rid/update");
-app.post("/post/:pid/comment/:cid/reply/:rid/delete");
-app.post("/post/:pid/comment/:cid/reply/:rid/love");
-app.post("/post/:pid/comment/:cid/reply/:rid/unlove");
-app.get("/post/:pid/comment/:cid/reply");
-app.get("/user/:uid");
+app.post("/post/:pid/comment/create", authmw, createComment);
+app.post("/post/:pid/comment/:cid/update", authmw, updateComment);
+app.post("/post/:pid/comment/:cid/delete", authmw, deleteComment);
+app.post("/post/:pid/comment/:cid/love", authmw, loveComment);
+app.post("/post/:pid/comment/:cid/unlove", authmw, unloveComment);
+app.get("/post/:pid/comment", authmw, getAllComment);
+app.post("/post/:pid/comment/:cid/reply/create", authmw, createReply);
+app.post("/post/:pid/comment/:cid/reply/:rid/update", authmw, updateReply);
+app.post("/post/:pid/comment/:cid/reply/:rid/delete", authmw, deleteReply);
+app.post("/post/:pid/comment/:cid/reply/:rid/love", authmw, loveReply);
+app.post("/post/:pid/comment/:cid/reply/:rid/unlove", authmw, unloveReply);
+app.get("/post/:pid/comment/:cid/reply", authmw, getAllReply);
+app.get("/user/:uid", authmw, getuser);
 app.post("/user/:uid/update/");
-app.post("/utils/upload");
+// app.post("/utils/upload");
 
 exports.api = functions.region("asia-southeast1").https.onRequest(app);
 
@@ -69,7 +72,7 @@ exports.onNotificationAdd = functions.firestore
   .document("notifications/{notiId}")
   .onCreate((snap, context) => {
     const sendTo = snap.data().reciever;
-    if (sendTo.length > 0) {
+    if (sendTo.isArray() && sendTo.length > 0) {
       sendTo.map((target) =>{
         if (target != snap.data().triggerer) {
           db
@@ -85,6 +88,19 @@ exports.onNotificationAdd = functions.firestore
         }
         }
       );
+    } else {
+      if (sendTo != snap.data().triggerer) {
+        db
+        .collection(`userDetail/${sendTo}/notification`)
+        .add({
+          notitype: snap.data().notitype,
+          triggerer: snap.data().triggerer,
+          group: snap.data().group,
+          object: snap.data().object,
+          timestamp: snap.data().timestamp,
+          readed: false,
+        });
+      }
     }
   });
 
