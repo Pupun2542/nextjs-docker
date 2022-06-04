@@ -7,34 +7,37 @@ exports.createGroup = (req, res) => {
   if (req.user) {
     db.collection("group")
         .add({
-          name: data.communame,
-          creator: data.creator,
+          name: data.name,
+          creator: req.user.uid,
           type: data.type,
           privacy: data.privacy,
-          tag: data.hashtag,
+          tag: data.tag,
           description: data.description,
           maxplayer: data.maxplayer,
           genre: data.genre,
           contactlink: data.contactlink,
           place: data.places,
           times: data.times,
-          tws: data.TWs,
-          startDate: data.startdate,
-          startDateRaw: data.startdateraw,
+          tws: data.tws,
+          startDate: data.startDate,
+          // startDateRaw: data.startDateraw,
           rating: data.rating,
           rule: data.rule,
-          averageTime: data.averagetime,
-          averageTimeUnit: data.averagetimeunit,
+          averageTime: data.averageTime,
+          averageTimeUnit: data.averageTimeUnit,
           createAt: admin.firestore.FieldValue.serverTimestamp(),
           config: data.config,
           lastpush: admin.firestore.FieldValue.serverTimestamp(),
           viewer: [],
           love: [],
           pinned: [],
-          members: [data.creator],
-          staff: [data.creator],
+          members: [],
+          staff: [req.user.uid],
           registrationlink: data.registrationlink,
           statuschecklink: data.statuschecklink,
+          banner916: data.banner916,
+          bannersqr: data.bannersqr,
+          banner: data.bannerurl,
         })
         .then(() => {
           res.status(200).send("add group sucessful");
@@ -51,27 +54,30 @@ exports.updateGroup = (req, res) => {
     const data = req.body;
     const docref = db.collection("group").doc(req.params.id);
     docref.update({
-      name: data.communame,
+      name: data.name,
       creator: data.creator,
       type: data.type,
       privacy: data.privacy,
-      tag: data.hashtag,
+      tag: data.tag,
       description: data.description,
       maxplayer: data.maxplayer,
       genre: data.genre,
       contactlink: data.contactlink,
       place: data.places,
       times: data.times,
-      tws: data.TWs,
+      tws: data.tws,
       startDate: data.startdate,
-      startDateRaw: data.startdateraw,
+      // startDateRaw: data.startdateraw,
       rating: data.rating,
       rule: data.rule,
-      averageTime: data.averagetime,
-      averageTimeUnit: data.averagetimeunit,
+      averageTime: data.averageTime,
+      averageTimeUnit: data.averageTimeUnit,
       config: data.config,
       registrationlink: data.registrationlink,
       statuschecklink: data.statuschecklink,
+      banner916: data.banner916,
+      bannersqr: data.bannersqr,
+      banner: data.bannerurl,
     }).then(() => {
       docref.get().then((doc)=>{
         db.collection("notifications").add({
@@ -327,6 +333,19 @@ exports.getAllGroup = (req, res) => {
         .then((snapshot) => {
           if (!snapshot.empty) {
             snapshot.forEach((doc) => {
+              let grpmember = [];
+              admin.auth().getUsers(doc.data().member).then((member)=>{
+                member.users.map((auser)=>{
+                  grpmember = [...grpmember, {
+                    [auser.uid]: {
+                      uid: auser.uid,
+                      displayName: auser.displayName,
+                      photoURL: auser.photoURL,
+                    }}];
+                });
+                return;
+              });
+              const mappeddocdata = {...doc.data(), creator: grpmember.find((v)=> v[doc.data().creator].uid == doc.data().creator)};
               data = [...data, doc.data()];
             });
             length -= snapshot.size;

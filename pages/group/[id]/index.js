@@ -95,7 +95,6 @@ export default function Group() {
     onOpen: onDelOpen,
     onClose: onDelClose,
   } = useDisclosure();
-  // const [data, setData] = useState(undefined);
   const [pin, setPin] = useState(false);
   const [text, setText] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -109,16 +108,13 @@ export default function Group() {
   useEffect(() => {
     const Fetchdata = async () => {
       console.log("Fetchdata")
-      getDoc(doc(db, "group", id)).then((d) => {
+      getDoc(doc(db, "group", id)).then( async (d) => {
         if (d.exists()) {
           // console.log(d.data());
-          setData({ ...d.data(), creator: getUser([d.data().creator]) });
-          // getDoc(doc(db, "userDetail", d.data().creator)).then((staff) => {
-          //   if (staff.exists()) {
-          //     setData({ ...d.data(), creator: staff.data().displayName });
-
-          //   }
-          // });
+          const mappedcreator = await getUser([d.data().creator])
+          // console.log(mappedcreator);
+          setData({ ...d.data(), creator: mappedcreator });
+          // setData(d.data());
           if (d.data().rating === "NC-21 (ไม่เหมาะสำหรับเยาวชน)") {
             setColor("#EA4545");
             // console.log(d.data().rating);
@@ -134,13 +130,15 @@ export default function Group() {
           }
           setLoading(false)
         } else {
-          console.log(d.exists(),d);
+          console.log(d.exists(),id);
           alert("ไม่พบคอมมู");
           // Router.back();
         }
       });
     };
-    if (id) Fetchdata();
+    if ( id && id != 'undefined' ) {
+      Fetchdata()
+    };
   }, [id]);
 
   useEffect(() => {
@@ -252,8 +250,10 @@ export default function Group() {
                         icon={<CalendarBlank size={32} />}
                         isDisabled
                       />
-                      {user && user.uid === data.creator.uid && (
+                      {console.log(data.creator[0].uid)}
+                      {user && user.uid === data.creator[0].uid && (
                         <Box>
+                          
                           <Menu>
                             <MenuButton
                               bg={"white"}
@@ -267,17 +267,17 @@ export default function Group() {
                             />
 
                             <MenuList minW={20} fontFamily={"Mitr"}>
-                              <MenuItem _hover={{ background: "#E2E8F0" }}>
-                                <Text
-                                  onClick={() =>
+                              <MenuItem _hover={{ background: "#E2E8F0" }} 
+                                onClick={() =>
                                     Router.push("/group/" + id + "/edit")
-                                  }
-                                >
+                                    // console.log("edit")
+                                  }>
+                                <Text>
                                   Edit
                                 </Text>
                               </MenuItem>
-                              <MenuItem _hover={{ background: "#E2E8F0" }}>
-                                <Text onClick={onDelOpen}>Delete</Text>
+                              <MenuItem _hover={{ background: "#E2E8F0" }} onClick={onDelOpen}>
+                                <Text>Delete</Text>
                               </MenuItem>
                             </MenuList>
                           </Menu>

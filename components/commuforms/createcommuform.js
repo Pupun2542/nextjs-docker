@@ -67,6 +67,7 @@ import { Checkform } from "./checkform";
 import axios from "axios";
 import { useRouter } from 'next/router'
 import { creategroup } from "../../src/services/firestoreservice";
+import { AddStaffForm } from "./addStaffForm";
 
 export const Createcommuform = ({ data, uid }) => {
   const { app, auth, db } = useApp();
@@ -75,31 +76,35 @@ export const Createcommuform = ({ data, uid }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: isCropPicOpen, onOpen: onCropPicOpen, onClose: onCropPicClose } = useDisclosure();
   const [fieldvalue, setFieldvalue] = useState({
-    hashtag: "",
-    communame: "",
+    tag: "",
+    name: "",
     maxplayer: 0,
     runtime: "",
     description: "",
-    smlink: "",
+    SMlink: "",
     docfile: null,
     contactlink: "",
-    startdate: "",
-    startdateraw: "",
+    startDate: "",
+    startDateraw: "",
     rating: "",
     rule: "",
-    averagetime: "",
-    averagetimeunit: "",
+    averageTime: "",
+    averageTimeUnit: "",
     type: "",
     privacy: "",
     registrationlink: [],
     statuschecklink: [],
-    creator: uid
+    creator: uid,
+    staff:[]
   });
   const [bannerBlob, setBannerBlob] = useState(null);
   const [genre, setGenre] = useState([]);
   const [places, setPlaces] = useState([]);
   const [times, setTimes] = useState([]);
   const [TWs, setTWs] = useState([]);
+  const [staffSearch, setStaffSearch] = useState([]);
+  const [staffSearchString, setStaffSearchString] = useState("");
+  const [staffSearchResult, setStaffSearchResult] = useState([]);
   const [configvalue, setConfigValue] = useState({
     durationsw: true,
     Averagesw: true,
@@ -112,22 +117,25 @@ export const Createcommuform = ({ data, uid }) => {
   useEffect(() => {
     if (data) {
       setFieldvalue({
-        hashtag: data.tag,
-        communame: data.name,
+        tag: data.tag,
+        name: data.name,
         maxplayer: data.maxplayer,
         runtime: data.runtime,
         description: data.description,
-        smlink: data.SMlink,
+        SMlink: data.SMlink,
         // docfile: data.docfile,
         contactlink: data.contactlink,
-        startdate: data.startDate,
+        startDate: data.startDate,
         rating: data.rating,
         rule: data.rule,
         averageTime: data.averageTime,
         averageTimeUnit: data.averageTimeUnit,
         type: data.type,
         privacy: data.privacy,
-        creator: data.creator
+        creator: data.creator,
+        staff: data.staff,
+        registrationlink: data.registrationlink,
+        statuschecklink: data.statuschecklink,
       });
       if (data.config) {
         setConfigValue({
@@ -315,6 +323,34 @@ export const Createcommuform = ({ data, uid }) => {
     setFieldvalue({ ...fieldvalue, statuschecklink: newState })
   }
 
+  const addStaff = (data) => {
+
+    setFieldvalue({
+      ...fieldvalue, statuschecklink: [...fieldvalue.statuschecklink, {
+        displayName: data.displayName,
+        uid: data.uid,
+        photoURL: photoURL,
+      }]
+    })
+  }
+
+  const deleteStaff = (index) => {
+    const newState = fieldvalue.statuschecklink.filter((v, i) => index !== i)
+    setFieldvalue({ ...fieldvalue, statuschecklink: newState })
+  }
+
+  const setStaff = (index, data) => {
+    const newState = fieldvalue.statuschecklink.map((v, i) => i == index ? data : v);
+    setFieldvalue({ ...fieldvalue, statuschecklink: newState })
+  }
+
+  const searchStaff = (value) =>{
+    setStaffSearchString(value);
+    if (value.length >= 3) {
+
+    }
+  }
+
   return (
     <Flex justifyContent={"center"} bg={'#F3F3F3'}>
 
@@ -336,15 +372,15 @@ export const Createcommuform = ({ data, uid }) => {
                 //จะเป็น Real-Time จากช่องพิมพ์ชื่อย่อคอมมู
                 p={2}
               >
-                {fieldvalue.hashtag
-                  ? "[" + fieldvalue.hashtag + "]"
+                {fieldvalue.tag
+                  ? "[" + fieldvalue.tag + "]"
                   : "[____]"}
               </Center>
               <Center
               //จะเป็น Real-Time จากช่องพิมพ์ชื่อคอมมู
               >
-                {fieldvalue.communame
-                  ? fieldvalue.communame
+                {fieldvalue.name
+                  ? fieldvalue.name
                   : "ชื่อคอมมูนิตี้"}
               </Center>
             </Flex>
@@ -387,11 +423,11 @@ export const Createcommuform = ({ data, uid }) => {
                       <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
                         <Input
                           type="text"
-                          value={fieldvalue.communame}
+                          value={fieldvalue.name}
                           onChange={(e) => {
                             setFieldvalue({
                               ...fieldvalue,
-                              communame: e.target.value,
+                              name: e.target.value,
                             });
                             // setCommuname(e.target.value);
                           }}
@@ -428,11 +464,11 @@ export const Createcommuform = ({ data, uid }) => {
                       <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
                         <Input
                           type="text"
-                          value={fieldvalue.hashtag}
+                          value={fieldvalue.tag}
                           onChange={(e) => {
                             setFieldvalue({
                               ...fieldvalue,
-                              hashtag: e.target.value,
+                              tag: e.target.value,
                             });
                             // setHashtag(e.target.value);
                           }}
@@ -672,11 +708,11 @@ export const Createcommuform = ({ data, uid }) => {
                             onChange={(e) => {
                               setFieldvalue({
                                 ...fieldvalue,
-                                startdate: parseTime(e.target.value),
+                                startDate: parseTime(e.target.value),
                               });
                               setFieldvalue({
                                 ...fieldvalue,
-                                startdateraw: parseRawTime(
+                                startDateraw: parseRawTime(
                                   e.target.value
                                 ),
                               });
@@ -727,12 +763,12 @@ export const Createcommuform = ({ data, uid }) => {
                             h={46}
                             color={"Black"}
                             isDisabled={!configvalue.Averagesw}
-                            value={fieldvalue.averagetime}
+                            value={fieldvalue.averageTime}
                             onChange={
                               (e) =>
                                 setFieldvalue({
                                   ...fieldvalue,
-                                  averagetime: e.target.value,
+                                  averageTime: e.target.value,
                                 })
                               // setAvergeTime(e.target.value)
                             }
@@ -749,11 +785,11 @@ export const Createcommuform = ({ data, uid }) => {
                           size="lg"
                           isDisabled={!configvalue.Averagesw}
                           fontFamily={"Mitr"}
-                          value={fieldvalue.averagetimeunit}
+                          value={fieldvalue.averageTimeUnit}
                           onChange={(e) =>
                             setFieldvalue({
                               ...fieldvalue,
-                              averagetimeunit: e.target.value,
+                              averageTimeUnit: e.target.value,
                             })
                           }
                         >
@@ -1115,11 +1151,11 @@ export const Createcommuform = ({ data, uid }) => {
                       <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
                         <Input
                           type="text"
-                          // value={fieldvalue.communame}
+                          // value={fieldvalue.name}
                           // onChange={(e) => {
                           //   setFieldvalue({
                           //     ...fieldvalue,
-                          //     communame: e.target.value,
+                          //     name: e.target.value,
                           //   });
                           //   // setCommuname(e.target.value);
                           // }}
@@ -1172,7 +1208,7 @@ export const Createcommuform = ({ data, uid }) => {
                   </Flex>
 
 
-                  {fieldvalue.registrationlink.map((item, index) => (
+                  {fieldvalue.registrationlink?.map((item, index) => (
                     <Regisform item={item} onDelete={() => deleteRegisLink(index)} onChange={(data) => setRegisLink(index, data)} />
                   ))}
 
@@ -1192,7 +1228,7 @@ export const Createcommuform = ({ data, uid }) => {
                     />
                   </Flex>
 
-                  {fieldvalue.statuschecklink.map((item, index) => (
+                  {fieldvalue.statuschecklink?.map((item, index) => (
                     <Checkform item={item} onDelete={() => deleteCheckLink(index)} onChange={(data) => setCheckLink(index, data)} />
                   ))}
 
@@ -1379,7 +1415,11 @@ export const Createcommuform = ({ data, uid }) => {
               รายชื่อผู้ดูแล
             </Box>
 
-            <Flex mt={3}>
+            {staffSearch.map((value, index)=>{
+              (<AddStaffForm item={value} onChange={(data)=> setStaff(index, data)} onDelete={()=>deleteStaff(index)} />)
+            })}
+
+            {/* <Flex mt={3}>
               <Center
                 w={50}
                 h={50}
@@ -1421,7 +1461,7 @@ export const Createcommuform = ({ data, uid }) => {
                   bg: 'red'
                 }}
               />
-            </Flex>
+            </Flex> */}
 
 
 

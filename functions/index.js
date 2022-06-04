@@ -5,8 +5,8 @@
 const functions = require("firebase-functions");
 const express = require("express");
 // const { db } = require("./utils/admin");
-const { createGroup, updateGroup, deleteGroup, getAllGroup, addPlayer, addPendingPlayer, removePlayer, removePendingPlayer, addStaff, removeStaff, groupPin, groupUnpin, groupLove, groupUnlove } = require("./handlers/group");
-const { db } = require("./utils/admin");
+const { createGroup, updateGroup, deleteGroup, getAllGroup, addPlayer, addPendingPlayer, removePlayer, removePendingPlayer, addStaff, removeStaff, groupPin, groupUnpin, groupLove, groupUnlove, getGroup } = require("./handlers/group");
+const { db, admin } = require("./utils/admin");
 const authmw = require("./utils/auth");
 const cors = require("cors");
 const { createPost, updatePost, deletePost, lovePost, unlovePost, getPost, getAllPost } = require("./handlers/posts");
@@ -36,12 +36,13 @@ app.post("/group/:id/removependingplayer", authmw, removePendingPlayer);
 app.post("/group/:id/addstaff", authmw, addStaff);
 app.post("/group/:id/removestaff", authmw, removeStaff);
 app.post("/group/:id/addchara");
+app.post("/group/:id/updatechara");
 app.post("/group/:id/removechara");
 app.post("/group/:id/pin", authmw, groupPin);
 app.post("/group/:id/unpin", authmw, groupUnpin);
 app.post("/group/:id/love", authmw, groupLove);
 app.post("/group/:id/unlove", authmw, groupUnlove);
-app.get("/group/:gid", authmw, groupUnlove);
+app.get("/group/:gid", authmw, getGroup);
 app.get("/groups", authmw, getAllGroup);
 app.post("/post/:gid/create", authmw, createPost);
 app.post("/post/:gid/:pid/update", authmw, updatePost);
@@ -63,6 +64,7 @@ app.post("/post/:pid/comment/:cid/reply/:rid/love", authmw, loveReply);
 app.post("/post/:pid/comment/:cid/reply/:rid/unlove", authmw, unloveReply);
 app.get("/post/:pid/comment/:cid/reply", authmw, getAllReply);
 app.get("/user/:uid", authmw, getuser);
+app.get("/user/search", authmw, getuser);
 app.post("/user/:uid/update/");
 // app.post("/utils/upload");
 
@@ -135,13 +137,14 @@ exports.onNotificationAdd = functions.firestore
 //     // todo
 //   });
 
-// exports.onUserCreated = functions.auth.user().onCreate((user) => {
-//   db.doc(`userDetail/${user.uid}`)
-//     .set({
-//       uid: user.uid,
-//       displayName: user.displayName,
-//       email: user.email,
-//       photoURL: user.photoURL,
-//     })
-//     .then();
-// });
+exports.onUserCreated = functions.auth.user().onCreate((user) => {
+  admin.auth().updateUser(user.uid, {photoURL: ""});
+  db.doc(`userDetail/${user.uid}`)
+    .set({
+      uid: user.uid,
+      displayName: user.displayName,
+      email: user.email,
+      photoURL: "",
+    })
+    .then();
+});

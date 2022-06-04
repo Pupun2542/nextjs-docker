@@ -356,8 +356,13 @@ const Commentpost = ({ cdoc, id }) => {
   const [editMode, setEditMode] = useState(false);
   const checkImage = useRef("");
   const getUser = useUser()
-  const commentdoc = cdoc.data();
-  commentdoc = {...commentdoc, creator: getUser([commentdoc.userId])}
+  const [commentdoc,setCommentdoc] = useState(cdoc.data());
+  const [loading, setLoading] = useState(true)
+  useEffect(()=>{
+    setCommentdoc({...commentdoc, creator: getUser([commentdoc.userId])})
+    setLoading(false);
+  },[])
+  
   // const inputFileRef = useRef(null);
   // const [coll] = useCollectionOnce(
   //   collection(db, "group", id, "comments", cdoc.id, "reply")
@@ -450,7 +455,7 @@ const Commentpost = ({ cdoc, id }) => {
   //   };
   //   reader.readAsDataURL(e.target.files[0]);
   // };
-
+if (!loading) {
   return (
     <Flex
       p={2.5}
@@ -629,6 +634,8 @@ const Commentpost = ({ cdoc, id }) => {
       </Menu>
     </Flex>
   );
+}
+  return (<></>)
 };
 
 const Reply = ({ id, setReply, commentId }) => {

@@ -57,6 +57,7 @@ export const ChatBox = ({ atab, user }) => {
       if (chatroomdata.exists) {
         const chatrommData = chatroomdata.data();
         console.log(chatrommData.member);
+        console.log("getUser");
         const members = await getUser(chatrommData.member);
         if (chatrommData.type == "private") {
           // console.log("Chatbox");
