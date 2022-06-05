@@ -87,7 +87,7 @@ import { Comments } from "../../../components/comments";
 
 export default function Group() {
   //{ data }
-  const [data, setData] = useState(undefined)
+  const [data, setData] = useState(undefined);
   const { app, auth, db } = useApp();
   const Router = useRouter();
   const {
@@ -100,18 +100,18 @@ export default function Group() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [user] = useAuthState(auth);
   const [color, setColor] = useState("");
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
   const getUser = useUser();
   const buttonRef = useRef(null);
 
   const { id } = Router.query;
   useEffect(() => {
     const Fetchdata = async () => {
-      console.log("Fetchdata")
-      getDoc(doc(db, "group", id)).then( async (d) => {
+      console.log("Fetchdata");
+      getDoc(doc(db, "group", id)).then(async (d) => {
         if (d.exists()) {
           // console.log(d.data());
-          const mappedcreator = await getUser([d.data().creator])
+          const mappedcreator = await getUser([d.data().creator]);
           // console.log(mappedcreator);
           setData({ ...d.data(), creator: mappedcreator });
           // setData(d.data());
@@ -128,17 +128,17 @@ export default function Group() {
             setColor("#72994C");
             // console.log(d.data().rating);
           }
-          setLoading(false)
+          setLoading(false);
         } else {
-          console.log(d.exists(),id);
+          console.log(d.exists(), id);
           alert("ไม่พบคอมมู");
           // Router.back();
         }
       });
     };
-    if ( id && id != 'undefined' ) {
-      Fetchdata()
-    };
+    if (id && id != "undefined") {
+      Fetchdata();
+    }
   }, [id]);
 
   useEffect(() => {
@@ -253,7 +253,6 @@ export default function Group() {
                       {console.log(data.creator[0].uid)}
                       {user && user.uid === data.creator[0].uid && (
                         <Box>
-                          
                           <Menu>
                             <MenuButton
                               bg={"white"}
@@ -267,16 +266,19 @@ export default function Group() {
                             />
 
                             <MenuList minW={20} fontFamily={"Mitr"}>
-                              <MenuItem _hover={{ background: "#E2E8F0" }} 
-                                onClick={() =>
-                                    Router.push("/group/" + id + "/edit")
-                                    // console.log("edit")
-                                  }>
-                                <Text>
-                                  Edit
-                                </Text>
+                              <MenuItem
+                                _hover={{ background: "#E2E8F0" }}
+                                onClick={
+                                  () => Router.push("/group/" + id + "/edit")
+                                  // console.log("edit")
+                                }
+                              >
+                                <Text>Edit</Text>
                               </MenuItem>
-                              <MenuItem _hover={{ background: "#E2E8F0" }} onClick={onDelOpen}>
+                              <MenuItem
+                                _hover={{ background: "#E2E8F0" }}
+                                onClick={onDelOpen}
+                              >
                                 <Text>Delete</Text>
                               </MenuItem>
                             </MenuList>
@@ -494,16 +496,16 @@ export default function Group() {
                                     {/* {console.log(data.genre)} */}
                                     {data.times && data.genre.length > 0
                                       ? data.genre.map((genre, index) => (
-                                        <Box
-                                          key={index}
-                                          className={style.tag}
-                                          marginLeft={2.5}
-                                          maxW={600}
-                                          float={"left"}
-                                        >
-                                          {genre}
-                                        </Box>
-                                      ))
+                                          <Box
+                                            key={index}
+                                            className={style.tag}
+                                            marginLeft={2.5}
+                                            maxW={600}
+                                            float={"left"}
+                                          >
+                                            {genre}
+                                          </Box>
+                                        ))
                                       : "ไม่มีหมวดหมู่"}
                                   </Box>
                                 </Flex>
@@ -533,16 +535,16 @@ export default function Group() {
                                   >
                                     {data.times && data.place.length > 0
                                       ? data.place.map((genre, index) => (
-                                        <Box
-                                          key={index}
-                                          className={style.tag}
-                                          marginLeft={2.5}
-                                          maxW={600}
-                                          float={"left"}
-                                        >
-                                          {genre}
-                                        </Box>
-                                      ))
+                                          <Box
+                                            key={index}
+                                            className={style.tag}
+                                            marginLeft={2.5}
+                                            maxW={600}
+                                            float={"left"}
+                                          >
+                                            {genre}
+                                          </Box>
+                                        ))
                                       : "ไม่มีหมวดหมู่"}
                                   </Box>
                                 </Flex>
@@ -573,16 +575,16 @@ export default function Group() {
                                     {/* {console.log(data.genre)} */}
                                     {data.times && data.times.length > 0
                                       ? data.times.map((genre, index) => (
-                                        <Box
-                                          key={index}
-                                          className={style.tag}
-                                          marginLeft={2.5}
-                                          maxW={600}
-                                          float={"left"}
-                                        >
-                                          {genre}
-                                        </Box>
-                                      ))
+                                          <Box
+                                            key={index}
+                                            className={style.tag}
+                                            marginLeft={2.5}
+                                            maxW={600}
+                                            float={"left"}
+                                          >
+                                            {genre}
+                                          </Box>
+                                        ))
                                       : "ไม่มีหมวดหมู่"}
                                   </Box>
                                 </Flex>
@@ -613,10 +615,10 @@ export default function Group() {
                                     {data.tws
                                       ? data.tws.length > 0
                                         ? data.tws.map((tw, index) => (
-                                          <Box key={index} float="left">
-                                            {tw}
-                                          </Box>
-                                        ))
+                                            <Box key={index} float="left">
+                                              {tw}
+                                            </Box>
+                                          ))
                                         : "ไม่มีคำเตือน"
                                       : "ไม่มีคำเตือน"}
                                   </Box>
@@ -679,8 +681,8 @@ export default function Group() {
                                     >
                                       {data.averageTime
                                         ? data.averageTime +
-                                        " " +
-                                        data.averageTimeUnit
+                                          " " +
+                                          data.averageTimeUnit
                                         : "ไม่มีระยะเวลาโดยประมาณ"}
                                     </Box>
                                   </Flex>
@@ -770,7 +772,7 @@ export default function Group() {
                                     // data.smlink
                                     //   ? () => outsidenavigate(data.smlink)
                                     //   : () => alert("ไม่มีลิงก์กลุ่ม")
-                                    ()=>Router.push(`/group/${id}/dashboard`)
+                                    () => Router.push(`/group/${id}/dashboard`)
                                   }
                                   cursor="pointer"
                                 >
@@ -993,17 +995,19 @@ export default function Group() {
                       </Flex>
                     </TabPanel>
                     <TabPanel>
-                      <Center ml={-4} w={850} bg={"tomato"} h={500}>
-                        <Box
-                          position={"static"}
-                          as="iframe"
-                          src={data.doclink + "#toolbar=0"}
-                          alt="demo"
-                          w={850}
-                          h={500}
-                        // maxH={"75%"}
-                        // maxW={"70%"}
-                        />
+                      <Center ml={-4} w={850} h={500}>
+                        {data.doclink && (
+                          <Box
+                            position={"static"}
+                            as="iframe"
+                            src={data.doclink + "#toolbar=0"}
+                            alt="demo"
+                            w={850}
+                            h={500}
+                            // maxH={"75%"}
+                            // maxW={"70%"}
+                          />
+                        )}
                         {/* <Box
                           as="iframe"
                           src={data.doclink}

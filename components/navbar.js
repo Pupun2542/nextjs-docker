@@ -179,9 +179,6 @@ function CustomNavbar() {
 
   const Loadthumbnail = () => {
     // console.log(user.getIdToken());
-    user.getIdToken().then((token)=>{
-      console.log(token)
-    })
     if (user) {
       return (
         <Menu>
