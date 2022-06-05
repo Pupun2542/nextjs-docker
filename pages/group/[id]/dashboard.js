@@ -136,6 +136,12 @@ function dashboard() {
   function isEmptyOrSpaces(str) {
     return str === null || str.match(/^ *$/) !== null;
   }
+  const resizeTextArea = (e) => {
+    e.target.style.height = 'inherit';
+    e.target.style.height = `${e.target.scrollHeight}px`; 
+    // In case you have a limitation
+    // e.target.style.height = `${Math.min(e.target.scrollHeight, limit)}px`;
+  }
 
   const handleSent = () => {
     if (!isEmptyOrSpaces(message)) {
@@ -342,6 +348,7 @@ function dashboard() {
                             onChange={(e) => setMessage(e.target.value)}
                             value={message}
                             onPaste={handleImagePaste}
+                            onKeyDown={resizeTextArea}
                           />
                           <Input
                             mt={2}
