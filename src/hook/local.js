@@ -179,7 +179,7 @@ export const UserProvider = ({ children }) => {
   const [data, DataDispatcher] = useReducer(userReducer, initialUser);
 
   const getUser = async (uid) => {
-    if (uid.length > 0) {
+    if (Array.isArray(uid)&&uid.length > 0) {
       console.log("recieved", uid)
       console.log("stored ", data)
       let users = [];

@@ -7,34 +7,37 @@ exports.createGroup = (req, res) => {
   if (req.user) {
     db.collection("group")
         .add({
-          name: data.communame,
-          creator: data.creator,
+          name: data.name,
+          creator: req.user.uid,
           type: data.type,
           privacy: data.privacy,
-          tag: data.hashtag,
+          tag: data.tag,
           description: data.description,
           maxplayer: data.maxplayer,
           genre: data.genre,
           contactlink: data.contactlink,
           place: data.places,
           times: data.times,
-          tws: data.TWs,
-          startDate: data.startdate,
-          startDateRaw: data.startdateraw,
+          tws: data.tws,
+          startDate: data.startDate,
+          // startDateRaw: data.startDateraw,
           rating: data.rating,
           rule: data.rule,
-          averageTime: data.averagetime,
-          averageTimeUnit: data.averagetimeunit,
+          averageTime: data.averageTime,
+          averageTimeUnit: data.averageTimeUnit,
           createAt: admin.firestore.FieldValue.serverTimestamp(),
           config: data.config,
           lastpush: admin.firestore.FieldValue.serverTimestamp(),
           viewer: [],
           love: [],
           pinned: [],
-          members: [data.creator],
-          staff: [data.creator],
+          members: [],
+          staff: [req.user.uid],
           registrationlink: data.registrationlink,
           statuschecklink: data.statuschecklink,
+          banner916: data.banner916,
+          bannersqr: data.bannersqr,
+          banner: data.bannerurl,
         })
         .then(() => {
           res.status(200).send("add group sucessful");
@@ -51,27 +54,30 @@ exports.updateGroup = (req, res) => {
     const data = req.body;
     const docref = db.collection("group").doc(req.params.id);
     docref.update({
-      name: data.communame,
+      name: data.name,
       creator: data.creator,
       type: data.type,
       privacy: data.privacy,
-      tag: data.hashtag,
+      tag: data.tag,
       description: data.description,
       maxplayer: data.maxplayer,
       genre: data.genre,
       contactlink: data.contactlink,
       place: data.places,
       times: data.times,
-      tws: data.TWs,
+      tws: data.tws,
       startDate: data.startdate,
-      startDateRaw: data.startdateraw,
+      // startDateRaw: data.startdateraw,
       rating: data.rating,
       rule: data.rule,
-      averageTime: data.averagetime,
-      averageTimeUnit: data.averagetimeunit,
+      averageTime: data.averageTime,
+      averageTimeUnit: data.averageTimeUnit,
       config: data.config,
       registrationlink: data.registrationlink,
       statuschecklink: data.statuschecklink,
+      banner916: data.banner916,
+      bannersqr: data.bannersqr,
+      banner: data.bannerurl,
     }).then(() => {
       docref.get().then((doc)=>{
         db.collection("notifications").add({
@@ -327,7 +333,26 @@ exports.getAllGroup = (req, res) => {
         .then((snapshot) => {
           if (!snapshot.empty) {
             snapshot.forEach((doc) => {
-              data = [...data, doc.data()];
+              let grpmember = {};
+              admin.auth().getUsers(doc.data().member).then((member)=>{
+                member.users.map((auser)=>{
+                  grpmember = {...grpmember,
+                    [auser.uid]: {
+                      uid: auser.uid,
+                      displayName: auser.displayName,
+                      photoURL: auser.photoURL,
+                    }};
+                });
+                const arrgrpmember = Object.entries(grpmember);
+                const mappeddocdata = {
+                  ...doc.data(),
+                  creator: Object.fromEntries(arrgrpmember.find(([k, v])=>v.id === doc.data().creator)),
+                  member: grpmember,
+                  staff: Object.fromEntries(arrgrpmember.filter(([k, v], i)=>doc.data().staff.includes(v.id))),
+                };
+                data = [...data, mappeddocdata];
+                return;
+              });
             });
             length -= snapshot.size;
           }
@@ -342,7 +367,28 @@ exports.getAllGroup = (req, res) => {
         .get()
         .then((snap) => {
           if (!snap.empty) {
-            snap.forEach((doc) => (data = [...data, doc.data()]));
+            snap.forEach((doc) => {
+              let grpmember = {};
+              admin.auth().getUsers(doc.data().member).then((member)=>{
+                member.users.map((auser)=>{
+                  grpmember = {...grpmember,
+                    [auser.uid]: {
+                      uid: auser.uid,
+                      displayName: auser.displayName,
+                      photoURL: auser.photoURL,
+                    }};
+                });
+                const arrgrpmember = Object.entries(grpmember);
+                const mappeddocdata = {
+                  ...doc.data(),
+                  creator: Object.fromEntries(arrgrpmember.find(([k, v])=>v.id === doc.data().creator)),
+                  member: grpmember,
+                  staff: Object.fromEntries(arrgrpmember.filter(([k, v], i)=>doc.data().staff.includes(v.id))),
+                };
+                data = [...data, mappeddocdata];
+                return;
+              });
+            });
           }
           return;
         });
@@ -355,12 +401,44 @@ exports.getAllGroup = (req, res) => {
 };
 
 exports.getGroup = (req, res) =>{
-  const user = req.user.uid;
+  // const user = req.user.uid;
+  // res.status(200).send("test success");
   db.collection("group").doc(req.params.gid).get().then((doc)=>{
     if (doc.exists) {
       const data = doc.data();
-      if (data.privacy == "private" && data.member.includes(user)) {
-        return res.status(200).json(data);
+      // console.log(data.privacy, req.user, data.member);
+      if (data.privacy == "private" && req.user && data.member.includes(req.user.uid) || data.privacy != "private") {
+        let identifiers = [];
+        doc.data().member.map((mem)=> {
+          identifiers = [...identifiers, {uid: mem}];
+        });
+        admin.auth().getUsers(identifiers).then((member)=>{
+          // console.log(member.users);
+          let grpmember = {};
+          member.users.map((auser)=>{
+            grpmember = {...grpmember,
+              [auser.uid]: {
+                uid: auser.uid,
+                displayName: auser.displayName,
+                photoURL: auser.photoURL,
+              }};
+          });
+          // console.log("405:", grpmember);
+          const arrgrpmember = Object.entries(grpmember);
+          // console.log("407", arrgrpmember);
+          // console.log("408", arrgrpmember.find(([k, v])=>v.uid === doc.data().creator));
+
+          const mappeddocdata = {
+            ...doc.data(),
+            creator: Object.fromEntries([arrgrpmember.find(([k, v])=>v.uid === doc.data().creator)]),
+            member: grpmember,
+            staff: Object.fromEntries(arrgrpmember.filter(([k, v], i)=>doc.data().staff.includes(v.uid))),
+          };
+          const senddata = {...data, ...mappeddocdata};
+          console.log("before send");
+          return res.status(200).json(senddata);
+          // return res.status(200).json("sent");
+        });
       } else {
         return res.status(403).send("this is private group");
       }
