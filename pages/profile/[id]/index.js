@@ -210,7 +210,7 @@ export default function profile() {
             <TabList borderColor={'gray.400'} p={2}>
               <Tab _selected={{ color: 'white', bg: '#9A9AB0' }} borderRadius={10}>About me</Tab>
               <Tab _selected={{ color: 'white', bg: '#9A9AB0' }} isDisabled borderRadius={10}>Timeline</Tab>
-              <Tab _selected={{ color: 'white', bg: '#9A9AB0' }} isDisabled borderRadius={10}>Original Character</Tab>
+              <Tab _selected={{ color: 'white', bg: '#9A9AB0' }} borderRadius={10}>Original Character</Tab>
               <Tab _selected={{ color: 'white', bg: '#9A9AB0' }} isDisabled borderRadius={10}>Friend</Tab>
               <Tab _selected={{ color: 'white', bg: '#9A9AB0' }} isDisabled borderRadius={10}>Bookshelf</Tab>
             </TabList>
@@ -340,7 +340,7 @@ export default function profile() {
                   </Flex>
                 </VStack>
 
-                
+
               </TabPanel>
 
               {/* Timeline */}
@@ -350,7 +350,15 @@ export default function profile() {
 
               {/* OC */}
               <TabPanel>
-                <p>two!</p>
+                <Center
+                  h={90}
+                  w={90}
+                  as={'button'}
+                  bg={'whatsapp.100'}
+                  onClick={() => router.push("/CreateCharacterForm")}
+                >
+                  Create
+                </Center>
               </TabPanel>
 
               {/* Friend */}
