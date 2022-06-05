@@ -107,16 +107,16 @@ function dashboard() {
     }
   }, [user, userLoading, orderby, loadLimit]);
 
-  useEffect(() => {
-    if (user && data && data.member) {
-      console.log(data);
-      const isMember = data.member.find((v) => v == user.uid);
-      if (!isMember) {
-        Router.push(`/group/${id}`);
-      }
-      // if (find)
-    }
-  }, [data, user]);
+  // useEffect(() => {
+  //   if (user && data && data.member) {
+  //     console.log(data);
+  //     const isMember = data.member.find((v) => v == user.uid);
+  //     if (!isMember) {
+  //       Router.push(`/group/${id}`);
+  //     }
+  //     // if (find)
+  //   }
+  // }, [data, user]);
 
   const handleImagePaste = () => {
     if (e.clipboardData.files[0]) {
@@ -359,6 +359,7 @@ function dashboard() {
                               ></Box>
                             </Box>
                           )}
+                          <Button float={'right'}>Send</Button>
                         </ModalBody>
                       </ModalContent>
                     </Modal>
