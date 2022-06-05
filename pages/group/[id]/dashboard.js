@@ -366,6 +366,7 @@ function dashboard() {
                               ></Box>
                             </Box>
                           )}
+                          <Button float={'right'}>Send</Button>
                         </ModalBody>
                       </ModalContent>
                     </Modal>
