@@ -432,9 +432,9 @@ function CustomNavbar() {
 
                 <Modal isOpen={isOpen} onClose={onClose}>
                   <ModalOverlay />
-                  <ModalContent>
-                    <ModalHeader>My Pinned</ModalHeader>
-                    <ModalCloseButton />
+                  <ModalContent borderWidth={2} borderColor={'black'}>
+                    <ModalHeader bg={'gray.50'}>My Pinned</ModalHeader>
+                    <ModalCloseButton rounded={'full'} />
                     <ModalBody>
                       {data.length > 0 &&
                         data.map((doc, k) => (
@@ -442,17 +442,16 @@ function CustomNavbar() {
                             onClick={() => router.push("/group/" + doc.id)}
                             cursor={"pointer"}
                             key={k}
+                            fontSize={18}
+                            _hover={{
+                              backgroundColor: 'gray.100'
+                            }}
                           >
                             [{doc.tag}]{doc.name}
                           </Text>
                         ))}
                     </ModalBody>
 
-                    <ModalFooter>
-                      <Button colorScheme="blue" mr={3} onClick={onClose}>
-                        Close
-                      </Button>
-                    </ModalFooter>
                   </ModalContent>
                 </Modal>
 
