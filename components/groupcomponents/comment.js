@@ -80,7 +80,33 @@ export const GroupComment = ({ comment, member }) => {
       unsubscribe();
     };
   }, [comment]);
-
+  const resizeTextArea = (e) => {
+    e.target.style.height = "inherit";
+    e.target.style.height = `${e.target.scrollHeight}px`;
+    // In case you have a limitation
+    // e.target.style.height = `${Math.min(e.target.scrollHeight, limit)}px`;
+  };
+  function isEmptyOrSpaces(str) {
+    return str === null || str.match(/^ *$/) !== null;
+  }
+  const handleSent = async () => {
+    if (!isEmptyOrSpaces(message)) {
+      // setImage([]);
+      const token = await auth.currentUser.getIdToken();
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${post.pid}/comment/create`,
+        { message: message, imageURL: "", charaId: "" },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      console.log("before set", message);
+      setMessage("");
+      console.log("after set", message)
+    }
+  };
 
 
   return (
@@ -162,13 +188,15 @@ export const GroupComment = ({ comment, member }) => {
             placeholder="Write Something"
             height="42"
             backgroundColor="gray.100"
-            // onKeyDown={(e) => {
-            //   // console.log(e.key)
-            //   if (e.key == "Enter" && !e.shiftKey) {
-            //     // console.log('message sent')
-            //     handleMessage();
-            //   }
-            // }}
+            value={message}
+            onKeyDown={(e) => {
+              resizeTextArea(e);
+              if (e.key == "Enter" && !e.shiftKey) {
+                // console.log('message sent')
+                handleSent();
+              }
+            }}
+            onChange={(e) => setMessage(e.target.value)}
           />
           <Box pl={2}>
             <IconButton rounded={"full"} icon={<ImageSquare size={28} />} />
