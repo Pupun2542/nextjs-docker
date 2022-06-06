@@ -192,6 +192,11 @@ function CustomNavbar() {
             _hover={{
               textDecoration: "none",
             }}
+            onClick={()=>{
+              user.getIdToken().then((token)=>{
+                console.log(token);
+              })
+            }}
           >
             <Center
               bg="white"
