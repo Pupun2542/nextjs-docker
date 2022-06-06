@@ -192,7 +192,6 @@ export const GroupPost = ({ post, member }) => {
           {isOpen && comment && comment.map((cmt, i) => <GroupComment comment={cmt} key={i} member={member} />)}
           <Flex mt={2}>
             <Box w={"8%"} mr={1}>
-              <Center mr={2} rounded={"100%"} h={42} w={42} bg={"gray.500"}>
                 <Avatar
                   mr={2}
                   rounded={"100%"}
@@ -201,7 +200,6 @@ export const GroupPost = ({ post, member }) => {
                   src={auth.currentUser.photoURL}
                   name={auth.currentUser.displayName}
                 />
-              </Center>
             </Box>
             <Textarea
               resize="none"

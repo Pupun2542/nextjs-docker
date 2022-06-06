@@ -86,7 +86,6 @@ export const GroupComment = ({ comment, member }) => {
   return (
     <Flex mt={3} p={2} boxShadow={"base"} w={"100%"}>
       <Box w={"7%"}>
-        <Center mr={2} rounded={"100%"} h={42} w={42} bg={"gray.500"}>
           <Avatar
             mr={2}
             rounded={"100%"}
@@ -95,7 +94,6 @@ export const GroupComment = ({ comment, member }) => {
             src={creator.photoURL}
             name={creator.displayName}
           />
-        </Center>
       </Box>
 
       <Box pl={2} pr={2} w={"90%"}>
@@ -144,7 +142,6 @@ export const GroupComment = ({ comment, member }) => {
 
         <Flex mt={2}>
           <Box w={"8%"} mr={1}>
-            <Center mr={2} rounded={"100%"} h={42} w={42} bg={"gray.500"}>
               <Avatar
                 mr={2}
                 rounded={"100%"}
@@ -153,7 +150,6 @@ export const GroupComment = ({ comment, member }) => {
                 src={auth.currentUser.photoURL}
                 name={auth.currentUser.displayName}
               />
-            </Center>
           </Box>
           <Textarea
             resize="none"
