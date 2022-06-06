@@ -30,6 +30,7 @@ import {
 } from "firebase/firestore";
 import { GroupReply } from "./reply";
 import { useApp, useUser } from "../../src/hook/local";
+import axios from "axios";
 
 export const GroupComment = ({ comment, member }) => {
   const creator = comment.creator
@@ -66,7 +67,8 @@ export const GroupComment = ({ comment, member }) => {
                   creator: creator, 
                   cid: comment.cid, 
                   pid: comment.pid,
-                  rid: doc.id 
+                  rid: doc.id,
+                  gid: comment.gid
                 },
               ];
             })
@@ -94,7 +96,7 @@ export const GroupComment = ({ comment, member }) => {
       // setImage([]);
       const token = await auth.currentUser.getIdToken();
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${post.pid}/comment/create`,
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${comment.gid}/${comment.pid}/comment/${comment.cid}/reply/create`,
         { message: message, imageURL: "", charaId: "" },
         {
           headers: {
@@ -102,13 +104,11 @@ export const GroupComment = ({ comment, member }) => {
           },
         }
       );
-      console.log("before set", message);
+      // console.log("before set", message);
       setMessage("");
-      console.log("after set", message)
+      // console.log("after set", message)
     }
   };
-
-
   return (
     <Flex mt={3} p={2} boxShadow={"base"} w={"100%"}>
       <Box w={"7%"}>
@@ -157,13 +157,15 @@ export const GroupComment = ({ comment, member }) => {
             fontWeight={"light"}
             boxShadow={"base"}
             variant="solid"
+            onClick={onToggle}
           >
             {comment.reply.length}
           </Button>
         </HStack>
-        {isOpen&&reply.reverse().map((rpy, i)=>{
-          <GroupReply reply={rpy} key={i} member={member} />
-        })}
+        {console.log(reply)}
+        {isOpen&&reply.reverse().map((rpy, i)=>
+          (<GroupReply reply={rpy} key={i} member={member} />)
+        )}
         
 
         <Flex mt={2}>

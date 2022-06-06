@@ -144,6 +144,7 @@ function dashboard() {
                     ...doc.data(),
                     creator: creator,
                     pid: doc.id,
+                    gid: id
                   },
                 ];
               })

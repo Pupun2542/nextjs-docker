@@ -5,10 +5,10 @@ const {sendNotifications} = require("../utils/notifications");
 exports.createReply = (req, res) =>{
   if (req.user) {
     const user = req.user.uid;
-    const docref = db.collection("posts").doc(req.params.pid).collection("comments").doc(req.params.pid);
+    const docref = db.collection("posts").doc(req.params.pid).collection("comments").doc(req.params.cid);
     docref.get().then((doc)=>{
       if (doc.exists) {
-        return db.collection("group").doc(doc.data().groupId).get().then((gdoc)=>{
+        return db.collection("group").doc(req.params.gid).get().then((gdoc)=>{
           if (gdoc.exists && gdoc.data().member.includes(user)) {
             return docref.collection("replies").add({
               "uid": user,
@@ -23,11 +23,15 @@ exports.createReply = (req, res) =>{
             }).catch((e)=>{
               return res.status(400).send("create comment not success ", e);
             });
+          } else {
+            return res.status(401).send("unauthorized");
           }
-          return res.status(401).send("unauthorized");
         });
+      } else {
+        return res.status(404).send("comment not found");
       }
     });
+  } else {
     res.status(401).send("unauthorized");
   }
 };

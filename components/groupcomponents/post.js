@@ -70,7 +70,8 @@ export const GroupPost = ({ post, member }) => {
                   ...doc.data(), 
                   creator: creator, 
                   cid: doc.id, 
-                  pid: post.pid 
+                  pid: post.pid,
+                  gid: post.gid
                 },
               ];
             })
@@ -189,7 +190,7 @@ export const GroupPost = ({ post, member }) => {
               {post.view}
             </Button>
           </HStack>
-          {isOpen && comment && comment.map((cmt, i) => <GroupComment comment={cmt} key={i} member={member} />)}
+          {isOpen && comment && comment.reverse().map((cmt, i) => <GroupComment comment={cmt} key={i} member={member} />)}
           <Flex mt={2}>
             <Box w={"8%"} mr={1}>
                 <Avatar

@@ -59,6 +59,7 @@ import {
 import { FacebookLogo, DiscordLogo } from "phosphor-react";
 import { Createcommuform } from "../../../components/commuforms/createcommuform";
 import Footer from "../../../components/footer";
+import axios from "axios";
 
 export default function Edit() {
   // const app = useApp();
@@ -94,13 +95,6 @@ export default function Edit() {
   const [contactlink, setContactlink] = useState("");
   const [privacy, setPrivacy] = useState("");
   const [bannerBlob, setBannerBlob] = useState(null);
-  const [durationsw, setDurationsw] = useState(true);
-  const [Averagesw, setAveragesw] = useState(true);
-  const [Locationsw, setLocationsw] = useState(true);
-  const [Timelinesw, setTimelinesw] = useState(true);
-  const [Ratingsw, setRatingsw] = useState(true);
-  const [Triggersw, setTriggersw] = useState(true);
-  const [Rulesw, setRulesw] = useState(true);
   const [places, setPlaces] = useState([]);
   const [times, setTimes] = useState([]);
   const [TWs, setTWs] = useState([]);
@@ -115,235 +109,34 @@ export default function Edit() {
   //ก็อปปี้บรรทัดบนไปวางเพิ่ม หรือเขียนเอง ลักษณะคือ const [state, setState] = useState(true) โดยที่ state คือชื่อตัวแปรที่จะใช้ เช่น durationsw ส่วน setstate คือฟังก์ชั่นที่ไว้ใช้เปลี่ยนค่าตัวแปร
 
   useEffect(() => {
+    const Fetchdata = async () => {
+      // console.log(auth.currentUser)
+      const token = await user.getIdToken();
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${id}`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      let data = res.data;
+      if (Object.keys(data.staff).includes(user.uid))
+      setData(data);
+    };
     if (!loading && !user) {
       Router.push("/login");
     } else {
       if (id && user) {
-        getDoc(doc(db, "group", id)).then((v) => {
-          // const data = v.data();
-          setData(v.data())
-
-      //     if (user.uid != data.creator) {
-      //       console.log(data.creator + " ", user);
-      //       alert("Unorthorized Access");
-      //       Router.back();
-      //     } else {
-      //       setGenre(data.genre ? data.genre : "");
-      //       setCommuname(data.name ? data.name : "");
-      //       setMaxplayer(data.maxplayer ? data.maxplayer : "");
-      //       // setRegDate(data.regDate ? data.regDate : "");
-      //       setRuntime(data.runtime ? data.runtime : "");
-      //       setStartDate(data.startDate ? data.startDate : "");
-      //       setSmlink(data.smlink ? data.smlink : "");
-      //       setDescription(data.description ? data.description : "");
-      //       setDoclink(data.doclink ? data.doclink : "");
-      //       setQaasklink(data.qaasklink ? data.qaasklink : "");
-      //       setQaanslink(data.qaanslink ? data.qaanslink : "");
-      //       setSubmitlink(data.submitlink ? data.submitlink : "");
-      //       setResultlink(data.resultlink ? data.resultlink : "");
-      //       setContactlink(data.contactlink ? data.contactlink : "");
-      //       setPrivacy(data.privacy ? data.privacy : "");
-      //       setBannerBlob(data.banner ? data.banner : "");
-      //       setHashtag(data.tag ? data.tag : "");
-      //       setPlaces(data.place ? data.place : []);
-      //       setTimes(data.times ? data.times : []);
-      //       setTWs(data.tws ? data.tws : []);
-      //       setRating(data.rating ? data.rating : "");
-      //       setRule(data.rule ? data.rule : "");
-      //       setAvergeTime(data.averageTime ? data.averageTime : "");
-      //       setAvergeTimeUnit(
-      //         data.averageTimeUnit ? data.averageTimeUnit : "วัน(Day)"
-      //       );
-      //       setType(data.type ? data.type : "");
-      //       originBannerUrl.current = data.banner;
-      //     }
-        });
+        Fetchdata();
       }
     }
-    console.log(user, loading, id);
   }, [user, loading, id]);
-
-  const HandleSubmit = async (e) => {
-    // console.log(communame)
-    // console.log(auth.currentUser.uid)
-    // console.log(privacy)
-    // console.log(hashtag)
-    // console.log(description)
-    // console.log(maxplayer)
-    // console.log(runtime)
-    // console.log(genre)
-    // console.log(smlink)
-    // console.log(doclink)
-    // console.log(qaasklink)
-    // console.log(qaanslink)
-    // console.log(submitlink)
-    // console.log(resultlink)
-    // console.log(contactlink)
-    // console.log(regDate)
-    // console.log(startDate)
-    // console.log(places)
-    // console.log(times)
-    // console.log(TWs)
-    // console.log(rating)
-    // console.log(rule)
-    // console.log(averageTime)
-    // console.log(averageTimeUnit)
-    // console.log(bannerBlob, originBannerUrl.current, bannerBlob !== originBannerUrl.current)
-
-    e.preventDefault();
-    if (confirm("ยืนยันการแก้ไข?")) {
-      if (communame && hashtag && description) {
-        await updateDoc(doc(db, "group", id), {
-          name: communame,
-          creator: auth.currentUser.uid,
-          type: type,
-          privacy: privacy,
-          tag: hashtag,
-          description: description,
-          maxplayer: maxplayer,
-          runtime: runtime,
-          genre: genre,
-          smlink: smlink,
-          doclink: doclink,
-          qaasklink: qaasklink,
-          qaanslink: qaanslink,
-          submitlink: submitlink,
-          resultlink: resultlink,
-          contactlink: contactlink,
-          // regDate: regDate,
-          startDate: startDate,
-          place: places,
-          times: times,
-          tws: TWs,
-          rating: rating,
-          rule: rule,
-          averageTime: averageTime,
-          averageTimeUnit: averageTimeUnit,
-          createAt: serverTimestamp(),
-        });
-        let toUpdate = {};
-        if (bannerBlob !== originBannerUrl.current) {
-          // console.log(bannerBlob, originBannerUrl);
-          const storageref = ref(
-            store,
-            `group/${id}/uploadImages/${auth.currentUser.uid}${Date.now()}`
-          );
-          uploadString(storageref, bannerBlob, "data_url").then((snapshot) => {
-            getDownloadURL(snapshot.ref).then((url) => {
-              updateDoc(doc(db, "group", id), { banner: url });
-              // toUpdate = { ...toUpdate, banner: url };
-            });
-          });
-        }
-        if (docfile) {
-          // console.log(store)
-          const storageref = ref(
-            store,
-            `group/${id}/documents/mainDocument.pdf`
-          );
-          console.log(storageref)
-          uploadBytes(storageref, docfile).then((snapshot) => {
-            getDownloadURL(snapshot.ref).then((url) => {
-              // toUpdate = { ...toUpdate, doclink: url };
-              updateDoc(doc(db, "group", id), { doclink: url });
-            });
-          });
-        }
-        // console.log("tosendLength",Object.keys(toUpdate).length)
-        // if (!Object.keys(toUpdate).length === 0) {
-        //   updateDoc(doc(db, "group", id), toUpdate);
-        // }
-
-        setGenre([]);
-        setCommuname("");
-        setMaxplayer("");
-        // setRegDate("");
-        setRuntime("");
-        setStartDate("");
-        setSmlink("");
-        setDescription("");
-        setDoclink("");
-        setQaasklink("");
-        setQaanslink("");
-        setSubmitlink("");
-        setResultlink("");
-        setContactlink("");
-        setPrivacy("");
-        setBannerBlob(null);
-        setHashtag("");
-        setPlaces([]);
-        setTimes([]);
-        setTWs([]);
-        setRule("");
-        setAvergeTime("");
-        setAvergeTimeUnit("");
-        setType("");
-        setDocfile(null);
-        Router.push("/group/" + id);
-      } else {
-        alert("กรุณาใส่ชื่อ ชื่อย่อ และคำอธิบายคอมมู");
-      }
-    }
-  };
-
-  const Hashtag = (props) => {
-    const removeTags = (indexToRemove) => {
-      props.setState([
-        ...props.state.filter((_, index) => index !== indexToRemove),
-      ]);
-    };
-    const addTags = (event) => {
-      let tag = event.target.value.replace(",", "");
-      tag = tag.trim();
-      if (tag !== "") {
-        props.setState([...props.state, tag]);
-        props.selectedTags([...props.state, tag]);
-        event.target.value = "";
-      }
-    };
-    return (
-      <Box w={680} h={38}>
-        <Box>
-          <Box id="tags">
-            {props.state.map((tag, index) => (
-              <Box key={index} className={style.tag} m={1.5} p={1} maxW={600}>
-                <Box>{tag}</Box>
-                <CloseButton
-                  onClick={() => removeTags(index)}
-                  rounded={50}
-                  bg="white"
-                  color={"black"}
-                  h={22}
-                  w={22}
-                  m={1}
-                />
-              </Box>
-            ))}
-            <Input
-              type="text"
-              onKeyUp={(event) => (event.key === "," ? addTags(event) : null)}
-              placeholder=" ใช้ , เพื่อแบ่งประเภท"
-              w={"auto"}
-              className={style.search}
-              isDisabled={props.isDisabled}
-              border="hidden"
-              maxW={650}
-              mt={1}
-            />
-          </Box>
-        </Box>
-      </Box>
-    );
-  };
-  const selectedTags = (tags) => {
-    console.log(tags);
-  };
-
   return (
     <Box>
       <Box bg="#FDFDFD" maxW={1980}>
         <CustomNavbar />
-        <Createcommuform data={data}/>
+        <Createcommuform data={data} gid={id}/>
         <Footer/>
       </Box>
     </Box>

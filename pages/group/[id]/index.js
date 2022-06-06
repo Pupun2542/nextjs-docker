@@ -286,7 +286,7 @@ export default function Group() {
                         isDisabled
                       />
                       {console.log(data)}
-                      {user && user.uid === data.creator.uid && (
+                      {user && Object.keys(data.creator).includes(user.uid) && (
                         <Box>
                           <Menu>
                             <MenuButton

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import style from "../../styles/creategroup.module.css";
 import { useState, useEffect } from "react";
 import "../Banner";
@@ -68,13 +68,15 @@ import axios from "axios";
 import { useRouter } from 'next/router'
 import { creategroup } from "../../src/services/firestoreservice";
 import { AddStaffForm } from "./addStaffForm";
+import { UploadBannerImage, UploadDoc } from "../../src/services/filestoreageservice";
 
-export const Createcommuform = ({ data, uid }) => {
+export const Createcommuform = ({ data, uid, gid }) => {
   const { app, auth, db } = useApp();
   const store = getStorage(app);
   const Router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: isCropPicOpen, onOpen: onCropPicOpen, onClose: onCropPicClose } = useDisclosure();
+  const inputref = useRef(null)
   const [fieldvalue, setFieldvalue] = useState({
     tag: "",
     name: "",
@@ -101,7 +103,7 @@ export const Createcommuform = ({ data, uid }) => {
   const [genre, setGenre] = useState([]);
   const [places, setPlaces] = useState([]);
   const [times, setTimes] = useState([]);
-  const [TWs, setTWs] = useState([]);
+  const [tws, settws] = useState([]);
   const [staffSearch, setStaffSearch] = useState([]);
   const [staffSearchString, setStaffSearchString] = useState("");
   const [staffSearchResult, setStaffSearchResult] = useState([]);
@@ -123,7 +125,7 @@ export const Createcommuform = ({ data, uid }) => {
         runtime: data.runtime,
         description: data.description,
         SMlink: data.SMlink,
-        // docfile: data.docfile,
+        startDateraw: data.startDateRaw,
         contactlink: data.contactlink,
         startDate: data.startDate,
         rating: data.rating,
@@ -151,7 +153,7 @@ export const Createcommuform = ({ data, uid }) => {
       setGenre(data.genre);
       setPlaces(data.place);
       setTimes(data.times);
-      setTWs(data.tws);
+      settws(data.tws);
       setBannerBlob(data.banner)
     }
   }, [data]);
@@ -225,6 +227,7 @@ export const Createcommuform = ({ data, uid }) => {
     const spdatetime = localtime.split("T");
 
     const timebuild = spdatetime[0] + " เวลา " + spdatetime[1];
+    console.log(timebuild);
     return timebuild;
   };
 
@@ -244,39 +247,66 @@ export const Createcommuform = ({ data, uid }) => {
     return timebuild;
   };
 
+  // console.log(inputref.current.value);
+
   const HandleSubmit = async () => {
+    
+    let bannerUrl = (data?.banner? data.banner: "");
+    let docUrl = (data?.doclink? data.doclink: "");
+    const token = await auth.currentUser.getIdToken();
+
+    if (bannerBlob&&!bannerBlob.startsWith("http")) {
+      // console.log("upload")
+      bannerUrl = await UploadBannerImage(bannerBlob, auth.currentUser.uid);
+    } else {
+      // console.log("not upload")
+      bannerUrl = bannerBlob
+    }
+
+    if (fieldvalue.docfile) {
+      if (fieldvalue.docfile.name.split(".").pop() == "pdf") {
+        // console.log("uploaddoc")
+        docUrl = await UploadDoc(fieldvalue.docfile, auth.currentUser.uid);
+      } else {
+        alert("เอกสารคอมมูต้องเป็นรูปแบบไฟล์ pdf เท่านั้น")
+        return;
+      }
+    }
     const body = {
       ...fieldvalue,
       genre: genre,
       places: places,
       times: times,
-      TWs: TWs,
-      bannerBlob: bannerBlob,
+      tws: tws,
+      bannerUrl: bannerUrl,
+      docUrl: docUrl,
       config: configvalue
     }
-    console.log(body)
+    // console.log(body)
     if (data) {
-
-      // const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/api/group/update/${data.id}`, body);
-      // console.log(res.status)
-    } else {
-      if (body.bannerBlob && body.bannerBlob !== "") {
-        const sp = body.bannerBlob.split(";", 1);
-        const sp2 = sp[0].split(":", 1);
-        const contenttype = sp2[1]
-
-        const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/api/store/upload`, { bannerBlob: bannerBlob }, { headers: { "content-type": contenttype } });
-        console.log(res);
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/group/${gid}/update`, body,
+      {
+        headers: {
+          Authorization: token,
+        },
       }
-
-
-      // creategroup(body);
-      // console.log(process.env)
-      // const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/api/group/create`, body);
-      // if (res.status == 200){
-      //   console.log(res.data)
-      //   // Router.push(res.)
-      // }
+      );
+      console.log(res.data)
+      if (res.status === 200) {
+        Router.push(`/group/${res.data}`)
+      }
+    } else {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/group/create`, body,
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+      );
+      console.log(res.data);
+      if (res.status === 200) {
+        Router.push(`/group/${gid}`)
+      }
     }
   }
 
@@ -506,18 +536,29 @@ export const Createcommuform = ({ data, uid }) => {
                           bg={"white"}
                           color="black"
                           size="lg"
-                          defaultValue={"สาธารณะ"}
+                          defaultValue={"public"}
                           fontFamily={"Mitr"}
+                          value={
+                            fieldvalue.privacy
+                              ? fieldvalue.privacy
+                              : "G (เหมาะสำหรับทุกวัย)"
+                          }
+                          onChange={(e) =>
+                            setFieldvalue({
+                              ...fieldvalue,
+                              privacy: e.target.value,
+                            })
+                          }
                         >
                           <option
                             style={{ backgroundColor: "White" }}
-                            value={"สาธารณะ"}
+                            value={"public"}
                           >
                             สาธารณะ
                           </option>
                           <option
                             style={{ backgroundColor: "White" }}
-                            value={"ส่วนตัว"}
+                            value={"private"}
                           >
                             ส่วนตัว
                           </option>
@@ -555,6 +596,8 @@ export const Createcommuform = ({ data, uid }) => {
                               maxplayer: e,
                             })
                           }
+                          min={0}
+                          value={fieldvalue.maxplayer}
                         >
                           <NumberInputField
                             bg={"white"}
@@ -593,6 +636,7 @@ export const Createcommuform = ({ data, uid }) => {
                           color="black"
                           size="lg"
                           fontFamily={"Mitr"}
+                          value={fieldvalue.type}
                           onChange={(e) =>
                             setFieldvalue({ ...fieldvalue, type: e.target.value })
                           }
@@ -705,6 +749,7 @@ export const Createcommuform = ({ data, uid }) => {
                             bg={"white"}
                             color="black"
                             w={'100%'}
+                            value={fieldvalue.startDateraw}
                             onChange={(e) => {
                               setFieldvalue({
                                 ...fieldvalue,
@@ -712,9 +757,7 @@ export const Createcommuform = ({ data, uid }) => {
                               });
                               setFieldvalue({
                                 ...fieldvalue,
-                                startDateraw: parseRawTime(
-                                  e.target.value
-                                ),
+                                startDateraw: e.target.value
                               });
                             }}
                             fontFamily={"Mitr"}
@@ -1028,8 +1071,8 @@ export const Createcommuform = ({ data, uid }) => {
                           mt={2}
                         >
                           <Hashtag
-                            state={TWs}
-                            setState={setTWs}
+                            state={tws}
+                            setState={settws}
                             isDisabled={!configvalue.Triggersw}
                           />
                         </Container>
@@ -1141,8 +1184,7 @@ export const Createcommuform = ({ data, uid }) => {
                       >
                         <Box>
                           <Text float="left">เอกสารของคอมมู</Text>
-                          <Text color={"red"} float="lef
-                          t">
+                          <Text color={"red"} float="left">
                             *
                           </Text>
                         </Box>
@@ -1150,7 +1192,7 @@ export const Createcommuform = ({ data, uid }) => {
 
                       <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
                         <Input
-                          type="text"
+                          type="file"
                           // value={fieldvalue.name}
                           // onChange={(e) => {
                           //   setFieldvalue({
@@ -1159,12 +1201,16 @@ export const Createcommuform = ({ data, uid }) => {
                           //   });
                           //   // setCommuname(e.target.value);
                           // }}
+                          // value={}
+                          ref={inputref}
+                          onChange={(e)=>setFieldvalue({...fieldvalue, docfile: e.target.files[0]})}
                           required
                           w={'100%'}
                           h={46}
                           bg={"white"}
                           placeholder={"..."}
                         />
+                        <Button onClick={()=>{setFieldvalue({...fieldvalue, docfile: undefined});inputref.current.value = ""}} >clear</Button>
                       </Center>
                     </Flex>
                     <Center w={50}></Center>
@@ -1364,7 +1410,7 @@ export const Createcommuform = ({ data, uid }) => {
               borderWidth={3}
               borderColor={'black'}
             >
-              สร้างคอมมู
+              {(data?"แก้ไข":"สร้างคอมมู")}
             </Button>
           </HStack>
         </Box>

@@ -45,29 +45,28 @@ export function Uploadprofileimg(file, name) {
   );
 }
 
-export async function UploadBannerImage(file, creator, docref) {
+export async function UploadBannerImage(file, creator) {
   // const file = new File([file], name)
-  const app = getApp();
-  const store = getStorage(app);
   if (!file) {
     return;
   }
   // const blob = new Blob(file);
-  const ref = `group/${docref.id}/uploadImages/${creator}${Date.now()}.jpg`
+  const storageref = ref(store, `publicResource/uploadImages/${creator}${Date.now()}.jpg`);
   
-  const snapsnot = await uploadString(ref, file, "data_url");
+  const snapsnot = await uploadString(storageref, file, "data_url");
   const downloadurl = await getDownloadURL(snapsnot.ref);
+  // console.log(downloadurl)
   return downloadurl
 }
 
-export async function UploadDoc(file, docref){
+export async function UploadDoc(file, creator){
   const storageref = ref(
     store,
-    `group/${docref.id}/documents/mainDocument.pdf`
+    `publicResource/documents/mainDocument_${creator}${Date.now()}.pdf`
   );
   const snapshot = await uploadBytes(storageref, file);
   const downloadurl = getDownloadURL(snapshot.ref);
-  
+  // console.log(downloadurl)
   return downloadurl
 }
 

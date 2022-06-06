@@ -5,7 +5,7 @@ const {sendNotifications} = require("../utils/notifications");
 exports.createGroup = (req, res) => {
   const data = req.body;
   if (req.user) {
-    db.collection("group")
+    return db.collection("group")
         .add({
           name: data.name,
           creator: req.user.uid,
@@ -19,8 +19,8 @@ exports.createGroup = (req, res) => {
           place: data.places,
           times: data.times,
           tws: data.tws,
-          startDate: data.startDate,
-          // startDateRaw: data.startDateraw,
+          // startDate: data.startDate,
+          startDateRaw: data.startDateraw,
           rating: data.rating,
           rule: data.rule,
           averageTime: data.averageTime,
@@ -31,31 +31,34 @@ exports.createGroup = (req, res) => {
           viewer: [],
           love: [],
           pinned: [],
-          members: [],
+          member: [req.user.uid],
           staff: [req.user.uid],
           registrationlink: data.registrationlink,
           statuschecklink: data.statuschecklink,
-          banner916: data.banner916,
-          bannersqr: data.bannersqr,
-          banner: data.bannerurl,
+          // banner916: data.banner916,
+          // bannersqr: data.bannersqr,
+          banner: data.bannerUrl,
+          doclink: data.docUrl,
         })
-        .then(() => {
-          res.status(200).send("add group sucessful");
+        .then((ref) => {
+          return res.status(200).send(ref.id);
         })
         .catch((e) => {
-          res.status(400).send("cannot add group : ", e);
+          return res.status(400).send("cannot add group : ", e);
         });
-  } else res.status(503).send("forbidden : you must login to create group");
+  } else {
+    return res.status(401).send("forbidden : you must login to create group");
+  }
 };
 
 exports.updateGroup = (req, res) => {
   if (req.user) {
-    const user = req.user.uid;
+    // const user = req.user.uid;
     const data = req.body;
+    console.log(req.params.id);
     const docref = db.collection("group").doc(req.params.id);
-    docref.update({
+    return docref.update({
       name: data.name,
-      creator: data.creator,
       type: data.type,
       privacy: data.privacy,
       tag: data.tag,
@@ -66,8 +69,8 @@ exports.updateGroup = (req, res) => {
       place: data.places,
       times: data.times,
       tws: data.tws,
-      startDate: data.startdate,
-      // startDateRaw: data.startdateraw,
+      // startDate: data.startdate,
+      startDateRaw: data.startDateraw,
       rating: data.rating,
       rule: data.rule,
       averageTime: data.averageTime,
@@ -75,26 +78,28 @@ exports.updateGroup = (req, res) => {
       config: data.config,
       registrationlink: data.registrationlink,
       statuschecklink: data.statuschecklink,
-      banner916: data.banner916,
-      bannersqr: data.bannersqr,
-      banner: data.bannerurl,
+      // banner916: data.banner916,
+      // bannersqr: data.bannersqr,
+      banner: data.bannerUrl,
+      doclink: data.docUrl,
     }).then(() => {
-      docref.get().then((doc)=>{
-        db.collection("notifications").add({
-          reciever: doc.data().staff,
-          notitype: "002",
-          triggerer: user,
-          group: doc.data().name,
-          object: "",
-          timestamp: admin.firestore.FieldValue.serverTimestamp(),
-        });
-      });
-      res.status(200).send("update group sucessful");
+      // docref.get().then((doc)=>{
+      //   sendNotifications(doc.data().staff, "002", user, doc.data().name, "", )
+      //   db.collection("notifications").add({
+      //     reciever: doc.data().staff,
+      //     notitype: "002",
+      //     triggerer: user,
+      //     group: doc.data().name,
+      //     object: "",
+      //     timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      //   });
+      // });
+      return res.status(200).send("update group sucessful");
     }).catch((e) => {
-      res.status(400).send("cannot update group : ", e);
+      return res.status(400).send("cannot update group : "+ e);
     });
   } else {
-    res.status(401).send("unauthorized");
+    return res.status(401).send("unauthorized");
   }
 };
 
@@ -406,7 +411,7 @@ exports.getGroup = (req, res) =>{
   db.collection("group").doc(req.params.gid).get().then((doc)=>{
     if (doc.exists) {
       const data = doc.data();
-      // console.log(data.privacy, req.user, data.member);
+      console.log(data);
       if (data.privacy == "private" && req.user && data.member.includes(req.user.uid) || data.privacy != "private") {
         let identifiers = [];
         doc.data().member.map((mem)=> {
