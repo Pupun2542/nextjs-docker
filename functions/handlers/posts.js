@@ -28,7 +28,10 @@ exports.createPost = (req, res) =>{
       }
       return res.status(401).send("unauthorized");
     });
-    res.status(401).send("unauthorized");
+    // console.log(req.body);
+    // return res.status(200).send(req.body.message);
+  } else {
+    return res.status(401).send("unauthorized " + req.user);
   }
 };
 
@@ -115,26 +118,103 @@ exports.unlovePost = (req, res) =>{
   }
 };
 
-exports.getAllPost = (req, res) =>{
+exports.getAllPost = async (req, res) =>{
   if (req.user) {
     const user = req.user.uid;
-    const groupref = db.collection("group").doc(res.params.gid);
-    groupref.get().then((doc)=>{
-      if (doc.exists) {
-        // eslint-disable-next-line max-len
-        if ((doc.data().privacy == "private" && doc.data().member.includes(user))|| doc.data().privacy == "public") {
-          db
-              .collection("posts")
-              .where("groupId", "==", res.params.gid)
-              .get()
-              .then((snapshot)=>{
-                const post = snapshot.docs.map((docs)=>docs.data());
-                return res.status(200).json(post);
-              });
-        }
+    const groupref = db.collection("group").doc(req.params.gid);
+    const doc = await groupref.get();
+
+    if (doc.exists) {
+      if ((doc.data().privacy == "private" && doc.data().member.includes(user))|| doc.data().privacy !="private" ) {
+        const snapshot = await db
+            .collection("posts")
+            .where("groupId", "==", req.params.gid)
+            .orderBy(req.query.orderby, "desc")
+            .limit(parseInt(req.query.loadlimit))
+            .get();
+        let post = [];
+        await Promise.all(snapshot.docs.map(async (postdoc)=>{
+          let identifiers = [];
+          postdoc.data().viewer.map((view)=>{
+            identifiers = [...identifiers, {uid: view}];
+          });
+          const users = await admin.auth().getUsers(identifiers);
+          let viewer = {};
+          users.users.map((auser)=>{
+            viewer = {...viewer,
+              [auser.uid]: {
+                uid: auser.uid,
+                displayName: auser.displayName,
+                photoURL: auser.photoURL,
+              }};
+          });
+          const arrviewer = Object.entries(viewer);
+          const mappeddocdata = {
+            ...postdoc.data(),
+            pid: postdoc.id,
+            creator: Object.fromEntries([arrviewer.find(([k, v])=>v.uid === postdoc.data().uid)]),
+            viewer: viewer,
+            follower: Object.fromEntries(arrviewer.filter(([k, v], i)=>postdoc.data().follower.includes(v.uid))),
+          };
+          const finaldata = {...postdoc.data(), ...mappeddocdata};
+          post = [...post, finaldata];
+          // console.log(post);
+        }));
+        return res.status(200).json(post);
       }
-      return res.status(401).send("unauthorized");
-    });
+    }
+
+    // return groupref.get().then((doc)=>{
+    //   if (doc.exists) {
+    //     // eslint-disable-next-line max-len
+    //     if ((doc.data().privacy == "private" && doc.data().member.includes(user))|| doc.data().privacy !="private" ) {
+    //       return db
+    //           .collection("posts")
+    //           .where("groupId", "==", req.params.gid)
+    //           .orderBy(req.query.orderby, "desc")
+    //           .limit(parseInt(req.query.loadlimit))
+    //           .get()
+    //           .then((snapshot)=>{
+    //             let post = [];
+    //             snapshot.forEach((docs)=>{
+    //               let identifiers = [];
+    //               docs.data().viewer.map((view)=>{
+    //                 identifiers = [...identifiers, {uid: view}];
+    //               });
+    //               admin.auth().getUsers(identifiers).then((users)=>{
+    //                 let viewer = {};
+    //                 users.users.map((auser)=>{
+    //                   viewer = {...viewer,
+    //                     [auser.uid]: {
+    //                       uid: auser.uid,
+    //                       displayName: auser.displayName,
+    //                       photoURL: auser.photoURL,
+    //                     }};
+    //                 });
+    //                 const arrviewer = Object.entries(viewer);
+    //                 const mappeddocdata = {
+    //                   ...docs.data(),
+    //                   creator: Object.fromEntries([arrviewer.find(([k, v])=>v.uid === docs.data().uid)]),
+    //                   viewer: viewer,
+    //                   follower: Object.fromEntries(arrviewer.filter(([k, v], i)=>docs.data().follower.includes(v.uid))),
+    //                 };
+    //                 const finaldata = {...docs.data(), ...mappeddocdata};
+    //                 post = [...post, finaldata];
+    //                 console.log(post);
+    //               });
+    //             });
+    //             console.log("before send");
+    //             return res.status(200).json(post);
+    //           });
+    //     } else {
+    //       return res.status(401).send("cannot get posts : unauthorized");
+    //     }
+    //   } else {
+    //     return res.status(401).send("unauthorized");
+    //   }
+    // });
+  } else {
+    return res.status(401).send("unauthorized");
   }
 };
 
@@ -146,7 +226,7 @@ exports.getPost = (req, res) =>{
       if (doc.exists) {
         // eslint-disable-next-line max-len
         if ((doc.data().privacy == "private" && doc.data().member.includes(user))|| doc.data().privacy == "public") {
-          db
+          return db
               .collection("posts")
               .doc(req.params.pid)
               .get()

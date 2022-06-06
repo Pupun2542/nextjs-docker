@@ -5,14 +5,14 @@
 const functions = require("firebase-functions");
 const express = require("express");
 // const { db } = require("./utils/admin");
-const { createGroup, updateGroup, deleteGroup, getAllGroup, addPlayer, addPendingPlayer, removePlayer, removePendingPlayer, addStaff, removeStaff, groupPin, groupUnpin, groupLove, groupUnlove, getGroup } = require("./handlers/group");
+const { createGroup, updateGroup, deleteGroup, getAllGroup, addPlayer, addPendingPlayer, removePlayer, removePendingPlayer, addStaff, removeStaff, groupPin, groupUnpin, groupLove, groupUnlove, getGroup, JoinDebug } = require("./handlers/group");
 const { db, admin } = require("./utils/admin");
 const authmw = require("./utils/auth");
 const cors = require("cors");
 const { createPost, updatePost, deletePost, lovePost, unlovePost, getPost, getAllPost } = require("./handlers/posts");
 const { createComment, updateComment, deleteComment, loveComment, unloveComment, getAllComment } = require("./handlers/comments");
 const { createReply, updateReply, deleteReply, loveReply, unloveReply, getAllReply } = require("./handlers/replies");
-const { getuser } = require("./handlers/user");
+const { getuser, getbatchUser } = require("./handlers/user");
 
 // The Firebase Admin SDK to access Firestore.
 
@@ -65,8 +65,10 @@ app.post("/post/:pid/comment/:cid/reply/:rid/unlove", authmw, unloveReply);
 app.get("/post/:pid/comment/:cid/reply", authmw, getAllReply);
 app.get("/user/:uid", authmw, getuser);
 app.get("/user/search", authmw, getuser);
+app.post("/user/bactchget/", getbatchUser);
 app.post("/user/:uid/update/");
-// app.post("/utils/upload");
+
+app.post("/debug/group/:gid/join/", authmw, JoinDebug);
 
 exports.api = functions.region("asia-southeast1").https.onRequest(app);
 
@@ -88,7 +90,7 @@ exports.onNotificationAdd = functions.firestore
             readed: false,
           });
         }
-        }
+        },
       );
     } else {
       if (sendTo != snap.data().triggerer) {

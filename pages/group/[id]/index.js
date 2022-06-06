@@ -14,10 +14,6 @@ import {
   updateDoc,
   setDoc,
 } from "firebase/firestore";
-import { getApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import Link from "next/link";
-import { async } from "@firebase/util";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
 import GroupSidebar from "../../../components/GroupSidebar";
@@ -76,12 +72,28 @@ import {
   DotsThreeVertical,
 } from "phosphor-react";
 import { Comments } from "../../../components/comments";
+import axios from "axios";
 
 // export async function getServerSideProps(context) {
 //   const { params } = context;
 //   const { id } = params;
-//   const res = await fetch(`${process.env.NEXT_USE_API_URL}/api/group/${id}`);
-//   const data = await res.json();
+//   const res = await fetch(`${process.env.NEXT_PUBLIC_USE_API_URL}/group/${id}`);
+//   let data = await res.json();
+//   let color = "";
+//   if (data.rating === "NC-21 (ไม่เหมาะสำหรับเยาวชน)") {
+//     color = "#EA4545";
+//     // console.log(d.data().rating);
+//   } else if (data.rating === "R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)") {
+//     color = "#FF912B";
+//     // console.log(d.data().rating);
+//   } else if (data.rating === "R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)") {
+//     color = "#FBBC43";
+//     // console.log(d.data().rating);
+//   } else {
+//     color = "#72994C";
+//     // console.log(d.data().rating);
+//   }
+//   data = {...data, color:color};
 //   return { props: { data } };
 // }
 
@@ -98,49 +110,51 @@ export default function Group() {
   const [pin, setPin] = useState(false);
   const [text, setText] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [user] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const [color, setColor] = useState("");
-  const [loading, setLoading] = useState(true);
+  // const color = data.color;
+  // const [loading, setLoading] = useState(false);
   const getUser = useUser();
   const buttonRef = useRef(null);
 
   const { id } = Router.query;
+  /* CSR */
   useEffect(() => {
     const Fetchdata = async () => {
-      console.log("Fetchdata");
-      getDoc(doc(db, "group", id)).then(async (d) => {
-        if (d.exists()) {
-          // console.log(d.data());
-          const mappedcreator = await getUser([d.data().creator]);
-          // console.log(mappedcreator);
-          setData({ ...d.data(), creator: mappedcreator });
-          // setData(d.data());
-          if (d.data().rating === "NC-21 (ไม่เหมาะสำหรับเยาวชน)") {
-            setColor("#EA4545");
-            // console.log(d.data().rating);
-          } else if (d.data().rating === "R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)") {
-            setColor("#FF912B");
-            // console.log(d.data().rating);
-          } else if (d.data().rating === "R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)") {
-            setColor("#FBBC43");
-            // console.log(d.data().rating);
-          } else {
-            setColor("#72994C");
-            // console.log(d.data().rating);
-          }
-          setLoading(false);
-        } else {
-          console.log(d.exists(), id);
-          alert("ไม่พบคอมมู");
-          // Router.back();
+      // console.log(auth.currentUser)
+      const token = await auth.currentUser.getIdToken();
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${id}`,
+        {
+          headers: {
+            Authorization: token,
+          },
         }
-      });
+      );
+      let data = res.data;
+      let color = "";
+      if (data.rating === "NC-21 (ไม่เหมาะสำหรับเยาวชน)") {
+        color = "#EA4545";
+        // console.log(d.data().rating);
+      } else if (data.rating === "R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)") {
+        color = "#FF912B";
+        // console.log(d.data().rating);
+      } else if (data.rating === "R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)") {
+        color = "#FBBC43";
+        // console.log(d.data().rating);
+      } else {
+        color = "#72994C";
+        // console.log(d.data().rating);
+      }
+      // data = { ...data, color: color };
+      setColor(color)
+      setData(data);
     };
-    if (id && id != "undefined") {
+    if (id && id != "undefined" &&!loading) {
       Fetchdata();
     }
-  }, [id]);
-
+  }, [id, loading]);
+  /* CSR */
   useEffect(() => {
     if (user) {
       getDoc(doc(db, "userDetail", user.uid, "pinnedGroup", id)).then(
@@ -200,6 +214,24 @@ export default function Group() {
     }
   };
 
+  const handleDebugJoin = async () => {
+    if (Object.keys(data.member).includes(user.uid)) {
+      Router.push(`/group/${id}/dashboard`);
+    } else {
+      const token = await user.getIdToken();
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/debug/group/${id}/join`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      console.log(res);
+      Router.push(`/group/${id}/dashboard`);
+    }
+  };
+
   return (
     <Box>
       <Box bg={"#FFFFFF"}>
@@ -250,8 +282,8 @@ export default function Group() {
                         icon={<CalendarBlank size={32} />}
                         isDisabled
                       />
-                      {console.log(data.creator[0].uid)}
-                      {user && user.uid === data.creator[0].uid && (
+                      {console.log(data)}
+                      {user && user.uid === data.creator.uid && (
                         <Box>
                           <Menu>
                             <MenuButton
@@ -772,7 +804,9 @@ export default function Group() {
                                     // data.smlink
                                     //   ? () => outsidenavigate(data.smlink)
                                     //   : () => alert("ไม่มีลิงก์กลุ่ม")
-                                    () => Router.push(`/group/${id}/dashboard`)
+                                    () => {
+                                      handleDebugJoin();
+                                    }
                                   }
                                   cursor="pointer"
                                 >
