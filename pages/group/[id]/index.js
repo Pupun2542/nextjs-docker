@@ -147,10 +147,10 @@ export default function Group() {
         // console.log(d.data().rating);
       }
       // data = { ...data, color: color };
-      setColor(color)
+      setColor(color);
       setData(data);
     };
-    if (id && id != "undefined" &&!loading) {
+    if (id && id != "undefined" && !loading) {
       Fetchdata();
     }
   }, [id, loading]);
@@ -221,6 +221,9 @@ export default function Group() {
       const token = await user.getIdToken();
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/debug/group/${id}/join`,
+        {
+          id: user.uid,
+        },
         {
           headers: {
             Authorization: token,
