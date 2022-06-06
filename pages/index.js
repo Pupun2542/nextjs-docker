@@ -2,8 +2,6 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import "../src/config/firebase.config";
 import CustomNavbar from "../components/navbar";
-import { Container, Row, Col, SSRProvider } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
 import Head from "next/head";
 import {
   Box,

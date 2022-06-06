@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import CustomNavbar from "../components/navbar";
-import { Button, SSRProvider } from "react-bootstrap";
 import { RegisterWithEmail } from "../src/services/authservice";
 import { useRouter } from "next/router";
 import "../src/config/firebase.config"

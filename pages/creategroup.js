@@ -2,7 +2,6 @@ import React from "react";
 import CustomNavbar from "../components/navbar";
 import style from "../styles/creategroup.module.css";
 import { useState, useEffect } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import {
   getFirestore,
   collection,

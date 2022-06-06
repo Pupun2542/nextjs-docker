@@ -5,16 +5,10 @@ import {
   ref,
   uploadBytesResumable,
   uploadBytes,
-  getBlob,
   uploadString
 } from "firebase/storage";
 import { getApp } from "firebase/app";
 import { getAuth, updateProfile } from "firebase/auth";
-import { useCallback, useState } from "react";
-import { async } from "@firebase/util";
-import { useApp } from "../hook/local";
-import { useDropzone } from "react-dropzone";
-import { Modal } from "react-bootstrap";
 // import { store } from "./firebaseadminservice";
 
 const app = getApp();

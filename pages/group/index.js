@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Container, SSRProvider, Row, Col } from "react-bootstrap";
 import CustomNavbar from "../../components/navbar";
 
 import {

@@ -11,10 +11,7 @@ import {
 } from "../src/services/authservice";
 import { useState } from "react";
 import CustomNavbar from "../components/navbar";
-import { SSRProvider } from "react-bootstrap";
 import { Router, useRouter } from "next/router";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Col, Container, Row } from "react-bootstrap";
 import Head from "next/head";
 import { Box, Center, Flex, Spacer, VStack, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure } from "@chakra-ui/layout";
 import {
@@ -32,9 +29,7 @@ function Login() {
   var mail;
   if (loading) {
     return (
-      <SSRProvider>
         <CustomNavbar />
-      </SSRProvider>
     );
   }
   if (user) {
@@ -54,7 +49,7 @@ function Login() {
     router.push("/");
   };
   return (
-    <SSRProvider>
+    <Box>
       <Head>
         <link rel="shortcut icon" href="favicon.ico"></link>
         <title>Login</title>
@@ -219,7 +214,7 @@ function Login() {
         </Flex>
       </Box>
 
-    </SSRProvider>
+    </Box>
   );
 }
 
