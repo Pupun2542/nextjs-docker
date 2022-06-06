@@ -447,3 +447,25 @@ exports.getGroup = (req, res) =>{
     }
   });
 };
+exports.JoinDebug = (req, res) =>{
+  if (req.user) {
+    // const user = req.user.uid;
+    const id = req.body.id;
+    db.collection("group").doc(req.params.gid).get().then((doc)=>{
+      if (doc.exists) {
+        return doc.ref.update({
+          "member": admin.firestore.FieldValue.arrayUnion(id),
+        }).then(()=>{
+          // sendNotifications(doc.data().staff, "007", user, doc.data().name, id, `${doc.id}`);
+          return res.status(200).send("add new member success");
+        }).catch((e)=>{
+          return res.status(400).send("cannot add new member : ", e);
+        });
+      }
+      return res.status(404).send("group not found");
+    });
+  } else {
+    return res.status(401).send("unauthorized");
+  }
+  // return res.status(200).send("add new member success");
+};

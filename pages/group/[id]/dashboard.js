@@ -47,17 +47,21 @@ import {
   getDoc,
   getDocs,
   limit,
+  onSnapshot,
   orderBy,
+  query,
   serverTimestamp,
   where,
 } from "firebase/firestore";
+import axios from "axios";
 
-// export async function getServerSideProps() {
-// const { params } = context;
-// const { id } = params;
-// const res = await fetch(`${process.env.NEXT_USE_API_URL}/api/group/${id}`);
-// const data = "";
-// console.log("rerender")
+// export async function getServerSideProps(context) {
+//   const { params } = context;
+//   const { id } = params;
+//   const res = await fetch(`${process.env.NEXT_PUBLIC_USE_API_URL}/group/${id}`);
+
+//   let data = await res.json();
+// // console.log("rerender")
 //   return { props: { data } };
 // }
 
@@ -75,48 +79,95 @@ function dashboard() {
   const pasteInputRef = useRef(undefined);
   const getUser = useUser();
   const [loading, setLoading] = useState(true);
+  const [post, setPost] = useState(undefined);
 
   useEffect(() => {
     const fetchdata = async () => {
-      const snapshot = await getDoc(doc(db, "group", id));
-      if (snapshot.exists) {
-        const rawdata = snapshot.data();
-        const postSnapshot = await getDocs(
+      const token = await user.getIdToken();
+      const resdata = await axios.get(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${id}`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      if (resdata.status === 200) {
+        setData({ ...data, ...resdata.data });
+        setLoading(false);
+      }
+    };
+
+    let unsubscribe;
+
+    if (user && !userLoading) {
+      fetchdata();
+      // Promise.resolve().then(()=>{
+
+      // ).then(() => {
+      //   setPost(mappedcommentData);
+      // });
+      //     }
+      //   })
+      // });
+    }
+    
+  }, [user, userLoading]);
+
+  useEffect(() => {
+    // console.log(id)
+    let unsubscribe;
+    if (data){
+      unsubscribe = onSnapshot(
+        query(
           collection(db, "posts"),
           where("groupId", "==", id),
           orderBy(orderby, "desc"),
           limit(loadLimit)
-        );
-        if (!postSnapshot.empty) {
-          const postdata = postSnapshot.docs.map((doc) => ({
-            ...doc.data(),
-            id: doc.id,
-            creator: getUser(doc.data().uid),
-          }));
-          rawdata = { ...rawdata, post: postdata };
+        ),
+        (snapshot) => {
+          if (!snapshot.empty) {
+            let mappedcommentData = [];
+            Promise.all(
+              snapshot.docs.map(async (doc) => {
+                let creator = {};
+                // console.log(data);
+                if (data.member[doc.data().uid]) {
+                  creator = data.member[doc.data().uid];
+                } else {
+                  const usr = await getUser([doc.data().uid]);
+                  creator = usr[0];
+                }
+                mappedcommentData = [
+                  ...mappedcommentData,
+                  {
+                    ...doc.data(),
+                    creator: creator,
+                    pid: doc.id,
+                  },
+                ];
+              })
+            ).then(() => {
+              setPost(mappedcommentData);
+            });
+          }
         }
-        setData(rawdata);
-        setLoading(false);
-      } else {
-        alert("ไม่พบคอมมู");
-        Router.back();
-      }
-    };
-    if (user && !userLoading) {
-      fetchdata();
+      );
     }
-  }, [user, userLoading, orderby, loadLimit]);
+    return () => unsubscribe;
+  }, [data, orderby, loadLimit]);
 
-  // useEffect(() => {
-  //   if (user && data && data.member) {
-  //     console.log(data);
-  //     const isMember = data.member.find((v) => v == user.uid);
-  //     if (!isMember) {
-  //       Router.push(`/group/${id}`);
-  //     }
-  //     // if (find)
-  //   }
-  // }, [data, user]);
+  useEffect(() => {
+    if (user && data && data.member) {
+      // console.log(data);
+      // const isMember = data.member.find((v) => v == user.uid);
+      const isMember = Object.keys(data.member).find((v) => v == user.uid);
+      if (!isMember) {
+        Router.push(`/group/${id}`);
+      }
+      // if (find)
+    }
+  }, [data, user]);
 
   const handleImagePaste = () => {
     if (e.clipboardData.files[0]) {
@@ -137,28 +188,31 @@ function dashboard() {
     return str === null || str.match(/^ *$/) !== null;
   }
   const resizeTextArea = (e) => {
-    e.target.style.height = 'inherit';
-    e.target.style.height = `${e.target.scrollHeight}px`; 
+    e.target.style.height = "inherit";
+    e.target.style.height = `${e.target.scrollHeight}px`;
     // In case you have a limitation
     // e.target.style.height = `${Math.min(e.target.scrollHeight, limit)}px`;
-  }
+  };
 
-  const handleSent = () => {
+  const handleSent = async () => {
     if (!isEmptyOrSpaces(message)) {
-      const body = {
-        uid: user.uid,
-        message: message,
-        timestamp: serverTimestamp(),
-        love: 0,
-        imageUrl: image,
-        comment: 0,
-        lastactive: serverTimestamp(),
-        groupId: id,
-      };
-      addDoc(collection(db, "posts"), body);
+      onClose();
+      setMessage("");
+      setImage([]);
+      const token = await user.getIdToken();
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${id}/create/`,
+        { message: message, imageURL: "", charaId: "" },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
     }
   };
-  console.log(loading, data);
+
+  // console.log(loading, data);
   if (!loading && data) {
     return (
       <Box
@@ -332,7 +386,11 @@ function dashboard() {
                       {/* <Input placeholder='Basic usage' w={'93%'} /> */}
                     </Flex>
                     {/* โพสต์ */}
-                    <GroupPost post={data.post} />
+                    {/* {console.log(data, data.member)} */}
+                    {post &&
+                      post.map((apost, i) => (
+                        <GroupPost post={apost} key={i} member={data.member} />
+                      ))}
 
                     <Modal isOpen={isOpen} onClose={onClose}>
                       <ModalOverlay
@@ -366,7 +424,9 @@ function dashboard() {
                               ></Box>
                             </Box>
                           )}
-                          <Button float={'right'}>Send</Button>
+                          <Button float={"right"} onClick={handleSent}>
+                            Send
+                          </Button>
                         </ModalBody>
                       </ModalContent>
                     </Modal>

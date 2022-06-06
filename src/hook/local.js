@@ -23,6 +23,7 @@ import {
 import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import useSound from "use-sound";
+import axios from "axios";
 
 const AppContext = createContext();
 const UserContext = createContext();
@@ -186,6 +187,7 @@ export const UserProvider = ({ children }) => {
       let newuid = uid;
       uid.map((id) => {
         const user = data.data.find((v) => v.uid == id);
+        console.log("search ", user)
         if (user){
           users = [...users, user];
           console.log("found ", users)
@@ -196,17 +198,22 @@ export const UserProvider = ({ children }) => {
       if (newuid.length > 0) {
         console.log(users.length, uid.length)
 
-        let docData = await getDocs(
-            query(collection(db, "userDetail"), where("uid", "in", newuid))
-          );
-        let userDetail = [];
-        if (!docData.empty) {
-          userDetail = docData.docs.map((doc) => doc.data());
-          DataDispatcher({ type: "addUser", userDetail });
-          console.log("new:", userDetail)
-          users = [...users, ...userDetail]
+        // let docData = await getDocs(
+        //     query(collection(db, "userDetail"), where("uid", "in", newuid))
+        //   );
+        // let userDetail = [];
+        // if (!docData.empty) {
+        //   userDetail = docData.docs.map((doc) => doc.data());
+        console.log("new:", newuid)
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/user/bactchget/`, {
+          users: newuid,
+        })
+        console.log("get:", res)
+        let docdata = res.data
+          DataDispatcher({ type: "addUser", docdata });
+          console.log("new:", users)
+          users = [...users, ...docdata]
           return users;
-        }
         
       } else {
         console.log("found: ",users)

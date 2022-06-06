@@ -23,16 +23,17 @@ exports.createComment = (req, res) =>{
               db.collection("posts").doc(req.params.pid).update({
                 comment: admin.firestore.FieldValue.increment(1),
               });
-              sendNotifications(doc.data().member, 102, user, doc.data().name, "", `${gdoc.id}/${req.params.pid}/${ref.id}`);
+              sendNotifications(doc.data().viewer, 102, user, doc.data().name, "", `${gdoc.id}/${req.params.pid}/${ref.id}`);
               return res.status(200).send("create comment success");
             }).catch((e)=>{
-              return res.status(400).send("create comment not success ", e);
+              return res.status(400).send("create comment not success "+ e);
             });
           }
           return res.status(401).send("unauthorized");
         });
       }
     });
+  } else {
     res.status(401).send("unauthorized");
   }
 };
