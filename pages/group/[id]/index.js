@@ -790,7 +790,7 @@ export default function Group() {
                                   <Center
                                     borderRadius={10}
                                     bg={"#FBBC43"}
-                                    w={495}
+                                    w={'49.5%'}
                                     h={63}
                                     p={5}
                                     as={"button"}
@@ -806,7 +806,7 @@ export default function Group() {
                                     shadow={"base"}
                                     borderRadius={10}
                                     bg={color}
-                                    w={240}
+                                    w={'49.5%'}
                                     h={63}
                                     p={5}
                                   >
