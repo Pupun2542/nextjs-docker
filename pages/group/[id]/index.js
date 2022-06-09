@@ -1053,18 +1053,18 @@ export default function Group() {
                       </Center>
                       <Wrap fontFamily={'Mitr'}>
                         <WrapItem>
-                          <Center w='180px' h='180px' bg='gray.100'boxShadow={'base'} rounded={10}>
+                          <Center w='180px' h='180px' bg='gray.100' boxShadow={'base'} rounded={10}>
                             <VStack spacing={0}>
                               <Center rounded={'full'} bg={'crimson'} w={75} h={75} mb={1} color={'white'}>A</Center>
                               <Center bg={'#6768AB'} w={120} color={'white'} p={1} borderTopRadius={10} mt={1}>A ant</Center>
                               <Center bg={'White'} w={120} borderBottomRadius={10} p={1}> Admin</Center>
                             </VStack>
-                            
+
                           </Center>
                         </WrapItem>
                         <WrapItem>
                           <Center w='180px' h='180px' bg='gray.100' boxShadow={'base'} rounded={10}>
-                          <VStack spacing={0}>
+                            <VStack spacing={0}>
                               <Center rounded={'full'} bg={'tan'} w={75} h={75} mb={1} color={'white'}>B</Center>
                               <Center bg={'#6768AB'} w={120} color={'white'} p={1} borderTopRadius={10} mt={1}>B Bird</Center>
                               <Center bg={'White'} w={120} borderBottomRadius={10} p={1}>Staff</Center>
