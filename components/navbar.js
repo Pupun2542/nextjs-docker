@@ -515,7 +515,7 @@ function CustomNavbar() {
                         _hover={{
                           backgroundColor: "gray.300",
                         }}
-                        // onClick={() => router.push("/profile/" + user.uid)}
+                        onClick={() => router.push("/profile/" + user.uid)}
                       >
                         Account Settings
                       </MenuItem>
