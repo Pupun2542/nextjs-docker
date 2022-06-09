@@ -64,6 +64,9 @@ import {
   PopoverCloseButton,
   PopoverAnchor,
   Container,
+  Wrap,
+  WrapItem,
+  HStack,
 } from "@chakra-ui/react";
 import Footer from "../../../components/footer";
 import {
@@ -1035,7 +1038,40 @@ export default function Group() {
                     </TabPanel>
 
                     <TabPanel>
-                      Staff
+
+                      <Center
+                        w={'100%'}
+                        p={3}
+                        color={'white'}
+                        bg={'#6768AB'}
+                        fontFamily={'Mitr'}
+                        fontSize={'xl'}
+                        mb={5}
+                      >
+                        รายชื่อผู้สร้าง
+                        <Center pl={1}>[0]</Center>
+                      </Center>
+                      <Wrap fontFamily={'Mitr'}>
+                        <WrapItem>
+                          <Center w='180px' h='180px' bg='gray.100'boxShadow={'base'} rounded={10}>
+                            <VStack spacing={0}>
+                              <Center rounded={'full'} bg={'crimson'} w={75} h={75} mb={1} color={'white'}>A</Center>
+                              <Center bg={'#6768AB'} w={120} color={'white'} p={1} borderTopRadius={10} mt={1}>A ant</Center>
+                              <Center bg={'White'} w={120} borderBottomRadius={10} p={1}> Admin</Center>
+                            </VStack>
+                            
+                          </Center>
+                        </WrapItem>
+                        <WrapItem>
+                          <Center w='180px' h='180px' bg='gray.100' boxShadow={'base'} rounded={10}>
+                          <VStack spacing={0}>
+                              <Center rounded={'full'} bg={'tan'} w={75} h={75} mb={1} color={'white'}>B</Center>
+                              <Center bg={'#6768AB'} w={120} color={'white'} p={1} borderTopRadius={10} mt={1}>B Bird</Center>
+                              <Center bg={'White'} w={120} borderBottomRadius={10} p={1}>Staff</Center>
+                            </VStack>
+                          </Center>
+                        </WrapItem>
+                      </Wrap>
                     </TabPanel>
                   </TabPanels>
                 </Tabs>
