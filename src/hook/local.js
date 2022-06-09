@@ -167,11 +167,11 @@ const initialUser = {
 const userReducer = (state, action) => {
   switch (action.type) {
     case "addUser":
-      console.log(state.data, action.userDetail)
+      console.log(state.data, action.docdata)
       return {
         ...state,
         // data: {...state.data, [action.uid]:action.payload}
-        data: [...state.data, ...action.userDetail],
+        data: [...state.data, ...action.docdata],
       };
   }
 };
@@ -208,8 +208,9 @@ export const UserProvider = ({ children }) => {
         const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/user/bactchget/`, {
           users: newuid,
         })
-        console.log("get:", res)
+        
         let docdata = res.data
+        console.log("get:", docdata)
           DataDispatcher({ type: "addUser", docdata });
           console.log("new:", users)
           users = [...users, ...docdata]

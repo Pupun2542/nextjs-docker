@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-// import { Modal, Button } from "react-bootstrap";
 import { useDropzone } from "react-dropzone";
 import style from "../styles/banner.module.css";
 import Dropzone from "react-dropzone";

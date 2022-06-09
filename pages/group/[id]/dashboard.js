@@ -98,18 +98,8 @@ function dashboard() {
       }
     };
 
-    let unsubscribe;
-
     if (user && !userLoading) {
       fetchdata();
-      // Promise.resolve().then(()=>{
-
-      // ).then(() => {
-      //   setPost(mappedcommentData);
-      // });
-      //     }
-      //   })
-      // });
     }
     
   }, [user, userLoading]);

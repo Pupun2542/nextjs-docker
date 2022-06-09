@@ -13,13 +13,15 @@ const { createPost, updatePost, deletePost, lovePost, unlovePost, getPost, getAl
 const { createComment, updateComment, deleteComment, loveComment, unloveComment, getAllComment } = require("./handlers/comments");
 const { createReply, updateReply, deleteReply, loveReply, unloveReply, getAllReply } = require("./handlers/replies");
 const { getuser, getbatchUser } = require("./handlers/user");
+const { createPreviewComment } = require("./handlers/previewcomments");
 
 // The Firebase Admin SDK to access Firestore.
 
 const app = express();
 app.use(express.json());
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: ["http://localhost:3000", "https://comuthor-uat-hclhis5lxq-de.a.run.app"],
+  // origin: "https://comuthor-uat-hclhis5lxq-de.a.run.app",
 }));
 
 app.get("/", (req, res)=>{
@@ -42,6 +44,12 @@ app.post("/group/:id/pin", authmw, groupPin);
 app.post("/group/:id/unpin", authmw, groupUnpin);
 app.post("/group/:id/love", authmw, groupLove);
 app.post("/group/:id/unlove", authmw, groupUnlove);
+app.post("/group/:id/comment/create", authmw, createPreviewComment);
+app.post("/group/:id/comment/:cid/update", authmw, createPreviewComment);
+app.post("/group/:id/comment/:cid/delete", authmw, createPreviewComment);
+app.post("/group/:id/comment/:cid/reply/create", authmw, createPreviewComment);
+app.post("/group/:id/comment/:cid/reply/:rid/update", authmw, createPreviewComment);
+app.post("/group/:id/comment/:cid/reply/:rid/delete", authmw, createPreviewComment);
 app.get("/group/:gid", authmw, getGroup);
 app.get("/groups", authmw, getAllGroup);
 app.post("/post/:gid/create", authmw, createPost);

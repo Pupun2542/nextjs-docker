@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Container, SSRProvider, Row, Col, Form } from "react-bootstrap";
 import style from "../styles/groupcard.module.css";
 import { useApp } from "../src/hook/local";
 import {

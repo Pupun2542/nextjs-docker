@@ -64,16 +64,12 @@ export async function UploadDoc(file, creator){
   return downloadurl
 }
 
-// export async function UploadTempImage(file) {
-//   const name = Math.floor(Math.random()*10000000000)+".jpg"
-//   const app = getApp();
-//   const store = getStorage(app);
-//   if (!file) {
-//     return;
-//   }
-//   // const blob = new Blob(file);
-//   const storageref = ref(store, `group/temp/${name}`);
-//   // const uploadtask = uploadBytesResumable(storageref, file);
-//   const upl = await uploadBytes(storageref, blob);
-//   const downloadurl = await getDownloadURL(storageref);
-// }
+export async function UploadGroupCommentImage(file, creator, group) {
+  const storeRef = ref(
+    store,
+    `group/${group}/comments/${creator}${Date.now()}.jpg`
+  );
+  const uploadsnapshot = await uploadString(storeRef, file, "data_url");
+  const downloadurl = await getDownloadURL(uploadsnapshot);
+  return downloadurl;
+}
