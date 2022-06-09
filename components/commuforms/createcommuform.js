@@ -97,7 +97,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
     registrationlink: [],
     statuschecklink: [],
     creator: uid,
-    staff:[]
+    staff: []
   });
   const [bannerBlob, setBannerBlob] = useState(null);
   const [genre, setGenre] = useState([]);
@@ -174,9 +174,9 @@ export const Createcommuform = ({ data, uid, gid }) => {
       }
     };
     return (
-      <Box w={'100%'} h={38} float={'left'}>
+      <Box w={'100%'} h={'auto'} float={'left'}>
         <Box>
-          <Box id="tags" mt={1}>
+          <Box id="tags" mt={1.5} mb={1.5}>
             {props.state.map((tag, index) => (
               <HStack
                 key={index}
@@ -213,7 +213,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
               // border="hidden"
               maxW={200}
               float='left'
-              mr={0.5} ml={0.5}
+              mr={0.5} ml={0.5} mb={2}
               fontSize={16}
               h={31}
             />
@@ -250,12 +250,12 @@ export const Createcommuform = ({ data, uid, gid }) => {
   // console.log(inputref.current.value);
 
   const HandleSubmit = async () => {
-    
-    let bannerUrl = (data?.banner? data.banner: "");
-    let docUrl = (data?.doclink? data.doclink: "");
+
+    let bannerUrl = (data?.banner ? data.banner : "");
+    let docUrl = (data?.doclink ? data.doclink : "");
     const token = await auth.currentUser.getIdToken();
 
-    if (bannerBlob&&!bannerBlob.startsWith("http")) {
+    if (bannerBlob && !bannerBlob.startsWith("http")) {
       // console.log("upload")
       bannerUrl = await UploadBannerImage(bannerBlob, auth.currentUser.uid);
     } else {
@@ -285,11 +285,11 @@ export const Createcommuform = ({ data, uid, gid }) => {
     // console.log(body)
     if (data) {
       const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/group/${gid}/update`, body,
-      {
-        headers: {
-          Authorization: token,
-        },
-      }
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
       );
       console.log(res.data)
       if (res.status === 200) {
@@ -297,11 +297,11 @@ export const Createcommuform = ({ data, uid, gid }) => {
       }
     } else {
       const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/group/create`, body,
-      {
-        headers: {
-          Authorization: token,
-        },
-      }
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
       );
       console.log(res.data);
       if (res.status === 200) {
@@ -374,7 +374,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
     setFieldvalue({ ...fieldvalue, statuschecklink: newState })
   }
 
-  const searchStaff = (value) =>{
+  const searchStaff = (value) => {
     setStaffSearchString(value);
     if (value.length >= 3) {
 
@@ -691,14 +691,13 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         </Box>
                       </Box>
 
-                      <Center w={'100%'} position="relative">
+                      <Center w={'100%'} height='auto' position="relative">
                         <Container
                           w={'100%'}
-                          h="auto"
+                          h='auto'
                           minH={46}
                           bg={"white"}
                           borderRadius={10}
-                          mt={1}
                         >
                           <Hashtag
                             // selectedTags={selectedTags}
@@ -1057,7 +1056,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         borderRightWidth={3}
                       >
                         <Box>
-                          <Text float="left">ระดับของเนื้อหา</Text>
+                          <Text float="left">คำเตือน</Text>
                         </Box>
                       </Box>
 
@@ -1193,24 +1192,19 @@ export const Createcommuform = ({ data, uid, gid }) => {
                       <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
                         <Input
                           type="file"
-                          // value={fieldvalue.name}
-                          // onChange={(e) => {
-                          //   setFieldvalue({
-                          //     ...fieldvalue,
-                          //     name: e.target.value,
-                          //   });
-                          //   // setCommuname(e.target.value);
-                          // }}
-                          // value={}
                           ref={inputref}
-                          onChange={(e)=>setFieldvalue({...fieldvalue, docfile: e.target.files[0]})}
+                          onChange={(e) => setFieldvalue({ ...fieldvalue, docfile: e.target.files[0] })}
                           required
                           w={'100%'}
                           h={46}
                           bg={"white"}
-                          placeholder={"..."}
+                          padding={2}
+
                         />
-                        <Button onClick={()=>{setFieldvalue({...fieldvalue, docfile: undefined});inputref.current.value = ""}} >clear</Button>
+                        <Button
+                          margin={2}
+                          onClick={() => { setFieldvalue({ ...fieldvalue, docfile: undefined }); inputref.current.value = "" }}
+                        >clear</Button>
                       </Center>
                     </Flex>
                     <Center w={50}></Center>
@@ -1410,7 +1404,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
               borderWidth={3}
               borderColor={'black'}
             >
-              {(data?"แก้ไข":"สร้างคอมมู")}
+              {(data ? "แก้ไข" : "สร้างคอมมู")}
             </Button>
           </HStack>
         </Box>
@@ -1461,8 +1455,8 @@ export const Createcommuform = ({ data, uid, gid }) => {
               รายชื่อผู้ดูแล
             </Box>
 
-            {staffSearch.map((value, index)=>{
-              (<AddStaffForm item={value} onChange={(data)=> setStaff(index, data)} onDelete={()=>deleteStaff(index)} />)
+            {staffSearch.map((value, index) => {
+              (<AddStaffForm item={value} onChange={(data) => setStaff(index, data)} onDelete={() => deleteStaff(index)} />)
             })}
 
             {/* <Flex mt={3}>

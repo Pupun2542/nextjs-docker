@@ -204,6 +204,7 @@ function CustomNavbar() {
               minHeight={38}
               borderWidth={2}
               borderColor={"black"}
+              onClick={() => router.push("/profile/" + user.uid)}
             >
               <Center px={0}>
                 <Avatar h={41} w={41} src={user.photoURL} />
@@ -514,7 +515,7 @@ function CustomNavbar() {
                         _hover={{
                           backgroundColor: "gray.300",
                         }}
-                        onClick={() => router.push("/profile/" + user.uid)}
+                        // onClick={() => router.push("/profile/" + user.uid)}
                       >
                         Account Settings
                       </MenuItem>
