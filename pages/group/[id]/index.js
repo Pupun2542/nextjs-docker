@@ -63,6 +63,7 @@ import {
   PopoverArrow,
   PopoverCloseButton,
   PopoverAnchor,
+  Container,
 } from "@chakra-ui/react";
 import Footer from "../../../components/footer";
 import {
@@ -237,7 +238,26 @@ export default function Group() {
 
   return (
     <Box>
-      <Box bg={"#FFFFFF"}>
+      <Box
+        bg={"#FFFFFF"}
+        overflowY={"auto"}
+        // maxH={'960'}
+        maxH={"100vh"}
+        css={{
+          "&::-webkit-scrollbar": {
+            width: "8px",
+            height: "8px"
+          },
+          "&::-webkit-scrollbar-track": {
+            width: "8px",
+            height: "8px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "#727272",
+            borderRadius: "24px",
+          },
+        }}
+      >
         <CustomNavbar />
         {!loading && data && (
           <Flex>
@@ -343,6 +363,7 @@ export default function Group() {
                   <TabList fontFamily={"Mitr"}>
                     <Tab>Detail</Tab>
                     <Tab>Document</Tab>
+                    <Tab>Staff List</Tab>
                   </TabList>
                   <TabPanels>
                     <TabPanel>
@@ -523,24 +544,30 @@ export default function Group() {
                                     bg={"white"}
                                     w={550}
                                     minH={63}
-                                    pt={2}
-                                    pl={3}
+                                    pt={3}
+                                    pl={1}
+                                    pb={2}
+                                    pr={1}
+                                    // h={'auto'}
                                     shadow={"base"}
                                     borderRightRadius={10}
                                   >
                                     {/* {console.log(data.genre)} */}
                                     {data.times && data.genre.length > 0
                                       ? data.genre.map((genre, index) => (
-                                          <Box
-                                            key={index}
-                                            className={style.tag}
-                                            marginLeft={2.5}
-                                            maxW={600}
-                                            float={"left"}
-                                          >
-                                            {genre}
-                                          </Box>
-                                        ))
+                                        <Box
+                                          key={index}
+                                          marginLeft={2.5}
+                                          maxW={600}
+                                          float={"left"}
+                                          bg={'#6768AB'}
+                                          p={2}
+                                          color={'white'}
+                                          borderRadius={'10'}
+                                        >
+                                          {genre}
+                                        </Box>
+                                      ))
                                       : "ไม่มีหมวดหมู่"}
                                   </Box>
                                 </Flex>
@@ -570,16 +597,16 @@ export default function Group() {
                                   >
                                     {data.times && data.place.length > 0
                                       ? data.place.map((genre, index) => (
-                                          <Box
-                                            key={index}
-                                            className={style.tag}
-                                            marginLeft={2.5}
-                                            maxW={600}
-                                            float={"left"}
-                                          >
-                                            {genre}
-                                          </Box>
-                                        ))
+                                        <Box
+                                          key={index}
+                                          className={style.tag}
+                                          marginLeft={2.5}
+                                          maxW={600}
+                                          float={"left"}
+                                        >
+                                          {genre}
+                                        </Box>
+                                      ))
                                       : "ไม่มีหมวดหมู่"}
                                   </Box>
                                 </Flex>
@@ -610,16 +637,16 @@ export default function Group() {
                                     {/* {console.log(data.genre)} */}
                                     {data.times && data.times.length > 0
                                       ? data.times.map((genre, index) => (
-                                          <Box
-                                            key={index}
-                                            className={style.tag}
-                                            marginLeft={2.5}
-                                            maxW={600}
-                                            float={"left"}
-                                          >
-                                            {genre}
-                                          </Box>
-                                        ))
+                                        <Box
+                                          key={index}
+                                          className={style.tag}
+                                          marginLeft={2.5}
+                                          maxW={600}
+                                          float={"left"}
+                                        >
+                                          {genre}
+                                        </Box>
+                                      ))
                                       : "ไม่มีหมวดหมู่"}
                                   </Box>
                                 </Flex>
@@ -642,7 +669,7 @@ export default function Group() {
                                     bg={"white"}
                                     w={550}
                                     h={63}
-                                    pt={5}
+                                    pt={2}
                                     pl={5}
                                     shadow={"base"}
                                     borderRightRadius={10}
@@ -650,10 +677,17 @@ export default function Group() {
                                     {data.tws
                                       ? data.tws.length > 0
                                         ? data.tws.map((tw, index) => (
-                                            <Box key={index} float="left">
-                                              {tw}
-                                            </Box>
-                                          ))
+                                          <Box
+                                            bg={'#6768AB'}
+                                            p={2}
+                                            borderRadius={10}
+                                            color={'white'}
+                                            m={1}
+                                            key={index}
+                                            float="left">
+                                            {tw}
+                                          </Box>
+                                        ))
                                         : "ไม่มีคำเตือน"
                                       : "ไม่มีคำเตือน"}
                                   </Box>
@@ -678,7 +712,7 @@ export default function Group() {
                                       bg={"white"}
                                       w={170}
                                       h={63}
-                                      pt={2}
+                                      pt={5}
                                       pl={5}
                                       shadow={"base"}
                                       borderRightRadius={10}
@@ -716,8 +750,8 @@ export default function Group() {
                                     >
                                       {data.averageTime
                                         ? data.averageTime +
-                                          " " +
-                                          data.averageTimeUnit
+                                        " " +
+                                        data.averageTimeUnit
                                         : "ไม่มีระยะเวลาโดยประมาณ"}
                                     </Box>
                                   </Flex>
@@ -737,7 +771,7 @@ export default function Group() {
                                   >
                                     คำอธิบาย
                                   </Box>
-                                  <Box
+                                  <Container
                                     bg={"white"}
                                     w={550}
                                     minH={63}
@@ -747,7 +781,7 @@ export default function Group() {
                                     whiteSpace="pre-line"
                                   >
                                     {data.description}
-                                  </Box>
+                                  </Container>
                                 </Flex>
 
                                 <Flex ml={10} w={750}>
@@ -763,7 +797,9 @@ export default function Group() {
                                   >
                                     Rule&Agreement
                                   </Center>
+
                                   <Spacer />
+
                                   <Center
                                     shadow={"base"}
                                     borderRadius={10}
@@ -788,17 +824,16 @@ export default function Group() {
                                     <ModalHeader>Rule&Agreement</ModalHeader>
                                     <ModalCloseButton />
                                     <ModalBody>
-                                      <Text  whiteSpace="pre-line">
+                                      <Container whiteSpace="pre-line">
                                         {data.rule
                                           ? data.rule
                                           : "ไม่มีกฎและข้อตกลง"}
-                                      </Text>
+                                      </Container>
+
                                     </ModalBody>
-                                    <ModalFooter>
-                                      <Button onClick={onClose}>Close</Button>
-                                    </ModalFooter>
                                   </ModalContent>
                                 </Modal>
+
                                 <Center
                                   bg={"#303030"}
                                   shadow={"base"}
@@ -832,220 +867,163 @@ export default function Group() {
                               </AccordionButton>
                             </h2>
                             <AccordionPanel pb={4}>
-                              {/* <Box pl={10}>ลงทะเบียนตัวละคร</Box> */}
                               <VStack>
-                                <Flex w={750}>
-                                  <Box
-                                    bg={"white"}
-                                    w={200}
-                                    h={63}
-                                    pt={5}
-                                    pl={5}
-                                    shadow={"base"}
-                                    borderLeftRadius={10}
-                                    borderRightColor={"gray.400"}
-                                    borderRightWidth={3}
-                                  >
-                                    ลงทะเบียนตัวละคร
-                                  </Box>
-                                  <Box
-                                    bg={"white"}
-                                    w={550}
-                                    h={63}
-                                    pt={5}
-                                    pl={5}
-                                    shadow={"base"}
-                                    borderRightRadius={10}
-                                  >
-                                    {data.submitlink ? (
-                                      <a href={data.submitlink}>
-                                        {data.submitlink}
-                                      </a>
-                                    ) : (
-                                      "ไม่มีลิงก์ลงทะเบียน"
-                                    )}
-                                  </Box>
+                                <Flex w={"100%"}>
+                                  <Center w={50}></Center>
+                                  <Flex w={"100%"} bg={"white"} boxShadow={"base"} borderRadius={10}>
+                                    <Box
+                                      p={4}
+                                      minW={180}
+                                      borderRightColor={"#C4C4C4"}
+                                      borderRightWidth={3}
+                                    >
+                                      <Box>
+                                        <Text float="left">หัวข้อการรับสมัคร</Text>
+                                      </Box>
+                                    </Box>
+
+                                    <Center w={"100%"} pl={1.5} pr={1.5} position="relative">
+
+                                    </Center>
+                                  </Flex>
+                                  <Center w={50}></Center>
                                 </Flex>
 
-                                <Flex ml={10} w={750}>
-                                  <Box
-                                    bg={"white"}
-                                    w={200}
-                                    h={63}
-                                    pt={5}
-                                    pl={5}
-                                    shadow={"base"}
-                                    borderLeftRadius={10}
-                                    borderRightColor={"gray.400"}
-                                    borderRightWidth={3}
-                                  >
-                                    ตรวจสอบตัวละคร
-                                  </Box>
-                                  <Box
-                                    bg={"white"}
-                                    w={550}
-                                    h={63}
-                                    pt={5}
-                                    pl={5}
-                                    shadow={"base"}
-                                    borderRightRadius={10}
-                                  >
-                                    {data.resultlink ? (
-                                      <a href={data.resultlink}>
-                                        {data.resultlink}
-                                      </a>
-                                    ) : (
-                                      "ไม่มีลิงก์ตรวจสอบตัวละคร"
-                                    )}
-                                  </Box>
+                                <Flex w={"100%"}>
+                                  <Center w={50}></Center>
+                                  <VStack w={50} spacing={0}>
+                                    <Box
+                                      mt={2.5}
+                                      h={5}
+                                      w={3.5}
+                                      borderLeftWidth={3}
+                                      borderLeftColor="gray.400"
+                                    ></Box>
+                                    <Box
+                                      borderBottomLeftRadius={10}
+                                      borderLeftWidth={3}
+                                      borderBottomWidth={3}
+                                      borderColor="gray.400"
+                                      h={2}
+                                      w={3.5}
+                                    ></Box>
+                                  </VStack>
+                                  <Flex w={"100%"} bg={"white"} boxShadow={"base"} borderRadius={10}>
+                                    <Center></Center>
+
+                                    <Box
+                                      p={4}
+                                      minW={180}
+                                      borderRightColor={"#C4C4C4"}
+                                      borderRightWidth={3}
+                                    >
+                                      <Box>
+                                        <Text float="left">วันที่และเวลา</Text>
+                                      </Box>
+                                    </Box>
+
+
+                                  </Flex>
+                                  <Center w={50}></Center>
                                 </Flex>
 
-                                <Flex ml={10} w={750}>
-                                  <Box
-                                    bg={"white"}
-                                    w={200}
-                                    h={"auto"}
-                                    pt={5}
-                                    pl={5}
-                                    shadow={"base"}
-                                    borderLeftRadius={10}
-                                    borderRightColor={"gray.400"}
-                                    borderRightWidth={3}
-                                  >
-                                    ข้อมูลคอมมู
-                                  </Box>
-                                  <Box
-                                    bg={"white"}
-                                    w={550}
-                                    h={"auto"}
-                                    p={5}
-                                    shadow={"base"}
-                                    borderRightRadius={10}
-                                  >
-                                    {data.doclink ? (
-                                      <a href={data.doclink}>{data.doclink}</a>
-                                    ) : (
-                                      "ไม่มีลิงก์ข้อมูลคอมมู"
-                                    )}
-                                  </Box>
-                                </Flex>
+                                <Flex w={"100%"}>
+                                  <Center w={50}></Center>
+                                  <VStack w={50} spacing={0}>
+                                    <Box
+                                      mt={2.5}
+                                      h={5}
+                                      w={3.5}
+                                      borderLeftWidth={3}
+                                      borderLeftColor="gray.400"
+                                    ></Box>
+                                    <Box
+                                      borderBottomLeftRadius={10}
+                                      borderLeftWidth={3}
+                                      borderBottomWidth={3}
+                                      borderColor="gray.400"
+                                      h={2}
+                                      w={3.5}
+                                    ></Box>
+                                  </VStack>
+                                  <Flex w={"100%"} bg={"white"} boxShadow={"base"} borderRadius={10}>
+                                    <Center></Center>
 
-                                <Flex ml={10} w={750}>
-                                  <Box
-                                    bg={"white"}
-                                    w={200}
-                                    h={63}
-                                    pt={5}
-                                    pl={5}
-                                    shadow={"base"}
-                                    borderLeftRadius={10}
-                                    borderRightColor={"gray.400"}
-                                    borderRightWidth={3}
-                                  >
-                                    คำถาม
-                                  </Box>
-                                  <Box
-                                    bg={"white"}
-                                    w={550}
-                                    h={63}
-                                    pt={5}
-                                    pl={5}
-                                    shadow={"base"}
-                                    borderRightRadius={10}
-                                  >
-                                    {data.qaasklink ? (
-                                      <a href={data.qaasklink}>
-                                        {data.qaasklink}
-                                      </a>
-                                    ) : (
-                                      "ไม่มีลิงก์ถามคำถาม"
-                                    )}
-                                  </Box>
-                                </Flex>
+                                    <Box
+                                      p={4}
+                                      minW={180}
+                                      borderRightColor={"#C4C4C4"}
+                                      borderRightWidth={3}
+                                    >
+                                      <Box>
+                                        <Text float="left">ลิงก์</Text>
+                                      </Box>
+                                    </Box>
 
-                                <Flex ml={10} w={750}>
-                                  <Box
-                                    bg={"white"}
-                                    w={200}
-                                    h={63}
-                                    pt={5}
-                                    pl={5}
-                                    shadow={"base"}
-                                    borderLeftRadius={10}
-                                    borderRightColor={"gray.400"}
-                                    borderRightWidth={3}
-                                  >
-                                    ตรวจสอบคำตอบ
-                                  </Box>
-                                  <Box
-                                    bg={"white"}
-                                    w={550}
-                                    h={63}
-                                    pt={5}
-                                    pl={5}
-                                    shadow={"base"}
-                                    borderRightRadius={10}
-                                  >
-                                    {data.qaanslink ? (
-                                      <a href={data.qaanslink}>
-                                        {data.qaanslink}
-                                      </a>
-                                    ) : (
-                                      "ไม่มีลิงก์ตรวจสอบคำตอบ"
-                                    )}
-                                  </Box>
-                                </Flex>
+                                    <Center w={"100%"} pl={1.5} pr={1.5} position="relative">
 
-                                <Flex ml={10} w={750}>
-                                  <Box
-                                    bg={"white"}
-                                    w={200}
-                                    h={63}
-                                    pt={5}
-                                    pl={5}
-                                    shadow={"base"}
-                                    borderLeftRadius={10}
-                                    borderRightColor={"gray.400"}
-                                    borderRightWidth={3}
-                                  >
-                                    ช่องทางติดต่อ
-                                  </Box>
-                                  <Box
-                                    bg={"white"}
-                                    w={550}
-                                    h={63}
-                                    pt={5}
-                                    pl={5}
-                                    shadow={"base"}
-                                    borderRightRadius={10}
-                                  >
-                                    {data.contactlink ? (
-                                      <a href={data.contactlink}>
-                                        {data.contactlink}
-                                      </a>
-                                    ) : (
-                                      "ไม่มีช่องทางติดต่อ"
-                                    )}
-                                  </Box>
+                                    </Center>
+                                  </Flex>
+                                  <Center w={50}></Center>
                                 </Flex>
                               </VStack>
+
+
+
                             </AccordionPanel>
                           </AccordionItem>
                         </Accordion>
                       </Flex>
                     </TabPanel>
-                    <TabPanel>
-                      <Center ml={-4} w={850} h={500}>
+
+                    <TabPanel
+                      overflowY={"auto"}
+                      // maxH={'960'}
+                      css={{
+                        "&::-webkit-scrollbar": {
+                          width: "8px",
+                          height: "8px"
+                        },
+                        "&::-webkit-scrollbar-track": {
+                          width: "8px",
+                          height: "8px",
+                        },
+                        "&::-webkit-scrollbar-thumb": {
+                          background: "#727272",
+                          borderRadius: "24px",
+                        },
+                      }}
+                    >
+                      <Container
+                        ml={-4}
+                      // w={850} 
+                      // h={500}
+                      >
                         {data.doclink && (
                           <Box
                             position={"static"}
                             as="iframe"
                             src={data.doclink + "#toolbar=0"}
                             alt="demo"
-                            w={850}
-                            h={500}
-                            // maxH={"75%"}
-                            // maxW={"70%"}
+                            w={900}
+                            h={1000}
+                            overflowY={"auto"}
+                            css={{
+                              "&::-webkit-scrollbar": {
+                                width: "8px",
+                                height: "8px"
+                              },
+                              "&::-webkit-scrollbar-track": {
+                                width: "8px",
+                                height: "8px",
+                              },
+                              "&::-webkit-scrollbar-thumb": {
+                                background: "#727272",
+                                borderRadius: "24px",
+                              },
+                            }}
+                          // maxH={"75%"}
+                          // maxW={"70%"}
                           />
                         )}
                         {/* <Box
@@ -1054,7 +1032,11 @@ export default function Group() {
                           w="850"
                           h="100%"
                         ></Box> */}
-                      </Center>
+                      </Container>
+                    </TabPanel>
+
+                    <TabPanel>
+                      Staff
                     </TabPanel>
                   </TabPanels>
                 </Tabs>
