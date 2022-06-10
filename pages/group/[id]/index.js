@@ -744,6 +744,7 @@ export default function Group() {
                                     p={5}
                                     shadow={"base"}
                                     borderRightRadius={10}
+                                    whiteSpace="pre-line"
                                   >
                                     {data.description}
                                   </Box>
@@ -787,9 +788,11 @@ export default function Group() {
                                     <ModalHeader>Rule&Agreement</ModalHeader>
                                     <ModalCloseButton />
                                     <ModalBody>
-                                      {data.rule
-                                        ? data.rule
-                                        : "ไม่มีกฎและข้อตกลง"}
+                                      <Text  whiteSpace="pre-line">
+                                        {data.rule
+                                          ? data.rule
+                                          : "ไม่มีกฎและข้อตกลง"}
+                                      </Text>
                                     </ModalBody>
                                     <ModalFooter>
                                       <Button onClick={onClose}>Close</Button>
