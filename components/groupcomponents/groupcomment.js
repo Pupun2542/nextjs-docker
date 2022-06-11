@@ -5,32 +5,182 @@ import {
   orderBy,
   query,
 } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import {
+  Box,
+  Text,
+  Image,
+  Input,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Flex,
+  Center,
+  Divider,
+  Button,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Avatar,
+  Textarea,
+  IconButton,
+} from "@chakra-ui/react";
+import React, { useEffect, useState, useRef } from "react";
 import { useApp, useUser } from "../../src/hook/local";
-
+import { Replypost } from "./groupreply";
+import { Heart, ChatCenteredText, DotsThreeVertical, X } from "phosphor-react";
+import axios from "axios";
 export const Commentpost = ({ cdoc, gid, commenters }) => {
-  const commentdoc = cdoc.data();
+  const commentdoc = cdoc;
   const { db, auth } = useApp();
-  const [reply, setReply] = useState(undefined);
+  const [reply, setReply] = useState([]);
   const [loadlimit, setloadlimit] = useState(20);
-  const getuser = useUser()
+  const getuser = useUser();
+  const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
+  const [editMode, setEditMode] = useState(false);
+  const [image, setImage] = useState(null);
+  const [message, setMessage] = useState("");
+  const inputFileRef = useRef(null);
+
   useEffect(() => {
     const unsubscribe = onSnapshot(
       query(
-        collection(db, "gorup", gid, "comments", cdoc.id, "replies"),
+        collection(db, "group", gid, "comments", cdoc.cid, "replies"),
         limit(loadlimit),
         orderBy("timestamp", "desc")
       ),
       (snapshot) => {
         if (!snapshot.empty) {
-          const data = snapshot.docs.map((doc)=>(doc.data()));
-          const creators = snapshot.docs.map((doc)=>(doc.data().uid));
-          
+          const creators = snapshot.docs.map((doc) => doc.data().uid);
+          console.log(creators);
+          let missing = [];
+          let notmissing = [];
+          creators.map((id) => {
+            if (Object.keys(commenters).includes(id)) {
+              notmissing = [...notmissing, id];
+            } else {
+              missing = [...missing, id];
+            }
+          });
+          console.log(missing, notmissing, commenters);
+          if (missing.length > 0) {
+            getuser(missing).then((found) => {
+              let foundmissing = found;
+              if (Object.keys(commenters).length > 0) {
+                // console.log()
+                const arrcommenters = Object.entries(commenters);
+                const mappedcommenters = Object.fromEntries([
+                  arrcommenters.filter(([k, v]) =>
+                    Object.keys(commenters).includes(k)
+                  ),
+                ]);
+                if (mappedcommenters) {
+                  foundmissing = [
+                    ...foundmissing,
+                    ...Object.values(mappedcommenters),
+                  ];
+                }
+              }
+              console.log(foundmissing);
+              setReply(
+                snapshot.docs.map((doc) => ({
+                  ...doc.data(),
+                  creator: foundmissing[doc.data().uid],
+                  cid: doc.id,
+                }))
+              );
+            });
+          } else {
+            if (Object.keys(commenters).length > 0) {
+              const arrcommenters = Object.entries(commenters);
+              console.log(arrcommenters);
+              const mappedcommenters = Object.fromEntries(
+                arrcommenters.filter(([k, v]) =>
+                  Object.keys(commenters).includes(k)
+                )
+              );
+              console.log(mappedcommenters);
+              setReply(
+                snapshot.docs.map((doc) => ({
+                  ...doc.data(),
+                  creator: mappedcommenters[doc.data().uid],
+                  cid: doc.id,
+                }))
+              );
+            }
+          }
         }
+      },
+      (e) => {
+        console.log(e);
       }
     );
-    return () => {unsubscribe()};
-  }, [id]);
+    return () => {
+      unsubscribe();
+    };
+  }, [cdoc.id]);
+
+  const HandleLove = () => {};
+  const handleMessage = async () => {
+    const token = await auth.currentUser.getIdToken();
+    let imageURL = "";
+    if (image) {
+      imageURL = await UploadGroupCommentImage(
+        image,
+        auth.currentUser.uid,
+        gid
+      );
+    }
+    axios.post(
+      `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${gid}/comment/${cdoc.cid}/reply/create`,
+      {
+        message: message,
+        imageURL: imageURL,
+      },
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    setMessage("");
+    setImage(null);
+  };
+
+  const handleUploadFile = (e) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImage(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
+  const handleFile = () => {
+    inputFileRef.current.click();
+  };
+  const handleImagePaste = (e) => {
+    if (e.clipboardData.files[0]) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setImage(reader.result);
+        }
+      };
+      reader.readAsDataURL(e.clipboardData.files[0]);
+    }
+  };
+
+  const resizeTextArea = (e) => {
+    e.target.style.height = "inherit";
+    e.target.style.height = `${e.target.scrollHeight}px`;
+    // In case you have a limitation
+    // e.target.style.height = `${Math.min(e.target.scrollHeight, limit)}px`;
+  };
+
   return (
     <Flex
       p={2.5}
@@ -42,7 +192,12 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
       marginTop="10px"
     >
       <Center flexGrow={1} w={75} h={70} mr={2.5}>
-        <Image maxW={70} src={commentdoc.creator.thumbnail} rounded={"full"} />
+        <Avatar
+          w={70}
+          h={70}
+          src={commentdoc.creator.photoURL}
+          rounded={"full"}
+        />
       </Center>
 
       <Flex flexDir="column" flexGrow={10}>
@@ -65,9 +220,7 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
           // <InputGroup>
           <Input
             onKeyDown={(e) => {
-              // console.log(e.key)
               if (e.key == "Enter" && !e.shiftKey) {
-                // console.log('message sent')
                 handleEdit();
               } else if (e.key == "Escape") {
                 if (image != checkImage.current) {
@@ -110,12 +263,12 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
           onChange={(e) => handleUploadFile(e)}
         /> */}
 
-        {image ? (
+        {commentdoc.imageURL ? (
           <>
             <Box pos={"relative"}>
               <Image
                 objectFit="cover"
-                src={image ? image : ""}
+                src={commentdoc.imageURL ? commentdoc.imageURL : ""}
                 width="250px"
                 height="250px"
                 onClick={() => setModalOpen(true)}
@@ -137,7 +290,7 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
                 <></>
               )} */}
             </Box>
-            <Modal
+            {/* <Modal
               isOpen={modalOpen}
               onClose={() => setModalOpen(false)}
               size="md"
@@ -152,7 +305,7 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
                   <Image src={image} />
                 </ModalBody>
               </ModalContent>
-            </Modal>
+            </Modal> */}
           </>
         ) : (
           <></>
@@ -190,10 +343,59 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
               <ChatCenteredText size={16} color="#000000" />
             </Box>
 
-            <Box p={1}>{reply}</Box>
+            <Box p={1}>{cdoc.replycount}</Box>
           </Button>
         </Box>
-        {isOpen && <Reply id={id} commentId={cdoc.id} setReply={setReply} />}
+        {isOpen && (
+          <>
+            {console.log(reply)}
+            {isOpen && reply.map((rdoc) => <Replypost replydoc={rdoc} />)}
+            <Textarea
+              resize="none"
+              minHeight={11}
+              onKeyDown={(e) => {
+                if (e.key == "Enter" && !e.shiftKey) {
+                  handleMessage();
+                }
+                resizeTextArea(e);
+              }}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              width="100%"
+              placeholder="Write Something"
+              height="45px"
+              backgroundColor="gray.100"
+              onPaste={handleImagePaste}
+            />
+            {image && (
+              <Box pos={"relative"}>
+                <Image
+                  src={image}
+                  width="250px"
+                  height="250px"
+                  objectFit="cover"
+                />
+                <IconButton
+                  icon={<X size={16} color="black" />}
+                  position="absolute"
+                  top={0}
+                  left={200}
+                  backgroundColor="transparent"
+                  _hover={{ backgroundColor: "transparent" }}
+                  onClick={() => setImage(null)}
+                ></IconButton>
+              </Box>
+            )}
+          </>
+        )}
+        {cdoc.replycount > loadlimit && (
+          <Text
+            decoration="underline"
+            onClick={() => setloadlimit(loadlimit + 20)}
+          >
+            Load more
+          </Text>
+        )}
       </Flex>
       <Menu>
         <MenuButton m={2.5} h={10} w={10} borderRadius={100}>
@@ -210,6 +412,28 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
           )}
         </MenuList>
       </Menu>
+      <Input
+        type="file"
+        id="file"
+        ref={inputFileRef}
+        display="none"
+        onChange={(e) => handleUploadFile(e)}
+      />
     </Flex>
   );
+};
+
+const parseDate = (seconds) => {
+  // const date = new Date(seconds._seconds * 1000);
+  const date = seconds.toDate();
+  const formatted = date.toLocaleDateString("th-TH", {
+    day: "numeric",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  const spdate = formatted.split(" ");
+  const formatted2 = `${spdate[0]} [${spdate[1]}]`;
+  return formatted2;
 };

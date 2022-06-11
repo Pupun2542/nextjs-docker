@@ -82,6 +82,8 @@ exports.updateGroup = (req, res) => {
       // bannersqr: data.bannersqr,
       banner: data.bannerUrl,
       doclink: data.docUrl,
+      commentcount: 0,
+      commentuser: [],
     }).then(() => {
       // docref.get().then((doc)=>{
       //   sendNotifications(doc.data().staff, "002", user, doc.data().name, "", )
@@ -417,8 +419,18 @@ exports.getGroup = (req, res) =>{
         doc.data().member.map((mem)=> {
           identifiers = [...identifiers, {uid: mem}];
         });
-        admin.auth().getUsers(identifiers).then((member)=>{
-          // console.log(member.users);
+        doc.data().commentuser.map((mem)=> {
+          identifiers = [...identifiers, {uid: mem}];
+        });
+
+        const identifierschk = identifiers.reduce((all, one, i) => {
+          const ch = Math.floor(i/100);
+          all[ch] = [].concat((all[ch]||[]), one);
+          return all;
+        }, []);
+
+        Promise.all(identifierschk.map((identifiers)=> admin.auth().getUsers(identifiers))).then((result)=>{
+          const member = result[0];
           let grpmember = {};
           member.users.map((auser)=>{
             grpmember = {...grpmember,
@@ -428,21 +440,18 @@ exports.getGroup = (req, res) =>{
                 photoURL: auser.photoURL,
               }};
           });
-          // console.log("405:", grpmember);
           const arrgrpmember = Object.entries(grpmember);
-          // console.log("407", arrgrpmember);
-          // console.log("408", arrgrpmember.find(([k, v])=>v.uid === doc.data().creator));
 
           const mappeddocdata = {
             ...doc.data(),
             creator: Object.fromEntries([arrgrpmember.find(([k, v])=>v.uid === doc.data().creator)]),
-            member: grpmember,
+            member: Object.fromEntries(arrgrpmember.filter(([k, v], i)=>doc.data().member.includes(v.uid))),
             staff: Object.fromEntries(arrgrpmember.filter(([k, v], i)=>doc.data().staff.includes(v.uid))),
+            commentuser: Object.fromEntries(arrgrpmember.filter(([k, v], i)=>doc.data().commentuser.includes(v.uid))),
           };
           const senddata = {...data, ...mappeddocdata};
           console.log("before send");
           return res.status(200).json(senddata);
-          // return res.status(200).json("sent");
         });
       } else {
         return res.status(403).send("this is private group");

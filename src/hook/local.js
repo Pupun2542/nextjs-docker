@@ -180,20 +180,28 @@ export const UserProvider = ({ children }) => {
   const [data, DataDispatcher] = useReducer(userReducer, initialUser);
 
   const getUser = async (uid) => {
-    if (Array.isArray(uid)&&uid.length > 0) {
-      console.log("recieved", uid)
-      console.log("stored ", data)
+      // console.log("recieved", uid)
+      // console.log("stored ", data)
       let users = [];
       let newuid = uid;
-      uid.map((id) => {
-        const user = data.data.find((v) => v.uid == id);
-        console.log("search ", user)
+      if (Array.isArray(uid)&&uid.length > 0) {
+        uid.map((id) => {
+          const user = data.data.find((v) => v.uid == id);
+          // console.log("search ", user)
+          if (user){
+            users = [...users, user];
+            console.log("found ", users)
+            newuid = newuid.filter((v,i)=>v!=id);
+          }
+        });
+      } else {
+        const user = data.data.find((v) => v.uid == uid);
         if (user){
-          users = [...users, user];
-          console.log("found ", users)
-          newuid = newuid.filter((v,i)=>v!=id);
+          users = user;
+          // console.log("found ", users)
+          newuid = [uid];
         }
-      });
+      }
 
       if (newuid.length > 0) {
         console.log(users.length, uid.length)
@@ -221,8 +229,7 @@ export const UserProvider = ({ children }) => {
         return users;
       }
     }
-    return undefined;
-  };
+    // return undefined;
   return (
     <UserContext.Provider value={getUser}>{children}</UserContext.Provider>
   );

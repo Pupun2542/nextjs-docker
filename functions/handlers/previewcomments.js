@@ -10,6 +10,7 @@ exports.createPreviewComment = (req, res) => {
       uid: req.user.uid,
       message: req.body.message,
       timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      replycount: 0,
       love: [],
       imageURL: req.body.imageURL,
     }).then((doc)=>{
