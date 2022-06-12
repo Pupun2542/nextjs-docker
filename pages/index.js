@@ -186,7 +186,7 @@ export default function Home() {
               align="center"
               justify={{ base: "center", md: "space-around", xl: "space-between" }}
               direction={{ base: "column-reverse", md: "row" }}
-              w={'100%'}
+              w={'50%'}
             >
               {/* <VStack
                 p={5}
@@ -219,6 +219,7 @@ export default function Home() {
               <VStack
                 p={5}
                 borderRadius={10}
+                justifyContent='center'
               // w={170}
               // h={180}
               >
@@ -263,13 +264,23 @@ export default function Home() {
               borderRadius={10}
               w={275}
             >
-              <Center><FacebookLogo size={100} color="#343434" weight="fill" /></Center>
+              <Center><FacebookLogo
+                onClick={() => router.push("https://www.facebook.com/ComuthorCorp")}
+                size={100}
+                color="#343434"
+                as='button'
+                cursor={"pointer"}
+                weight="fill"
+              /></Center>
               <Hide below='md'>
                 <Center fontWeight={500} fontSize={18} overflow={"hidden"} >Facebook Fanpage</Center>
               </Hide>
               <Center
                 fontWeight={400}
                 fontSize={14}
+                as='button'
+                cursor={"pointer"}
+                onClick={() => router.push("https://www.facebook.com/ComuthorCorp")}
               >
                 Comuthor
               </Center>
@@ -283,11 +294,21 @@ export default function Home() {
               w={275}
             >
 
-              <Center><DiscordLogo size={100} color="#343434" weight="fill" /></Center>
+              <Center><DiscordLogo
+                size={100}
+                color="#343434"
+                weight="fill"
+                as='button'
+                cursor={"pointer"}
+                onClick={() => router.push("https://discord.gg/BVrwyCPEHc")}
+              /></Center>
               <Hide below='md'>
                 <Center fontWeight={500} fontSize={18}>Discord</Center>
               </Hide>
-              <Center fontWeight={400} fontSize={14}>Comuthor Community</Center>
+              <Center fontWeight={400} as='button'
+                cursor={"pointer"}
+                onClick={() => router.push("https://discord.gg/BVrwyCPEHc")}
+                fontSize={14}>Comuthor Community</Center>
 
             </VStack>
 
