@@ -38,6 +38,8 @@ import {
   EditablePreview,
   Wrap,
   WrapItem,
+  IconButton,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import CustomNavbar from "../../../components/navbar";
 
@@ -51,6 +53,8 @@ export default function profile() {
   const { app, auth, db } = useApp();
   const [user, loading, error] = useAuthState(auth);
   const [userDetail, setUserDetail] = useState(null);
+  const top = useBreakpointValue({ base: '90%', md: '50%' });
+  const side = useBreakpointValue({ base: '30%', md: '10px' });
   // const [newtab, setNewtab] = useState("");
 
   useEffect(() => {
@@ -153,9 +157,17 @@ export default function profile() {
       )} */}
       <Flex flexGrow={0.8} justifyContent="center" pt={55}>
         {/* <Spacer /> */}
-        <VStack bg={'#EBEBEB'} minH={914} spacing={0} >
-          <Center bg={"wheat"} width="100%" h={400} fontSize={30}>
+        <VStack bg={'#EBEBEB'} width="100%" maxW={1000} minH={914} spacing={0} boxShadow='base'>
+
+          <Center
+            bg={"wheat"}
+            width="100%"
+            maxW={1000}
+            h={400}
+            fontSize={30}
+          >
             Cover
+
           </Center>
           <Flex bg={'white'} boxShadow={'base'}>
             <Center
@@ -351,10 +363,15 @@ export default function profile() {
               {/* OC */}
               <TabPanel>
                 <Center
-                  h={90}
-                  w={90}
+                  h={150}
+                  w={150}
+                  boxShadow={'base'}
+                  rounded={10}
                   as={'button'}
-                  bg={'whatsapp.100'}
+                  bg={'whatsapp.500'}
+                  _hover={{
+                    backgroundColor: 'whatsapp.600'
+                  }}
                   onClick={() => router.push("/CreateCharacterForm")}
                 >
                   Create
@@ -375,6 +392,7 @@ export default function profile() {
         </VStack>
         {/* <Spacer /> */}
       </Flex>
+
     </Box>
   );
 }
