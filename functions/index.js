@@ -14,6 +14,7 @@ const { createComment, updateComment, deleteComment, loveComment, unloveComment,
 const { createReply, updateReply, deleteReply, loveReply, unloveReply, getAllReply } = require("./handlers/replies");
 const { getuser, getbatchUser } = require("./handlers/user");
 const { createPreviewComment } = require("./handlers/previewcomments");
+const { createPreviewReply } = require("./handlers/previewreplies");
 
 // The Firebase Admin SDK to access Firestore.
 
@@ -44,12 +45,16 @@ app.post("/group/:id/pin", authmw, groupPin);
 app.post("/group/:id/unpin", authmw, groupUnpin);
 app.post("/group/:id/love", authmw, groupLove);
 app.post("/group/:id/unlove", authmw, groupUnlove);
-app.post("/group/:id/comment/create", authmw, createPreviewComment);
-app.post("/group/:id/comment/:cid/update", authmw, createPreviewComment);
-app.post("/group/:id/comment/:cid/delete", authmw, createPreviewComment);
-app.post("/group/:id/comment/:cid/reply/create", authmw, createPreviewComment);
-app.post("/group/:id/comment/:cid/reply/:rid/update", authmw, createPreviewComment);
-app.post("/group/:id/comment/:cid/reply/:rid/delete", authmw, createPreviewComment);
+app.post("/group/:gid/comment/create", authmw, createPreviewComment);
+app.post("/group/:gid/comment/:cid/update", authmw);
+app.post("/group/:gid/comment/:cid/delete", authmw);
+app.post("/group/:gid/comment/:cid/love", authmw);
+app.post("/group/:gid/comment/:cid/unlove", authmw);
+app.post("/group/:gid/comment/:cid/reply/create", authmw, createPreviewReply);
+app.post("/group/:gid/comment/:cid/reply/:rid/update", authmw);
+app.post("/group/:gid/comment/:cid/reply/:rid/delete", authmw);
+app.post("/group/:gid/comment/:cid/reply/:rid/love", authmw);
+app.post("/group/:gid/comment/:cid/reply/:rid/unlove", authmw);
 app.get("/group/:gid", authmw, getGroup);
 app.get("/groups", authmw, getAllGroup);
 app.post("/post/:gid/create", authmw, createPost);

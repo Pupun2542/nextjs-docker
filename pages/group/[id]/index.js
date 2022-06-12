@@ -77,6 +77,7 @@ import {
 } from "phosphor-react";
 import { Comments } from "../../../components/comments";
 import axios from "axios";
+import { Commentsection } from "../../../components/groupcomponents/previewcommentsection";
 
 // export async function getServerSideProps(context) {
 //   const { params } = context;
@@ -781,6 +782,7 @@ export default function Group() {
                                     p={5}
                                     shadow={"base"}
                                     borderRightRadius={10}
+                                    whiteSpace="pre-line"
                                   >
                                     {data.description}
                                   </Container>
@@ -826,7 +828,7 @@ export default function Group() {
                                     <ModalHeader>Rule&Agreement</ModalHeader>
                                     <ModalCloseButton />
                                     <ModalBody>
-                                      <Container>
+                                      <Container whiteSpace="pre-line">
                                         {data.rule
                                           ? data.rule
                                           : "ไม่มีกฎและข้อตกลง"}
@@ -1077,7 +1079,7 @@ export default function Group() {
                 </Tabs>
               </VStack>
               <Box>
-                <Comments id={id} />
+                <Commentsection gid={id} commentcount={data.commentcount? data.commentcount : 0} commenters={data.commentuser? data.commentuser: {}}  />
               </Box>
 
               {/* <Text>TEST 1234</Text> */}
