@@ -1079,7 +1079,7 @@ export default function Group() {
                 </Tabs>
               </VStack>
               <Box>
-                <Commentsection gid={id} commentcount={data.commentcount? data.commentcount : 0} commenters={data.commentuser? data.commentuser: {}}  />
+                <Commentsection gid={id} initialcomment={data.commentcount? data.commentcount : 0} commenters={data.commentuser? data.commentuser: {}}  />
               </Box>
 
               {/* <Text>TEST 1234</Text> */}

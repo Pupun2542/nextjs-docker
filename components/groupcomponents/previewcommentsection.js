@@ -17,80 +17,64 @@ import {
 import { UploadGroupCommentImage } from "../../src/services/filestoreageservice";
 import axios from "axios";
 import { Commentpost } from "./groupcomment";
-import { limit, onSnapshot, query, collection, orderBy } from "firebase/firestore";
+import {
+  limit,
+  onSnapshot,
+  query,
+  collection,
+  orderBy,
+  doc
+} from "firebase/firestore";
 import { useApp, useUser } from "../../src/hook/local";
-import { ImageSquare } from "phosphor-react"
+import { ImageSquare, X } from "phosphor-react";
 
-export const Commentsection = ({ gid, commenters, commentcount }) => {
-  const getuser = useUser()
-  // let commenter = commenters;
+export const Commentsection = ({ gid, commenters, initialcomment }) => {
+  const getuser = useUser();
   const [loadlimit, setLoadlimit] = useState(20);
   const { app, auth, db } = useApp();
-  const q = query(
-    collection(db, "group", gid, "comments"),
-    orderBy("timestamp", "desc"),
-    limit(loadlimit)
-  );
-  // const [snapshot, loading, error] = useCollection(q);
-  const [snapshot, setSanpshot] = useState([]);
-  // const [replyState, setReplyState] = useState(false);
+  const [snapshot, setSnapshot] = useState([]);
   const [message, setMessage] = useState("");
   const [image, setImage] = useState(null);
   const inputFileRef = useRef(null);
   const [modalOpen, setModalOpen] = useState(false);
-
-  useEffect(()=>{
-    const unsubscribe = onSnapshot(q, (snapshot)=>{
-      if (!snapshot.empty) {
-        const creators = snapshot.docs.map((doc)=>(doc.data().uid));
-        console.log(creators)
-        let missing = [];
-        let notmissing = [];
-        creators.map((id)=>{
-          if (Object.keys(commenters).includes(id)) {
-            notmissing = [...notmissing, id];
-          } else {
-            missing = [...missing, id]
-          }
-        })
-        console.log(missing, notmissing, commenters)
-        if (missing.length > 0) {
-          getuser(missing).then((found)=>{
-            let foundmissing = found;
-            if (Object.keys(commenters).length > 0) {
-              // console.log()
-              const arrcommenters  = Object.entries(commenters);
-              const mappedcommenters = Object.fromEntries([arrcommenters.filter(([k, v])=>Object.keys(commenters).includes(k))])
-              if (mappedcommenters) {
-                foundmissing = [...foundmissing, ...Object.values(mappedcommenters)]
-              }
-            }
-            console.log(foundmissing)
-            setSanpshot(snapshot.docs.map((doc)=>({
-              ...doc.data(),
-              creator: foundmissing[doc.data().uid],
-              cid: doc.id,
-            })));
-          });
-        } else {
-          if (Object.keys(commenters).length > 0) {
-            const arrcommenters  = Object.entries(commenters);
-            console.log(arrcommenters)
-            const mappedcommenters = Object.fromEntries(arrcommenters.filter(([k, v])=>Object.keys(commenters).includes(k)))
-            console.log(mappedcommenters)
-            setSanpshot(snapshot.docs.map((doc)=>({
-              ...doc.data(),
-              creator: mappedcommenters[doc.data().uid],
-              cid: doc.id,
-            })));
-          }
-        }
-      }
-    }, (e)=>{
-      console.log(e)
+  const [replyMessage, setReplyMessage] = useState({});
+  const [replyImage, setReplyImage] = useState({});
+  const [commentEditMessage, setCommentEditMessage] = useState({});
+  const [replyEditMessage, setReplyEditMessage] = useState({});
+  const [commentcount, setCommentcount] = useState(initialcomment);
+  const [initialcommentcount, setInitialcommentcount] = useState(initialcomment);
+  // console.log(replyMessage)
+  const setStateReply = (id, msg) => {
+    setReplyMessage({ ...replyMessage, [id]: msg });
+  };
+  const setStateImage = (id, msg) => {
+    setReplyImage({ ...replyImage, [id]: msg });
+  };
+  const setStateCommentEditMessage = (id, msg) => {
+    setCommentEditMessage({ ...commentEditMessage, [id]: msg });
+  };
+  const setStateReplyEditMessage = (id, msg) => {
+    setReplyEditMessage({ ...replyEditMessage, [id]: msg });
+  };
+  const fetchdata = (limit) =>{
+    axios.get(`${process.env.NEXT_PUBLIC_USE_API_URL}/group/${gid}/comment/?limit=${limit}`).then((res)=>{
+      const snapshot = res.data;
+      setSnapshot(snapshot)
+      setInitialcommentcount(snapshot.length)
     })
-    return ()=> {unsubscribe()};
-  },[])
+  }
+
+  useEffect(() => {
+    fetchdata(loadlimit);
+    setInitialcommentcount((initialcommentcount < snapshot.length? snapshot.length : initialcommentcount));
+
+    const unsubscribe = onSnapshot(doc(db, "group", gid), (doc)=>{
+      setCommentcount(doc.data().commentcount);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [gid, loadlimit]);
 
   const handleMessage = async () => {
     const token = await auth.currentUser.getIdToken();
@@ -102,7 +86,7 @@ export const Commentsection = ({ gid, commenters, commentcount }) => {
         gid
       );
     }
-    axios.post(
+    await axios.post(
       `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${gid}/comment/create`,
       {
         message: message,
@@ -114,6 +98,8 @@ export const Commentsection = ({ gid, commenters, commentcount }) => {
         },
       }
     );
+    fetchdata(loadlimit);
+
     setMessage("");
     setImage(null);
   };
@@ -141,6 +127,11 @@ export const Commentsection = ({ gid, commenters, commentcount }) => {
     }
   };
 
+  const deleteComment = (k) =>{
+    const newsnap = snapshot.filter((v,i)=> i !== k);
+    setSnapshot(newsnap);
+  }
+
   const resizeTextArea = (e) => {
     e.target.style.height = "inherit";
     e.target.style.height = `${e.target.scrollHeight}px`;
@@ -156,7 +147,8 @@ export const Commentsection = ({ gid, commenters, commentcount }) => {
       fontFamily={"Mitr"}
     >
       <Text fontSize={32} fontWeight={"bold"}>
-        ความคิดเห็น - [{commentcount}]
+        ความคิดเห็น - [
+        {commentcount}]
       </Text>
       <Box>
         <InputGroup>
@@ -167,7 +159,7 @@ export const Commentsection = ({ gid, commenters, commentcount }) => {
               if (e.key == "Enter" && !e.shiftKey) {
                 handleMessage();
               }
-              resizeTextArea(e)
+              resizeTextArea(e);
             }}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
@@ -235,11 +227,40 @@ export const Commentsection = ({ gid, commenters, commentcount }) => {
           <></>
         )}
       </Box>
-
+      {commentcount >
+        initialcommentcount && (
+        <Text
+          decoration="underline"
+          onClick={() => fetchdata(loadlimit)}
+        >
+          Load more
+        </Text>
+      )}
       {snapshot.map((doc, k) => (
-        <Commentpost cdoc={doc} gid={gid} key={k} commenters={commenters} />
+        <Commentpost
+          cdoc={doc}
+          key={k}
+          commenters={commenters}
+          setrpymsg={(msg) => setStateReply(doc.cid, msg)}
+          setImage={(img) => setStateImage(doc.cid, img)}
+          setEditReplyMessage={setStateReplyEditMessage}
+          setEditMessage={(msg)=> setStateCommentEditMessage(doc.cid, msg)}
+          editMessage={commentEditMessage[doc.cid]}
+          editReplyMessage={replyEditMessage}
+          image={replyImage[doc.cid]}
+          rpymsg={replyMessage[doc.cid]}
+          onCommentDelete={()=>deleteComment(k)}
+        />
       ))}
-      {commentcount > loadlimit&&(<Text decoration='underline' onClick={()=>setLoadlimit(loadlimit + 20)}>Load more</Text>)}
+      {initialcommentcount >
+        loadlimit && (
+        <Text
+          decoration="underline"
+          onClick={() => setLoadlimit(loadlimit + 20)}
+        >
+          Load more
+        </Text>
+      )}
     </Box>
   );
 };

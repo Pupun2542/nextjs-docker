@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Text,
@@ -21,30 +21,131 @@ import {
   Menu,
   MenuButton,
   MenuList,
-  MenuItem
+  MenuItem,
 } from "@chakra-ui/react";
-import { Heart, DotsThreeVertical } from "phosphor-react"
-import { useApp } from '../../src/hook/local';
+import { Heart, DotsThreeVertical } from "phosphor-react";
+import { useApp } from "../../src/hook/local";
+import axios from "axios";
 
-export const Replypost = ({replydoc}) => {
+export const Replypost = ({ replydoc, message, setMessage }) => {
   const [editMode, setEditMode] = useState(false);
-  const [message, setMessage] = useState("");
-  const {auth} = useApp();
-  console.log(replydoc)
-  const HandleLove = () => {};
+  // const [message, setMessage] = useState("");
+  const { auth } = useApp();
+  const [love, setLove] = useState(false);
+  console.log(replydoc);
+  useEffect(() => {
+    if (replydoc.love.includes(auth.currentUser.uid)) {
+      setLove(true);
+    }
+    return () => setLove(false);
+  }, [replydoc]);
+  const HandleLove = async () => {
+    const token = await auth.currentUser.getIdToken();
+    if (love) {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${replydoc.gid}/comment/${replydoc.cid}/reply/${replydoc.rid}/unlove`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      if (res.status === 200) {
+        setLove(false);
+      }
+    } else {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${replydoc.gid}/comment/${replydoc.cid}/reply/${replydoc.rid}/love`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      if (res.status === 200) {
+        setLove(true);
+        console.log(res.request, res.statusText);
+      } else {
+        console.log(res.status, res.data);
+      }
+    }
+  };
+  const resizeTextArea = (e) => {
+    e.target.style.height = "inherit";
+    e.target.style.height = `${e.target.scrollHeight}px`;
+    // In case you have a limitation
+    // e.target.style.height = `${Math.min(e.target.scrollHeight, limit)}px`;
+  };
+
+  const handleDelete = async () => {
+    const token = await auth.currentUser.getIdToken();
+    if (replydoc.imageURL) {
+      const path = getpathfromUrl(replydoc.imageURL);
+      axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${replydoc.gid}/comment/${replydoc.cid}/reply/${replydoc.rid}/delete`,
+        {
+          bucket: path.bucket,
+          filepath: path.fullPath,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+    } else {
+      axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${replydoc.gid}/comment/${replydoc.cid}/reply/${replydoc.rid}/delete`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+    }
+    setMessage("");
+    // console.log(getpathfromUrl(commentdoc.imageURL))
+  };
+
+  const handleEdit = async () => {
+    const token = await auth.currentUser.getIdToken();
+    axios.post(
+      `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${replydoc.gid}/comment/${replydoc.cid}/reply/${replydoc.rid}/update`,
+      {
+        message: message,
+      },
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    setEditMode(false);
+    // setMessage(editMessage);
+    // console.log(getpathfromUrl(commentdoc.imageURL))
+  };
+
   return (
     <Flex>
-      <VStack spacing={0} mt={5} mr={5} >
-        <Box w={'22px'} borderColor={'#636363'} height={'50'} borderLeftWidth={3} ></Box>
+      <VStack spacing={0} mt={5} mr={5}>
         <Box
-          borderColor={'#636363'}
+          w={"22px"}
+          borderColor={"#636363"}
+          height={"50"}
+          borderLeftWidth={3}
+        ></Box>
+        <Box
+          borderColor={"#636363"}
           borderBottomLeftRadius={10}
-          borderBottomStyle={'solid'}
+          borderBottomStyle={"solid"}
           borderBottomWidth={3}
           borderLeftWidth={3}
-          height={'45px'}
-          w={'22px'}
-          borderLeftStyle={'solid'}
+          height={"45px"}
+          w={"22px"}
+          borderLeftStyle={"solid"}
         ></Box>
       </VStack>
 
@@ -54,15 +155,21 @@ export const Replypost = ({replydoc}) => {
         boxShadow="0 0 2px #000000"
         marginTop="10px"
       >
-
         <Center flexGrow={1} w={75} h={70} m={2.5}>
-          <Image m={2.5} maxW={70} rounded={"full"} src={replydoc.creator.photoURL} />
+          <Image
+            m={2.5}
+            maxW={70}
+            rounded={"full"}
+            src={replydoc.creator.photoURL}
+          />
         </Center>
 
         <Flex flexDir="column" w={440} flexGrow={10} p={2.5}>
           <Flex justifyContent="space-between">
             <Text fontSize={20}>
-              {replydoc.creator.displayName ? replydoc.creator.displayName : "placeholder"}
+              {replydoc.creator.displayName
+                ? replydoc.creator.displayName
+                : "placeholder"}
             </Text>
             <Text fontSize={10} mt={3} color={"GrayText"}>
               {replydoc.timestamp
@@ -76,14 +183,19 @@ export const Replypost = ({replydoc}) => {
           <Divider />
           {editMode ? (
             // <InputGroup>
-            <Input
+            <Textarea
+              resize="none"
+              minHeight={11}
               onKeyDown={(e) => {
-                // console.log(e.key)
                 if (e.key == "Enter" && !e.shiftKey) {
-                  // console.log('message sent')
                   handleEdit();
                 } else if (e.key == "Escape") {
+                  // if (image != checkImage.current) {
+                  //   setImage(checkImage.current);
+                  // }
                   setEditMode(false);
+                } else {
+                  resizeTextArea(e);
                 }
               }}
               value={message}
@@ -135,7 +247,7 @@ export const Replypost = ({replydoc}) => {
             <DotsThreeVertical size={30} />
           </MenuButton>
           <MenuList>
-            {auth.currentUser.uid == replydoc.userId ? (
+            {auth.currentUser.uid == replydoc.creator.uid ? (
               <>
                 <MenuItem onClick={() => setEditMode(true)}>Edit</MenuItem>
                 <MenuItem onClick={handleDelete}>Delete</MenuItem>
@@ -147,8 +259,8 @@ export const Replypost = ({replydoc}) => {
         </Menu>
       </Flex>
     </Flex>
-  )
-}
+  );
+};
 const parseDate = (seconds) => {
   // const date = new Date(seconds._seconds * 1000);
   const date = seconds.toDate();

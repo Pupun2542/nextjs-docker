@@ -33,29 +33,55 @@ import { useApp, useUser } from "../../src/hook/local";
 import { Replypost } from "./groupreply";
 import { Heart, ChatCenteredText, DotsThreeVertical, X } from "phosphor-react";
 import axios from "axios";
-export const Commentpost = ({ cdoc, gid, commenters }) => {
-  const commentdoc = cdoc;
+import { getpathfromUrl } from "../../src/services/filestoreageservice";
+export const Commentpost = ({
+  cdoc,
+  commenters,
+  setrpymsg,
+  setImage,
+  rpymsg,
+  image,
+  editMessage,
+  setEditMessage,
+  editReplyMessage,
+  setEditReplyMessage,
+  onCommentDelete,
+}) => {
+  let commentdoc = cdoc;
+  const [message, setMessage] = useState("");
+  const [lovecount, setLovecount] = useState(0);
   const { db, auth } = useApp();
   const [reply, setReply] = useState([]);
   const [loadlimit, setloadlimit] = useState(20);
   const getuser = useUser();
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
   const [editMode, setEditMode] = useState(false);
-  const [image, setImage] = useState(null);
-  const [message, setMessage] = useState("");
+  // const [editMessage, setEditMessage] = useState(commentdoc.message);
   const inputFileRef = useRef(null);
+  const [love, setLove] = useState(false);
+  const commentinputref = useRef(null);
 
   useEffect(() => {
+    if (cdoc.love.includes(auth.currentUser.uid)) {
+      setLove(true);
+    }
+    if (rpymsg) {
+      onOpen();
+      // commentinputref.current.focus();
+      // console.log(commentinputref.current)
+    }
+    setMessage(cdoc.message);
+    setLovecount(cdoc.love.length);
     const unsubscribe = onSnapshot(
       query(
-        collection(db, "group", gid, "comments", cdoc.cid, "replies"),
+        collection(db, "group", cdoc.gid, "comments", cdoc.cid, "replies"),
         limit(loadlimit),
         orderBy("timestamp", "desc")
       ),
       (snapshot) => {
         if (!snapshot.empty) {
           const creators = snapshot.docs.map((doc) => doc.data().uid);
-          console.log(creators);
+          // console.log(creators);
           let missing = [];
           let notmissing = [];
           creators.map((id) => {
@@ -65,7 +91,7 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
               missing = [...missing, id];
             }
           });
-          console.log(missing, notmissing, commenters);
+          // console.log(missing, notmissing, commenters);
           if (missing.length > 0) {
             getuser(missing).then((found) => {
               let foundmissing = found;
@@ -84,30 +110,34 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
                   ];
                 }
               }
-              console.log(foundmissing);
+              // console.log(foundmissing);
               setReply(
                 snapshot.docs.map((doc) => ({
                   ...doc.data(),
                   creator: foundmissing[doc.data().uid],
-                  cid: doc.id,
+                  cid: cdoc.cid,
+                  rid: doc.id,
+                  gid: cdoc.gid,
                 }))
               );
             });
           } else {
             if (Object.keys(commenters).length > 0) {
               const arrcommenters = Object.entries(commenters);
-              console.log(arrcommenters);
+              // console.log(arrcommenters);
               const mappedcommenters = Object.fromEntries(
                 arrcommenters.filter(([k, v]) =>
                   Object.keys(commenters).includes(k)
                 )
               );
-              console.log(mappedcommenters);
+              // console.log(mappedcommenters);
               setReply(
                 snapshot.docs.map((doc) => ({
                   ...doc.data(),
                   creator: mappedcommenters[doc.data().uid],
-                  cid: doc.id,
+                  cid: cdoc.cid,
+                  rid: doc.id,
+                  gid: cdoc.gid,
                 }))
               );
             }
@@ -118,12 +148,61 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
         console.log(e);
       }
     );
+
     return () => {
       unsubscribe();
+      setLove(false);
+      onClose();
+      setLovecount(0);
+      setMessage("");
     };
-  }, [cdoc.id]);
+  }, [cdoc, loadlimit]);
 
-  const HandleLove = () => {};
+  useEffect(()=>{
+    setEditMessage(cdoc.message)
+  },[editMode])
+
+  useEffect(() => {
+    // console.log(isOpen, rpymsg);
+    if (isOpen && rpymsg && rpymsg !== "") {
+      const end = rpymsg.length;
+      commentinputref.current.setSelectionRange(end, end);
+      commentinputref.current.focus();
+    }
+  }, [isOpen, rpymsg]);
+
+  const HandleLove = async () => {
+    const token = await auth.currentUser.getIdToken();
+    if (love) {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${cdoc.gid}/comment/${cdoc.cid}/unlove`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      if (res.status === 200) {
+        setLovecount(lovecount-1)
+        setLove(false);
+      }
+    } else {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${cdoc.gid}/comment/${cdoc.cid}/love`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      if (res.status === 200) {
+        setLovecount(lovecount+1)
+        setLove(true);
+      }
+    }
+  };
   const handleMessage = async () => {
     const token = await auth.currentUser.getIdToken();
     let imageURL = "";
@@ -131,13 +210,13 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
       imageURL = await UploadGroupCommentImage(
         image,
         auth.currentUser.uid,
-        gid
+        cdoc.gid
       );
     }
     axios.post(
-      `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${gid}/comment/${cdoc.cid}/reply/create`,
+      `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${cdoc.gid}/comment/${cdoc.cid}/reply/create`,
       {
-        message: message,
+        message: rpymsg,
         imageURL: imageURL,
       },
       {
@@ -146,7 +225,7 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
         },
       }
     );
-    setMessage("");
+    setrpymsg("");
     setImage(null);
   };
 
@@ -181,6 +260,63 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
     // e.target.style.height = `${Math.min(e.target.scrollHeight, limit)}px`;
   };
 
+  const handleDelete = async () => {
+    const token = await auth.currentUser.getIdToken();
+    if (commentdoc.imageURL) {
+      const path = getpathfromUrl(commentdoc.imageURL);
+      axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${cdoc.gid}/comment/${cdoc.cid}/delete`,
+        {
+          bucket: path.bucket,
+          filepath: path.fullPath,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+    } else {
+      axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${cdoc.gid}/comment/${cdoc.cid}/delete`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+    }
+    setrpymsg("");
+    setImage(null);
+    // console.log(getpathfromUrl(commentdoc.imageURL))
+    onCommentDelete();
+  };
+
+  const handleEdit = async () => {
+    const token = await auth.currentUser.getIdToken();
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${cdoc.gid}/comment/${cdoc.cid}/update`,
+      {
+        message: editMessage,
+      },
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+      if (res.status === 200) {
+        setMessage(editMessage);
+        setEditMode(false);
+      } else {
+        alert(res.data);
+      }
+    
+    // setMessage(editMessage);
+    // console.log(getpathfromUrl(commentdoc.imageURL))
+  };
+
   return (
     <Flex
       p={2.5}
@@ -195,7 +331,7 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
         <Avatar
           w={70}
           h={70}
-          src={commentdoc.creator.photoURL}
+          src={commentdoc.creator?.photoURL}
           rounded={"full"}
         />
       </Center>
@@ -203,9 +339,10 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
       <Flex flexDir="column" flexGrow={10}>
         <Flex justifyContent="space-between">
           <Text fontSize={20}>
-            {commentdoc.creator.displayName
-              ? commentdoc.creator.displayName
+            {commentdoc.creator?.displayName
+              ? commentdoc.creator?.displayName
               : "placeholder"}
+            {"  " + cdoc.cid}
           </Text>
 
           <Text fontSize={10} mt={3} color={"GrayText"}>
@@ -218,19 +355,21 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
         <Divider />
         {editMode ? (
           // <InputGroup>
-          <Input
+          <Textarea
+            resize="none"
+            minHeight={11}
             onKeyDown={(e) => {
               if (e.key == "Enter" && !e.shiftKey) {
                 handleEdit();
               } else if (e.key == "Escape") {
-                if (image != checkImage.current) {
-                  setImage(checkImage.current);
-                }
+                // if (image != checkImage.current) {
+                //   setImage(checkImage.current);
+                // }
                 setEditMode(false);
               }
             }}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            value={editMessage}
+            onChange={(e) => setEditMessage(e.target.value)}
             width="100%"
             placeholder="Write Something"
             height="45px"
@@ -251,7 +390,7 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
           // </InputGroup>
           <Box fontSize={14} minW={"625"} w={"auto"} maxW={600}>
             <Text whiteSpace="pre-line">
-              {commentdoc.message ? commentdoc.message : ""}
+              {message ? message : ""}
             </Text>
           </Box>
         )}
@@ -327,15 +466,11 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
               <Heart
                 size={16}
                 color={"red"}
-                weight={
-                  commentdoc.love.includes(auth.currentUser.uid)
-                    ? "fill"
-                    : "regular"
-                }
+                weight={love ? "fill" : "regular"}
               />
             </Box>
 
-            <Box p={1}>{commentdoc.love ? commentdoc.love.length : "0"}</Box>
+            <Box p={1}>{lovecount}</Box>
           </Button>
 
           <Button mt={2} mr={2} onClick={onToggle}>
@@ -348,8 +483,25 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
         </Box>
         {isOpen && (
           <>
-            {console.log(reply)}
-            {isOpen && reply.map((rdoc) => <Replypost replydoc={rdoc} />)}
+            {cdoc.replycount > loadlimit && (
+              <Text
+                decoration="underline"
+                onClick={() => setloadlimit(loadlimit + 20)}
+              >
+                Load more
+              </Text>
+            )}
+            {/* {console.log(reply.reverse())} */}
+            {isOpen &&
+              reply
+                .map((rdoc) => (
+                  <Replypost
+                    replydoc={rdoc}
+                    message={editReplyMessage[rdoc.rid]}
+                    setMessage={(msg) => setEditReplyMessage(rdoc.rid, msg)}
+                  />
+                ))
+                .reverse()}
             <Textarea
               resize="none"
               minHeight={11}
@@ -359,13 +511,15 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
                 }
                 resizeTextArea(e);
               }}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              value={rpymsg}
+              onChange={(e) => setrpymsg(e.target.value)}
+              // onChange={(e) => console.log(e.target.)}
               width="100%"
               placeholder="Write Something"
               height="45px"
               backgroundColor="gray.100"
               onPaste={handleImagePaste}
+              ref={commentinputref}
             />
             {image && (
               <Box pos={"relative"}>
@@ -388,21 +542,13 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
             )}
           </>
         )}
-        {cdoc.replycount > loadlimit && (
-          <Text
-            decoration="underline"
-            onClick={() => setloadlimit(loadlimit + 20)}
-          >
-            Load more
-          </Text>
-        )}
       </Flex>
       <Menu>
         <MenuButton m={2.5} h={10} w={10} borderRadius={100}>
           <DotsThreeVertical size={30} />
         </MenuButton>
         <MenuList>
-          {auth.currentUser.uid == commentdoc.userId ? (
+          {auth.currentUser.uid == commentdoc.creator.uid ? (
             <>
               <MenuItem onClick={() => setEditMode(true)}>Edit</MenuItem>
               <MenuItem onClick={handleDelete}>Delete</MenuItem>
@@ -424,8 +570,8 @@ export const Commentpost = ({ cdoc, gid, commenters }) => {
 };
 
 const parseDate = (seconds) => {
-  // const date = new Date(seconds._seconds * 1000);
-  const date = seconds.toDate();
+  const date = new Date(seconds._seconds * 1000);
+  // const date = seconds.toDate();
   const formatted = date.toLocaleDateString("th-TH", {
     day: "numeric",
     month: "2-digit",

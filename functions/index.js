@@ -13,8 +13,8 @@ const { createPost, updatePost, deletePost, lovePost, unlovePost, getPost, getAl
 const { createComment, updateComment, deleteComment, loveComment, unloveComment, getAllComment } = require("./handlers/comments");
 const { createReply, updateReply, deleteReply, loveReply, unloveReply, getAllReply } = require("./handlers/replies");
 const { getuser, getbatchUser } = require("./handlers/user");
-const { createPreviewComment } = require("./handlers/previewcomments");
-const { createPreviewReply } = require("./handlers/previewreplies");
+const { createPreviewComment, DeletePreviewComment, lovePreviewComment, unlovePreviewComment, UpdatePreviewComment, getAllPreviewcomment } = require("./handlers/previewcomments");
+const { createPreviewReply, UpdatePreviewReply, DeletePreviewReply, lovePreviewReply, unlovePreviewReply } = require("./handlers/previewreplies");
 
 // The Firebase Admin SDK to access Firestore.
 
@@ -26,8 +26,8 @@ app.use(cors({
 }));
 
 app.get("/", (req, res)=>{
-  // res.send(req.query);
 });
+app.post("/", DeletePreviewComment);
 
 app.post("/group/create", authmw, createGroup);
 app.post("/group/:id/update", authmw, updateGroup);
@@ -46,16 +46,17 @@ app.post("/group/:id/unpin", authmw, groupUnpin);
 app.post("/group/:id/love", authmw, groupLove);
 app.post("/group/:id/unlove", authmw, groupUnlove);
 app.post("/group/:gid/comment/create", authmw, createPreviewComment);
-app.post("/group/:gid/comment/:cid/update", authmw);
-app.post("/group/:gid/comment/:cid/delete", authmw);
-app.post("/group/:gid/comment/:cid/love", authmw);
-app.post("/group/:gid/comment/:cid/unlove", authmw);
+app.post("/group/:gid/comment/:cid/update", authmw, UpdatePreviewComment);
+app.post("/group/:gid/comment/:cid/delete", authmw, DeletePreviewComment);
+app.post("/group/:gid/comment/:cid/love", authmw, lovePreviewComment);
+app.post("/group/:gid/comment/:cid/unlove", authmw, unlovePreviewComment);
 app.post("/group/:gid/comment/:cid/reply/create", authmw, createPreviewReply);
-app.post("/group/:gid/comment/:cid/reply/:rid/update", authmw);
-app.post("/group/:gid/comment/:cid/reply/:rid/delete", authmw);
-app.post("/group/:gid/comment/:cid/reply/:rid/love", authmw);
-app.post("/group/:gid/comment/:cid/reply/:rid/unlove", authmw);
+app.post("/group/:gid/comment/:cid/reply/:rid/update", authmw, UpdatePreviewReply);
+app.post("/group/:gid/comment/:cid/reply/:rid/delete", authmw, DeletePreviewReply);
+app.post("/group/:gid/comment/:cid/reply/:rid/love", authmw, lovePreviewReply);
+app.post("/group/:gid/comment/:cid/reply/:rid/unlove", authmw, unlovePreviewReply);
 app.get("/group/:gid", authmw, getGroup);
+app.get("/group/:gid/comment", authmw, getAllPreviewcomment);
 app.get("/groups", authmw, getAllGroup);
 app.post("/post/:gid/create", authmw, createPost);
 app.post("/post/:gid/:pid/update", authmw, updatePost);

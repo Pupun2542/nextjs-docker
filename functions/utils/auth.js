@@ -2,6 +2,7 @@ const {admin, db} = require("./admin");
 
 module.exports = (req, res, next) =>{
   let idToken;
+  // console.log(req.headers.authorization);
   if (req.headers.authorization) {
     idToken = req.headers.authorization;
     admin.auth().verifyIdToken(idToken).then((decodedToken)=>{

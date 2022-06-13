@@ -69,7 +69,12 @@ export async function UploadGroupCommentImage(file, creator, group) {
     store,
     `group/${group}/comments/${creator}${Date.now()}.jpg`
   );
-  const uploadsnapshot = await uploadString(storeRef, file, "data_url");
-  const downloadurl = await getDownloadURL(uploadsnapshot);
+  const snapsnot = await uploadString(storeRef, file, "data_url");
+  console.log(snapsnot.ref)
+  const downloadurl = await getDownloadURL(snapsnot.ref);
   return downloadurl;
+}
+
+export function getpathfromUrl(url) {
+  return ref(store, url) 
 }
