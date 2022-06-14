@@ -5,18 +5,18 @@ const {sendNotifications} = require("../utils/notifications");
 exports.createPost = (req, res) =>{
   if (req.user) {
     const user = req.user.uid;
-    db.collection("group").doc(req.params.gid).get().then((doc)=>{
+    const docref = db.collection("group").doc(req.params.gid);
+    docref.get().then((doc)=>{
       if (doc.exists && doc.data().member.includes(user)) {
-        return db.collection("posts").add({
+        return docref.collection("posts").add({
           "uid": user,
           "message": req.body.message,
           "timestamp": admin.firestore.FieldValue.serverTimestamp(),
-          "love": 0,
+          "love": [],
           "imageUrl": (req.body.imageUrl? req.body.imageUrl: []),
           "comment": 0,
           "follower": [user],
           "lastactive": admin.firestore.FieldValue.serverTimestamp(),
-          "groupId": req.params.gid,
           "charaId": req.body.charaId,
           "viewer": [user],
         }).then((ref)=>{
@@ -37,7 +37,7 @@ exports.createPost = (req, res) =>{
 
 exports.updatePost = (req, res) =>{
   if (req.user) {
-    const docref = db.collection("posts").doc(req.params.pid);
+    const docref = db.collection("group").doc(req.params.gid).collection("posts").doc(req.params.pid);
     docref.get().then((doc)=>{
       if (doc.exists && doc.data().uid == req.user.uid) {
         return docref.update({
@@ -59,7 +59,7 @@ exports.updatePost = (req, res) =>{
 
 exports.deletePost = (req, res) =>{
   if (req.user) {
-    const docref = db.collection("posts").doc(req.params.pid);
+    const docref = db.collection("group").doc(req.params.gid).collection("posts").doc(req.params.pid);
     docref.get().then((doc)=>{
       if (doc.exists && doc.data().uid == req.user.uid) {
         return docref.delete().then(()=>{
@@ -77,8 +77,8 @@ exports.deletePost = (req, res) =>{
 exports.lovePost = (req, res) =>{
   if (req.user) {
     const user = req.user.uid;
-    const docref = db.collection("posts").doc(req.params.pid);
     const groupref = db.collection("group").doc(req.params.gid);
+    const docref = groupref.collection("posts").doc(req.params.pid);
     docref.get().then((doc)=>{
       if (doc.exists) {
         return docref.update({
@@ -91,17 +91,19 @@ exports.lovePost = (req, res) =>{
         }). catch((e)=>{
           return res.status(400).send("update post not success ", e);
         });
+      } else {
+        res.status(404).send("post not found");
       }
-      return res.status(401).send("unauthorized");
     });
-    res.status(404).send("post not found");
+  } else {
+    return res.status(401).send("unauthorized");
   }
 };
 
 exports.unlovePost = (req, res) =>{
   if (req.user) {
-    const docref = db.collection("posts").doc(res.params.pid);
-    // const groupref = db.collection("group").doc(res.params.gid);
+    const groupref = db.collection("group").doc(req.params.gid);
+    const docref = groupref.collection("posts").doc(req.params.pid);
     docref.get().then((doc)=>{
       if (doc.exists && doc.data().uid == req.user.uid) {
         return docref.update({
@@ -111,10 +113,12 @@ exports.unlovePost = (req, res) =>{
         }). catch((e)=>{
           return res.status(400).send("update post not success ", e);
         });
+      } else {
+        res.status(403).send("forbidden");
       }
-      return res.status(401).send("unauthorized");
     });
-    res.status(404).send("post not found");
+  } else {
+    return res.status(401).send("unauthorized");
   }
 };
 
@@ -123,14 +127,14 @@ exports.getAllPost = async (req, res) =>{
     const user = req.user.uid;
     const groupref = db.collection("group").doc(req.params.gid);
     const doc = await groupref.get();
+    // console.log(req.query);
 
     if (doc.exists) {
       if ((doc.data().privacy == "private" && doc.data().member.includes(user))|| doc.data().privacy !="private" ) {
-        const snapshot = await db
+        const snapshot = await groupref
             .collection("posts")
-            .where("groupId", "==", req.params.gid)
             .orderBy(req.query.orderby, "desc")
-            .limit(parseInt(req.query.loadlimit))
+            .limit(parseInt(parseInt(req.query.loadlimit)))
             .get();
         let post = [];
         await Promise.all(snapshot.docs.map(async (postdoc)=>{
@@ -152,6 +156,7 @@ exports.getAllPost = async (req, res) =>{
           const mappeddocdata = {
             ...postdoc.data(),
             pid: postdoc.id,
+            gid: req.params.gid,
             creator: Object.fromEntries([arrviewer.find(([k, v])=>v.uid === postdoc.data().uid)]),
             viewer: viewer,
             follower: Object.fromEntries(arrviewer.filter(([k, v], i)=>postdoc.data().follower.includes(v.uid))),
@@ -161,58 +166,12 @@ exports.getAllPost = async (req, res) =>{
           // console.log(post);
         }));
         return res.status(200).json(post);
+      } else {
+        return res.status(403).send("forbidden");
       }
+    } else {
+      return res.status(404).send("not found");
     }
-
-    // return groupref.get().then((doc)=>{
-    //   if (doc.exists) {
-    //     // eslint-disable-next-line max-len
-    //     if ((doc.data().privacy == "private" && doc.data().member.includes(user))|| doc.data().privacy !="private" ) {
-    //       return db
-    //           .collection("posts")
-    //           .where("groupId", "==", req.params.gid)
-    //           .orderBy(req.query.orderby, "desc")
-    //           .limit(parseInt(req.query.loadlimit))
-    //           .get()
-    //           .then((snapshot)=>{
-    //             let post = [];
-    //             snapshot.forEach((docs)=>{
-    //               let identifiers = [];
-    //               docs.data().viewer.map((view)=>{
-    //                 identifiers = [...identifiers, {uid: view}];
-    //               });
-    //               admin.auth().getUsers(identifiers).then((users)=>{
-    //                 let viewer = {};
-    //                 users.users.map((auser)=>{
-    //                   viewer = {...viewer,
-    //                     [auser.uid]: {
-    //                       uid: auser.uid,
-    //                       displayName: auser.displayName,
-    //                       photoURL: auser.photoURL,
-    //                     }};
-    //                 });
-    //                 const arrviewer = Object.entries(viewer);
-    //                 const mappeddocdata = {
-    //                   ...docs.data(),
-    //                   creator: Object.fromEntries([arrviewer.find(([k, v])=>v.uid === docs.data().uid)]),
-    //                   viewer: viewer,
-    //                   follower: Object.fromEntries(arrviewer.filter(([k, v], i)=>docs.data().follower.includes(v.uid))),
-    //                 };
-    //                 const finaldata = {...docs.data(), ...mappeddocdata};
-    //                 post = [...post, finaldata];
-    //                 console.log(post);
-    //               });
-    //             });
-    //             console.log("before send");
-    //             return res.status(200).json(post);
-    //           });
-    //     } else {
-    //       return res.status(401).send("cannot get posts : unauthorized");
-    //     }
-    //   } else {
-    //     return res.status(401).send("unauthorized");
-    //   }
-    // });
   } else {
     return res.status(401).send("unauthorized");
   }
@@ -226,7 +185,7 @@ exports.getPost = (req, res) =>{
       if (doc.exists) {
         // eslint-disable-next-line max-len
         if ((doc.data().privacy == "private" && doc.data().member.includes(user))|| doc.data().privacy == "public") {
-          return db
+          return groupref
               .collection("posts")
               .doc(req.params.pid)
               .get()

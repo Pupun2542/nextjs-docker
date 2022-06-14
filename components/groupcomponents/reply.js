@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Center,
@@ -18,9 +18,61 @@ import {
   Eye,
   DotsThreeVertical,
 } from "phosphor-react";
+import { useApp } from "../../src/hook/local";
+import axios from "axios";
 
 export const GroupReply = ({ reply }) => {
+  const [love, setLove] = useState(false);
   const creator = reply.creator
+  const { auth } = useApp();
+  useEffect(()=>{
+    if (reply.love.includes(auth.currentUser.uid)) {
+      setLove(true);
+    }
+    return()=>{
+      setLove(false);
+    }
+  },[reply])
+
+  const HandleLove = async () => {
+    const token = await auth.currentUser.getIdToken();
+    if (love) {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${reply.gid}/${reply.pid}/comment/${reply.cid}/reply/${reply.rid}/unlove`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      if (res.status === 200) {
+        // setLovecount(lovecount-1)
+        setLove(false);
+      }
+    } else {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${reply.gid}/${reply.pid}/comment/${reply.cid}/reply/${reply.rid}/love`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      if (res.status === 200) {
+        // setLovecount(lovecount+1)
+        setLove(true);
+      }
+    }
+  };
+
+
+
+
+
+
+
   return (
       <Flex mt={3} p={2} boxShadow={"base"} w={"100%"}>
         <Box w={"8%"}>
@@ -60,8 +112,9 @@ export const GroupReply = ({ reply }) => {
               fontWeight={"light"}
               boxShadow={"base"}
               variant="solid"
+              onClick={HandleLove}
             >
-              {reply.love}
+              {reply.love.length}
             </Button>
           </HStack>
         </Box>

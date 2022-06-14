@@ -5,10 +5,12 @@ const {sendNotifications} = require("../utils/notifications");
 exports.createReply = (req, res) =>{
   if (req.user) {
     const user = req.user.uid;
-    const docref = db.collection("posts").doc(req.params.pid).collection("comments").doc(req.params.cid);
+    const groupref = db.collection("group").doc(req.params.gid);
+    const postref = groupref.collection("posts").doc(req.params.pid);
+    const docref = postref.collection("comments").doc(req.params.cid);
     docref.get().then((doc)=>{
       if (doc.exists) {
-        return db.collection("group").doc(req.params.gid).get().then((gdoc)=>{
+        return groupref.get().then((gdoc)=>{
           if (gdoc.exists && gdoc.data().member.includes(user)) {
             return docref.collection("replies").add({
               "uid": user,
@@ -18,7 +20,11 @@ exports.createReply = (req, res) =>{
               "imageUrl": (req.body.imageUrl? req.body.imageUrl: ""),
               "charaId": req.body.charaId,
             }).then((ref)=>{
-              sendNotifications(doc.data().member, 103, user, doc.data().name, "", `${gdoc.id}/${req.params.pid}/${req.params.cid}/${ref.id}`);
+              docref.update({
+                reply: admin.firestore.FieldValue.increment(1),
+                follower: admin.firestore.FieldValue.arrayUnion(user),
+              });
+              sendNotifications(doc.data().follower, 103, user, doc.data().name, "", `${gdoc.id}/${req.params.pid}/${req.params.cid}/${ref.id}`);
               return res.status(200).send("create comment success");
             }).catch((e)=>{
               return res.status(400).send("create comment not success ", e);
@@ -39,13 +45,10 @@ exports.createReply = (req, res) =>{
 exports.updateReply = (req, res) =>{
   if (req.user) {
     const user = req.user.uid;
-    const docref = db
-        .collection("posts")
-        .doc(req.params.pid)
-        .collection("comments")
-        .doc(req.params.cid)
-        .collection("replies")
-        .doc(req.params.cid);
+    const groupref = db.collection("group").doc(req.params.gid);
+    const postref = groupref.collection("posts").doc(req.params.pid);
+    const cmtref = postref.collection("comments").doc(req.params.cid);
+    const docref = cmtref.collection("replies").doc(req.params.rid);
     docref.get().then((doc)=>{
       if (doc.exists && doc.data().uid == user) {
         return docref.update({
@@ -67,16 +70,16 @@ exports.updateReply = (req, res) =>{
 
 exports.deleteReply = (req, res) =>{
   if (req.user) {
-    const docref = db
-        .collection("posts")
-        .doc(req.params.pid)
-        .collection("comments")
-        .doc(req.params.cid)
-        .collection("replies")
-        .doc(req.params.cid);
+    const groupref = db.collection("group").doc(req.params.gid);
+    const postref = groupref.collection("posts").doc(req.params.pid);
+    const cmtref = postref.collection("comments").doc(req.params.cid);
+    const docref = cmtref.collection("replies").doc(req.params.rid);
     docref.get().then((doc)=>{
       if (doc.exists && doc.data().uid == req.user.uid) {
         return docref.delete().then(()=>{
+          docref.update({
+            reply: admin.firestore.FieldValue.increment(-1),
+          });
           return res.status(200).send("delete comment success");
         }). catch((e)=>{
           return res.status(400).send("delete comment not success ", e);
@@ -93,16 +96,13 @@ exports.deleteReply = (req, res) =>{
 exports.loveReply = (req, res) =>{
   if (req.user) {
     const user = req.user.uid;
-    const docref = db
-        .collection("posts")
-        .doc(req.params.pid)
-        .collection("comments")
-        .doc(req.params.cid)
-        .collection("replies")
-        .doc(req.params.cid);
+    const groupref = db.collection("group").doc(req.params.gid);
+    const postref = groupref.collection("posts").doc(req.params.pid);
+    const cmtref = postref.collection("comments").doc(req.params.cid);
+    const docref = cmtref.collection("replies").doc(req.params.rid);
     docref.get().then((doc)=>{
       if (doc.exists) {
-        return db.collection("group").doc(doc.data().groupId).get().then((gdoc)=>{
+        return groupref.get().then((gdoc)=>{
           if (gdoc.exists && gdoc.data().member.includes(user)) {
             return docref.update({
               "love": admin.firestore.FieldValue.arrayUnion(req.user.uid),
@@ -126,16 +126,13 @@ exports.loveReply = (req, res) =>{
 exports.unloveReply = (req, res) =>{
   if (req.user) {
     const user = req.user.uid;
-    const docref = db
-        .collection("posts")
-        .doc(req.params.pid)
-        .collection("comments")
-        .doc(req.params.cid)
-        .collection("replies")
-        .doc(req.params.cid);
+    const groupref = db.collection("group").doc(req.params.gid);
+    const postref = groupref.collection("posts").doc(req.params.pid);
+    const cmtref = postref.collection("comments").doc(req.params.cid);
+    const docref = cmtref.collection("replies").doc(req.params.rid);
     docref.get().then((doc)=>{
       if (doc.exists) {
-        return db.collection("group").doc(doc.data().groupId).get().then((gdoc)=>{
+        return groupref.get().then((gdoc)=>{
           if (gdoc.exists && gdoc.data().member.includes(user)) {
             return docref.update({
               "love": admin.firestore.FieldValue.arrayRemove(req.user.uid),

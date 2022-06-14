@@ -75,6 +75,24 @@ export async function UploadGroupCommentImage(file, creator, group) {
   return downloadurl;
 }
 
+export async function UploadGroupImage(files, creator, group) { 
+  if (Array.isArray(files)) {
+    const downloadurl = await Promise.all(files.map(async(file)=>{
+      const storeRef = ref(
+        store,
+        `group/${group}/album/${creator}${Date.now()}.jpg`
+      );
+      const snapsnot = await uploadString(storeRef, file, "data_url");
+      // console.log(snapsnot.ref)
+      const downloadurl = await getDownloadURL(snapsnot.ref);
+      return downloadurl;
+    }))
+    return downloadurl;
+  }
+  return undefined;
+  
+}
+
 export function getpathfromUrl(url) {
   return ref(store, url) 
 }

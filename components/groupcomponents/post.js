@@ -35,19 +35,32 @@ import {
 import { useApp, useUser } from "../../src/hook/local";
 import axios from "axios";
 
-export const GroupPost = ({ post, member }) => {
+export const GroupPost = ({
+  post,
+  member,
+  openReply,
+  setOpenReply,
+  setEditComment,
+}) => {
   const creator = post.creator;
   const getUser = useUser();
   // console.log(post);
   const { auth, db } = useApp();
-  const { isOpen, onToggle } = useDisclosure();
-  const [comment, setComment] = useState(undefined);
+  const { isOpen, onToggle, onClose } = useDisclosure();
+  const [comment, setComment] = useState([]);
   const [fetchlimit, setFetchlimit] = useState(20);
   const [message, setMessage] = useState("");
+  const [love, setLove] = useState(false);
+  const [lovecount, setLovecount] = useState(0);
   useEffect(() => {
+    if (post.love.includes(auth.currentUser.uid)) {
+      setLove(true);
+    }
+    // setMessage(cdoc.message);
+    setLovecount(post.love.length);
     const unsubscribe = onSnapshot(
       query(
-        collection(db, "posts", post.pid, "comments"),
+        collection(db, "group", post.gid, "posts", post.pid, "comments"),
         orderBy("timestamp", "desc"),
         limit(fetchlimit)
       ),
@@ -66,12 +79,12 @@ export const GroupPost = ({ post, member }) => {
               }
               mappedcommentData = [
                 ...mappedcommentData,
-                { 
-                  ...doc.data(), 
-                  creator: creator, 
-                  cid: doc.id, 
+                {
+                  ...doc.data(),
+                  creator: creator,
+                  cid: doc.id,
                   pid: post.pid,
-                  gid: post.gid
+                  gid: post.gid,
                 },
               ];
             })
@@ -83,6 +96,10 @@ export const GroupPost = ({ post, member }) => {
     );
     return () => {
       unsubscribe();
+      onClose();
+      setComment([])
+      setLove(false);
+      setLovecount(0);
     };
   }, [post]);
 
@@ -100,7 +117,7 @@ export const GroupPost = ({ post, member }) => {
       // setImage([]);
       const token = await auth.currentUser.getIdToken();
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${post.pid}/comment/create`,
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${post.gid}/${post.pid}/comment/create`,
         { message: message, imageURL: "", charaId: "" },
         {
           headers: {
@@ -110,9 +127,44 @@ export const GroupPost = ({ post, member }) => {
       );
       console.log("before set", message);
       setMessage("");
-      console.log("after set", message)
+      console.log("after set", message);
     }
   };
+
+  const HandleLove = async () => {
+    const token = await auth.currentUser.getIdToken();
+    if (love) {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${post.gid}/${post.pid}/unlove`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      if (res.status === 200) {
+        setLovecount(lovecount-1)
+        setLove(false);
+      }
+    } else {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${post.gid}/${post.pid}/love`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      if (res.status === 200) {
+        setLovecount(lovecount+1)
+        setLove(true);
+      }
+    }
+  };
+
+
   if (post) {
     return (
       <Flex mt={3} p={2} boxShadow={"base"} bg={"white"} borderRadius={10}>
@@ -151,20 +203,36 @@ export const GroupPost = ({ post, member }) => {
           <Text whiteSpace="pre-line">{post.message}</Text>
 
           <Center mt={3} w={"100%"} borderRadius={10} boxShadow={"base"}>
-            <Image size={300} color="#100e0e" weight="light" />
+            <Box display={"flex"} overflowX="auto" overflowY="hidden" whiteSpace="nowrap" alignContent={"center"}>
+              {post.imageUrl &&
+                post.imageUrl.map((img) => (
+                  <Image
+                    size={300}
+                    color="#100e0e"
+                    weight="light"
+                    src={img}
+                    objectFit={"contain"}
+                    display={"inline-block"}
+                  />
+                ))}
+            </Box>
           </Center>
 
           <HStack spacing={4} fontSize={14} color={"GrayText"} pt={2}>
             <Button
-              leftIcon={<Heart />}
-              color="black"
+              leftIcon={<Heart 
+                weight={love ? "fill" : "regular"}
+              />}
+              color={love ? "red" : "black"}
               width={"40%"}
               fontSize={16}
               fontWeight={"light"}
               boxShadow={"base"}
               variant="solid"
+              onClick={HandleLove}
+              
             >
-              {post.love}
+              {lovecount}
             </Button>
             <Button
               leftIcon={<ChatCenteredText />}
@@ -176,7 +244,7 @@ export const GroupPost = ({ post, member }) => {
               variant="solid"
               onClick={onToggle}
             >
-              {post.comment}
+              {(post.comment > comment.length? post.comment : comment.length)}
             </Button>
             <Button
               leftIcon={<Eye />}
@@ -190,17 +258,29 @@ export const GroupPost = ({ post, member }) => {
               {post.view}
             </Button>
           </HStack>
-          {isOpen && comment && comment.reverse().map((cmt, i) => <GroupComment comment={cmt} key={i} member={member} />)}
+          {isOpen &&
+            comment &&
+            comment
+              .map((cmt, i) => (
+                <GroupComment
+                  comment={cmt}
+                  key={i}
+                  member={member}
+                  openReply={openReply[i]}
+                  setOpenReply={(state) => setOpenReply(state, i)}
+                />
+              ))
+              .reverse()}
           <Flex mt={2}>
             <Box w={"8%"} mr={1}>
-                <Avatar
-                  mr={2}
-                  rounded={"100%"}
-                  h={42}
-                  w={42}
-                  src={auth.currentUser.photoURL}
-                  name={auth.currentUser.displayName}
-                />
+              <Avatar
+                mr={2}
+                rounded={"100%"}
+                h={42}
+                w={42}
+                src={auth.currentUser.photoURL}
+                name={auth.currentUser.displayName}
+              />
             </Box>
             <Textarea
               resize="none"
@@ -234,8 +314,8 @@ export const GroupPost = ({ post, member }) => {
 };
 
 const parseDate = (seconds) => {
-  // const date = new Date(seconds._seconds * 1000);
-  const date = seconds.toDate();
+  const date = new Date(seconds._seconds * 1000);
+  // const date = seconds.toDate();
   const formatted = date.toLocaleDateString("th-TH", {
     day: "numeric",
     month: "2-digit",

@@ -32,20 +32,25 @@ import { GroupReply } from "./reply";
 import { useApp, useUser } from "../../src/hook/local";
 import axios from "axios";
 
-export const GroupComment = ({ comment, member }) => {
+export const GroupComment = ({ comment, member, openReply, setOpenReply }) => {
   const creator = comment.creator
   const getUser = useUser();
   // console.log(comment);
   const { auth, db } = useApp();
-  const { isOpen, onToggle } = useDisclosure();
-  const [reply, setReply] = useState(undefined);
+  const { isOpen, onToggle } = useDisclosure({isOpen: openReply});
+  const [reply, setReply] = useState([]);
   const [fetchlimit, setFetchlimit] = useState(20);
   const [message, setMessage] = useState("");
+  const [love, setLove] = useState(false);
+  // const [lovecount, setLovecount] = useState(0);
   useEffect(() => {
+    if (comment.love.includes(auth.currentUser.uid)) {
+      setLove(true);
+    }
     const unsubscribe = onSnapshot(
       query(
-        collection(db, "posts", comment.pid, "comments", comment.cid, "replies"),
-        orderBy("timestamp", "desc"),
+        collection(db, "group", comment.gid, "posts", comment.pid, "comments", comment.cid, "replies"),
+        orderBy("timestamp", "desc"), 
         limit(fetchlimit)
       ),
       (snaphot) => {
@@ -80,8 +85,17 @@ export const GroupComment = ({ comment, member }) => {
     );
     return () => {
       unsubscribe();
+      setLove(false);
+      // setLovecount(0);
     };
   }, [comment]);
+
+  const ToggleReplyTab = () => {
+    setOpenReply(!isOpen);
+    onToggle();
+  }
+
+
   const resizeTextArea = (e) => {
     e.target.style.height = "inherit";
     e.target.style.height = `${e.target.scrollHeight}px`;
@@ -109,6 +123,42 @@ export const GroupComment = ({ comment, member }) => {
       // console.log("after set", message)
     }
   };
+
+  const HandleLove = async () => {
+    const token = await auth.currentUser.getIdToken();
+    if (love) {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${comment.gid}/${comment.pid}/comment/${comment.cid}/unlove`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      if (res.status === 200) {
+        // setLovecount(lovecount-1)
+        setLove(false);
+      }
+    } else {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${comment.gid}/${comment.pid}/comment/${comment.cid}/love`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      if (res.status === 200) {
+        // setLovecount(lovecount+1)
+        setLove(true);
+      }
+    }
+  };
+
+
+
   return (
     <Flex mt={3} p={2} boxShadow={"base"} w={"100%"}>
       <Box w={"7%"}>
@@ -138,17 +188,21 @@ export const GroupComment = ({ comment, member }) => {
         </Box>
 
         <HStack spacing={4} fontSize={14} color={"GrayText"} pt={2}>
-          <Button
-            leftIcon={<Heart />}
-            color="black"
-            width={"40%"}
-            fontSize={16}
-            fontWeight={"light"}
-            boxShadow={"base"}
-            variant="solid"
-          >
-            {comment.love.length}
-          </Button>
+        <Button
+              leftIcon={<Heart 
+                weight={love ? "fill" : "regular"}
+              />}
+              color={love ? "red" : "black"}
+              width={"40%"}
+              fontSize={16}
+              fontWeight={"light"}
+              boxShadow={"base"}
+              variant="solid"
+              onClick={HandleLove}
+              
+            >
+              {comment.love.length}
+            </Button>
           <Button
             leftIcon={<ChatCenteredText />}
             color="black"
@@ -157,15 +211,15 @@ export const GroupComment = ({ comment, member }) => {
             fontWeight={"light"}
             boxShadow={"base"}
             variant="solid"
-            onClick={onToggle}
+            onClick={()=>ToggleReplyTab()}
           >
-            {comment.reply.length}
+            {comment.reply}
           </Button>
         </HStack>
-        {console.log(reply)}
-        {isOpen&&reply.reverse().map((rpy, i)=>
+        {/* {console.log(reply)} */}
+        {isOpen&&reply.map((rpy, i)=>
           (<GroupReply reply={rpy} key={i} member={member} />)
-        )}
+        ).reverse()}
         
 
         <Flex mt={2}>

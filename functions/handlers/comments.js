@@ -2,58 +2,57 @@
 const {db, admin} = require("../utils/admin");
 const {sendNotifications} = require("../utils/notifications");
 
-exports.createComment = (req, res) =>{
+exports.createComment = async (req, res) =>{
   if (req.user) {
     const user = req.user.uid;
-    db.collection("posts").doc(req.params.pid).get().then((doc)=>{
-      if (doc.exists) {
-        return db.collection("group").doc(doc.data().groupId).get().then((gdoc)=>{
-          if (gdoc.exists && gdoc.data().member.includes(user)) {
-            return db.collection("posts").doc(req.params.pid).collection("comments").add({
-              "uid": user,
-              "message": req.body.message,
-              "timestamp": admin.firestore.FieldValue.serverTimestamp(),
-              "love": [],
-              "imageUrl": (req.body.imageUrl? req.body.imageUrl: ""),
-              "reply": 0,
-              "follower": [user],
-              "charaId": req.body.charaId,
-              "viewer": [user],
-            }).then((ref)=>{
-              db.collection("posts").doc(req.params.pid).update({
-                comment: admin.firestore.FieldValue.increment(1),
-              });
-              sendNotifications(doc.data().viewer, 102, user, doc.data().name, "", `${gdoc.id}/${req.params.pid}/${ref.id}`);
-              return res.status(200).send("create comment success");
-            }).catch((e)=>{
-              return res.status(400).send("create comment not success "+ e);
-            });
-          }
-          return res.status(401).send("unauthorized");
-        });
-      }
-    });
+    const groupref = db.collection("group").doc(req.params.gid);
+    const postref = groupref.collection("posts").doc(req.params.pid);
+    const grpdoc = await groupref.get();
+    if (grpdoc.exists && grpdoc.data().member.includes(user)) {
+      const cmtref = await postref.collection("comments").add({
+        "uid": user,
+        "message": req.body.message,
+        "timestamp": admin.firestore.FieldValue.serverTimestamp(),
+        "love": [],
+        "imageUrl": (req.body.imageUrl? req.body.imageUrl: ""),
+        "reply": 0,
+        "follower": [user],
+        "charaId": req.body.charaId,
+        "viewer": [user],
+      });
+      await postref.update({
+        comment: admin.firestore.FieldValue.increment(1),
+        follower: admin.firestore.FieldValue.arrayUnion(user),
+      });
+      const postdoc = await postref.get();
+      sendNotifications(postdoc.data().follower, 102, user, postdoc.data().name, "", `${req.params.gid}/${req.params.pid}/${cmtref.id}`);
+      return res.status(200).send("create comment success");
+    } else {
+      res.status(403).send("forbidden");
+    }
   } else {
     res.status(401).send("unauthorized");
   }
 };
-exports.updateComment = (req, res) =>{
+exports.updateComment = async (req, res) =>{
   if (req.user) {
-    const docref = db.collection("posts").doc(req.params.pid).collection("comments").doc(req.params.cid);
-    docref.get().then((doc)=>{
-      if (doc.exists && doc.data().uid == req.user.uid) {
-        return docref.update({
-          "message": req.body.message,
-        }).then(()=>{
-          return res.status(200).send("update commment success");
-        }). catch((e)=>{
-          return res.status(400).send("update commment not success ", e);
-        });
-      } else if (!doc.exists) {
-        return res.status(404).send("post not found");
-      }
-      return res.status(401).send("unauthorized");
-    });
+    const groupref = db.collection("group").doc(req.params.gid);
+    const postref = groupref.collection("posts").doc(req.params.pid);
+    const cmtref = postref.collection("comments").doc(req.params.cid);
+
+    const doc = await cmtref.get();
+    if (doc.exists && doc.data().uid == req.user.uid) {
+      cmtref.update({
+        "message": req.body.message,
+      }).then(()=>{
+        return res.status(200).send("update commment success");
+      }).catch((e)=>{
+        return res.status(400).send("update commment not success ", e);
+      });
+    } else if (!doc.exists) {
+      return res.status(404).send("post not found");
+    }
+    return res.status(401).send("unauthorized");
   } else {
     res.status(401).send("unauthorized");
   }
@@ -61,10 +60,15 @@ exports.updateComment = (req, res) =>{
 
 exports.deleteComment = (req, res) =>{
   if (req.user) {
-    const docref = db.collection("posts").doc(req.params.pid).collection("comments").doc(req.params.cid);
-    docref.get().then((doc)=>{
+    const groupref = db.collection("group").doc(req.params.gid);
+    const postref = groupref.collection("posts").doc(req.params.pid);
+    const cmtref = postref.collection("comments").doc(req.params.cid);
+    cmtref.get().then((doc)=>{
       if (doc.exists && doc.data().uid == req.user.uid) {
-        return docref.delete().then(()=>{
+        return cmtref.delete().then(()=>{
+          postref.update({
+            comment: admin.firestore.FieldValue.increment(-1),
+          });
           return res.status(200).send("delete comment success");
         }). catch((e)=>{
           return res.status(400).send("delete comment not success ", e);
@@ -81,10 +85,12 @@ exports.deleteComment = (req, res) =>{
 exports.loveComment = (req, res) =>{
   if (req.user) {
     const user = req.user.uid;
-    const docref = db.collection("posts").doc(req.params.pid).collection("comments").doc(req.params.cid);
+    const groupref = db.collection("group").doc(req.params.gid);
+    const postref = groupref.collection("posts").doc(req.params.pid);
+    const docref = postref.collection("comments").doc(req.params.cid);
     docref.get().then((doc)=>{
       if (doc.exists) {
-        return db.collection("group").doc(doc.data().groupId).get().then((gdoc)=>{
+        return groupref.get().then((gdoc)=>{
           if (gdoc.exists && gdoc.data().member.includes(user)) {
             return docref.update({
               "love": admin.firestore.FieldValue.arrayUnion(req.user.uid),
@@ -108,10 +114,12 @@ exports.loveComment = (req, res) =>{
 exports.unloveComment = (req, res) =>{
   if (req.user) {
     const user = req.user.uid;
-    const docref = db.collection("posts").doc(req.params.pid).collection("comments").doc(req.params.cid);
+    const groupref = db.collection("group").doc(req.params.gid);
+    const postref = groupref.collection("posts").doc(req.params.pid);
+    const docref = postref.collection("comments").doc(req.params.cid);
     docref.get().then((doc)=>{
       if (doc.exists) {
-        return db.collection("group").doc(doc.data().groupId).get().then((gdoc)=>{
+        return groupref.get().then((gdoc)=>{
           if (gdoc.exists && gdoc.data().member.includes(user)) {
             return docref.update({
               "love": admin.firestore.FieldValue.arrayRemove(req.user.uid),

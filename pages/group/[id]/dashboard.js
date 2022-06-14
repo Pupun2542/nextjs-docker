@@ -33,9 +33,10 @@ import {
   Text,
   Image,
   Divider,
+  IconButton
 } from "@chakra-ui/react";
 
-import { Info, Megaphone } from "phosphor-react";
+import { Info, Megaphone, X } from "phosphor-react";
 import { GroupPost } from "../../../components/groupcomponents/post";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useApp, useUser } from "../../../src/hook/local";
@@ -54,6 +55,7 @@ import {
   where,
 } from "firebase/firestore";
 import axios from "axios";
+import { UploadGroupImage } from "../../../src/services/filestoreageservice";
 
 // export async function getServerSideProps(context) {
 //   const { params } = context;
@@ -67,7 +69,7 @@ import axios from "axios";
 
 function dashboard() {
   const [data, setData] = useState(undefined);
-  const [orderby, setOrderby] = useState("lastactive");
+  const [orderby, setOrderby] = useState("timestamp");
   const [loadLimit, selLoadlimit] = useState(20);
   const { app, auth, db } = useApp();
   const [user, userLoading, error] = useAuthState(auth);
@@ -77,75 +79,92 @@ function dashboard() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [image, setImage] = useState([]);
   const pasteInputRef = useRef(undefined);
-  const getUser = useUser();
   const [loading, setLoading] = useState(true);
-  const [post, setPost] = useState(undefined);
+  const [post, setPost] = useState([]);
+  const [replyTab, setReplyTab] = useState({});
+  // const [comment, setComment] = useState({});
+  const [editComment, setEditComment] = useState({});
+
+  const fetchPost = async () => {
+    const token = await user.getIdToken();
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${id}?orderby=${orderby}&loadlimit=${loadLimit}`,
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    if (res.status === 200) {
+      console.log(res.data);
+      setPost(res.data);
+    }
+  };
+  const fetchdata = async () => {
+    const token = await user.getIdToken();
+    const resdata = await axios.get(
+      `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${id}`,
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    if (resdata.status === 200) {
+      setData({ ...data, ...resdata.data });
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchdata = async () => {
-      const token = await user.getIdToken();
-      const resdata = await axios.get(
-        `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${id}`,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-      if (resdata.status === 200) {
-        setData({ ...data, ...resdata.data });
-        setLoading(false);
-      }
-    };
-
     if (user && !userLoading) {
       fetchdata();
     }
-    
   }, [user, userLoading]);
 
   useEffect(() => {
     // console.log(id)
-    let unsubscribe;
-    if (data){
-      unsubscribe = onSnapshot(
-        query(
-          collection(db, "posts"),
-          where("groupId", "==", id),
-          orderBy(orderby, "desc"),
-          limit(loadLimit)
-        ),
-        (snapshot) => {
-          if (!snapshot.empty) {
-            let mappedcommentData = [];
-            Promise.all(
-              snapshot.docs.map(async (doc) => {
-                let creator = {};
-                // console.log(data);
-                if (data.member[doc.data().uid]) {
-                  creator = data.member[doc.data().uid];
-                } else {
-                  const usr = await getUser([doc.data().uid]);
-                  creator = usr[0];
-                }
-                mappedcommentData = [
-                  ...mappedcommentData,
-                  {
-                    ...doc.data(),
-                    creator: creator,
-                    pid: doc.id,
-                    gid: id
-                  },
-                ];
-              })
-            ).then(() => {
-              setPost(mappedcommentData);
-            });
-          }
-        }
-      );
+    if (data) {
+      fetchPost();
     }
-    return () => unsubscribe;
+    // unsubscribe = onSnapshot(
+    //   query(
+    //     collection(db, "posts"),
+    //     where("groupId", "==", id),
+    //     orderBy(orderby, "desc"),
+    //     limit(loadLimit)
+    //   ),
+    //   (snapshot) => {
+    //     if (!snapshot.empty) {
+    //       let mappedcommentData = [];
+    //       Promise.all(
+    //         snapshot.docs.map(async (doc) => {
+    //           let creator = {};
+    //           // console.log(data);
+    //           if (data.member[doc.data().uid]) {
+    //             creator = data.member[doc.data().uid];
+    //           } else {
+    //             const usr = await getUser([doc.data().uid]);
+    //             creator = usr[0];
+    //           }
+    //           mappedcommentData = [
+    //             ...mappedcommentData,
+    //             {
+    //               ...doc.data(),
+    //               creator: creator,
+    //               pid: doc.id,
+    //               gid: id
+    //             },
+    //           ];
+    //         })
+    //       ).then(() => {
+    //         setPost(mappedcommentData);
+    //       });
+    //     }
+    //   }
+    // );
+
+    // return () => unsubscribe;
   }, [data, orderby, loadLimit]);
 
   useEffect(() => {
@@ -160,7 +179,14 @@ function dashboard() {
     }
   }, [data, user]);
 
-  const handleImagePaste = () => {
+  const setStateReplyTab = (state, id) => {
+    setReplyTab({ ...replyTab, [id]: state });
+  };
+  const setStateEditMode = (state, id) => {
+    setEditComment({ ...editComment, [id]: state });
+  };
+
+  const handleImagePaste = (e) => {
     if (e.clipboardData.files[0]) {
       const reader = new FileReader();
       reader.onload = () => {
@@ -186,20 +212,31 @@ function dashboard() {
   };
 
   const handleSent = async () => {
-    if (!isEmptyOrSpaces(message)) {
-      onClose();
-      setMessage("");
-      setImage([]);
+    if (!isEmptyOrSpaces(message)||image.length > 0) {
+      let dlurl = "";
+      if (image.length > 0) {
+        dlurl = await UploadGroupImage(image, user.uid, id);
+        // console.log(dlurl);
+
+      }
       const token = await user.getIdToken();
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${id}/create/`,
-        { message: message, imageURL: "", charaId: "" },
+        { message: message, imageUrl: dlurl, charaId: "" },
         {
           headers: {
             Authorization: token,
           },
         }
       );
+      if (res.status === 200) {
+        fetchPost();
+      } else {
+        alert(res.status + " : " + res.data);
+      }
+      onClose();
+      setMessage("");
+      setImage([]);
     }
   };
 
@@ -377,10 +414,17 @@ function dashboard() {
                       {/* <Input placeholder='Basic usage' w={'93%'} /> */}
                     </Flex>
                     {/* โพสต์ */}
-                    {/* {console.log(data, data.member)} */}
+                    {console.log(post)}
                     {post &&
                       post.map((apost, i) => (
-                        <GroupPost post={apost} key={i} member={data.member} />
+                        <GroupPost
+                          post={apost}
+                          key={i}
+                          member={data.member}
+                          openReply={replyTab}
+                          setOpenReply={setStateReplyTab}
+                          setEditComment={setStateEditMode}
+                        />
                       ))}
 
                     <Modal isOpen={isOpen} onClose={onClose}>
@@ -403,19 +447,52 @@ function dashboard() {
                             mt={2}
                             p={2}
                             h={"auto"}
-                            display="hidden"
+                            display="none"
                             type="file"
                             ref={pasteInputRef}
                           />
-                          {image && (
+                          {/* {image && (
                             <Box>
                               <Box></Box>
                               <Box
                                 display={image.length > 2 ? "initial" : "none"}
                               ></Box>
                             </Box>
-                          )}
-                          <Button float={"right"} onClick={handleSent}>
+                          )} */}
+                          <Box
+                            w="100%"
+                            height={150}
+                            overflowX="auto"
+                            overflowY="hidden"
+                            whiteSpace="nowrap"
+                            display={(image.length > 0? "inline-block" : "none")}
+                          >
+                            {image.length > 0 &&
+                              image.map((img, k) => (
+                                <Box
+                                  key={k}
+                                  display={"inline-block"}
+                                  pos={"relative"}
+                                >
+                                  <Image
+                                    src={img}
+                                    width={150}
+                                    height={150}
+                                    objectFit="cover"
+                                  />
+                                  <IconButton
+                                    icon={<X size={16} color="black" />}
+                                    position="absolute"
+                                    top={"-6px"}
+                                    left={114}
+                                    backgroundColor="transparent"
+                                    _hover={{ backgroundColor: "transparent" }}
+                                    onClick={() => setImage(image.filter((v,i)=> i!== k))}
+                                  ></IconButton>
+                                </Box>
+                              ))}
+                          </Box>
+                          <Button float={"right"} onClick={handleSent} disabled={isEmptyOrSpaces(message)||image.length == 0}>
                             Send
                           </Button>
                         </ModalBody>
