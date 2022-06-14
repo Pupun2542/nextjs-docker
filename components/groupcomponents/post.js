@@ -42,9 +42,9 @@ export const GroupPost = ({
   setOpenReply,
   setEditComment,
 }) => {
-  const creator = post.creator;
+  const creator = Object.values(post.creator)[0];
   const getUser = useUser();
-  // console.log(post);
+  // console.log();
   const { auth, db } = useApp();
   const { isOpen, onToggle, onClose } = useDisclosure();
   const [comment, setComment] = useState([]);

@@ -15,28 +15,15 @@ const app = getApp();
 const store = getStorage(app);
 const auth = getAuth(app);
 
-export function Uploadprofileimg(file, name) {
-  // const [fileURL, setfileURL] = useState("");
-  // console.log(file.name)
-  if (!file) {
-    // console.log("returned")
-    return;
-  }
-  const storageref = ref(store, `profileimg/${name}`);
-  const uploadtask = uploadBytesResumable(storageref, file);
-
-  uploadtask.on(
-    "state_changed",
-    (snapshot) => {},
-    (error) => {
-      console.log(error);
-    },
-    () => {
-      getDownloadURL(uploadtask.snapshot.ref).then((url) => {
-        updateProfile(auth.currentUser, { photoURL: url });
-      });
-    }
+export async function Uploadprofileimg(file, creator) {
+  const storeRef = ref(
+    store,
+    `images/${creator}/${creator}${Date.now()}.jpg`
   );
+  const snapsnot = await uploadString(storeRef, file, "data_url");
+  // console.log(snapsnot.ref)
+  const downloadurl = await getDownloadURL(snapsnot.ref);
+  return downloadurl;
 }
 
 export async function UploadBannerImage(file, creator) {
@@ -70,7 +57,7 @@ export async function UploadGroupCommentImage(file, creator, group) {
     `group/${group}/comments/${creator}${Date.now()}.jpg`
   );
   const snapsnot = await uploadString(storeRef, file, "data_url");
-  console.log(snapsnot.ref)
+  // console.log(snapsnot.ref)
   const downloadurl = await getDownloadURL(snapsnot.ref);
   return downloadurl;
 }
@@ -90,7 +77,6 @@ export async function UploadGroupImage(files, creator, group) {
     return downloadurl;
   }
   return undefined;
-  
 }
 
 export function getpathfromUrl(url) {

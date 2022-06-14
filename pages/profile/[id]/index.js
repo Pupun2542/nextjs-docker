@@ -15,7 +15,7 @@ import {
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
-import { getAuth } from "firebase/auth";
+import { getAuth, updateProfile } from "firebase/auth";
 import {
   Flex,
   Box,
@@ -40,8 +40,14 @@ import {
   WrapItem,
   IconButton,
   useBreakpointValue,
+  Avatar,
+  Input,
+  Image,
 } from "@chakra-ui/react";
 import CustomNavbar from "../../../components/navbar";
+import { Check, X } from "phosphor-react";
+import UploadImageModal from "../../../components/universalUploadModal";
+import { Uploadprofileimg } from "../../../src/services/filestoreageservice";
 
 export default function profile() {
   const { tabState, addTab, removeTab, changeTab, CloseTab } = useTab();
@@ -53,21 +59,25 @@ export default function profile() {
   const { app, auth, db } = useApp();
   const [user, loading, error] = useAuthState(auth);
   const [userDetail, setUserDetail] = useState(null);
-  const top = useBreakpointValue({ base: '90%', md: '50%' });
-  const side = useBreakpointValue({ base: '30%', md: '10px' });
-  // const [newtab, setNewtab] = useState("");
+  const [editDisplayNameMode, setEditDisplayNameMode] = useState(false);
+  const [editDisplayName, setEditDisplayName] = useState("");
+  const [editAvartar, setEditAvatar] = useState("");
+  const [editCover, setEditCover] = useState("");
+  const [editAvartarMode, setEditAvatarMode] = useState(false);
+  const [editCoverMode, setEditCoverMode] = useState(false);
+
+  const loaduserDetail = async () => {
+    if (!loading) {
+      const detail = await getDoc(doc(db, "userDetail", id));
+      //    console.log(detail.data())
+      if (detail.exists) {
+        setUserDetail(detail.data());
+      }
+    }
+  };
 
   useEffect(() => {
     // console.log(id);
-    const loaduserDetail = async () => {
-      if (!loading) {
-        const detail = await getDoc(doc(db, "userDetail", id));
-        //    console.log(detail.data())
-        if (detail.exists) {
-          setUserDetail(detail.data());
-        }
-      }
-    };
     loaduserDetail();
   }, [loading, id]);
 
@@ -149,250 +159,501 @@ export default function profile() {
       // setTimeout(()=>setNewtab(""),500)
     });
   };
+
+  const handleNameChange = async () => {
+    await updateProfile(user, { displayName: editDisplayName });
+    await updateDoc(doc(db, "userDetail", user.uid), {
+      displayName: editDisplayName,
+    });
+    await loaduserDetail();
+  };
+  const handleAvartarChange = async (newavatar) => {
+    const dlurl = await Uploadprofileimg(newavatar, user.uid);
+    if (dlurl) {
+      await updateProfile(user, { photoURL: dlurl });
+      await updateDoc(doc(db, "userDetail", user.uid), {
+        photoURL: dlurl,
+      });
+      loaduserDetail();
+    }
+  };
+  const handleCoverChange = async (newcover) => {
+    const dlurl = await Uploadprofileimg(newcover, user.uid);
+    if (dlurl) {
+      await updateDoc(doc(db, "userDetail", user.uid), {
+        coverImage: dlurl,
+      });
+      loaduserDetail();
+    }
+  };
+
   return (
-    <Box fontFamily={'Mitr'}>
+    <Box fontFamily={"Mitr"}>
       <CustomNavbar />
       {/* {user&&(
         <Chatsidebar db={db} user={user} forcedopenTab={newtab}/>
       )} */}
       <Flex flexGrow={0.8} justifyContent="center" pt={55}>
-        {/* <Spacer /> */}
-        <VStack bg={'#EBEBEB'} width="100%" maxW={1000} minH={914} spacing={0} boxShadow='base'>
-
-          <Center
-            bg={"wheat"}
+        {userDetail && (
+          <VStack
+            bg={"#EBEBEB"}
             width="100%"
             maxW={1000}
-            h={400}
-            fontSize={30}
+            minH={914}
+            spacing={0}
+            boxShadow="base"
           >
-            Cover
-
-          </Center>
-          <Flex bg={'white'} boxShadow={'base'}>
-            <Center
-              w={150}
-              h={150}
-              bg="blue.100"
-              rounded={100}
-              m={2}
-              mt={-20}
-              float={"left"}
-            >
-              Avatar
+            <Center bg={"wheat"} width="100%" maxW={1000} h={400} fontSize={30} onClick={()=>setEditCoverMode(true)}>
+              <Image src={userDetail?.coverImage} w="100%" h="100%" fallback={<Box></Box>} />
             </Center>
+            <Flex bg={"white"} boxShadow={"base"}>
+              <Avatar
+                w={150}
+                h={150}
+                bg="blue.100"
+                rounded={100}
+                m={2}
+                mt={-20}
+                float={"left"}
+                src={userDetail?.photoURL}
+                onClick={()=>setEditAvatarMode(true)}
+              ></Avatar>
 
-            <Flex bg={"red.200"} w={770} m={2} p={2}>
-              <Flex flexDir={'column'} fontFamily={'Mitr'} w={'75%'}>
-                {userDetail && (
+              <Flex bg={"red.200"} w={770} m={2} p={2}>
+                <Flex flexDir={"column"} fontFamily={"Mitr"} w={"75%"}>
+                  {userDetail && (
+                    <Box fontFamily={"Mitr"} fontSize={30}>
+                      {editDisplayNameMode ? (
+                        <Input
+                          value={editDisplayName}
+                          onChange={(e) => setEditDisplayName(e.target.value)}
+                        />
+                      ) : (
+                        <>{userDetail?.displayName}</>
+                      )}
+                    </Box>
+                  )}
+                  <Box bg={"tomato"}>
+                    เมื่อร่างกายได้ทิ้งดิ่งสู่เบื้องล่างตามแรงดึงดูดของโลก
+                    ระหว่างนั้นกลับรู้สึกวูบโหวงจนต้องเปล่งเสียงร้องออกมาด้วยความตกใจ
+                    น่าแปลกว่าแทนที่ผิวจะได้สัมผัสกับน้ำที่เน่า
+                  </Box>
+                </Flex>
 
-                  <Box fontFamily={"Mitr"} fontSize={30}>
-                    {userDetail.displayName}
+                <Spacer />
+
+                {user && user.uid == id ? (
+                  <Box>
+                    {!editDisplayNameMode && (
+                      <Button
+                        onClick={() => {
+                          setEditDisplayNameMode(true);
+                          setEditDisplayName(userDetail.displayName);
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    )}
+                    {editDisplayNameMode && (
+                      <Box>
+                        <IconButton
+                          icon={<Check />}
+                          onClick={()=>{
+                            handleNameChange();
+                            setEditDisplayNameMode(false);
+                          }}
+                        />
+                        <IconButton
+                          icon={<X />}
+                          onClick={() => {
+                            setEditDisplayNameMode(false);
+                            // setEditDisplayName("");
+                          }}
+                        />
+                      </Box>
+                    )}
+                  </Box>
+                ) : (
+                  <Stack direction="row" spacing={4}>
+                    <Button
+                      colorScheme="teal"
+                      variant="solid"
+                      position="initial"
+                    >
+                      Add Friend
+                    </Button>
+                    <Button
+                      colorScheme="teal"
+                      variant="outline"
+                      onClick={handleMessage}
+                      position="initial"
+                    >
+                      Message
+                    </Button>
+                  </Stack>
+                )}
+              </Flex>
+            </Flex>
+
+            <Tabs w={"100%"} bg={"tomato2"} isFitted spacing={0}>
+              <TabList borderColor={"gray.400"} p={2}>
+                <Tab
+                  _selected={{ color: "white", bg: "#9A9AB0" }}
+                  borderRadius={10}
+                >
+                  About me
+                </Tab>
+                <Tab
+                  _selected={{ color: "white", bg: "#9A9AB0" }}
+                  isDisabled
+                  borderRadius={10}
+                >
+                  Timeline
+                </Tab>
+                <Tab
+                  _selected={{ color: "white", bg: "#9A9AB0" }}
+                  borderRadius={10}
+                >
+                  Original Character
+                </Tab>
+                <Tab
+                  _selected={{ color: "white", bg: "#9A9AB0" }}
+                  isDisabled
+                  borderRadius={10}
+                >
+                  Friend
+                </Tab>
+                <Tab
+                  _selected={{ color: "white", bg: "#9A9AB0" }}
+                  isDisabled
+                  borderRadius={10}
+                >
+                  Bookshelf
+                </Tab>
+              </TabList>
+
+              {/* <Divider  color={'black'}/> */}
+
+              <TabPanels>
+                {/* About */}
+                <TabPanel>
+                  <Box fontSize={24} fontWeight={"extrabold"} ml={5}>
+                    การโรลเพลย์
                   </Box>
 
-                )}
-                <Box bg={'tomato'}>
-                  เมื่อร่างกายได้ทิ้งดิ่งสู่เบื้องล่างตามแรงดึงดูดของโลก ระหว่างนั้นกลับรู้สึกวูบโหวงจนต้องเปล่งเสียงร้องออกมาด้วยความตกใจ น่าแปลกว่าแทนที่ผิวจะได้สัมผัสกับน้ำที่เน่า
-                </Box>
-              </Flex>
-
-              <Spacer />
-
-              {user && user.uid == id ? (
-                <Button>Edit</Button>
-              ) : (
-                <Stack direction="row" spacing={4}>
-                  <Button colorScheme="teal" variant="solid" position="initial">
-                    Add Friend
-                  </Button>
-                  <Button
-                    colorScheme="teal"
-                    variant="outline"
-                    onClick={handleMessage}
-                    position="initial"
+                  <VStack
+                    bg={"white"}
+                    width={"100%"}
+                    borderRadius={10}
+                    boxShadow={"base"}
                   >
-                    Message
-                  </Button>
-                </Stack>
-              )}
-            </Flex>
-          </Flex>
+                    <Flex p={3} w={"100%"}>
+                      <Center maxWidth={150} w={"100%"}>
+                        สไตล์การเล่น
+                      </Center>
 
-          <Tabs w={'100%'} bg={'tomato2'} isFitted spacing={0}>
-            <TabList borderColor={'gray.400'} p={2}>
-              <Tab _selected={{ color: 'white', bg: '#9A9AB0' }} borderRadius={10}>About me</Tab>
-              <Tab _selected={{ color: 'white', bg: '#9A9AB0' }} isDisabled borderRadius={10}>Timeline</Tab>
-              <Tab _selected={{ color: 'white', bg: '#9A9AB0' }} borderRadius={10}>Original Character</Tab>
-              <Tab _selected={{ color: 'white', bg: '#9A9AB0' }} isDisabled borderRadius={10}>Friend</Tab>
-              <Tab _selected={{ color: 'white', bg: '#9A9AB0' }} isDisabled borderRadius={10}>Bookshelf</Tab>
-            </TabList>
+                      <Divider ml={2} mr={2} orientation="vertical" />
 
-            {/* <Divider  color={'black'}/> */}
+                      <Wrap>
+                        <WrapItem>
+                          <Flex
+                            bg={"gray.400"}
+                            borderRadius={10}
+                            p={1.5}
+                            boxShadow={"base"}
+                          >
+                            <Center ml={2} mr={2}>
+                              สายวาด
+                            </Center>
+                            <Editable
+                              bg={"white"}
+                              w={53}
+                              borderRadius={10}
+                              pl={1}
+                              pr={1}
+                              pt={0.5}
+                              pb={0.5}
+                              defaultValue="100%"
+                            >
+                              <EditablePreview />
+                              <EditableInput />
+                            </Editable>
+                          </Flex>
+                        </WrapItem>
 
-            <TabPanels>
+                        <WrapItem>
+                          <Flex
+                            bg={"gray.400"}
+                            borderRadius={10}
+                            p={1.5}
+                            boxShadow={"base"}
+                          >
+                            <Center ml={2} mr={2}>
+                              สายโรลเพลย์ยาว
+                            </Center>
+                            <Editable
+                              bg={"white"}
+                              w={53}
+                              borderRadius={10}
+                              pl={1}
+                              pr={1}
+                              pt={0.5}
+                              pb={0.5}
+                              defaultValue="100%"
+                            >
+                              <EditablePreview />
+                              <EditableInput w={50} />
+                            </Editable>
+                          </Flex>
+                        </WrapItem>
 
-              {/* About */}
-              <TabPanel>
-                <Box fontSize={24} fontWeight={'extrabold'} ml={5}>การโรลเพลย์</Box>
+                        <WrapItem>
+                          <Flex
+                            bg={"gray.400"}
+                            borderRadius={10}
+                            p={1.5}
+                            boxShadow={"base"}
+                          >
+                            <Center ml={2} mr={2}>
+                              สายโรลเพลย์สั้น
+                            </Center>
+                            <Editable
+                              bg={"white"}
+                              w={53}
+                              borderRadius={10}
+                              pl={1}
+                              pr={1}
+                              pt={0.5}
+                              pb={0.5}
+                              defaultValue="100%"
+                            >
+                              <EditablePreview />
+                              <EditableInput w={50} />
+                            </Editable>
+                          </Flex>
+                        </WrapItem>
 
-                <VStack bg={'white'} width={'100%'} borderRadius={10} boxShadow={'base'}>
-                  <Flex p={3} w={'100%'}>
+                        <WrapItem>
+                          <Flex
+                            bg={"gray.400"}
+                            borderRadius={10}
+                            p={1.5}
+                            boxShadow={"base"}
+                          >
+                            <Center ml={2} mr={2}>
+                              สายเวิ่นสตอรี่
+                            </Center>
+                            <Editable
+                              bg={"white"}
+                              w={53}
+                              borderRadius={10}
+                              pl={1}
+                              pr={1}
+                              pt={0.5}
+                              pb={0.5}
+                              defaultValue="100%"
+                            >
+                              <EditablePreview />
+                              <EditableInput w={50} />
+                            </Editable>
+                          </Flex>
+                        </WrapItem>
 
-                    <Center maxWidth={150} w={'100%'}>
-                      สไตล์การเล่น
-                    </Center>
+                        <WrapItem>
+                          <Flex
+                            bg={"gray.400"}
+                            borderRadius={10}
+                            p={1.5}
+                            boxShadow={"base"}
+                          >
+                            <Center ml={2} mr={2}>
+                              สายฟิคชั่น
+                            </Center>
+                            <Editable
+                              bg={"white"}
+                              w={53}
+                              borderRadius={10}
+                              pl={1}
+                              pr={1}
+                              pt={0.5}
+                              pb={0.5}
+                              defaultValue="100%"
+                            >
+                              <EditablePreview />
+                              <EditableInput w={50} />
+                            </Editable>
+                          </Flex>
+                        </WrapItem>
+                      </Wrap>
+                    </Flex>
 
-                    <Divider ml={2} mr={2} orientation="vertical" />
+                    <Flex p={3} w={"100%"}>
+                      <Center maxWidth={150} w={"100%"}>
+                        สไตล์การเล่น
+                      </Center>
 
-                    <Wrap>
-                      <WrapItem>
-                        <Flex bg={'gray.400'} borderRadius={10} p={1.5} boxShadow={'base'}>
-                          <Center ml={2} mr={2} >สายวาด</Center>
-                          <Editable bg={'white'} w={53} borderRadius={10} pl={1} pr={1} pt={0.5} pb={0.5} defaultValue='100%'>
-                            <EditablePreview />
-                            <EditableInput />
-                          </Editable>
-                        </Flex>
-                      </WrapItem>
+                      <Divider ml={2} mr={2} orientation="vertical" />
 
-                      <WrapItem>
-                        <Flex bg={'gray.400'} borderRadius={10} p={1.5} boxShadow={'base'}>
-                          <Center ml={2} mr={2} >สายโรลเพลย์ยาว</Center>
-                          <Editable bg={'white'} w={53} borderRadius={10} pl={1} pr={1} pt={0.5} pb={0.5} defaultValue='100%'>
-                            <EditablePreview />
-                            <EditableInput w={50} />
-                          </Editable>
-                        </Flex>
-                      </WrapItem>
+                      <Wrap>
+                        <WrapItem>
+                          <Flex
+                            bg={"gray.400"}
+                            borderRadius={10}
+                            p={1.5}
+                            boxShadow={"base"}
+                          >
+                            <Center ml={2} mr={2}>
+                              คอเมดี้
+                            </Center>
+                            <Editable
+                              bg={"white"}
+                              w={53}
+                              borderRadius={10}
+                              pl={1}
+                              pr={1}
+                              pt={0.5}
+                              pb={0.5}
+                              defaultValue="100%"
+                            >
+                              <EditablePreview />
+                              <EditableInput />
+                            </Editable>
+                          </Flex>
+                        </WrapItem>
 
-                      <WrapItem>
-                        <Flex bg={'gray.400'} borderRadius={10} p={1.5} boxShadow={'base'}>
-                          <Center ml={2} mr={2} >สายโรลเพลย์สั้น</Center>
-                          <Editable bg={'white'} w={53} borderRadius={10} pl={1} pr={1} pt={0.5} pb={0.5} defaultValue='100%'>
-                            <EditablePreview />
-                            <EditableInput w={50} />
-                          </Editable>
-                        </Flex>
-                      </WrapItem>
+                        <WrapItem>
+                          <Flex
+                            bg={"gray.400"}
+                            borderRadius={10}
+                            p={1.5}
+                            boxShadow={"base"}
+                          >
+                            <Center ml={2} mr={2}>
+                              ดราม่า
+                            </Center>
+                            <Editable
+                              bg={"white"}
+                              w={53}
+                              borderRadius={10}
+                              pl={1}
+                              pr={1}
+                              pt={0.5}
+                              pb={0.5}
+                              defaultValue="100%"
+                            >
+                              <EditablePreview />
+                              <EditableInput w={50} />
+                            </Editable>
+                          </Flex>
+                        </WrapItem>
 
-                      <WrapItem>
-                        <Flex bg={'gray.400'} borderRadius={10} p={1.5} boxShadow={'base'}>
-                          <Center ml={2} mr={2} >สายเวิ่นสตอรี่</Center>
-                          <Editable bg={'white'} w={53} borderRadius={10} pl={1} pr={1} pt={0.5} pb={0.5} defaultValue='100%'>
-                            <EditablePreview />
-                            <EditableInput w={50} />
-                          </Editable>
-                        </Flex>
-                      </WrapItem>
+                        <WrapItem>
+                          <Flex
+                            bg={"gray.400"}
+                            borderRadius={10}
+                            p={1.5}
+                            boxShadow={"base"}
+                          >
+                            <Center ml={2} mr={2}>
+                              อีโรติก
+                            </Center>
+                            <Editable
+                              bg={"white"}
+                              w={53}
+                              borderRadius={10}
+                              pl={1}
+                              pr={1}
+                              pt={0.5}
+                              pb={0.5}
+                              defaultValue="100%"
+                            >
+                              <EditablePreview />
+                              <EditableInput w={50} />
+                            </Editable>
+                          </Flex>
+                        </WrapItem>
 
-                      <WrapItem>
-                        <Flex bg={'gray.400'} borderRadius={10} p={1.5} boxShadow={'base'}>
-                          <Center ml={2} mr={2} >สายฟิคชั่น</Center>
-                          <Editable bg={'white'} w={53} borderRadius={10} pl={1} pr={1} pt={0.5} pb={0.5} defaultValue='100%'>
-                            <EditablePreview />
-                            <EditableInput w={50} />
-                          </Editable>
-                        </Flex>
-                      </WrapItem>
-                    </Wrap>
+                        <WrapItem>
+                          <Flex
+                            bg={"gray.400"}
+                            borderRadius={10}
+                            p={1.5}
+                            boxShadow={"base"}
+                          >
+                            <Center ml={2} mr={2}>
+                              มิตรภาพ
+                            </Center>
+                            <Editable
+                              bg={"white"}
+                              w={53}
+                              borderRadius={10}
+                              pl={1}
+                              pr={1}
+                              pt={0.5}
+                              pb={0.5}
+                              defaultValue="100%"
+                            >
+                              <EditablePreview />
+                              <EditableInput w={50} />
+                            </Editable>
+                          </Flex>
+                        </WrapItem>
+                      </Wrap>
+                    </Flex>
+                  </VStack>
+                </TabPanel>
 
-                  </Flex>
+                {/* Timeline */}
+                <TabPanel>
+                  <p>one!</p>
+                </TabPanel>
 
-                  <Flex p={3} w={'100%'}>
+                {/* OC */}
+                <TabPanel>
+                  <Center
+                    h={150}
+                    w={150}
+                    boxShadow={"base"}
+                    rounded={10}
+                    as={"button"}
+                    bg={"whatsapp.500"}
+                    _hover={{
+                      backgroundColor: "whatsapp.600",
+                    }}
+                    onClick={() => router.push("/CreateCharacterForm")}
+                  >
+                    Create
+                  </Center>
+                </TabPanel>
 
-                    <Center maxWidth={150} w={'100%'}>
-                      สไตล์การเล่น
-                    </Center>
+                {/* Friend */}
+                <TabPanel>
+                  <p>Friens Zone</p>
+                </TabPanel>
 
-                    <Divider ml={2} mr={2} orientation="vertical" />
-
-                    <Wrap>
-                      <WrapItem>
-                        <Flex bg={'gray.400'} borderRadius={10} p={1.5} boxShadow={'base'}>
-                          <Center ml={2} mr={2} >คอเมดี้</Center>
-                          <Editable bg={'white'} w={53} borderRadius={10} pl={1} pr={1} pt={0.5} pb={0.5} defaultValue='100%'>
-                            <EditablePreview />
-                            <EditableInput />
-                          </Editable>
-                        </Flex>
-                      </WrapItem>
-
-                      <WrapItem>
-                        <Flex bg={'gray.400'} borderRadius={10} p={1.5} boxShadow={'base'}>
-                          <Center ml={2} mr={2} >ดราม่า</Center>
-                          <Editable bg={'white'} w={53} borderRadius={10} pl={1} pr={1} pt={0.5} pb={0.5} defaultValue='100%'>
-                            <EditablePreview />
-                            <EditableInput w={50} />
-                          </Editable>
-                        </Flex>
-                      </WrapItem>
-
-                      <WrapItem>
-                        <Flex bg={'gray.400'} borderRadius={10} p={1.5} boxShadow={'base'}>
-                          <Center ml={2} mr={2} >อีโรติก</Center>
-                          <Editable bg={'white'} w={53} borderRadius={10} pl={1} pr={1} pt={0.5} pb={0.5} defaultValue='100%'>
-                            <EditablePreview />
-                            <EditableInput w={50} />
-                          </Editable>
-                        </Flex>
-                      </WrapItem>
-
-                      <WrapItem>
-                        <Flex bg={'gray.400'} borderRadius={10} p={1.5} boxShadow={'base'}>
-                          <Center ml={2} mr={2} >มิตรภาพ</Center>
-                          <Editable bg={'white'} w={53} borderRadius={10} pl={1} pr={1} pt={0.5} pb={0.5} defaultValue='100%'>
-                            <EditablePreview />
-                            <EditableInput w={50} />
-                          </Editable>
-                        </Flex>
-                      </WrapItem>
-
-                    </Wrap>
-
-                  </Flex>
-                </VStack>
-
-
-              </TabPanel>
-
-              {/* Timeline */}
-              <TabPanel>
-                <p>one!</p>
-              </TabPanel>
-
-              {/* OC */}
-              <TabPanel>
-                <Center
-                  h={150}
-                  w={150}
-                  boxShadow={'base'}
-                  rounded={10}
-                  as={'button'}
-                  bg={'whatsapp.500'}
-                  _hover={{
-                    backgroundColor: 'whatsapp.600'
-                  }}
-                  onClick={() => router.push("/CreateCharacterForm")}
-                >
-                  Create
-                </Center>
-              </TabPanel>
-
-              {/* Friend */}
-              <TabPanel>
-                <p>Friens Zone</p>
-              </TabPanel>
-
-              {/* Bookshelf */}
-              <TabPanel>
-                <p>?</p>
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-        </VStack>
-        {/* <Spacer /> */}
+                {/* Bookshelf */}
+                <TabPanel>
+                  <p>?</p>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </VStack>
+        )}
       </Flex>
-
+      <UploadImageModal
+        isOpen={editAvartarMode}
+        onOpen={() => setEditAvatarMode(true)}
+        onClose={() => setEditAvatarMode(false)}
+        onSubmit={(cropped)=>handleAvartarChange(cropped)}
+        aspectRatio={1/1}
+      />
+      <UploadImageModal
+        isOpen={editCoverMode}
+        onOpen={() => setEditCoverMode(true)}
+        onClose={() => setEditCoverMode(false)}
+        onSubmit={(cropped)=>handleCoverChange(cropped)}
+        aspectRatio={16/9}
+      />
     </Box>
   );
 }
