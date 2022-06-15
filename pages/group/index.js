@@ -81,11 +81,23 @@ export default function Groups() {
           <CustomNavbar />
 
           <Flex boxShadow={'base'} justifyContent={'center'} paddingTop={55}>
-            
-              <Center>
-                <GroupCard />
-              </Center>
-              
+
+            <Center bg={'white'} boxShadow={'0px 0px 2px rgba(0, 0, 0.25)'} flexDir={'column'} >
+              <Button
+                fontFamily={'Mitr'}
+                fontWeight='hairline'
+                mt={1}
+                size='lg'
+                bg={'#343434'}
+                color={'#FFC75A'}
+                onClick={() => Router.push("/creategroup")}
+              >
+                สร้างคอมมูนิตี้
+              </Button>
+
+              <GroupCard />
+            </Center>
+
           </Flex>
           <Footer />
         </Box>

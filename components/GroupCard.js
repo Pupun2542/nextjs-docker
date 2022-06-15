@@ -80,7 +80,6 @@ function GroupCard() {
     <Flex
       justifyContent={'center'}
       bg={'white'}
-      boxShadow='base'
       direction={'column'}
     >
       {!loading &&
