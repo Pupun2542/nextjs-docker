@@ -42,7 +42,6 @@ export const GroupComment = ({
   setOpenReply,
   onGoingReply,
   setOnGoingReply,
-  setEditComment
 }) => {
   const creator = comment.creator;
   const getUser = useUser();

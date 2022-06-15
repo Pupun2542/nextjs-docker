@@ -424,7 +424,7 @@ export const GroupPost = ({
                   setOpenReply={(state) => setOpenReply(state, cmt.cid)}
                   onGoingReply={onGoingComment[cmt.cid]}
                   setOnGoingReply={(value)=>setOnGoingComment(value, cmt.cid)}
-                  editComment={value}
+                  // editComment={value}
                   setEditComment={(state)=>setEditComment(state, cmt.cid)}
                 />
               ))
