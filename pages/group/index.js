@@ -60,9 +60,8 @@ export default function Groups() {
     if (user) {
       return (
         <Box
-          bg="#F3F3F3"
+          bg={'#F3F3F3'}
           overflowY={"auto"}
-          // maxH={'960'}
           minH={950}
           maxH={"100vh"}
           css={{
@@ -81,21 +80,12 @@ export default function Groups() {
 
           <CustomNavbar />
 
-          <Flex paddingTop={55}>
-            <Box w={400}>
-            </Box>
-
-            <Spacer />
-
-            <Center w={1000} bg={'#FFFFFF'} boxShadow={'base'}>
-              <GroupCard />
-            </Center>
-
-            <Spacer />
-
-            <Box w={400}>
-
-            </Box>
+          <Flex boxShadow={'base'} justifyContent={'center'} paddingTop={55}>
+            
+              <Center>
+                <GroupCard />
+              </Center>
+              
           </Flex>
           <Footer />
         </Box>

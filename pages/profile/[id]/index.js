@@ -22,6 +22,7 @@ import {
   Text,
   Spacer,
   VStack,
+  HStack,
   Center,
   Stack,
   Button,
@@ -188,7 +189,25 @@ export default function profile() {
   };
 
   return (
-    <Box fontFamily={"Mitr"}>
+    <Box
+      fontFamily={"Mitr"}
+      overflowY={"auto"}
+      maxH={"100vh"}
+      css={{
+        "&::-webkit-scrollbar": {
+          width: "8px",
+          height: "8px"
+        },
+        "&::-webkit-scrollbar-track": {
+          width: "8px",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          background: "#727272",
+          borderRadius: "24px",
+        },
+      }}
+    >
+
       <CustomNavbar />
       {/* {user&&(
         <Chatsidebar db={db} user={user} forcedopenTab={newtab}/>
@@ -203,23 +222,39 @@ export default function profile() {
             spacing={0}
             boxShadow="base"
           >
-            <Center bg={"wheat"} width="100%" maxW={1000} h={400} fontSize={30} onClick={()=>setEditCoverMode(true)}>
-              <Image src={userDetail?.coverImage} w="100%" h="100%" fallback={<Box></Box>} />
+            <Center
+              width="100%"
+              maxW={1000}
+              h={400}
+              fontSize={30}
+              boxShadow={'base'}
+              borderBottomRadius={10}
+              onClick={() => setEditCoverMode(true)}
+            >
+              <Image
+                borderBottomRadius={10}
+                src={userDetail?.coverImage}
+                w="100%"
+                h="100%"
+                fallback={<Box></Box>}
+              />
             </Center>
-            <Flex bg={"white"} boxShadow={"base"}>
-              <Avatar
-                w={150}
-                h={150}
-                bg="blue.100"
-                rounded={100}
-                m={2}
-                mt={-20}
-                float={"left"}
-                src={userDetail?.photoURL}
-                onClick={()=>setEditAvatarMode(true)}
-              ></Avatar>
+            <Flex borderBottomRadius={10} bg={"white"} boxShadow={"base"}>
+              <Center rounded={'full'} ml={-10} p={2} mt={-20} w={157} h={157} bg={'white'} boxShadow={'base'}>
+                <Avatar
+                  w={150}
+                  h={150}
+                  rounded={100}
+                  m={2}
+                  // mt={-20}
+                  float={"left"}
+                  src={userDetail?.photoURL}
+                  onClick={() => setEditAvatarMode(true)}
+                ></Avatar>
+              </Center>
 
-              <Flex bg={"red.200"} w={770} m={2} p={2}>
+
+              <Flex w={770} m={2} p={2} >
                 <Flex flexDir={"column"} fontFamily={"Mitr"} w={"75%"}>
                   {userDetail && (
                     <Box fontFamily={"Mitr"} fontSize={30}>
@@ -233,11 +268,11 @@ export default function profile() {
                       )}
                     </Box>
                   )}
-                  <Box bg={"tomato"}>
-                    เมื่อร่างกายได้ทิ้งดิ่งสู่เบื้องล่างตามแรงดึงดูดของโลก
-                    ระหว่างนั้นกลับรู้สึกวูบโหวงจนต้องเปล่งเสียงร้องออกมาด้วยความตกใจ
-                    น่าแปลกว่าแทนที่ผิวจะได้สัมผัสกับน้ำที่เน่า
+
+                  <Box>
+                    ตรงนี้คือ Profile Description!!
                   </Box>
+
                 </Flex>
 
                 <Spacer />
@@ -255,10 +290,10 @@ export default function profile() {
                       </Button>
                     )}
                     {editDisplayNameMode && (
-                      <Box>
+                      <HStack>
                         <IconButton
                           icon={<Check />}
-                          onClick={()=>{
+                          onClick={() => {
                             handleNameChange();
                             setEditDisplayNameMode(false);
                           }}
@@ -270,7 +305,7 @@ export default function profile() {
                             // setEditDisplayName("");
                           }}
                         />
-                      </Box>
+                      </HStack>
                     )}
                   </Box>
                 ) : (
@@ -644,15 +679,15 @@ export default function profile() {
         isOpen={editAvartarMode}
         onOpen={() => setEditAvatarMode(true)}
         onClose={() => setEditAvatarMode(false)}
-        onSubmit={(cropped)=>handleAvartarChange(cropped)}
-        aspectRatio={1/1}
+        onSubmit={(cropped) => handleAvartarChange(cropped)}
+        aspectRatio={1 / 1}
       />
       <UploadImageModal
         isOpen={editCoverMode}
         onOpen={() => setEditCoverMode(true)}
         onClose={() => setEditCoverMode(false)}
-        onSubmit={(cropped)=>handleCoverChange(cropped)}
-        aspectRatio={16/9}
+        onSubmit={(cropped) => handleCoverChange(cropped)}
+        aspectRatio={16 / 9}
       />
     </Box>
   );
