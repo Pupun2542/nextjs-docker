@@ -51,8 +51,9 @@ exports.updateComment = async (req, res) =>{
       });
     } else if (!doc.exists) {
       return res.status(404).send("post not found");
+    } else {
+      return res.status(401).send("unauthorized");
     }
-    return res.status(401).send("unauthorized");
   } else {
     res.status(401).send("unauthorized");
   }
@@ -65,6 +66,9 @@ exports.deleteComment = (req, res) =>{
     const cmtref = postref.collection("comments").doc(req.params.cid);
     cmtref.get().then((doc)=>{
       if (doc.exists && doc.data().uid == req.user.uid) {
+        if (doc.data().imageUrl !== "") {
+          admin.storage().bucket(req.body.bucket).file(req.body.filepath).delete();
+        }
         return cmtref.delete().then(()=>{
           postref.update({
             comment: admin.firestore.FieldValue.increment(-1),
@@ -73,10 +77,10 @@ exports.deleteComment = (req, res) =>{
         }). catch((e)=>{
           return res.status(400).send("delete comment not success ", e);
         });
+      } else {
+        return res.status(403).send("forbidden");
       }
-      return res.status(401).send("unauthorized");
     });
-    res.status(404).send("comment not found");
   } else {
     res.status(401).send("unauthorized");
   }

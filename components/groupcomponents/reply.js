@@ -10,7 +10,7 @@ import {
   Button,
   Spacer,
   IconButton,
-  Avatar
+  Avatar,
 } from "@chakra-ui/react";
 import {
   Heart,
@@ -23,16 +23,65 @@ import axios from "axios";
 
 export const GroupReply = ({ reply }) => {
   const [love, setLove] = useState(false);
-  const creator = reply.creator
+  const creator = reply.creator;
   const { auth } = useApp();
-  useEffect(()=>{
+  useEffect(() => {
     if (reply.love.includes(auth.currentUser.uid)) {
       setLove(true);
     }
-    return()=>{
+    return () => {
       setLove(false);
+    };
+  }, [reply]);
+
+  const handleDelete = async () => {
+    const token = await auth.currentUser.getIdToken();
+    if (replydoc.imageURL) {
+      const path = getpathfromUrl(replydoc.imageURL);
+      axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${reply.gid}/${reply.pid}/comment/${reply.cid}/reply/${reply.rid}/delete`,
+        {
+          bucket: path.bucket,
+          filepath: path.fullPath,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+    } else {
+      axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${reply.gid}/${reply.pid}/comment/${reply.cid}/reply/${reply.rid}/delete`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
     }
-  },[reply])
+    // setMessage("");
+    // console.log(getpathfromUrl(commentdoc.imageURL))
+  };
+
+  const handleEdit = async () => {
+    const token = await auth.currentUser.getIdToken();
+    axios.post(
+      `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${reply.gid}/${reply.pid}/comment/${reply.cid}/reply/${reply.rid}/update`,
+      {
+        message: message,
+      },
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    setEditMode(false);
+    // setMessage(editMessage);
+    // console.log(getpathfromUrl(commentdoc.imageURL))
+  };
 
   const HandleLove = async () => {
     const token = await auth.currentUser.getIdToken();
@@ -67,60 +116,63 @@ export const GroupReply = ({ reply }) => {
     }
   };
 
-
-
-
-
-
-
   return (
-      <Flex mt={3} p={2} boxShadow={"base"} w={"100%"}>
-        <Box w={"8%"}>
+    <Flex mt={3} p={2} boxShadow={"base"} w={"100%"}>
+      <Box w={"8%"}>
         <Avatar
-            mr={2}
-            rounded={"100%"}
-            h={42}
-            w={42}
-            src={creator.photoURL}
-            name={creator.displayName}
-          />
-        </Box>
+          mr={2}
+          rounded={"100%"}
+          h={42}
+          w={42}
+          src={creator.photoURL}
+          name={creator.displayName}
+        />
+      </Box>
 
-        <Box pl={2} pr={2} w={"84.5%"}>
-          <HStack spacing={4}>
-            <Box ml={2}>{creator.displayName}</Box>
-            <Spacer />
-            <Box color={"gray.500"} fontSize={14}>
-              {parseDate(reply.timestamp)}
-            </Box>
-          </HStack>
+      <Box pl={2} pr={2} w={"84.5%"}>
+        <HStack spacing={4}>
+          <Box ml={2}>{creator.displayName}</Box>
+          <Spacer />
+          <Box color={"gray.500"} fontSize={14}>
+            {parseDate(reply.timestamp)}
+          </Box>
+        </HStack>
 
-          <Divider />
+        <Divider />
 
-          <Box m={2}>{reply.message}</Box>
+        <Box m={2}>{reply.message}</Box>
 
-          <Center mt={3} w={"100%"} borderRadius={10} boxShadow={"base"}>
-            <Image size={300} color="#100e0e" weight="light" />
-          </Center>
+        <Center mt={3} w={"100%"} borderRadius={10} boxShadow={"base"}>
+          {reply.imageUrl && (
+            <Image
+              size={300}
+              color="#100e0e"
+              weight="light"
+              src={reply.imageUrl}
+              objectFit={"contain"}
+              display={"inline-block"}
+            />
+          )}
+        </Center>
 
-          <HStack spacing={4} fontSize={14} color={"GrayText"} pt={2}>
-            <Button
-              leftIcon={<Heart />}
-              color="black"
-              width={"40%"}
-              fontSize={16}
-              fontWeight={"light"}
-              boxShadow={"base"}
-              variant="solid"
-              onClick={HandleLove}
-            >
-              {reply.love.length}
-            </Button>
-          </HStack>
-        </Box>
+        <HStack spacing={4} fontSize={14} color={"GrayText"} pt={2}>
+          <Button
+            leftIcon={<Heart />}
+            color="black"
+            width={"40%"}
+            fontSize={16}
+            fontWeight={"light"}
+            boxShadow={"base"}
+            variant="solid"
+            onClick={HandleLove}
+          >
+            {reply.love.length}
+          </Button>
+        </HStack>
+      </Box>
 
-        <IconButton rounded={"full"} icon={<DotsThreeVertical size={28} />} />
-      </Flex>
+      <IconButton rounded={"full"} icon={<DotsThreeVertical size={28} />} />
+    </Flex>
   );
 };
 
