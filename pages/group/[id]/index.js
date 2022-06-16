@@ -219,6 +219,33 @@ export default function Group() {
     }
   };
 
+  const HandleLove = async () => {
+    if (user) {
+      const token = await user.getIdToken();
+      if (data.love === undefined || !data.love.includes(user.uid)) {
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/group/${id}/love`,{},{
+          headers: {
+            Authorization: token,
+          }
+        })
+        if (res.status === 200) {
+          setData({...data, love: [...data.love, user.uid]})
+        }
+      } else {
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/group/${id}/unlove`,{},{
+          headers: {
+            Authorization: token,
+          }
+        })
+        console.log(res);
+        if (res.status === 200) {
+          console.log(data.love.filter((v,i)=> v !== user.uid))
+          setData({...data, love: data.love.filter((v,i)=> v !== user.uid)});
+        }
+      }
+    }
+  }
+
   const handleDebugJoin = async () => {
     if (Object.keys(data.member).includes(user.uid)) {
       Router.push(`/group/${id}/dashboard`);
@@ -282,8 +309,15 @@ export default function Group() {
                         w={38}
                         mt={2.5}
                         ml={2.5}
-                        icon={<Heart size={32} />}
-                        isDisabled
+                        icon={<Heart 
+                          size={32}                   
+                          weight={
+                            data.love?.includes(auth.currentUser.uid) ? "fill" : "regular"
+                          }
+                          color={data.love?.includes(auth.currentUser.uid) ? "red" : "black"}
+                        />}
+                        isDisabled={!user}
+                        onClick={HandleLove}
                       />
 
                       <IconButton
