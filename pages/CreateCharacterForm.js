@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import CustomNavbar from "../components/navbar";
 import {
     Box,
@@ -41,10 +41,18 @@ import {
 import Footer from "../components/footer";
 
 import {
-    Eye
+    Eye,
+    EyeClosed
 } from "phosphor-react";
 
 export default function Home() {
+
+    const [hiddenState, setHiddenState] = useState({
+        name: false,
+    })
+
+
+
     const breakpoints = {
         sm: '30em',
         md: '48em',
@@ -164,8 +172,8 @@ export default function Home() {
                                             >
                                                 ชื่อ
                                             </Box>
-                                            <Center p={1} w={'75%'}><Input placeholder='ชื่อ-นามสกุล' /></Center>
-                                            <IconButton m={1} aria-label='Search database' icon={<Eye />} />
+                                            <Center p={1} w={'75%'}><Input placeholder='ชื่อ-นามสกุล' disabled={hiddenState.name} /></Center>
+                                            <IconButton m={1} aria-label='Search database' icon={hiddenState.name?<EyeClosed/>:<Eye/>} onClick={()=>setHiddenState({...hiddenState, name: !hiddenState.name})} />
                                         </Flex>
 
                                         {/* ชื่ออื่น ๆ */}
