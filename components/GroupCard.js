@@ -38,6 +38,23 @@ function GroupCard() {
   // const auth = getAuth(app);
   const [commu, setCommu] = useState([]);
   const [loading, setLoading] = useState(true);
+  const chooseColor = (rating) => {
+    // let color = "";
+    if (rating === "NC-21 (ไม่เหมาะสำหรับเยาวชน)") {
+      return "#EA4545";
+      // console.log(d.data().rating);
+    } else if (rating === "R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)") {
+      return "#FF912B";
+      // console.log(d.data().rating);
+    } else if (rating === "R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)") {
+      return "#FBBC43";
+      // console.log(d.data().rating);
+    } else {
+      return "#72994C";
+      // console.log(d.data().rating);
+    }
+
+  }
 
   useEffect(() => {
     const Fetchdata = async () => {
@@ -61,7 +78,7 @@ function GroupCard() {
         );
         const QuerySnapshot = await getDocs(q);
         setCommu(
-          QuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+          QuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id, color: chooseColor(doc.data().rating) }))
         );
         setLoading(false);
       }
