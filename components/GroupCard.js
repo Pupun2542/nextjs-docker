@@ -11,6 +11,11 @@ import {
   orderBy,
   onSnapshot,
 } from "firebase/firestore";
+import {
+  Eye,
+  PushPin,
+  Heart,
+} from "phosphor-react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { getAuth } from "firebase/auth";
@@ -25,6 +30,8 @@ import {
   HStack,
   Wrap,
   WrapItem,
+  Image,
+  Divider,
 } from '@chakra-ui/react'
 
 function GroupCard() {
@@ -87,8 +94,10 @@ function GroupCard() {
   }, [bws]);
 
   return (
-    <Box
-      bg={"#d4d4d4"}
+    <Flex
+      justifyContent={'center'}
+      bg={'white'}
+      direction={'column'}
     >
       {!loading &&
         commu.map((value, index) => {
@@ -97,58 +106,94 @@ function GroupCard() {
               onClick={() => {
                 Router.push("/group/" + value.id);
               }}
-              bg={"#9A9A9A"}
+              bg={"#F3F3F3"}
               mr={5}
               ml={5}
               mt={2}
               mb={1.5}
+              p={5}
+              w={900}
               h={'auto'}
+              boxShadow={'0px 0px 2px rgba(0, 0, 0.25)'}
               borderRadius={10}
               _hover={{
-                background: "#535353"
+                background: "gray.300"
               }}
               // as="button"
               cursor="pointer"
+              justifyContent={'center'}
             >
-              <Center
-                minH={216}
-                minW={384}
-              >
-                <img src={value.banner} height="216" width="384"></img>
+              <Center w={'50%'}>
+                <Image src={value.banner} borderRadius={5} height="216" width="384" />
               </Center>
 
-              <VStack ml={5}>
+              <VStack ml={5} w={'50%'}>
                 <Box
-                  className={style.Communame}
+                  // bg={'tomato'}
                   color="black"
-                  maxW={606}
-                  w={556}
+                  w={'100%'}
+                  fontSize={24}
+                  fontFamily={'Mitr'}
+                  borderBottomWidth={2}
+                  borderBottomColor={'black'}
                 >
                   <Box>
-                    [{value.tag}]{value.name}
+                    [{value.tag}]&#160;{value.name}
+                  </Box>
+                  <Box
+                    fontSize={14}
+                  >
+                    นาย A, นายB และอีก 1 คน
                   </Box>
                 </Box>
 
                 <Wrap
-                  w={556}
-                  maxW={606}
-                  h={30}
+                  w={456}
+                  maxW={415}
+                  minH={115}
                 >
                   {value.genre.map((tag) => {
                     return <WrapItem
-                      bg={"#6768AB"}
-                      className={style.genre}
+                      bg={"white"}
                       m={1}
                       borderRadius={10}
-                      p={2}
+                      pt={1} pb={1} pl={2} pr={2}
+                      fontFamily={'Mitr'}
+                      borderWidth={2}
+                      borderColor={'black'}
                     >{tag}</WrapItem>;
                   })}
+
+                  {value.tws.map((tag) => {
+                    return <WrapItem
+                      bg={"#EA4545"}
+                      m={1}
+                      borderRadius={10}
+                      pt={1} pb={1} pl={2} pr={2}
+                      fontFamily={'Mitr'}
+                      color={'white'}
+                    >{tag}
+                    </WrapItem>;
+                  })}
+
+                  <Center>
+                    {/* เปลี่ยนสีตาม Rating */}
+                  </Center>
+                </Wrap>
+
+                <Wrap fontFamily={'Mitr'} w={'100%'}>
+                  <Eye size={26} />
+                  <Box>100</Box>
+                  <Heart size={26} />
+                  <Box>100</Box>
+                  <PushPin size={26} />
+                  <Box>100</Box>
                 </Wrap>
               </VStack>
             </Flex>
           );
         })}
-    </Box>
+    </Flex>
   );
 }
 

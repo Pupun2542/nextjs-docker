@@ -833,7 +833,7 @@ export default function Group() {
                                     onClick={onOpen}
                                     shadow={"base"}
                                   >
-                                    Rule&Agreement
+                                    กฎกติกาและข้อตกลง
                                   </Center>
 
                                   <Spacer />
@@ -845,6 +845,7 @@ export default function Group() {
                                     w={'49.5%'}
                                     h={63}
                                     p={5}
+                                    color={'white'}
                                   >
                                     {data.rating
                                       ? data.rating
@@ -875,10 +876,13 @@ export default function Group() {
                                 <Center
                                   bg={"#303030"}
                                   shadow={"base"}
-                                  color={"white"}
+                                  color={"#FFC75A"}
                                   h={63}
                                   w={750}
                                   borderRadius={10}
+                                  borderColor={'black'}
+                                  borderWidth={2}
+                                  fontSize={18}
                                   onClick={
                                     // data.smlink
                                     //   ? () => outsidenavigate(data.smlink)
@@ -889,7 +893,7 @@ export default function Group() {
                                   }
                                   cursor="pointer"
                                 >
-                                  Community Link
+                                  เข้าร่วมกลุ่ม
                                 </Center>
                               </VStack>
                             </AccordionPanel>
