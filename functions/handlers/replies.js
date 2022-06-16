@@ -76,6 +76,9 @@ exports.deleteReply = (req, res) =>{
     const docref = cmtref.collection("replies").doc(req.params.rid);
     docref.get().then((doc)=>{
       if (doc.exists && doc.data().uid == req.user.uid) {
+        if (doc.data().imageUrl !== "") {
+          admin.storage().bucket(req.body.bucket).file(req.body.filepath).delete();
+        }
         return docref.delete().then(()=>{
           docref.update({
             reply: admin.firestore.FieldValue.increment(-1),
@@ -84,10 +87,10 @@ exports.deleteReply = (req, res) =>{
         }). catch((e)=>{
           return res.status(400).send("delete comment not success ", e);
         });
+      } else {
+        return res.status(403).send("forbidden");
       }
-      return res.status(401).send("unauthorized");
     });
-    res.status(404).send("comment not found");
   } else {
     res.status(401).send("unauthorized");
   }

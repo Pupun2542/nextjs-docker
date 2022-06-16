@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Center,
@@ -15,6 +15,10 @@ import {
   useDisclosure,
   Avatar,
   Text,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
 import {
   Heart,
@@ -22,7 +26,8 @@ import {
   Eye,
   DotsThreeVertical,
   ImageSquare,
-  NotePencil,
+  X,
+  PaperPlaneRight,
 } from "phosphor-react";
 import { GroupComment } from "./comment";
 import {
@@ -34,6 +39,7 @@ import {
 } from "firebase/firestore";
 import { useApp, useUser } from "../../src/hook/local";
 import axios from "axios";
+import { getpathfromUrl, UploadGroupCommentImage, getpMutiPathfromUrl } from "../../src/services/filestoreageservice";
 
 export const GroupPost = ({
   post,
@@ -41,6 +47,9 @@ export const GroupPost = ({
   openReply,
   setOpenReply,
   setEditComment,
+  onGoingComment,
+  setOnGoingComment,
+  onPostDelete,
 }) => {
   const creator = Object.values(post.creator)[0];
   const getUser = useUser();
@@ -50,12 +59,23 @@ export const GroupPost = ({
   const [comment, setComment] = useState([]);
   const [fetchlimit, setFetchlimit] = useState(20);
   const [message, setMessage] = useState("");
+  const [text, setText] = useState("");
+  const [image, setImage] = useState("");
   const [love, setLove] = useState(false);
   const [lovecount, setLovecount] = useState(0);
+  const inputFileRef = useRef(null);
+  const [editMessage, setEditMessage] = useState("");
+  const [editMode ,setEditMode] = useState(false);
+
+  useEffect(()=>{
+    setEditMessage(post.message)
+  },[editMode])
+
   useEffect(() => {
     if (post.love.includes(auth.currentUser.uid)) {
       setLove(true);
     }
+    setText(post.message);
     // setMessage(cdoc.message);
     setLovecount(post.love.length);
     const unsubscribe = onSnapshot(
@@ -100,12 +120,18 @@ export const GroupPost = ({
       setComment([])
       setLove(false);
       setLovecount(0);
+      setText("");
     };
   }, [post]);
 
   const resizeTextArea = (e) => {
-    e.target.style.height = "inherit";
-    e.target.style.height = `${e.target.scrollHeight}px`;
+    if(!isEmptyOrSpaces(message)) {
+      e.target.style.height = "inherit";
+      e.target.style.height = `${e.target.scrollHeight}px`;
+    } else {
+      e.target.style.height = "inherit";
+      e.target.style.height = `42px`;
+    }
     // In case you have a limitation
     // e.target.style.height = `${Math.min(e.target.scrollHeight, limit)}px`;
   };
@@ -113,21 +139,25 @@ export const GroupPost = ({
     return str === null || str.match(/^ *$/) !== null;
   }
   const handleSent = async () => {
-    if (!isEmptyOrSpaces(message)) {
-      // setImage([]);
+    if (!isEmptyOrSpaces(message) || image) {
+      let dlurl = "";
+      if (image) {
+        dlurl = await UploadGroupCommentImage(image, auth.currentUser.uid, post.gid);
+        // console.log(dlurl);
+
+      }
       const token = await auth.currentUser.getIdToken();
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${post.gid}/${post.pid}/comment/create`,
-        { message: message, imageURL: "", charaId: "" },
+        { message: message, imageUrl: dlurl, charaId: "" },
         {
           headers: {
             Authorization: token,
           },
         }
       );
-      console.log("before set", message);
       setMessage("");
-      console.log("after set", message);
+      setImage("");
     }
   };
 
@@ -161,6 +191,89 @@ export const GroupPost = ({
         setLovecount(lovecount+1)
         setLove(true);
       }
+    }
+  };
+
+  const handleEdit = async () => {
+    const token = await auth.currentUser.getIdToken();
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${post.gid}/${post.pid}/update`,
+      {
+        message: editMessage,
+      },
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+      if (res.status === 200) {
+        setText(editMessage);
+        setEditMode(false);
+      } else {
+        alert(res.data);
+      }
+  
+  };
+
+  const handleDelete = async () => {
+    const token = await auth.currentUser.getIdToken();
+    if (post.imageUrl.length > 0) {
+      
+      const path = getpMutiPathfromUrl(post.imageUrl);
+      const bucket = path[0].bucket;
+      const fullpath = path.map((pat)=>(pat.fullpath));
+      console.log(fullpath);
+      axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${post.gid}/${post.pid}/delete`,
+        {
+          bucket: bucket,
+          filepath: fullpath,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+    } else {
+      axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${post.gid}/${post.pid}/delete`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+    }
+    setMessage("");
+    setImage(null);
+    onPostDelete();
+    setComment([]);
+  };
+
+  const handleUploadFile = (e) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImage(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
+  const handleFile = () => {
+    inputFileRef.current.click();
+  };
+  const handleImagePaste = (e) => {
+    if (e.clipboardData.files[0]) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setImage(reader.result);
+        }
+      };
+      reader.readAsDataURL(e.clipboardData.files[0]);
     }
   };
 
@@ -200,13 +313,54 @@ export const GroupPost = ({
 
           <Divider mb={2} />
 
-          <Text whiteSpace="pre-line">{post.message}</Text>
+          {editMode ? (
+          // <InputGroup>
+          <Textarea
+            resize="none"
+            minHeight={11}
+            onKeyDown={(e) => {
+              if (e.key == "Enter" && !e.shiftKey) {
+                handleEdit();
+              } else if (e.key == "Escape") {
+                // if (image != checkImage.current) {
+                //   setImage(checkImage.current);
+                // }
+                setEditMode(false);
+              }
+            }}
+            value={editMessage}
+            onChange={(e) => setEditMessage(e.target.value)}
+            width="100%"
+            placeholder="Write Something"
+            height="45px"
+            backgroundColor="gray.100"
+            mb={2.5}
+          />
+        ) : (
+          //  <InputRightElement>
+          //   <IconButton
+          //     paddingTop={1}
+          //     h={15}
+          //     w={11}
+          //     borderRadius={100}
+          //     onClick={handleFile}
+          //     icon={<ImageSquare size={32} weight="bold" />}
+          //   />
+          // </InputRightElement>
+          // </InputGroup>
+          <Box fontSize={14} minW={"625"} w={"auto"} maxW={600}>
+            <Text whiteSpace="pre-line">
+              {text ? text : ""}
+            </Text>
+          </Box>
+        )}
 
           <Center mt={3} w={"100%"} borderRadius={10} boxShadow={"base"}>
             <Box display={"flex"} overflowX="auto" overflowY="hidden" whiteSpace="nowrap" alignContent={"center"}>
               {post.imageUrl &&
-                post.imageUrl.map((img) => (
+                post.imageUrl.map((img, k) => (
                   <Image
+                    key={k}
                     size={300}
                     color="#100e0e"
                     weight="light"
@@ -266,8 +420,12 @@ export const GroupPost = ({
                   comment={cmt}
                   key={i}
                   member={member}
-                  openReply={openReply[i]}
-                  setOpenReply={(state) => setOpenReply(state, i)}
+                  openReply={openReply[cmt.cid]}
+                  setOpenReply={(state) => setOpenReply(state, cmt.cid)}
+                  onGoingReply={onGoingComment[cmt.cid]}
+                  setOnGoingReply={(value)=>setOnGoingComment(value, cmt.cid)}
+                  // editComment={value}
+                  setEditComment={(state)=>setEditComment(state, cmt.cid)}
                 />
               ))
               .reverse()}
@@ -287,25 +445,68 @@ export const GroupPost = ({
               minHeight={11}
               width="100%"
               placeholder="Write Something"
-              height="42"
+              height="42px"
               backgroundColor="gray.100"
               value={message}
               onKeyDown={(e) => {
                 resizeTextArea(e);
-                if (e.key == "Enter" && !e.shiftKey) {
-                  // console.log('message sent')
-                  handleSent();
-                }
+                // if (e.key == "Enter" && !e.shiftKey) {
+                //   // console.log('message sent')
+                //   handleSent();
+                // }
               }}
               onChange={(e) => setMessage(e.target.value)}
+              onPaste={handleImagePaste}
             />
-            <Box pl={2}>
-              <IconButton rounded={"full"} icon={<ImageSquare size={28} />} />
-              {/* <IconButton rounded={"full"} icon={<NotePencil size={28} />} onClick={handleSent} /> */}
+            <Box pl={2} whiteSpace="nowrap">
+              <IconButton rounded={"full"} icon={<ImageSquare size={28} />} mr={2} onClick={handleFile} />
+              <IconButton rounded={"full"} icon={<PaperPlaneRight size={28} />} onClick={handleSent} />
             </Box>
           </Flex>
+          {image&&(
+          <Box pos={"relative"}>
+            <Image
+              src={image}
+              width="250px"
+              height="250px"
+              onClick={() => setModalOpen(true)}
+              objectFit="cover"
+            />
+            <IconButton
+              icon={<X size={16} color="black" />}
+              position="absolute"
+              top={0}
+              left={200}
+              backgroundColor="transparent"
+              _hover={{ backgroundColor: "transparent" }}
+              onClick={() => setImage(null)}
+            ></IconButton>
+          </Box>
+        )}
         </Box>
-        <IconButton rounded={"full"} icon={<DotsThreeVertical size={28} />} />
+        <Menu>
+        <MenuButton m={2.5} h={10} w={10} borderRadius={100}>
+          <DotsThreeVertical size={30} />
+        </MenuButton>
+        <MenuList>
+          {auth.currentUser.uid == post.uid ? (
+            <>
+            {console.log(post)}
+              <MenuItem onClick={() => setEditMode(true)}>Edit</MenuItem>
+              <MenuItem onClick={handleDelete}>Delete</MenuItem>
+            </>
+          ) : (
+            <MenuItem>Report</MenuItem>
+          )}
+        </MenuList>
+      </Menu>
+        <Input
+          type="file"
+          id="file"
+          ref={inputFileRef}
+          display="none"
+          onChange={(e) => handleUploadFile(e)}
+        />
       </Flex>
     );
   } else {

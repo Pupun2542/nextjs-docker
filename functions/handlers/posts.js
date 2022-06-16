@@ -62,14 +62,21 @@ exports.deletePost = (req, res) =>{
     const docref = db.collection("group").doc(req.params.gid).collection("posts").doc(req.params.pid);
     docref.get().then((doc)=>{
       if (doc.exists && doc.data().uid == req.user.uid) {
+        if (doc.data().imageUrl.length > 0) {
+          Promise.all(req.body.filepath.map((path)=>{
+            admin.storage().bucket(req.body.bucket).file(path).delete();
+          }));
+        }
         return docref.delete().then(()=>{
           return res.status(200).send("delete post success");
         }). catch((e)=>{
           return res.status(400).send("delete post not success ", e);
         });
+      } else {
+        return res.status(401).send("unauthorized");
       }
-      return res.status(401).send("unauthorized");
     });
+  } else {
     res.status(404).send("post not found");
   }
 };

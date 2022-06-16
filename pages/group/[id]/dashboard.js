@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, createContext } from "react";
 import CustomNavbar from "../../../components/navbar";
 
 import {
@@ -33,7 +33,7 @@ import {
   Text,
   Image,
   Divider,
-  IconButton
+  IconButton,
 } from "@chakra-ui/react";
 
 import { Info, Megaphone, X } from "phosphor-react";
@@ -82,8 +82,14 @@ function dashboard() {
   const [loading, setLoading] = useState(true);
   const [post, setPost] = useState([]);
   const [replyTab, setReplyTab] = useState({});
-  // const [comment, setComment] = useState({});
+  const [comment, setComment] = useState({});
   const [editComment, setEditComment] = useState({});
+  const PostContext = createContext();
+
+  const onPostDelete = (k) => {
+    const newpost = post.filter((v, i) => i !== k);
+    setPost(newpost);
+  };
 
   const fetchPost = async () => {
     const token = await user.getIdToken();
@@ -123,54 +129,13 @@ function dashboard() {
   }, [user, userLoading]);
 
   useEffect(() => {
-    // console.log(id)
     if (data) {
       fetchPost();
     }
-    // unsubscribe = onSnapshot(
-    //   query(
-    //     collection(db, "posts"),
-    //     where("groupId", "==", id),
-    //     orderBy(orderby, "desc"),
-    //     limit(loadLimit)
-    //   ),
-    //   (snapshot) => {
-    //     if (!snapshot.empty) {
-    //       let mappedcommentData = [];
-    //       Promise.all(
-    //         snapshot.docs.map(async (doc) => {
-    //           let creator = {};
-    //           // console.log(data);
-    //           if (data.member[doc.data().uid]) {
-    //             creator = data.member[doc.data().uid];
-    //           } else {
-    //             const usr = await getUser([doc.data().uid]);
-    //             creator = usr[0];
-    //           }
-    //           mappedcommentData = [
-    //             ...mappedcommentData,
-    //             {
-    //               ...doc.data(),
-    //               creator: creator,
-    //               pid: doc.id,
-    //               gid: id
-    //             },
-    //           ];
-    //         })
-    //       ).then(() => {
-    //         setPost(mappedcommentData);
-    //       });
-    //     }
-    //   }
-    // );
-
-    // return () => unsubscribe;
   }, [data, orderby, loadLimit]);
 
   useEffect(() => {
     if (user && data && data.member) {
-      // console.log(data);
-      // const isMember = data.member.find((v) => v == user.uid);
       const isMember = Object.keys(data.member).find((v) => v == user.uid);
       if (!isMember) {
         Router.push(`/group/${id}`);
@@ -183,6 +148,12 @@ function dashboard() {
     setReplyTab({ ...replyTab, [id]: state });
   };
   const setStateEditMode = (state, id) => {
+    setEditComment({ ...editComment, [id]: state });
+  };
+  const setStateOngoingComment = (value, id) => {
+    setComment({ ...comment, [id]: value });
+  };
+  const setStateComment = (state, id) => {
     setEditComment({ ...editComment, [id]: state });
   };
 
@@ -212,12 +183,11 @@ function dashboard() {
   };
 
   const handleSent = async () => {
-    if (!isEmptyOrSpaces(message)||image.length > 0) {
+    if (!isEmptyOrSpaces(message) || image.length > 0) {
       let dlurl = "";
       if (image.length > 0) {
         dlurl = await UploadGroupImage(image, user.uid, id);
         // console.log(dlurl);
-
       }
       const token = await user.getIdToken();
       const res = await axios.post(
@@ -414,19 +384,23 @@ function dashboard() {
                       {/* <Input placeholder='Basic usage' w={'93%'} /> */}
                     </Flex>
                     {/* โพสต์ */}
-                    {console.log(post)}
-                    {post &&
-                      post.map((apost, i) => (
-                        <GroupPost
-                          post={apost}
-                          key={i}
-                          member={data.member}
-                          openReply={replyTab}
-                          setOpenReply={setStateReplyTab}
-                          setEditComment={setStateEditMode}
-                        />
-                      ))}
-
+                    {/* {console.log(post)} */}
+                    <PostContext.Provider value={{replyTab, setStateReplyTab, setStateEditMode, }}>
+                      {post &&
+                        post.map((apost, i) => (
+                          <GroupPost
+                            post={apost}
+                            key={i}
+                            member={data.member}
+                            openReply={replyTab}
+                            setOpenReply={setStateReplyTab}
+                            setEditComment={setStateEditMode}
+                            onGoingComment={comment}
+                            setOnGoingComment={setStateOngoingComment}
+                            onPostDelete={() => onPostDelete(i)}
+                          />
+                        ))}
+                    </PostContext.Provider>
                     <Modal isOpen={isOpen} onClose={onClose}>
                       <ModalOverlay
                         bg="blackAlpha.300"
@@ -465,7 +439,7 @@ function dashboard() {
                             overflowX="auto"
                             overflowY="hidden"
                             whiteSpace="nowrap"
-                            display={(image.length > 0? "inline-block" : "none")}
+                            display={image.length > 0 ? "inline-block" : "none"}
                           >
                             {image.length > 0 &&
                               image.map((img, k) => (
@@ -487,12 +461,20 @@ function dashboard() {
                                     left={114}
                                     backgroundColor="transparent"
                                     _hover={{ backgroundColor: "transparent" }}
-                                    onClick={() => setImage(image.filter((v,i)=> i!== k))}
+                                    onClick={() =>
+                                      setImage(image.filter((v, i) => i !== k))
+                                    }
                                   ></IconButton>
                                 </Box>
                               ))}
                           </Box>
-                          <Button float={"right"} onClick={handleSent} disabled={isEmptyOrSpaces(message)||image.length == 0}>
+                          <Button
+                            float={"right"}
+                            onClick={handleSent}
+                            disabled={
+                              isEmptyOrSpaces(message) && image.length == 0
+                            }
+                          >
                             Send
                           </Button>
                         </ModalBody>
