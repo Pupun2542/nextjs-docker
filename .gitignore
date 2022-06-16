@@ -43,3 +43,4 @@ functions/credential dev.json
 .firebaserc
 functions/123456.json
 functions/wasdqe.json
+functions/firebase-debug.log
