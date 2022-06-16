@@ -83,7 +83,7 @@ export default function Groups() {
           <Flex boxShadow={'base'} justifyContent={'center'} paddingTop={55}>
 
             <Center bg={'white'} boxShadow={'0px 0px 2px rgba(0, 0, 0.25)'} flexDir={'column'} >
-              <Button
+              {/* <Button
                 fontFamily={'Mitr'}
                 fontWeight='hairline'
                 mt={1}
@@ -93,7 +93,7 @@ export default function Groups() {
                 onClick={() => Router.push("/creategroup")}
               >
                 สร้างคอมมูนิตี้
-              </Button>
+              </Button> */}
 
               <GroupCard />
             </Center>
