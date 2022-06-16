@@ -278,6 +278,8 @@ exports.groupLove = (req, res) =>{
     }).catch((e)=>{
       return res.status(400).send("cannot love : ", e);
     });
+  } else {
+    return res.status(401).send("unauthorized");
   }
 };
 exports.groupUnlove = (req, res) =>{
@@ -291,6 +293,8 @@ exports.groupUnlove = (req, res) =>{
     }).catch((e)=>{
       return res.status(400).send("cannot unlove : ", e);
     });
+  } else {
+    return res.status(401).send("unauthorized");
   }
 };
 exports.groupPin = (req, res) =>{
