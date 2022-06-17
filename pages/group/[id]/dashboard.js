@@ -159,15 +159,21 @@ function dashboard() {
  const reducer = (state, action) => {
   switch (action.type) {
     case "set": {
+      // console.log(action.id, action.value, state[action.id])
       return {...state, [action.id]:{...state[action.id], ...action.value} }
     }
     case "setMultiple": {
       return {...state, ...action.value}
     }
+    default: return state;
   }
  }
 
   const [postData, dispatch] = useReducer(reducer, {});
+
+  // useEffect(()=>{
+  //   console.log(postData);
+  // },[postData])
 
   const setPostData = (value) => {
     dispatch({type:"setMultiple", value: value});

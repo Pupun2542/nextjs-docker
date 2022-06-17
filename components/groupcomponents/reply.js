@@ -40,8 +40,8 @@ export const GroupReply = ({ reply }) => {
   } = useContext(PostContext);
 
   const rid = reply.rid;
-
-  const love = getStateDataLove(rid);
+  const love = reply.love;
+  // const love = getStateDataLove(rid);
   const setLove = (value) =>{
     // setStateDataLove(value, rid);
   }
@@ -133,7 +133,7 @@ export const GroupReply = ({ reply }) => {
         }
       );
       if (res.status === 200) {
-        setLove(love.filter((v,i)=>v !== auth.currentUser.uid))
+        // setLove(love.filter((v,i)=>v !== auth.currentUser.uid))
       }
     } else {
       const res = await axios.post(
@@ -146,7 +146,7 @@ export const GroupReply = ({ reply }) => {
         }
       );
       if (res.status === 200) {
-        setLove([...love, auth.currentUser.uid])
+        // setLove([...love, auth.currentUser.uid])
       }
     }
   };

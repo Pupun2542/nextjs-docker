@@ -39,6 +39,7 @@ import { useApp, useUser } from "../../src/hook/local";
 import axios from "axios";
 import { UploadGroupCommentImage } from "../../src/services/filestoreageservice";
 import { PostContext } from "../../pages/group/[id]/dashboard";
+import { useCollection } from "react-firebase-hooks/firestore";
 
 export const GroupComment = ({ comment, member }) => {
   const {
@@ -67,11 +68,12 @@ export const GroupComment = ({ comment, member }) => {
   const inputFileRef = useRef(null);
   const cid = comment.cid;
   const TextareaRef = useRef(null);
-
-  const love = getStateDataLove(cid);
-  const setLove = (value) => {
-    console.log(love, value, cid);
-  };
+  // console.log(getStateData(cid));
+  // const love = getStateDataLove(cid);
+  // const setLove = (value) => {
+  //   console.log(love, value, cid);
+  // };
+  const love = comment.love;
   const editMode = getStateDataEdit(cid);
   const setEditMode = (state) => {
     setStateDataEdit(state, cid);
@@ -88,10 +90,10 @@ export const GroupComment = ({ comment, member }) => {
   const setImage = (value) => {
     setStateDataPendingImage(value, cid);
   };
-  const reply = getStateDataChild(cid);
-  const setReply = (value) => {
-    setStateDataChild(value, cid);
-  };
+  // const reply = getStateDataChild(cid);
+  // const setReply = (value) => {
+  //   setStateDataChild(value, cid);
+  // };
   const text = comment.message;
   const setText = (value) => {
     setStateDataData({ ...comment, message: value });
@@ -107,68 +109,114 @@ export const GroupComment = ({ comment, member }) => {
   const onToggle = () => {
     setStateDataReply(!isOpen, cid);
   };
+  console.log(comment);
 
-  useEffect(() => {
-    console.log("fetchreply")
-    const unsubscribe = onSnapshot(
-      query(
-        collection(
-          db,
-          "group",
-          comment.gid,
-          "posts",
-          comment.pid,
-          "comments",
-          comment.cid,
-          "replies"
-        ),
-        orderBy("timestamp", "desc"),
-        limit(fetchlimit)
+  const [snapshot, loading, error] = useCollection(
+    query(
+      collection(
+        db,
+        "group",
+        comment.gid,
+        "posts",
+        comment.pid,
+        "comments",
+        comment.cid,
+        "replies"
       ),
-      (snapshot) => {
-        if (!snapshot.empty) {
-          let mappedcommentData = {};
-          let commentList = [];
-          Promise.all(
-            snapshot.docs.map(async (doc) => {
-              let creator = {};
-              // console.log(member, doc.data().uid)
-              if (member[doc.data().uid]) {
-                creator = member[doc.data().uid];
-              } else {
-                const usr = await getUser([doc.data().uid]);
-                creator = usr[0];
-              }
-              mappedcommentData = {
-                ...mappedcommentData,
-                [doc.id]: {
-                  data: {
-                    ...doc.data(),
-                    creator: creator,
-                    cid: comment.cid,
-                    pid: comment.pid,
-                    gid: comment.gid,
-                    rid: doc.id,
-                  },
-                  love: doc.data().love,
-                },
-              };
-              // setStateData({data: mappedcommentData, love: doc.data().love}, doc.id);
-              commentList = [...commentList, doc.id];
-            })
-          ).then(() => {
-            setPostData(mappedcommentData);
-            setStateDataChild(commentList, cid);
-          });
+      orderBy("timestamp", "desc"),
+      limit(fetchlimit)
+    )
+  );
+
+  let reply = [];
+  if (!loading) {
+    Promise.all(
+      snapshot.docs.map(async (doc) => {
+        let mappedcommentData = {};
+        let creator = {};
+        // console.log(member, doc.data().uid)
+        if (member[doc.data().uid]) {
+          creator = member[doc.data().uid];
+        } else {
+          const usr = await getUser([doc.data().uid]);
+          creator = usr[0];
         }
-      }
+        mappedcommentData = {
+          ...doc.data(),
+          creator: creator,
+          cid: comment.cid,
+          pid: comment.pid,
+          gid: comment.gid,
+          rid: doc.id,
+        };
+        reply = [...reply, mappedcommentData];
+      })
     );
-    return () => {
-      unsubscribe();
-      setReply([]);
-      setText("");
-    };
-  }, [comment]);
+  }
+
+  // useEffect(() => {
+  //   console.log("fetchreply")
+  //   const unsubscribe = onSnapshot(
+  //     query(
+  //       collection(
+  //         db,
+  //         "group",
+  //         comment.gid,
+  //         "posts",
+  //         comment.pid,
+  //         "comments",
+  //         comment.cid,
+  //         "replies"
+  //       ),
+  //       orderBy("timestamp", "desc"),
+  //       limit(fetchlimit)
+  //     ),
+  //     (snapshot) => {
+  //       if (!snapshot.empty) {
+  //         let mappedcommentData = {};
+  //         let commentList = [];
+  //         console.log(cid,getStateData(cid));
+  //         Promise.all(
+  //           snapshot.docs.map(async (doc) => {
+  //             let creator = {};
+  //             // console.log(member, doc.data().uid)
+  //             if (member[doc.data().uid]) {
+  //               creator = member[doc.data().uid];
+  //             } else {
+  //               const usr = await getUser([doc.data().uid]);
+  //               creator = usr[0];
+  //             }
+  //             mappedcommentData = {
+  //               ...mappedcommentData,
+  //               [doc.id]: {
+  //                 ...getStateData(doc.id),
+  //                 data: {
+  //                   ...doc.data(),
+  //                   creator: creator,
+  //                   cid: comment.cid,
+  //                   pid: comment.pid,
+  //                   gid: comment.gid,
+  //                   rid: doc.id,
+  //                 },
+  //                 love: doc.data().love,
+  //               },
+  //             };
+  //             // setStateData({data: mappedcommentData, love: doc.data().love}, doc.id);
+  //             commentList = [...commentList, doc.id];
+  //           })
+  //         ).then(() => {
+  //           setPostData(mappedcommentData);
+  //           setStateDataChild(commentList, cid);
+  //         });
+  //       }
+  //     }
+  //   );
+  //   return () => {
+  //     unsubscribe();
+  //     // setReply([]);
+  //     // setText("");
+  //   };
+  // }, [comment]);
 
   // const ToggleReplyTab = () => {
   //   setOpenReply(!isOpen);
@@ -279,7 +327,7 @@ export const GroupComment = ({ comment, member }) => {
         }
       );
       if (res.status === 200) {
-        setLove(love.filter((v, i) => v !== auth.currentUser.uid));
+        // setLove(love.filter((v, i) => v !== auth.currentUser.uid));
       }
     } else {
       const res = await axios.post(
@@ -292,7 +340,7 @@ export const GroupComment = ({ comment, member }) => {
         }
       );
       if (res.status === 200) {
-        setLove([...love, auth.currentUser.uid]);
+        // setLove([...love, auth.currentUser.uid]);
       }
     }
   };
@@ -435,13 +483,7 @@ export const GroupComment = ({ comment, member }) => {
           reply
             .map((rpy, i) => (
               <Box key={i}>
-                {getStateData(rpy) && (
-                  <GroupReply
-                    reply={getStateDataData(rpy)}
-                    key={i}
-                    member={member}
-                  />
-                )}
+                <GroupReply reply={rpy} key={i} member={member} />
               </Box>
             ))
             .reverse()}
