@@ -32,13 +32,6 @@ import { Playedcom } from "./playedcom";
 import { Condition } from "./condition";
 
 export const About = () => {
-    // const [demand, setDemand] = useState('1')
-    const [hiddenState, setHiddenState] = useState({
-        othname: false,
-        gender: false,
-        age: false,
-        work: false,
-    })
 
     return (
         <Flex direction={'column'}>
