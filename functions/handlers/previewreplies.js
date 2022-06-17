@@ -13,14 +13,16 @@ exports.createPreviewReply = (req, res) => {
       love: [],
       imageURL: req.body.imageURL,
     }).then(()=>{
-      groupref.get().then((doc)=>{
-        sendNotifications(doc.data().member, "202", req.user.uid, doc.data().name, "", doc.id);
+      commentref.get().then((doc)=>{
+        sendNotifications(doc.data().uid, "202", req.user.uid, req.params.gid, "", `group/${req.params.gid}?cid=${req.params.cid}&rid=${doc.id}`);
       });
+
       groupref.update({
         commentuser: admin.firestore.FieldValue.arrayUnion(req.user.uid),
       });
       commentref.update({
         replycount: admin.firestore.FieldValue.increment(1),
+        follower: admin.firestore.FieldValue.arrayUnion(req.user.uid),
       });
       return res.status(200).send("created comment");
     });
@@ -86,6 +88,7 @@ exports.lovePreviewReply = async (req, res) =>{
       replyref.update({
         love: admin.firestore.FieldValue.arrayUnion(req.user.uid),
       });
+      sendNotifications(reply.data().uid, "204", req.user.uid, req.params.gid, "", `group/${req.params.gid}?cid=${req.params.cid}&rid=${req.params.rid}`);
     } else {
       return res.status(404).send("comment not found");
     }

@@ -631,6 +631,8 @@ const ChatNotiIcon = ({ data, user }) => {
       Math.floor(minusDate / (30 * 3600 * 1000)) > 30
     ) {
       return now.getMonth() - sentdate.getMonth() + " เดือน";
+    } else if(Math.floor(minusDate / ( 24* 3600 * 1000)) > 0) {
+      return Math.floor(minusDate / ( 24* 3600 * 1000)) + " วัน"
     } else if (Math.floor(minusDate / (3600 * 1000)) > 0) {
       return Math.floor(minusDate / (3600 * 1000)) + " ชั่วโมง";
     } else if (Math.floor(minusDate / (60 * 1000)) > 0) {
