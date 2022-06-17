@@ -41,6 +41,7 @@ import UploadImageModal from "../../../components/universalUploadModal";
 import { Uploadprofileimg } from "../../../src/services/filestoreageservice";
 import Footer from "../../../components/footer";
 import { About } from "../../../components/profile/about";
+import { Myfriends } from "../../../components/profile/myfriends";
 
 export default function profile() {
   const { tabState, addTab, removeTab, changeTab, CloseTab } = useTab();
@@ -326,12 +327,7 @@ export default function profile() {
 
             <Tabs w={"100%"} bg={"tomato2"} isFitted spacing={0}>
               <TabList borderColor={"gray.400"} p={2}>
-                <Tab
-                  _selected={{ color: "white", bg: "#9A9AB0" }}
-                  borderRadius={10}
-                >
-                  About me
-                </Tab>
+                
                 <Tab
                   _selected={{ color: "white", bg: "#9A9AB0" }}
                   isDisabled
@@ -341,13 +337,20 @@ export default function profile() {
                 </Tab>
                 <Tab
                   _selected={{ color: "white", bg: "#9A9AB0" }}
+                  isDisabled
                   borderRadius={10}
                 >
-                  Original Character
+                  Community
+                </Tab>
+                <Tab
+                  isDisabled
+                  _selected={{ color: "white", bg: "#9A9AB0" }}
+                  borderRadius={10}
+                >
+                  OC
                 </Tab>
                 <Tab
                   _selected={{ color: "white", bg: "#9A9AB0" }}
-                  isDisabled
                   borderRadius={10}
                 >
                   Friend
@@ -359,17 +362,24 @@ export default function profile() {
                 >
                   Bookshelf
                 </Tab>
+                <Tab
+                  _selected={{ color: "white", bg: "#9A9AB0" }}
+                  borderRadius={10}
+                >
+                  About me
+                </Tab>
               </TabList>
 
               <TabPanels>
-                {/* About */}
-                <TabPanel>
-                  <About></About>
-                </TabPanel>
-
+                
                 {/* Timeline */}
                 <TabPanel>
                   <p>one!</p>
+                </TabPanel>
+
+                {/* Community */}
+                <TabPanel>
+                  <p>?</p>
                 </TabPanel>
 
                 {/* OC */}
@@ -392,12 +402,17 @@ export default function profile() {
 
                 {/* Friend */}
                 <TabPanel>
-                  <p>Friens Zone</p>
+                  <Myfriends />
                 </TabPanel>
 
                 {/* Bookshelf */}
                 <TabPanel>
                   <p>?</p>
+                </TabPanel>
+
+                {/* About */}
+                <TabPanel>
+                  <About></About>
                 </TabPanel>
               </TabPanels>
             </Tabs>

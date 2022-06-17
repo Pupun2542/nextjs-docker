@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useApp } from "../../src/hook/local";
-import { Box, Flex, Image } from "@chakra-ui/react";
+import { Box, Center, Flex, Image, useDisclosure, ModalOverlay, Modal, ModalContent, ModalHeader, ModalCloseButton, ModalBody, SimpleGrid } from "@chakra-ui/react";
 
 const Gallery = ({ gid }) => {
   const { auth } = useApp();
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const [gallery, setGallery] = useState([]);
   console.log(gallery);
   useEffect(() => {
@@ -27,13 +28,43 @@ const Gallery = ({ gid }) => {
   }, [gid]);
 
   return (
-    <Flex flexWrap={"wrap"}>
+    <Flex flexWrap={"wrap"}
+    // justifyContent={'center'}
+    >
       {gallery.length > 0 &&
         gallery.map((img) => (
-          <Box width={192} height={192} marginBottom={5}>
-            <Image src={img.url} width={192} height={192} objectFit={"contain"} />
-          </Box>
+          <SimpleGrid
+            width={'auto'}
+            height={'auto'}
+            marginBottom={5}
+            boxShadow={'base'}
+            margin={2}
+            cursor={'pointer'}
+            borderRadius={10}
+            onClick={onOpen}
+          >
+            <Image
+              src={img.url}
+              width={240}
+              height={225}
+              objectFit={"contain"}
+            />
+          </SimpleGrid>
+
+
         ))}
+
+      <Modal size={'7xl'} isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+
+          <ModalBody>
+            โชว์ทีละภาพ
+          </ModalBody>
+
+        </ModalContent>
+      </Modal>
     </Flex>
   );
 };

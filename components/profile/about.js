@@ -1,28 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
     Flex,
-    Box,
-    Spacer,
-    VStack,
-    Center,
-    Stack,
-    TabPanel,
-    Editable,
-    EditableInput,
-    EditablePreview,
-    Wrap,
-    WrapItem,
-    IconButton,
-    Radio,
-    RadioGroup,
-    NumberInput,
-    NumberInputField,
-    NumberInputStepper,
-    NumberDecrementStepper,
-    NumberIncrementStepper,
-    Select,
-    Input,
-    SimpleGrid,
 } from "@chakra-ui/react";
 import { Personal } from "./pesonal";
 import { Roleplay } from "./roleplay";

@@ -44,6 +44,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { UploadGroupImage } from "../../../src/services/filestoreageservice";
 import Gallery from "../../../components/groupcomponents/gallery";
+import { Member } from "../../../components/groupcomponents/member";
 
 // export async function getServerSideProps(context) {
 //   const { params } = context;
@@ -345,8 +346,7 @@ function dashboard() {
       >
         <CustomNavbar />
 
-        <Flex pt={55} fontFamily={"mitr"}>
-          <Spacer />
+        <Flex pt={55} fontFamily={"mitr"} justifyContent={'center'} boxShadow='base'>
 
           <Box
             bg={"#F3F3F3"}
@@ -371,7 +371,7 @@ function dashboard() {
                   {data?.tag}] {data?.name}
                 </Center>
 
-                <Box bg={"#6768AB"}>
+                <Box bg={"#6768AB"} cursor={'pointer'}>
                   <Popover bg={"#6768AB"}>
                     <PopoverTrigger>
                       <Info color="#FFC75A" size={22} weight="fill" />
@@ -404,7 +404,7 @@ function dashboard() {
                 </Box>
               </Flex>
 
-              <Tabs w={"100%"} maxW={800} isFitted variant="enclosed">
+              <Tabs w={"100%"} maxW={800} isFitted>
                 {/* หัว tab */}
                 <TabList mb="1em">
                   <Tab
@@ -438,6 +438,7 @@ function dashboard() {
                     Member
                   </Tab>
                   <Tab
+                    isDisabled
                     _selected={{
                       color: "white",
                       bg: "#9A9AB0",
@@ -452,7 +453,7 @@ function dashboard() {
                 <TabPanels>
                   <TabPanel>
                     {/* ประกาศ */}
-                    <Flex
+                    {/* <Flex
                       w={"100%"}
                       bg={"white"}
                       boxShadow="base"
@@ -475,7 +476,7 @@ function dashboard() {
                       <Center w={"65"} color={"gray.500"}>
                         เพิ่มเติม
                       </Center>
-                    </Flex>
+                    </Flex> */}
                     {/* กล่องข้อความ */}
                     <Flex
                       mt={3}
@@ -483,6 +484,7 @@ function dashboard() {
                       boxShadow={"base"}
                       bg={"white"}
                       borderRadius={10}
+                      cursor={'pointer'}
                     >
                       <Image
                         mr={2}
@@ -600,7 +602,7 @@ function dashboard() {
                   </TabPanel>
 
                   <TabPanel>
-                    <p>Member!</p>
+                    <Member />
                   </TabPanel>
 
                   <TabPanel>
@@ -611,7 +613,6 @@ function dashboard() {
             </VStack>
           </Box>
 
-          <Spacer />
         </Flex>
       </Box>
     );
