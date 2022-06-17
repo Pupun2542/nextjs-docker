@@ -43,6 +43,7 @@ import { useApp, useUser } from "../../../src/hook/local";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { UploadGroupImage } from "../../../src/services/filestoreageservice";
+import Gallery from "../../../components/groupcomponents/gallery";
 
 // export async function getServerSideProps(context) {
 //   const { params } = context;
@@ -595,7 +596,7 @@ function dashboard() {
                   </TabPanel>
 
                   <TabPanel>
-                    <p>Gallery!</p>
+                    <Gallery gid={id} />
                   </TabPanel>
 
                   <TabPanel>
