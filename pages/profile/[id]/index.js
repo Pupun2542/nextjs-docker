@@ -19,28 +19,18 @@ import { getAuth, updateProfile } from "firebase/auth";
 import {
   Flex,
   Box,
-  Text,
   Spacer,
   VStack,
   HStack,
   Center,
   Stack,
   Button,
-  useDisclosure,
   Tabs,
   TabList,
   TabPanels,
   Tab,
   TabPanel,
-  Divider,
-  Editable,
-  EditableInput,
-  EditableTextarea,
-  EditablePreview,
-  Wrap,
-  WrapItem,
   IconButton,
-  useBreakpointValue,
   Avatar,
   Input,
   Image,
@@ -49,6 +39,8 @@ import CustomNavbar from "../../../components/navbar";
 import { Check, X } from "phosphor-react";
 import UploadImageModal from "../../../components/universalUploadModal";
 import { Uploadprofileimg } from "../../../src/services/filestoreageservice";
+import Footer from "../../../components/footer";
+import { About } from "../../../components/profile/about";
 
 export default function profile() {
   const { tabState, addTab, removeTab, changeTab, CloseTab } = useTab();
@@ -66,6 +58,7 @@ export default function profile() {
   const [editCover, setEditCover] = useState("");
   const [editAvartarMode, setEditAvatarMode] = useState(false);
   const [editCoverMode, setEditCoverMode] = useState(false);
+  const [value, setValue] = React.useState('1')
 
   const loaduserDetail = async () => {
     if (!loading) {
@@ -76,6 +69,13 @@ export default function profile() {
       }
     }
   };
+
+  const [hiddenState, setHiddenState] = useState({
+    othname: false,
+    gender: false,
+    age: false,
+    work: false,
+  })
 
   useEffect(() => {
     // console.log(id);
@@ -361,275 +361,10 @@ export default function profile() {
                 </Tab>
               </TabList>
 
-              {/* <Divider  color={'black'}/> */}
-
               <TabPanels>
                 {/* About */}
                 <TabPanel>
-                  <Box fontSize={24} fontWeight={"extrabold"} ml={5}>
-                    การโรลเพลย์
-                  </Box>
-
-                  <VStack
-                    bg={"white"}
-                    width={"100%"}
-                    borderRadius={10}
-                    boxShadow={"base"}
-                  >
-                    <Flex p={3} w={"100%"}>
-                      <Center maxWidth={150} w={"100%"}>
-                        สไตล์การเล่น
-                      </Center>
-
-                      <Divider ml={2} mr={2} orientation="vertical" />
-
-                      <Wrap>
-                        <WrapItem>
-                          <Flex
-                            bg={"gray.400"}
-                            borderRadius={10}
-                            p={1.5}
-                            boxShadow={"base"}
-                          >
-                            <Center ml={2} mr={2}>
-                              สายวาด
-                            </Center>
-                            <Editable
-                              bg={"white"}
-                              w={53}
-                              borderRadius={10}
-                              pl={1}
-                              pr={1}
-                              pt={0.5}
-                              pb={0.5}
-                              defaultValue="100%"
-                            >
-                              <EditablePreview />
-                              <EditableInput />
-                            </Editable>
-                          </Flex>
-                        </WrapItem>
-
-                        <WrapItem>
-                          <Flex
-                            bg={"gray.400"}
-                            borderRadius={10}
-                            p={1.5}
-                            boxShadow={"base"}
-                          >
-                            <Center ml={2} mr={2}>
-                              สายโรลเพลย์ยาว
-                            </Center>
-                            <Editable
-                              bg={"white"}
-                              w={53}
-                              borderRadius={10}
-                              pl={1}
-                              pr={1}
-                              pt={0.5}
-                              pb={0.5}
-                              defaultValue="100%"
-                            >
-                              <EditablePreview />
-                              <EditableInput w={50} />
-                            </Editable>
-                          </Flex>
-                        </WrapItem>
-
-                        <WrapItem>
-                          <Flex
-                            bg={"gray.400"}
-                            borderRadius={10}
-                            p={1.5}
-                            boxShadow={"base"}
-                          >
-                            <Center ml={2} mr={2}>
-                              สายโรลเพลย์สั้น
-                            </Center>
-                            <Editable
-                              bg={"white"}
-                              w={53}
-                              borderRadius={10}
-                              pl={1}
-                              pr={1}
-                              pt={0.5}
-                              pb={0.5}
-                              defaultValue="100%"
-                            >
-                              <EditablePreview />
-                              <EditableInput w={50} />
-                            </Editable>
-                          </Flex>
-                        </WrapItem>
-
-                        <WrapItem>
-                          <Flex
-                            bg={"gray.400"}
-                            borderRadius={10}
-                            p={1.5}
-                            boxShadow={"base"}
-                          >
-                            <Center ml={2} mr={2}>
-                              สายเวิ่นสตอรี่
-                            </Center>
-                            <Editable
-                              bg={"white"}
-                              w={53}
-                              borderRadius={10}
-                              pl={1}
-                              pr={1}
-                              pt={0.5}
-                              pb={0.5}
-                              defaultValue="100%"
-                            >
-                              <EditablePreview />
-                              <EditableInput w={50} />
-                            </Editable>
-                          </Flex>
-                        </WrapItem>
-
-                        <WrapItem>
-                          <Flex
-                            bg={"gray.400"}
-                            borderRadius={10}
-                            p={1.5}
-                            boxShadow={"base"}
-                          >
-                            <Center ml={2} mr={2}>
-                              สายฟิคชั่น
-                            </Center>
-                            <Editable
-                              bg={"white"}
-                              w={53}
-                              borderRadius={10}
-                              pl={1}
-                              pr={1}
-                              pt={0.5}
-                              pb={0.5}
-                              defaultValue="100%"
-                            >
-                              <EditablePreview />
-                              <EditableInput w={50} />
-                            </Editable>
-                          </Flex>
-                        </WrapItem>
-                      </Wrap>
-                    </Flex>
-
-                    <Flex p={3} w={"100%"}>
-                      <Center maxWidth={150} w={"100%"}>
-                        สไตล์การเล่น
-                      </Center>
-
-                      <Divider ml={2} mr={2} orientation="vertical" />
-
-                      <Wrap>
-                        <WrapItem>
-                          <Flex
-                            bg={"gray.400"}
-                            borderRadius={10}
-                            p={1.5}
-                            boxShadow={"base"}
-                          >
-                            <Center ml={2} mr={2}>
-                              คอเมดี้
-                            </Center>
-                            <Editable
-                              bg={"white"}
-                              w={53}
-                              borderRadius={10}
-                              pl={1}
-                              pr={1}
-                              pt={0.5}
-                              pb={0.5}
-                              defaultValue="100%"
-                            >
-                              <EditablePreview />
-                              <EditableInput />
-                            </Editable>
-                          </Flex>
-                        </WrapItem>
-
-                        <WrapItem>
-                          <Flex
-                            bg={"gray.400"}
-                            borderRadius={10}
-                            p={1.5}
-                            boxShadow={"base"}
-                          >
-                            <Center ml={2} mr={2}>
-                              ดราม่า
-                            </Center>
-                            <Editable
-                              bg={"white"}
-                              w={53}
-                              borderRadius={10}
-                              pl={1}
-                              pr={1}
-                              pt={0.5}
-                              pb={0.5}
-                              defaultValue="100%"
-                            >
-                              <EditablePreview />
-                              <EditableInput w={50} />
-                            </Editable>
-                          </Flex>
-                        </WrapItem>
-
-                        <WrapItem>
-                          <Flex
-                            bg={"gray.400"}
-                            borderRadius={10}
-                            p={1.5}
-                            boxShadow={"base"}
-                          >
-                            <Center ml={2} mr={2}>
-                              อีโรติก
-                            </Center>
-                            <Editable
-                              bg={"white"}
-                              w={53}
-                              borderRadius={10}
-                              pl={1}
-                              pr={1}
-                              pt={0.5}
-                              pb={0.5}
-                              defaultValue="100%"
-                            >
-                              <EditablePreview />
-                              <EditableInput w={50} />
-                            </Editable>
-                          </Flex>
-                        </WrapItem>
-
-                        <WrapItem>
-                          <Flex
-                            bg={"gray.400"}
-                            borderRadius={10}
-                            p={1.5}
-                            boxShadow={"base"}
-                          >
-                            <Center ml={2} mr={2}>
-                              มิตรภาพ
-                            </Center>
-                            <Editable
-                              bg={"white"}
-                              w={53}
-                              borderRadius={10}
-                              pl={1}
-                              pr={1}
-                              pt={0.5}
-                              pb={0.5}
-                              defaultValue="100%"
-                            >
-                              <EditablePreview />
-                              <EditableInput w={50} />
-                            </Editable>
-                          </Flex>
-                        </WrapItem>
-                      </Wrap>
-                    </Flex>
-                  </VStack>
+                  <About></About>
                 </TabPanel>
 
                 {/* Timeline */}
@@ -683,6 +418,7 @@ export default function profile() {
         onSubmit={(cropped) => handleCoverChange(cropped)}
         aspectRatio={16 / 9}
       />
+      <Footer></Footer>
     </Box>
   );
 }
