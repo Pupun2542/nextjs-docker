@@ -192,8 +192,8 @@ function CustomNavbar() {
             _hover={{
               textDecoration: "none",
             }}
-            onClick={()=>{
-              user.getIdToken().then((token)=>{
+            onClick={() => {
+              user.getIdToken().then((token) => {
                 console.log(token);
               })
             }}
@@ -328,6 +328,7 @@ function CustomNavbar() {
                     cursor="pointer"
                     minW={0}
                     title="Notifications"
+                    onClick={onNotiToggle}
                   >
                     <Center
                       bg="white"
@@ -337,6 +338,7 @@ function CustomNavbar() {
                       size={40}
                       borderColor={"black"}
                       borderWidth={2}
+
                     >
                       <Bell size={28} color="black" />
                       {unreadnoti.length > 0 && (
@@ -548,7 +550,9 @@ function CustomNavbar() {
           </Flex>
         </Flex>
       </Box>
+
       <Chatsidebar user={user} db={db} />
+
       <Box
         overflowY={"auto"}
         w="300px"
@@ -562,23 +566,58 @@ function CustomNavbar() {
         borderRadius={10}
         display={isChatOpen ? "initial" : "none"}
         zIndex={20000}
+        fontFamily={'Mitr'}
       >
         <Box bg={'gray.100'} p={2}>Chat</Box>
         <Box w={'100%'}>
           {chatNotiData ? (
-          chatNotiData.map((data, k) => <ChatNotiIcon data={data} user={user} key={k} />)
-        ) : (
-          <></>
-        )}
+            chatNotiData.map((data, k) => <ChatNotiIcon data={data} user={user} key={k} />)
+          ) : (
+            <></>
+          )}
         </Box>
-        
-        <Center 
-        pt={'2.5'} 
-        pb={'2.5'}
-        _hover={{
-          bg:'gray.200'
-        }}
+
+        <Center
+          pt={'2.5'}
+          pb={'2.5'}
+          _hover={{
+            bg: 'gray.200'
+          }}
         >ดูแชททั้งหมด</Center>
+      </Box>
+
+      <Box
+        overflowY={"auto"}
+        minW="300px"
+        h="auto"
+        bg="white"
+        pos="fixed"
+        top="55px"
+        right="85px"
+        borderWidth={2}
+        borderColor='black'
+        borderRadius={10}
+        display={isNotiOpen ? "initial" : "none"}
+        zIndex={20000}
+        fontFamily={'Mitr'}
+      >
+        <Box bg={'gray.100'} p={2}>Notifications</Box>
+        
+        <Flex p={2}>
+          <Avatar size={'lg'} ></Avatar>
+          <VStack pl={2} w={'100%'} float={'left'}>
+            <Text w={'100%'}>ข้อความระบบ</Text>
+            <Text w={'100%'}>เวลา</Text>
+          </VStack>
+        </Flex>
+
+        <Center
+          pt={'2.5'}
+          pb={'2.5'}
+          _hover={{
+            bg: 'gray.200'
+          }}
+        >ดูแจ้งเตือนทั้งหมด</Center>
       </Box>
     </>
   );
@@ -631,8 +670,8 @@ const ChatNotiIcon = ({ data, user }) => {
       Math.floor(minusDate / (30 * 3600 * 1000)) > 30
     ) {
       return now.getMonth() - sentdate.getMonth() + " เดือน";
-    } else if(Math.floor(minusDate / ( 24* 3600 * 1000)) > 0) {
-      return Math.floor(minusDate / ( 24* 3600 * 1000)) + " วัน"
+    } else if (Math.floor(minusDate / (24 * 3600 * 1000)) > 0) {
+      return Math.floor(minusDate / (24 * 3600 * 1000)) + " วัน"
     } else if (Math.floor(minusDate / (3600 * 1000)) > 0) {
       return Math.floor(minusDate / (3600 * 1000)) + " ชั่วโมง";
     } else if (Math.floor(minusDate / (60 * 1000)) > 0) {
@@ -654,7 +693,7 @@ const ChatNotiIcon = ({ data, user }) => {
       fontFamily={'Mitr'}
       cursor='pointer'
       _hover={{
-        bg:'gray.200'
+        bg: 'gray.200'
       }}
     >
       <Flex justifyContent='space-between' marginLeft={2} marginRight={2}>

@@ -54,6 +54,20 @@ export default function Home() {
       bg={'#F3F3F3'}
       justifySelf={'center'}
       textAlign={['center', 'left']}
+      overflowY={"auto"}
+      maxH={"100vh"}
+      css={{
+        "&::-webkit-scrollbar": {
+          width: "8px",
+        },
+        "&::-webkit-scrollbar-track": {
+          width: "8px",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          background: "#727272",
+          borderRadius: "24px",
+        },
+      }}
     >
       <CustomNavbar />
 
