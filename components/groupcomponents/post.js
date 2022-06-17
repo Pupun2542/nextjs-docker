@@ -115,7 +115,7 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
   const onToggle = () => {
     setStateDataReply(!isOpen, pid);
   };
-  
+
   const [snapshot, loading, error] = useCollection(
     query(
       collection(db, "group", post.gid, "posts", post.pid, "comments"),
@@ -125,7 +125,7 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
   );
 
   let comment = [];
-  if(!loading) {
+  if (!loading) {
     Promise.all(
       snapshot.docs.map(async (doc) => {
         let mappedcommentData = {};
@@ -138,15 +138,15 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
           creator = usr[0];
         }
         mappedcommentData = {
-              ...doc.data(),
-              creator: creator,
-              cid: doc.id,
-              pid: post.pid,
-              gid: post.gid,
+          ...doc.data(),
+          creator: creator,
+          cid: doc.id,
+          pid: post.pid,
+          gid: post.gid,
         };
         comment = [...comment, mappedcommentData];
       })
-    )
+    );
   }
 
   // useEffect(()=>{
@@ -165,34 +165,34 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
   //       if (!snapshot.empty) {
   //         let mappedcommentData = {};
   //         let commentList = [];
-          // Promise.all(
-          //   snapshot.docs.map(async (doc) => {
-          //     let creator = {};
-          //     // console.log(member, doc.data().uid)
-          //     if (member[doc.data().uid]) {
-          //       creator = member[doc.data().uid];
-          //     } else {
-          //       const usr = await getUser([doc.data().uid]);
-          //       creator = usr[0];
-          //     }
-          //     // console.log(getStateData(doc.id), doc.id, postData);
-          //     mappedcommentData = {
-          //       ...mappedcommentData,
-          //       [doc.id]: {
-          //         ...getStateData(doc.id),
-          //         data: {
-          //           ...doc.data(),
-          //           creator: creator,
-          //           cid: doc.id,
-          //           pid: post.pid,
-          //           gid: post.gid,
-          //         },
-          //         love: doc.data().love,
-          //       },
-          //     };
-          //     // setStateData({data: mappedcommentData, love: doc.data().love}, doc.id);
-          //     commentList = [...commentList, doc.id];
-          //   })
+  // Promise.all(
+  //   snapshot.docs.map(async (doc) => {
+  //     let creator = {};
+  //     // console.log(member, doc.data().uid)
+  //     if (member[doc.data().uid]) {
+  //       creator = member[doc.data().uid];
+  //     } else {
+  //       const usr = await getUser([doc.data().uid]);
+  //       creator = usr[0];
+  //     }
+  //     // console.log(getStateData(doc.id), doc.id, postData);
+  //     mappedcommentData = {
+  //       ...mappedcommentData,
+  //       [doc.id]: {
+  //         ...getStateData(doc.id),
+  //         data: {
+  //           ...doc.data(),
+  //           creator: creator,
+  //           cid: doc.id,
+  //           pid: post.pid,
+  //           gid: post.gid,
+  //         },
+  //         love: doc.data().love,
+  //       },
+  //     };
+  //     // setStateData({data: mappedcommentData, love: doc.data().love}, doc.id);
+  //     commentList = [...commentList, doc.id];
+  //   })
   //         ).then(() => {
   //           console.log(mappedcommentData)
   //           setPostData(mappedcommentData);
@@ -502,18 +502,30 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
               {post.view}
             </Button>
           </HStack>
-          {isOpen &&
-            comment?.length > 0 &&
-            comment
-              .map((cmt, i) => (
-                <Box key={i}>
-                    <GroupComment
-                      comment={cmt}
-                      member={member}
-                    />
-                </Box>
-              ))
-              .reverse()}
+          <Box>
+            {isOpen && (
+              <>
+                {post.comment > fetchlimit && (
+                  <Text
+                    decoration="underline"
+                    onClick={() => setFetchlimit(fetchlimit + 20)}
+                    cursor="pointer"
+                  >
+                    Load more
+                  </Text>
+                )}
+                {comment?.length > 0 &&
+                  comment
+                    .map((cmt, i) => (
+                      <Box key={i}>
+                        <GroupComment comment={cmt} member={member} />
+                      </Box>
+                    ))
+                    .reverse()}
+              </>
+            )}
+          </Box>
+
           <Flex mt={2}>
             <Box w={"8%"} mr={1}>
               <Avatar

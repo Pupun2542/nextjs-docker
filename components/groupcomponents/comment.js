@@ -479,14 +479,26 @@ export const GroupComment = ({ comment, member }) => {
           </Button>
         </HStack>
         {/* {console.log(reply)} */}
-        {isOpen &&
-          reply
-            .map((rpy, i) => (
-              <Box key={i}>
-                <GroupReply reply={rpy} key={i} member={member} />
-              </Box>
-            ))
-            .reverse()}
+        {isOpen && (
+          <>
+            {comment.reply > fetchlimit && (
+              <Text
+                decoration="underline"
+                onClick={() => setFetchlimit(fetchlimit + 20)}
+                cursor="pointer"
+              >
+                Load more
+              </Text>
+            )}
+            {reply
+              .map((rpy, i) => (
+                <Box key={i}>
+                  <GroupReply reply={rpy} key={i} member={member} />
+                </Box>
+              ))
+              .reverse()}
+          </>
+        )}
 
         <Flex mt={2}>
           <Box w={"8%"} mr={1}>
