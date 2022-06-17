@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Center,
@@ -11,6 +11,12 @@ import {
   Spacer,
   IconButton,
   Avatar,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Text,
+  Textarea
 } from "@chakra-ui/react";
 import {
   Heart,
@@ -20,24 +26,55 @@ import {
 } from "phosphor-react";
 import { useApp } from "../../src/hook/local";
 import axios from "axios";
+import { PostContext } from "../../pages/group/[id]/dashboard";
 
 export const GroupReply = ({ reply }) => {
-  const [love, setLove] = useState(false);
+
+  const {
+    setStateDataData,
+    setStateDataEditMessage,
+    getStateDataEditMessage,
+    getStateDataLove,
+    setStateDataEdit,
+    getStateDataEdit,
+  } = useContext(PostContext);
+
+  const rid = reply.rid;
+  const love = reply.love;
+  // const love = getStateDataLove(rid);
+  const setLove = (value) =>{
+    // setStateDataLove(value, rid);
+  }
+  const text = reply.message;
+  const setText = (value) =>{
+    setStateDataData({...reply, message: value})
+  }
+  const editMode = getStateDataEdit(rid);
+  const setEditMode = (state) =>{
+    setStateDataEdit(state, rid);
+  }
+  const editMessage = getStateDataEditMessage(rid);
+  const setEditMessage = (value) =>{
+    setStateDataEditMessage(value, rid);
+  }
+
+  // const [love, setLove] = useState(false);
   const creator = reply.creator;
+  // console.log(reply);
   const { auth } = useApp();
-  useEffect(() => {
-    if (reply.love.includes(auth.currentUser.uid)) {
-      setLove(true);
-    }
-    return () => {
-      setLove(false);
-    };
-  }, [reply]);
+  // useEffect(() => {
+  //   if (reply.love.includes(auth.currentUser.uid)) {
+  //     setLove(true);
+  //   }
+  //   return () => {
+  //     setLove(false);
+  //   };
+  // }, [reply]);
 
   const handleDelete = async () => {
     const token = await auth.currentUser.getIdToken();
-    if (replydoc.imageURL) {
-      const path = getpathfromUrl(replydoc.imageURL);
+    if (reply.imageUrl) {
+      const path = getpathfromUrl(reply.imageUrl);
       axios.post(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${reply.gid}/${reply.pid}/comment/${reply.cid}/reply/${reply.rid}/delete`,
         {
@@ -85,7 +122,7 @@ export const GroupReply = ({ reply }) => {
 
   const HandleLove = async () => {
     const token = await auth.currentUser.getIdToken();
-    if (love) {
+    if (love.includes(auth.currentUser.uid)) {
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${reply.gid}/${reply.pid}/comment/${reply.cid}/reply/${reply.rid}/unlove`,
         {},
@@ -96,8 +133,7 @@ export const GroupReply = ({ reply }) => {
         }
       );
       if (res.status === 200) {
-        // setLovecount(lovecount-1)
-        setLove(false);
+        // setLove(love.filter((v,i)=>v !== auth.currentUser.uid))
       }
     } else {
       const res = await axios.post(
@@ -110,8 +146,7 @@ export const GroupReply = ({ reply }) => {
         }
       );
       if (res.status === 200) {
-        // setLovecount(lovecount+1)
-        setLove(true);
+        // setLove([...love, auth.currentUser.uid])
       }
     }
   };
@@ -140,7 +175,47 @@ export const GroupReply = ({ reply }) => {
 
         <Divider />
 
-        <Box m={2}>{reply.message}</Box>
+        {editMode ? (
+          // <InputGroup>
+          <Textarea
+            resize="none"
+            minHeight={11}
+            onKeyDown={(e) => {
+              if (e.key == "Enter" && !e.shiftKey) {
+                handleEdit();
+              } else if (e.key == "Escape") {
+                // if (image != checkImage.current) {
+                //   setImage(checkImage.current);
+                // }
+                setEditMode(false);
+              }
+            }}
+            value={editMessage}
+            onChange={(e) => setEditMessage(e.target.value)}
+            width="100%"
+            placeholder="Write Something"
+            height="45px"
+            backgroundColor="gray.100"
+            mb={2.5}
+          />
+        ) : (
+          //  <InputRightElement>
+          //   <IconButton
+          //     paddingTop={1}
+          //     h={15}
+          //     w={11}
+          //     borderRadius={100}
+          //     onClick={handleFile}
+          //     icon={<ImageSquare size={32} weight="bold" />}
+          //   />
+          // </InputRightElement>
+          // </InputGroup>
+          <Box fontSize={14} minW={"625"} w={"auto"} maxW={600}>
+            <Text whiteSpace="pre-line">
+              {text ? text : ""}
+            </Text>
+          </Box>
+        )}
 
         <Center mt={3} w={"100%"} borderRadius={10} boxShadow={"base"}>
           {reply.imageUrl && (
@@ -171,7 +246,22 @@ export const GroupReply = ({ reply }) => {
         </HStack>
       </Box>
 
-      <IconButton rounded={"full"} icon={<DotsThreeVertical size={28} />} />
+      <Menu>
+        <MenuButton m={2.5} h={10} w={10} borderRadius={100}>
+          <DotsThreeVertical size={30} />
+        </MenuButton>
+        <MenuList>
+          {auth.currentUser.uid == reply.uid ? (
+            <>
+            {/* {console.log(post)} */}
+              <MenuItem onClick={() => setEditMode(true)}>Edit</MenuItem>
+              <MenuItem onClick={handleDelete}>Delete</MenuItem>
+            </>
+          ) : (
+            <MenuItem>Report</MenuItem>
+          )}
+        </MenuList>
+      </Menu>
     </Flex>
   );
 };

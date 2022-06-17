@@ -109,12 +109,6 @@ export default function profile() {
       )
     ).then((docs) => {
       if (!docs.empty) {
-        // docs.docs.map(doc=>{
-        //     // console.log(doc.data())
-        //     if (doc.data().member.includes(id)){
-        //         roomId = doc.data().id
-        //     }
-        // });
         //ถ้าเจอ doc
         const docId = docs.docs.find((v) => v.data().member.includes(id));
         if (docId) {

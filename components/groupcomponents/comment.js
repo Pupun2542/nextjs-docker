@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   Box,
   Center,
@@ -14,6 +14,10 @@ import {
   Avatar,
   useDisclosure,
   Text,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
 import {
   Heart,
@@ -34,101 +38,190 @@ import { GroupReply } from "./reply";
 import { useApp, useUser } from "../../src/hook/local";
 import axios from "axios";
 import { UploadGroupCommentImage } from "../../src/services/filestoreageservice";
+import { PostContext } from "../../pages/group/[id]/dashboard";
+import { useCollection } from "react-firebase-hooks/firestore";
 
-export const GroupComment = ({
-  comment,
-  member,
-  openReply,
-  setOpenReply,
-  onGoingReply,
-  setOnGoingReply,
-}) => {
+export const GroupComment = ({ comment, member }) => {
+  const {
+    getStateData,
+    setStateDataData,
+    getStateDataData,
+    setStateDataEditMessage,
+    getStateDataEditMessage,
+    setStateDataPendingMessage,
+    getStateDataPendingMessage,
+    setStateDataPendingImage,
+    getStateDataPendingImage,
+    getStateDataLove,
+    setStateDataEdit,
+    getStateDataEdit,
+    setStateDataReply,
+    getStateDataReply,
+    setPostData,
+    setStateDataChild,
+    getStateDataChild,
+  } = useContext(PostContext);
   const creator = comment.creator;
   const getUser = useUser();
-  // console.log(comment);
   const { auth, db } = useApp();
-  const { isOpen, onToggle } = useDisclosure({ isOpen: openReply });
-  const [reply, setReply] = useState([]);
   const [fetchlimit, setFetchlimit] = useState(20);
   const inputFileRef = useRef(null);
-  // const [message, setMessage] = useState("");
-  const [love, setLove] = useState(false);
-  // const [lovecount, setLovecount] = useState(0);
-  console.log(onGoingReply);
-  const message = onGoingReply?.message ? onGoingReply.message : "";
-  const setMessage = (msg) => {
-    setOnGoingReply({ ...onGoingReply, message: msg });
+  const cid = comment.cid;
+  const TextareaRef = useRef(null);
+  // console.log(getStateData(cid));
+  // const love = getStateDataLove(cid);
+  // const setLove = (value) => {
+  //   console.log(love, value, cid);
+  // };
+  const love = comment.love;
+  const editMode = getStateDataEdit(cid);
+  const setEditMode = (state) => {
+    setStateDataEdit(state, cid);
   };
-  const image = onGoingReply?.image ? onGoingReply.image : "";
-  const setImage = (img) => {
-    setOnGoingReply({ ...onGoingReply, image: img });
+  const editMessage = getStateDataEditMessage(cid);
+  const setEditMessage = (value) => {
+    setStateDataEditMessage(value, cid);
   };
-  const editMessage = onGoingReply?.message ? onGoingReply.message : "";
-  const setEditComment = (msg) => {
-    setOnGoingReply({ ...onGoingReply, editMessage: msg });
+  const message = getStateDataPendingMessage(cid);
+  const setMessage = (value) => {
+    setStateDataPendingMessage(value, cid);
+  };
+  const image = getStateDataPendingImage(cid);
+  const setImage = (value) => {
+    setStateDataPendingImage(value, cid);
+  };
+  // const reply = getStateDataChild(cid);
+  // const setReply = (value) => {
+  //   setStateDataChild(value, cid);
+  // };
+  const text = comment.message;
+  const setText = (value) => {
+    setStateDataData({ ...comment, message: value });
   };
 
-  useEffect(() => {
-    if (comment.love.includes(auth.currentUser.uid)) {
-      setLove(true);
-    }
-    const unsubscribe = onSnapshot(
-      query(
-        collection(
-          db,
-          "group",
-          comment.gid,
-          "posts",
-          comment.pid,
-          "comments",
-          comment.cid,
-          "replies"
-        ),
-        orderBy("timestamp", "desc"),
-        limit(fetchlimit)
+  const isOpen = getStateDataReply(cid);
+  const onOpen = () => {
+    setStateDataReply(true, cid);
+  };
+  const onClose = () => {
+    setStateDataReply(false, cid);
+  };
+  const onToggle = () => {
+    setStateDataReply(!isOpen, cid);
+  };
+  console.log(comment);
+
+  const [snapshot, loading, error] = useCollection(
+    query(
+      collection(
+        db,
+        "group",
+        comment.gid,
+        "posts",
+        comment.pid,
+        "comments",
+        comment.cid,
+        "replies"
       ),
-      (snaphot) => {
-        if (!snaphot.empty) {
-          let mappedcommentData = [];
-          Promise.all(
-            snaphot.docs.map(async (doc) => {
-              let creator = {};
-              if (member[doc.data().uid]) {
-                creator = member[doc.data().uid];
-              } else {
-                const usr = await getUser([doc.data().uid]);
-                creator = usr[0];
-              }
-              mappedcommentData = [
-                ...mappedcommentData,
-                {
-                  ...doc.data(),
-                  creator: creator,
-                  cid: comment.cid,
-                  pid: comment.pid,
-                  rid: doc.id,
-                  gid: comment.gid,
-                },
-              ];
-            })
-          ).then(() => {
-            setReply(mappedcommentData);
-          });
-        }
-      }
-    );
-    return () => {
-      unsubscribe();
-      setLove(false);
-      setReply([]);
-      // setLovecount(0);
-    };
-  }, [comment]);
+      orderBy("timestamp", "desc"),
+      limit(fetchlimit)
+    )
+  );
 
-  const ToggleReplyTab = () => {
-    setOpenReply(!isOpen);
-    onToggle();
-  };
+  let reply = [];
+  if (!loading) {
+    Promise.all(
+      snapshot.docs.map(async (doc) => {
+        let mappedcommentData = {};
+        let creator = {};
+        // console.log(member, doc.data().uid)
+        if (member[doc.data().uid]) {
+          creator = member[doc.data().uid];
+        } else {
+          const usr = await getUser([doc.data().uid]);
+          creator = usr[0];
+        }
+        mappedcommentData = {
+          ...doc.data(),
+          creator: creator,
+          cid: comment.cid,
+          pid: comment.pid,
+          gid: comment.gid,
+          rid: doc.id,
+        };
+        reply = [...reply, mappedcommentData];
+      })
+    );
+  }
+
+  // useEffect(() => {
+  //   console.log("fetchreply")
+  //   const unsubscribe = onSnapshot(
+  //     query(
+  //       collection(
+  //         db,
+  //         "group",
+  //         comment.gid,
+  //         "posts",
+  //         comment.pid,
+  //         "comments",
+  //         comment.cid,
+  //         "replies"
+  //       ),
+  //       orderBy("timestamp", "desc"),
+  //       limit(fetchlimit)
+  //     ),
+  //     (snapshot) => {
+  //       if (!snapshot.empty) {
+  //         let mappedcommentData = {};
+  //         let commentList = [];
+  //         console.log(cid,getStateData(cid));
+  //         Promise.all(
+  //           snapshot.docs.map(async (doc) => {
+  //             let creator = {};
+  //             // console.log(member, doc.data().uid)
+  //             if (member[doc.data().uid]) {
+  //               creator = member[doc.data().uid];
+  //             } else {
+  //               const usr = await getUser([doc.data().uid]);
+  //               creator = usr[0];
+  //             }
+  //             mappedcommentData = {
+  //               ...mappedcommentData,
+  //               [doc.id]: {
+  //                 ...getStateData(doc.id),
+  //                 data: {
+  //                   ...doc.data(),
+  //                   creator: creator,
+  //                   cid: comment.cid,
+  //                   pid: comment.pid,
+  //                   gid: comment.gid,
+  //                   rid: doc.id,
+  //                 },
+  //                 love: doc.data().love,
+  //               },
+  //             };
+  //             // setStateData({data: mappedcommentData, love: doc.data().love}, doc.id);
+  //             commentList = [...commentList, doc.id];
+  //           })
+  //         ).then(() => {
+  //           setPostData(mappedcommentData);
+  //           setStateDataChild(commentList, cid);
+  //         });
+  //       }
+  //     }
+  //   );
+  //   return () => {
+  //     unsubscribe();
+  //     // setReply([]);
+  //     // setText("");
+  //   };
+  // }, [comment]);
+
+  // const ToggleReplyTab = () => {
+  //   setOpenReply(!isOpen);
+  //   onToggle();
+  // };
 
   const resizeTextArea = (e) => {
     e.target.style.height = "inherit";
@@ -144,7 +237,11 @@ export const GroupComment = ({
     if (!isEmptyOrSpaces(message) || image) {
       let dlurl = "";
       if (image) {
-        dlurl = await UploadGroupCommentImage(image, auth.currentUser.uid, comment.gid);
+        dlurl = await UploadGroupCommentImage(
+          image,
+          auth.currentUser.uid,
+          comment.gid
+        );
       }
       const token = await auth.currentUser.getIdToken();
       axios.post(
@@ -158,13 +255,15 @@ export const GroupComment = ({
       );
       setMessage("");
       setImage("");
+      onOpen();
+      TextareaRef.current?.scrollIntoView();
     }
   };
 
   const handleDelete = async () => {
     const token = await auth.currentUser.getIdToken();
-    if (replydoc.imageURL) {
-      const path = getpathfromUrl(replydoc.imageURL);
+    if (comment.imageUrl) {
+      const path = getpathfromUrl(replydoc.imageUrl);
       axios.post(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${comment.gid}/${comment.pid}/comment/${comment.cid}/delete`,
         {
@@ -194,7 +293,7 @@ export const GroupComment = ({
 
   const handleEdit = async () => {
     const token = await auth.currentUser.getIdToken();
-    axios.post(
+    const res = await axios.post(
       `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${comment.gid}/${comment.pid}/comment/${comment.cid}/update`,
       {
         message: message,
@@ -205,14 +304,19 @@ export const GroupComment = ({
         },
       }
     );
-    setEditMode(false);
+    if (res.status === 200) {
+      setText(editMessage);
+      setEditMode(false);
+    } else {
+      alert(res.data);
+    }
     // setMessage(editMessage);
     // console.log(getpathfromUrl(commentdoc.imageURL))
   };
 
   const HandleLove = async () => {
     const token = await auth.currentUser.getIdToken();
-    if (love) {
+    if (love.includes(auth.currentUser.uid)) {
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${comment.gid}/${comment.pid}/comment/${comment.cid}/unlove`,
         {},
@@ -223,8 +327,7 @@ export const GroupComment = ({
         }
       );
       if (res.status === 200) {
-        // setLovecount(lovecount-1)
-        setLove(false);
+        // setLove(love.filter((v, i) => v !== auth.currentUser.uid));
       }
     } else {
       const res = await axios.post(
@@ -237,13 +340,10 @@ export const GroupComment = ({
         }
       );
       if (res.status === 200) {
-        // setLovecount(lovecount+1)
-        setLove(true);
+        // setLove([...love, auth.currentUser.uid]);
       }
     }
   };
-
-
 
   const handleUploadFile = (e) => {
     const reader = new FileReader();
@@ -284,7 +384,7 @@ export const GroupComment = ({
 
       <Box pl={2} pr={2} w={"90%"}>
         <HStack spacing={4}>
-          <Box ml={2}>{comment.creator.displayName}</Box>
+          <Box ml={2}>{creator.displayName}</Box>
           <Spacer />
           <Box color={"gray.500"} fontSize={14}>
             {parseDate(comment.timestamp)}
@@ -293,9 +393,45 @@ export const GroupComment = ({
 
         <Divider />
 
-        <Box m={2}>
-          <Text whiteSpace="pre-line">{comment.message}</Text>
-        </Box>
+        {editMode ? (
+          // <InputGroup>
+          <Textarea
+            resize="none"
+            minHeight={11}
+            onKeyDown={(e) => {
+              if (e.key == "Enter" && !e.shiftKey) {
+                handleEdit();
+              } else if (e.key == "Escape") {
+                // if (image != checkImage.current) {
+                //   setImage(checkImage.current);
+                // }
+                setEditMode(false);
+              }
+            }}
+            value={editMessage}
+            onChange={(e) => setEditMessage(e.target.value)}
+            width="100%"
+            placeholder="Write Something"
+            height="45px"
+            backgroundColor="gray.100"
+            mb={2.5}
+          />
+        ) : (
+          //  <InputRightElement>
+          //   <IconButton
+          //     paddingTop={1}
+          //     h={15}
+          //     w={11}
+          //     borderRadius={100}
+          //     onClick={handleFile}
+          //     icon={<ImageSquare size={32} weight="bold" />}
+          //   />
+          // </InputRightElement>
+          // </InputGroup>
+          <Box fontSize={14} minW={"625"} w={"auto"} maxW={600}>
+            <Text whiteSpace="pre-line">{text ? text : ""}</Text>
+          </Box>
+        )}
 
         <Center mt={3} w={"100%"} borderRadius={10} boxShadow={"base"}>
           {comment.imageUrl && (
@@ -312,8 +448,14 @@ export const GroupComment = ({
 
         <HStack spacing={4} fontSize={14} color={"GrayText"} pt={2}>
           <Button
-            leftIcon={<Heart weight={love ? "fill" : "regular"} />}
-            color={love ? "red" : "black"}
+            leftIcon={
+              <Heart
+                weight={
+                  love.includes(auth.currentUser.uid) ? "fill" : "regular"
+                }
+              />
+            }
+            color={love.includes(auth.currentUser.uid) ? "red" : "black"}
             width={"40%"}
             fontSize={16}
             fontWeight={"light"}
@@ -321,7 +463,7 @@ export const GroupComment = ({
             variant="solid"
             onClick={HandleLove}
           >
-            {comment.love.length}
+            {love.length}
           </Button>
           <Button
             leftIcon={<ChatCenteredText />}
@@ -331,16 +473,32 @@ export const GroupComment = ({
             fontWeight={"light"}
             boxShadow={"base"}
             variant="solid"
-            onClick={() => ToggleReplyTab()}
+            onClick={onToggle}
           >
             {comment.reply}
           </Button>
         </HStack>
         {/* {console.log(reply)} */}
-        {isOpen &&
-          reply
-            .map((rpy, i) => <GroupReply reply={rpy} key={i} member={member} />)
-            .reverse()}
+        {isOpen && (
+          <>
+            {comment.reply > fetchlimit && (
+              <Text
+                decoration="underline"
+                onClick={() => setFetchlimit(fetchlimit + 20)}
+                cursor="pointer"
+              >
+                Load more
+              </Text>
+            )}
+            {reply
+              .map((rpy, i) => (
+                <Box key={i}>
+                  <GroupReply reply={rpy} key={i} member={member} />
+                </Box>
+              ))
+              .reverse()}
+          </>
+        )}
 
         <Flex mt={2}>
           <Box w={"8%"} mr={1}>
@@ -361,6 +519,7 @@ export const GroupComment = ({
             height="42px"
             backgroundColor="gray.100"
             value={message}
+            ref={TextareaRef}
             onKeyDown={(e) => {
               resizeTextArea(e);
               // if (e.key == "Enter" && !e.shiftKey) {
@@ -407,7 +566,22 @@ export const GroupComment = ({
         )}
       </Box>
 
-      <IconButton rounded={"full"} icon={<DotsThreeVertical size={28} />} />
+      <Menu>
+        <MenuButton m={2.5} h={10} w={10} borderRadius={100}>
+          <DotsThreeVertical size={30} />
+        </MenuButton>
+        <MenuList>
+          {auth.currentUser.uid == comment.uid ? (
+            <>
+              {/* {console.log(post)} */}
+              <MenuItem onClick={() => setEditMode(true)}>Edit</MenuItem>
+              <MenuItem onClick={handleDelete}>Delete</MenuItem>
+            </>
+          ) : (
+            <MenuItem>Report</MenuItem>
+          )}
+        </MenuList>
+      </Menu>
       <Input
         type="file"
         id="file"

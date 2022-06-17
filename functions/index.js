@@ -9,7 +9,7 @@ const { createGroup, updateGroup, deleteGroup, getAllGroup, addPlayer, addPendin
 const { db, admin } = require("./utils/admin");
 const authmw = require("./utils/auth");
 const cors = require("cors");
-const { createPost, updatePost, deletePost, lovePost, unlovePost, getPost, getAllPost } = require("./handlers/posts");
+const { createPost, updatePost, deletePost, lovePost, unlovePost, getPost, getAllPost, getAllMedia } = require("./handlers/posts");
 const { createComment, updateComment, deleteComment, loveComment, unloveComment, getAllComment } = require("./handlers/comments");
 const { createReply, updateReply, deleteReply, loveReply, unloveReply, getAllReply } = require("./handlers/replies");
 const { getuser, getbatchUser } = require("./handlers/user");
@@ -25,7 +25,8 @@ app.use(cors({
   // origin: "https://comuthor-uat-hclhis5lxq-de.a.run.app",
 }));
 
-app.get("/", (req, res)=>{
+app.get("/", async (req, res)=>{
+
 });
 app.post("/", DeletePreviewComment);
 
@@ -57,6 +58,7 @@ app.post("/group/:gid/comment/:cid/reply/:rid/love", authmw, lovePreviewReply);
 app.post("/group/:gid/comment/:cid/reply/:rid/unlove", authmw, unlovePreviewReply);
 app.get("/group/:gid", authmw, getGroup);
 app.get("/group/:gid/comment", authmw, getAllPreviewcomment);
+app.get("/group/:gid/media", authmw, getAllMedia);
 app.get("/groups", authmw, getAllGroup);
 app.post("/post/:gid/create", authmw, createPost);
 app.post("/post/:gid/:pid/update", authmw, updatePost);

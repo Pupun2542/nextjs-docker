@@ -223,28 +223,39 @@ export default function Group() {
     if (user) {
       const token = await user.getIdToken();
       if (data.love === undefined || !data.love.includes(user.uid)) {
-        const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/group/${id}/love`,{},{
-          headers: {
-            Authorization: token,
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${id}/love`,
+          {},
+          {
+            headers: {
+              Authorization: token,
+            },
           }
-        })
+        );
         if (res.status === 200) {
-          setData({...data, love: [...data.love, user.uid]})
+          setData({ ...data, love: [...data.love, user.uid] });
         }
       } else {
-        const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/group/${id}/unlove`,{},{
-          headers: {
-            Authorization: token,
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${id}/unlove`,
+          {},
+          {
+            headers: {
+              Authorization: token,
+            },
           }
-        })
+        );
         console.log(res);
         if (res.status === 200) {
-          console.log(data.love.filter((v,i)=> v !== user.uid))
-          setData({...data, love: data.love.filter((v,i)=> v !== user.uid)});
+          console.log(data.love.filter((v, i) => v !== user.uid));
+          setData({
+            ...data,
+            love: data.love.filter((v, i) => v !== user.uid),
+          });
         }
       }
     }
-  }
+  };
 
   const handleDebugJoin = async () => {
     if (Object.keys(data.member).includes(user.uid)) {
@@ -277,7 +288,7 @@ export default function Group() {
         css={{
           "&::-webkit-scrollbar": {
             width: "8px",
-            height: "8px"
+            height: "8px",
           },
           "&::-webkit-scrollbar-track": {
             width: "8px",
@@ -309,13 +320,21 @@ export default function Group() {
                         w={38}
                         mt={2.5}
                         ml={2.5}
-                        icon={<Heart 
-                          size={32}                   
-                          weight={
-                            data.love?.includes(auth.currentUser.uid) ? "fill" : "regular"
-                          }
-                          color={data.love?.includes(auth.currentUser.uid) ? "red" : "black"}
-                        />}
+                        icon={
+                          <Heart
+                            size={32}
+                            weight={
+                              data.love?.includes(auth.currentUser.uid)
+                                ? "fill"
+                                : "regular"
+                            }
+                            color={
+                              data.love?.includes(auth.currentUser.uid)
+                                ? "red"
+                                : "black"
+                            }
+                          />
+                        }
                         isDisabled={!user}
                         onClick={HandleLove}
                       />
@@ -593,19 +612,19 @@ export default function Group() {
                                     {/* {console.log(data.genre)} */}
                                     {data.times && data.genre.length > 0
                                       ? data.genre.map((genre, index) => (
-                                        <Box
-                                          key={index}
-                                          marginLeft={2.5}
-                                          maxW={600}
-                                          float={"left"}
-                                          bg={'#6768AB'}
-                                          p={2}
-                                          color={'white'}
-                                          borderRadius={'10'}
-                                        >
-                                          {genre}
-                                        </Box>
-                                      ))
+                                          <Box
+                                            key={index}
+                                            marginLeft={2.5}
+                                            maxW={600}
+                                            float={"left"}
+                                            bg={"#6768AB"}
+                                            p={2}
+                                            color={"white"}
+                                            borderRadius={"10"}
+                                          >
+                                            {genre}
+                                          </Box>
+                                        ))
                                       : "ไม่มีหมวดหมู่"}
                                   </Box>
                                 </Flex>
@@ -635,16 +654,16 @@ export default function Group() {
                                   >
                                     {data.times && data.place.length > 0
                                       ? data.place.map((genre, index) => (
-                                        <Box
-                                          key={index}
-                                          className={style.tag}
-                                          marginLeft={2.5}
-                                          maxW={600}
-                                          float={"left"}
-                                        >
-                                          {genre}
-                                        </Box>
-                                      ))
+                                          <Box
+                                            key={index}
+                                            className={style.tag}
+                                            marginLeft={2.5}
+                                            maxW={600}
+                                            float={"left"}
+                                          >
+                                            {genre}
+                                          </Box>
+                                        ))
                                       : "ไม่มีหมวดหมู่"}
                                   </Box>
                                 </Flex>
@@ -675,16 +694,16 @@ export default function Group() {
                                     {/* {console.log(data.genre)} */}
                                     {data.times && data.times.length > 0
                                       ? data.times.map((genre, index) => (
-                                        <Box
-                                          key={index}
-                                          className={style.tag}
-                                          marginLeft={2.5}
-                                          maxW={600}
-                                          float={"left"}
-                                        >
-                                          {genre}
-                                        </Box>
-                                      ))
+                                          <Box
+                                            key={index}
+                                            className={style.tag}
+                                            marginLeft={2.5}
+                                            maxW={600}
+                                            float={"left"}
+                                          >
+                                            {genre}
+                                          </Box>
+                                        ))
                                       : "ไม่มีหมวดหมู่"}
                                   </Box>
                                 </Flex>
@@ -715,17 +734,18 @@ export default function Group() {
                                     {data.tws
                                       ? data.tws.length > 0
                                         ? data.tws.map((tw, index) => (
-                                          <Box
-                                            bg={'#6768AB'}
-                                            p={2}
-                                            borderRadius={10}
-                                            color={'white'}
-                                            m={1}
-                                            key={index}
-                                            float="left">
-                                            {tw}
-                                          </Box>
-                                        ))
+                                            <Box
+                                              bg={"#6768AB"}
+                                              p={2}
+                                              borderRadius={10}
+                                              color={"white"}
+                                              m={1}
+                                              key={index}
+                                              float="left"
+                                            >
+                                              {tw}
+                                            </Box>
+                                          ))
                                         : "ไม่มีคำเตือน"
                                       : "ไม่มีคำเตือน"}
                                   </Box>
@@ -788,8 +808,8 @@ export default function Group() {
                                     >
                                       {data.averageTime
                                         ? data.averageTime +
-                                        " " +
-                                        data.averageTimeUnit
+                                          " " +
+                                          data.averageTimeUnit
                                         : "ไม่มีระยะเวลาโดยประมาณ"}
                                     </Box>
                                   </Flex>
@@ -826,7 +846,7 @@ export default function Group() {
                                   <Center
                                     borderRadius={10}
                                     bg={"#FBBC43"}
-                                    w={'49.5%'}
+                                    w={"49.5%"}
                                     h={63}
                                     p={5}
                                     as={"button"}
@@ -842,10 +862,10 @@ export default function Group() {
                                     shadow={"base"}
                                     borderRadius={10}
                                     bg={color}
-                                    w={'49.5%'}
+                                    w={"49.5%"}
                                     h={63}
                                     p={5}
-                                    color={'white'}
+                                    color={"white"}
                                   >
                                     {data.rating
                                       ? data.rating
@@ -868,7 +888,6 @@ export default function Group() {
                                           ? data.rule
                                           : "ไม่มีกฎและข้อตกลง"}
                                       </Container>
-
                                     </ModalBody>
                                   </ModalContent>
                                 </Modal>
@@ -880,7 +899,7 @@ export default function Group() {
                                   h={63}
                                   w={750}
                                   borderRadius={10}
-                                  borderColor={'black'}
+                                  borderColor={"black"}
                                   borderWidth={2}
                                   fontSize={18}
                                   onClick={
@@ -909,109 +928,143 @@ export default function Group() {
                               </AccordionButton>
                             </h2>
                             <AccordionPanel pb={4}>
-                              <VStack>
-                                <Flex w={"100%"}>
-                                  <Center w={50}></Center>
-                                  <Flex w={"100%"} bg={"white"} boxShadow={"base"} borderRadius={10}>
-                                    <Box
-                                      p={4}
-                                      minW={180}
-                                      borderRightColor={"#C4C4C4"}
-                                      borderRightWidth={3}
+                              {data.registrationlink?.map((link) => (
+                                <VStack>
+                                  <Flex w={"100%"}>
+                                    <Center w={50}></Center>
+                                    <Flex
+                                      w={"100%"}
+                                      bg={"white"}
+                                      boxShadow={"base"}
+                                      borderRadius={10}
                                     >
-                                      <Box>
-                                        <Text float="left">หัวข้อการรับสมัคร</Text>
+                                      <Box
+                                        p={4}
+                                        minW={180}
+                                        borderRightColor={"#C4C4C4"}
+                                        borderRightWidth={3}
+                                      >
+                                        <Box>
+                                          <Text float="left">
+                                            หัวข้อการรับสมัคร
+                                          </Text>
+                                        </Box>
                                       </Box>
-                                    </Box>
 
-                                    <Center w={"100%"} pl={1.5} pr={1.5} position="relative">
-
-                                    </Center>
+                                      <Center
+                                        w={"100%"}
+                                        pl={1.5}
+                                        pr={1.5}
+                                        position="relative"
+                                      >
+                                        {link.name}
+                                      </Center>
+                                    </Flex>
+                                    <Center w={50}></Center>
                                   </Flex>
-                                  <Center w={50}></Center>
-                                </Flex>
 
-                                <Flex w={"100%"}>
-                                  <Center w={50}></Center>
-                                  <VStack w={50} spacing={0}>
-                                    <Box
-                                      mt={2.5}
-                                      h={5}
-                                      w={3.5}
-                                      borderLeftWidth={3}
-                                      borderLeftColor="gray.400"
-                                    ></Box>
-                                    <Box
-                                      borderBottomLeftRadius={10}
-                                      borderLeftWidth={3}
-                                      borderBottomWidth={3}
-                                      borderColor="gray.400"
-                                      h={2}
-                                      w={3.5}
-                                    ></Box>
-                                  </VStack>
-                                  <Flex w={"100%"} bg={"white"} boxShadow={"base"} borderRadius={10}>
-                                    <Center></Center>
-
-                                    <Box
-                                      p={4}
-                                      minW={180}
-                                      borderRightColor={"#C4C4C4"}
-                                      borderRightWidth={3}
+                                  <Flex w={"100%"}>
+                                    <Center w={50}></Center>
+                                    <VStack w={50} spacing={0}>
+                                      <Box
+                                        mt={2.5}
+                                        h={5}
+                                        w={3.5}
+                                        borderLeftWidth={3}
+                                        borderLeftColor="gray.400"
+                                      ></Box>
+                                      <Box
+                                        borderBottomLeftRadius={10}
+                                        borderLeftWidth={3}
+                                        borderBottomWidth={3}
+                                        borderColor="gray.400"
+                                        h={2}
+                                        w={3.5}
+                                      ></Box>
+                                    </VStack>
+                                    <Flex
+                                      w={"100%"}
+                                      bg={"white"}
+                                      boxShadow={"base"}
+                                      borderRadius={10}
                                     >
-                                      <Box>
-                                        <Text float="left">วันที่และเวลา</Text>
+                                      <Center></Center>
+
+                                      <Box
+                                        p={4}
+                                        minW={180}
+                                        borderRightColor={"#C4C4C4"}
+                                        borderRightWidth={3}
+                                      >
+                                        <Box>
+                                          <Text float="left">
+                                            วันที่และเวลา
+                                          </Text>
+                                        </Box>
                                       </Box>
-                                    </Box>
-
-
+                                      <Center
+                                        w={"100%"}
+                                        pl={1.5}
+                                        pr={1.5}
+                                        position="relative"
+                                      >
+                                        {link.fromdate} ถึง {link.todate}
+                                      </Center>
+                                    </Flex>
+                                    <Center w={50}></Center>
                                   </Flex>
-                                  <Center w={50}></Center>
-                                </Flex>
 
-                                <Flex w={"100%"}>
-                                  <Center w={50}></Center>
-                                  <VStack w={50} spacing={0}>
-                                    <Box
-                                      mt={2.5}
-                                      h={5}
-                                      w={3.5}
-                                      borderLeftWidth={3}
-                                      borderLeftColor="gray.400"
-                                    ></Box>
-                                    <Box
-                                      borderBottomLeftRadius={10}
-                                      borderLeftWidth={3}
-                                      borderBottomWidth={3}
-                                      borderColor="gray.400"
-                                      h={2}
-                                      w={3.5}
-                                    ></Box>
-                                  </VStack>
-                                  <Flex w={"100%"} bg={"white"} boxShadow={"base"} borderRadius={10}>
-                                    <Center></Center>
-
-                                    <Box
-                                      p={4}
-                                      minW={180}
-                                      borderRightColor={"#C4C4C4"}
-                                      borderRightWidth={3}
+                                  <Flex w={"100%"}>
+                                    <Center w={50}></Center>
+                                    <VStack w={50} spacing={0}>
+                                      <Box
+                                        mt={2.5}
+                                        h={5}
+                                        w={3.5}
+                                        borderLeftWidth={3}
+                                        borderLeftColor="gray.400"
+                                      ></Box>
+                                      <Box
+                                        borderBottomLeftRadius={10}
+                                        borderLeftWidth={3}
+                                        borderBottomWidth={3}
+                                        borderColor="gray.400"
+                                        h={2}
+                                        w={3.5}
+                                      ></Box>
+                                    </VStack>
+                                    <Flex
+                                      w={"100%"}
+                                      bg={"white"}
+                                      boxShadow={"base"}
+                                      borderRadius={10}
                                     >
-                                      <Box>
-                                        <Text float="left">ลิงก์</Text>
+                                      <Center></Center>
+
+                                      <Box
+                                        p={4}
+                                        minW={180}
+                                        borderRightColor={"#C4C4C4"}
+                                        borderRightWidth={3}
+                                      >
+                                        <Box>
+                                          <Text float="left">ลิงก์</Text>
+                                        </Box>
                                       </Box>
-                                    </Box>
 
-                                    <Center w={"100%"} pl={1.5} pr={1.5} position="relative">
-
-                                    </Center>
+                                      <Center
+                                        w={"100%"}
+                                        pl={1.5}
+                                        pr={1.5}
+                                        position="relative"
+                                      >
+                                        {link.link}
+                                      </Center>
+                                    </Flex>
+                                    <Center w={50}></Center>
                                   </Flex>
-                                  <Center w={50}></Center>
-                                </Flex>
-                              </VStack>
-
-
-
+                                </VStack>
+                              ))}
                             </AccordionPanel>
                           </AccordionItem>
                         </Accordion>
@@ -1024,7 +1077,7 @@ export default function Group() {
                       css={{
                         "&::-webkit-scrollbar": {
                           width: "8px",
-                          height: "8px"
+                          height: "8px",
                         },
                         "&::-webkit-scrollbar-track": {
                           width: "8px",
@@ -1038,8 +1091,8 @@ export default function Group() {
                     >
                       <Container
                         ml={-4}
-                      // w={850} 
-                      // h={500}
+                        // w={850}
+                        // h={500}
                       >
                         {data.doclink && (
                           <Box
@@ -1053,7 +1106,7 @@ export default function Group() {
                             css={{
                               "&::-webkit-scrollbar": {
                                 width: "8px",
-                                height: "8px"
+                                height: "8px",
                               },
                               "&::-webkit-scrollbar-track": {
                                 width: "8px",
@@ -1064,8 +1117,8 @@ export default function Group() {
                                 borderRadius: "24px",
                               },
                             }}
-                          // maxH={"75%"}
-                          // maxW={"70%"}
+                            // maxH={"75%"}
+                            // maxW={"70%"}
                           />
                         )}
                         {/* <Box
@@ -1078,36 +1131,97 @@ export default function Group() {
                     </TabPanel>
 
                     <TabPanel>
-
                       <Center
-                        w={'100%'}
+                        w={"100%"}
                         p={3}
-                        color={'white'}
-                        bg={'#6768AB'}
-                        fontFamily={'Mitr'}
-                        fontSize={'xl'}
+                        color={"white"}
+                        bg={"#6768AB"}
+                        fontFamily={"Mitr"}
+                        fontSize={"xl"}
                         mb={5}
                       >
                         รายชื่อผู้สร้าง
                         <Center pl={1}>[0]</Center>
                       </Center>
-                      <Wrap fontFamily={'Mitr'}>
+                      <Wrap fontFamily={"Mitr"}>
                         <WrapItem>
-                          <Center w='180px' h='180px' bg='gray.100' boxShadow={'base'} rounded={10}>
+                          <Center
+                            w="180px"
+                            h="180px"
+                            bg="gray.100"
+                            boxShadow={"base"}
+                            rounded={10}
+                          >
                             <VStack spacing={0}>
-                              <Center rounded={'full'} bg={'crimson'} w={75} h={75} mb={1} color={'white'}>A</Center>
-                              <Center bg={'#6768AB'} w={120} color={'white'} p={1} borderTopRadius={10} mt={1}>A ant</Center>
-                              <Center bg={'White'} w={120} borderBottomRadius={10} p={1}> Admin</Center>
+                              <Center
+                                rounded={"full"}
+                                bg={"crimson"}
+                                w={75}
+                                h={75}
+                                mb={1}
+                                color={"white"}
+                              >
+                                A
+                              </Center>
+                              <Center
+                                bg={"#6768AB"}
+                                w={120}
+                                color={"white"}
+                                p={1}
+                                borderTopRadius={10}
+                                mt={1}
+                              >
+                                A ant
+                              </Center>
+                              <Center
+                                bg={"White"}
+                                w={120}
+                                borderBottomRadius={10}
+                                p={1}
+                              >
+                                {" "}
+                                Admin
+                              </Center>
                             </VStack>
-
                           </Center>
                         </WrapItem>
                         <WrapItem>
-                          <Center w='180px' h='180px' bg='gray.100' boxShadow={'base'} rounded={10}>
+                          <Center
+                            w="180px"
+                            h="180px"
+                            bg="gray.100"
+                            boxShadow={"base"}
+                            rounded={10}
+                          >
                             <VStack spacing={0}>
-                              <Center rounded={'full'} bg={'tan'} w={75} h={75} mb={1} color={'white'}>B</Center>
-                              <Center bg={'#6768AB'} w={120} color={'white'} p={1} borderTopRadius={10} mt={1}>B Bird</Center>
-                              <Center bg={'White'} w={120} borderBottomRadius={10} p={1}>Staff</Center>
+                              <Center
+                                rounded={"full"}
+                                bg={"tan"}
+                                w={75}
+                                h={75}
+                                mb={1}
+                                color={"white"}
+                              >
+                                B
+                              </Center>
+                              <Center
+                                bg={"#6768AB"}
+                                w={120}
+                                color={"white"}
+                                p={1}
+                                borderTopRadius={10}
+                                mt={1}
+                              >
+                                B Bird
+                              </Center>
+                              <Center
+                                bg={"White"}
+                                w={120}
+                                borderBottomRadius={10}
+                                p={1}
+                              >
+                                Staff
+                              </Center>
                             </VStack>
                           </Center>
                         </WrapItem>
@@ -1117,7 +1231,11 @@ export default function Group() {
                 </Tabs>
               </VStack>
               <Box>
-                <Commentsection gid={id} initialcomment={data.commentcount? data.commentcount : 0} commenters={data.commentuser? data.commentuser: {}}  />
+                <Commentsection
+                  gid={id}
+                  initialcomment={data.commentcount ? data.commentcount : 0}
+                  commenters={data.commentuser ? data.commentuser : {}}
+                />
               </Box>
 
               {/* <Text>TEST 1234</Text> */}

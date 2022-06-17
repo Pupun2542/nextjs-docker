@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, createContext } from "react";
+import React, { useState, useEffect, useRef, createContext, useReducer } from "react";
 import CustomNavbar from "../../../components/navbar";
 
 import {
@@ -41,21 +41,9 @@ import { GroupPost } from "../../../components/groupcomponents/post";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useApp, useUser } from "../../../src/hook/local";
 import { useRouter } from "next/router";
-import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  limit,
-  onSnapshot,
-  orderBy,
-  query,
-  serverTimestamp,
-  where,
-} from "firebase/firestore";
 import axios from "axios";
 import { UploadGroupImage } from "../../../src/services/filestoreageservice";
+import Gallery from "../../../components/groupcomponents/gallery";
 
 // export async function getServerSideProps(context) {
 //   const { params } = context;
@@ -66,7 +54,7 @@ import { UploadGroupImage } from "../../../src/services/filestoreageservice";
 // // console.log("rerender")
 //   return { props: { data } };
 // }
-
+export const PostContext = createContext();
 function dashboard() {
   const [data, setData] = useState(undefined);
   const [orderby, setOrderby] = useState("timestamp");
@@ -84,11 +72,10 @@ function dashboard() {
   const [replyTab, setReplyTab] = useState({});
   const [comment, setComment] = useState({});
   const [editComment, setEditComment] = useState({});
-  const PostContext = createContext();
 
-  const onPostDelete = (k) => {
-    const newpost = post.filter((v, i) => i !== k);
-    setPost(newpost);
+  const onPostDelete = (n) => {
+    const newindex = post.filter((v, i) => i !== n);
+    setPost(newindex);
   };
 
   const fetchPost = async () => {
@@ -102,8 +89,19 @@ function dashboard() {
       }
     );
     if (res.status === 200) {
-      console.log(res.data);
-      setPost(res.data);
+      // console.log(res.data);
+      // setPost(res.data);
+      let item = {};
+      let postId = [];
+      res.data.map((data) => {
+        item = {...item, [data.pid]:{data: data, love: data.love}}
+
+        // setStateData({data: data, love: data.love}, data.pid);
+        postId = [...postId, data.pid];
+      });
+      // console.log(item);
+      setPostData(item);
+      setPost(postId);
     }
   };
   const fetchdata = async () => {
@@ -129,6 +127,7 @@ function dashboard() {
   }, [user, userLoading]);
 
   useEffect(() => {
+    console.log("fetchpost");
     if (data) {
       fetchPost();
     }
@@ -157,6 +156,120 @@ function dashboard() {
     setEditComment({ ...editComment, [id]: state });
   };
 
+
+ const reducer = (state, action) => {
+  switch (action.type) {
+    case "set": {
+      // console.log(action.id, action.value, state[action.id])
+      return {...state, [action.id]:{...state[action.id], ...action.value} }
+    }
+    case "setMultiple": {
+      return {...state, ...action.value}
+    }
+    default: return state;
+  }
+ }
+
+  const [postData, dispatch] = useReducer(reducer, {});
+
+  // useEffect(()=>{
+  //   console.log(postData);
+  // },[postData])
+
+  const setPostData = (value) => {
+    dispatch({type:"setMultiple", value: value});
+  }
+
+  //main
+  const setStateData = (value, id) => {
+    dispatch({type: "set", value: value, id: id})
+  };
+  const getStateData = (id) => {
+    return postData[id];
+  };
+
+  //data
+  const setStateDataData = (value, id) => {
+    dispatch({type: "set", value: {data: value}, id: id})
+  };
+  const getStateDataData = (id) => {
+    return postData[id]?.data;
+  };
+
+  //editMessage
+  const setStateDataEditMessage = (value, id) => {
+    dispatch({type: "set", value: { editMessage: value }, id: id})
+  };
+  const getStateDataEditMessage = (id) => {
+    return postData[id]?.editMessage ? postData[id].editMessage : "";
+  };
+
+  //pendingMessage
+  const setStateDataPendingMessage = (value, id) => {
+    dispatch({type: "set", value: { pendingMessage: value }, id: id})
+  };
+  const getStateDataPendingMessage = (id) => {
+    return postData[id]?.pendingMessage? postData[id].pendingMessage:"";
+  };
+  //pendingImage
+  const setStateDataPendingImage = (value, id) => {
+    dispatch({type: "set", value: { pendingImage: value }, id: id})
+  };
+  const getStateDataPendingImage = (id) => {
+    return postData[id]?.pendingImage;
+  };
+  //love
+  const setStateDataLove = (value, id) => {
+    dispatch({type: "set", value: { love: value }, id: id})
+  };
+  const getStateDataLove = (id) => {
+    return postData[id]?.love ? postData[id]?.love : [];
+  };
+
+  //edit
+  const setStateDataEdit = (state, id) => {
+    dispatch({type: "set", value: { edit: state }, id: id})
+  };
+  const getStateDataEdit = (id) => {
+    return postData[id]?.edit ? postData[id].edit : false;
+  };
+
+  //reply
+  const setStateDataReply = (state, id) => {
+    dispatch({type: "set", value: { reply: state }, id: id})
+  };
+  const getStateDataReply = (id) => {
+    return postData[id]?.reply ? postData[id].reply : false;
+  };
+  //child
+  const setStateDataChild = (value, id) => {
+    dispatch({type: "set", value: { child: value }, id: id})
+  };
+  const getStateDataChild = (id) => {
+    return postData[id]?.child? postData[id].child : [];
+  };
+  const pack = {
+    setStateData,
+    getStateData,
+    setStateDataData,
+    getStateDataData,
+    setStateDataEditMessage,
+    getStateDataEditMessage,
+    setStateDataPendingMessage,
+    getStateDataPendingMessage,
+    setStateDataPendingImage,
+    getStateDataPendingImage,
+    setStateDataLove,
+    getStateDataLove,
+    setStateDataEdit,
+    getStateDataEdit,
+    setStateDataReply,
+    getStateDataReply,
+    postData,
+    setPostData,
+    setStateDataChild,
+    getStateDataChild,
+  };
   const handleImagePaste = (e) => {
     if (e.clipboardData.files[0]) {
       const reader = new FileReader();
@@ -385,11 +498,11 @@ function dashboard() {
                     </Flex>
                     {/* โพสต์ */}
                     {/* {console.log(post)} */}
-                    <PostContext.Provider value={{replyTab, setStateReplyTab, setStateEditMode, }}>
+                    <PostContext.Provider value={pack}>
                       {post &&
                         post.map((apost, i) => (
                           <GroupPost
-                            post={apost}
+                            post={getStateDataData(apost)}
                             key={i}
                             member={data.member}
                             openReply={replyTab}
@@ -483,7 +596,7 @@ function dashboard() {
                   </TabPanel>
 
                   <TabPanel>
-                    <p>Gallery!</p>
+                    <Gallery gid={id} />
                   </TabPanel>
 
                   <TabPanel>
