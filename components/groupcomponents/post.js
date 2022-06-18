@@ -19,6 +19,7 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  VStack,
 } from "@chakra-ui/react";
 import {
   Heart,
@@ -148,65 +149,6 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
       })
     );
   }
-
-  // useEffect(()=>{
-  //   setEditMessage(post.message)
-  // },[editMode])
-  // useEffect(() => {
-  //   console.log("effect");
-  //   // setText(post.message);
-  //   const unsubscribe = onSnapshot(
-  //     query(
-  //       collection(db, "group", post.gid, "posts", post.pid, "comments"),
-  //       orderBy("timestamp", "desc"),
-  //       limit(fetchlimit)
-  //     ),
-  //     (snapshot) => {
-  //       if (!snapshot.empty) {
-  //         let mappedcommentData = {};
-  //         let commentList = [];
-  // Promise.all(
-  //   snapshot.docs.map(async (doc) => {
-  //     let creator = {};
-  //     // console.log(member, doc.data().uid)
-  //     if (member[doc.data().uid]) {
-  //       creator = member[doc.data().uid];
-  //     } else {
-  //       const usr = await getUser([doc.data().uid]);
-  //       creator = usr[0];
-  //     }
-  //     // console.log(getStateData(doc.id), doc.id, postData);
-  //     mappedcommentData = {
-  //       ...mappedcommentData,
-  //       [doc.id]: {
-  //         ...getStateData(doc.id),
-  //         data: {
-  //           ...doc.data(),
-  //           creator: creator,
-  //           cid: doc.id,
-  //           pid: post.pid,
-  //           gid: post.gid,
-  //         },
-  //         love: doc.data().love,
-  //       },
-  //     };
-  //     // setStateData({data: mappedcommentData, love: doc.data().love}, doc.id);
-  //     commentList = [...commentList, doc.id];
-  //   })
-  //         ).then(() => {
-  //           console.log(mappedcommentData)
-  //           setPostData(mappedcommentData);
-  //           setStateDataChild(commentList, pid);
-  //         });
-  //       }
-  //     }
-  //   );
-  //   return () => {
-  //     unsubscribe();
-  //     // setComment([]);
-  //     // setText("");
-  //   };
-  // }, [post]);
 
   const resizeTextArea = (e) => {
     if (!isEmptyOrSpaces(message)) {
@@ -363,256 +305,249 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
 
   if (post) {
     return (
-      <Flex mt={3} p={2} boxShadow={"base"} bg={"white"} borderRadius={10}>
-        <Box w={"6%"}>
+      <Flex mt={3} p={2} boxShadow={"base"} bg={"white"} borderRadius={10} direction={'column'}>
+        <Flex w={'100%'}>
           <Avatar
             mr={2}
             rounded={"100%"}
-            h={42}
-            w={42}
+            h={50}
+            w={50}
             src={creator.photoURL}
             name={creator.displayName}
           />
-        </Box>
-        <Box pl={2} pr={2} w={"90%"}>
-          <HStack spacing={4}>
-            <Box>{creator.displayName}</Box>
 
-            {/* <Tag variant="solid" colorScheme="gray">
-              Day 1
-            </Tag>
-  
-            <Tag variant="solid" colorScheme="gray">
-              Cut scene
-            </Tag> */}
-          </HStack>
+          <VStack w={'100%'} spacing={0}>
+            <Box fontSize={18} w={'100%'}>{creator.displayName}</Box>
 
-          <HStack spacing={4} fontSize={14} color={"GrayText"}>
-            <Box>{creator.displayName}</Box>
-            <Box>
-              {post.timestamp ? parseDate(post.timestamp) : "01/01/1970:00.00"}
-            </Box>
-          </HStack>
+            <Flex w={'100%'} fontSize={14} color={'gray.400'}>
+              <Box>{creator.displayName}</Box>
+              <Spacer />
+              <Box float={'right'}>
+                {post.timestamp ? parseDate(post.timestamp) : "01/01/1970:00.00"}
+              </Box>
+            </Flex>
+            <Divider mb={2} />
 
-          <Divider mb={2} />
-
-          {editMode ? (
-            // <InputGroup>
-            <Textarea
-              resize="none"
-              minHeight={11}
-              onKeyDown={(e) => {
-                if (e.key == "Enter" && !e.shiftKey) {
-                  handleEdit();
-                } else if (e.key == "Escape") {
-                  // if (image != checkImage.current) {
-                  //   setImage(checkImage.current);
-                  // }
-                  setEditMode(false);
-                }
-              }}
-              value={editMessage}
-              onChange={(e) => setEditMessage(e.target.value)}
-              width="100%"
-              placeholder="Write Something"
-              height="45px"
-              backgroundColor="gray.100"
-              mb={2.5}
-            />
-          ) : (
-            //  <InputRightElement>
-            //   <IconButton
-            //     paddingTop={1}
-            //     h={15}
-            //     w={11}
-            //     borderRadius={100}
-            //     onClick={handleFile}
-            //     icon={<ImageSquare size={32} weight="bold" />}
-            //   />
-            // </InputRightElement>
-            // </InputGroup>
-            <Box fontSize={14} minW={"625"} w={"auto"} maxW={600}>
-              <Text whiteSpace="pre-line">{text ? text : ""}</Text>
-            </Box>
-          )}
-
-          <Center mt={3} w={"100%"} borderRadius={10} boxShadow={"base"}>
-            <Box
-              display={"flex"}
-              overflowX="auto"
-              overflowY="hidden"
-              whiteSpace="nowrap"
-              alignContent={"center"}
-            >
-              {post.imageUrl &&
-                post.imageUrl.map((img, k) => (
-                  <Image
-                    key={k}
-                    size={300}
-                    color="#100e0e"
-                    weight="light"
-                    src={img}
-                    objectFit={"contain"}
-                    display={"inline-block"}
+            <Flex justifyContent={'center'}>
+              <Flex direction={'column'} >
+                {editMode ? (
+                  // <InputGroup>
+                  <Textarea
+                    w={'80%'}
+                    resize="none"
+                    minHeight={11}
+                    onKeyDown={(e) => {
+                      if (e.key == "Enter" && !e.shiftKey) {
+                        handleEdit();
+                      } else if (e.key == "Escape") {
+                        // if (image != checkImage.current) {
+                        //   setImage(checkImage.current);
+                        // }
+                        setEditMode(false);
+                      }
+                    }}
+                    value={editMessage}
+                    onChange={(e) => setEditMessage(e.target.value)}
+                    width="100%"
+                    placeholder="Write Something"
+                    height="45px"
+                    backgroundColor="gray.100"
+                    mb={2.5}
                   />
-                ))}
-            </Box>
-          </Center>
-
-          <HStack spacing={4} fontSize={14} color={"GrayText"} pt={2}>
-            <Button
-              leftIcon={
-                <Heart
-                  weight={
-                    love.includes(auth.currentUser.uid) ? "fill" : "regular"
-                  }
-                />
-              }
-              color={love.includes(auth.currentUser.uid) ? "red" : "black"}
-              width={"40%"}
-              fontSize={16}
-              fontWeight={"light"}
-              boxShadow={"base"}
-              variant="solid"
-              onClick={HandleLove}
-            >
-              {getStateDataLove(post.pid).length}
-            </Button>
-            <Button
-              leftIcon={<ChatCenteredText />}
-              color="black"
-              width={"100%"}
-              fontSize={16}
-              fontWeight={"light"}
-              boxShadow={"base"}
-              variant="solid"
-              onClick={onToggle}
-            >
-              {post.comment > comment?.length ? post.comment : comment?.length}
-            </Button>
-            <Button
-              leftIcon={<Eye />}
-              color="black"
-              width={"40%"}
-              fontSize={16}
-              fontWeight={"light"}
-              boxShadow={"base"}
-              variant="solid"
-            >
-              {post.view}
-            </Button>
-          </HStack>
-          <Box>
-            {isOpen && (
-              <>
-                {post.comment > fetchlimit && (
-                  <Text
-                    decoration="underline"
-                    onClick={() => setFetchlimit(fetchlimit + 20)}
-                    cursor="pointer"
-                  >
-                    Load more
-                  </Text>
+                ) : (
+                  <Box w={'100%'} fontSize={16}>
+                    <Text whiteSpace="pre-line">{text ? text : ""}</Text>
+                  </Box>
                 )}
-                {comment?.length > 0 &&
-                  comment
-                    .map((cmt, i) => (
-                      <Box key={i}>
-                        <GroupComment comment={cmt} member={member} />
-                      </Box>
-                    ))
-                    .reverse()}
-              </>
-            )}
-          </Box>
 
-          <Flex mt={2}>
-            <Box w={"8%"} mr={1}>
-              <Avatar
-                mr={2}
-                rounded={"100%"}
-                h={42}
-                w={42}
-                src={auth.currentUser.photoURL}
-                name={auth.currentUser.displayName}
-              />
-            </Box>
-            <Textarea
-              resize="none"
-              minHeight={11}
-              width="100%"
-              placeholder="Write Something"
-              height="42px"
-              backgroundColor="gray.100"
-              value={message}
-              ref={TextareaRef}
-              onKeyDown={(e) => {
-                resizeTextArea(e);
-                // if (e.key == "Enter" && !e.shiftKey) {
-                //   handleSent();
-                // }
-              }}
-              onChange={(e) => setMessage(e.target.value)}
-              onPaste={handleImagePaste}
-            />
-            <Box pl={2} whiteSpace="nowrap">
-              <IconButton
-                rounded={"full"}
-                icon={<ImageSquare size={28} />}
-                mr={2}
-                onClick={handleFile}
-              />
-              <IconButton
-                rounded={"full"}
-                icon={<PaperPlaneRight size={28} />}
-                onClick={handleSent}
-              />
-            </Box>
-          </Flex>
-          {image && (
-            <Box pos={"relative"}>
-              <Image
-                src={image}
-                width="250px"
-                height="250px"
-                onClick={() => setModalOpen(true)}
-                objectFit="cover"
-              />
-              <IconButton
-                icon={<X size={16} color="black" />}
-                position="absolute"
-                top={0}
-                left={200}
-                backgroundColor="transparent"
-                _hover={{ backgroundColor: "transparent" }}
-                onClick={() => setImage(null)}
-              ></IconButton>
-            </Box>
-          )}
-        </Box>
-        <Menu>
-          <MenuButton m={2.5} h={10} w={10} borderRadius={100}>
-            <DotsThreeVertical size={30} />
-          </MenuButton>
-          <MenuList>
-            {auth.currentUser.uid == post.uid ? (
-              <>
-                {/* {console.log(post)} */}
-                <MenuItem onClick={() => setEditMode(true)}>Edit</MenuItem>
-                <MenuItem onClick={handleDelete}>Delete</MenuItem>
-              </>
-            ) : (
-              <MenuItem>Report</MenuItem>
-            )}
-          </MenuList>
-        </Menu>
-        <Input
-          type="file"
-          id="file"
-          ref={inputFileRef}
-          display="none"
-          onChange={(e) => handleUploadFile(e)}
-        />
+                <Center mt={3} w={"100%"} borderRadius={10} boxShadow={"base"}>
+                  <Box
+                    display={"flex"}
+                    overflowX="auto"
+                    overflowY="hidden"
+                    whiteSpace="nowrap"
+                    alignContent={"center"}
+                  >
+                    {post.imageUrl &&
+                      post.imageUrl.map((img, k) => (
+                        <Image
+                          key={k}
+                          size={300}
+                          color="#100e0e"
+                          weight="light"
+                          src={img}
+                          objectFit={"contain"}
+                          display={"inline-block"}
+                          borderRadius={10}
+                        />
+                      ))}
+                  </Box>
+                </Center>
+
+                <HStack spacing={4} w={'100%'} fontSize={14} color={"GrayText"} pt={2}>
+                  <Button
+                    leftIcon={
+                      <Heart
+                        weight={
+                          love.includes(auth.currentUser.uid) ? "fill" : "regular"
+                        }
+                      />
+                    }
+                    color={love.includes(auth.currentUser.uid) ? "#EA4545" : "black"}
+                    width={"40%"}
+                    fontSize={16}
+                    fontWeight={"light"}
+                    boxShadow={"base"}
+                    variant="solid"
+                    onClick={HandleLove}
+                  >
+                    {getStateDataLove(post.pid).length}
+                  </Button>
+                  <Button
+                    leftIcon={<ChatCenteredText />}
+                    color="black"
+                    width={"100%"}
+                    fontSize={16}
+                    fontWeight={"light"}
+                    boxShadow={"base"}
+                    variant="solid"
+                    onClick={onToggle}
+                  >
+                    {post.comment > comment?.length ? post.comment : comment?.length}
+                  </Button>
+                  <Button
+                    leftIcon={<Eye />}
+                    color="black"
+                    width={"40%"}
+                    fontSize={16}
+                    fontWeight={"light"}
+                    boxShadow={"base"}
+                    variant="solid"
+                  >
+                    {post.view}
+                  </Button>
+                </HStack>
+
+                <Box>
+                  {isOpen && (
+                    <>
+                      {post.comment > fetchlimit && (
+                        <Text
+                          decoration="underline"
+                          onClick={() => setFetchlimit(fetchlimit + 20)}
+                          cursor="pointer"
+                        >
+                          Load more
+                        </Text>
+                      )}
+                      {comment?.length > 0 &&
+                        comment
+                          .map((cmt, i) => (
+                            <Box key={i}>
+                              <GroupComment comment={cmt} member={member} />
+                            </Box>
+                          ))
+                          .reverse()}
+                    </>
+                  )}
+                </Box>
+
+                <Flex mt={2}>
+                  <Box w={"8%"} mr={1}>
+                    <Avatar
+                      mr={2}
+                      rounded={"100%"}
+                      h={42}
+                      w={42}
+                      src={auth.currentUser.photoURL}
+                      name={auth.currentUser.displayName}
+                    />
+                  </Box>
+                  <Textarea
+                    resize="none"
+                    minHeight={11}
+                    width="100%"
+                    placeholder="Write Something"
+                    height="42px"
+                    backgroundColor="gray.100"
+                    value={message}
+                    ref={TextareaRef}
+                    onKeyDown={(e) => {
+                      resizeTextArea(e);
+                      // if (e.key == "Enter" && !e.shiftKey) {
+                      //   handleSent();
+                      // }
+                    }}
+                    onChange={(e) => setMessage(e.target.value)}
+                    onPaste={handleImagePaste}
+                  />
+                  <Box pl={2} whiteSpace="nowrap">
+                    <IconButton
+                      rounded={"full"}
+                      icon={<ImageSquare size={28} />}
+                      mr={2}
+                      onClick={handleFile}
+                    />
+                    <IconButton
+                      rounded={"full"}
+                      icon={<PaperPlaneRight size={28} />}
+                      onClick={handleSent}
+                    />
+                  </Box>
+                </Flex>
+                {image && (
+                  <Box pos={"relative"}>
+                    <Image
+                      src={image}
+                      width="250px"
+                      height="250px"
+                      onClick={() => setModalOpen(true)}
+                      objectFit="cover"
+                    />
+                    <IconButton
+                      icon={<X size={16} color="black" />}
+                      position="absolute"
+                      top={0}
+                      left={200}
+                      backgroundColor="transparent"
+                      _hover={{ backgroundColor: "transparent" }}
+                      onClick={() => setImage(null)}
+                    ></IconButton>
+                  </Box>
+                )}
+
+                <Input
+                  type="file"
+                  id="file"
+                  ref={inputFileRef}
+                  display="none"
+                  onChange={(e) => handleUploadFile(e)}
+                />
+              </Flex>
+            </Flex>
+
+          </VStack>
+
+          <Menu>
+            <MenuButton ml={5}>
+              <IconButton icon={<DotsThreeVertical size={20} />} rounded={'full'} />
+
+            </MenuButton>
+            <MenuList>
+              {auth.currentUser.uid == post.uid ? (
+                <>
+                  {/* {console.log(post)} */}
+                  <MenuItem onClick={() => setEditMode(true)}>Edit</MenuItem>
+                  <MenuItem onClick={handleDelete}>Delete</MenuItem>
+                </>
+              ) : (
+                <MenuItem>Report</MenuItem>
+              )}
+            </MenuList>
+          </Menu>
+
+        </Flex>
+
       </Flex>
     );
   } else {
