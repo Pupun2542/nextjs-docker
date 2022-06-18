@@ -575,8 +575,10 @@ function CustomNavbar() {
         <Box bg={"gray.100"} p={2}>
           Notifications
         </Box>
-
-        <Notitab notidata={notidata} />
+        
+        <Flex direction={'column'}>
+          <Notitab bg={'facebook'} notidata={notidata} />
+        </Flex>
 
         <Center
           pt={"2.5"}

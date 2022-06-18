@@ -156,16 +156,16 @@ const Notitab = ({ notidata }) => {
   // console.log(header)
 
   return (
-    <Flex p={2}>
+    <Flex p={2} direction={'column'}>
       {newNotiData.map((data) => (
-        <Box onClick={()=>router.push(data.path)} cursor="pointer">
+        <Flex onClick={()=>router.push(data.path)} cursor="pointer">
           {/* {console.log(data)} */}
           <Avatar size={"lg"} src={data.triggerer.photoURL}></Avatar>
           <VStack pl={2} w={"100%"} float={"left"}>
             <Text w={"100%"}>{data.message}</Text>
             <Text w={"100%"}>{data.time}</Text>
           </VStack>
-        </Box>
+        </Flex>
       ))}
     </Flex>
   );
