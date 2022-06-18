@@ -17,9 +17,11 @@ function MyApp({ Component, pageProps }) {
       global: () => ({
         "::-webkit-scrollbar": {
           width: "8px",
+          height: "8px",
         },
         "::-webkit-scrollbar-track": {
           width: "8px",
+          height: "8px",
         },
         "::-webkit-scrollbar-thumb": {
           background: "#727272",

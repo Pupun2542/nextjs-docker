@@ -16,7 +16,8 @@ import {
   MenuList,
   MenuItem,
   Text,
-  Textarea
+  Textarea,
+  VStack,
 } from "@chakra-ui/react";
 import {
   Heart,
@@ -42,19 +43,19 @@ export const GroupReply = ({ reply }) => {
   const rid = reply.rid;
   const love = reply.love;
   // const love = getStateDataLove(rid);
-  const setLove = (value) =>{
+  const setLove = (value) => {
     // setStateDataLove(value, rid);
   }
   const text = reply.message;
-  const setText = (value) =>{
-    setStateDataData({...reply, message: value})
+  const setText = (value) => {
+    setStateDataData({ ...reply, message: value })
   }
   const editMode = getStateDataEdit(rid);
-  const setEditMode = (state) =>{
+  const setEditMode = (state) => {
     setStateDataEdit(state, rid);
   }
   const editMessage = getStateDataEditMessage(rid);
-  const setEditMessage = (value) =>{
+  const setEditMessage = (value) => {
     setStateDataEditMessage(value, rid);
   }
 
@@ -152,117 +153,154 @@ export const GroupReply = ({ reply }) => {
   };
 
   return (
-    <Flex mt={3} p={2} boxShadow={"base"} w={"100%"}>
-      <Box w={"8%"}>
-        <Avatar
-          mr={2}
-          rounded={"100%"}
-          h={42}
-          w={42}
-          src={creator.photoURL}
-          name={creator.displayName}
-        />
-      </Box>
+    <Flex w={'100%'}>
+      <Center m={2}>
+        <VStack spacing={0}>
+          <Box
+            borderWidth={2}
+            borderColor={'gray.400'}
+            h={10}
+            ml={-4}
+          ></Box>
+          <Box
+            borderWidth={2}
+            borderColor={'gray.400'}
+            borderBottomLeftRadius={15}
+            w={5}
+          ></Box>
+        </VStack>
+      </Center>
 
-      <Box pl={2} pr={2} w={"84.5%"}>
-        <HStack spacing={4}>
-          <Box ml={2}>{creator.displayName}</Box>
-          <Spacer />
-          <Box color={"gray.500"} fontSize={14}>
-            {parseDate(reply.timestamp)}
-          </Box>
-        </HStack>
-
-        <Divider />
-
-        {editMode ? (
-          // <InputGroup>
-          <Textarea
-            resize="none"
-            minHeight={11}
-            onKeyDown={(e) => {
-              if (e.key == "Enter" && !e.shiftKey) {
-                handleEdit();
-              } else if (e.key == "Escape") {
-                // if (image != checkImage.current) {
-                //   setImage(checkImage.current);
-                // }
-                setEditMode(false);
-              }
-            }}
-            value={editMessage}
-            onChange={(e) => setEditMessage(e.target.value)}
-            width="100%"
-            placeholder="Write Something"
-            height="45px"
-            backgroundColor="gray.100"
-            mb={2.5}
+      <Flex
+        mt={3}
+        p={2}
+        boxShadow={"base"}
+        w={"100%"}
+        direction={'column'}
+        float={'right'}
+        borderRadius={10}
+      >
+        <Flex w={"100%"}>
+          <Avatar
+            mr={2}
+            rounded={"100%"}
+            h={50}
+            w={50}
+            src={creator.photoURL}
+            name={creator.displayName}
           />
-        ) : (
-          //  <InputRightElement>
-          //   <IconButton
-          //     paddingTop={1}
-          //     h={15}
-          //     w={11}
-          //     borderRadius={100}
-          //     onClick={handleFile}
-          //     icon={<ImageSquare size={32} weight="bold" />}
-          //   />
-          // </InputRightElement>
-          // </InputGroup>
-          <Box fontSize={14} minW={"625"} w={"auto"} maxW={600}>
-            <Text whiteSpace="pre-line">
-              {text ? text : ""}
-            </Text>
-          </Box>
-        )}
 
-        <Center mt={3} w={"100%"} borderRadius={10} boxShadow={"base"}>
-          {reply.imageUrl && (
-            <Image
-              size={300}
-              color="#100e0e"
-              weight="light"
-              src={reply.imageUrl}
-              objectFit={"contain"}
-              display={"inline-block"}
-            />
-          )}
-        </Center>
+          <VStack pl={2} pr={2} w={"100%"} spacing={0}>
+            <Box fontSize={18} w={'100%'}>{creator.displayName}</Box>
+            <Flex w={'100%'} fontSize={14} color={'gray.400'}>
+              <Box>{creator.displayName}</Box>
+              <Spacer />
+              <Box float={'right'}>
+                {parseDate(reply.timestamp)}
+              </Box>
+            </Flex>
+            <Divider mb={2} />
 
-        <HStack spacing={4} fontSize={14} color={"GrayText"} pt={2}>
-          <Button
-            leftIcon={<Heart />}
-            color="black"
-            width={"40%"}
-            fontSize={16}
-            fontWeight={"light"}
-            boxShadow={"base"}
-            variant="solid"
-            onClick={HandleLove}
-          >
-            {reply.love.length}
-          </Button>
-        </HStack>
-      </Box>
+            <Flex justifyContent={'center'} w={'100%'}>
+              <Flex direction={'column'} w={'100%'}>
+                {editMode ? (
+                  // <InputGroup>
+                  <Textarea
+                    w={'100%'}
+                    resize="none"
+                    minHeight={11}
+                    onKeyDown={(e) => {
+                      if (e.key == "Enter" && !e.shiftKey) {
+                        handleEdit();
+                      } else if (e.key == "Escape") {
+                        // if (image != checkImage.current) {
+                        //   setImage(checkImage.current);
+                        // }
+                        setEditMode(false);
+                      }
+                    }}
+                    value={editMessage}
+                    onChange={(e) => setEditMessage(e.target.value)}
+                    width="100%"
+                    placeholder="Write Something"
+                    height="45px"
+                    backgroundColor="gray.100"
+                    mb={2.5}
+                  />
+                ) : (
+                  //  <InputRightElement>
+                  //   <IconButton
+                  //     paddingTop={1}
+                  //     h={15}
+                  //     w={11}
+                  //     borderRadius={100}
+                  //     onClick={handleFile}
+                  //     icon={<ImageSquare size={32} weight="bold" />}
+                  //   />
+                  // </InputRightElement>
+                  // </InputGroup>
+                  <Box fontSize={14} w={'100%'}>
+                    <Text w={'100%'} whiteSpace="pre-line">
+                      {text ? text : ""}
+                    </Text>
+                  </Box>
+                )}
 
-      <Menu>
-        <MenuButton m={2.5} h={10} w={10} borderRadius={100}>
-          <DotsThreeVertical size={30} />
-        </MenuButton>
-        <MenuList>
-          {auth.currentUser.uid == reply.uid ? (
-            <>
-            {/* {console.log(post)} */}
-              <MenuItem onClick={() => setEditMode(true)}>Edit</MenuItem>
-              <MenuItem onClick={handleDelete}>Delete</MenuItem>
-            </>
-          ) : (
-            <MenuItem>Report</MenuItem>
-          )}
-        </MenuList>
-      </Menu>
+                <Center mt={3} w={"100%"} borderRadius={10} boxShadow={"base"}>
+                  {reply.imageUrl && (
+                    <Image
+                      size={300}
+                      color="#100e0e"
+                      weight="light"
+                      src={reply.imageUrl}
+                      objectFit={"contain"}
+                      display={"inline-block"}
+                    />
+                  )}
+                </Center>
+
+                <HStack spacing={4} fontSize={14} color={"GrayText"} pt={2}>
+                  <Button
+                    leftIcon={<Heart />}
+                    color="black"
+                    width={"40%"}
+                    fontSize={16}
+                    fontWeight={"light"}
+                    boxShadow={"base"}
+                    variant="solid"
+                    onClick={HandleLove}
+                  >
+                    {reply.love.length}
+                  </Button>
+                </HStack>
+              </Flex>
+            </Flex>
+
+
+          </VStack>
+
+          <Menu>
+            <MenuButton m={2.5} h={10} w={10} borderRadius={100}>
+            <IconButton icon={<DotsThreeVertical size={20} />} rounded={'full'} />
+            </MenuButton>
+            <MenuList>
+              {auth.currentUser.uid == reply.uid ? (
+                <>
+                  {/* {console.log(post)} */}
+                  <MenuItem onClick={() => setEditMode(true)}>Edit</MenuItem>
+                  <MenuItem onClick={handleDelete}>Delete</MenuItem>
+                </>
+              ) : (
+                <MenuItem>Report</MenuItem>
+              )}
+            </MenuList>
+          </Menu>
+        </Flex>
+      </Flex>
+
+
     </Flex>
+
   );
 };
 

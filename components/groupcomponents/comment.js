@@ -18,6 +18,7 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  VStack,
 } from "@chakra-ui/react";
 import {
   Heart,
@@ -370,135 +371,222 @@ export const GroupComment = ({ comment, member }) => {
   };
 
   return (
-    <Flex mt={3} p={2} boxShadow={"base"} w={"100%"}>
-      <Box w={"7%"}>
-        <Avatar
-          mr={2}
-          rounded={"100%"}
-          h={42}
-          w={42}
-          src={creator.photoURL}
-          name={creator.displayName}
-        />
-      </Box>
 
-      <Box pl={2} pr={2} w={"90%"}>
-        <HStack spacing={4}>
-          <Box ml={2}>{creator.displayName}</Box>
-          <Spacer />
-          <Box color={"gray.500"} fontSize={14}>
-            {parseDate(comment.timestamp)}
-          </Box>
-        </HStack>
+    <Flex>
 
-        <Divider />
+      <Center m={2}>
+        <VStack spacing={0}>
+          <Box
+            borderWidth={3}
+            borderColor={'gray.400'}
+            h={10}
+            ml={-3.5}
+          ></Box>
+          <Box
+            borderWidth={3}
+            borderColor={'gray.400'}
+            borderBottomLeftRadius={10}
+            w={5}
+          ></Box>
+        </VStack>
+      </Center>
 
-        {editMode ? (
-          // <InputGroup>
-          <Textarea
-            resize="none"
-            minHeight={11}
-            onKeyDown={(e) => {
-              if (e.key == "Enter" && !e.shiftKey) {
-                handleEdit();
-              } else if (e.key == "Escape") {
-                // if (image != checkImage.current) {
-                //   setImage(checkImage.current);
-                // }
-                setEditMode(false);
-              }
-            }}
-            value={editMessage}
-            onChange={(e) => setEditMessage(e.target.value)}
-            width="100%"
-            placeholder="Write Something"
-            height="45px"
-            backgroundColor="gray.100"
-            mb={2.5}
+      <Flex
+        mt={3}
+        p={2}
+        boxShadow={"base"}
+        direction={'column'}
+        float={'right'}
+        borderRadius={10}
+        w={'95%'}
+      >
+
+        <Flex w={"100%"}>
+          <Avatar
+            mr={2}
+            rounded={"100%"}
+            h={50}
+            w={50}
+            src={creator.photoURL}
+            name={creator.displayName}
           />
-        ) : (
-          //  <InputRightElement>
-          //   <IconButton
-          //     paddingTop={1}
-          //     h={15}
-          //     w={11}
-          //     borderRadius={100}
-          //     onClick={handleFile}
-          //     icon={<ImageSquare size={32} weight="bold" />}
-          //   />
-          // </InputRightElement>
-          // </InputGroup>
-          <Box fontSize={14} minW={"625"} w={"auto"} maxW={600}>
-            <Text whiteSpace="pre-line">{text ? text : ""}</Text>
-          </Box>
-        )}
 
-        <Center mt={3} w={"100%"} borderRadius={10} boxShadow={"base"}>
-          {comment.imageUrl && (
-            <Image
-              size={300}
-              color="#100e0e"
-              weight="light"
-              src={comment.imageUrl}
-              objectFit={"contain"}
-              display={"inline-block"}
-            />
-          )}
-        </Center>
+          <VStack pl={2} pr={2} w={"100%"} spacing={0}>
+            <Box fontSize={18} w={'100%'}>{creator.displayName}</Box>
 
-        <HStack spacing={4} fontSize={14} color={"GrayText"} pt={2}>
-          <Button
-            leftIcon={
-              <Heart
-                weight={
-                  love.includes(auth.currentUser.uid) ? "fill" : "regular"
-                }
-              />
-            }
-            color={love.includes(auth.currentUser.uid) ? "red" : "black"}
-            width={"40%"}
-            fontSize={16}
-            fontWeight={"light"}
-            boxShadow={"base"}
-            variant="solid"
-            onClick={HandleLove}
-          >
-            {love.length}
-          </Button>
-          <Button
-            leftIcon={<ChatCenteredText />}
-            color="black"
-            width={"100%"}
-            fontSize={16}
-            fontWeight={"light"}
-            boxShadow={"base"}
-            variant="solid"
-            onClick={onToggle}
-          >
-            {comment.reply}
-          </Button>
-        </HStack>
-        {/* {console.log(reply)} */}
-        {isOpen && (
-          <>
-            {comment.reply > fetchlimit && (
-              <Text
-                decoration="underline"
-                onClick={() => setFetchlimit(fetchlimit + 20)}
-                cursor="pointer"
-              >
-                Load more
-              </Text>
-            )}
-            {reply
-              .map((rpy, i) => (
-                <Box key={i}>
-                  <GroupReply reply={rpy} key={i} member={member} />
-                </Box>
-              ))
-              .reverse()}
-          </>
-        )}
+            <Flex w={'100%'} fontSize={14} color={'gray.400'}>
+              <Box>{creator.displayName}</Box>
+              <Spacer />
+              <Box float={'right'}>
+                {parseDate(comment.timestamp)}
+              </Box>
+            </Flex>
+            <Divider mb={2} />
+
+            <Flex justifyContent={'center'} w={'100%'}>
+              <Flex direction={'column'} w={'100%'}>
+                {editMode ? (
+                  // <InputGroup>
+                  <Textarea
+                    w={'100%'}
+                    resize="none"
+                    minHeight={11}
+                    onKeyDown={(e) => {
+                      if (e.key == "Enter" && !e.shiftKey) {
+                        handleEdit();
+                      } else if (e.key == "Escape") {
+                        // if (image != checkImage.current) {
+                        //   setImage(checkImage.current);
+                        // }
+                        setEditMode(false);
+                      }
+                    }}
+                    value={editMessage}
+                    onChange={(e) => setEditMessage(e.target.value)}
+                    width="100%"
+                    placeholder="Write Something"
+                    height="45px"
+                    backgroundColor="gray.100"
+                    mb={2.5}
+                  />
+                ) : (
+                  //  <InputRightElement>
+                  //   <IconButton
+                  //     paddingTop={1}
+                  //     h={15}
+                  //     w={11}
+                  //     borderRadius={100}
+                  //     onClick={handleFile}
+                  //     icon={<ImageSquare size={32} weight="bold" />}
+                  //   />
+                  // </InputRightElement>
+                  // </InputGroup>
+                  <Box fontSize={14} w={'100%'}>
+                    <Text w={'100%'} whiteSpace="pre-line">{text ? text : ""}</Text>
+                  </Box>
+                )}
+
+                <Center mt={3} w={"100%"} borderRadius={10} boxShadow={"base"}>
+                  {comment.imageUrl && (
+                    <Image
+                      size={300}
+                      color="#100e0e"
+                      weight="light"
+                      src={comment.imageUrl}
+                      objectFit={"contain"}
+                      display={"inline-block"}
+                    />
+                  )}
+                </Center>
+
+                <HStack spacing={4} fontSize={14} color={"GrayText"} pt={2}>
+                  <Button
+                    leftIcon={
+                      <Heart
+                        weight={
+                          love.includes(auth.currentUser.uid) ? "fill" : "regular"
+                        }
+                      />
+                    }
+                    color={love.includes(auth.currentUser.uid) ? "#EA4545" : "black"}
+                    width={"40%"}
+                    fontSize={16}
+                    fontWeight={"light"}
+                    boxShadow={"base"}
+                    variant="solid"
+                    onClick={HandleLove}
+                  >
+                    {love.length}
+                  </Button>
+                  <Button
+                    leftIcon={<ChatCenteredText />}
+                    color="black"
+                    width={"100%"}
+                    fontSize={16}
+                    fontWeight={"light"}
+                    boxShadow={"base"}
+                    variant="solid"
+                    onClick={onToggle}
+                  >
+                    {comment.reply}
+                  </Button>
+                </HStack>
+                {/* {console.log(reply)} */}
+                {isOpen && (
+                  <>
+                    {comment.reply > fetchlimit && (
+                      <Text
+                        decoration="underline"
+                        onClick={() => setFetchlimit(fetchlimit + 20)}
+                        cursor="pointer"
+                      >
+                        Load more
+                      </Text>
+                    )}
+                    {reply
+                      .map((rpy, i) => (
+                        <Box key={i}>
+                          <GroupReply reply={rpy} key={i} member={member} />
+                        </Box>
+                      ))
+                      .reverse()}
+                  </>
+                )}
+
+
+                {image && (
+                  <Box pos={"relative"}>
+                    <Image
+                      src={image}
+                      width="250px"
+                      height="250px"
+                      onClick={() => setModalOpen(true)}
+                      objectFit="cover"
+                    />
+                    <IconButton
+                      icon={<X size={16} color="black" />}
+                      position="absolute"
+                      top={0}
+                      left={200}
+                      backgroundColor="transparent"
+                      _hover={{ backgroundColor: "transparent" }}
+                      onClick={() => setImage(null)}
+                    ></IconButton>
+                  </Box>
+                )}
+              </Flex>
+            </Flex>
+
+
+          </VStack>
+
+          <Menu>
+            <MenuButton m={2.5} h={10} w={10} borderRadius={100}>
+              <IconButton icon={<DotsThreeVertical size={20} />} rounded={'full'} />
+            </MenuButton>
+            <MenuList>
+              {auth.currentUser.uid == comment.uid ? (
+                <>
+                  {/* {console.log(post)} */}
+                  <MenuItem onClick={() => setEditMode(true)}>Edit</MenuItem>
+                  <MenuItem onClick={handleDelete}>Delete</MenuItem>
+                </>
+              ) : (
+                <MenuItem>Report</MenuItem>
+              )}
+            </MenuList>
+          </Menu>
+
+
+
+          <Input
+            type="file"
+            id="file"
+            ref={inputFileRef}
+            display="none"
+            onChange={(e) => handleUploadFile(e)}
+          />
+        </Flex>
 
         <Flex mt={2}>
           <Box w={"8%"} mr={1}>
@@ -544,52 +632,10 @@ export const GroupComment = ({ comment, member }) => {
             />
           </Box>
         </Flex>
-        {image && (
-          <Box pos={"relative"}>
-            <Image
-              src={image}
-              width="250px"
-              height="250px"
-              onClick={() => setModalOpen(true)}
-              objectFit="cover"
-            />
-            <IconButton
-              icon={<X size={16} color="black" />}
-              position="absolute"
-              top={0}
-              left={200}
-              backgroundColor="transparent"
-              _hover={{ backgroundColor: "transparent" }}
-              onClick={() => setImage(null)}
-            ></IconButton>
-          </Box>
-        )}
-      </Box>
 
-      <Menu>
-        <MenuButton m={2.5} h={10} w={10} borderRadius={100}>
-          <DotsThreeVertical size={30} />
-        </MenuButton>
-        <MenuList>
-          {auth.currentUser.uid == comment.uid ? (
-            <>
-              {/* {console.log(post)} */}
-              <MenuItem onClick={() => setEditMode(true)}>Edit</MenuItem>
-              <MenuItem onClick={handleDelete}>Delete</MenuItem>
-            </>
-          ) : (
-            <MenuItem>Report</MenuItem>
-          )}
-        </MenuList>
-      </Menu>
-      <Input
-        type="file"
-        id="file"
-        ref={inputFileRef}
-        display="none"
-        onChange={(e) => handleUploadFile(e)}
-      />
+      </Flex>
     </Flex>
+
   );
 };
 

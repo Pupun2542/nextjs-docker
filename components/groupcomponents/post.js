@@ -326,14 +326,14 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
                 {post.timestamp ? parseDate(post.timestamp) : "01/01/1970:00.00"}
               </Box>
             </Flex>
-            <Divider mb={2} />
+            <Divider  />
 
-            <Flex justifyContent={'center'}>
-              <Flex direction={'column'} >
+            <Flex justifyContent={'center'} w={'100%'}>
+              <Flex direction={'column'} w={'100%'}>
                 {editMode ? (
                   // <InputGroup>
                   <Textarea
-                    w={'80%'}
+                    w={'100%'}
                     resize="none"
                     minHeight={11}
                     onKeyDown={(e) => {
