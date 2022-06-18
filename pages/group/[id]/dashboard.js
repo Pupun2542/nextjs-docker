@@ -327,23 +327,7 @@ function dashboard() {
   // console.log(loading, data);
   if (!loading && data) {
     return (
-      <Box
-        overflowY={"auto"}
-        // maxH={'960'}
-        maxH={"100vh"}
-        css={{
-          "&::-webkit-scrollbar": {
-            width: "8px",
-          },
-          "&::-webkit-scrollbar-track": {
-            width: "8px",
-          },
-          "&::-webkit-scrollbar-thumb": {
-            background: "#727272",
-            borderRadius: "24px",
-          },
-        }}
-      >
+      <Box>
         <CustomNavbar />
 
         <Flex pt={55} fontFamily={"mitr"} justifyContent={'center'} boxShadow='base'>

@@ -61,21 +61,7 @@ export default function Groups() {
       return (
         <Box
           bg={'#F3F3F3'}
-          overflowY={"auto"}
           minH={950}
-          maxH={"100vh"}
-          css={{
-            "&::-webkit-scrollbar": {
-              width: "8px",
-            },
-            "&::-webkit-scrollbar-track": {
-              width: "8px",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              background: "#727272",
-              borderRadius: "24px",
-            },
-          }}
         >
 
           <CustomNavbar />

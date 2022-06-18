@@ -280,26 +280,7 @@ export default function Group() {
 
   return (
     <Box>
-      <Box
-        bg={"#FFFFFF"}
-        overflowY={"auto"}
-        // maxH={'960'}
-        maxH={"100vh"}
-        css={{
-          "&::-webkit-scrollbar": {
-            width: "8px",
-            height: "8px",
-          },
-          "&::-webkit-scrollbar-track": {
-            width: "8px",
-            height: "8px",
-          },
-          "&::-webkit-scrollbar-thumb": {
-            background: "#727272",
-            borderRadius: "24px",
-          },
-        }}
-      >
+      <Box bg={"#FFFFFF"}>
         <CustomNavbar />
         {!loading && data && (
           <Flex>

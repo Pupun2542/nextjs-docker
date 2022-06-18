@@ -59,7 +59,7 @@ export default function profile() {
   const [editCover, setEditCover] = useState("");
   const [editAvartarMode, setEditAvatarMode] = useState(false);
   const [editCoverMode, setEditCoverMode] = useState(false);
-  const [value, setValue] = React.useState('1')
+  const [value, setValue] = React.useState("1");
 
   const loaduserDetail = async () => {
     if (!loading) {
@@ -76,7 +76,7 @@ export default function profile() {
     gender: false,
     age: false,
     work: false,
-  })
+  });
 
   useEffect(() => {
     // console.log(id);
@@ -184,25 +184,7 @@ export default function profile() {
   };
 
   return (
-    <Box
-      fontFamily={"Mitr"}
-      overflowY={"auto"}
-      maxH={"100vh"}
-      css={{
-        "&::-webkit-scrollbar": {
-          width: "8px",
-          height: "8px"
-        },
-        "&::-webkit-scrollbar-track": {
-          width: "8px",
-        },
-        "&::-webkit-scrollbar-thumb": {
-          background: "#727272",
-          borderRadius: "24px",
-        },
-      }}
-    >
-
+    <Box fontFamily={"Mitr"}>
       <CustomNavbar />
       {/* {user&&(
         <Chatsidebar db={db} user={user} forcedopenTab={newtab}/>
@@ -222,7 +204,7 @@ export default function profile() {
               maxW={1000}
               h={400}
               fontSize={30}
-              boxShadow={'base'}
+              boxShadow={"base"}
               borderBottomRadius={10}
               onClick={() => setEditCoverMode(true)}
             >
@@ -235,7 +217,16 @@ export default function profile() {
               />
             </Center>
             <Flex borderBottomRadius={10} bg={"white"} boxShadow={"base"}>
-              <Center rounded={'full'} ml={-10} p={2} mt={-20} w={157} h={157} bg={'white'} boxShadow={'base'}>
+              <Center
+                rounded={"full"}
+                ml={-10}
+                p={2}
+                mt={-20}
+                w={157}
+                h={157}
+                bg={"white"}
+                boxShadow={"base"}
+              >
                 <Avatar
                   w={150}
                   h={150}
@@ -248,8 +239,7 @@ export default function profile() {
                 ></Avatar>
               </Center>
 
-
-              <Flex w={770} m={2} p={2} >
+              <Flex w={770} m={2} p={2}>
                 <Flex flexDir={"column"} fontFamily={"Mitr"} w={"75%"}>
                   {userDetail && (
                     <Box fontFamily={"Mitr"} fontSize={30}>
@@ -264,10 +254,7 @@ export default function profile() {
                     </Box>
                   )}
 
-                  <Box>
-                    ตรงนี้คือ Profile Description!!
-                  </Box>
-
+                  <Box>ตรงนี้คือ Profile Description!!</Box>
                 </Flex>
 
                 <Spacer />
@@ -327,7 +314,6 @@ export default function profile() {
 
             <Tabs w={"100%"} bg={"tomato2"} isFitted spacing={0}>
               <TabList borderColor={"gray.400"} p={2}>
-                
                 <Tab
                   _selected={{ color: "white", bg: "#9A9AB0" }}
                   isDisabled
@@ -371,7 +357,6 @@ export default function profile() {
               </TabList>
 
               <TabPanels>
-                
                 {/* Timeline */}
                 <TabPanel>
                   <p>one!</p>

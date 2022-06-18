@@ -7,23 +7,30 @@ import {
   NotificationProvider,
   GroupNotiProvider,
 } from "../src/hook/local";
-import { useMediaQuery } from "@chakra-ui/react";
+import { extendTheme, useMediaQuery } from "@chakra-ui/react";
 import { ChakraProvider } from "@chakra-ui/react";
 import Head from "next/head";
 
 function MyApp({ Component, pageProps }) {
-  const theme = {
+  const theme = extendTheme({
     styles: {
-      global: {
-        "html, body": {
-          scrollbars: {},
+      global: () => ({
+        "::-webkit-scrollbar": {
+          width: "8px",
         },
-      },
+        "::-webkit-scrollbar-track": {
+          width: "8px",
+        },
+        "::-webkit-scrollbar-thumb": {
+          background: "#727272",
+          borderRadius: "24px",
+        },
+      }),
     },
-  };
+  })
 
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <AppProvider>
         <NotificationProvider>
           <UserProvider>

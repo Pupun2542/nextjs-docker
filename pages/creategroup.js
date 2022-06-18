@@ -61,11 +61,7 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
-import {
-  Plus,
-  Minus,
-  ArrowRight,
-} from "phosphor-react";
+import { Plus, Minus, ArrowRight } from "phosphor-react";
 import GroupSidebar from "../components/GroupSidebar";
 import Footer from "../components/footer";
 import { Createcommuform } from "../components/commuforms/createcommuform";
@@ -76,19 +72,21 @@ export default function CreateGroup() {
   const [user, loading, error] = useAuthState(auth);
   const Router = useRouter();
   const store = getStorage(app);
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     if (!loading && !user) {
       Router.push("/login");
     } else {
-      if (user){
-        user.getIdToken().then((token)=>{
+      if (user) {
+        user.getIdToken().then((token) => {
           // console.log(`token : ${token}`);
-          axios.get(`${process.env.NEXT_PUBLIC_USE_API_URL}/`,{headers: {'authorization': token}}).then(
-            (res)=> console.log(res)
-          )
-        })
+          axios
+            .get(`${process.env.NEXT_PUBLIC_USE_API_URL}/`, {
+              headers: { authorization: token },
+            })
+            .then((res) => console.log(res));
+        });
       }
     }
   }, [user, loading]);
@@ -179,7 +177,11 @@ export default function CreateGroup() {
           });
         });
       } else {
-        toUpdate = { ...toUpdate, banner: "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2Fimageplaceholder.png?alt=media&token=e3a54ee9-8d20-4471-8f4f-7157ac972757" };
+        toUpdate = {
+          ...toUpdate,
+          banner:
+            "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/resource%2Fimageplaceholder.png?alt=media&token=e3a54ee9-8d20-4471-8f4f-7157ac972757",
+        };
       }
       if (docfile) {
         const storageref = ref(
@@ -218,44 +220,24 @@ export default function CreateGroup() {
       setAvergeTime("");
       setAvergeTimeUnit("");
       setType("");
-      setDocfile(null)
+      setDocfile(null);
       Router.push("/group/" + docRef.id);
     } else {
       alert("กรุณาใส่ชื่อ ชื่อย่อ และคำอธิบายคอมมู");
     }
   };
 
-
-
   if (loading) {
-    <Text>Loding User</Text>
+    <Text>Loding User</Text>;
   }
 
   if (user) {
     return (
-      <Box 
-        bg="#FFFFFF"
-        overflowY={"auto"}
-        // maxH={'960'}
-        maxH={"100vh"}
-        css={{
-          "&::-webkit-scrollbar": {
-            width: "8px",
-          },
-          "&::-webkit-scrollbar-track": {
-            width: "8px",
-          },
-          "&::-webkit-scrollbar-thumb": {
-            background: "#727272",
-            borderRadius: "24px",
-          },
-        }}
-      >
+      <Box bg="#FFFFFF">
         <CustomNavbar />
         <Box pt={50}>
           <Createcommuform uid={user.uid} />
         </Box>
-        
 
         {/* module zone */}
 
@@ -264,22 +246,19 @@ export default function CreateGroup() {
           <ModalContent>
             <ModalHeader>Modal Title</ModalHeader>
             <ModalCloseButton />
-            <ModalBody>
-              Test
-            </ModalBody>
+            <ModalBody>Test</ModalBody>
 
             <ModalFooter>
-              <Button colorScheme='blue' mr={3} onClick={onClose}>
+              <Button colorScheme="blue" mr={3} onClick={onClose}>
                 Close
               </Button>
             </ModalFooter>
           </ModalContent>
         </Modal>
 
-
         <Footer></Footer>
       </Box>
     );
   }
-  return (<></>)
+  return <></>;
 }
