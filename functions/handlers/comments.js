@@ -25,7 +25,7 @@ exports.createComment = async (req, res) =>{
         follower: admin.firestore.FieldValue.arrayUnion(user),
       });
       const postdoc = await postref.get();
-      sendNotifications(postdoc.data().follower, 102, user, postdoc.data().name, "", `${req.params.gid}/${req.params.pid}/${cmtref.id}`);
+      sendNotifications(postdoc.data().follower, 102, user, req.params.gid, "", `${req.params.gid}/${req.params.pid}/${cmtref.id}`);
       return res.status(200).send("create comment success");
     } else {
       res.status(403).send("forbidden");

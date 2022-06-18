@@ -38,9 +38,9 @@ exports.createPost = (req, res) => {
                   doc.data().member,
                   "101",
                   user,
-                  doc.data().name,
+                  req.params.gid,
                   "",
-                  `${doc.id}/${ref.id}`,
+                  `group/${req.params.gid}/dashboard?pid=${ref.id}`,
               );
               return res.status(200).send("create post success");
             })
@@ -53,7 +53,7 @@ exports.createPost = (req, res) => {
     // console.log(req.body);
     // return res.status(200).send(req.body.message);
   } else {
-    return res.status(401).send("unauthorized " + req.user);
+    return res.status(401).send("unauthorized");
   }
 };
 
@@ -78,8 +78,9 @@ exports.updatePost = (req, res) => {
             });
       } else if (!doc.exists) {
         return res.status(404).send("post not found");
+      } else {
+        return res.status(401).send("unauthorized");
       }
-      return res.status(401).send("unauthorized");
     });
   } else {
     res.status(401).send("unauthorized");
@@ -131,16 +132,14 @@ exports.lovePost = (req, res) => {
               love: admin.firestore.FieldValue.arrayUnion(req.user.uid),
             })
             .then(() => {
-              groupref.get().then((gdoc) => {
-                sendNotifications(
-                    doc.data().uid,
-                    "104",
-                    user,
-                    gdoc.data().name,
-                    "",
-                    `${doc.id}/${req.params.pid}`,
-                );
-              });
+              sendNotifications(
+                  doc.data().uid,
+                  "104",
+                  user,
+                  req.params.gid,
+                  "",
+                  `group/${req.params.gid}/dashboard?pid=${req.params.pid}`,
+              );
               return res.status(200).send("update post success");
             })
             .catch((e) => {

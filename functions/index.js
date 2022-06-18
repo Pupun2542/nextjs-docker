@@ -99,11 +99,12 @@ exports.onNotificationAdd = functions.firestore
           .collection(`userDetail/${target}/notification`)
           .add({
             notitype: snap.data().notitype,
-            triggerer: snap.data().triggerer,
+            triggerer: [snap.data().triggerer],
             group: snap.data().group,
             object: snap.data().object,
             timestamp: snap.data().timestamp,
             readed: false,
+            path: snap.data().path,
           });
         }
         },
@@ -114,24 +115,16 @@ exports.onNotificationAdd = functions.firestore
         .collection(`userDetail/${sendTo}/notification`)
         .add({
           notitype: snap.data().notitype,
-          triggerer: snap.data().triggerer,
+          triggerer: [snap.data().triggerer],
           group: snap.data().group,
           object: snap.data().object,
           timestamp: snap.data().timestamp,
           readed: false,
+          path: snap.data().path,
         });
       }
     }
   });
-
-  // exports.onCommuUpdate = functions.firestore.document("group/{groupId}").onUpdate((snap, context)=>{
-  //   // todo
-  // });
-
-  // exports.onCommuCommentCreate = functions.firestore.document("group/{groupId}/comments/{commentId}").onCreate((snap, context)=>{
-  //   // todo
-  // });
-
 
   /* พวกนี้จะใช้ */
 //   exports.onPostCreate = functions.firestore.document("posts/{postId}/").onCreate((snap, context)=>{

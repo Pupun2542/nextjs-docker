@@ -13,13 +13,15 @@ exports.createPreviewComment = (req, res) => {
       replycount: 0,
       love: [],
       imageURL: req.body.imageURL,
-    }).then((doc)=>{
+    }).then((ref)=>{
       groupref.get().then((doc)=>{
-        sendNotifications(doc.data().member, "201", req.user.uid, doc.data().name, "", doc.id);
+        const reciever = (doc.data().follower? [...doc.data().staff, ...doc.data().follower] : doc.data().staff);
+        sendNotifications(reciever, "201", req.user.uid, doc.id, "", `group/${doc.id}?cid=${ref.id}`);
       });
       groupref.update({
         commentcount: admin.firestore.FieldValue.increment(1),
         commentuser: admin.firestore.FieldValue.arrayUnion(req.user.uid),
+        follower: admin.firestore.FieldValue.arrayUnion(req.user.uid),
       });
       return res.status(200).send("created comment");
     });
@@ -83,9 +85,10 @@ exports.lovePreviewComment = async (req, res) =>{
     const commentnref= db.collection("group").doc(req.params.gid).collection("comments").doc(req.params.cid);
     const comment = await commentnref.get();
     if (comment.exists) {
-      commentnref.update({
+      await commentnref.update({
         love: admin.firestore.FieldValue.arrayUnion(req.user.uid),
       });
+      sendNotifications(comment.data().uid, "203", req.user.uid, req.params.gid, "", `group/${req.params.gid}?cid=${req.params.cid}`);
     } else {
       return res.status(404).send("comment not found");
     }
@@ -136,7 +139,6 @@ exports.getAllPreviewcomment = async (req, res) => {
         },
       };
     });
-    // console.log(mappedcreator["OH2BEJiq8OQ7FtKwbu2WAS8oJ2Z2"]);
     data = data.map((dat)=>({
       ...dat,
       creator: mappedcreator[dat.uid],
