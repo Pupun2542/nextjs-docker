@@ -432,7 +432,10 @@ function CustomNavbar() {
                   {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
                 </Button> */}
 
-                <Loadthumbnail />
+                <Center as="button" onClick={() => router.push("/profile/" + user.uid)}>
+                  <Loadthumbnail />
+                </Center>
+                
 
                 {user && (
                   <Menu>
@@ -494,7 +497,7 @@ function CustomNavbar() {
                         _hover={{
                           backgroundColor: "gray.300",
                         }}
-                        onClick={() => router.push("/profile/" + user.uid)}
+                        isDisabled
                       >
                         Account Settings
                       </MenuItem>
