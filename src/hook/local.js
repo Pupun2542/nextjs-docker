@@ -128,15 +128,13 @@ export const NotificationProvider = ({ children }) => {
         limit(20)
       );
       const unsubscribe = onSnapshot(q, (snapshot) => {
-        setNotidata(snapshot.docs.map((doc) => doc.data()));
+        setNotidata(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
       });
       return () => unsubscribe();
     }
   }, [loading, user]);
   useEffect(() => {
-    // console.log(user);
     if (!loading && user) {
-      // console.log(user.uid)
       const q = query(
         collection(db, "chatrooms"),
         where("member", "array-contains", user.uid),
@@ -144,7 +142,7 @@ export const NotificationProvider = ({ children }) => {
         limit(50)
       );
       const unsubscribe = onSnapshot(q, (snapshot) => {
-        console.log(snapshot.docs);
+        // console.log(snapshot.docs);
         setChatNotidata(
           snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
         );
@@ -167,7 +165,7 @@ const initialUser = {
 const userReducer = (state, action) => {
   switch (action.type) {
     case "addUser":
-      console.log(state.data, action.docdata)
+      // console.log(state.data, action.docdata)
       return {
         ...state,
         // data: {...state.data, [action.uid]:action.payload}
@@ -190,7 +188,7 @@ export const UserProvider = ({ children }) => {
           // console.log("search ", user)
           if (user){
             users = [...users, user];
-            console.log("found ", users)
+            // console.log("found ", users)
             newuid = newuid.filter((v,i)=>v!=id);
           }
         });
@@ -204,7 +202,7 @@ export const UserProvider = ({ children }) => {
       }
 
       if (newuid.length > 0) {
-        console.log(users.length, uid.length)
+        // console.log(users.length, uid.length)
 
         // let docData = await getDocs(
         //     query(collection(db, "userDetail"), where("uid", "in", newuid))
@@ -212,20 +210,20 @@ export const UserProvider = ({ children }) => {
         // let userDetail = [];
         // if (!docData.empty) {
         //   userDetail = docData.docs.map((doc) => doc.data());
-        console.log("new:", newuid)
+        // console.log("new:", newuid)
         const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/user/bactchget/`, {
           users: newuid,
         })
         
         let docdata = res.data
-        console.log("get:", docdata)
+        // console.log("get:", docdata)
           DataDispatcher({ type: "addUser", docdata });
-          console.log("new:", users)
+          // console.log("new:", users)
           users = [...users, ...docdata]
           return users;
         
       } else {
-        console.log("found: ",users)
+        // console.log("found: ",users)
         return users;
       }
     }
@@ -242,16 +240,16 @@ const initialGroup = {
 const groupNotiReducer = (state, action) => {
   switch (action.type) {
     case "addGroup":
-      // console.log(state.data, action.userDetail)
+      console.log(action)
       return {
         ...state,
         // data: {...state.data, [action.uid]:action.payload}
-        data: [...state.data, ...action.tosend],
+        data: [...state.data, action.tosend],
       };
   }
 };
 
-export const groupNotiProvider = ({ children }) => {
+export const GroupNotiProvider = ({ children }) => {
   const [data, DataDispatcher] = useReducer(groupNotiReducer, initialGroup);
 
   const getGroupHeader = async (groupId) => {
@@ -260,22 +258,24 @@ export const groupNotiProvider = ({ children }) => {
     if (group) {
       return group
     } else {
+      console.log(groupId);
       const snapshot = await getDoc(doc(db, "group", groupId));
       if (snapshot.exists){
         const res = snapshot.data()
+        console.log(res);
         const tosend = {
-          name: res.communame,
+          name: res.name,
           thumbnail: res.banner,
-          groupId: groupId
+          gid: groupId
         }
-        DataDispatcher({ type: "addUser", tosend })
+        DataDispatcher({ type: "addGroup", tosend })
         return tosend;
       }
       return undefined;
     }
   };
   return (
-    <UserContext.Provider value={getGroupHeader}>{children}</UserContext.Provider>
+    <GroupNotiHeaderContext.Provider value={getGroupHeader}>{children}</GroupNotiHeaderContext.Provider>
   );
 };
 

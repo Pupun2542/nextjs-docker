@@ -86,7 +86,7 @@ exports.updateGroup = (req, res) => {
       commentuser: [],
     }).then(() => {
       docref.get().then((doc)=>{
-        sendNotifications([...doc.data().staff, ...doc.data().pinned], "002", user, doc.id, "", `group/${doc.id}/`);
+        sendNotifications([...doc.data().staff, ...doc.data().pinned], "002", user, req.params.id, "", `group/${req.params.id}`);
       });
       return res.status(200).send("update group sucessful");
     }).catch((e) => {
@@ -132,7 +132,7 @@ exports.addPlayer = (req, res)=>{
           return doc.ref.update({
             "member": admin.firestore.FieldValue.arrayUnion(id),
           }).then(()=>{
-            sendNotifications(doc.data().staff, "007", user, doc.id, id, `group/${doc.id}/dashboard`);
+            sendNotifications(doc.data().staff, "007", user, req.params.id, id, `group/${req.params.id}/dashboard`);
             return res.status(200).send("add new member success");
           }).catch((e)=>{
             return res.status(400).send("cannot add new member : ", e);
@@ -155,7 +155,7 @@ exports.removePlayer = (req, res) =>{
           doc.ref.update({
             "member": admin.firestore.FieldValue.arrayRemove(id),
           }).then(()=>{
-            sendNotifications([...doc.data().staff, id], "008", user, doc.id, id, `group/${doc.id}/`);
+            sendNotifications([...doc.data().staff, id], "008", user, req.params.id, id, `group/${req.params.id}`);
             return res.status(200).send("remove member success");
           }).catch((e)=>{
             return res.status(400).send("cannot remove member : ", e);
@@ -174,7 +174,7 @@ exports.addPendingPlayer = (req, res)=>{
       "pendingmember": admin.firestore.FieldValue.arrayUnion(user),
     }).then(()=>{
       docref.get().then((doc)=>{
-        sendNotifications(doc.data().staff, "009", user, doc.id, "", `group/${doc.id}/dashboard?tab=member`);
+        sendNotifications(doc.data().staff, "009", user, req.params.id, "", `group/${req.params.id}/dashboard?tab=member`);
       });
       return res.status(200).send("add new member success");
     }).catch((e)=>{
@@ -193,7 +193,7 @@ exports.removePendingPlayer = (req, res) =>{
           doc.ref.update({
             "pendingmember": admin.firestore.FieldValue.arrayRemove(id),
           }).then(()=>{
-            sendNotifications(doc.data().staff, "010", user, doc.data().name, id, `group/${doc.id}/`);
+            sendNotifications(doc.data().staff, "010", user, req.params.id, id, `group/${req.params.id}`);
             return res.status(200).send("remove member success");
           }).catch((e)=>{
             return res.status(400).send("cannot remove member : ", e);
@@ -214,7 +214,7 @@ exports.addStaff = (req, res)=>{
           doc.ref.update({
             "staff": admin.firestore.FieldValue.arrayUnion(id),
           }).then(()=>{
-            sendNotifications(doc.data().staff, "005", user, doc.id, id, `group/${doc.id}/`);
+            sendNotifications(doc.data().staff, "005", user, req.params.id, id, `group/${req.params.id}`);
             return res.status(200).send("add new staff success");
           }).catch((e)=>{
             return res.status(400).send("cannot add new staff : ", e);
@@ -234,7 +234,7 @@ exports.removeStaff = (req, res) =>{
           doc.ref.update({
             "staff": admin.firestore.FieldValue.arrayRemove(id),
           }).then(()=>{
-            sendNotifications(doc.data().staff, "006", user, doc.id, id, `group/${doc.id}/`);
+            sendNotifications(doc.data().staff, "006", user, req.params.id, id, `group/${req.params.id}/`);
             return res.status(200).send("remove staff success");
           }).catch((e)=>{
             return res.status(400).send("cannot remove staff : ", e);
@@ -260,7 +260,7 @@ exports.groupLove = (req, res) =>{
       love: admin.firestore.FieldValue.arrayUnion(user),
     }).then(()=>{
       docref.get().then((doc)=>{
-        sendNotifications(doc.data().staff, "004", user, doc.id, "", `group/${doc.id}/`);
+        sendNotifications(doc.data().staff, "004", user, req.params.id, "", `group/${req.params.id}/`);
       });
       return res.status(200).send("loved");
     }).catch((e)=>{
@@ -293,7 +293,7 @@ exports.groupPin = (req, res) =>{
       pinned: admin.firestore.FieldValue.arrayUnion(user),
     }).then(()=>{
       docref.get().then((doc)=>{
-        sendNotifications(doc.data().staff, "003", user, doc.id, "", `group/${doc.id}/`);
+        sendNotifications(doc.data().staff, "003", user, req.params.id, "", `group/${req.params.id}`);
       });
       return res.status(200).send("loved");
     }).catch((e)=>{

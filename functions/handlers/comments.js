@@ -25,7 +25,7 @@ exports.createComment = async (req, res) =>{
         follower: admin.firestore.FieldValue.arrayUnion(user),
       });
       const postdoc = await postref.get();
-      sendNotifications(postdoc.data().follower, 102, user, req.params.gid, "", `${req.params.gid}/${req.params.pid}/${cmtref.id}`);
+      sendNotifications(postdoc.data().follower, 102, user, req.params.gid, "", `group/${req.params.gid}/dashboard?pid=${req.params.pid}&cid=${cmtref.id}`);
       return res.status(200).send("create comment success");
     } else {
       res.status(403).send("forbidden");
@@ -99,7 +99,7 @@ exports.loveComment = (req, res) =>{
             return docref.update({
               "love": admin.firestore.FieldValue.arrayUnion(req.user.uid),
             }).then(()=>{
-              sendNotifications(doc.data().uid, "105", user, gdoc.data().name, "", `${gdoc.id}/${req.params.pid}/${req.params.cid}`);
+              sendNotifications(doc.data().uid, "105", user, req.params.gid, "", `group/${req.params.gid}/dashboard?pid=${req.params.pid}&cid=${req.params.cid}`);
               return res.status(200).send("love success");
             }).catch((e)=>{
               return res.status(400).send("love not success ", e);

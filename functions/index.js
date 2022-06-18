@@ -88,16 +88,48 @@ app.post("/debug/group/:gid/join/", authmw, JoinDebug);
 
 exports.api = functions.region("asia-southeast1").https.onRequest(app);
 
-exports.onNotificationAdd = functions.firestore
+exports.onNotificationAdd = functions.region("asia-southeast1").firestore
   .document("notifications/{notiId}")
-  .onCreate((snap, context) => {
-    const sendTo = snap.data().reciever;
-    if (sendTo.isArray() && sendTo.length > 0) {
+  .onCreate(async (snap, context) => {
+    let sendTo = snap.data().reciever;
+    const batch = db.batch();
+    if (!Array.isArray(sendTo)) {
+      sendTo = [sendTo];
+    }
+    if (snap.data().notitype === "002" || snap.data().notitype === "101") {
       sendTo.map((target) =>{
         if (target != snap.data().triggerer) {
-          db
+          return batch.set(db.collection(`userDetail/${target}/notification`).doc(), {
+            notitype: snap.data().notitype,
+            triggerer: [snap.data().triggerer],
+            group: snap.data().group,
+            object: snap.data().object,
+            timestamp: snap.data().timestamp,
+            readed: false,
+            path: snap.data().path,
+          });
+        } else {
+          return;
+        }
+        });
+    } else {
+      await Promise.all(sendTo.map(async (target) =>{
+        const snap2 = await db
           .collection(`userDetail/${target}/notification`)
-          .add({
+          .where("notitype", "==", snap.data().notitype)
+          .where("path", "==", snap.data().path)
+          .get();
+        if (!snap2.empty) {
+          return snap2.docs.map((doc) => {
+            return batch.update(db.collection(`userDetail/${target}/notification`).doc(doc.id), {
+              triggerer: admin.firestore.FieldValue.arrayUnion(snap.data().triggerer),
+              timestamp: snap.data().timestamp,
+              readed: false,
+              object: snap.data().object,
+            });
+          });
+        } else {
+          return batch.set(db.collection(`userDetail/${target}/notification`).doc(), {
             notitype: snap.data().notitype,
             triggerer: [snap.data().triggerer],
             group: snap.data().group,
@@ -107,25 +139,10 @@ exports.onNotificationAdd = functions.firestore
             path: snap.data().path,
           });
         }
-        },
-      );
-    } else {
-      if (sendTo != snap.data().triggerer) {
-        db
-        .collection(`userDetail/${sendTo}/notification`)
-        .add({
-          notitype: snap.data().notitype,
-          triggerer: [snap.data().triggerer],
-          group: snap.data().group,
-          object: snap.data().object,
-          timestamp: snap.data().timestamp,
-          readed: false,
-          path: snap.data().path,
-        });
-      }
+      }));
     }
+    return batch.commit();
   });
-
   /* พวกนี้จะใช้ */
 //   exports.onPostCreate = functions.firestore.document("posts/{postId}/").onCreate((snap, context)=>{
 //     // db.collection("notifications").where("linkId", "==", context.params.postId).where("type", "==", "11");

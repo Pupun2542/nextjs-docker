@@ -36,12 +36,9 @@ import {
   Badge,
   IconButton,
 } from "@chakra-ui/react";
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import style from "../styles/navbar.module.css";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { getApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
 import React from "react";
 
 import {
@@ -66,10 +63,12 @@ import {
   orderBy,
   query,
   where,
+  writeBatch,
 } from "firebase/firestore";
 import { useApp, useNotifications, useTab } from "../src/hook/local";
 import { Chatsidebar } from "./chat/Chatsidebar";
 import useSound from "use-sound";
+import Notitab from "./notitab";
 // import { useLocalStorage } from "../src/hook/uselocalstorage";
 
 const NavLink = ({ children }) => (
@@ -88,9 +87,6 @@ const NavLink = ({ children }) => (
 );
 
 function CustomNavbar() {
-  // const app = getApp();
-  // const auth = getAuth(app);
-  // const db = getFirestore(app);
   const { app, auth, db } = useApp();
   const { notidata, chatNotiData } = useNotifications();
   const { colorMode, toggleColorMode } = useColorMode();
@@ -138,47 +134,23 @@ function CustomNavbar() {
 
   useEffect(() => {
     if (chatNotiData.length > 0) {
-      // console.log(chatNotiData);
       const unreadedItem = chatNotiData.filter(
         (v, i) => !v.readedby.includes(user.uid)
       );
       if (unreadedItem.length > 0) {
         play();
       }
-      // if (tabState.openTab == ""){
-      //   console.log(unreadedItem[0].data().id)
-      // changeTab(unreadedItem[0].data().id);
-      // }
       setUnreadChat(unreadedItem);
     }
-    // console.log(chatNotiData)
   }, [chatNotiData]);
+
   useEffect(() => {
     if (notidata.length > 0) {
       setUnreadnoti(notidata.filter((v, i) => v.readed == false));
     }
   }, [notidata]);
 
-  // useEffect(()=>{
-  //   const openedTab = window.localStorage.getItem("openedTab");
-  //   const otherTab = JSON.parse(window.localStorage.getItem("otherTab"));
-
-  //   if (otherTab) {
-  //     otherTab.forEach(element => {
-  //       addTab(element)
-  //     });
-  //     if (openedTab){
-  //       changeTab(openedTab)
-  //     }
-  //   }
-  // },[])
-  // useEffect(()=>{
-  //   console.log(tabState.othertab);
-  //   window.localStorage.setItem("otherTab", JSON.stringify(tabState.othertab))
-  // },[tabState.othertab])
-
   const Loadthumbnail = () => {
-    // console.log(user.getIdToken());
     if (user) {
       return (
         <Menu>
@@ -195,7 +167,7 @@ function CustomNavbar() {
             onClick={() => {
               user.getIdToken().then((token) => {
                 console.log(token);
-              })
+              });
             }}
           >
             <Center
@@ -239,6 +211,15 @@ function CustomNavbar() {
       </Center>
     );
   };
+
+  const readNotification = () => {
+    const batch = writeBatch(db);
+
+    unreadnoti.map((noti)=>{
+      batch.update(doc(db, "userDetail", user.uid, "notification", noti.id), {readed: true});
+    })
+    batch.commit();
+  }
 
   return (
     <>
@@ -328,7 +309,11 @@ function CustomNavbar() {
                     cursor="pointer"
                     minW={0}
                     title="Notifications"
-                    onClick={onNotiToggle}
+                    onClick={()=>{
+                      onNotiToggle();
+                      readNotification();
+                    }}
+                    pos="relative"
                   >
                     <Center
                       bg="white"
@@ -338,7 +323,6 @@ function CustomNavbar() {
                       size={40}
                       borderColor={"black"}
                       borderWidth={2}
-
                     >
                       <Bell size={28} color="black" />
                       {unreadnoti.length > 0 && (
@@ -356,19 +340,6 @@ function CustomNavbar() {
                   </MenuButton>
                 </Menu>
               )}
-
-              {/* <MenuList minWidth={"auto"} ml={-1}>
-
-                        <MenuItem minH="48px" as={"a"} href="#" title='Main Hall'>
-                          <House size={32} /> 
-                        </MenuItem>
-
-                        <MenuItem minH="48px" as={"a"} href="#" title='Create Commu'>
-                          <Plus size={32} />
-                        </MenuItem>
-                        
-                      </MenuList> */}
-
               <Menu>
                 <MenuButton>
                   <Center
@@ -393,7 +364,7 @@ function CustomNavbar() {
                   mt={-1}
                   color={"black"}
                   cursor="pointer"
-                  borderColor={'black'}
+                  borderColor={"black"}
                   borderWidth={2}
                 >
                   <MenuItem
@@ -435,9 +406,9 @@ function CustomNavbar() {
 
                 <Modal isOpen={isOpen} onClose={onClose}>
                   <ModalOverlay />
-                  <ModalContent borderWidth={2} borderColor={'black'}>
-                    <ModalHeader bg={'gray.50'}>My Pinned</ModalHeader>
-                    <ModalCloseButton rounded={'full'} />
+                  <ModalContent borderWidth={2} borderColor={"black"}>
+                    <ModalHeader bg={"gray.50"}>My Pinned</ModalHeader>
+                    <ModalCloseButton rounded={"full"} />
                     <ModalBody>
                       {data.length > 0 &&
                         data.map((doc, k) => (
@@ -447,14 +418,13 @@ function CustomNavbar() {
                             key={k}
                             fontSize={18}
                             _hover={{
-                              backgroundColor: 'gray.100'
+                              backgroundColor: "gray.100",
                             }}
                           >
                             [{doc.tag}]{doc.name}
                           </Text>
                         ))}
                     </ModalBody>
-
                   </ModalContent>
                 </Modal>
 
@@ -493,19 +463,26 @@ function CustomNavbar() {
                       mr={-4}
                       color={"black"}
                       borderWidth={3}
-                      borderColor={'black'}
+                      borderColor={"black"}
                       w={100}
                     >
                       <br />
 
                       <Center>
-                        <Avatar borderWidth={3} borderColor={'black'} size={"2xl"} src={user.photoURL} />
+                        <Avatar
+                          borderWidth={3}
+                          borderColor={"black"}
+                          size={"2xl"}
+                          src={user.photoURL}
+                        />
                       </Center>
 
                       <br />
 
                       <Center>
-                        <Box fontSize={20} fontWeight={'semibold'}>{user.displayName}</Box>
+                        <Box fontSize={20} fontWeight={"semibold"}>
+                          {user.displayName}
+                        </Box>
                       </Center>
 
                       <br />
@@ -531,18 +508,6 @@ function CustomNavbar() {
                         Logout
                       </MenuItem>
                     </MenuList>
-
-                    {/* <MenuList minWidth={"auto"} ml={-1}>
-
-                        <MenuItem minH="48px" as={"a"} href="#" title='Main Hall'>
-                          <House size={32} /> 
-                        </MenuItem>
-
-                        <MenuItem minH="48px" as={"a"} href="#" title='Create Commu'>
-                          <Plus size={32} />
-                        </MenuItem>
-                        
-                      </MenuList> */}
                   </Menu>
                 )}
               </Menu>
@@ -562,28 +527,34 @@ function CustomNavbar() {
         top="55px"
         right="85px"
         borderWidth={2}
-        borderColor='black'
+        borderColor="black"
         borderRadius={10}
         display={isChatOpen ? "initial" : "none"}
         zIndex={20000}
-        fontFamily={'Mitr'}
+        fontFamily={"Mitr"}
       >
-        <Box bg={'gray.100'} p={2}>Chat</Box>
-        <Box w={'100%'}>
+        <Box bg={"gray.100"} p={2}>
+          Chat
+        </Box>
+        <Box w={"100%"}>
           {chatNotiData ? (
-            chatNotiData.map((data, k) => <ChatNotiIcon data={data} user={user} key={k} />)
+            chatNotiData.map((data, k) => (
+              <ChatNotiIcon data={data} user={user} key={k} />
+            ))
           ) : (
             <></>
           )}
         </Box>
 
         <Center
-          pt={'2.5'}
-          pb={'2.5'}
+          pt={"2.5"}
+          pb={"2.5"}
           _hover={{
-            bg: 'gray.200'
+            bg: "gray.200",
           }}
-        >ดูแชททั้งหมด</Center>
+        >
+          ดูแชททั้งหมด
+        </Center>
       </Box>
 
       <Box
@@ -595,29 +566,27 @@ function CustomNavbar() {
         top="55px"
         right="85px"
         borderWidth={2}
-        borderColor='black'
+        borderColor="black"
         borderRadius={10}
         display={isNotiOpen ? "initial" : "none"}
         zIndex={20000}
-        fontFamily={'Mitr'}
+        fontFamily={"Mitr"}
       >
-        <Box bg={'gray.100'} p={2}>Notifications</Box>
-        
-        <Flex p={2}>
-          <Avatar size={'lg'} ></Avatar>
-          <VStack pl={2} w={'100%'} float={'left'}>
-            <Text w={'100%'}>ข้อความระบบ</Text>
-            <Text w={'100%'}>เวลา</Text>
-          </VStack>
-        </Flex>
+        <Box bg={"gray.100"} p={2}>
+          Notifications
+        </Box>
+
+        <Notitab notidata={notidata} />
 
         <Center
-          pt={'2.5'}
-          pb={'2.5'}
+          pt={"2.5"}
+          pb={"2.5"}
           _hover={{
-            bg: 'gray.200'
+            bg: "gray.200",
           }}
-        >ดูแจ้งเตือนทั้งหมด</Center>
+        >
+          ดูแจ้งเตือนทั้งหมด
+        </Center>
       </Box>
     </>
   );
@@ -671,7 +640,7 @@ const ChatNotiIcon = ({ data, user }) => {
     ) {
       return now.getMonth() - sentdate.getMonth() + " เดือน";
     } else if (Math.floor(minusDate / (24 * 3600 * 1000)) > 0) {
-      return Math.floor(minusDate / (24 * 3600 * 1000)) + " วัน"
+      return Math.floor(minusDate / (24 * 3600 * 1000)) + " วัน";
     } else if (Math.floor(minusDate / (3600 * 1000)) > 0) {
       return Math.floor(minusDate / (3600 * 1000)) + " ชั่วโมง";
     } else if (Math.floor(minusDate / (60 * 1000)) > 0) {
@@ -688,15 +657,15 @@ const ChatNotiIcon = ({ data, user }) => {
       // bg={'tomato'}
       onClick={() => changeTab(data.id)}
       mt="2.5px"
-      mb={'2.5px'}
+      mb={"2.5px"}
       p={2}
-      fontFamily={'Mitr'}
-      cursor='pointer'
+      fontFamily={"Mitr"}
+      cursor="pointer"
       _hover={{
-        bg: 'gray.200'
+        bg: "gray.200",
       }}
     >
-      <Flex justifyContent='space-between' marginLeft={2} marginRight={2}>
+      <Flex justifyContent="space-between" marginLeft={2} marginRight={2}>
         <Flex justifyContent="start">
           <Image
             src={display.thumbnail}
@@ -707,12 +676,13 @@ const ChatNotiIcon = ({ data, user }) => {
           />
           <Box>
             <Text>{display.name}</Text>
-            <Text> {data.senderId == user.uid ? "คุณ: " : ""} {data.lastmsg}</Text>
+            <Text>
+              {" "}
+              {data.senderId == user.uid ? "คุณ: " : ""} {data.lastmsg}
+            </Text>
           </Box>
         </Flex>
-        {data.timestamp && (
-          <Text>{caltime()}</Text>
-        )}
+        {data.timestamp && <Text>{caltime()}</Text>}
       </Flex>
     </Box>
   );

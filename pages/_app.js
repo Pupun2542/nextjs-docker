@@ -5,22 +5,35 @@ import {
   UserProvider,
   OpenChatTabProvider,
   NotificationProvider,
+  GroupNotiProvider,
 } from "../src/hook/local";
-import { useMediaQuery } from '@chakra-ui/react';
+import { useMediaQuery } from "@chakra-ui/react";
 import { ChakraProvider } from "@chakra-ui/react";
 import Head from "next/head";
 
 function MyApp({ Component, pageProps }) {
+  const theme = {
+    styles: {
+      global: {
+        "html, body": {
+          scrollbars: {},
+        },
+      },
+    },
+  };
+
   return (
     <ChakraProvider>
       <AppProvider>
         <NotificationProvider>
           <UserProvider>
             <OpenChatTabProvider>
-              <Head>
-                <title>Comuthor</title>
-              </Head>
-              <Component {...pageProps} />
+              <GroupNotiProvider>
+                <Head>
+                  <title>Comuthor</title>
+                </Head>
+                <Component {...pageProps} />
+              </GroupNotiProvider>
             </OpenChatTabProvider>
           </UserProvider>
         </NotificationProvider>

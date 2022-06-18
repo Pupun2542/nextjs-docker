@@ -24,7 +24,7 @@ exports.createReply = (req, res) =>{
                 reply: admin.firestore.FieldValue.increment(1),
                 follower: admin.firestore.FieldValue.arrayUnion(user),
               });
-              sendNotifications(doc.data().follower, 103, user, doc.data().name, "", `${gdoc.id}/${req.params.pid}/${req.params.cid}/${ref.id}`);
+              sendNotifications(doc.data().follower, 103, user, req.params.gid, "", `group/${req.params.gid}/dashboard?pid=${req.params.pid}&cid=${req.params.cid}&rid=${ref.id}`);
               return res.status(200).send("create comment success");
             }).catch((e)=>{
               return res.status(400).send("create comment not success ", e);
@@ -80,7 +80,7 @@ exports.deleteReply = (req, res) =>{
           admin.storage().bucket(req.body.bucket).file(req.body.filepath).delete();
         }
         return docref.delete().then(()=>{
-          docref.update({
+          cmtref.update({
             reply: admin.firestore.FieldValue.increment(-1),
           });
           return res.status(200).send("delete comment success");
@@ -110,7 +110,7 @@ exports.loveReply = (req, res) =>{
             return docref.update({
               "love": admin.firestore.FieldValue.arrayUnion(req.user.uid),
             }).then(()=>{
-              sendNotifications(doc.data().uid, "106", user, gdoc.data().name, "", `${gdoc.id}/${req.params.pid}/${req.params.cid}`);
+              sendNotifications(doc.data().uid, "106", user, req.params.gid, "", `group/${req.params.gid}/dashboard?pid=${req.params.pid}&cid=${req.params.cid}&rid=${req.params.rid}`);
               return res.status(200).send("love success");
             }).catch((e)=>{
               return res.status(400).send("love not success ", e);
