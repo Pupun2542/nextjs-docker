@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { Eye, EyeClosed } from "phosphor-react";
 
-export const Roleplay = () => {
+export const Editroleplay = () => {
 
     return (
         <Flex direction={'column'}>
@@ -23,7 +23,22 @@ export const Roleplay = () => {
             <Flex fontSize={24} fontWeight={"extrabold"} ml={5}>
                 <Text>การโรลเพลย์</Text>
                 <Spacer />
-                <Text fontSize={14} mt={3}>Edit</Text>
+                <HStack>
+                    <IconButton
+                        icon={<Check />}
+                        onClick={() => {
+                            handleNameChange();
+                            setEditDisplayNameMode(false);
+                        }}
+                    />
+                    <IconButton
+                        icon={<X />}
+                        onClick={() => {
+                            setEditDisplayNameMode(false);
+                            // setEditDisplayName("");
+                        }}
+                    />
+                </HStack>
             </Flex>
 
             <VStack
@@ -55,8 +70,20 @@ export const Roleplay = () => {
                                     </Center>
                                     <Spacer />
 
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                    <NumberInput min={0} max={100}>
+                                        <NumberInputField fontSize={14}
+                                            bg={"white"}
+                                            borderRadius={10}
+                                            pl={1}
+                                            pr={1}
+                                            pt={0.5}
+                                            pb={0.5}
+                                            borderWidth={1}
+                                            borderColor={'#6768AB'}
+                                            w={39}
+                                            h={25} />
+                                    </NumberInput>
+                                    <Center ml={1}>
                                         %
                                     </Center>
 
@@ -78,8 +105,20 @@ export const Roleplay = () => {
                                         สายโรลเพลย์ยาว
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                    <NumberInput min={0} max={100}>
+                                        <NumberInputField fontSize={14}
+                                            bg={"white"}
+                                            borderRadius={10}
+                                            pl={1}
+                                            pr={1}
+                                            pt={0.5}
+                                            pb={0.5}
+                                            borderWidth={1}
+                                            borderColor={'#6768AB'}
+                                            w={39}
+                                            h={25} />
+                                    </NumberInput>
+                                    <Center ml={1}>
                                         %
                                     </Center>
                                 </Flex>
@@ -100,8 +139,20 @@ export const Roleplay = () => {
                                         สายฟิคชั่น
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                    <NumberInput min={0} max={100}>
+                                        <NumberInputField fontSize={14}
+                                            bg={"white"}
+                                            borderRadius={10}
+                                            pl={1}
+                                            pr={1}
+                                            pt={0.5}
+                                            pb={0.5}
+                                            borderWidth={1}
+                                            borderColor={'#6768AB'}
+                                            w={39}
+                                            h={25} />
+                                    </NumberInput>
+                                    <Center ml={1}>
                                         %
                                     </Center>
                                 </Flex>
@@ -122,8 +173,20 @@ export const Roleplay = () => {
                                         สายเวิ่นเนื้อเรื่อง
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                    <NumberInput min={0} max={100}>
+                                        <NumberInputField fontSize={14}
+                                            bg={"white"}
+                                            borderRadius={10}
+                                            pl={1}
+                                            pr={1}
+                                            pt={0.5}
+                                            pb={0.5}
+                                            borderWidth={1}
+                                            borderColor={'#6768AB'}
+                                            w={39}
+                                            h={25} />
+                                    </NumberInput>
+                                    <Center ml={1}>
                                         %
                                     </Center>
                                 </Flex>
@@ -144,8 +207,20 @@ export const Roleplay = () => {
                                         สายวาดภาพ
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                    <NumberInput min={0} max={100}>
+                                        <NumberInputField fontSize={14}
+                                            bg={"white"}
+                                            borderRadius={10}
+                                            pl={1}
+                                            pr={1}
+                                            pt={0.5}
+                                            pb={0.5}
+                                            borderWidth={1}
+                                            borderColor={'#6768AB'}
+                                            w={39}
+                                            h={25} />
+                                    </NumberInput>
+                                    <Center ml={1}>
                                         %
                                     </Center>
                                 </Flex>
@@ -173,8 +248,20 @@ export const Roleplay = () => {
                                     >
                                         <Center ml={2} mr={2}>ตลก</Center>
                                         <Spacer />
-                                        <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
+                                        <NumberInput min={0} max={100}>
+                                            <NumberInputField fontSize={14}
+                                                bg={"white"}
+                                                borderRadius={10}
+                                                pl={1}
+                                                pr={1}
+                                                pt={0.5}
+                                                pb={0.5}
+                                                borderWidth={1}
+                                                borderColor={'#6768AB'}
+                                                w={39}
+                                                h={25} />
+                                        </NumberInput>
+                                        <Center ml={1}>
                                             %
                                         </Center>
                                     </Flex>
@@ -193,8 +280,20 @@ export const Roleplay = () => {
                                     >
                                         <Center ml={2} mr={2}>ดราม่า</Center>
                                         <Spacer />
-                                        <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
+                                        <NumberInput min={0} max={100}>
+                                            <NumberInputField fontSize={14}
+                                                bg={"white"}
+                                                borderRadius={10}
+                                                pl={1}
+                                                pr={1}
+                                                pt={0.5}
+                                                pb={0.5}
+                                                borderWidth={1}
+                                                borderColor={'#6768AB'}
+                                                w={39}
+                                                h={25} />
+                                        </NumberInput>
+                                        <Center ml={1}>
                                             %
                                         </Center>
                                     </Flex>
@@ -213,8 +312,20 @@ export const Roleplay = () => {
                                     >
                                         <Center ml={2} mr={2}>โรแมนซ์</Center>
                                         <Spacer />
-                                        <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
+                                        <NumberInput min={0} max={100}>
+                                            <NumberInputField fontSize={14}
+                                                bg={"white"}
+                                                borderRadius={10}
+                                                pl={1}
+                                                pr={1}
+                                                pt={0.5}
+                                                pb={0.5}
+                                                borderWidth={1}
+                                                borderColor={'#6768AB'}
+                                                w={39}
+                                                h={25} />
+                                        </NumberInput>
+                                        <Center ml={1}>
                                             %
                                         </Center>
                                     </Flex>
@@ -233,8 +344,20 @@ export const Roleplay = () => {
                                     >
                                         <Center ml={2} mr={2}>อีโรติก</Center>
                                         <Spacer />
-                                        <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
+                                        <NumberInput min={0} max={100}>
+                                            <NumberInputField fontSize={14}
+                                                bg={"white"}
+                                                borderRadius={10}
+                                                pl={1}
+                                                pr={1}
+                                                pt={0.5}
+                                                pb={0.5}
+                                                borderWidth={1}
+                                                borderColor={'#6768AB'}
+                                                w={39}
+                                                h={25} />
+                                        </NumberInput>
+                                        <Center ml={1}>
                                             %
                                         </Center>
                                     </Flex>
@@ -253,8 +376,20 @@ export const Roleplay = () => {
                                     >
                                         <Center ml={2} mr={2}>มิตรภาพ</Center>
                                         <Spacer />
-                                        <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
+                                        <NumberInput min={0} max={100}>
+                                            <NumberInputField fontSize={14}
+                                                bg={"white"}
+                                                borderRadius={10}
+                                                pl={1}
+                                                pr={1}
+                                                pt={0.5}
+                                                pb={0.5}
+                                                borderWidth={1}
+                                                borderColor={'#6768AB'}
+                                                w={39}
+                                                h={25} />
+                                        </NumberInput>
+                                        <Center ml={1}>
                                             %
                                         </Center>
                                     </Flex>
@@ -273,8 +408,20 @@ export const Roleplay = () => {
                                     >
                                         <Center ml={2} mr={2}>สยองขวัญ</Center>
                                         <Spacer />
-                                        <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
+                                        <NumberInput min={0} max={100}>
+                                            <NumberInputField fontSize={14}
+                                                bg={"white"}
+                                                borderRadius={10}
+                                                pl={1}
+                                                pr={1}
+                                                pt={0.5}
+                                                pb={0.5}
+                                                borderWidth={1}
+                                                borderColor={'#6768AB'}
+                                                w={39}
+                                                h={25} />
+                                        </NumberInput>
+                                        <Center ml={1}>
                                             %
                                         </Center>
                                     </Flex>
@@ -293,8 +440,20 @@ export const Roleplay = () => {
                                     >
                                         <Center ml={2} mr={2}>ระทึกขวัญ</Center>
                                         <Spacer />
-                                        <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
+                                        <NumberInput min={0} max={100}>
+                                            <NumberInputField fontSize={14}
+                                                bg={"white"}
+                                                borderRadius={10}
+                                                pl={1}
+                                                pr={1}
+                                                pt={0.5}
+                                                pb={0.5}
+                                                borderWidth={1}
+                                                borderColor={'#6768AB'}
+                                                w={39}
+                                                h={25} />
+                                        </NumberInput>
+                                        <Center ml={1}>
                                             %
                                         </Center>
                                     </Flex>
@@ -313,8 +472,20 @@ export const Roleplay = () => {
                                     >
                                         <Center ml={2} mr={2}>แอคชั่น</Center>
                                         <Spacer />
-                                        <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
+                                        <NumberInput min={0} max={100}>
+                                            <NumberInputField fontSize={14}
+                                                bg={"white"}
+                                                borderRadius={10}
+                                                pl={1}
+                                                pr={1}
+                                                pt={0.5}
+                                                pb={0.5}
+                                                borderWidth={1}
+                                                borderColor={'#6768AB'}
+                                                w={39}
+                                                h={25} />
+                                        </NumberInput>
+                                        <Center ml={1}>
                                             %
                                         </Center>
                                     </Flex>
@@ -333,8 +504,20 @@ export const Roleplay = () => {
                                     >
                                         <Center ml={2} mr={2}>แฟนตาซี</Center>
                                         <Spacer />
-                                        <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
+                                        <NumberInput min={0} max={100}>
+                                            <NumberInputField fontSize={14}
+                                                bg={"white"}
+                                                borderRadius={10}
+                                                pl={1}
+                                                pr={1}
+                                                pt={0.5}
+                                                pb={0.5}
+                                                borderWidth={1}
+                                                borderColor={'#6768AB'}
+                                                w={39}
+                                                h={25} />
+                                        </NumberInput>
+                                        <Center ml={1}>
                                             %
                                         </Center>
                                     </Flex>
@@ -353,8 +536,20 @@ export const Roleplay = () => {
                                     >
                                         <Center ml={2} mr={2}>ย้อนยุค</Center>
                                         <Spacer />
-                                        <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
+                                        <NumberInput min={0} max={100}>
+                                            <NumberInputField fontSize={14}
+                                                bg={"white"}
+                                                borderRadius={10}
+                                                pl={1}
+                                                pr={1}
+                                                pt={0.5}
+                                                pb={0.5}
+                                                borderWidth={1}
+                                                borderColor={'#6768AB'}
+                                                w={39}
+                                                h={25} />
+                                        </NumberInput>
+                                        <Center ml={1}>
                                             %
                                         </Center>
                                     </Flex>
@@ -373,8 +568,20 @@ export const Roleplay = () => {
                                     >
                                         <Center ml={2} mr={2}>ไซไฟ</Center>
                                         <Spacer />
-                                        <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
+                                        <NumberInput min={0} max={100}>
+                                            <NumberInputField fontSize={14}
+                                                bg={"white"}
+                                                borderRadius={10}
+                                                pl={1}
+                                                pr={1}
+                                                pt={0.5}
+                                                pb={0.5}
+                                                borderWidth={1}
+                                                borderColor={'#6768AB'}
+                                                w={39}
+                                                h={25} />
+                                        </NumberInput>
+                                        <Center ml={1}>
                                             %
                                         </Center>
                                     </Flex>
@@ -383,15 +590,7 @@ export const Roleplay = () => {
                             </WrapItem>
                         </SimpleGrid>
 
-                        <Flex w={'100%'}>
-                            <Wrap>
-                                <Box p={1} borderRadius={10} boxShadow={'base'} w={'auto'} bg={'#E7E7E7'}>ยังไงดี</Box>
-                                <Box p={1} borderRadius={10} boxShadow={'base'} w={'auto'} bg={'#E7E7E7'}>ยังไงดี</Box>
-                                <Box p={1} borderRadius={10} boxShadow={'base'} w={'auto'} bg={'#E7E7E7'}>ยังไงดี</Box>
-                            </Wrap>
-                        </Flex>
-
-
+                        <Input placeholder="กรอกข้อมูลตรงนี้" />
                     </VStack>
 
                 </Flex>

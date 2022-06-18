@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { Eye, EyeClosed } from "phosphor-react";
 
-export const Personal = () => {
+export const EdiePersonal = () => {
     const [gender, setGender] = useState('1')
     const [hiddenState, setHiddenState] = useState({
         othname: false,
@@ -32,7 +32,22 @@ export const Personal = () => {
             <Flex fontSize={24} fontWeight={"extrabold"} ml={5}>
                 <Text>ข้อมูลส่วนตัว</Text>
                 <Spacer />
-                <Text fontSize={14} mt={3}>Edit</Text>
+                <HStack>
+                    <IconButton
+                        icon={<Check />}
+                        onClick={() => {
+                            handleNameChange();
+                            setEditDisplayNameMode(false);
+                        }}
+                    />
+                    <IconButton
+                        icon={<X />}
+                        onClick={() => {
+                            setEditDisplayNameMode(false);
+                            // setEditDisplayName("");
+                        }}
+                    />
+                </HStack>
             </Flex>
 
             <VStack
@@ -49,7 +64,9 @@ export const Personal = () => {
                         ชื่อเรียก
                     </Box>
 
-                    <Box pt={2} h={10}>เซนครับ</Box>
+                    <Input w={'100%'} placeholder='สมมติชื่อสมชาย'></Input>
+
+                    <IconButton ml={1} icon={hiddenState.othname ? <EyeClosed /> : <Eye />} onClick={() => setHiddenState({ ...hiddenState, othname: !hiddenState.othname })} />
                 </Flex>
 
                 <Flex pl={3} pr={2} w={"100%"}>
@@ -66,7 +83,9 @@ export const Personal = () => {
                         </Stack>
                     </RadioGroup>
 
+                    <Input w={'100%'} />
 
+                    <IconButton ml={1} icon={hiddenState.gender ? <EyeClosed /> : <Eye />} onClick={() => setHiddenState({ ...hiddenState, gender: !hiddenState.gender })} />
                 </Flex>
 
                 <Flex pl={3} pr={2} w={"100%"}>
@@ -74,8 +93,15 @@ export const Personal = () => {
                         อายุ
                     </Box>
 
-                    <Box pt={2} h={10}>24</Box>
+                    <NumberInput w={"100%"}>
+                        <NumberInputField placeholder="2" />
+                        <NumberInputStepper>
+                            <NumberIncrementStepper />
+                            <NumberDecrementStepper />
+                        </NumberInputStepper>
+                    </NumberInput>
 
+                    <IconButton ml={1} icon={hiddenState.age ? <EyeClosed /> : <Eye />} onClick={() => setHiddenState({ ...hiddenState, age: !hiddenState.age })} />
                 </Flex>
 
                 <Flex pl={3} pr={2} w={"100%"}>
@@ -83,7 +109,9 @@ export const Personal = () => {
                         อาชีพ
                     </Box>
 
-                    <Box pt={2} h={10}>Influ</Box>
+                    <Input w={'100%'} placeholder='Last BOSS in Narnia'></Input>
+
+                    <IconButton ml={1} icon={hiddenState.work ? <EyeClosed /> : <Eye />} onClick={() => setHiddenState({ ...hiddenState, work: !hiddenState.work })} />
                 </Flex>
 
             </VStack>

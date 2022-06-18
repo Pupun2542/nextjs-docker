@@ -14,14 +14,29 @@ import {
     Checkbox,
 } from "@chakra-ui/react";
 
-export const Condition = () => {
+export const Editcondition = () => {
 
     return (
         <Flex direction={'column'}>
             <Flex fontSize={24} fontWeight={"extrabold"} ml={5}>
                 <Text>เงื่อนไข</Text>
                 <Spacer />
-                <Text fontSize={14} mt={3}>Edit</Text>
+                <HStack>
+                    <IconButton
+                        icon={<Check />}
+                        onClick={() => {
+                            handleNameChange();
+                            setEditDisplayNameMode(false);
+                        }}
+                    />
+                    <IconButton
+                        icon={<X />}
+                        onClick={() => {
+                            setEditDisplayNameMode(false);
+                            // setEditDisplayName("");
+                        }}
+                    />
+                </HStack>
             </Flex>
 
             <VStack
@@ -38,7 +53,7 @@ export const Condition = () => {
                         สิ่งที่ทำได้
                     </Box>
 
-                    <Box pt={2} h={10}>ทุกอย่างเลยค้าบ</Box>
+                    <Input placeholder="กรอกข้อมูลตรงนี้" />
                 </Flex>
 
                 <Flex pl={3} pr={2} w={"100%"}>
@@ -46,7 +61,7 @@ export const Condition = () => {
                         สิ่งที่ไม่ควรทำ
                     </Box>
 
-                    <Box pt={2} h={10}>อย่าทิ้งกันเลยนะ</Box>
+                    <Input placeholder="กรอกข้อมูลตรงนี้" />
                 </Flex>
 
                 <Flex pl={3} pr={2} w={"100%"}>
@@ -54,7 +69,7 @@ export const Condition = () => {
                         โฟเบีย
                     </Box>
 
-                    <Box pt={2} h={10}>เรื่องเศร้า</Box>
+                    <Input placeholder="กรอกข้อมูลตรงนี้" />
                 </Flex>
 
                 <Flex pl={3} pr={2} w={"100%"}>
@@ -106,7 +121,7 @@ export const Condition = () => {
                         เงื่อนไขอื่น ๆ
                     </Box>
 
-                    <Box pt={2} h={10}>Blah Bla bla</Box>
+                    <Input placeholder="กรอกข้อมูลตรงนี้" />
                 </Flex>
             </VStack>
         </Flex>

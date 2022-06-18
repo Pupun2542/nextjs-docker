@@ -13,14 +13,29 @@ import {
     NumberInputField,
 } from "@chakra-ui/react";
 
-export const Relationship = () => {
+export const Editrelationship = () => {
 
     return (
         <Flex direction={'column'}>
             <Flex fontSize={24} fontWeight={"extrabold"} ml={5}>
                 <Text>ความสัมพันธ์ตัวละคร</Text>
                 <Spacer />
-                <Text fontSize={14} mt={3}>Edit</Text>
+                <HStack>
+                    <IconButton
+                        icon={<Check />}
+                        onClick={() => {
+                            handleNameChange();
+                            setEditDisplayNameMode(false);
+                        }}
+                    />
+                    <IconButton
+                        icon={<X />}
+                        onClick={() => {
+                            setEditDisplayNameMode(false);
+                            // setEditDisplayName("");
+                        }}
+                    />
+                </HStack>
             </Flex>
 
             <VStack
@@ -51,8 +66,20 @@ export const Relationship = () => {
                                         Heroto Love
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                    <NumberInput min={0} max={100}>
+                                        <NumberInputField fontSize={14}
+                                            bg={"white"}
+                                            borderRadius={10}
+                                            pl={1}
+                                            pr={1}
+                                            pt={0.5}
+                                            pb={0.5}
+                                            borderWidth={1}
+                                            borderColor={'#6768AB'}
+                                            w={39}
+                                            h={25} />
+                                    </NumberInput>
+                                    <Center ml={1}>
                                         %
                                     </Center>
                                 </Flex>
@@ -73,8 +100,20 @@ export const Relationship = () => {
                                         Boy Love
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                    <NumberInput min={0} max={100}>
+                                        <NumberInputField fontSize={14}
+                                            bg={"white"}
+                                            borderRadius={10}
+                                            pl={1}
+                                            pr={1}
+                                            pt={0.5}
+                                            pb={0.5}
+                                            borderWidth={1}
+                                            borderColor={'#6768AB'}
+                                            w={39}
+                                            h={25} />
+                                    </NumberInput>
+                                    <Center ml={1}>
                                         %
                                     </Center>
                                 </Flex>
@@ -95,8 +134,20 @@ export const Relationship = () => {
                                         Girl Love
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                    <NumberInput min={0} max={100}>
+                                        <NumberInputField fontSize={14}
+                                            bg={"white"}
+                                            borderRadius={10}
+                                            pl={1}
+                                            pr={1}
+                                            pt={0.5}
+                                            pb={0.5}
+                                            borderWidth={1}
+                                            borderColor={'#6768AB'}
+                                            w={39}
+                                            h={25} />
+                                    </NumberInput>
+                                    <Center ml={1}>
                                         %
                                     </Center>
                                 </Flex>
@@ -117,8 +168,20 @@ export const Relationship = () => {
                                         No Love
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                    <NumberInput min={0} max={100}>
+                                        <NumberInputField fontSize={14}
+                                            bg={"white"}
+                                            borderRadius={10}
+                                            pl={1}
+                                            pr={1}
+                                            pt={0.5}
+                                            pb={0.5}
+                                            borderWidth={1}
+                                            borderColor={'#6768AB'}
+                                            w={39}
+                                            h={25} />
+                                    </NumberInput>
+                                    <Center ml={1}>
                                         %
                                     </Center>
                                 </Flex>
@@ -139,8 +202,20 @@ export const Relationship = () => {
                                         Friend with Benefit
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                    <NumberInput min={0} max={100}>
+                                        <NumberInputField fontSize={14}
+                                            bg={"white"}
+                                            borderRadius={10}
+                                            pl={1}
+                                            pr={1}
+                                            pt={0.5}
+                                            pb={0.5}
+                                            borderWidth={1}
+                                            borderColor={'#6768AB'}
+                                            w={39}
+                                            h={25} />
+                                    </NumberInput>
+                                    <Center ml={1}>
                                         %
                                     </Center>
                                 </Flex>
@@ -161,8 +236,20 @@ export const Relationship = () => {
                                         Friend Zone
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                    <NumberInput min={0} max={100}>
+                                        <NumberInputField fontSize={14}
+                                            bg={"white"}
+                                            borderRadius={10}
+                                            pl={1}
+                                            pr={1}
+                                            pt={0.5}
+                                            pb={0.5}
+                                            borderWidth={1}
+                                            borderColor={'#6768AB'}
+                                            w={39}
+                                            h={25} />
+                                    </NumberInput>
+                                    <Center ml={1}>
                                         %
                                     </Center>
                                 </Flex>
@@ -183,8 +270,20 @@ export const Relationship = () => {
                                         One Night Stand
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                    <NumberInput min={0} max={100}>
+                                        <NumberInputField fontSize={14}
+                                            bg={"white"}
+                                            borderRadius={10}
+                                            pl={1}
+                                            pr={1}
+                                            pt={0.5}
+                                            pb={0.5}
+                                            borderWidth={1}
+                                            borderColor={'#6768AB'}
+                                            w={39}
+                                            h={25} />
+                                    </NumberInput>
+                                    <Center ml={1}>
                                         %
                                     </Center>
                                 </Flex>
@@ -199,7 +298,7 @@ export const Relationship = () => {
                         สายที่ไม่เล่น
                     </Box>
 
-                    <Box pt={2} h={10}>ไม่น่ามี</Box>
+                    <Input placeholder="กรอกข้อมูลตรงนี้" />
                 </Flex>
 
                 <Flex pl={3} pr={2} w={"100%"}>
@@ -221,8 +320,20 @@ export const Relationship = () => {
                                         Top
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                    <NumberInput min={0} max={100}>
+                                        <NumberInputField fontSize={14}
+                                            bg={"white"}
+                                            borderRadius={10}
+                                            pl={1}
+                                            pr={1}
+                                            pt={0.5}
+                                            pb={0.5}
+                                            borderWidth={1}
+                                            borderColor={'#6768AB'}
+                                            w={39}
+                                            h={25} />
+                                    </NumberInput>
+                                    <Center ml={1}>
                                         %
                                     </Center>
                                 </Flex>
@@ -243,8 +354,20 @@ export const Relationship = () => {
                                         Bottom
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                    <NumberInput min={0} max={100}>
+                                        <NumberInputField fontSize={14}
+                                            bg={"white"}
+                                            borderRadius={10}
+                                            pl={1}
+                                            pr={1}
+                                            pt={0.5}
+                                            pb={0.5}
+                                            borderWidth={1}
+                                            borderColor={'#6768AB'}
+                                            w={39}
+                                            h={25} />
+                                    </NumberInput>
+                                    <Center ml={1}>
                                         %
                                     </Center>
                                 </Flex>
@@ -265,8 +388,20 @@ export const Relationship = () => {
                                         Switch
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                    <NumberInput min={0} max={100}>
+                                        <NumberInputField fontSize={14}
+                                            bg={"white"}
+                                            borderRadius={10}
+                                            pl={1}
+                                            pr={1}
+                                            pt={0.5}
+                                            pb={0.5}
+                                            borderWidth={1}
+                                            borderColor={'#6768AB'}
+                                            w={39}
+                                            h={25} />
+                                    </NumberInput>
+                                    <Center ml={1}>
                                         %
                                     </Center>
                                 </Flex>
@@ -287,8 +422,20 @@ export const Relationship = () => {
                                         Submissive
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                    <NumberInput min={0} max={100}>
+                                        <NumberInputField fontSize={14}
+                                            bg={"white"}
+                                            borderRadius={10}
+                                            pl={1}
+                                            pr={1}
+                                            pt={0.5}
+                                            pb={0.5}
+                                            borderWidth={1}
+                                            borderColor={'#6768AB'}
+                                            w={39}
+                                            h={25} />
+                                    </NumberInput>
+                                    <Center ml={1}>
                                         %
                                     </Center>
                                 </Flex>
@@ -309,8 +456,20 @@ export const Relationship = () => {
                                         Dominant
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                    <NumberInput min={0} max={100}>
+                                        <NumberInputField fontSize={14}
+                                            bg={"white"}
+                                            borderRadius={10}
+                                            pl={1}
+                                            pr={1}
+                                            pt={0.5}
+                                            pb={0.5}
+                                            borderWidth={1}
+                                            borderColor={'#6768AB'}
+                                            w={39}
+                                            h={25} />
+                                    </NumberInput>
+                                    <Center ml={1}>
                                         %
                                     </Center>
                                 </Flex>
@@ -325,7 +484,7 @@ export const Relationship = () => {
                         รสนิยม
                     </Box>
 
-                    <Box pt={2} h={10}>รักตัวเองครับ</Box>
+                    <Input placeholder="กรอกข้อมูลตรงนี้" />
                 </Flex>
             </VStack>
         </Flex>

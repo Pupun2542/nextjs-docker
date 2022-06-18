@@ -14,14 +14,29 @@ import {
     NumberInputField,
 } from "@chakra-ui/react";
 
-export const Active = () => {
+export const EditActive = () => {
 
     return (
         <Flex direction={'column'}>
             <Flex fontSize={24} fontWeight={"extrabold"} ml={5}>
                 <Text>ความแอคทีฟ</Text>
                 <Spacer />
-                <Text fontSize={14} mt={3}>Edit</Text>
+                <HStack>
+                    <IconButton
+                        icon={<Check />}
+                        onClick={() => {
+                            handleNameChange();
+                            setEditDisplayNameMode(false);
+                        }}
+                    />
+                    <IconButton
+                        icon={<X />}
+                        onClick={() => {
+                            setEditDisplayNameMode(false);
+                            // setEditDisplayName("");
+                        }}
+                    />
+                </HStack>
             </Flex>
 
             <VStack
@@ -52,8 +67,20 @@ export const Active = () => {
                                         หลังไมค์ (แชท)
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                    <NumberInput min={0} max={100}>
+                                        <NumberInputField fontSize={14}
+                                            bg={"white"}
+                                            borderRadius={10}
+                                            pl={1}
+                                            pr={1}
+                                            pt={0.5}
+                                            pb={0.5}
+                                            borderWidth={1}
+                                            borderColor={'#6768AB'}
+                                            w={39}
+                                            h={25} />
+                                    </NumberInput>
+                                    <Center ml={1}>
                                         %
                                     </Center>
                                 </Flex>
@@ -74,8 +101,20 @@ export const Active = () => {
                                         หน้าไมค์ (โพสต์)
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                    <NumberInput min={0} max={100}>
+                                        <NumberInputField fontSize={14}
+                                            bg={"white"}
+                                            borderRadius={10}
+                                            pl={1}
+                                            pr={1}
+                                            pt={0.5}
+                                            pb={0.5}
+                                            borderWidth={1}
+                                            borderColor={'#6768AB'}
+                                            w={39}
+                                            h={25} />
+                                    </NumberInput>
+                                    <Center ml={1}>
                                         %
                                     </Center>
                                 </Flex>
@@ -92,7 +131,11 @@ export const Active = () => {
                         ระยะเวลาตอบ
                     </Box>
 
-                    <Box pt={2} h={10}>ตอบกลับทันที</Box>
+                    <Select placeholder='ตอบกลับทันที'>
+                        <option>ตอบกลับตามความสะดวกของตนเอง</option>
+                        <option>ตอบกลับภายใน 1 - 2 ชั่วโมง</option>
+                        <option>ตอบกลับภายใน 3 - 6 ชั่วโมง</option>
+                    </Select>
                 </Flex>
             </VStack>
         </Flex>
