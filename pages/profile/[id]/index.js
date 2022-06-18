@@ -42,6 +42,8 @@ import { Uploadprofileimg } from "../../../src/services/filestoreageservice";
 import Footer from "../../../components/footer";
 import { About } from "../../../components/profile/about";
 import { Myfriends } from "../../../components/profile/myfriends";
+import axios from "axios";
+import useFriendManager from "../../../components/groupcomponents/friendhooks";
 
 export default function profile() {
   const { tabState, addTab, removeTab, changeTab, CloseTab } = useTab();
@@ -55,18 +57,68 @@ export default function profile() {
   const [userDetail, setUserDetail] = useState(null);
   const [editDisplayNameMode, setEditDisplayNameMode] = useState(false);
   const [editDisplayName, setEditDisplayName] = useState("");
-  const [editAvartar, setEditAvatar] = useState("");
-  const [editCover, setEditCover] = useState("");
   const [editAvartarMode, setEditAvatarMode] = useState(false);
   const [editCoverMode, setEditCoverMode] = useState(false);
-  const [value, setValue] = React.useState("1");
+  const {
+    friend,
+    setFriend,
+    handleAddFriend,
+    handleRemoveAddFriend,
+    handleAcceptFriend,
+    handleRejectFriend,
+    handleRemoveFriend,
+  } = useFriendManager();
 
   const loaduserDetail = async () => {
     if (!loading) {
-      const detail = await getDoc(doc(db, "userDetail", id));
-      //    console.log(detail.data())
-      if (detail.exists) {
-        setUserDetail(detail.data());
+      const token = await user.getIdToken();
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/user/getdetailusers`, {
+        users: [...new Set([id, user.uid])]
+      },         
+      {
+        headers: {
+          Authorization: token,
+        },
+      })
+      if (res.status === 200) {
+        let thisuser = res.data.find(v=>v.uid === id);
+        let myuser = res.data.find(v=>v.uid === user.uid);
+        if (thisuser.pendingFriend?.includes(user.uid)) {
+          setFriend(1); //onpending
+        } else if (thisuser.friend?.includes(user.uid)) {
+          setFriend(2); //friended
+        } else if (myuser.pendingFriend?.includes(id)) {
+          setFriend(3); //onpending but reciever
+        }
+        if (user.uid === id && thisuser.pendingFriend && thisuser.pendingFriend.length > 0) {
+          
+          const res2 = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/user/getdetailusers`, {
+            users: [...thisuser.pendingFriend]
+          },
+          {
+            headers: {
+              Authorization: token,
+            },
+          })
+          if (res2.status === 200) {
+            console.log(thisuser.pendingFriend, res2.data);
+            thisuser = {...thisuser, pendingFriend: res2.data}
+          }
+        }
+        if (thisuser.friend && thisuser.friend.length > 0) {
+          const res3 = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/user/getdetailusers`, {
+            users: [...thisuser.friend]
+          },
+          {
+            headers: {
+              Authorization: token,
+            },
+          })
+          if (res3.status === 200) {
+            thisuser = {...thisuser, friend: res3.data}
+          }
+        }
+        setUserDetail(thisuser);
       }
     }
   };
@@ -149,10 +201,6 @@ export default function profile() {
           }).then(() => changeTab(created.id));
         });
       }
-
-      // console.log(roomId)
-      // setNewtab(roomId)
-      // setTimeout(()=>setNewtab(""),500)
     });
   };
 
@@ -199,23 +247,42 @@ export default function profile() {
             spacing={0}
             boxShadow="base"
           >
-            <Center
-              width="100%"
-              maxW={1000}
-              h={400}
-              fontSize={30}
-              boxShadow={"base"}
-              borderBottomRadius={10}
-              onClick={() => setEditCoverMode(true)}
-            >
-              <Image
+            {user.uid === id ? (
+              <Center
+                width="100%"
+                maxW={1000}
+                h={400}
+                fontSize={30}
+                boxShadow={"base"}
                 borderBottomRadius={10}
-                src={userDetail?.coverImage}
-                w="100%"
-                h="100%"
-                fallback={<Box></Box>}
-              />
-            </Center>
+                onClick={() => setEditCoverMode(true)}
+              >
+                <Image
+                  borderBottomRadius={10}
+                  src={userDetail?.coverImage}
+                  w="100%"
+                  h="100%"
+                  fallback={<Box></Box>}
+                />
+              </Center>
+            ) : (
+              <Center
+                width="100%"
+                maxW={1000}
+                h={400}
+                fontSize={30}
+                boxShadow={"base"}
+                borderBottomRadius={10}
+              >
+                <Image
+                  borderBottomRadius={10}
+                  src={userDetail?.coverImage}
+                  w="100%"
+                  h="100%"
+                  fallback={<Box></Box>}
+                />
+              </Center>
+            )}
             <Flex borderBottomRadius={10} bg={"white"} boxShadow={"base"}>
               <Center
                 rounded={"full"}
@@ -227,16 +294,28 @@ export default function profile() {
                 bg={"white"}
                 boxShadow={"base"}
               >
-                <Avatar
-                  w={150}
-                  h={150}
-                  rounded={100}
-                  m={2}
-                  // mt={-20}
-                  float={"left"}
-                  src={userDetail?.photoURL}
-                  onClick={() => setEditAvatarMode(true)}
-                ></Avatar>
+                {user.uid === id ? (
+                  <Avatar
+                    w={150}
+                    h={150}
+                    rounded={100}
+                    m={2}
+                    // mt={-20}
+                    float={"left"}
+                    src={userDetail?.photoURL}
+                    onClick={() => setEditAvatarMode(true)}
+                  ></Avatar>
+                ) : (
+                  <Avatar
+                    w={150}
+                    h={150}
+                    rounded={100}
+                    m={2}
+                    // mt={-20}
+                    float={"left"}
+                    src={userDetail?.photoURL}
+                  ></Avatar>
+                )}
               </Center>
 
               <Flex w={770} m={2} p={2}>
@@ -292,13 +371,56 @@ export default function profile() {
                   </Box>
                 ) : (
                   <Stack direction="row" spacing={4}>
-                    <Button
-                      colorScheme="teal"
-                      variant="solid"
-                      position="initial"
-                    >
-                      Add Friend
-                    </Button>
+                    {friend === 0 && (
+                      <Button
+                        colorScheme="teal"
+                        variant="solid"
+                        position="initial"
+                        onClick={() => handleAddFriend(id, user)}
+                      >
+                        Add Friend
+                      </Button>
+                    )}
+                    {friend === 1 && (
+                      <Button
+                        colorScheme="teal"
+                        variant="solid"
+                        position="initial"
+                        onClick={() => handleRemoveAddFriend(id, user)}
+                      >
+                        Cancel Request
+                      </Button>
+                    )}
+                    {friend === 2 && (
+                      <Button
+                        colorScheme="teal"
+                        variant="solid"
+                        position="initial"
+                        onClick={() => handleRemoveFriend(id, user)}
+                      >
+                        Unfriend
+                      </Button>
+                    )}
+                    {friend === 3 && (
+                      <>
+                        <Button
+                          colorScheme="teal"
+                          variant="solid"
+                          position="initial"
+                          onClick={() => handleAcceptFriend(id, user)}
+                        >
+                          Accept Request
+                        </Button>
+                        <Button
+                          colorScheme="teal"
+                          variant="solid"
+                          position="initial"
+                          onClick={() => handleRejectFriend(id, user)}
+                        >
+                          Reject Request
+                        </Button>
+                      </>
+                    )}
                     <Button
                       colorScheme="teal"
                       variant="outline"
@@ -387,7 +509,7 @@ export default function profile() {
 
                 {/* Friend */}
                 <TabPanel>
-                  <Myfriends />
+                  <Myfriends data={userDetail} owner={id} accessor={user.uid} />
                 </TabPanel>
 
                 {/* Bookshelf */}
@@ -397,7 +519,7 @@ export default function profile() {
 
                 {/* About */}
                 <TabPanel>
-                  <About></About>
+                  <About />
                 </TabPanel>
               </TabPanels>
             </Tabs>

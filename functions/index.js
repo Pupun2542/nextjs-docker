@@ -12,7 +12,7 @@ const cors = require("cors");
 const { createPost, updatePost, deletePost, lovePost, unlovePost, getPost, getAllPost, getAllMedia } = require("./handlers/posts");
 const { createComment, updateComment, deleteComment, loveComment, unloveComment, getAllComment } = require("./handlers/comments");
 const { createReply, updateReply, deleteReply, loveReply, unloveReply, getAllReply } = require("./handlers/replies");
-const { getuser, getbatchUser } = require("./handlers/user");
+const { getuser, getbatchUser, getUserByName, addfriend, removefriend, acceptfriend, rejectfriend, removeaddfriend, getDetailedUsers } = require("./handlers/user");
 const { createPreviewComment, DeletePreviewComment, lovePreviewComment, unlovePreviewComment, UpdatePreviewComment, getAllPreviewcomment } = require("./handlers/previewcomments");
 const { createPreviewReply, UpdatePreviewReply, DeletePreviewReply, lovePreviewReply, unlovePreviewReply } = require("./handlers/previewreplies");
 
@@ -81,8 +81,15 @@ app.post("/post/:gid/:pid/comment/:cid/reply/:rid/unlove", authmw, unloveReply);
 app.get("/post/:gid/:pid/comment/:cid/reply", authmw, getAllReply);
 app.get("/user/:uid", authmw, getuser);
 app.get("/user/search", authmw, getuser);
-app.post("/user/bactchget/", getbatchUser);
-app.post("/user/:uid/update/");
+app.post("/user/batchget", getbatchUser);
+app.post("/user/:uid/update");
+app.post("/user/getbyname", authmw, getUserByName);
+app.post("/user/addfriend", authmw, addfriend);
+app.post("/user/removefriend", authmw, removefriend);
+app.post("/user/acceptfriend", authmw, acceptfriend);
+app.post("/user/rejectfriend", authmw, rejectfriend);
+app.post("/user/removeaddfriend", authmw, removeaddfriend);
+app.post("/user/getdetailusers", authmw, getDetailedUsers);
 
 app.post("/debug/group/:gid/join/", authmw, JoinDebug);
 
