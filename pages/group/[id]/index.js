@@ -1066,6 +1066,145 @@ export default function Group() {
                                 </VStack>
                               ))}
                             </AccordionPanel>
+                            <AccordionPanel pb={4}>
+                              {data.statuschecklink?.map((link) => (
+                                <VStack>
+                                  <Flex w={"100%"}>
+                                    <Center w={50}></Center>
+                                    <Flex
+                                      w={"100%"}
+                                      bg={"white"}
+                                      boxShadow={"base"}
+                                      borderRadius={10}
+                                    >
+                                      <Box
+                                        p={4}
+                                        minW={180}
+                                        borderRightColor={"#C4C4C4"}
+                                        borderRightWidth={3}
+                                      >
+                                        <Box>
+                                          <Text float="left">
+                                            หัวข้อการรับสมัคร
+                                          </Text>
+                                        </Box>
+                                      </Box>
+
+                                      <Center
+                                        w={"100%"}
+                                        pl={1.5}
+                                        pr={1.5}
+                                        position="relative"
+                                      >
+                                        {link.name}
+                                      </Center>
+                                    </Flex>
+                                    <Center w={50}></Center>
+                                  </Flex>
+
+                                  <Flex w={"100%"}>
+                                    <Center w={50}></Center>
+                                    <VStack w={50} spacing={0}>
+                                      <Box
+                                        mt={2.5}
+                                        h={5}
+                                        w={3.5}
+                                        borderLeftWidth={3}
+                                        borderLeftColor="gray.400"
+                                      ></Box>
+                                      <Box
+                                        borderBottomLeftRadius={10}
+                                        borderLeftWidth={3}
+                                        borderBottomWidth={3}
+                                        borderColor="gray.400"
+                                        h={2}
+                                        w={3.5}
+                                      ></Box>
+                                    </VStack>
+                                    <Flex
+                                      w={"100%"}
+                                      bg={"white"}
+                                      boxShadow={"base"}
+                                      borderRadius={10}
+                                    >
+                                      <Center></Center>
+
+                                      <Box
+                                        p={4}
+                                        minW={180}
+                                        borderRightColor={"#C4C4C4"}
+                                        borderRightWidth={3}
+                                      >
+                                        <Box>
+                                          <Text float="left">
+                                            วันที่และเวลา
+                                          </Text>
+                                        </Box>
+                                      </Box>
+                                      <Center
+                                        w={"100%"}
+                                        pl={1.5}
+                                        pr={1.5}
+                                        position="relative"
+                                      >
+                                        {link.fromdate} ถึง {link.todate}
+                                      </Center>
+                                    </Flex>
+                                    <Center w={50}></Center>
+                                  </Flex>
+
+                                  <Flex w={"100%"}>
+                                    <Center w={50}></Center>
+                                    <VStack w={50} spacing={0}>
+                                      <Box
+                                        mt={2.5}
+                                        h={5}
+                                        w={3.5}
+                                        borderLeftWidth={3}
+                                        borderLeftColor="gray.400"
+                                      ></Box>
+                                      <Box
+                                        borderBottomLeftRadius={10}
+                                        borderLeftWidth={3}
+                                        borderBottomWidth={3}
+                                        borderColor="gray.400"
+                                        h={2}
+                                        w={3.5}
+                                      ></Box>
+                                    </VStack>
+                                    <Flex
+                                      w={"100%"}
+                                      bg={"white"}
+                                      boxShadow={"base"}
+                                      borderRadius={10}
+                                    >
+                                      <Center></Center>
+
+                                      <Box
+                                        p={4}
+                                        minW={180}
+                                        borderRightColor={"#C4C4C4"}
+                                        borderRightWidth={3}
+                                      >
+                                        <Box>
+                                          <Text float="left">ลิงก์</Text>
+                                        </Box>
+                                      </Box>
+
+                                      <Center
+                                        w={"100%"}
+                                        pl={1.5}
+                                        pr={1.5}
+                                        position="relative"
+                                      >
+                                        {link.link}
+                                      </Center>
+                                    </Flex>
+                                    <Center w={50}></Center>
+                                  </Flex>
+                                </VStack>
+                              ))}
+                            </AccordionPanel>
                           </AccordionItem>
                         </Accordion>
                       </Flex>
