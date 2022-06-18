@@ -158,7 +158,7 @@ const Notitab = ({ notidata }) => {
   return (
     <Flex p={2} direction={'column'}>
       {newNotiData.map((data) => (
-        <Flex onClick={()=>router.push(data.path)} cursor="pointer">
+        <Flex boxShadow={'base'} p={2} mt={0.5} mb={0.5} onClick={()=>router.push(data.path)} cursor="pointer" _hover={{backgroundColor: "gray.100"}}>
           {/* {console.log(data)} */}
           <Avatar size={"lg"} src={data.triggerer.photoURL}></Avatar>
           <VStack pl={2} w={"100%"} float={"left"}>
