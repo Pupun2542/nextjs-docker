@@ -133,7 +133,11 @@ export const Playedcom = () => {
                         หมวดหมู่ที่สนใจ
                     </Box>
 
-                    <Box pt={2} h={10}>ตำนานแฟนตาซี</Box>
+                    <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={12}>
+                        <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={10}>
+                            ตำนานแฟนตาซี
+                        </Box>
+                    </Center>
                 </Flex>
             </VStack>
         </Flex>

@@ -92,7 +92,11 @@ export const Active = () => {
                         ระยะเวลาตอบ
                     </Box>
 
-                    <Box pt={2} h={10}>ตอบกลับทันที</Box>
+                    <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={12}>
+                        <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={10}>
+                            ตอบกลับทันที
+                        </Box>
+                    </Center>
                 </Flex>
             </VStack>
         </Flex>

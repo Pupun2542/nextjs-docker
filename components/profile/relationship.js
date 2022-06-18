@@ -198,8 +198,11 @@ export const Relationship = () => {
                     <Box pt={2} h={10} maxWidth={135} w={"100%"}>
                         สายที่ไม่เล่น
                     </Box>
-
-                    <Box pt={2} h={10}>ไม่น่ามี</Box>
+                    <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={12}>
+                        <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={10}>
+                            ไม่น่ามี
+                        </Box>
+                    </Center>
                 </Flex>
 
                 <Flex pl={3} pr={2} w={"100%"}>
@@ -325,7 +328,11 @@ export const Relationship = () => {
                         รสนิยม
                     </Box>
 
-                    <Box pt={2} h={10}>รักตัวเองครับ</Box>
+                    <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={12}>
+                        <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={10}>
+                            รักตัวเองครับ
+                        </Box>
+                    </Center>
                 </Flex>
             </VStack>
         </Flex>
