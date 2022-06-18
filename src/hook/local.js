@@ -211,7 +211,7 @@ export const UserProvider = ({ children }) => {
         // if (!docData.empty) {
         //   userDetail = docData.docs.map((doc) => doc.data());
         // console.log("new:", newuid)
-        const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/user/bactchget/`, {
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/user/batchget/`, {
           users: newuid,
         })
         
