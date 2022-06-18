@@ -10,6 +10,8 @@ import {
     Radio,
     SimpleGrid,
     Text,
+    Center,
+    Checkbox,
 } from "@chakra-ui/react";
 
 export const Condition = () => {
@@ -87,16 +89,16 @@ export const Condition = () => {
                         เงื่อนไขการมีปฏิสัมพันธ์
                     </Box>
 
-                    <RadioGroup pt={2} w={'100%'}>
+                    <Flex float={'left'} pt={2} w={'100%'}>
                         <SimpleGrid columns={2}>
-                            <Radio value='1' colorScheme='purple'>ต้องการให้แจ้งก่อนโดยตรง</Radio>
-                            <Radio value='2' colorScheme='purple'>ไม่ต้องการเปิดเผยความสัมพันธ์หน้าไมค์</Radio>
-                            <Radio value='3' colorScheme='purple'>สามารถปล่อยตามสถานการณ์</Radio>
-                            <Radio value='4' colorScheme='purple'>ไม่ใช้คำหยาบคาย</Radio>
-                            <Radio value='5' colorScheme='purple'>ไม่รับเจ้าของตัวละครที่เป็นเพศชาย</Radio>
-                            <Radio value='6' colorScheme='purple'>ไม่รับเจ้าของตัวละครที่เป็นเพศหญิง</Radio>
+                            <Checkbox value='1' colorScheme='purple'>ต้องการให้แจ้งก่อนโดยตรง</Checkbox>
+                            <Checkbox value='2' colorScheme='purple'>ไม่ต้องการเปิดเผยความสัมพันธ์หน้าไมค์</Checkbox>
+                            <Checkbox value='3' colorScheme='purple'>สามารถปล่อยตามสถานการณ์</Checkbox>
+                            <Checkbox value='4' colorScheme='purple'>ไม่ใช้คำหยาบคาย</Checkbox>
+                            <Checkbox value='5' colorScheme='purple'>ไม่รับเจ้าของตัวละครที่เป็นเพศชาย</Checkbox>
+                            <Checkbox value='6' colorScheme='purple'>ไม่รับเจ้าของตัวละครที่เป็นเพศหญิง</Checkbox>
                         </SimpleGrid>
-                    </RadioGroup>
+                    </Flex>
                 </Flex>
 
                 <Flex pl={3} pr={2} w={"100%"}>
