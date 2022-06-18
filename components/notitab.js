@@ -24,15 +24,22 @@ const Notitab = ({ notidata }) => {
       const detaileduser = await getUser(uniquser);
       const uniqgroup = [...new Set(groupdetail)];
       const detailedgroup = await Promise.all(
-        uniqgroup.map(async (grp) => await getHeader(grp))
+        uniqgroup.map(async (grp) => {
+            if (grp !== "") {
+                return await getHeader(grp);
+            } else {
+                return;
+            }
+            
+        })
       );
       console.log(detaileduser, detailedgroup);
       const mappedNotiData = [];
       notidata.map((data)=>{
-        const group = detailedgroup.find((v)=> v.gid === data.group);
-        const triggerer = detaileduser.find((v)=> data.triggerer[data.triggerer.length-1] === v.uid)
+        const group = detailedgroup.find((v)=> v?.gid === data.group);
+        const triggerer = detaileduser.find((v)=> data.triggerer[data.triggerer.length-1] === v?.uid)
         const other = (data.triggerer.length-1)
-        const object = detaileduser.find((v)=> data.object === v.uid)
+        const object = detaileduser.find((v)=> data.object === v?.uid)
         mappedNotiData = [
             ...mappedNotiData, 
             {
