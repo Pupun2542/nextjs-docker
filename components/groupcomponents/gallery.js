@@ -5,7 +5,8 @@ import { Box, Center, Flex, Image, useDisclosure, ModalOverlay, Modal, ModalCont
 
 const Gallery = ({ gid }) => {
   const { auth } = useApp();
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  // const { isOpen, onOpen, onClose } = useDisclosure();
+  const [modalImage, setModalImage] = useState("");
   const [gallery, setGallery] = useState([]);
   console.log(gallery);
   useEffect(() => {
@@ -41,7 +42,7 @@ const Gallery = ({ gid }) => {
             margin={2}
             cursor={'pointer'}
             borderRadius={10}
-            onClick={onOpen}
+            onClick={()=>setModalImage(img.url)}
           >
             <Image
               src={img.url}
@@ -54,13 +55,13 @@ const Gallery = ({ gid }) => {
 
         ))}
 
-      <Modal size={'7xl'} isOpen={isOpen} onClose={onClose}>
+      <Modal size={'7xl'} isOpen={modalImage} onClose={()=>setModalImage("")}>
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />
 
           <ModalBody>
-            โชว์ทีละภาพ
+            <Image src={modalImage} height="90%" width="90%"></Image>
           </ModalBody>
 
         </ModalContent>
