@@ -5,29 +5,96 @@
 const functions = require("firebase-functions");
 const express = require("express");
 // const { db } = require("./utils/admin");
-const { createGroup, updateGroup, deleteGroup, getAllGroup, addPlayer, addPendingPlayer, removePlayer, removePendingPlayer, addStaff, removeStaff, groupPin, groupUnpin, groupLove, groupUnlove, getGroup, JoinDebug } = require("./handlers/group");
+const {
+  createGroup,
+  updateGroup,
+  deleteGroup,
+  getAllGroup,
+  addPlayer,
+  addPendingPlayer,
+  removePlayer,
+  removePendingPlayer,
+  addStaff,
+  removeStaff,
+  groupPin,
+  groupUnpin,
+  groupLove,
+  groupUnlove,
+  getGroup,
+  JoinDebug,
+} = require("./handlers/group");
 const { db, admin } = require("./utils/admin");
 const authmw = require("./utils/auth");
 const cors = require("cors");
-const { createPost, updatePost, deletePost, lovePost, unlovePost, getPost, getAllPost, getAllMedia } = require("./handlers/posts");
-const { createComment, updateComment, deleteComment, loveComment, unloveComment, getAllComment } = require("./handlers/comments");
-const { createReply, updateReply, deleteReply, loveReply, unloveReply, getAllReply } = require("./handlers/replies");
-const { getuser, getbatchUser, getUserByName, addfriend, removefriend, acceptfriend, rejectfriend, removeaddfriend, getDetailedUsers } = require("./handlers/user");
-const { createPreviewComment, DeletePreviewComment, lovePreviewComment, unlovePreviewComment, UpdatePreviewComment, getAllPreviewcomment } = require("./handlers/previewcomments");
-const { createPreviewReply, UpdatePreviewReply, DeletePreviewReply, lovePreviewReply, unlovePreviewReply } = require("./handlers/previewreplies");
+const {
+  createPost,
+  updatePost,
+  deletePost,
+  lovePost,
+  unlovePost,
+  getPost,
+  getAllPost,
+  getAllMedia,
+} = require("./handlers/posts");
+const {
+  createComment,
+  updateComment,
+  deleteComment,
+  loveComment,
+  unloveComment,
+  getAllComment,
+} = require("./handlers/comments");
+const {
+  createReply,
+  updateReply,
+  deleteReply,
+  loveReply,
+  unloveReply,
+  getAllReply,
+} = require("./handlers/replies");
+const {
+  getuser,
+  getbatchUser,
+  getUserByName,
+  addfriend,
+  removefriend,
+  acceptfriend,
+  rejectfriend,
+  removeaddfriend,
+  getDetailedUsers,
+} = require("./handlers/user");
+const {
+  createPreviewComment,
+  DeletePreviewComment,
+  lovePreviewComment,
+  unlovePreviewComment,
+  UpdatePreviewComment,
+  getAllPreviewcomment,
+} = require("./handlers/previewcomments");
+const {
+  createPreviewReply,
+  UpdatePreviewReply,
+  DeletePreviewReply,
+  lovePreviewReply,
+  unlovePreviewReply,
+} = require("./handlers/previewreplies");
+const { getChatHeader } = require("./handlers/chat");
 
 // The Firebase Admin SDK to access Firestore.
 
 const app = express();
 app.use(express.json());
-app.use(cors({
-  origin: ["http://localhost:3000", "https://comuthor-uat-hclhis5lxq-de.a.run.app"],
-  // origin: "https://comuthor-uat-hclhis5lxq-de.a.run.app",
-}));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://comuthor-uat-hclhis5lxq-de.a.run.app",
+    ],
+    // origin: "https://comuthor-uat-hclhis5lxq-de.a.run.app",
+  }),
+);
 
-app.get("/", async (req, res)=>{
-
-});
+app.get("/", async (req, res) => {});
 app.post("/", DeletePreviewComment);
 
 app.post("/group/create", authmw, createGroup);
@@ -52,10 +119,22 @@ app.post("/group/:gid/comment/:cid/delete", authmw, DeletePreviewComment);
 app.post("/group/:gid/comment/:cid/love", authmw, lovePreviewComment);
 app.post("/group/:gid/comment/:cid/unlove", authmw, unlovePreviewComment);
 app.post("/group/:gid/comment/:cid/reply/create", authmw, createPreviewReply);
-app.post("/group/:gid/comment/:cid/reply/:rid/update", authmw, UpdatePreviewReply);
-app.post("/group/:gid/comment/:cid/reply/:rid/delete", authmw, DeletePreviewReply);
+app.post(
+  "/group/:gid/comment/:cid/reply/:rid/update",
+  authmw,
+  UpdatePreviewReply,
+);
+app.post(
+  "/group/:gid/comment/:cid/reply/:rid/delete",
+  authmw,
+  DeletePreviewReply,
+);
 app.post("/group/:gid/comment/:cid/reply/:rid/love", authmw, lovePreviewReply);
-app.post("/group/:gid/comment/:cid/reply/:rid/unlove", authmw, unlovePreviewReply);
+app.post(
+  "/group/:gid/comment/:cid/reply/:rid/unlove",
+  authmw,
+  unlovePreviewReply,
+);
 app.get("/group/:gid", authmw, getGroup);
 app.get("/group/:gid/comment", authmw, getAllPreviewcomment);
 app.get("/group/:gid/media", authmw, getAllMedia);
@@ -90,13 +169,15 @@ app.post("/user/acceptfriend", authmw, acceptfriend);
 app.post("/user/rejectfriend", authmw, rejectfriend);
 app.post("/user/removeaddfriend", authmw, removeaddfriend);
 app.post("/user/getdetailusers", authmw, getDetailedUsers);
+app.get("/chat/getchatheader/:crid", authmw, getChatHeader);
 
 app.post("/debug/group/:gid/join/", authmw, JoinDebug);
 
 exports.api = functions.region("asia-southeast1").https.onRequest(app);
 
-exports.onNotificationAdd = functions.region("asia-southeast1").firestore
-  .document("notifications/{notiId}")
+exports.onNotificationAdd = functions
+  .region("asia-southeast1")
+  .firestore.document("notifications/{notiId}")
   .onCreate(async (snap, context) => {
     let sendTo = snap.data().reciever;
     const batch = db.batch();
@@ -104,53 +185,70 @@ exports.onNotificationAdd = functions.region("asia-southeast1").firestore
       sendTo = [sendTo];
     }
     if (snap.data().notitype === "002" || snap.data().notitype === "101") {
-      sendTo.map((target) =>{
+      sendTo.map((target) => {
         if (target != snap.data().triggerer) {
-          return batch.set(db.collection(`userDetail/${target}/notification`).doc(), {
-            notitype: snap.data().notitype,
-            triggerer: [snap.data().triggerer],
-            group: snap.data().group,
-            object: snap.data().object,
-            timestamp: snap.data().timestamp,
-            readed: false,
-            path: snap.data().path,
-          });
+          return batch.set(
+            db.collection(`userDetail/${target}/notification`).doc(),
+            {
+              notitype: snap.data().notitype,
+              triggerer: [snap.data().triggerer],
+              group: snap.data().group,
+              object: snap.data().object,
+              timestamp: snap.data().timestamp,
+              readed: false,
+              path: snap.data().path,
+            },
+          );
         } else {
           return;
         }
-        });
+      });
     } else {
-      await Promise.all(sendTo.map(async (target) =>{
-        const snap2 = await db
-          .collection(`userDetail/${target}/notification`)
-          .where("notitype", "==", snap.data().notitype)
-          .where("path", "==", snap.data().path)
-          .get();
-        if (!snap2.empty) {
-          return snap2.docs.map((doc) => {
-            return batch.update(db.collection(`userDetail/${target}/notification`).doc(doc.id), {
-              triggerer: admin.firestore.FieldValue.arrayUnion(snap.data().triggerer),
-              timestamp: snap.data().timestamp,
-              readed: false,
-              object: snap.data().object,
-            });
-          });
-        } else {
-          return batch.set(db.collection(`userDetail/${target}/notification`).doc(), {
-            notitype: snap.data().notitype,
-            triggerer: [snap.data().triggerer],
-            group: snap.data().group,
-            object: snap.data().object,
-            timestamp: snap.data().timestamp,
-            readed: false,
-            path: snap.data().path,
-          });
-        }
-      }));
+      await Promise.all(
+        sendTo.map(async (target) => {
+          if (target != snap.data().triggerer) {
+            const snap2 = await db
+              .collection(`userDetail/${target}/notification`)
+              .where("notitype", "==", snap.data().notitype)
+              .where("path", "==", snap.data().path)
+              .get();
+            if (!snap2.empty) {
+              return snap2.docs.map((doc) => {
+                return batch.update(
+                  db
+                    .collection(`userDetail/${target}/notification`)
+                    .doc(doc.id),
+                  {
+                    triggerer: admin.firestore.FieldValue.arrayUnion(
+                      snap.data().triggerer,
+                    ),
+                    timestamp: snap.data().timestamp,
+                    readed: false,
+                    object: snap.data().object,
+                  },
+                );
+              });
+            } else {
+              return batch.set(
+                db.collection(`userDetail/${target}/notification`).doc(),
+                {
+                  notitype: snap.data().notitype,
+                  triggerer: [snap.data().triggerer],
+                  group: snap.data().group,
+                  object: snap.data().object,
+                  timestamp: snap.data().timestamp,
+                  readed: false,
+                  path: snap.data().path,
+                },
+              );
+            }
+          }
+        }),
+      );
     }
     return batch.commit();
   });
-  /* พวกนี้จะใช้ */
+/* พวกนี้จะใช้ */
 //   exports.onPostCreate = functions.firestore.document("posts/{postId}/").onCreate((snap, context)=>{
 //     // db.collection("notifications").where("linkId", "==", context.params.postId).where("type", "==", "11");
 //     db.collection("group").doc(snap.data().groupId).get().then((parent)=>{
@@ -173,7 +271,7 @@ exports.onNotificationAdd = functions.region("asia-southeast1").firestore
 //   });
 
 exports.onUserCreated = functions.auth.user().onCreate((user) => {
-  admin.auth().updateUser(user.uid, {photoURL: ""});
+  admin.auth().updateUser(user.uid, { photoURL: "" });
   db.doc(`userDetail/${user.uid}`)
     .set({
       uid: user.uid,

@@ -102,7 +102,7 @@ exports.removefriend = async (req, res) => {
       const userref = db.collection("userDetail").doc(req.body.uid);
       const userref2 = db.collection("userDetail").doc(req.user.uid);
       batch.update(userref, {
-        friend: admin.firestore.FieldValue.arrayRemove(req.body.uid),
+        friend: admin.firestore.FieldValue.arrayRemove(req.user.uid),
       });
       batch.update(userref2, {
         friend: admin.firestore.FieldValue.arrayRemove(req.body.uid),
@@ -133,7 +133,7 @@ exports.acceptfriend = async (req, res) => {
           });
           batch.update(docref1, {
             pendingFriend: admin.firestore.FieldValue.arrayRemove(req.body.uid),
-          })
+          });
           await batch.commit();
           sendNotifications(req.body.uid, "302", req.user.uid, "", "", `/profile/${req.user.uid}`);
           return res.status(200).send("remove friend complete");

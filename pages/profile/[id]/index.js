@@ -44,6 +44,7 @@ import { About } from "../../../components/profile/about";
 import { Myfriends } from "../../../components/profile/myfriends";
 import axios from "axios";
 import useFriendManager from "../../../components/groupcomponents/friendhooks";
+import UseChatManager from "../../../components/chat/ChatManager";
 
 export default function profile() {
   const { tabState, addTab, removeTab, changeTab, CloseTab } = useTab();
@@ -68,6 +69,7 @@ export default function profile() {
     handleRejectFriend,
     handleRemoveFriend,
   } = useFriendManager();
+  const { handleMessage } = UseChatManager()
 
   const loaduserDetail = async () => {
     if (!loading) {
@@ -135,74 +137,74 @@ export default function profile() {
     loaduserDetail();
   }, [loading, id]);
 
-  const handleMessage = () => {
-    let roomId = "";
-    getDocs(
-      query(
-        collection(db, "chatrooms"),
-        where("member", "array-contains", user.uid),
-        where("type", "==", "private")
-      )
-    ).then((docs) => {
-      if (!docs.empty) {
-        //ถ้าเจอ doc
-        const docId = docs.docs.find((v) => v.data().member.includes(id));
-        if (docId) {
-          //ถ้า doc เป็นของเราจริงๆ
-          changeTab(docId.data().id);
-        } else {
-          //ถ้าไม่ใช่
-          addDoc(collection(db, "chatrooms"), {
-            member: [user.uid, id],
-            memberDetail: [
-              {
-                uid: user.uid,
-                displayName: user.displayName,
-                photoURL: user.photoURL,
-              },
-              {
-                uid: id,
-                displayName: userDetail.displayName,
-                photoURL: userDetail.photoURL,
-              },
-            ],
-            type: "private",
-          }).then((created) => {
-            roomId = created.id;
-            updateDoc(doc(db, "chatrooms", created.id), {
-              id: created.id,
-            }).then(() => changeTab(created.id));
-          });
-        }
-        // console.log("not empty")
-      } else {
-        // console.log("empty")
-        addDoc(collection(db, "chatrooms"), {
-          member: [user.uid, id],
-          memberDetail: [
-            {
-              uid: user.uid,
-              displayName: user.displayName,
-              photoURL: user.photoURL,
-            },
-            {
-              uid: id,
-              displayName: userDetail.displayName,
-              photoURL: userDetail.photoURL,
-            },
-          ],
-          type: "private",
-        }).then((created) => {
-          // console.log("created")
-          roomId = created.id;
-          changeTab(roomId);
-          updateDoc(doc(db, "chatrooms", created.id), {
-            id: created.id,
-          }).then(() => changeTab(created.id));
-        });
-      }
-    });
-  };
+  // const handleMessage = () => {
+  //   let roomId = "";
+  //   getDocs(
+  //     query(
+  //       collection(db, "chatrooms"),
+  //       where("member", "array-contains", user.uid),
+  //       where("type", "==", "private")
+  //     )
+  //   ).then((docs) => {
+  //     if (!docs.empty) {
+  //       //ถ้าเจอ doc
+  //       const docId = docs.docs.find((v) => v.data().member.includes(id));
+  //       if (docId) {
+  //         //ถ้า doc เป็นของเราจริงๆ
+  //         changeTab(docId.data().id);
+  //       } else {
+  //         //ถ้าไม่ใช่
+  //         addDoc(collection(db, "chatrooms"), {
+  //           member: [user.uid, id],
+  //           memberDetail: [
+  //             {
+  //               uid: user.uid,
+  //               displayName: user.displayName,
+  //               photoURL: user.photoURL,
+  //             },
+  //             {
+  //               uid: id,
+  //               displayName: userDetail.displayName,
+  //               photoURL: userDetail.photoURL,
+  //             },
+  //           ],
+  //           type: "private",
+  //         }).then((created) => {
+  //           roomId = created.id;
+  //           updateDoc(doc(db, "chatrooms", created.id), {
+  //             id: created.id,
+  //           }).then(() => changeTab(created.id));
+  //         });
+  //       }
+  //       // console.log("not empty")
+  //     } else {
+  //       // console.log("empty")
+  //       addDoc(collection(db, "chatrooms"), {
+  //         member: [user.uid, id],
+  //         memberDetail: [
+  //           {
+  //             uid: user.uid,
+  //             displayName: user.displayName,
+  //             photoURL: user.photoURL,
+  //           },
+  //           {
+  //             uid: id,
+  //             displayName: userDetail.displayName,
+  //             photoURL: userDetail.photoURL,
+  //           },
+  //         ],
+  //         type: "private",
+  //       }).then((created) => {
+  //         // console.log("created")
+  //         roomId = created.id;
+  //         changeTab(roomId);
+  //         updateDoc(doc(db, "chatrooms", created.id), {
+  //           id: created.id,
+  //         }).then(() => changeTab(created.id));
+  //       });
+  //     }
+  //   });
+  // };
 
   const handleNameChange = async () => {
     await updateProfile(user, { displayName: editDisplayName });
@@ -424,7 +426,7 @@ export default function profile() {
                     <Button
                       colorScheme="teal"
                       variant="outline"
-                      onClick={handleMessage}
+                      onClick={()=>handleMessage(user, id)}
                       position="initial"
                     >
                       Message

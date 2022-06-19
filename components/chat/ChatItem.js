@@ -15,10 +15,7 @@ import {
 export const ChatItem = ({ doc, user, members }) => {
   const [modalOpen, setModalOpen] = useState(false);
   // const [userDetail, setUserDetail] = useState({})
-  console.log("member", members);
-  console.log("doc", doc.data())
   const sender = members.find((v) => v.uid == doc.data().senderId);
-  console.log("sender", sender);
 
   if (sender) {
     return (
