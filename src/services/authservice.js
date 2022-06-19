@@ -9,21 +9,13 @@ import { initializeUserDb } from "./firestoreservice";
 const app = getApp();
 const auth = getAuth(app);
 
-export function SignInwithGoogle(){
-    // const { setLoginPhoto } = useContext(ProfileContext);
+export async function SignInwithGoogle(){
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider).then(
-        // (v)=>{
-            // console.log(v)
-            // initializeUserDb(v.user)
-        // }
-    );
+    return await signInWithPopup(auth, provider);
 }
 export async function SignInWithFacebook(){
     const provider = new FacebookAuthProvider();
-    signInWithPopup(auth, provider).then(
-        // (v)=>{initializeUserDb(v.user)}
-    );
+    return await signInWithPopup(auth, provider);
 }
 export async function Logout(){
     signOut(auth)

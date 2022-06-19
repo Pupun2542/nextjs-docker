@@ -40,12 +40,12 @@ function Login() {
   const signInWithEmail = async () => {
     SignInWithEmailAndPassword(email, password);
   };
-  const google = () => {
-    SignInwithGoogle();
+  const google = async () => {
+    await SignInwithGoogle();
     router.push("/");
   };
-  const facebook = () => {
-    SignInWithFacebook();
+  const facebook = async () => {
+    await SignInWithFacebook();
     router.push("/");
   };
   return (

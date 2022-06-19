@@ -115,7 +115,7 @@ function CustomNavbar() {
   const [data, setData] = useState([]);
   const [unreadChat, setUnreadChat] = useState([]);
   const [unreadnoti, setUnreadnoti] = useState([]);
-  const [play] = useSound("/chatnoti.wav", { volume: 1.0 });
+  const [play] = useSound("/chatnoti.wav", { volume: 0.25 });
   const { tabState, addTab, removeTab, changeTab, closeTab } = useTab();
 
   useEffect(() => {
