@@ -373,7 +373,7 @@ function about() {
                   h={230}
                 >
                   <Center w={'100%'}>
-                    <Image src='yuu.png' height={100} width={100}></Image>
+                    <Image src='Yuu.png' height={100} width={100}></Image>
                   </Center>
 
                   <Flex direction={'column'}>
