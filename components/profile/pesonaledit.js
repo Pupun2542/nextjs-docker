@@ -14,18 +14,27 @@ import {
     NumberDecrementStepper,
     NumberIncrementStepper,
     Input,
-    Text
+    Text,
+    HStack
 } from "@chakra-ui/react";
-import { Eye, EyeClosed } from "phosphor-react";
+import { Eye, EyeClosed, Check, X } from "phosphor-react";
+import usePersonalEditState from "../../src/hook/usePersonalEditState";
 
-export const EdiePersonal = () => {
-    const [gender, setGender] = useState('1')
-    const [hiddenState, setHiddenState] = useState({
-        othname: false,
-        gender: false,
-        age: false,
-        work: false,
-    })
+export const EditPersonal = ({onFinish, value, config, onRefresh}) => {
+    const initalvalue = {
+        othername: value?.othername?value.othername: "",
+        gender: value?.gender?value.gender:1,
+        othergender: value?.othergender?value.othergender:"",
+        age: value?.age?value.age:0,
+        work: value?.work?value.work:""
+    };
+    const initialconfig = {
+        othername: config.othername?config.othername:false,
+        gender: config.othername?config.gender:false,
+        age: config.othername?config.age:false,
+        work: config.othername?config.work:false,
+    };
+    const { getValue, getConfig, setValue, setConfig, commit } = usePersonalEditState(initalvalue, initialconfig);
 
     return (
         <Flex direction={'column'}>
@@ -35,16 +44,16 @@ export const EdiePersonal = () => {
                 <HStack>
                     <IconButton
                         icon={<Check />}
-                        onClick={() => {
-                            handleNameChange();
-                            setEditDisplayNameMode(false);
+                        onClick={async() => {
+                            await commit();
+                            onRefresh();
+                            onFinish();
                         }}
                     />
                     <IconButton
                         icon={<X />}
                         onClick={() => {
-                            setEditDisplayNameMode(false);
-                            // setEditDisplayName("");
+                            onFinish();
                         }}
                     />
                 </HStack>
@@ -64,9 +73,9 @@ export const EdiePersonal = () => {
                         ชื่อเรียก
                     </Box>
 
-                    <Input w={'100%'} placeholder='สมมติชื่อสมชาย'></Input>
+                    <Input w={'100%'} placeholder='สมมติชื่อสมชาย' value={getValue("othername")} onChange={(e)=>setValue("othername", e.target.value)} ></Input>
 
-                    <IconButton ml={1} icon={hiddenState.othname ? <EyeClosed /> : <Eye />} onClick={() => setHiddenState({ ...hiddenState, othname: !hiddenState.othname })} />
+                    <IconButton ml={1} icon={getConfig("othername") ? <EyeClosed /> : <Eye />} onClick={() => setConfig("othername", !getConfig("othername"))} />
                 </Flex>
 
                 <Flex pl={3} pr={2} w={"100%"}>
@@ -74,7 +83,7 @@ export const EdiePersonal = () => {
                         เพศ
                     </Box>
 
-                    <RadioGroup pt={2} w={'100%'} onChange={setGender} value={gender}>
+                    <RadioGroup pt={2} w={'100%'} value={getValue("gender")} onChange={(e)=>setValue("gender", e)}>
                         <Stack direction='row'>
                             <Radio value='1' w={'25%'} colorScheme='purple'>ชาย</Radio>
                             <Radio value='2' w={'25%'} colorScheme='purple'>หญิง</Radio>
@@ -83,9 +92,9 @@ export const EdiePersonal = () => {
                         </Stack>
                     </RadioGroup>
 
-                    <Input w={'100%'} />
+                    <Input w={'100%'} placeholder='สมมติชื่อสมชาย' value={getValue("othergender")} onChange={(e)=>setValue("othergender", e.target.value)} />
 
-                    <IconButton ml={1} icon={hiddenState.gender ? <EyeClosed /> : <Eye />} onClick={() => setHiddenState({ ...hiddenState, gender: !hiddenState.gender })} />
+                    <IconButton ml={1} icon={getConfig("gender") ? <EyeClosed /> : <Eye />} onClick={() => setConfig("gender", !getConfig("gender"))} />
                 </Flex>
 
                 <Flex pl={3} pr={2} w={"100%"}>
@@ -93,15 +102,15 @@ export const EdiePersonal = () => {
                         อายุ
                     </Box>
 
-                    <NumberInput w={"100%"}>
-                        <NumberInputField placeholder="2" />
+                    <NumberInput w={"100%"} value={getValue("age")} onChange={(e)=>setValue("age", parseInt(e))}>
+                        <NumberInputField placeholder="2" min={0} />
                         <NumberInputStepper>
                             <NumberIncrementStepper />
                             <NumberDecrementStepper />
                         </NumberInputStepper>
                     </NumberInput>
 
-                    <IconButton ml={1} icon={hiddenState.age ? <EyeClosed /> : <Eye />} onClick={() => setHiddenState({ ...hiddenState, age: !hiddenState.age })} />
+                    <IconButton ml={1} icon={getConfig("age") ? <EyeClosed /> : <Eye />} onClick={() => setConfig("age", !getConfig("age"))} />
                 </Flex>
 
                 <Flex pl={3} pr={2} w={"100%"}>
@@ -109,9 +118,9 @@ export const EdiePersonal = () => {
                         อาชีพ
                     </Box>
 
-                    <Input w={'100%'} placeholder='Last BOSS in Narnia'></Input>
+                    <Input w={'100%'} placeholder='Last BOSS in Narnia' value={getValue("work")} onChange={(e)=>setValue("work", e.target.value)}></Input>
 
-                    <IconButton ml={1} icon={hiddenState.work ? <EyeClosed /> : <Eye />} onClick={() => setHiddenState({ ...hiddenState, work: !hiddenState.work })} />
+                    <IconButton ml={1} icon={getConfig("work") ? <EyeClosed /> : <Eye />} onClick={() => setConfig("work", !getConfig("work"))}/>
                 </Flex>
 
             </VStack>

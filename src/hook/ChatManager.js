@@ -14,7 +14,7 @@ import {
 } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { getAuth, updateProfile } from "firebase/auth";
-import { useApp, useTab } from '../../src/hook/local';
+import { useApp, useTab } from './local';
 
 const UseChatManager = (isOpen, onOpen, onClose) => {
     const { tabState, addTab, removeTab, changeTab, CloseTab } = useTab();

@@ -4,7 +4,7 @@ import {
     Box,
     Spacer,
     VStack,
-    Input,
+    HStack,
     Wrap,
     WrapItem,
     Center,
@@ -12,9 +12,18 @@ import {
     Text,
     NumberInput,
     NumberInputField,
+    IconButton
 } from "@chakra-ui/react";
+import { Check, X } from "phosphor-react";
+import useActiveEditState from "../../src/hook/useActiveEditState";
 
-export const EditActive = () => {
+export const EditActive = ({onFinish, value, onRefresh}) => {
+    const initalvalue = {
+        front: value?.front?value.front: 50,
+        back: value?.back?value.back: 50,
+        time: value?.time?value.time: 1,
+    }
+    const  { limit, front, setFront, back, setBack, time, setTime, commit } = useActiveEditState(initalvalue)
 
     return (
         <Flex direction={'column'}>
@@ -22,18 +31,18 @@ export const EditActive = () => {
                 <Text>ความแอคทีฟ</Text>
                 <Spacer />
                 <HStack>
-                    <IconButton
+                <IconButton
                         icon={<Check />}
-                        onClick={() => {
-                            handleNameChange();
-                            setEditDisplayNameMode(false);
+                        onClick={async() => {
+                            await commit();
+                            onRefresh();
+                            onFinish();
                         }}
                     />
                     <IconButton
                         icon={<X />}
                         onClick={() => {
-                            setEditDisplayNameMode(false);
-                            // setEditDisplayName("");
+                            onFinish();
                         }}
                     />
                 </HStack>
@@ -67,7 +76,7 @@ export const EditActive = () => {
                                         หลังไมค์ (แชท)
                                     </Center>
                                     <Spacer />
-                                    <NumberInput min={0} max={100}>
+                                    <NumberInput min={0} max={100} onChange={(e)=>setBack(parseInt(e))} value={back}>
                                         <NumberInputField fontSize={14}
                                             bg={"white"}
                                             borderRadius={10}
@@ -101,7 +110,7 @@ export const EditActive = () => {
                                         หน้าไมค์ (โพสต์)
                                     </Center>
                                     <Spacer />
-                                    <NumberInput min={0} max={100}>
+                                    <NumberInput min={0} max={100} onChange={(e)=>setFront(parseInt(e))} value={front}>
                                         <NumberInputField fontSize={14}
                                             bg={"white"}
                                             borderRadius={10}
@@ -131,10 +140,10 @@ export const EditActive = () => {
                         ระยะเวลาตอบ
                     </Box>
 
-                    <Select placeholder='ตอบกลับทันที'>
-                        <option>ตอบกลับตามความสะดวกของตนเอง</option>
-                        <option>ตอบกลับภายใน 1 - 2 ชั่วโมง</option>
-                        <option>ตอบกลับภายใน 3 - 6 ชั่วโมง</option>
+                    <Select placeholder='ตอบกลับทันที' onChange={(e)=> setTime(e.target.value)} value={time}>
+                        <option value={1}>ตอบกลับตามความสะดวกของตนเอง</option>
+                        <option value={2}>ตอบกลับภายใน 1 - 2 ชั่วโมง</option>
+                        <option value={3}>ตอบกลับภายใน 3 - 6 ชั่วโมง</option>
                     </Select>
                 </Flex>
             </VStack>

@@ -35,7 +35,7 @@ import {
 } from "firebase/storage";
 
 import { ChatItem } from "./ChatItem";
-import UseChatManager from "./ChatManager";
+import UseChatManager from "../../src/hook/ChatManager";
 
 export const ChatBox = ({ atab, user }) => {
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
@@ -51,7 +51,7 @@ export const ChatBox = ({ atab, user }) => {
   const [chatRoomDetail, setChatRoomDetail] = useState(undefined);
   const [previouschat, setPreviouschat] = useState("");
   const messagesEndRef = useRef(null)
-  const { remove, onChatSent } = UseChatManager(user, onOpen, onClose);
+  // const { remove, onChatSent } = UseChatManager(user, onOpen, onClose);
 
   useEffect(() => {
     const getChatRoomDetail = async () => {
@@ -101,59 +101,54 @@ export const ChatBox = ({ atab, user }) => {
     }
   },[loading, chatRoomDetail, previouschat, tabState, snapshot])
 
-  // const remove = () => {
-  //   // window.localStorage.removeItem("openTab");
-  //   // setTab([...chatTab.filter((v, i) => v != tab)]);
-  //   removeTab(tabState.opentab);
-  //   // changeTab("");
-  //   CloseTab();
-  //   onClose();
-  // };
+  const remove = () => {
+    // window.localStorage.removeItem("openTab");
+    // setTab([...chatTab.filter((v, i) => v != tab)]);
+    removeTab(tabState.opentab);
+    // changeTab("");
+    CloseTab();
+    onClose();
+  };
 
-  // const onChatSent = async () => {
-  //   if (msg) {
-  //     // console.log(doc(db, "chatrooms", tabState.opentab));
-  //     await updateDoc(doc(db, "chatrooms", tabState.opentab), {
-  //       lastmsg: msg,
-  //       sender: user.displayName,
-  //       senderId: user.uid,
-  //       readedby: [user.uid],
-  //       timestamp: serverTimestamp(),
-  //     })
-  //       .then()
-  //       .catch((e) => console.log(e));
-  //     await addDoc(collection(db, "chatrooms", tabState.opentab, "message"), {
-  //       sender: user.displayName,
-  //       senderId: user.uid,
-  //       text: msg,
-  //       timestamp: serverTimestamp(),
-  //     });
-  //     setMsg("");
-  //   }
-  //   if (image) {
-  //     const storeRef = ref(
-  //       store,
-  //       `chatrooms/${tabState.opentab}/${auth.currentUser.uid}${Date.now()}`
-  //     );
-  //     // console.log(storeRef.name);
-  //     const snapshot = await uploadString(storeRef, image, "data_url");
-  //     const url = await getDownloadURL(snapshot.ref);
-  //     await addDoc(collection(db, "chatrooms", tabState.opentab, "message"), {
-  //       sender: user.displayName,
-  //       senderId: user.uid,
-  //       image: url,
-  //       timestamp: serverTimestamp(),
-  //     });
-  //     await updateDoc(doc(db, "chatrooms", tabState.opentab), {
-  //       lastmsg: user.displayName + " ได้ส่งรูป",
-  //       sender: user.displayName,
-  //       senderId: user.uid,
-  //       readedby: [user.uid],
-  //       timestamp: serverTimestamp(),
-  //     });
-  //     setImage(null);
-  //   }
-  // };
+  const onChatSent = async () => {
+    if (msg) {
+      await updateDoc(doc(db, "chatrooms", tabState.opentab), {
+        lastmsg: msg,
+        senderId: user.uid,
+        readedby: [user.uid],
+        timestamp: serverTimestamp(),
+      })
+        .then()
+        .catch((e) => console.log(e));
+      await addDoc(collection(db, "chatrooms", tabState.opentab, "message"), {
+        senderId: user.uid,
+        text: msg,
+        timestamp: serverTimestamp(),
+      });
+      setMsg("");
+    }
+    if (image) {
+      const storeRef = ref(
+        store,
+        `chatrooms/${tabState.opentab}/${auth.currentUser.uid}${Date.now()}`
+      );
+      // console.log(storeRef.name);
+      const snapshot = await uploadString(storeRef, image, "data_url");
+      const url = await getDownloadURL(snapshot.ref);
+      await addDoc(collection(db, "chatrooms", tabState.opentab, "message"), {
+        senderId: user.uid,
+        image: url,
+        timestamp: serverTimestamp(),
+      });
+      await updateDoc(doc(db, "chatrooms", tabState.opentab), {
+        lastmsg: user.displayName + " ได้ส่งรูป",
+        senderId: user.uid,
+        readedby: [user.uid],
+        timestamp: serverTimestamp(),
+      });
+      setImage(null);
+    }
+  };
   const handleFocus = async () => {
     // if (unrededref) {
     const userDocRef = doc(db, "chatrooms", tabState.opentab);
@@ -283,7 +278,6 @@ export const ChatBox = ({ atab, user }) => {
             value={msg}
             onChange={(e) => setMsg(e.target.value)}
             onFocus={handleFocus}
-            onKeyUp={(event) => (event.key === "Enter" ? onChatSent() : null)}
             onPaste={handleImagePaste}
           />
           <Button

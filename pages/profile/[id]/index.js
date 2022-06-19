@@ -44,10 +44,9 @@ import { About } from "../../../components/profile/about";
 import { Myfriends } from "../../../components/profile/myfriends";
 import axios from "axios";
 import useFriendManager from "../../../components/groupcomponents/friendhooks";
-import UseChatManager from "../../../components/chat/ChatManager";
+import UseChatManager from "../../../src/hook/ChatManager";
 
 export default function profile() {
-  const { tabState, addTab, removeTab, changeTab, CloseTab } = useTab();
   const router = useRouter();
   const { id } = router.query;
   // const app = useApp();
@@ -125,86 +124,10 @@ export default function profile() {
     }
   };
 
-  const [hiddenState, setHiddenState] = useState({
-    othname: false,
-    gender: false,
-    age: false,
-    work: false,
-  });
-
   useEffect(() => {
     // console.log(id);
     loaduserDetail();
   }, [loading, id]);
-
-  // const handleMessage = () => {
-  //   let roomId = "";
-  //   getDocs(
-  //     query(
-  //       collection(db, "chatrooms"),
-  //       where("member", "array-contains", user.uid),
-  //       where("type", "==", "private")
-  //     )
-  //   ).then((docs) => {
-  //     if (!docs.empty) {
-  //       //ถ้าเจอ doc
-  //       const docId = docs.docs.find((v) => v.data().member.includes(id));
-  //       if (docId) {
-  //         //ถ้า doc เป็นของเราจริงๆ
-  //         changeTab(docId.data().id);
-  //       } else {
-  //         //ถ้าไม่ใช่
-  //         addDoc(collection(db, "chatrooms"), {
-  //           member: [user.uid, id],
-  //           memberDetail: [
-  //             {
-  //               uid: user.uid,
-  //               displayName: user.displayName,
-  //               photoURL: user.photoURL,
-  //             },
-  //             {
-  //               uid: id,
-  //               displayName: userDetail.displayName,
-  //               photoURL: userDetail.photoURL,
-  //             },
-  //           ],
-  //           type: "private",
-  //         }).then((created) => {
-  //           roomId = created.id;
-  //           updateDoc(doc(db, "chatrooms", created.id), {
-  //             id: created.id,
-  //           }).then(() => changeTab(created.id));
-  //         });
-  //       }
-  //       // console.log("not empty")
-  //     } else {
-  //       // console.log("empty")
-  //       addDoc(collection(db, "chatrooms"), {
-  //         member: [user.uid, id],
-  //         memberDetail: [
-  //           {
-  //             uid: user.uid,
-  //             displayName: user.displayName,
-  //             photoURL: user.photoURL,
-  //           },
-  //           {
-  //             uid: id,
-  //             displayName: userDetail.displayName,
-  //             photoURL: userDetail.photoURL,
-  //           },
-  //         ],
-  //         type: "private",
-  //       }).then((created) => {
-  //         // console.log("created")
-  //         roomId = created.id;
-  //         changeTab(roomId);
-  //         updateDoc(doc(db, "chatrooms", created.id), {
-  //           id: created.id,
-  //         }).then(() => changeTab(created.id));
-  //       });
-  //     }
-  //   });
-  // };
 
   const handleNameChange = async () => {
     await updateProfile(user, { displayName: editDisplayName });
@@ -521,7 +444,7 @@ export default function profile() {
 
                 {/* About */}
                 <TabPanel>
-                  <About />
+                  <About data={userDetail} onRefresh={loaduserDetail} />
                 </TabPanel>
               </TabPanels>
             </Tabs>
