@@ -334,8 +334,7 @@ function dashboard() {
 
           <Box
             bg={"#F3F3F3"}
-            minH={896}
-            h={"auto"}
+            minH={1000}
             minW={800}
             maxW={800}
             boxShadow="base"
@@ -596,7 +595,6 @@ function dashboard() {
               </Tabs>
             </VStack>
           </Box>
-
         </Flex>
       </Box>
     );
