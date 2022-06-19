@@ -194,7 +194,7 @@ exports.getAllPost = async (req, res) => {
         const snapshot = await groupref
             .collection("posts")
             .orderBy(req.query.orderby, "desc")
-            .limit(parseInt(parseInt(req.query.loadlimit)))
+            .limit(parseInt(req.query.loadlimit))
             .get();
         let post = [];
         await Promise.all(
