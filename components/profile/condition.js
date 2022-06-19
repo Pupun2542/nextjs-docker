@@ -87,7 +87,6 @@ export const Condition = () => {
                     <Box pt={2} h={10} maxWidth={135} w={"100%"}>
                         การอ้างอิงตัวละคร
                     </Box>
-
                     <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={12}>
                         <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={10}>
                             <RadioGroup w={'100%'}>
