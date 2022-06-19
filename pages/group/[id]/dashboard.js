@@ -378,8 +378,8 @@ function dashboard() {
                           },
                         }}
                       >
-                        {data.desciption
-                          ? data.desciption
+                        {data.description
+                          ? data.description
                           : "ไม่มีคำอธิบายคอมมู"}
                       </PopoverBody>
                     </PopoverContent>
