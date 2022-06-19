@@ -68,7 +68,7 @@ export const Member = () => {
             </Accordion>
 
             <Box ml={'15px'} flex={1} textAlign={'left'} fontSize={20}>
-                คำขอเข้าร่วมคอมมูนิตี้
+                สมาชิกในคอมมูนิตี้
             </Box>
 
             <SimpleGrid p={5} spacing={5} columns={2}>
