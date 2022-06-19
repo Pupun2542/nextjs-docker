@@ -32,6 +32,7 @@ exports.createGroup = (req, res) => {
           love: [],
           pinned: [],
           member: [req.user.uid],
+          commentuser: [],
           staff: [req.user.uid],
           registrationlink: data.registrationlink,
           statuschecklink: data.statuschecklink,

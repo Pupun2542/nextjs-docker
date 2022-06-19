@@ -91,33 +91,33 @@ const Notitab = ({ notidata }) => {
         return `${triggerer.displayName} ${ other > 0? `และคนอื่นๆ อีก ${other} คน` : "" } ส่งคำขอเข้ากลุ่ม ${group.name}`
     } else if (type === "010"){
         if (!auth.currentUser.uid === object.uid) {
-            return `/triggerer/ ได้ปฏิเสธคำขอของ ${object.name} จากกลุ่ม ${group.name}`
+            return `${triggerer.displayName} ได้ปฏิเสธคำขอของ ${object.name} จากกลุ่ม ${group.name}`
         } else {
             return `คำขอเข้าร่วม ${group.name} ของคุณถูกปฏิเสธ`
         }
-    } else if (type === "101"){
-        return `/triggerer/ ได้สร้างโพสต์ใหม่ในกลุ่ม ${group.name}`
-    } else if (type === "102"){
+    } else if (type == "101"){
+        return `${triggerer.displayName} ได้สร้างโพสต์ใหม่ในกลุ่ม ${group.name}`
+    } else if (type == "102"){
         return `${triggerer.displayName} ${ other > 0? `และคนอื่นๆ อีก ${other} คน` : "" } ได้แสดงความคิดเห็นในโพสในกลุ่ม ${group.name}`
-    } else if (type === "103"){
+    } else if (type == "103"){
         return `${triggerer.displayName} ${ other > 0? `และคนอื่นๆ อีก ${other} คน` : "" } ได้ตอบกลับความคิดเห็นในโพสในกลุ่ม ${group.name}`
-    } else if (type === "104"){
+    } else if (type == "104"){
         return `${triggerer.displayName} ${ other > 0? `และคนอื่นๆ อีก ${other} คน` : "" } ได้กดหัวใจให้โพสในกลุ่ม ${group.name}`
-    } else if (type === "105"){
+    } else if (type == "105"){
         return `${triggerer.displayName} ${ other > 0? `และคนอื่นๆ อีก ${other} คน` : "" } ได้กดหัวใจให้คอมเมนต์ในกลุ่ม ${group.name}`
-    } else if (type === "106"){
+    } else if (type == "106"){
         return `${triggerer.displayName} ${ other > 0? `และคนอื่นๆ อีก ${other} คน` : "" } ได้กดหัวใจให้ตอบกลับในกลุ่ม ${group.name}`
-    } else if (type === "201"){
+    } else if (type == "201"){
         return `${triggerer.displayName} ${ other > 0? `และคนอื่นๆ อีก ${other} คน` : "" } ได้แสดงความคิดเห็นให้กลุ่ม ${group.name}`
-    } else if (type === "202"){
+    } else if (type == "202"){
         return `${triggerer.displayName} ${ other > 0? `และคนอื่นๆ อีก ${other} คน` : "" } ได้ตอบกลับความคิดเห็นของกลุ่ม ${group.name}`
-    } else if (type === "203"){
+    } else if (type == "203"){
         return `${triggerer.displayName} ${ other > 0? `และคนอื่นๆ อีก ${other} คน` : "" } ได้กดหัวใจให้ความคิดเห็นของกลุ่ม ${group.name}`
-    } else if (type === "204"){
+    } else if (type == "204"){
         return `${triggerer.displayName} ${ other > 0? `และคนอื่นๆ อีก ${other} คน` : "" } ได้กดหัวใจให้ตอบกลับของกลุ่ม ${group.name}`
-    } else if (type === "301"){
+    } else if (type == "301"){
       return `${triggerer.displayName} ${triggerer.displayName} ได้ส่งคำขอเป็นเพื่อนกับคุณ`
-    } else if (type === "302"){
+    } else if (type == "302"){
       return `${triggerer.displayName} ${triggerer.displayName} ได้ตอบรับคำขอเป็นเพื่อนกับคุณ`
     } 
   }
