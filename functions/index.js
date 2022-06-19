@@ -169,7 +169,7 @@ app.post("/user/acceptfriend", authmw, acceptfriend);
 app.post("/user/rejectfriend", authmw, rejectfriend);
 app.post("/user/removeaddfriend", authmw, removeaddfriend);
 app.post("/user/getdetailusers", authmw, getDetailedUsers);
-app.get("/chat/getchatheader/:crid", getChatHeader);
+app.get("/chat/getchatheader/:crid", authmw, getChatHeader);
 
 app.post("/debug/group/:gid/join/", authmw, JoinDebug);
 
