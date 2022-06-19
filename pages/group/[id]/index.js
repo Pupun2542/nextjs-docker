@@ -1263,6 +1263,7 @@ export default function Group() {
                         รายชื่อผู้สร้าง
                         <Center pl={1}>[0]</Center>
                       </Center>
+                      
                       <Wrap fontFamily={"Mitr"}>
                         <WrapItem>
                           <Center
