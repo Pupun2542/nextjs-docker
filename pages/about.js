@@ -217,9 +217,7 @@ function about() {
               >
                 <FacebookLogo size={60} />
 
-                <Center h={55} pl={3} fontSize={18}>
-                  Facebook
-                </Center>
+                <Center h={55} pl={3} fontSize={18}>Facebook</Center>
               </Flex>
 
               <Flex
@@ -234,13 +232,18 @@ function about() {
               >
                 <TwitterLogo size={60} />
 
-                <Center h={55} pl={3} fontSize={18}>
-                  Twitter
-                </Center>
+                <Center h={55} pl={3} fontSize={18}>Twitter</Center>
               </Flex>
             </SimpleGrid>
 
-            <Box w={"100%"} mb={5} mr={5} ml={5} fontWeight={700} fontSize={24}>
+            {/* Staff */}
+
+            <Box
+              w={'100%'}
+              mb={5} mr={5} ml={5}
+              fontWeight={700}
+              fontSize={24}
+            >
               Staff
             </Box>
 
@@ -260,12 +263,12 @@ function about() {
                     <Image src="ManiaS.png" width={100} height={100}></Image>
                   </Center>
 
-                  <Flex direction={"column"}>
-                    <Center fontSize={20} fontWeight={"extrabold"}>
-                      ManiaS
-                    </Center>
-                    <Center fontSize={14}>Founder</Center>
-                    <Center fontSize={14}>Concept Design</Center>
+                  <Flex direction={'column'}>
+                    <Center fontSize={20} fontWeight={'extrabold'}>ManiaS</Center>
+                    <Center fontSize={14}>Co-Founder</Center>
+                    <Center fontSize={14}>Concept and Graphic</Center>
+                    <Center fontSize={14}>Designer (UX&UI)</Center>
+
                   </Flex>
                 </Flex>
               </Flex>
@@ -288,8 +291,9 @@ function about() {
                     <Center fontSize={20} fontWeight={"extrabold"}>
                       Mr.Daruma
                     </Center>
-                    <Center fontSize={14}>Founder</Center>
+                    <Center fontSize={14}>Co-Founder</Center>
                     <Center fontSize={14}>Frontend-Developer</Center>
+                    <Center fontSize={14} color={'white'}>.</Center>
                   </Flex>
                 </Flex>
               </Flex>
@@ -313,9 +317,8 @@ function about() {
                       WeFailedTheRodina
                     </Center>
                     <Center fontSize={14}>Leader Developer Team</Center>
-                    <Center fontSize={14} color={"white"}>
-                      .
-                    </Center>
+                    <Center fontSize={14}>Back-end Developer</Center>
+                    <Center fontSize={14} color={'white'}>.</Center>
                   </Flex>
                 </Flex>
               </Flex>
@@ -330,8 +333,8 @@ function about() {
                   direction={"column"}
                   h={230}
                 >
-                  <Center w={"100%"}>
-                    <Image src="yuu.png" height={100} width={100}></Image>
+                  <Center w={'100%'}>
+                    <Image src='Yuu.png' height={100} width={100}></Image>
                   </Center>
 
                   <Flex direction={"column"}>
@@ -339,9 +342,8 @@ function about() {
                       Niflheimea Project
                     </Center>
                     <Center fontSize={14}>Project Manager</Center>
-                    <Center fontSize={14} color={"white"}>
-                      .
-                    </Center>
+                    <Center fontSize={14} color={'white'}>.</Center>
+                    <Center fontSize={14} color={'white'}>.</Center>
                   </Flex>
                 </Flex>
               </Flex>
@@ -370,9 +372,8 @@ function about() {
                       CreatorVerse Official
                     </Center>
                     <Center fontSize={14}>Project Adviser</Center>
-                    <Center fontSize={14} color={"white"}>
-                      .
-                    </Center>
+                    <Center fontSize={14} color={'white'}>.</Center>
+                    <Center fontSize={14} color={'white'}>.</Center>
                   </Flex>
                 </Flex>
               </Flex>
@@ -401,9 +402,8 @@ function about() {
                       UncertD
                     </Center>
                     <Center fontSize={14}>Developer</Center>
-                    <Center fontSize={14} color={"white"}>
-                      .
-                    </Center>
+                    <Center fontSize={14} color={'white'}>.</Center>
+                    <Center fontSize={14} color={'white'}>.</Center>
                   </Flex>
                 </Flex>
               </Flex>
@@ -431,10 +431,9 @@ function about() {
                     <Center fontSize={18} fontWeight={"extrabold"}>
                       Kasayama
                     </Center>
-                    <Center fontSize={14}>Concept Design</Center>
-                    <Center fontSize={14} color={"white"}>
-                      .
-                    </Center>
+                    <Center fontSize={14}>Graphic Designer (UX&UI)</Center>
+                    <Center fontSize={14} color={'white'}>.</Center>
+                    <Center fontSize={14} color={'white'}>.</Center>
                   </Flex>
                 </Flex>
               </Flex>
@@ -480,8 +479,8 @@ function about() {
                 >
                   <Center w={"100%"}>
                     <Image
-                      rounded={"full"}
-                      src="khwan.png"
+                      // rounded={'full'}
+                      src='khwan.png'
                       height={100}
                       width={100}
                     ></Image>
@@ -491,10 +490,8 @@ function about() {
                     <Center fontSize={18} fontWeight={"extrabold"}>
                       Kawakhwan
                     </Center>
-                    <Center fontSize={14}>Concept Design</Center>
-                    <Center fontSize={14} color={"white"}>
-                      .
-                    </Center>
+                    <Center fontSize={14}>Graphic Designer (UX&UI)</Center>
+                    <Center fontSize={14} color={'white'}>.</Center>
                   </Flex>
                 </Flex>
               </Flex>
