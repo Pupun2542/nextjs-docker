@@ -29,10 +29,10 @@ export const EditPersonal = ({onFinish, value, config, onRefresh}) => {
         work: value?.work?value.work:""
     };
     const initialconfig = {
-        othername: config.othername?config.othername:false,
-        gender: config.othername?config.gender:false,
-        age: config.othername?config.age:false,
-        work: config.othername?config.work:false,
+        othername: config?.othername?config.othername:false,
+        gender: config?.othername?config.gender:false,
+        age: config?.othername?config.age:false,
+        work: config?.othername?config.work:false,
     };
     const { getValue, getConfig, setValue, setConfig, commit } = usePersonalEditState(initalvalue, initialconfig);
 
