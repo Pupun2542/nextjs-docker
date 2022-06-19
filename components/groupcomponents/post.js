@@ -73,14 +73,15 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
   const getUser = useUser();
   const { auth, db } = useApp();
   const [fetchlimit, setFetchlimit] = useState(20);
+  // const [love, setLove] = useState(post.love)
   const inputFileRef = useRef(null);
   const pid = post.pid;
   const TextareaRef = useRef(null);
-  const love = post.love;
-  // const love = getStateDataLove(pid);
-  // const setLove = (value) => {
-  //   setStateDataLove(value, pid);
-  // };
+  // const love = post.love;
+  const love = getStateDataLove(pid);
+  const setLove = (value) => {
+    setStateDataLove(value, pid);
+  };
   const editMode = getStateDataEdit(pid);
   const setEditMode = (state) => {
     setStateDataEdit(state, pid);
@@ -205,7 +206,7 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
         }
       );
       if (res.status === 200) {
-        // setLove(love.filter((v, i) => v !== auth.currentUser.uid));
+        setLove(love.filter((v, i) => v !== auth.currentUser.uid));
       }
     } else {
       const res = await axios.post(
@@ -218,7 +219,7 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
         }
       );
       if (res.status === 200) {
-        // setLove([...love, auth.currentUser.uid]);
+        setLove([...love, auth.currentUser.uid]);
       }
     }
   };

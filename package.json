@@ -3,7 +3,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p ${PORT:=3000}"
+    "start": "next start -p ${PORT:=3000}",
+    "deploy-dev": "gcloud builds submit --tag gcr.io/comuthor-dev/comuthor-uat --project comuthor-dev",
+    "deploy-prod": "gcloud builds submit --tag gcr.io/comuthor-36139/comuthor-web --project comuthor-36139"
   },
   "dependencies": {
     "@chakra-ui/accordion": "^1.4.9",

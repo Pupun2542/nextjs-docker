@@ -191,3 +191,13 @@ exports.removeaddfriend = async (req, res) => {
     return res.status(401).send("unauthorized");
   }
 };
+
+exports.updateUserDetail = async (req, res) => {
+  if (req.user) {
+    const body = req.body;
+    await db.collection("userDetail").doc(req.user.uid).update(body);
+    return res.status(200).send("update complete");
+  } else {
+    res.status(401).send("unauthorized");
+  }
+};

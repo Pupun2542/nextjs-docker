@@ -11,7 +11,7 @@ import {
 import { useRouter } from "next/router";
 import { Chat } from "phosphor-react";
 import { useApp } from "../../src/hook/local";
-import UseChatManager from "../chat/ChatManager";
+import UseChatManager from "../../src/hook/ChatManager";
 
 export const Myfriends = ({ data, owner, accessor }) => {
   const { auth } = useApp();

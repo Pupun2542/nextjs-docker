@@ -62,6 +62,7 @@ const {
   rejectfriend,
   removeaddfriend,
   getDetailedUsers,
+  updateUserDetail,
 } = require("./handlers/user");
 const {
   createPreviewComment,
@@ -86,16 +87,16 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://comuthor-uat-hclhis5lxq-de.a.run.app",
-    ],
-    // origin: "https://comuthor-uat-hclhis5lxq-de.a.run.app",
+    // origin: [
+    //   "http://localhost:3000",
+    //   "https://comuthor-uat-hclhis5lxq-de.a.run.app",
+    // ],
+    origin: "https://comuthor-uat-hclhis5lxq-de.a.run.app",
   }),
 );
 
-app.get("/", async (req, res) => {});
-app.post("/", DeletePreviewComment);
+// app.get("/", async (req, res) => {});
+// app.post("/", DeletePreviewComment);
 
 app.post("/group/create", authmw, createGroup);
 app.post("/group/:id/update", authmw, updateGroup);
@@ -161,7 +162,7 @@ app.get("/post/:gid/:pid/comment/:cid/reply", authmw, getAllReply);
 app.get("/user/:uid", authmw, getuser);
 app.get("/user/search", authmw, getuser);
 app.post("/user/batchget", getbatchUser);
-app.post("/user/:uid/update");
+app.post("/user/update", authmw, updateUserDetail);
 app.post("/user/getbyname", authmw, getUserByName);
 app.post("/user/addfriend", authmw, addfriend);
 app.post("/user/removefriend", authmw, removefriend);
@@ -270,7 +271,7 @@ exports.onNotificationAdd = functions
 //     // todo
 //   });
 
-exports.onUserCreated = functions.auth.user().onCreate((user) => {
+exports.onUserCreated = functions.region("asia-southeast1").auth.user().onCreate((user) => {
   admin.auth().updateUser(user.uid, { photoURL: "" });
   db.doc(`userDetail/${user.uid}`)
     .set({
