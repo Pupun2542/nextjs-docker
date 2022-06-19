@@ -249,7 +249,7 @@ function about() {
               >
                 <FacebookLogo size={60} />
 
-                <Center h={55} pl={3} fontSize={18}>Discord</Center>
+                <Center h={55} pl={3} fontSize={18}>Facebook</Center>
               </Flex>
 
               <Flex
@@ -264,9 +264,11 @@ function about() {
               >
                 <TwitterLogo size={60} />
 
-                <Center h={55} pl={3} fontSize={18}>Discord</Center>
+                <Center h={55} pl={3} fontSize={18}>Twitter</Center>
               </Flex>
             </SimpleGrid>
+
+            {/* Staff */}
 
             <Box
               w={'100%'}
@@ -296,8 +298,9 @@ function about() {
 
                   <Flex direction={'column'}>
                     <Center fontSize={20} fontWeight={'extrabold'}>ManiaS</Center>
-                    <Center fontSize={14}>Founder</Center>
-                    <Center fontSize={14}>Concept Design</Center>
+                    <Center fontSize={14}>Co-Founder</Center>
+                    <Center fontSize={14}>Concept and Graphic</Center>
+                    <Center fontSize={14}>Designer (UX&UI)</Center>
 
                   </Flex>
                 </Flex>
@@ -324,8 +327,9 @@ function about() {
                     >
                       Mr.Daruma
                     </Center>
-                    <Center fontSize={14}>Founder</Center>
+                    <Center fontSize={14}>Co-Founder</Center>
                     <Center fontSize={14}>Frontend-Developer</Center>
+                    <Center fontSize={14} color={'white'}>.</Center>
                   </Flex>
                 </Flex>
               </Flex>
@@ -352,6 +356,7 @@ function about() {
                       WeFailedTheRodina
                     </Center>
                     <Center fontSize={14}>Leader Developer Team</Center>
+                    <Center fontSize={14}>Back-end Developer</Center>
                     <Center fontSize={14} color={'white'}>.</Center>
                   </Flex>
                 </Flex>
@@ -380,6 +385,7 @@ function about() {
                     </Center>
                     <Center fontSize={14}>Project Manager</Center>
                     <Center fontSize={14} color={'white'}>.</Center>
+                    <Center fontSize={14} color={'white'}>.</Center>
                   </Flex>
                 </Flex>
               </Flex>
@@ -406,6 +412,7 @@ function about() {
                       CreatorVerse Official
                     </Center>
                     <Center fontSize={14}>Project Adviser</Center>
+                    <Center fontSize={14} color={'white'}>.</Center>
                     <Center fontSize={14} color={'white'}>.</Center>
                   </Flex>
                 </Flex>
@@ -439,6 +446,7 @@ function about() {
                     </Center>
                     <Center fontSize={14}>Developer</Center>
                     <Center fontSize={14} color={'white'}>.</Center>
+                    <Center fontSize={14} color={'white'}>.</Center>
                   </Flex>
 
 
@@ -471,7 +479,8 @@ function about() {
                     >
                       Kasayama
                     </Center>
-                    <Center fontSize={14}>Concept Design</Center>
+                    <Center fontSize={14}>Graphic Designer (UX&UI)</Center>
+                    <Center fontSize={14} color={'white'}>.</Center>
                     <Center fontSize={14} color={'white'}>.</Center>
                   </Flex>
 
@@ -518,7 +527,7 @@ function about() {
                 >
                   <Center w={'100%'}>
                     <Image
-                      rounded={'full'}
+                      // rounded={'full'}
                       src='khwan.png'
                       height={100}
                       width={100}
@@ -532,7 +541,7 @@ function about() {
                     >
                       Kawakhwan
                     </Center>
-                    <Center fontSize={14}>Concept Design</Center>
+                    <Center fontSize={14}>Graphic Designer (UX&UI)</Center>
                     <Center fontSize={14} color={'white'}>.</Center>
                   </Flex>
 
