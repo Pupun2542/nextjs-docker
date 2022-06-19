@@ -115,6 +115,10 @@ const Notitab = ({ notidata }) => {
         return `${triggerer.displayName} ${ other > 0? `และคนอื่นๆ อีก ${other} คน` : "" } ได้กดหัวใจให้ความคิดเห็นของกลุ่ม ${group.name}`
     } else if (type === "204"){
         return `${triggerer.displayName} ${ other > 0? `และคนอื่นๆ อีก ${other} คน` : "" } ได้กดหัวใจให้ตอบกลับของกลุ่ม ${group.name}`
+    } else if (type === "301"){
+      return `${triggerer.displayName} ${triggerer.displayName} ได้ส่งคำขอเป็นเพื่อนกับคุณ`
+    } else if (type === "302"){
+      return `${triggerer.displayName} ${triggerer.displayName} ได้ตอบรับคำขอเป็นเพื่อนกับคุณ`
     } 
   }
 
@@ -156,7 +160,7 @@ const Notitab = ({ notidata }) => {
   // console.log(header)
 
   return (
-    <Flex p={2} direction={'column'}>
+    <Flex p={2} direction={'column'} overflowY={"auto"} maxH={550}>
       {newNotiData.map((data) => (
         <Flex boxShadow={'base'} p={2} mt={0.5} mb={0.5} onClick={()=>router.push(data.path)} cursor="pointer" _hover={{backgroundColor: "gray.100"}}>
           {/* {console.log(data)} */}

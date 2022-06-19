@@ -87,11 +87,11 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    // origin: [
-    //   "http://localhost:3000",
-    //   "https://comuthor-uat-hclhis5lxq-de.a.run.app",
-    // ],
-    origin: "https://comuthor-uat-hclhis5lxq-de.a.run.app",
+    origin: [
+      "http://localhost:3000",
+      "https://comuthor-uat-hclhis5lxq-de.a.run.app",
+    ],
+    // origin: "https://comuthor-uat-hclhis5lxq-de.a.run.app",
   }),
 );
 
