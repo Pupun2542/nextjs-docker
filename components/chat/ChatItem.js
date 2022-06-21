@@ -12,27 +12,22 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
-export const ChatItem = ({ doc, user, members }) => {
+export const ChatItem = ({ doc, user }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  // const [userDetail, setUserDetail] = useState({})
-  const sender = members.find((v) => v.uid == doc.data().senderId);
-
-  if (sender) {
     return (
       <Flex
-        flexDirection={sender.uid == user.uid ? "row-reverse" : "row"}
+        flexDirection={doc.sender.uid == user.uid ? "row-reverse" : "row"}
         alignSelf={"flex-end"}
         padding="5px"
-      // maxH={500}
       >
         <Box fontFamily={"Mitr"}>
-          {sender.uid == user.uid ? (
+          {doc.sender.uid == user.uid ? (
             <VStack align={'stretch'} spacing={0} float={'right'} minW={280} maxW={320} marginBottom={0}>
               <Box>
-                <Text float={'right'} fontSize={12}>{sender.displayName}</Text>
+                <Text float={'right'} fontSize={12}>{doc.sender.displayName}</Text>
               </Box>
               <Box>
-                {doc.data().text && (
+                {doc.text && (
                   <Text
                     float={'right'}
                     fontSize={16}
@@ -43,12 +38,13 @@ export const ChatItem = ({ doc, user, members }) => {
                     w={'auto'}
                     maxW={250}
                   >
-                    {doc.data().text}
+                    {doc.text}
                   </Text>
                 )}
-                {doc.data().image && (
+                {doc.image && (
                   <Image
-                    src={doc.data().image}
+                    float={'right'}
+                    src={doc.image}
                     w="150px"
                     h="150px"
                     objectFit="cover"
@@ -61,11 +57,11 @@ export const ChatItem = ({ doc, user, members }) => {
           ) : (
             <VStack float={'left'} spacing={0} align={'stretch'} minW={280} maxW={320} marginBottom={0}>
               <Box>
-                <Text fontSize={12}>{sender.displayName}</Text>
+                <Text fontSize={12}>{doc.sender.displayName}</Text>
               </Box>
 
               <Box>
-                {doc.data().text && (
+                {doc.text && (
                   <Text
                   float={'left'}
                     fontSize={16}
@@ -76,13 +72,13 @@ export const ChatItem = ({ doc, user, members }) => {
                     width='auto'
                     maxWidth={250}
                   >
-                    {doc.data().text}
+                    {doc.text}
                   </Text>
                 )}
 
-                {doc.data().image && (
+                {doc.image && (
                   <Image
-                    src={doc.data().image}
+                    src={doc.image}
                     w={250}
                     h={250}
                     objectFit="cover"
@@ -100,12 +96,10 @@ export const ChatItem = ({ doc, user, members }) => {
           <ModalContent>
             <ModalCloseButton />
             <ModalBody>
-              <Image src={doc.data().image} sizes="2xl" />
+              <Image src={doc.image} sizes="2xl" />
             </ModalBody>
           </ModalContent>
         </Modal>
       </Flex>
     );
-  }
-  return <></>
 };

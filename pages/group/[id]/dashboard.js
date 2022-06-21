@@ -45,6 +45,7 @@ import axios from "axios";
 import { UploadGroupImage } from "../../../src/services/filestoreageservice";
 import Gallery from "../../../components/groupcomponents/gallery";
 import { Member } from "../../../components/groupcomponents/member";
+import Setting from "../../../components/groupcomponents/setting";
 
 // export async function getServerSideProps(context) {
 //   const { params } = context;
@@ -421,8 +422,9 @@ function dashboard() {
                   >
                     Member
                   </Tab>
-                  <Tab
-                    isDisabled
+                  {/* {console.log(data)} */}
+                  {data&&Object.keys(data.staff).includes(user.uid)&&(
+                    <Tab
                     _selected={{
                       color: "white",
                       bg: "#9A9AB0",
@@ -431,7 +433,8 @@ function dashboard() {
                     }}
                   >
                     Setting
-                  </Tab>
+                  </Tab>                  
+                  )}
                 </TabList>
 
                 <TabPanels>
@@ -588,9 +591,8 @@ function dashboard() {
                   <TabPanel>
                     <Member />
                   </TabPanel>
-
                   <TabPanel>
-                    <p>Setting!</p>
+                    <Setting data={data} gid={id} />
                   </TabPanel>
                 </TabPanels>
               </Tabs>

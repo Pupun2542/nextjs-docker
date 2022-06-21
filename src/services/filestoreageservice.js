@@ -81,6 +81,17 @@ export async function UploadGroupImage(files, creator, group) {
   return undefined;
 }
 
+export async function UploadChatImage(file, creator, crid) {
+  const storeRef = ref(
+    store,
+    `chatrooms/${crid}/${creator}${Date.now()}.jpg`
+  );
+  const snapsnot = await uploadString(storeRef, file, "data_url");
+  // console.log(snapsnot.ref)
+  const downloadurl = await getDownloadURL(snapsnot.ref);
+  return downloadurl;
+}
+
 export function getpathfromUrl(url) {
   return ref(store, url);
 }

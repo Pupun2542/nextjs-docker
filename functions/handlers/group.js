@@ -33,7 +33,7 @@ exports.createGroup = (req, res) => {
           pinned: [],
           member: [req.user.uid],
           commentuser: [],
-          staff: [req.user.uid],
+          staff: [req.user.uid, ...data.staff],
           registrationlink: data.registrationlink,
           statuschecklink: data.statuschecklink,
           // banner916: data.banner916,
@@ -133,7 +133,7 @@ exports.addPlayer = (req, res)=>{
           return doc.ref.update({
             "member": admin.firestore.FieldValue.arrayUnion(id),
           }).then(()=>{
-            sendNotifications(doc.data().staff, "007", user, req.params.id, id, `group/${req.params.id}/dashboard`);
+            sendNotifications([...doc.data().staff, req.body.id], "007", user, req.params.id, id, `group/${req.params.id}/dashboard`);
             return res.status(200).send("add new member success");
           }).catch((e)=>{
             return res.status(400).send("cannot add new member : ", e);
@@ -194,7 +194,7 @@ exports.removePendingPlayer = (req, res) =>{
           doc.ref.update({
             "pendingmember": admin.firestore.FieldValue.arrayRemove(id),
           }).then(()=>{
-            sendNotifications(doc.data().staff, "010", user, req.params.id, id, `group/${req.params.id}`);
+            sendNotifications([...doc.data().staff, req.body.id], "010", user, req.params.id, id, `group/${req.params.id}`);
             return res.status(200).send("remove member success");
           }).catch((e)=>{
             return res.status(400).send("cannot remove member : ", e);
@@ -211,18 +211,24 @@ exports.addStaff = (req, res)=>{
     const id = req.body.id;
     db.collection("group").doc(req.params.id).get().then((doc)=>{
       if (doc.exists) {
-        if (doc.data().creator == user) {
+        if (doc.data().staff.includes(user)) {
           doc.ref.update({
             "staff": admin.firestore.FieldValue.arrayUnion(id),
           }).then(()=>{
-            sendNotifications(doc.data().staff, "005", user, req.params.id, id, `group/${req.params.id}`);
+            sendNotifications([...doc.data().staff, req.body.id], "005", user, req.params.id, id, `group/${req.params.id}`);
             return res.status(200).send("add new staff success");
           }).catch((e)=>{
             return res.status(400).send("cannot add new staff : ", e);
           });
+        } else {
+          return res.status(403).send("forbidden");
         }
+      } else {
+        return res.status(404).send("not found");
       }
     });
+  } else {
+    return res.status(401).send("unauthorized");
   }
 };
 exports.removeStaff = (req, res) =>{
@@ -235,7 +241,7 @@ exports.removeStaff = (req, res) =>{
           doc.ref.update({
             "staff": admin.firestore.FieldValue.arrayRemove(id),
           }).then(()=>{
-            sendNotifications(doc.data().staff, "006", user, req.params.id, id, `group/${req.params.id}/`);
+            sendNotifications([...doc.data().staff, req.body.id], "006", user, req.params.id, id, `group/${req.params.id}/`);
             return res.status(200).send("remove staff success");
           }).catch((e)=>{
             return res.status(400).send("cannot remove staff : ", e);

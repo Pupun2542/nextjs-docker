@@ -11,12 +11,12 @@ import {
 import { useRouter } from "next/router";
 import { Chat } from "phosphor-react";
 import { useApp } from "../../src/hook/local";
-import UseChatManager from "../../src/hook/ChatManager";
+import UseChatManager from "../../src/hook/useChatManager";
 
 export const Myfriends = ({ data, owner, accessor }) => {
   const { auth } = useApp();
   const router = useRouter();
-  const { handleMessage } = UseChatManager();
+  const { handlePrivateMessage } = UseChatManager();
   return (
     <Flex direction={"column"}>
       {owner === accessor && (
@@ -57,7 +57,7 @@ export const Myfriends = ({ data, owner, accessor }) => {
                         icon={<Chat />}
                         onClick={() =>{
                           e.stopPropagation();
-                          handleMessage(auth.currentUser, friend.uid);
+                          handlePrivateMessage(auth.currentUser, friend.uid);
                         }}
                       />
                     )}
@@ -111,7 +111,7 @@ export const Myfriends = ({ data, owner, accessor }) => {
                     icon={<Chat />}
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleMessage(auth.currentUser, friend.uid);
+                      handlePrivateMessage(auth.currentUser, friend.uid);
                     }}
                   />
                 )}

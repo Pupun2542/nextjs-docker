@@ -342,7 +342,6 @@ export const Commentpost = ({
             {commentdoc.creator?.displayName
               ? commentdoc.creator?.displayName
               : "placeholder"}
-            {"  " + cdoc.cid}
           </Text>
 
           <Text fontSize={10} mt={3} color={"GrayText"}>

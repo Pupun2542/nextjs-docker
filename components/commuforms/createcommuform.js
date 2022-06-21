@@ -51,6 +51,7 @@ import {
   useDisclosure,
   Tooltip,
   Divider,
+  Avatar,
 } from "@chakra-ui/react";
 import {
   CaretLeft,
@@ -65,18 +66,26 @@ import {
 import { Regisform } from "./regisform";
 import { Checkform } from "./checkform";
 import axios from "axios";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 import { creategroup } from "../../src/services/firestoreservice";
 import { AddStaffForm } from "./addStaffForm";
-import { UploadBannerImage, UploadDoc } from "../../src/services/filestoreageservice";
+import {
+  UploadBannerImage,
+  UploadDoc,
+} from "../../src/services/filestoreageservice";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 export const Createcommuform = ({ data, uid, gid }) => {
   const { app, auth, db } = useApp();
   const store = getStorage(app);
   const Router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isOpen: isCropPicOpen, onOpen: onCropPicOpen, onClose: onCropPicClose } = useDisclosure();
-  const inputref = useRef(null)
+  const {
+    isOpen: isCropPicOpen,
+    onOpen: onCropPicOpen,
+    onClose: onCropPicClose,
+  } = useDisclosure();
+  const inputref = useRef(null);
   const [fieldvalue, setFieldvalue] = useState({
     tag: "",
     name: "",
@@ -97,7 +106,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
     registrationlink: [],
     statuschecklink: [],
     creator: uid,
-    staff: []
+    staff: [],
   });
   const [bannerBlob, setBannerBlob] = useState(null);
   const [genre, setGenre] = useState([]);
@@ -141,22 +150,49 @@ export const Createcommuform = ({ data, uid, gid }) => {
       });
       if (data.config) {
         setConfigValue({
-          durationsw: (data.config.durationsw ? data.config.durationsw : true),
-          Averagesw: (data.config.durationsw ? data.config.Averagesw : true),
-          Locationsw: (data.config.durationsw ? data.config.Locationsw : true),
-          Timelinesw: (data.config.durationsw ? data.config.Timelinesw : true),
-          Ratingsw: (data.config.durationsw ? data.config.Ratingsw : true),
-          Triggersw: (data.config.durationsw ? data.config.Triggersw : true),
-          Rulesw: (data.config.durationsw ? data.config.Rulesw : true),
+          durationsw: data.config.durationsw ? data.config.durationsw : true,
+          Averagesw: data.config.durationsw ? data.config.Averagesw : true,
+          Locationsw: data.config.durationsw ? data.config.Locationsw : true,
+          Timelinesw: data.config.durationsw ? data.config.Timelinesw : true,
+          Ratingsw: data.config.durationsw ? data.config.Ratingsw : true,
+          Triggersw: data.config.durationsw ? data.config.Triggersw : true,
+          Rulesw: data.config.durationsw ? data.config.Rulesw : true,
         });
       }
       setGenre(data.genre);
       setPlaces(data.place);
       setTimes(data.times);
       settws(data.tws);
-      setBannerBlob(data.banner)
+      setBannerBlob(data.banner);
     }
   }, [data]);
+
+  useEffect(() => {
+    const search = async () => {
+      const snap = await getDocs(
+        query(
+          collection(db, "userDetail"),
+          where("displayName", ">=", staffSearchString),
+          where("displayName", "<", staffSearchString + "\uf8ff")
+        )
+      );
+      if (!snap.empty) {
+        setStaffSearchResult(
+          snap.docs.map((doc) => ({
+            uid: doc.data().uid,
+            displayName: doc.data().displayName,
+            photoURL: doc.data().photoURL,
+          }))
+        );
+      }
+    };
+    if (staffSearchString.length > 2) {
+      search();
+    }
+    return () => {
+      setStaffSearchResult([]);
+    };
+  }, [staffSearchString]);
 
   const Hashtag = (props) => {
     const removeTags = (indexToRemove) => {
@@ -174,29 +210,33 @@ export const Createcommuform = ({ data, uid, gid }) => {
       }
     };
     return (
-      <Box w={'100%'} h={'auto'} float={'left'}>
+      <Box w={"100%"} h={"auto"} float={"left"}>
         <Box>
           <Box id="tags" mt={1.5} mb={1.5}>
             {props.state.map((tag, index) => (
               <HStack
                 key={index}
-                bg={'#6768AB'}
-                color='white'
+                bg={"#6768AB"}
+                color="white"
                 borderRadius={10}
-                pt={1} pb={1}
-                pl={2} pr={2}
-                // maxW={200} 
-                float='left'
+                pt={1}
+                pb={1}
+                pl={2}
+                pr={2}
+                // maxW={200}
+                float="left"
                 spacing={2.5}
-                mr={0.5} ml={0.5}
-                mt={0.5} mb={0.5}
+                mr={0.5}
+                ml={0.5}
+                mt={0.5}
+                mb={0.5}
                 fontSize={16}
-                w={'auto'}
+                w={"auto"}
               >
                 <Box>{tag}</Box>
                 <CloseButton
                   onClick={() => removeTags(index)}
-                  rounded={'full'}
+                  rounded={"full"}
                   bg="white"
                   color={"black"}
                   h={5}
@@ -208,12 +248,14 @@ export const Createcommuform = ({ data, uid, gid }) => {
               type="text"
               onKeyUp={(event) => (event.key === "," ? addTags(event) : null)}
               placeholder=" ใช้ , เพื่อแบ่งประเภท"
-              w={'auto'}
+              w={"auto"}
               isDisabled={props.isDisabled}
               // border="hidden"
               maxW={200}
-              float='left'
-              mr={0.5} ml={0.5} mb={2}
+              float="left"
+              mr={0.5}
+              ml={0.5}
+              mb={2}
               fontSize={16}
               h={31}
             />
@@ -221,7 +263,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
         </Box>
       </Box>
     );
-  }
+  };
   const parseTime = (localtime) => {
     // console.log(localtime);
     const spdatetime = localtime.split("T");
@@ -250,9 +292,8 @@ export const Createcommuform = ({ data, uid, gid }) => {
   // console.log(inputref.current.value);
 
   const HandleSubmit = async () => {
-
-    let bannerUrl = (data?.banner ? data.banner : "");
-    let docUrl = (data?.doclink ? data.doclink : "");
+    let bannerUrl = data?.banner ? data.banner : "";
+    let docUrl = data?.doclink ? data.doclink : "";
     const token = await auth.currentUser.getIdToken();
 
     if (bannerBlob && !bannerBlob.startsWith("http")) {
@@ -260,7 +301,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
       bannerUrl = await UploadBannerImage(bannerBlob, auth.currentUser.uid);
     } else {
       // console.log("not upload")
-      bannerUrl = bannerBlob
+      bannerUrl = bannerBlob;
     }
 
     if (fieldvalue.docfile) {
@@ -268,7 +309,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
         // console.log("uploaddoc")
         docUrl = await UploadDoc(fieldvalue.docfile, auth.currentUser.uid);
       } else {
-        alert("เอกสารคอมมูต้องเป็นรูปแบบไฟล์ pdf เท่านั้น")
+        alert("เอกสารคอมมูต้องเป็นรูปแบบไฟล์ pdf เท่านั้น");
         return;
       }
     }
@@ -280,23 +321,13 @@ export const Createcommuform = ({ data, uid, gid }) => {
       tws: tws,
       bannerUrl: bannerUrl,
       docUrl: docUrl,
-      config: configvalue
-    }
+      config: configvalue,
+    };
     // console.log(body)
     if (data) {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/group/${gid}/update`, body,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-      console.log(res.data)
-      if (res.status === 200) {
-        Router.push(`/group/${res.data}`)
-      }
-    } else {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/group/create`, body,
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${gid}/update`,
+        body,
         {
           headers: {
             Authorization: token,
@@ -305,88 +336,120 @@ export const Createcommuform = ({ data, uid, gid }) => {
       );
       console.log(res.data);
       if (res.status === 200) {
-        Router.push(`/group/${gid}`)
+        Router.push(`/group/${gid}`);
+      }
+    } else {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/group/create`,
+        body,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      console.log(res.data);
+      if (res.status === 200) {
+        Router.push(`/group/${res.data}`);
       }
     }
-  }
+  };
 
   const addRegisLink = () => {
-
     setFieldvalue({
-      ...fieldvalue, registrationlink: [...fieldvalue.registrationlink, {
-        name: "",
-        fromdate: "",
-        todate: "",
-        link: "",
-      }]
-    })
-  }
+      ...fieldvalue,
+      registrationlink: [
+        ...fieldvalue.registrationlink,
+        {
+          name: "",
+          fromdate: "",
+          todate: "",
+          link: "",
+        },
+      ],
+    });
+  };
 
   const deleteRegisLink = (index) => {
-    const newState = fieldvalue.registrationlink.filter((v, i) => index !== i)
-    setFieldvalue({ ...fieldvalue, registrationlink: newState })
-  }
+    const newState = fieldvalue.registrationlink.filter((v, i) => index !== i);
+    setFieldvalue({ ...fieldvalue, registrationlink: newState });
+  };
 
   const setRegisLink = (index, data) => {
-    const newState = fieldvalue.registrationlink.map((v, i) => i == index ? data : v);
-    setFieldvalue({ ...fieldvalue, registrationlink: newState })
-  }
+    const newState = fieldvalue.registrationlink.map((v, i) =>
+      i == index ? data : v
+    );
+    setFieldvalue({ ...fieldvalue, registrationlink: newState });
+  };
   const addCheckLink = () => {
-
     setFieldvalue({
-      ...fieldvalue, statuschecklink: [...fieldvalue.statuschecklink, {
-        name: "",
-        fromdate: "",
-        todate: "",
-        link: "",
-      }]
-    })
-  }
+      ...fieldvalue,
+      statuschecklink: [
+        ...fieldvalue.statuschecklink,
+        {
+          name: "",
+          fromdate: "",
+          todate: "",
+          link: "",
+        },
+      ],
+    });
+  };
 
   const deleteCheckLink = (index) => {
-    const newState = fieldvalue.statuschecklink.filter((v, i) => index !== i)
-    setFieldvalue({ ...fieldvalue, statuschecklink: newState })
-  }
+    const newState = fieldvalue.statuschecklink.filter((v, i) => index !== i);
+    setFieldvalue({ ...fieldvalue, statuschecklink: newState });
+  };
 
   const setCheckLink = (index, data) => {
-    const newState = fieldvalue.statuschecklink.map((v, i) => i == index ? data : v);
-    setFieldvalue({ ...fieldvalue, statuschecklink: newState })
-  }
+    const newState = fieldvalue.statuschecklink.map((v, i) =>
+      i == index ? data : v
+    );
+    setFieldvalue({ ...fieldvalue, statuschecklink: newState });
+  };
 
   const addStaff = (data) => {
-
-    setFieldvalue({
-      ...fieldvalue, statuschecklink: [...fieldvalue.statuschecklink, {
-        displayName: data.displayName,
-        uid: data.uid,
-        photoURL: photoURL,
-      }]
-    })
-  }
+    console.log(data);
+    if (
+      data.uid != auth.currentUser.uid &&
+      !fieldvalue.staff.includes(data.uid)
+    ) {
+      setStaffSearch([...staffSearch, data]);
+      setFieldvalue({
+        ...fieldvalue,
+        staff: [...fieldvalue.staff, data.uid],
+      });
+      setStaffSearchResult([]);
+      setStaffSearchString("");
+    } else {
+      alert("มีชื่ออยู่แล้ว");
+    }
+  };
 
   const deleteStaff = (index) => {
-    const newState = fieldvalue.statuschecklink.filter((v, i) => index !== i)
-    setFieldvalue({ ...fieldvalue, statuschecklink: newState })
-  }
+    const newState = fieldvalue.staff.filter((v, i) => index !== i);
+    setFieldvalue({ ...fieldvalue, staff: newState });
+    setStaffSearch(newState);
+  };
 
   const setStaff = (index, data) => {
-    const newState = fieldvalue.statuschecklink.map((v, i) => i == index ? data : v);
-    setFieldvalue({ ...fieldvalue, statuschecklink: newState })
-  }
-
-  const searchStaff = (value) => {
-    setStaffSearchString(value);
-    if (value.length >= 3) {
-
-    }
-  }
+    const newState = fieldvalue.statuschecklink.map((v, i) =>
+      i == index ? data : v
+    );
+    setFieldvalue({ ...fieldvalue, statuschecklink: newState });
+  };
 
   return (
-    <Flex justifyContent={"center"} bg={'#F3F3F3'}>
-
-      <Center fontFamily={'Mitr'} bg={'white'} maxW={1000} width={'100%'} boxShadow={'base'}>
-        <Box maxW={875} width={'100%'} boxShadow={'base'}>
-          <Box w={'100%'} bg={'#6768AB'} h={50}></Box>
+    <Flex justifyContent={"center"} bg={"#F3F3F3"}>
+      <Center
+        fontFamily={"Mitr"}
+        bg={"white"}
+        maxW={1000}
+        width={"100%"}
+        boxShadow={"base"}
+      >
+        <Box maxW={875} width={"100%"} boxShadow={"base"}>
+          <Box w={"100%"} bg={"#6768AB"} h={50}></Box>
           <Center>
             <Flex>
               <UploadImageModal
@@ -396,28 +459,30 @@ export const Createcommuform = ({ data, uid, gid }) => {
             </Flex>
           </Center>
 
-          <Center fontSize={24} bg={'#6768AB'} p={2} borderTopRadius={10} color={"white"}>
+          <Center
+            fontSize={24}
+            bg={"#6768AB"}
+            p={2}
+            borderTopRadius={10}
+            color={"white"}
+          >
             <Flex>
               <Center
                 //จะเป็น Real-Time จากช่องพิมพ์ชื่อย่อคอมมู
                 p={2}
               >
-                {fieldvalue.tag
-                  ? "[" + fieldvalue.tag + "]"
-                  : "[____]"}
+                {fieldvalue.tag ? "[" + fieldvalue.tag + "]" : "[____]"}
               </Center>
               <Center
               //จะเป็น Real-Time จากช่องพิมพ์ชื่อคอมมู
               >
-                {fieldvalue.name
-                  ? fieldvalue.name
-                  : "ชื่อคอมมูนิตี้"}
+                {fieldvalue.name ? fieldvalue.name : "ชื่อคอมมูนิตี้"}
               </Center>
             </Flex>
           </Center>
 
-          <Accordion allowMultiple bg={'#F3F3F3'}>
-            <AccordionItem w={'100%'}>
+          <Accordion allowMultiple bg={"#F3F3F3"}>
+            <AccordionItem w={"100%"}>
               <h2>
                 <AccordionButton>
                   <AccordionIcon color={"Black"} w={50} h={50} />
@@ -429,17 +494,20 @@ export const Createcommuform = ({ data, uid, gid }) => {
               </h2>
 
               <AccordionPanel color={"white"}>
-                <VStack fontSize={16} color={'black'}>
-
+                <VStack fontSize={16} color={"black"}>
                   {/* Community Name */}
-                  <Flex w={'100%'}>
+                  <Flex w={"100%"}>
                     <Center w={50}></Center>
-                    <Flex w={'100%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
-
+                    <Flex
+                      w={"100%"}
+                      bg={"white"}
+                      boxShadow={"base"}
+                      borderRadius={10}
+                    >
                       <Box
                         p={4}
                         minW={180}
-                        borderRightColor={'#C4C4C4'}
+                        borderRightColor={"#C4C4C4"}
                         borderRightWidth={3}
                       >
                         <Box>
@@ -450,7 +518,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         </Box>
                       </Box>
 
-                      <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
+                      <Center w={"100%"} pl={1.5} pr={1.5} position="relative">
                         <Input
                           type="text"
                           value={fieldvalue.name}
@@ -462,7 +530,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
                             // setCommuname(e.target.value);
                           }}
                           required
-                          w={'100%'}
+                          w={"100%"}
                           h={46}
                           bg={"white"}
                           placeholder={"..."}
@@ -474,13 +542,18 @@ export const Createcommuform = ({ data, uid, gid }) => {
                   </Flex>
 
                   {/* ชื่อย่อคอมมู ความเป็นส่วนตัว */}
-                  <Flex w={'100%'}>
+                  <Flex w={"100%"}>
                     <Center w={50}></Center>
-                    <Flex w={'50%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
+                    <Flex
+                      w={"50%"}
+                      bg={"white"}
+                      boxShadow={"base"}
+                      borderRadius={10}
+                    >
                       <Box
                         p={4}
                         minW={180}
-                        borderRightColor={'#C4C4C4'}
+                        borderRightColor={"#C4C4C4"}
                         borderRightWidth={3}
                       >
                         <Box>
@@ -491,7 +564,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         </Box>
                       </Box>
 
-                      <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
+                      <Center w={"100%"} pl={1.5} pr={1.5} position="relative">
                         <Input
                           type="text"
                           value={fieldvalue.tag}
@@ -504,8 +577,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
                           }}
                           required
                           maxLength={6}
-
-                          w={'100%'}
+                          w={"100%"}
                           h={46}
                           bg={"white"}
                           placeholder={"ไม่เกิน 6 ตัวอักษร"}
@@ -515,12 +587,16 @@ export const Createcommuform = ({ data, uid, gid }) => {
 
                     <Spacer minW={2} />
 
-                    <Flex w={'50%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
-
+                    <Flex
+                      w={"50%"}
+                      bg={"white"}
+                      boxShadow={"base"}
+                      borderRadius={10}
+                    >
                       <Box
                         p={4}
                         minW={180}
-                        borderRightColor={'#C4C4C4'}
+                        borderRightColor={"#C4C4C4"}
                         borderRightWidth={3}
                       >
                         <Box>
@@ -528,10 +604,10 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         </Box>
                       </Box>
 
-                      <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
+                      <Center w={"100%"} pl={1.5} pr={1.5} position="relative">
                         <Select
                           isRequired
-                          w={'100%'}
+                          w={"100%"}
                           h={46}
                           bg={"white"}
                           color="black"
@@ -563,23 +639,26 @@ export const Createcommuform = ({ data, uid, gid }) => {
                             ส่วนตัว
                           </option>
                         </Select>
-
                       </Center>
                     </Flex>
 
                     <Center w={50}></Center>
-
                   </Flex>
 
                   {/* ประเภท */}
 
-                  <Flex w={'100%'}>
+                  <Flex w={"100%"}>
                     <Center w={50}></Center>
-                    <Flex w={'50%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
+                    <Flex
+                      w={"50%"}
+                      bg={"white"}
+                      boxShadow={"base"}
+                      borderRadius={10}
+                    >
                       <Box
                         p={4}
                         minW={180}
-                        borderRightColor={'#C4C4C4'}
+                        borderRightColor={"#C4C4C4"}
                         borderRightWidth={3}
                       >
                         <Box>
@@ -587,9 +666,9 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         </Box>
                       </Box>
 
-                      <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
+                      <Center w={"100%"} pl={1.5} pr={1.5} position="relative">
                         <NumberInput
-                          w={'100%'}
+                          w={"100%"}
                           onChange={(e) =>
                             setFieldvalue({
                               ...fieldvalue,
@@ -614,12 +693,16 @@ export const Createcommuform = ({ data, uid, gid }) => {
 
                     <Spacer minW={2} />
 
-                    <Flex w={'50%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
-
+                    <Flex
+                      w={"50%"}
+                      bg={"white"}
+                      boxShadow={"base"}
+                      borderRadius={10}
+                    >
                       <Box
                         p={4}
                         minW={180}
-                        borderRightColor={'#C4C4C4'}
+                        borderRightColor={"#C4C4C4"}
                         borderRightWidth={3}
                       >
                         <Box>
@@ -627,10 +710,10 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         </Box>
                       </Box>
 
-                      <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
+                      <Center w={"100%"} pl={1.5} pr={1.5} position="relative">
                         <Select
                           isRequired
-                          w={'100%'}
+                          w={"100%"}
                           h={46}
                           bg={"white"}
                           color="black"
@@ -638,7 +721,10 @@ export const Createcommuform = ({ data, uid, gid }) => {
                           fontFamily={"Mitr"}
                           value={fieldvalue.type}
                           onChange={(e) =>
-                            setFieldvalue({ ...fieldvalue, type: e.target.value })
+                            setFieldvalue({
+                              ...fieldvalue,
+                              type: e.target.value,
+                            })
                           }
                           defaultValue={"Slow-Life"}
                         >
@@ -667,23 +753,25 @@ export const Createcommuform = ({ data, uid, gid }) => {
                             Slow-Survival
                           </option>
                         </Select>
-
                       </Center>
                     </Flex>
 
                     <Center w={50}></Center>
-
                   </Flex>
 
                   {/* หมวดหมู่ */}
-                  <Flex w={'100%'}>
+                  <Flex w={"100%"}>
                     <Center w={50}></Center>
-                    <Flex w={'100%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
-
+                    <Flex
+                      w={"100%"}
+                      bg={"white"}
+                      boxShadow={"base"}
+                      borderRadius={10}
+                    >
                       <Box
                         p={4}
                         minW={180}
-                        borderRightColor={'#C4C4C4'}
+                        borderRightColor={"#C4C4C4"}
                         borderRightWidth={3}
                       >
                         <Box>
@@ -691,10 +779,10 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         </Box>
                       </Box>
 
-                      <Center w={'100%'} height='auto' position="relative">
+                      <Center w={"100%"} height="auto" position="relative">
                         <Container
-                          w={'100%'}
-                          h='auto'
+                          w={"100%"}
+                          h="auto"
                           minH={46}
                           bg={"white"}
                           borderRadius={10}
@@ -711,7 +799,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
                   </Flex>
 
                   {/* วันที่เริ่มเล่น */}
-                  <Flex w={'100%'}>
+                  <Flex w={"100%"}>
                     <Center w={50}>
                       <Switch
                         bg={"gray.500"}
@@ -725,12 +813,16 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         }
                       />
                     </Center>
-                    <Flex w={'100%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
-
+                    <Flex
+                      w={"100%"}
+                      bg={"white"}
+                      boxShadow={"base"}
+                      borderRadius={10}
+                    >
                       <Box
                         p={4}
                         minW={180}
-                        borderRightColor={'#C4C4C4'}
+                        borderRightColor={"#C4C4C4"}
                         borderRightWidth={3}
                       >
                         <Box>
@@ -738,8 +830,8 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         </Box>
                       </Box>
 
-                      <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
-                        <Center w={'100%'}>
+                      <Center w={"100%"} pl={1.5} pr={1.5} position="relative">
+                        <Center w={"100%"}>
                           <Input
                             type="datetime-local"
                             isDisabled={!configvalue.durationsw} //แล้วก็เพิ่มตรงนี้ ชื่อตัวแปรตาม state ที่สร้าง
@@ -747,7 +839,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
                             h={46}
                             bg={"white"}
                             color="black"
-                            w={'100%'}
+                            w={"100%"}
                             value={fieldvalue.startDateraw}
                             onChange={(e) => {
                               setFieldvalue({
@@ -756,7 +848,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
                               });
                               setFieldvalue({
                                 ...fieldvalue,
-                                startDateraw: e.target.value
+                                startDateraw: e.target.value,
                               });
                             }}
                             fontFamily={"Mitr"}
@@ -768,7 +860,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
                   </Flex>
 
                   {/* ระยะเวลาโดยประมาณ */}
-                  <Flex w={'100%'}>
+                  <Flex w={"100%"}>
                     <Center w={50}>
                       <Switch
                         bg={"gray.500"}
@@ -783,11 +875,16 @@ export const Createcommuform = ({ data, uid, gid }) => {
                       />
                     </Center>
 
-                    <Flex w={'100%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
+                    <Flex
+                      w={"100%"}
+                      bg={"white"}
+                      boxShadow={"base"}
+                      borderRadius={10}
+                    >
                       <Box
                         p={4}
                         minW={180}
-                        borderRightColor={'#C4C4C4'}
+                        borderRightColor={"#C4C4C4"}
                         borderRightWidth={3}
                       >
                         <Box>
@@ -795,13 +892,13 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         </Box>
                       </Box>
 
-                      <Center w={'55%'} position="relative">
-                        <Center w={'100%'}>
+                      <Center w={"55%"} position="relative">
+                        <Center w={"100%"}>
                           <Input
                             bg="white"
                             m={1.5}
                             borderRadius={10}
-                            w={'100%'}
+                            w={"100%"}
                             h={46}
                             color={"Black"}
                             isDisabled={!configvalue.Averagesw}
@@ -818,7 +915,12 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         </Center>
                       </Center>
 
-                      <Center pl={1.5} pr={1.5} borderLeftColor={'#C4C4C4'} borderLeftWidth={3}>
+                      <Center
+                        pl={1.5}
+                        pr={1.5}
+                        borderLeftColor={"#C4C4C4"}
+                        borderLeftWidth={3}
+                      >
                         <Select
                           isRequired
                           h={46}
@@ -835,30 +937,23 @@ export const Createcommuform = ({ data, uid, gid }) => {
                             })
                           }
                         >
-                          <option
-                            style={{ backgroundColor: "White" }}
-                          >
+                          <option style={{ backgroundColor: "White" }}>
                             วัน(Day)
                           </option>
-                          <option
-                            style={{ backgroundColor: "White" }}
-                          >
+                          <option style={{ backgroundColor: "White" }}>
                             เดือน(Month)
                           </option>
-                          <option
-                            style={{ backgroundColor: "White" }}
-                          >
+                          <option style={{ backgroundColor: "White" }}>
                             ปี(Year)
                           </option>
                         </Select>
                       </Center>
-
                     </Flex>
                     <Center w={50}></Center>
                   </Flex>
 
                   {/* สถานที่ภายในคอมมู */}
-                  <Flex w={'100%'}>
+                  <Flex w={"100%"}>
                     <Center w={50}>
                       <Switch
                         bg={"gray.500"}
@@ -872,11 +967,16 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         }
                       />
                     </Center>
-                    <Flex w={'100%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
+                    <Flex
+                      w={"100%"}
+                      bg={"white"}
+                      boxShadow={"base"}
+                      borderRadius={10}
+                    >
                       <Box
                         p={4}
                         minW={180}
-                        borderRightColor={'#C4C4C4'}
+                        borderRightColor={"#C4C4C4"}
                         borderRightWidth={3}
                       >
                         <Box>
@@ -884,10 +984,10 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         </Box>
                       </Box>
 
-                      <Center w={'100%'} pr={1.5} position="relative">
-                        <Center w={'100%'}>
+                      <Center w={"100%"} pr={1.5} position="relative">
+                        <Center w={"100%"}>
                           <Container
-                            w={'100%'}
+                            w={"100%"}
                             h="auto"
                             minH={46}
                             bg={"white"}
@@ -907,7 +1007,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
                   </Flex>
 
                   {/* ยุคสมัยคอมมู */}
-                  <Flex w={'100%'}>
+                  <Flex w={"100%"}>
                     <Center w={50}>
                       <Switch
                         bg={"gray.500"}
@@ -921,11 +1021,16 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         }
                       />
                     </Center>
-                    <Flex w={'100%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
+                    <Flex
+                      w={"100%"}
+                      bg={"white"}
+                      boxShadow={"base"}
+                      borderRadius={10}
+                    >
                       <Box
                         p={4}
                         minW={180}
-                        borderRightColor={'#C4C4C4'}
+                        borderRightColor={"#C4C4C4"}
                         borderRightWidth={3}
                       >
                         <Box>
@@ -933,9 +1038,9 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         </Box>
                       </Box>
 
-                      <Center w={'100%'} pr={1.5} position="relative">
+                      <Center w={"100%"} pr={1.5} position="relative">
                         <Container
-                          w={'100%'}
+                          w={"100%"}
                           h="auto"
                           minH={46}
                           bg={"white"}
@@ -954,7 +1059,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
                   </Flex>
 
                   {/* ระดับของเนื้อหา */}
-                  <Flex w={'100%'}>
+                  <Flex w={"100%"}>
                     <Center w={50}>
                       <Switch
                         bg={"gray.500"}
@@ -968,12 +1073,16 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         }
                       />
                     </Center>
-                    <Flex w={'100%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
-
+                    <Flex
+                      w={"100%"}
+                      bg={"white"}
+                      boxShadow={"base"}
+                      borderRadius={10}
+                    >
                       <Box
                         p={4}
                         minW={180}
-                        borderRightColor={'#C4C4C4'}
+                        borderRightColor={"#C4C4C4"}
                         borderRightWidth={3}
                       >
                         <Box>
@@ -981,10 +1090,10 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         </Box>
                       </Box>
 
-                      <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
+                      <Center w={"100%"} pl={1.5} pr={1.5} position="relative">
                         <Select
                           isRequired
-                          w={'100%'}
+                          w={"100%"}
                           h={46}
                           bg={"white"}
                           color="black"
@@ -1033,7 +1142,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
                   </Flex>
 
                   {/* คำเตือน */}
-                  <Flex w={'100%'}>
+                  <Flex w={"100%"}>
                     <Center w={50}>
                       <Switch
                         bg={"gray.500"}
@@ -1047,12 +1156,16 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         }
                       />
                     </Center>
-                    <Flex w={'100%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
-
+                    <Flex
+                      w={"100%"}
+                      bg={"white"}
+                      boxShadow={"base"}
+                      borderRadius={10}
+                    >
                       <Box
                         p={4}
                         minW={180}
-                        borderRightColor={'#C4C4C4'}
+                        borderRightColor={"#C4C4C4"}
                         borderRightWidth={3}
                       >
                         <Box>
@@ -1060,9 +1173,9 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         </Box>
                       </Box>
 
-                      <Center w={'100%'} position="relative">
+                      <Center w={"100%"} position="relative">
                         <Container
-                          minW={'100%'}
+                          minW={"100%"}
                           h="auto"
                           minH={46}
                           bg={"white"}
@@ -1081,7 +1194,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
                   </Flex>
 
                   {/* กฏกติกาและข้อตกลง */}
-                  <Flex w={'100%'}>
+                  <Flex w={"100%"}>
                     <Center w={50}>
                       <Switch
                         bg={"gray.500"}
@@ -1095,12 +1208,16 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         }
                       />
                     </Center>
-                    <Flex w={'100%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
-
+                    <Flex
+                      w={"100%"}
+                      bg={"white"}
+                      boxShadow={"base"}
+                      borderRadius={10}
+                    >
                       <Box
                         p={4}
                         minW={180}
-                        borderRightColor={'#C4C4C4'}
+                        borderRightColor={"#C4C4C4"}
                         borderRightWidth={3}
                       >
                         <Box>
@@ -1108,11 +1225,11 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         </Box>
                       </Box>
 
-                      <Center w={'100%'} position="relative">
+                      <Center w={"100%"} position="relative">
                         <Textarea
                           type="text"
                           required
-                          w={'100%'}
+                          w={"100%"}
                           h={100}
                           bg={"white"}
                           className={style.search}
@@ -1132,14 +1249,18 @@ export const Createcommuform = ({ data, uid, gid }) => {
                   </Flex>
 
                   {/* คำอธิบาย */}
-                  <Flex w={'100%'}>
+                  <Flex w={"100%"}>
                     <Center w={50}></Center>
-                    <Flex w={'100%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
-
+                    <Flex
+                      w={"100%"}
+                      bg={"white"}
+                      boxShadow={"base"}
+                      borderRadius={10}
+                    >
                       <Box
                         p={4}
                         minW={180}
-                        borderRightColor={'#C4C4C4'}
+                        borderRightColor={"#C4C4C4"}
                         borderRightWidth={3}
                       >
                         <Box>
@@ -1147,11 +1268,11 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         </Box>
                       </Box>
 
-                      <Center w={'100%'} position="relative">
+                      <Center w={"100%"} position="relative">
                         <Textarea
                           type="text"
                           required
-                          w={'100%'}
+                          w={"100%"}
                           h={200}
                           bg={"white"}
                           className={style.search}
@@ -1171,14 +1292,18 @@ export const Createcommuform = ({ data, uid, gid }) => {
 
                   {/* PDF */}
 
-                  <Flex w={'100%'}>
+                  <Flex w={"100%"}>
                     <Center w={50}></Center>
-                    <Flex w={'100%'} bg={'white'} boxShadow={'base'} borderRadius={10}>
-
+                    <Flex
+                      w={"100%"}
+                      bg={"white"}
+                      boxShadow={"base"}
+                      borderRadius={10}
+                    >
                       <Box
                         p={4}
                         minW={180}
-                        borderRightColor={'#C4C4C4'}
+                        borderRightColor={"#C4C4C4"}
                         borderRightWidth={3}
                       >
                         <Box>
@@ -1189,27 +1314,38 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         </Box>
                       </Box>
 
-                      <Center w={'100%'} pl={1.5} pr={1.5} position="relative">
+                      <Center w={"100%"} pl={1.5} pr={1.5} position="relative">
                         <Input
                           type="file"
                           ref={inputref}
-                          onChange={(e) => setFieldvalue({ ...fieldvalue, docfile: e.target.files[0] })}
+                          onChange={(e) =>
+                            setFieldvalue({
+                              ...fieldvalue,
+                              docfile: e.target.files[0],
+                            })
+                          }
                           required
-                          w={'100%'}
+                          w={"100%"}
                           h={46}
                           bg={"white"}
                           padding={2}
-
                         />
                         <Button
                           margin={2}
-                          onClick={() => { setFieldvalue({ ...fieldvalue, docfile: undefined }); inputref.current.value = "" }}
-                        >clear</Button>
+                          onClick={() => {
+                            setFieldvalue({
+                              ...fieldvalue,
+                              docfile: undefined,
+                            });
+                            inputref.current.value = "";
+                          }}
+                        >
+                          clear
+                        </Button>
                       </Center>
                     </Flex>
                     <Center w={50}></Center>
                   </Flex>
-
                 </VStack>
               </AccordionPanel>
             </AccordionItem>
@@ -1217,8 +1353,8 @@ export const Createcommuform = ({ data, uid, gid }) => {
 
           {/* Registration */}
 
-          <Accordion allowMultiple bg={'#F3F3F3'}>
-            <AccordionItem w={'100%'}>
+          <Accordion allowMultiple bg={"#F3F3F3"}>
+            <AccordionItem w={"100%"}>
               <h2>
                 <AccordionButton>
                   <AccordionIcon color={"Black"} w={50} h={50} />
@@ -1231,45 +1367,50 @@ export const Createcommuform = ({ data, uid, gid }) => {
 
               <AccordionPanel color={"black"}>
                 <VStack>
-
-                  <Flex w={'100%'} m={2}>
+                  <Flex w={"100%"} m={2}>
                     <Center w={50}></Center>
                     <Box>ลงทะเบียนตัวละครและอื่น ๆ</Box>
                     <Spacer />
                     <IconButton
-                      colorScheme='blue'
-                      aria-label='Search database'
+                      colorScheme="blue"
+                      aria-label="Search database"
                       icon={<Plus />}
-                      rounded={'full'}
-                      bg={'#72994C'}
-                      size={'xs'}
+                      rounded={"full"}
+                      bg={"#72994C"}
+                      size={"xs"}
                       onClick={addRegisLink}
                     />
                   </Flex>
 
-
                   {fieldvalue.registrationlink?.map((item, index) => (
-                    <Regisform item={item} onDelete={() => deleteRegisLink(index)} onChange={(data) => setRegisLink(index, data)} />
+                    <Regisform
+                      item={item}
+                      onDelete={() => deleteRegisLink(index)}
+                      onChange={(data) => setRegisLink(index, data)}
+                    />
                   ))}
 
-
-                  <Flex w={'100%'} m={2}>
+                  <Flex w={"100%"} m={2}>
                     <Center w={50}></Center>
                     <Box>ตรวจสอบสถานะ</Box>
                     <Spacer />
                     <IconButton
-                      colorScheme='blue'
-                      aria-label='Search database'
+                      colorScheme="blue"
+                      aria-label="Search database"
                       icon={<Plus />}
-                      rounded={'full'}
-                      bg={'#72994C'}
-                      size={'xs'}
+                      rounded={"full"}
+                      bg={"#72994C"}
+                      size={"xs"}
                       onClick={addCheckLink}
                     />
                   </Flex>
 
                   {fieldvalue.statuschecklink?.map((item, index) => (
-                    <Checkform item={item} onDelete={() => deleteCheckLink(index)} onChange={(data) => setCheckLink(index, data)} />
+                    <Checkform
+                      item={item}
+                      onDelete={() => deleteCheckLink(index)}
+                      onChange={(data) => setCheckLink(index, data)}
+                    />
                   ))}
 
                   {/* <Center>
@@ -1358,22 +1499,24 @@ export const Createcommuform = ({ data, uid, gid }) => {
             </AccordionItem>
           </Accordion>
 
-          <HStack justifyContent={'center'} spacing={50} m={5}>
-            <Button
-              onClick={onOpen}
-              color={"black"}
-              bg={"#FFC75A"}
-              fontFamily="Mitr"
-              fontWeight={100}
-              fontSize={20}
-              h={50}
-              w={180}
-              p={8}
-              borderWidth={3}
-              borderColor={'black'}
-            >
-              เพิ่มผู้ดูแล
-            </Button>
+          <HStack justifyContent={"center"} spacing={50} m={5}>
+            {!data && (
+              <Button
+                onClick={onOpen}
+                color={"black"}
+                bg={"#FFC75A"}
+                fontFamily="Mitr"
+                fontWeight={100}
+                fontSize={20}
+                h={50}
+                w={180}
+                p={8}
+                borderWidth={3}
+                borderColor={"black"}
+              >
+                เพิ่มผู้ดูแล
+              </Button>
+            )}
 
             <Button
               onClick={onCropPicOpen}
@@ -1386,7 +1529,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
               w={180}
               p={8}
               borderWidth={3}
-              borderColor={'black'}
+              borderColor={"black"}
             >
               เพิ่มรูปแบนเนอร์
             </Button>
@@ -1402,9 +1545,9 @@ export const Createcommuform = ({ data, uid, gid }) => {
               w={180}
               p={8}
               borderWidth={3}
-              borderColor={'black'}
+              borderColor={"black"}
             >
-              {(data ? "แก้ไข" : "สร้างคอมมู")}
+              {data ? "แก้ไข" : "สร้างคอมมู"}
             </Button>
           </HStack>
         </Box>
@@ -1412,103 +1555,109 @@ export const Createcommuform = ({ data, uid, gid }) => {
 
       {/* modal Administator */}
 
-      <Modal size={'xl'} blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
+      <Modal
+        size={"xl"}
+        blockScrollOnMount={false}
+        isOpen={isOpen}
+        onClose={onClose}
+      >
         <ModalOverlay />
-        <ModalContent fontFamily={'Mitr'}>
+        <ModalContent fontFamily={"Mitr"}>
           <ModalHeader>จัดการผู้ดูแล</ModalHeader>
-          <ModalCloseButton rounded={'full'} />
+          <ModalCloseButton rounded={"full"} />
           <ModalBody>
-
-            <Flex w={'100%'}>
-              <Center
+            <Flex w={"100%"}>
+              <Avatar
                 w={70}
                 h={70}
-                rounded={'full'}
-                bg={'green.100'}
-              >
-                L
-              </Center>
-              <Box mt={3} w={'83%'}>
-                <Text fontSize={18} w={'100%'} maxW={350} ml='2'>
-                  Luke Earthrunner
+                rounded={"full"}
+                bg={"green.100"}
+                src={
+                  data?.creator
+                    ? Object.values(data.creator)[0].photoURL
+                    : auth.currentUser.photoURL
+                }
+                name={
+                  data?.creator
+                    ? Object.values(data.creator)[0].displayName
+                    : auth.currentUser.displayName
+                }
+              />
+              <Box mt={3} w={"83%"}>
+                <Text fontSize={18} w={"100%"} maxW={350} ml="2">
+                  {data?.creator
+                    ? Object.values(data.creator)[0].displayName
+                    : auth.currentUser.displayName}
                 </Text>
-                <Text ml='2'>
-                  Owner
-                </Text>
+                <Text ml="2">Owner</Text>
               </Box>
-              <Box float={'right'} w={'3%'}>
-                <Tooltip float={'right'} hasArrow label='UID:...' bg='gray.300' color='black'>
+              <Box float={"right"} w={"3%"}>
+                <Tooltip
+                  float={"right"}
+                  hasArrow
+                  label={
+                    data?.creator
+                      ? Object.values(data.creator)[0].uid
+                      : auth.currentUser.uid
+                  }
+                  bg="gray.300"
+                  color="black"
+                >
                   <Hash />
                 </Tooltip>
               </Box>
-
             </Flex>
 
             <Flex mt={5}>
-              <Input mr={1} />
-              <Button bg='#FFC75A'>เพิ่มผู้ดูแล</Button>
+              <Input
+                mr={1}
+                value={staffSearchString}
+                onChange={(e) => setStaffSearchString(e.target.value)}
+              />
+              <Button bg="#FFC75A">เพิ่มผู้ดูแล</Button>
+            </Flex>
+            <Flex display={staffSearchResult.length > 0 ? "initial" : "none"}>
+              {staffSearchResult.map((staff, index) => (
+                <Flex
+                  justifyContent={"space-between"}
+                  mt={5}
+                  onClick={() => addStaff(staff)}
+                  _hover={{
+                    backgroundColor: "gray.200",
+                  }}
+                  key={index}
+                  cursor={"pointer"}
+                >
+                  <Avatar
+                    name={staff.displayName}
+                    src={staff.photoURL}
+                    mr={3}
+                  />
+                  <Box flexGrow={9}>
+                    <Text>{staff.displayName}</Text>
+                    <Text>{staff.uid}</Text>
+                  </Box>
+                </Flex>
+              ))}
             </Flex>
 
             <Divider mt={2} />
 
-            <Box mt={2} fontSize={22} fontWeight={'bold'}>
+            <Box mt={2} fontSize={22} fontWeight={"bold"}>
               รายชื่อผู้ดูแล
             </Box>
 
-            {staffSearch.map((value, index) => {
-              (<AddStaffForm item={value} onChange={(data) => setStaff(index, data)} onDelete={() => deleteStaff(index)} />)
-            })}
-
-            {/* <Flex mt={3}>
-              <Center
-                w={50}
-                h={50}
-                rounded={'full'}
-                bg={'yellow.200'}
-              >
-                R
-              </Center>
-
-              <Box mt={0} w={'83%'}>
-                <Text fontSize={18} w={'100%'} maxW={350} ml='2'>
-                  Rudvik Stormsearch
-                </Text>
-
-                <Flex>
-                  <Select variant='filled' h={25} ml={2} w={'25%'} placeholder='Staff'>
-                    <option value='option1'>Option 1</option>
-                    <option value='option2'>Option 2</option>
-                    <option value='option3'>Option 3</option>
-                  </Select>
-
-                  <Box p={1} float={'right'} w={'3%'}>
-                    <Tooltip float={'right'} hasArrow label='UID:...' bg='gray.300' color='black'>
-                      <Hash />
-                    </Tooltip>
-                  </Box>
-                </Flex>
-
-              </Box>
-
-              <IconButton
-                rounded={'full'}
-                size='xs'
-                mt={3.5}
-                variant='outline'
-                colorScheme='teal'
-                icon={<Minus />}
-                _hover={{
-                  bg: 'red'
-                }}
+            {staffSearch.map((value, index) => (
+              <AddStaffForm
+                item={value}
+                onChange={(data) => setStaff(index, data)}
+                onDelete={() => deleteStaff(index)}
               />
-            </Flex> */}
-
-
-
+            ))}
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} >
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
               บันทึก
             </Button>
           </ModalFooter>
@@ -1517,26 +1666,29 @@ export const Createcommuform = ({ data, uid, gid }) => {
 
       {/* modal Croppic */}
 
-      <Modal blockScrollOnMount={false} isOpen={isCropPicOpen} onClose={onCropPicClose}>
+      <Modal
+        blockScrollOnMount={false}
+        isOpen={isCropPicOpen}
+        onClose={onCropPicClose}
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Modal Title</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text fontWeight='bold' mb='1rem'>
+            <Text fontWeight="bold" mb="1rem">
               You can scroll the content behind the moon
             </Text>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button variant='ghost'>Secondary Action</Button>
+            <Button variant="ghost">Secondary Action</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
-
     </Flex>
   );
 };

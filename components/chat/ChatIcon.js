@@ -1,39 +1,54 @@
 import React, { useState, useEffect } from "react";
-import { Box, Center, Image } from "@chakra-ui/react";
-import { useTab, useNotifications } from "../../src/hook/local";
+import { Avatar, Box, Center, Image } from "@chakra-ui/react";
+import { useTab, useNotifications, useApp, useUser } from "../../src/hook/local";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { doc } from "firebase/firestore";
 
-export const ChatIcon = ({ user, db, atab }) => {
+export const ChatIcon = ({ user, atab, onOpen }) => {
   const { tabState, addTab, removeTab, changeTab } = useTab();
-  const { notidata, chatNotiData } = useNotifications();
-  const [unreadnum, setUnreadnum] = useState(0);
-  const [thumbnail, setThumbnail] = useState("");
+  const {db} = useApp()
+  const getUser = useUser()
+  const { chatNotiData } = useNotifications();
+  const [mappedRoomDetail, setMappedRoomDetail] = useState({});
   // const unreadnum = 0;
+  const [roomDetail, loading] = useDocumentData(doc(db, "chatrooms", atab))
+  
+
   useEffect(() => {
-    console.log(chatNotiData);
-    if (chatNotiData && chatNotiData.length > 0) {
-      const tabDetail = chatNotiData.find((v) => v.id == atab);
-      if (tabDetail.type == "private" || tabDetail.type == "chara") {
-        const filteredname = tabDetail.memberDetail.find(
-          (v) => v.uid != user.uid
-        );
-        // console.log(filteredname)
-        const thumbnail = filteredname.photoURL;
-        setThumbnail(thumbnail);
-      } else {
-        const thumbnail = tabDetail.thumbnail;
-        setThumbnail(thumbnail);
-      }
+    const mapped = async () => {
+      const member = await getUser(roomDetail.member);
+      setMappedRoomDetail({
+        name: getName(member),
+        thumbnail: getThumbnail(member),
+      });
+    };
+    if (!loading) {
+      mapped();
+    } else {
+      setMappedRoomDetail(roomDetail);
     }
+  }, [roomDetail]);
 
-  }, [chatNotiData]);
+  const getName = (member) => {
+    if (roomDetail.type == "private") {
+      const opp = member.find((v) => v.uid != user.uid);
+      return opp.displayName;
+    } else {
+      return roomDetail.name;
+    }
+  };
+  const getThumbnail = (member) => {
+    if (roomDetail.type == "private") {
+      const opp = member.find((v) => v.uid != user.uid);
+      return opp.photoURL;
+    } else {
+      return roomDetail.thumbnail;
+    }
+  };
 
-  // const unreadnum = unreadedSnapshot ? unreadedSnapshot.docs.length : 0;
-  // const unreadnum = 0;
   const onIconClicked = () => {
-    // window.localStorage.setItem("openTab", atab);
     changeTab(atab);
-    // console.log("opentab" + atab);
-    // onToggle();
+    onOpen();
   };
 
   return (
@@ -51,41 +66,11 @@ export const ChatIcon = ({ user, db, atab }) => {
         onClick={onIconClicked}
         marginBottom="3"
       >
-        <Image src={thumbnail} w="100%" h="100%" rounded={100} />
+        <Avatar src={mappedRoomDetail?.thumbnail} name={mappedRoomDetail?.name} w="100%" h="100%" rounded={100} />
         {/* <Chats size={32} /> */}
         {/* <Text>{atab}</Text> */}
         {/* <Badge>{unreadnum}</Badge> */}
       </Center>
-      {/* {unreadnum &&
-              (
-              <Center
-                float="left"
-                background="#343434"
-                rounded={100}
-                color={"white"}
-                w={50}
-                h={50}
-                _hover={{
-                  backgroundColor: "#4D4D88",
-                }}
-                onClick={onToggle}
-                marginBottom="3"
-              >
-                <Chats size={32} />
-                <Badge>{unreadnum}</Badge>
-              </Center>
-            )} */}
-      {/* {isOpen && (
-          <ChatBox
-            atab={atab}
-            user={user}
-            onClose={onClose}
-            // setTab={setTab}
-            isOpen={isOpen}
-            db={db}
-            // chatTab={chatTab}
-          />
-        )} */}
     </Box>
   );
 };

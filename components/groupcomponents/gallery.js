@@ -33,7 +33,7 @@ const Gallery = ({ gid }) => {
     // justifyContent={'center'}
     >
       {gallery.length > 0 &&
-        gallery.map((img) => (
+        gallery.map((img, k) => (
           <SimpleGrid
             width={'auto'}
             height={'auto'}
@@ -43,6 +43,7 @@ const Gallery = ({ gid }) => {
             cursor={'pointer'}
             borderRadius={10}
             onClick={()=>setModalImage(img.url)}
+            key={k}
           >
             <Image
               src={img.url}

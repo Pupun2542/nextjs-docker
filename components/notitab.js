@@ -16,10 +16,11 @@ const Notitab = ({ notidata }) => {
       notidata.map((data) => {
         userdetail = [...userdetail, ...data.triggerer];
         if (data.object !== "") {
-          userdetail = [...userdetail, ...data.object];
+          userdetail = [...userdetail, data.object];
         }
         groupdetail = [...groupdetail, data.group];
       });
+      // console.log(userdetail)
       const uniquser = [...new Set(userdetail)];
       const detaileduser = await getUser(uniquser);
       const uniqgroup = [...new Set(groupdetail)];
@@ -33,7 +34,7 @@ const Notitab = ({ notidata }) => {
             
         })
       );
-      console.log(detaileduser, detailedgroup);
+      // console.log(detaileduser, detailedgroup);
       const mappedNotiData = [];
       notidata.map((data)=>{
         const group = detailedgroup.find((v)=> v?.gid === data.group);
@@ -57,6 +58,7 @@ const Notitab = ({ notidata }) => {
   }, [notidata]);
 
   const notimessage = (type, group, object, triggerer, other) => {
+    // console.log(object);
     if (type === "002") {
         return `${group.name} มีการอัพเดตรายละเอียดกลุ่ม`
     } else if (type === "003"){
@@ -161,8 +163,8 @@ const Notitab = ({ notidata }) => {
 
   return (
     <Flex p={2} direction={'column'} overflowY={"auto"} maxH={550}>
-      {newNotiData.map((data) => (
-        <Flex boxShadow={'base'} p={2} mt={0.5} mb={0.5} onClick={()=>router.push(data.path)} cursor="pointer" _hover={{backgroundColor: "gray.100"}}>
+      {newNotiData.map((data, k) => (
+        <Flex boxShadow={'base'} p={2} mt={0.5} mb={0.5} onClick={()=>router.push(data.path)} cursor="pointer" _hover={{backgroundColor: "gray.100"}} key={k}>
           {/* {console.log(data)} */}
           <Avatar size={"lg"} src={data.triggerer.photoURL}></Avatar>
           <VStack pl={2} w={"100%"} float={"left"}>

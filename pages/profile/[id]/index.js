@@ -44,7 +44,7 @@ import { About } from "../../../components/profile/about";
 import { Myfriends } from "../../../components/profile/myfriends";
 import axios from "axios";
 import useFriendManager from "../../../components/groupcomponents/friendhooks";
-import UseChatManager from "../../../src/hook/ChatManager";
+import UseChatManager from "../../../src/hook/useChatManager";
 
 export default function profile() {
   const router = useRouter();
@@ -68,7 +68,7 @@ export default function profile() {
     handleRejectFriend,
     handleRemoveFriend,
   } = useFriendManager();
-  const { handleMessage } = UseChatManager()
+  const { handlePrivateMessage } = UseChatManager();
 
   const loaduserDetail = async () => {
     if (!loading) {
@@ -349,7 +349,7 @@ export default function profile() {
                     <Button
                       colorScheme="teal"
                       variant="outline"
-                      onClick={()=>handleMessage(user, id)}
+                      onClick={()=>handlePrivateMessage(user, id)}
                       position="initial"
                     >
                       Message

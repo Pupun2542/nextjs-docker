@@ -176,18 +176,26 @@ function GroupCard() {
                     </WrapItem>;
                   })}
 
-                  <Center>
-                    {/* เปลี่ยนสีตาม Rating */}
-                  </Center>
+                  {/* <Center> */}
+                  <WrapItem
+                      bg={value.color}
+                      m={1}
+                      borderRadius={10}
+                      pt={1} pb={1} pl={2} pr={2}
+                      fontFamily={'Mitr'}
+                      color={'white'}
+                    >{value.rating.split(" ", 1)[0]}
+                    </WrapItem>
+                  {/* </Center> */}
                 </Wrap>
 
                 <Wrap fontFamily={'Mitr'} w={'100%'}>
                   <Eye size={26} />
                   <Box>100</Box>
                   <Heart size={26} />
-                  <Box>100</Box>
+                  <Box>{value.love?.length}</Box>
                   <PushPin size={26} />
-                  <Box>100</Box>
+                  <Box>{value.pinned?.length}</Box>
                 </Wrap>
               </VStack>
             </Flex>
