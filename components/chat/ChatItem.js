@@ -79,8 +79,8 @@ export const ChatItem = ({ doc, user }) => {
                 {doc.image && (
                   <Image
                     src={doc.image}
-                    w={250}
-                    h={250}
+                    w={150}
+                    h={150}
                     objectFit="cover"
                     onClick={() => setModalOpen(true)}
                   />
