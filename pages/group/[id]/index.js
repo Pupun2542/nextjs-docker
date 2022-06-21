@@ -321,7 +321,7 @@ export default function Group() {
                       />
 
                       <IconButton
-                        bg={pin ? "yellow" : "white"}
+                        bg={pin ? "#FFC75A" : "white"}
                         rounded="full"
                         h={38}
                         w={38}
