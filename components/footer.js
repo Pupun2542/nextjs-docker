@@ -13,7 +13,7 @@ function Footer() {
       bg={'#343434'}
       h={180}
       w="100%"
-      
+
     >
       <Flex>
         <Center>
@@ -66,7 +66,12 @@ function Footer() {
 
         <Center>
           <VStack m={5} fontFamily={'Mitr'} color={'#FFFFFF'}>
-            <Box>Policy</Box>
+            <Box
+              as='button'
+              onClick={() => router.push("/policy")}
+            >
+              Policy
+            </Box>
             <Box>Term</Box>
           </VStack>
 
