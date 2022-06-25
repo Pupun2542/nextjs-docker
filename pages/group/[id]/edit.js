@@ -62,9 +62,6 @@ import Footer from "../../../components/footer";
 import axios from "axios";
 
 export default function Edit() {
-  // const app = useApp();
-  // const db = getFirestore(app);
-  // const auth = getAuth(app);
   const { app, auth, db } = useApp();
   const [user, loading, error] = useAuthState(auth);
   const Router = useRouter();
@@ -76,34 +73,6 @@ export default function Edit() {
       Router.push("/login");
     }
   }, [user, loading]);
-
-  const [genre, setGenre] = useState([]);
-  const [hashtag, setHashtag] = useState("");
-  const [communame, setCommuname] = useState("");
-  const [maxplayer, setMaxplayer] = useState("");
-  // const [regDate, setRegDate] = useState("");
-  const [runtime, setRuntime] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [description, setDescription] = useState("");
-  const [smlink, setSmlink] = useState("");
-  const [doclink, setDoclink] = useState("");
-  const [docfile, setDocfile] = useState(null);
-  const [qaasklink, setQaasklink] = useState("");
-  const [qaanslink, setQaanslink] = useState("");
-  const [submitlink, setSubmitlink] = useState("");
-  const [resultlink, setResultlink] = useState("");
-  const [contactlink, setContactlink] = useState("");
-  const [privacy, setPrivacy] = useState("");
-  const [bannerBlob, setBannerBlob] = useState(null);
-  const [places, setPlaces] = useState([]);
-  const [times, setTimes] = useState([]);
-  const [TWs, setTWs] = useState([]);
-  const [rating, setRating] = useState("");
-  const originBannerUrl = useRef("");
-  const [rule, setRule] = useState("");
-  const [averageTime, setAvergeTime] = useState("");
-  const [averageTimeUnit, setAvergeTimeUnit] = useState("");
-  const [type, setType] = useState("");
   const [data, setData] = useState(null)
 
   //ก็อปปี้บรรทัดบนไปวางเพิ่ม หรือเขียนเอง ลักษณะคือ const [state, setState] = useState(true) โดยที่ state คือชื่อตัวแปรที่จะใช้ เช่น durationsw ส่วน setstate คือฟังก์ชั่นที่ไว้ใช้เปลี่ยนค่าตัวแปร

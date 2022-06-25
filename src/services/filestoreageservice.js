@@ -92,6 +92,17 @@ export async function UploadChatImage(file, creator, crid) {
   return downloadurl;
 }
 
+export async function UploadCharaImage(file, creator, group) {
+  const storeRef = ref(
+    store,
+    `group/${group}/chara/${creator}${Date.now()}.jpg`
+  );
+  const snapsnot = await uploadString(storeRef, file, "data_url");
+  // console.log(snapsnot.ref)
+  const downloadurl = await getDownloadURL(snapsnot.ref);
+  return downloadurl;
+}
+
 export function getpathfromUrl(url) {
   return ref(store, url);
 }

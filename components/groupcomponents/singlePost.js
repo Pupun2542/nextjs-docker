@@ -33,10 +33,13 @@ import {
 import { GroupComment } from "./comment";
 import {
   collection,
+  doc,
+  getDoc,
   limit,
   onSnapshot,
   orderBy,
   query,
+  startAt,
 } from "firebase/firestore";
 import { useApp, useUser } from "../../src/hook/local";
 import axios from "axios";
@@ -46,14 +49,11 @@ import {
 } from "../../src/services/filestoreageservice";
 import { PostContext } from "../../pages/group/[id]/dashboard";
 import { useCollection } from "react-firebase-hooks/firestore";
-export const GroupPost = ({ post, member, onPostDelete }) => {
+import { isEmptyOrSpaces } from "../../src/services/utilsservice";
+export const GroupSinglePost = ({ post, member, onPostDelete, cid, rid }) => {
+    console.log(post);
   const {
-    setStateData,
-    getStateData,
     setStateDataData,
-    getStateDataData,
-    setStateDataEditMessage,
-    getStateDataEditMessage,
     setStateDataPendingMessage,
     getStateDataPendingMessage,
     setStateDataPendingImage,
@@ -64,10 +64,6 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
     getStateDataEdit,
     setStateDataReply,
     getStateDataReply,
-    postData,
-    setPostData,
-    setStateDataChild,
-    getStateDataChild,
   } = useContext(PostContext);
   const creator = Object.values(post.creator)[0];
   const getUser = useUser();
@@ -102,10 +98,6 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
   const setText = (value) => {
     setStateDataData({ ...post, message: value });
   };
-  // const comment = getStateDataChild(pid);
-  // const setComment = (value) => {
-  //   setStateDataChild(value, pid);
-  // };
 
   const isOpen = getStateDataReply(pid);
   const onOpen = () => {
@@ -118,16 +110,49 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
     setStateDataReply(!isOpen, pid);
   };
 
+//   const [snapshot, setSnapshot] = useState(null);
+
   const [snapshot, loading, error] = useCollection(
     query(
       collection(db, "group", post.gid, "posts", post.pid, "comments"),
       orderBy("timestamp", "desc"),
-      limit(fetchlimit)
+      limit(fetchlimit),
     )
   );
+// const snapshotWithCommentFocus = async() => {
+//     const ref = await getDoc(doc(db, "group", post.gid, "posts", post.pid, "comments", cid));
+//     return onSnapshot(query(
+//         collection(db, "group", post.gid, "posts", post.pid, "comments"),
+//         orderBy("timestamp", "desc"),
+//         startAt(ref),
+//         limit(fetchlimit)
+//       ), (snapshot)=> {
+//         setSnapshot(snapshot)
+//         onOpen()
+//       })
+// }
+// const snapshotWithoutCommentFocus = async() => {
+//     return onSnapshot(query(
+//         collection(db, "group", post.gid, "posts", post.pid, "comments"),
+//         orderBy("timestamp", "desc"),
+//         limit(fetchlimit)
+//       ), (snapshot)=> {
+//         setSnapshot(snapshot)
+//         onOpen()
+//       })
+// }
 
+//   useEffect(()=> {
+//     let unsubscribe;
+//     if (!cid) {
+//         unsubscribe = snapshotWithoutCommentFocus();
+//     } else {
+//         unsubscribe = snapshotWithCommentFocus();
+//     }
+//     return ()=> unsubscribe();
+//   }, [post, rid, limit])
   let comment = [];
-  if (!loading) {
+  if (snapshot) {
     Promise.all(
       snapshot.docs.map(async (doc) => {
         let mappedcommentData = {};
@@ -162,9 +187,6 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
     // In case you have a limitation
     // e.target.style.height = `${Math.min(e.target.scrollHeight, limit)}px`;
   };
-  function isEmptyOrSpaces(str) {
-    return str === null || str.match(/^ *$/) !== null;
-  }
   const handleSent = async () => {
     if (!isEmptyOrSpaces(message) || image) {
       let dlurl = "";
@@ -499,8 +521,8 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
                     {comment?.length > 0 &&
                       comment
                         .map((cmt, i) => (
-                          <Box key={i}>
-                            <GroupComment comment={cmt} member={member} />
+                          <Box key={i} id={cmt.cid}>
+                            <GroupComment comment={cmt} member={member} setTo={cid} rid={rid} />
                           </Box>
                         ))
                         .reverse()}

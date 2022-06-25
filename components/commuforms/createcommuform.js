@@ -102,7 +102,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
     averageTime: "",
     averageTimeUnit: "",
     type: "",
-    privacy: "",
+    privacy: "public",
     registrationlink: [],
     statuschecklink: [],
     creator: uid,
@@ -408,16 +408,16 @@ export const Createcommuform = ({ data, uid, gid }) => {
     setFieldvalue({ ...fieldvalue, statuschecklink: newState });
   };
 
-  const addStaff = (data) => {
-    console.log(data);
+  const addStaff = (dat) => {
+    console.log(dat);
     if (
-      data.uid != auth.currentUser.uid &&
-      !fieldvalue.staff.includes(data.uid)
+      dat.uid != auth.currentUser.uid &&
+      !fieldvalue.staff.includes(dat.uid)
     ) {
-      setStaffSearch([...staffSearch, data]);
+      setStaffSearch([...staffSearch, dat]);
       setFieldvalue({
         ...fieldvalue,
-        staff: [...fieldvalue.staff, data.uid],
+        staff: [...fieldvalue.staff, dat.uid],
       });
       setStaffSearchResult([]);
       setStaffSearchString("");
@@ -1335,7 +1335,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
                           onClick={() => {
                             setFieldvalue({
                               ...fieldvalue,
-                              docfile: undefined,
+                              docfile: null,
                             });
                             inputref.current.value = "";
                           }}
@@ -1573,21 +1573,22 @@ export const Createcommuform = ({ data, uid, gid }) => {
                 rounded={"full"}
                 bg={"green.100"}
                 src={
-                  data?.creator
+                  data && Object.values(data.creator)[0].photoURL
                     ? Object.values(data.creator)[0].photoURL
-                    : auth.currentUser.photoURL
+                    : auth.currentUser?.photoURL
                 }
+                // src={auth.currentUser.photoURL}
                 name={
-                  data?.creator
+                  data && Object.values(data.creator)[0].displayName
                     ? Object.values(data.creator)[0].displayName
-                    : auth.currentUser.displayName
+                    : auth.currentUser?.displayName
                 }
               />
               <Box mt={3} w={"83%"}>
                 <Text fontSize={18} w={"100%"} maxW={350} ml="2">
                   {data?.creator
                     ? Object.values(data.creator)[0].displayName
-                    : auth.currentUser.displayName}
+                    : auth.currentUser?.displayName}
                 </Text>
                 <Text ml="2">Owner</Text>
               </Box>
@@ -1597,8 +1598,8 @@ export const Createcommuform = ({ data, uid, gid }) => {
                   hasArrow
                   label={
                     data?.creator
-                      ? Object.values(data.creator)[0].uid
-                      : auth.currentUser.uid
+                      ? Object.values(data.creator)[0]?.uid
+                      : auth.currentUser?.uid
                   }
                   bg="gray.300"
                   color="black"
@@ -1630,7 +1631,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
                 >
                   <Avatar
                     name={staff.displayName}
-                    src={staff.photoURL}
+                    // src={staff.photoURL}
                     mr={3}
                   />
                   <Box flexGrow={9}>

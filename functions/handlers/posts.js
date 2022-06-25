@@ -1,57 +1,57 @@
 /* eslint-disable max-len */
 const {db, admin} = require("../utils/admin");
 const {sendNotifications} = require("../utils/notifications");
+const {getUsersById} = require("../utils/userMapper");
 
-exports.createPost = (req, res) => {
+exports.createPost = async (req, res) => {
   if (req.user) {
     const user = req.user.uid;
     const docref = db.collection("group").doc(req.params.gid);
-    docref.get().then((doc) => {
-      if (doc.exists && doc.data().member.includes(user)) {
-        return docref
-            .collection("posts")
-            .add({
-              uid: user,
-              message: req.body.message,
-              timestamp: admin.firestore.FieldValue.serverTimestamp(),
-              love: [],
-              imageUrl: req.body.imageUrl ? req.body.imageUrl : [],
-              comment: 0,
-              follower: [user],
-              lastactive: admin.firestore.FieldValue.serverTimestamp(),
-              charaId: req.body.charaId,
-              viewer: [user],
-            })
-            .then((ref) => {
-              if (req.body.imageUrl.length > 0) {
-                Promise.all(
-                    req.body.imageUrl.map((url) => {
-                      docref.collection("media").add({
-                        url: url,
-                        pid: ref.id,
-                        timestamp: admin.firestore.FieldValue.serverTimestamp(),
-                      });
-                    }),
-                );
-              }
-              sendNotifications(
-                  doc.data().member,
-                  "101",
-                  user,
-                  req.params.gid,
-                  "",
-                  `group/${req.params.gid}/dashboard?pid=${ref.id}`,
-              );
-              return res.status(200).send("create post success");
-            })
-            .catch((e) => {
-              return res.status(400).send("create post not success ", e);
-            });
+    const doc = await docref.get();
+    if (doc.exists && doc.data().member.includes(user)) {
+      const ref = await docref.collection("posts").add({
+        uid: user,
+        message: req.body.message,
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        love: [],
+        imageUrl: req.body.imageUrl ? req.body.imageUrl : [],
+        comment: 0,
+        follower: [user],
+        lastactive: admin.firestore.FieldValue.serverTimestamp(),
+        charaId: req.body.charaId,
+        viewer: [user],
+      });
+      const batch = db.batch();
+      if (req.body.imageUrl.length > 0) {
+        req.body.imageUrl.map((url) => {
+          batch.set(docref.collection("media").doc(), {
+            url: url,
+            pid: ref.id,
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
+          });
+        });
       }
-      return res.status(401).send("unauthorized");
-    });
-    // console.log(req.body);
-    // return res.status(200).send(req.body.message);
+      if (req.body.charaId && req.body.charaId != "") {
+        batch.update(docref.collection("chara").doc(req.body.charaId), {
+          postRef: admin.firestore.FieldValue.arrayUnion({
+            pid: ref.id,
+            timestamp: Date.now(),
+          }),
+        });
+      }
+      batch.commit();
+      sendNotifications(
+          doc.data().member,
+          "101",
+          user,
+          req.params.gid,
+          "",
+          `group/${req.params.gid}/dashboard?pid=${ref.id}`,
+      );
+      return res.status(200).send("create post success");
+    } else {
+      return res.status(403).send("forbidden");
+    }
   } else {
     return res.status(401).send("unauthorized");
   }
@@ -87,34 +87,45 @@ exports.updatePost = (req, res) => {
   }
 };
 
-exports.deletePost = (req, res) => {
+exports.deletePost = async (req, res) => {
   if (req.user) {
     const docref = db
         .collection("group")
         .doc(req.params.gid)
         .collection("posts")
         .doc(req.params.pid);
-    docref.get().then((doc) => {
-      if (doc.exists && doc.data().uid == req.user.uid) {
-        if (doc.data().imageUrl.length > 0) {
-          Promise.all(
-              req.body.filepath.map((path) => {
-                admin.storage().bucket(req.body.bucket).file(path).delete();
-              }),
-          );
-        }
-        return docref
-            .delete()
-            .then(() => {
-              return res.status(200).send("delete post success");
-            })
-            .catch((e) => {
-              return res.status(400).send("delete post not success ", e);
-            });
-      } else {
-        return res.status(401).send("unauthorized");
+    const doc = await docref.get();
+    if (doc.exists && doc.data().uid == req.user.uid) {
+      if (doc.data().imageUrl.length > 0) {
+        Promise.all(
+            req.body.filepath.map((path) => {
+              admin.storage().bucket(req.body.bucket).file(path).delete();
+            }),
+        );
       }
-    });
+      if (doc.data().charaId) {
+        await db.runTransaction(async (transaction) => {
+          const trdoc = await transaction.get(
+              docref.collection("chara").doc(doc.data().charaId),
+          );
+          if (trdoc.exists) {
+            const newList = trdoc
+                .data()
+                .postRef.filter((v, i) => v.pid != req.params.gid);
+            transaction.update(
+                docref.collection("chara").doc(doc.data().charaId),
+                {
+                  postRef: newList,
+                },
+            );
+          }
+        });
+      }
+      await docref.delete();
+      return res.status(200).send("delete post success");
+    } else {
+      return res.status(401).send("unauthorized");
+    }
   } else {
     res.status(404).send("post not found");
   }
@@ -184,7 +195,6 @@ exports.getAllPost = async (req, res) => {
     const user = req.user.uid;
     const groupref = db.collection("group").doc(req.params.gid);
     const doc = await groupref.get();
-    // console.log(req.query);
 
     if (doc.exists) {
       if (
@@ -232,7 +242,6 @@ exports.getAllPost = async (req, res) => {
               };
               const finaldata = {...postdoc.data(), ...mappeddocdata};
               post = [...post, finaldata];
-            // console.log(post);
             }),
         );
         return res.status(200).json(post);
@@ -257,22 +266,43 @@ exports.getPost = (req, res) => {
         if (
           (doc.data().privacy == "private" &&
             doc.data().member.includes(user)) ||
-          doc.data().privacy == "public"
+          doc.data().privacy != "private"
         ) {
           return groupref
               .collection("posts")
               .doc(req.params.pid)
               .get()
-              .order
               .then((snapshot) => {
               // const post = snapshot.docs.map((docs)=>docs.data());
                 if (snapshot.exists) {
-                  return res.status(200).json(snapshot.data());
+                  getUsersById(doc.data().member).then((usr) => {
+                    const mappedusr = Object.entries(usr);
+                    const usrdata = {
+                      ...snapshot.data(),
+                      viewer: Object.fromEntries(
+                          mappedusr.filter(([k, v], i) =>
+                            snapshot.data().viewer.includes(k),
+                          ),
+                      ),
+                      creator: Object.fromEntries(
+                          mappedusr.filter(([k, v], i) => snapshot.data().uid === k),
+                      ),
+                      gid: req.params.gid,
+                      pid: req.params.pid,
+                    };
+                    return res.status(200).json(usrdata);
+                  });
                 }
               });
+        } else {
+          return res.status(403).send("forbidden");
         }
+      } else {
+        return res.status(404).send("group not found");
       }
     });
+  } else {
+    return res.status(40).send("unauthorized");
   }
 };
 
@@ -286,7 +316,7 @@ exports.getAllMedia = (req, res) => {
         if (
           (doc.data().privacy == "private" &&
             doc.data().member.includes(user)) ||
-          doc.data().privacy == "public"
+          doc.data().privacy != "private"
         ) {
           return groupref
               .collection("media")
@@ -294,7 +324,9 @@ exports.getAllMedia = (req, res) => {
               .get()
               .then((snapshot) => {
                 if (!snapshot.empty) {
-                  return res.status(200).json(snapshot.docs.map((doc)=>doc.data()));
+                  return res
+                      .status(200)
+                      .json(snapshot.docs.map((doc) => doc.data()));
                 } else {
                   return res.status(404).json("media not found");
                 }

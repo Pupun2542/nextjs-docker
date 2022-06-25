@@ -117,7 +117,6 @@ function CustomNavbar() {
   const [unreadChat, setUnreadChat] = useState([]);
   const [unreadnoti, setUnreadnoti] = useState([]);
   const [play] = useSound("/chatnoti.wav", { volume: 0.25 });
-  const { tabState, addTab, removeTab, changeTab, closeTab } = useTab();
 
   useEffect(() => {
     if (user && !loading) {
@@ -165,11 +164,11 @@ function CustomNavbar() {
             _hover={{
               textDecoration: "none",
             }}
-            onClick={() => {
-              user.getIdToken().then((token) => {
-                console.log(token);
-              });
-            }}
+            // onClick={() => {
+            //   user.getIdToken().then((token) => {
+            //     console.log(token);
+            //   });
+            // }}
           >
             <Center
               bg="white"

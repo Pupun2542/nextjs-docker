@@ -48,10 +48,8 @@ import UseChatManager from "../../../src/hook/useChatManager";
 
 export default function profile() {
   const router = useRouter();
-  const { id } = router.query;
-  // const app = useApp();
-  // const db = getFirestore(app);
-  // const auth = getAuth(app);
+  const { id, tab } = router.query;
+  // console.log(router.query);
   const { app, auth, db } = useApp();
   const [user, loading, error] = useAuthState(auth);
   const [userDetail, setUserDetail] = useState(null);
@@ -59,6 +57,7 @@ export default function profile() {
   const [editDisplayName, setEditDisplayName] = useState("");
   const [editAvartarMode, setEditAvatarMode] = useState(false);
   const [editCoverMode, setEditCoverMode] = useState(false);
+  const [tabIndex, setTabIndex] = useState(5);
   const {
     friend,
     setFriend,
@@ -69,6 +68,13 @@ export default function profile() {
     handleRemoveFriend,
   } = useFriendManager();
   const { handlePrivateMessage } = UseChatManager();
+
+  useEffect(()=> {
+    console.log(tab)
+    if (tab && tab == "friend") {
+      setTabIndex(3);
+    }
+  },[tab])
 
   const loaduserDetail = async () => {
     if (!loading) {
@@ -176,7 +182,7 @@ export default function profile() {
               <Center
                 width="100%"
                 maxW={1000}
-                h={400}
+                h={563}
                 fontSize={30}
                 boxShadow={"base"}
                 borderBottomRadius={10}
@@ -194,7 +200,7 @@ export default function profile() {
               <Center
                 width="100%"
                 maxW={1000}
-                h={400}
+                h={563}
                 fontSize={30}
                 boxShadow={"base"}
                 borderBottomRadius={10}
@@ -359,7 +365,7 @@ export default function profile() {
               </Flex>
             </Flex>
 
-            <Tabs w={"100%"} bg={"tomato2"} isFitted spacing={0}>
+            <Tabs w={"100%"} bg={"tomato2"} isFitted spacing={0} index={tabIndex} onChange={(e)=>setTabIndex(e)}>
               <TabList borderColor={"gray.400"} p={2}>
                 <Tab
                   _selected={{ color: "white", bg: "#9A9AB0" }}
@@ -376,7 +382,7 @@ export default function profile() {
                   Community
                 </Tab>
                 <Tab
-                  isDisabled
+                  // isDisabled
                   _selected={{ color: "white", bg: "#9A9AB0" }}
                   borderRadius={10}
                 >

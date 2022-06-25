@@ -56,7 +56,6 @@ exports.updateGroup = (req, res) => {
   if (req.user) {
     const user = req.user.uid;
     const data = req.body;
-    console.log(req.params.id);
     const docref = db.collection("group").doc(req.params.id);
     return docref.update({
       name: data.name,
@@ -122,7 +121,7 @@ exports.deleteGroup = (req, res) => {
         });
   }
 };
-exports.addPlayer = (req, res)=>{
+exports.acceptPlayer = (req, res)=>{
   // staff กด
   if (req.user) {
     const user = req.user.uid;
@@ -132,6 +131,7 @@ exports.addPlayer = (req, res)=>{
         if (doc.data().staff.includes(user)) {
           return doc.ref.update({
             "member": admin.firestore.FieldValue.arrayUnion(id),
+            "pendingmember": admin.firestore.FieldValue.arrayRemove(id),
           }).then(()=>{
             sendNotifications([...doc.data().staff, req.body.id], "007", user, req.params.id, id, `group/${req.params.id}/dashboard`);
             return res.status(200).send("add new member success");
@@ -166,7 +166,7 @@ exports.removePlayer = (req, res) =>{
     });
   }
 };
-exports.addPendingPlayer = (req, res)=>{
+exports.joinGroup = (req, res)=>{
   // user กด
   if (req.user) {
     const user = req.user.uid;
@@ -183,7 +183,7 @@ exports.addPendingPlayer = (req, res)=>{
     });
   }
 };
-exports.removePendingPlayer = (req, res) =>{
+exports.rejectPendingPlayer = (req, res) =>{
   // staff กด
   if (req.user) {
     const user = req.user.uid;
@@ -205,6 +205,55 @@ exports.removePendingPlayer = (req, res) =>{
   }
 };
 
+exports.invitePlayer = async (req, res)=>{
+  // user กด
+  if (req.user) {
+    const user = req.user.uid;
+    const ids = req.body.id;
+    // console.log(id);
+    const groupref = db.collection("group").doc(req.params.id);
+    const batch = db.batch();
+    const group = await groupref.get();
+    if (group.exists) {
+      if (group.data().staff.includes(user)) {
+        const pending = ids.map((i)=> i.uid);
+        pending.map((i)=> batch.update(groupref, "member", admin.firestore.FieldValue.arrayUnion(i)));
+        await batch.commit();
+        pending.forEach((i)=> {
+          sendNotifications([...group.data().staff, ...pending], "011", user, req.params.id, i, `group/${req.params.id}/dashboard`);
+        });
+        return res.status(200).send("success");
+      } else {
+        return res.status(403).send("forbidden");
+      }
+    } else {
+      return res.status(404).send("group no foud");
+    }
+  } else {
+    return res.status(401).send("unauthorized");
+  }
+};
+exports.cancelPending = (req, res) =>{
+  // user กด
+  if (req.user) {
+    const user = req.user.uid;
+    const id = req.body.id;
+    db.collection("group").doc(req.params.id).get().then((doc)=>{
+      if (doc.exists) {
+        if (doc.data().pendingmember.includes(user)) {
+          doc.ref.update({
+            "pendingmember": admin.firestore.FieldValue.arrayRemove(id),
+          }).then(()=>{
+            return res.status(200).send("remove member success");
+          }).catch((e)=>{
+            return res.status(400).send("cannot remove member : ", e);
+          });
+        }
+      }
+    });
+  }
+};
+
 exports.addStaff = (req, res)=>{
   if (req.user) {
     const user = req.user.uid;
@@ -214,6 +263,7 @@ exports.addStaff = (req, res)=>{
         if (doc.data().staff.includes(user)) {
           doc.ref.update({
             "staff": admin.firestore.FieldValue.arrayUnion(id),
+            "member": admin.firestore.FieldValue.arrayUnion(id),
           }).then(()=>{
             sendNotifications([...doc.data().staff, req.body.id], "005", user, req.params.id, id, `group/${req.params.id}`);
             return res.status(200).send("add new staff success");
@@ -252,11 +302,98 @@ exports.removeStaff = (req, res) =>{
   }
 };
 
-exports.addChara = (req, res) =>{
-  // todo
+exports.addChara = async (req, res) =>{
+  if (req.user) {
+    const groupRef = db.collection("group").doc(req.params.id);
+    const groupdoc = await groupRef.get();
+    if (groupdoc.exists&&groupdoc.data().member.includes(req.user.uid)) {
+      const addRes = await groupRef.collection("chara").add({
+        name: req.body.name,
+        photoURL: req.body.photoURL,
+        parentId: req.user.uid,
+        docLink: req.body.docLink,
+        description: req.body.description,
+      });
+      await db.runTransaction(async (trans)=> {
+        const ref = await trans.get(groupRef);
+        trans.update(groupRef, {
+          chara: {...ref.data().chara, [addRes.id]: {
+            name: req.body.name,
+            photoURL: req.body.photoURL,
+            parentId: req.user.uid,
+            refererId: addRes.id,
+            description: req.body.description,
+            docLink: req.body.docLink,
+          }},
+        });
+      });
+      return res.status(200).json({
+        name: req.body.name,
+        photoURL: req.body.photoURL,
+        description: req.body.description,
+        parentId: req.user.uid,
+        refererId: addRes.id,
+      });
+    } else {
+      return res.status(403).send("forbidden");
+    }
+  } else {
+    return res.status(401).send("unauthorized");
+  }
 };
-exports.removeChara = (req, res) =>{
-  // todo
+exports.removeChara = async (req, res) =>{
+  if (req.user) {
+    const groupRef = db.collection("group").doc(req.params.id);
+    await db.runTransaction(async (trans)=> {
+      const doc = await trans.get(groupRef);
+      if (doc.exists) {
+        const entries = Object.entries(doc.data().chara);
+        const newEntries = entries.filter(([k, v], i)=> k != req.body.caid);
+        const obj = Object.fromEntries(newEntries);
+        trans.update(groupRef, {
+          chara: obj,
+        });
+      } else {
+        return res.status(404).send("group not found");
+      }
+    });
+    await groupRef.collection("chara").doc(req.body.caid).delete();
+    return res.status(200).send("delete success");
+  } else {
+    return res.status(401).send("unauthorized");
+  }
+};
+
+exports.updateChara = async (req, res) => {
+  if (req.user) {
+    const groupRef = db.collection("group").doc(req.params.id);
+    await db.runTransaction(async (trans)=> {
+      const doc = await trans.get(groupRef);
+      if (doc.exists) {
+        const newObj = {...doc.data().chara, [req.body.caid]: {
+          ...doc.data().chara[req.body.caid],
+          name: req.body.name,
+          photoURL: req.body.photoURL,
+          description: req.body.description,
+          docLink: req.body.docLink,
+        }};
+        trans.update(groupRef, {
+          chara: newObj,
+        });
+      } else {
+        return res.status(404).send("group not found");
+      }
+    });
+    await groupRef.collection("chara").doc(req.body.caid).update({
+      name: req.body.name,
+      photoURL: req.body.photoURL,
+      docLink: req.body.docLink,
+      description: req.body.description,
+    });
+    return res.status(200).send("delete success");
+  } else {
+    return res.status(401).send("unauthorized");
+  }
 };
 
 exports.groupLove = (req, res) =>{
@@ -412,7 +549,6 @@ exports.getGroup = (req, res) =>{
   db.collection("group").doc(req.params.gid).get().then((doc)=>{
     if (doc.exists) {
       const data = doc.data();
-      console.log(data);
       if (data.privacy == "private" && req.user && data.member.includes(req.user.uid) || data.privacy != "private") {
         let identifiers = [];
         doc.data().member.map((mem)=> {
@@ -421,7 +557,11 @@ exports.getGroup = (req, res) =>{
         doc.data().commentuser.map((mem)=> {
           identifiers = [...identifiers, {uid: mem}];
         });
-
+        if (doc.data().pendingmember) {
+          doc.data().pendingmember.map((mem)=> {
+            identifiers = [...identifiers, {uid: mem}];
+          });
+        }
         const identifierschk = identifiers.reduce((all, one, i) => {
           const ch = Math.floor(i/100);
           all[ch] = [].concat((all[ch]||[]), one);
@@ -440,16 +580,33 @@ exports.getGroup = (req, res) =>{
               }};
           });
           const arrgrpmember = Object.entries(grpmember);
-
-          const mappeddocdata = {
+          let mappeddocdata = {
             ...doc.data(),
             creator: Object.fromEntries([arrgrpmember.find(([k, v])=>v.uid === doc.data().creator)]),
             member: Object.fromEntries(arrgrpmember.filter(([k, v], i)=>doc.data().member.includes(v.uid))),
             staff: Object.fromEntries(arrgrpmember.filter(([k, v], i)=>doc.data().staff.includes(v.uid))),
             commentuser: Object.fromEntries(arrgrpmember.filter(([k, v], i)=>doc.data().commentuser.includes(v.uid))),
           };
+          if (doc.data().chara) {
+            const arrgrpchara = Object.entries(doc.data().chara);
+            let newChara = [];
+            arrgrpchara.map(([k, v])=> {
+              console.log(v.parentId);
+              const refname = grpmember[v.parentId].displayName;
+              newChara = [...newChara, [k, {...v, parentName: refname}]];
+            });
+            mappeddocdata = {
+              ...mappeddocdata,
+              chara: Object.fromEntries(newChara),
+            };
+          }
+          if (doc.data().pendingmember) {
+            mappeddocdata = {
+              ...mappeddocdata,
+              pendingmember: Object.fromEntries(arrgrpmember.filter(([k, v], i)=>doc.data().pendingmember.includes(v.uid))),
+            };
+          }
           const senddata = {...data, ...mappeddocdata};
-          console.log("before send");
           return res.status(200).json(senddata);
         });
       } else {
@@ -482,3 +639,5 @@ exports.JoinDebug = (req, res) =>{
   }
   // return res.status(200).send("add new member success");
 };
+
+
