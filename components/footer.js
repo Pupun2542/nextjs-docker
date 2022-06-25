@@ -12,6 +12,8 @@ function Footer() {
     <Center
       bg={'#343434'}
       h={180}
+      w="100%"
+      
     >
       <Flex>
         <Center>

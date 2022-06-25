@@ -10,10 +10,10 @@ const {
   updateGroup,
   deleteGroup,
   getAllGroup,
-  addPlayer,
-  addPendingPlayer,
+  acceptPlayer,
+  joinGroup,
   removePlayer,
-  removePendingPlayer,
+  rejectPendingPlayer,
   addStaff,
   removeStaff,
   groupPin,
@@ -22,6 +22,11 @@ const {
   groupUnlove,
   getGroup,
   JoinDebug,
+  invitePlayer,
+  cancelPending,
+  addChara,
+  updateChara,
+  removeChara,
 } = require("./handlers/group");
 const { db, admin } = require("./utils/admin");
 const authmw = require("./utils/auth");
@@ -85,6 +90,10 @@ const { getChatHeader } = require("./handlers/chat");
 
 const app = express();
 app.use(express.json());
+app.use((req, res, next)=>{
+  console.log(req.url);
+  next();
+});
 app.use(
   cors({
     origin: [
@@ -101,15 +110,17 @@ app.use(
 app.post("/group/create", authmw, createGroup);
 app.post("/group/:id/update", authmw, updateGroup);
 app.post("/group/:id/delete", authmw, deleteGroup);
-app.post("/group/:id/addplayer", authmw, addPlayer);
-app.post("/group/:id/addpendingplayer", authmw, addPendingPlayer);
-app.post("/group/:id/removeplayer", authmw, removePlayer);
-app.post("/group/:id/removependingplayer", authmw, removePendingPlayer);
+app.post("/group/:id/acceptPlayer", authmw, acceptPlayer);
+app.post("/group/:id/joinGroup", authmw, joinGroup);
+app.post("/group/:id/removePlayer", authmw, removePlayer);
+app.post("/group/:id/rejectPendingPlayer", authmw, rejectPendingPlayer);
+app.post("/group/:id/invitePlayer", authmw, invitePlayer);
+app.post("/group/:id/cancelPending", authmw, cancelPending);
 app.post("/group/:id/addstaff", authmw, addStaff);
 app.post("/group/:id/removestaff", authmw, removeStaff);
-app.post("/group/:id/addchara");
-app.post("/group/:id/updatechara");
-app.post("/group/:id/removechara");
+app.post("/group/:id/addchara", authmw, addChara);
+app.post("/group/:id/updatechara", authmw, updateChara);
+app.post("/group/:id/removechara", authmw, removeChara);
 app.post("/group/:id/pin", authmw, groupPin);
 app.post("/group/:id/unpin", authmw, groupUnpin);
 app.post("/group/:id/love", authmw, groupLove);

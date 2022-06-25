@@ -65,7 +65,7 @@ import {
   where,
   writeBatch,
 } from "firebase/firestore";
-import { useApp, useNotifications, useTab } from "../src/hook/local";
+import { useApp, useNotifications, useTab, useUser } from "../src/hook/local";
 import { Chatsidebar } from "./chat/Chatsidebar";
 import useSound from "use-sound";
 import Notitab from "./notitab";
@@ -112,11 +112,11 @@ function CustomNavbar() {
     xl: "1200px",
     "2xl": "1536px",
   };
+  
   const [data, setData] = useState([]);
   const [unreadChat, setUnreadChat] = useState([]);
   const [unreadnoti, setUnreadnoti] = useState([]);
   const [play] = useSound("/chatnoti.wav", { volume: 0.25 });
-  const { tabState, addTab, removeTab, changeTab, closeTab } = useTab();
 
   useEffect(() => {
     if (user && !loading) {
@@ -164,11 +164,11 @@ function CustomNavbar() {
             _hover={{
               textDecoration: "none",
             }}
-            onClick={() => {
-              user.getIdToken().then((token) => {
-                console.log(token);
-              });
-            }}
+            // onClick={() => {
+            //   user.getIdToken().then((token) => {
+            //     console.log(token);
+            //   });
+            // }}
           >
             <Center
               bg="white"
@@ -599,6 +599,7 @@ function CustomNavbar() {
 
 const ChatNotiIcon = ({ data, user }) => {
   const { tabState, addTab, removeTab, changeTab, closeTab } = useTab();
+  const getUser = useUser();
   // let thumbnail;
   // let name;
   const [display, setDisplay] = useState({
@@ -607,19 +608,24 @@ const ChatNotiIcon = ({ data, user }) => {
   });
 
   useEffect(() => {
-    if (data.type == "private" || data.type == "chara") {
-      const filteredname = data.memberDetail.find((v) => v.uid != user.uid);
-      // console.log(filteredname)
-      const thumbnail = filteredname.photoURL;
-      const name = filteredname.displayName;
-      // console.log(filteredname);
-      setDisplay({ thumbnail: thumbnail, name: name });
-    } else {
-      const thumbnail = data.thumbnail;
-      const name = data.name;
-      // console.log(timestamp);
-      setDisplay({ thumbnail: thumbnail, name: name });
+    
+    const getHeader = async() => {
+      if (data.type == "private" || data.type == "chara") {
+        const filteredname = data.member.find((v) => v !== user.uid);
+        console.log(data.member)
+        const detail = await getUser([filteredname]);
+        const thumbnail = detail[0].photoURL;
+        const name = detail[0].displayName;
+        
+        setDisplay({ thumbnail: thumbnail, name: name });
+      } else {
+        const thumbnail = data.thumbnail;
+        const name = data.name;
+        // 
+        setDisplay({ thumbnail: thumbnail, name: name });
+      }
     }
+    getHeader()
   }, [data, user]);
 
   const caltime = () => {
@@ -682,7 +688,6 @@ const ChatNotiIcon = ({ data, user }) => {
           <Box>
             <Text>{display.name}</Text>
             <Text>
-              {" "}
               {data.senderId == user.uid ? "คุณ: " : ""} {data.lastmsg}
             </Text>
           </Box>

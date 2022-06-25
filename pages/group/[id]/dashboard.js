@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, createContext, useReducer } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  createContext,
+  useReducer,
+} from "react";
 import CustomNavbar from "../../../components/navbar";
 
 import {
@@ -34,6 +40,7 @@ import {
   Image,
   Divider,
   IconButton,
+  Select,
 } from "@chakra-ui/react";
 
 import { Info, Megaphone, X } from "phosphor-react";
@@ -45,6 +52,9 @@ import axios from "axios";
 import { UploadGroupImage } from "../../../src/services/filestoreageservice";
 import Gallery from "../../../components/groupcomponents/gallery";
 import { Member } from "../../../components/groupcomponents/member";
+import Setting from "../../../components/groupcomponents/setting";
+import { GroupSinglePost } from "../../../components/groupcomponents/singlePost";
+import { isEmptyOrSpaces } from "../../../src/services/utilsservice";
 
 // export async function getServerSideProps(context) {
 //   const { params } = context;
@@ -63,7 +73,7 @@ function dashboard() {
   const { app, auth, db } = useApp();
   const [user, userLoading, error] = useAuthState(auth);
   const Router = useRouter();
-  const { id } = Router.query;
+  const { id, pid, cid, rid } = Router.query;
   const [message, setMessage] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [image, setImage] = useState([]);
@@ -73,6 +83,7 @@ function dashboard() {
   const [replyTab, setReplyTab] = useState({});
   const [comment, setComment] = useState({});
   const [editComment, setEditComment] = useState({});
+  const [tabIndex, setTabIndex] = useState(0);
 
   const onPostDelete = (n) => {
     const newindex = post.filter((v, i) => i !== n);
@@ -81,6 +92,7 @@ function dashboard() {
 
   const fetchPost = async () => {
     const token = await user.getIdToken();
+
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${id}?orderby=${orderby}&loadlimit=${loadLimit}`,
       {
@@ -95,7 +107,7 @@ function dashboard() {
       let item = {};
       let postId = [];
       res.data.map((data) => {
-        item = {...item, [data.pid]:{data: data, love: data.love}}
+        item = { ...item, [data.pid]: { data: data, love: data.love } };
 
         // setStateData({data: data, love: data.love}, data.pid);
         postId = [...postId, data.pid];
@@ -103,6 +115,22 @@ function dashboard() {
       // console.log(item);
       setPostData(item);
       setPost(postId);
+    }
+  };
+  const fetchSinglePost = async () => {
+    const token = await user.getIdToken();
+
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${id}/post/${pid}`,
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    if (res.status === 200) {
+      setPostData({ [pid]: { data: res.data, love: res.data.love } });
+      setPost(pid);
     }
   };
   const fetchdata = async () => {
@@ -116,7 +144,18 @@ function dashboard() {
       }
     );
     if (resdata.status === 200) {
-      setData({ ...data, ...resdata.data });
+      let mappedData = {
+        ...data,
+        ...resdata.data,
+        isStaff: Object.keys(resdata.data.staff).includes(user.uid),
+      }
+      if (resdata.data.chara) {
+        mappedData = {
+          ...mappedData,
+          mychara: Object.fromEntries(Object.entries(resdata.data.chara).filter(([k,v],i)=> v.parentId == user.uid)),
+        }
+      }
+      setData(mappedData);
       setLoading(false);
     }
   };
@@ -128,9 +167,10 @@ function dashboard() {
   }, [user, userLoading]);
 
   useEffect(() => {
-    console.log("fetchpost");
-    if (data) {
+    if (data && !pid) {
       fetchPost();
+    } else if (data && pid) {
+      fetchSinglePost();
     }
   }, [data, orderby, loadLimit]);
 
@@ -157,19 +197,22 @@ function dashboard() {
     setEditComment({ ...editComment, [id]: state });
   };
 
-
- const reducer = (state, action) => {
-  switch (action.type) {
-    case "set": {
-      // console.log(action.id, action.value, state[action.id])
-      return {...state, [action.id]:{...state[action.id], ...action.value} }
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case "set": {
+        // console.log(action.id, action.value, state[action.id])
+        return {
+          ...state,
+          [action.id]: { ...state[action.id], ...action.value },
+        };
+      }
+      case "setMultiple": {
+        return { ...state, ...action.value };
+      }
+      default:
+        return state;
     }
-    case "setMultiple": {
-      return {...state, ...action.value}
-    }
-    default: return state;
-  }
- }
+  };
 
   const [postData, dispatch] = useReducer(reducer, {});
 
@@ -178,12 +221,12 @@ function dashboard() {
   // },[postData])
 
   const setPostData = (value) => {
-    dispatch({type:"setMultiple", value: value});
-  }
+    dispatch({ type: "setMultiple", value: value });
+  };
 
   //main
   const setStateData = (value, id) => {
-    dispatch({type: "set", value: value, id: id})
+    dispatch({ type: "set", value: value, id: id });
   };
   const getStateData = (id) => {
     return postData[id];
@@ -191,7 +234,7 @@ function dashboard() {
 
   //data
   const setStateDataData = (value, id) => {
-    dispatch({type: "set", value: {data: value}, id: id})
+    dispatch({ type: "set", value: { data: value }, id: id });
   };
   const getStateDataData = (id) => {
     return postData[id]?.data;
@@ -199,7 +242,7 @@ function dashboard() {
 
   //editMessage
   const setStateDataEditMessage = (value, id) => {
-    dispatch({type: "set", value: { editMessage: value }, id: id})
+    dispatch({ type: "set", value: { editMessage: value }, id: id });
   };
   const getStateDataEditMessage = (id) => {
     return postData[id]?.editMessage ? postData[id].editMessage : "";
@@ -207,21 +250,21 @@ function dashboard() {
 
   //pendingMessage
   const setStateDataPendingMessage = (value, id) => {
-    dispatch({type: "set", value: { pendingMessage: value }, id: id})
+    dispatch({ type: "set", value: { pendingMessage: value }, id: id });
   };
   const getStateDataPendingMessage = (id) => {
-    return postData[id]?.pendingMessage? postData[id].pendingMessage:"";
+    return postData[id]?.pendingMessage ? postData[id].pendingMessage : "";
   };
   //pendingImage
   const setStateDataPendingImage = (value, id) => {
-    dispatch({type: "set", value: { pendingImage: value }, id: id})
+    dispatch({ type: "set", value: { pendingImage: value }, id: id });
   };
   const getStateDataPendingImage = (id) => {
     return postData[id]?.pendingImage;
   };
   //love
   const setStateDataLove = (value, id) => {
-    dispatch({type: "set", value: { love: value }, id: id})
+    dispatch({ type: "set", value: { love: value }, id: id });
   };
   const getStateDataLove = (id) => {
     return postData[id]?.love ? postData[id]?.love : [];
@@ -229,7 +272,7 @@ function dashboard() {
 
   //edit
   const setStateDataEdit = (state, id) => {
-    dispatch({type: "set", value: { edit: state }, id: id})
+    dispatch({ type: "set", value: { edit: state }, id: id });
   };
   const getStateDataEdit = (id) => {
     return postData[id]?.edit ? postData[id].edit : false;
@@ -237,17 +280,17 @@ function dashboard() {
 
   //reply
   const setStateDataReply = (state, id) => {
-    dispatch({type: "set", value: { reply: state }, id: id})
+    dispatch({ type: "set", value: { reply: state }, id: id });
   };
   const getStateDataReply = (id) => {
     return postData[id]?.reply ? postData[id].reply : false;
   };
   //child
   const setStateDataChild = (value, id) => {
-    dispatch({type: "set", value: { child: value }, id: id})
+    dispatch({ type: "set", value: { child: value }, id: id });
   };
   const getStateDataChild = (id) => {
-    return postData[id]?.child? postData[id].child : [];
+    return postData[id]?.child ? postData[id].child : [];
   };
   const pack = {
     setStateData,
@@ -286,9 +329,6 @@ function dashboard() {
       reader.readAsDataURL(e.clipboardData.files[0]);
     }
   };
-  function isEmptyOrSpaces(str) {
-    return str === null || str.match(/^ *$/) !== null;
-  }
   const resizeTextArea = (e) => {
     e.target.style.height = "inherit";
     e.target.style.height = `${e.target.scrollHeight}px`;
@@ -330,8 +370,12 @@ function dashboard() {
       <Box>
         <CustomNavbar />
 
-        <Flex pt={55} fontFamily={"mitr"} justifyContent={'center'} boxShadow='base'>
-
+        <Flex
+          pt={55}
+          fontFamily={"mitr"}
+          justifyContent={"center"}
+          boxShadow="base"
+        >
           <Box
             bg={"#F3F3F3"}
             minH={1000}
@@ -354,7 +398,7 @@ function dashboard() {
                   {data?.tag}] {data?.name}
                 </Center>
 
-                <Box bg={"#6768AB"} cursor={'pointer'}>
+                <Box bg={"#6768AB"} cursor={"pointer"}>
                   <Popover bg={"#6768AB"}>
                     <PopoverTrigger>
                       <Info color="#FFC75A" size={22} weight="fill" />
@@ -387,7 +431,13 @@ function dashboard() {
                 </Box>
               </Flex>
 
-              <Tabs w={"100%"} maxW={800} isFitted>
+              <Tabs
+                w={"100%"}
+                maxW={800}
+                isFitted
+                index={tabIndex}
+                onChange={(e) => setTabIndex(e)}
+              >
                 {/* หัว tab */}
                 <TabList mb="1em">
                   <Tab
@@ -397,6 +447,7 @@ function dashboard() {
                       margin: "2",
                       borderRadius: "10",
                     }}
+                    onClick={()=>Router.replace("/group/"+id+"/dashboard", undefined, {shallow: true})}
                   >
                     Post
                   </Tab>
@@ -420,17 +471,19 @@ function dashboard() {
                   >
                     Member
                   </Tab>
-                  <Tab
-                    isDisabled
-                    _selected={{
-                      color: "white",
-                      bg: "#9A9AB0",
-                      margin: "2",
-                      borderRadius: "10",
-                    }}
-                  >
-                    Setting
-                  </Tab>
+                  {/* {console.log(data)} */}
+                  {data?.isStaff && (
+                    <Tab
+                      _selected={{
+                        color: "white",
+                        bg: "#9A9AB0",
+                        margin: "2",
+                        borderRadius: "10",
+                      }}
+                    >
+                      Setting
+                    </Tab>
+                  )}
                 </TabList>
 
                 <TabPanels>
@@ -467,7 +520,7 @@ function dashboard() {
                       boxShadow={"base"}
                       bg={"white"}
                       borderRadius={10}
-                      cursor={'pointer'}
+                      cursor={"pointer"}
                     >
                       <Image
                         mr={2}
@@ -484,7 +537,9 @@ function dashboard() {
                     {/* โพสต์ */}
                     {/* {console.log(post)} */}
                     <PostContext.Provider value={pack}>
+                      {console.log(post)}
                       {post &&
+                        !pid &&
                         post.map((apost, i) => (
                           <GroupPost
                             post={getStateDataData(apost)}
@@ -498,6 +553,15 @@ function dashboard() {
                             onPostDelete={() => onPostDelete(i)}
                           />
                         ))}
+                      {post.length > 0 && pid && (
+                        <GroupSinglePost
+                          post={getStateDataData(pid)}
+                          member={data.member}
+                          onPostDelete={() => onPostDelete(0)}
+                          cid={cid}
+                          rid={rid}
+                        />
+                      )}
                     </PostContext.Provider>
                     <Modal isOpen={isOpen} onClose={onClose}>
                       <ModalOverlay
@@ -509,6 +573,7 @@ function dashboard() {
                         <ModalCloseButton />
                         <Divider />
                         <ModalBody>
+                          
                           <Textarea
                             onChange={(e) => setMessage(e.target.value)}
                             value={message}
@@ -580,16 +645,13 @@ function dashboard() {
                     </Modal>
                   </TabPanel>
 
-                  <TabPanel>
-                    <Gallery gid={id} />
-                  </TabPanel>
+                  <TabPanel>{tabIndex == 1 && <Gallery gid={id} />}</TabPanel>
 
                   <TabPanel>
-                    <Member />
+                    {tabIndex == 2 && <Member data={data} gid={id} />}
                   </TabPanel>
-
                   <TabPanel>
-                    <p>Setting!</p>
+                    {tabIndex == 3 && <Setting data={data} gid={id} />}
                   </TabPanel>
                 </TabPanels>
               </Tabs>

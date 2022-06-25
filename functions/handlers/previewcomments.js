@@ -127,6 +127,7 @@ exports.getAllPreviewcomment = async (req, res) => {
       creators = [...creators, doc.data().uid];
     });
     const identifiers = creators.map((id) =>({uid: id}));
+    console.log(creators);
     const creator = await admin.auth().getUsers(identifiers);
     let mappedcreator = {};
     creator.users.map((usr)=>{

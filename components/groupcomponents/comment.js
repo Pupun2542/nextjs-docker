@@ -42,25 +42,19 @@ import { UploadGroupCommentImage } from "../../src/services/filestoreageservice"
 import { PostContext } from "../../pages/group/[id]/dashboard";
 import { useCollection } from "react-firebase-hooks/firestore";
 
-export const GroupComment = ({ comment, member }) => {
+export const GroupComment = ({ comment, member, setTo, rid }) => {
   const {
-    getStateData,
     setStateDataData,
-    getStateDataData,
     setStateDataEditMessage,
     getStateDataEditMessage,
     setStateDataPendingMessage,
     getStateDataPendingMessage,
     setStateDataPendingImage,
     getStateDataPendingImage,
-    getStateDataLove,
     setStateDataEdit,
     getStateDataEdit,
     setStateDataReply,
     getStateDataReply,
-    setPostData,
-    setStateDataChild,
-    getStateDataChild,
   } = useContext(PostContext);
   const creator = comment.creator;
   const getUser = useUser();
@@ -69,11 +63,6 @@ export const GroupComment = ({ comment, member }) => {
   const inputFileRef = useRef(null);
   const cid = comment.cid;
   const TextareaRef = useRef(null);
-  // console.log(getStateData(cid));
-  // const love = getStateDataLove(cid);
-  // const setLove = (value) => {
-  //   console.log(love, value, cid);
-  // };
   const love = comment.love;
   const editMode = getStateDataEdit(cid);
   const setEditMode = (state) => {
@@ -91,10 +80,6 @@ export const GroupComment = ({ comment, member }) => {
   const setImage = (value) => {
     setStateDataPendingImage(value, cid);
   };
-  // const reply = getStateDataChild(cid);
-  // const setReply = (value) => {
-  //   setStateDataChild(value, cid);
-  // };
   const text = comment.message;
   const setText = (value) => {
     setStateDataData({ ...comment, message: value });
@@ -110,7 +95,6 @@ export const GroupComment = ({ comment, member }) => {
   const onToggle = () => {
     setStateDataReply(!isOpen, cid);
   };
-  console.log(comment);
 
   const [snapshot, loading, error] = useCollection(
     query(
@@ -154,75 +138,6 @@ export const GroupComment = ({ comment, member }) => {
       })
     );
   }
-
-  // useEffect(() => {
-  //   console.log("fetchreply")
-  //   const unsubscribe = onSnapshot(
-  //     query(
-  //       collection(
-  //         db,
-  //         "group",
-  //         comment.gid,
-  //         "posts",
-  //         comment.pid,
-  //         "comments",
-  //         comment.cid,
-  //         "replies"
-  //       ),
-  //       orderBy("timestamp", "desc"),
-  //       limit(fetchlimit)
-  //     ),
-  //     (snapshot) => {
-  //       if (!snapshot.empty) {
-  //         let mappedcommentData = {};
-  //         let commentList = [];
-  //         console.log(cid,getStateData(cid));
-  //         Promise.all(
-  //           snapshot.docs.map(async (doc) => {
-  //             let creator = {};
-  //             // console.log(member, doc.data().uid)
-  //             if (member[doc.data().uid]) {
-  //               creator = member[doc.data().uid];
-  //             } else {
-  //               const usr = await getUser([doc.data().uid]);
-  //               creator = usr[0];
-  //             }
-  //             mappedcommentData = {
-  //               ...mappedcommentData,
-  //               [doc.id]: {
-  //                 ...getStateData(doc.id),
-  //                 data: {
-  //                   ...doc.data(),
-  //                   creator: creator,
-  //                   cid: comment.cid,
-  //                   pid: comment.pid,
-  //                   gid: comment.gid,
-  //                   rid: doc.id,
-  //                 },
-  //                 love: doc.data().love,
-  //               },
-  //             };
-  //             // setStateData({data: mappedcommentData, love: doc.data().love}, doc.id);
-  //             commentList = [...commentList, doc.id];
-  //           })
-  //         ).then(() => {
-  //           setPostData(mappedcommentData);
-  //           setStateDataChild(commentList, cid);
-  //         });
-  //       }
-  //     }
-  //   );
-  //   return () => {
-  //     unsubscribe();
-  //     // setReply([]);
-  //     // setText("");
-  //   };
-  // }, [comment]);
-
-  // const ToggleReplyTab = () => {
-  //   setOpenReply(!isOpen);
-  //   onToggle();
-  // };
 
   const resizeTextArea = (e) => {
     e.target.style.height = "inherit";
@@ -568,7 +483,10 @@ export const GroupComment = ({ comment, member }) => {
               {auth.currentUser.uid == comment.uid ? (
                 <>
                   {/* {console.log(post)} */}
-                  <MenuItem onClick={() => setEditMode(true)}>Edit</MenuItem>
+                  <MenuItem onClick={() => {
+                    setEditMode(true);
+                    setEditMessage(text);
+                    }}>Edit</MenuItem>
                   <MenuItem onClick={handleDelete}>Delete</MenuItem>
                 </>
               ) : (

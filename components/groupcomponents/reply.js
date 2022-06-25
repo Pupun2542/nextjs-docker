@@ -287,7 +287,10 @@ export const GroupReply = ({ reply }) => {
               {auth.currentUser.uid == reply.uid ? (
                 <>
                   {/* {console.log(post)} */}
-                  <MenuItem onClick={() => setEditMode(true)}>Edit</MenuItem>
+                  <MenuItem onClick={() => {
+                    setEditMode(true);
+                    setEditMessage(text);
+                    }}>Edit</MenuItem>
                   <MenuItem onClick={handleDelete}>Delete</MenuItem>
                 </>
               ) : (

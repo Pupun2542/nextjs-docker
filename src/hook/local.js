@@ -22,7 +22,6 @@ import {
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
-import useSound from "use-sound";
 import axios from "axios";
 
 const AppContext = createContext();
@@ -61,8 +60,6 @@ const tabReducer = (state, action) => {
 
     case "removeTab":
       const newtab = state.othertab.filter((v, i) => v != action.payload);
-      // console.log("removetab");
-      // window.localStorage.removeItem(action.payload)
       return {
         ...state,
         othertab: newtab,
@@ -89,8 +86,6 @@ const tabReducer = (state, action) => {
 
 export const OpenChatTabProvider = ({ children }) => {
   const [tabState, tabDispatcher] = useReducer(tabReducer, initialState);
-  // console.log(tabState)
-  // const { tab } = tabState;
 
   const addTab = (payload) => {
     tabDispatcher({ type: "addTab", payload });
@@ -99,11 +94,9 @@ export const OpenChatTabProvider = ({ children }) => {
     tabDispatcher({ type: "removeTab", payload });
   };
   const changeTab = (payload) => {
-    // console.log(tabState.opentab,payload)
     tabDispatcher({ type: "changeOpenTab", payload });
   };
   const CloseTab = () => {
-    // console.log(tabState.opentab,payload)
     tabDispatcher({ type: "closeOpenTab" });
   };
 
@@ -142,7 +135,6 @@ export const NotificationProvider = ({ children }) => {
         limit(50)
       );
       const unsubscribe = onSnapshot(q, (snapshot) => {
-        // console.log(snapshot.docs);
         setChatNotidata(
           snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
         );
@@ -202,32 +194,19 @@ export const UserProvider = ({ children }) => {
       }
 
       if (newuid.length > 0) {
-        // console.log(users.length, uid.length)
-
-        // let docData = await getDocs(
-        //     query(collection(db, "userDetail"), where("uid", "in", newuid))
-        //   );
-        // let userDetail = [];
-        // if (!docData.empty) {
-        //   userDetail = docData.docs.map((doc) => doc.data());
-        // console.log("new:", newuid)
         const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/user/batchget/`, {
           users: newuid,
         })
         
         let docdata = res.data
-        // console.log("get:", docdata)
           DataDispatcher({ type: "addUser", docdata });
-          // console.log("new:", users)
           users = [...users, ...docdata]
           return users;
         
       } else {
-        // console.log("found: ",users)
         return users;
       }
     }
-    // return undefined;
   return (
     <UserContext.Provider value={getUser}>{children}</UserContext.Provider>
   );
@@ -240,7 +219,7 @@ const initialGroup = {
 const groupNotiReducer = (state, action) => {
   switch (action.type) {
     case "addGroup":
-      console.log(action)
+      // console.log(action)
       return {
         ...state,
         // data: {...state.data, [action.uid]:action.payload}
@@ -258,11 +237,11 @@ export const GroupNotiProvider = ({ children }) => {
     if (group) {
       return group
     } else {
-      console.log(groupId);
+      // console.log(groupId);
       const snapshot = await getDoc(doc(db, "group", groupId));
       if (snapshot.exists){
         const res = snapshot.data()
-        console.log(res);
+        // console.log(res);
         const tosend = {
           name: res.name,
           thumbnail: res.banner,

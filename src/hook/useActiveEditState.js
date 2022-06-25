@@ -7,7 +7,7 @@ const useActiveEditState = (initialvalue) => {
   });
   const front = getEditValue("active").front;
   const setFront = (value) => {
-    setEditValue("front", {...getEditValue("active"), front:value});
+    setEditValue("active", {...getEditValue("active"), front:value});
   };
   const back = getEditValue("active").back;
   const setBack = (value) => {

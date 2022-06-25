@@ -67,6 +67,7 @@ import {
   Wrap,
   WrapItem,
   HStack,
+  Avatar,
 } from "@chakra-ui/react";
 import Footer from "../../../components/footer";
 import {
@@ -278,6 +279,26 @@ export default function Group() {
     }
   };
 
+  const handleEnterGroup = async () => {
+    if (Object.keys(data.member).includes(user.uid)) {
+      Router.push(`/group/${id}/dashboard`);
+    } else {
+      const token = await user.getIdToken();
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${id}/joinGroup`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      if (res.status === 200) {
+        alert("สมัครเข้ากลุ่มเรียบร้อย");
+      }
+    }
+  };
+
   return (
     <Box>
       <Box bg={"#FFFFFF"}>
@@ -321,7 +342,7 @@ export default function Group() {
                       />
 
                       <IconButton
-                        bg={pin ? "yellow" : "white"}
+                        bg={pin ? "#FFC75A" : "white"}
                         rounded="full"
                         h={38}
                         w={38}
@@ -888,12 +909,18 @@ export default function Group() {
                                     //   ? () => outsidenavigate(data.smlink)
                                     //   : () => alert("ไม่มีลิงก์กลุ่ม")
                                     () => {
-                                      handleDebugJoin();
+                                      handleEnterGroup();
                                     }
                                   }
                                   cursor="pointer"
                                 >
-                                  เข้าร่วมกลุ่ม
+                                  {Object.keys(data.member).includes(user.uid)
+                                    ? "ไปที่กลุ่ม"
+                                    : Object.keys(data.pendingmember).includes(
+                                        user.uid
+                                      )
+                                    ? "รอการตอบรับ"
+                                    : "เข้าร่วมกลุ่ม"}
                                 </Center>
                               </VStack>
                             </AccordionPanel>
@@ -1261,91 +1288,57 @@ export default function Group() {
                         mb={5}
                       >
                         รายชื่อผู้สร้าง
-                        <Center pl={1}>[0]</Center>
+                        <Center pl={1}>
+                          [{Object.keys(data.staff).length}]
+                        </Center>
                       </Center>
                       
                       <Wrap fontFamily={"Mitr"}>
-                        <WrapItem>
-                          <Center
-                            w="180px"
-                            h="180px"
-                            bg="gray.100"
-                            boxShadow={"base"}
-                            rounded={10}
-                          >
-                            <VStack spacing={0}>
-                              <Center
-                                rounded={"full"}
-                                bg={"crimson"}
-                                w={75}
-                                h={75}
-                                mb={1}
-                                color={"white"}
-                              >
-                                A
-                              </Center>
-                              <Center
-                                bg={"#6768AB"}
-                                w={120}
-                                color={"white"}
-                                p={1}
-                                borderTopRadius={10}
-                                mt={1}
-                              >
-                                A ant
-                              </Center>
-                              <Center
-                                bg={"White"}
-                                w={120}
-                                borderBottomRadius={10}
-                                p={1}
-                              >
-                                {" "}
-                                Admin
-                              </Center>
-                            </VStack>
-                          </Center>
-                        </WrapItem>
-                        <WrapItem>
-                          <Center
-                            w="180px"
-                            h="180px"
-                            bg="gray.100"
-                            boxShadow={"base"}
-                            rounded={10}
-                          >
-                            <VStack spacing={0}>
-                              <Center
-                                rounded={"full"}
-                                bg={"tan"}
-                                w={75}
-                                h={75}
-                                mb={1}
-                                color={"white"}
-                              >
-                                B
-                              </Center>
-                              <Center
-                                bg={"#6768AB"}
-                                w={120}
-                                color={"white"}
-                                p={1}
-                                borderTopRadius={10}
-                                mt={1}
-                              >
-                                B Bird
-                              </Center>
-                              <Center
-                                bg={"White"}
-                                w={120}
-                                borderBottomRadius={10}
-                                p={1}
-                              >
-                                Staff
-                              </Center>
-                            </VStack>
-                          </Center>
-                        </WrapItem>
+                        {Object.values(data.staff).map((staff) => (
+                          <WrapItem>
+                            <Center
+                              w="180px"
+                              h="180px"
+                              bg="gray.100"
+                              boxShadow={"base"}
+                              rounded={10}
+                            >
+                              <VStack spacing={0}>
+                                <Avatar
+                                  rounded={"full"}
+                                  w={75}
+                                  h={75}
+                                  mb={1}
+                                  color={"white"}
+                                  src={staff.photoURL}
+                                  name={staff.displayName}
+                                />
+                                <Center
+                                  bg={"#6768AB"}
+                                  w={120}
+                                  color={"white"}
+                                  p={1}
+                                  borderTopRadius={10}
+                                  mt={1}
+                                  wordBreak="break-word"
+                                  textAlign="center"
+                                >
+                                  {staff.displayName}
+                                </Center>
+                                <Center
+                                  bg={"White"}
+                                  w={120}
+                                  borderBottomRadius={10}
+                                  p={1}
+                                >
+                                  {Object.keys(data.creator).includes(staff.uid)
+                                    ? "Owner"
+                                    : "Staff"}
+                                </Center>
+                              </VStack>
+                            </Center>
+                          </WrapItem>
+                        ))}
                       </Wrap>
                     </TabPanel>
                   </TabPanels>
