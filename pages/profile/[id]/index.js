@@ -355,11 +355,7 @@ export default function profile() {
                     <Button
                       colorScheme="teal"
                       variant="outline"
-<<<<<<< HEAD
-                      onClick={() => handleMessage(user, id)}
-=======
                       onClick={()=>handlePrivateMessage(user, id)}
->>>>>>> 361f0792a3650d63e0eb8f12f07385f891daa032
                       position="initial"
                     >
                       Message
