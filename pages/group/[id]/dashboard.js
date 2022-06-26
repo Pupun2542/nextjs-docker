@@ -40,8 +40,13 @@ import {
   Image,
   Divider,
   IconButton,
-  Select,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Avatar,
 } from "@chakra-ui/react";
+import { CaretDown, ImageSquare } from "phosphor-react";
 
 import { Info, Megaphone, X } from "phosphor-react";
 import { GroupPost } from "../../../components/groupcomponents/post";
@@ -55,6 +60,8 @@ import { Member } from "../../../components/groupcomponents/member";
 import Setting from "../../../components/groupcomponents/setting";
 import { GroupSinglePost } from "../../../components/groupcomponents/singlePost";
 import { isEmptyOrSpaces } from "../../../src/services/utilsservice";
+import { useDocument } from "@nandorojo/swr-firestore";
+import { doc } from "firebase/firestore";
 
 // export async function getServerSideProps(context) {
 //   const { params } = context;
@@ -80,10 +87,14 @@ function dashboard() {
   const pasteInputRef = useRef(undefined);
   const [loading, setLoading] = useState(true);
   const [post, setPost] = useState([]);
-  const [replyTab, setReplyTab] = useState({});
-  const [comment, setComment] = useState({});
-  const [editComment, setEditComment] = useState({});
   const [tabIndex, setTabIndex] = useState(0);
+  const [selectedchara, setSelectedchara] = useState({});
+  const inputFileRef = useRef(null);
+
+  useEffect(()=>{
+    console.log(selectedchara, data?.mychara)
+  },[selectedchara])
+  
 
   const onPostDelete = (n) => {
     const newindex = post.filter((v, i) => i !== n);
@@ -148,12 +159,22 @@ function dashboard() {
         ...data,
         ...resdata.data,
         isStaff: Object.keys(resdata.data.staff).includes(user.uid),
-      }
+      };
       if (resdata.data.chara) {
+        console.log(resdata.data.chara)
+        console.log(Object.fromEntries(
+          Object.entries(resdata.data.chara).filter(
+            ([k, v], i) => v.parentId == user.uid
+          )
+        ))
         mappedData = {
           ...mappedData,
-          mychara: Object.fromEntries(Object.entries(resdata.data.chara).filter(([k,v],i)=> v.parentId == user.uid)),
-        }
+          mychara: Object.fromEntries(
+            Object.entries(resdata.data.chara).filter(
+              ([k, v], i) => v.parentId == user.uid
+            )
+          ),
+        };
       }
       setData(mappedData);
       setLoading(false);
@@ -168,11 +189,12 @@ function dashboard() {
 
   useEffect(() => {
     if (data && !pid) {
+      console.log(data, orderby, loadLimit)
       fetchPost();
     } else if (data && pid) {
       fetchSinglePost();
     }
-  }, [data, orderby, loadLimit]);
+  }, [data, orderby, loadLimit, pid]);
 
   useEffect(() => {
     if (user && data && data.member) {
@@ -183,19 +205,6 @@ function dashboard() {
       // if (find)
     }
   }, [data, user]);
-
-  const setStateReplyTab = (state, id) => {
-    setReplyTab({ ...replyTab, [id]: state });
-  };
-  const setStateEditMode = (state, id) => {
-    setEditComment({ ...editComment, [id]: state });
-  };
-  const setStateOngoingComment = (value, id) => {
-    setComment({ ...comment, [id]: value });
-  };
-  const setStateComment = (state, id) => {
-    setEditComment({ ...editComment, [id]: state });
-  };
 
   const reducer = (state, action) => {
     switch (action.type) {
@@ -215,10 +224,6 @@ function dashboard() {
   };
 
   const [postData, dispatch] = useReducer(reducer, {});
-
-  // useEffect(()=>{
-  //   console.log(postData);
-  // },[postData])
 
   const setPostData = (value) => {
     dispatch({ type: "setMultiple", value: value });
@@ -329,6 +334,24 @@ function dashboard() {
       reader.readAsDataURL(e.clipboardData.files[0]);
     }
   };
+
+  const handleUploadFile = (e) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        if (image.length < 4) {
+          setImage([...image, reader.result]);
+        } else {
+          alert("ใส่รูปได้ไม่เกิน 4 รูปต่อ 1 โพสต์");
+        }
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
+  const handleFile = () => {
+    inputFileRef.current.click();
+  };
+
   const resizeTextArea = (e) => {
     e.target.style.height = "inherit";
     e.target.style.height = `${e.target.scrollHeight}px`;
@@ -346,7 +369,7 @@ function dashboard() {
       const token = await user.getIdToken();
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${id}/create/`,
-        { message: message, imageUrl: dlurl, charaId: "" },
+        { message: message, imageUrl: dlurl, charaId: selectedchara.refererId },
         {
           headers: {
             Authorization: token,
@@ -448,7 +471,11 @@ function dashboard() {
                       margin: "2",
                       borderRadius: "10",
                     }}
-                    onClick={()=>Router.replace("/group/"+id+"/dashboard", undefined, {shallow: true})}
+                    onClick={() =>
+                      Router.replace("/group/" + id + "/dashboard", undefined, {
+                        shallow: true,
+                      })
+                    }
                   >
                     Post
                   </Tab>
@@ -538,20 +565,17 @@ function dashboard() {
                     {/* โพสต์ */}
                     {/* {console.log(post)} */}
                     <PostContext.Provider value={pack}>
-                      {console.log(post)}
                       {post &&
-                        !pid &&
+                        !pid && Array.isArray(post) &&
                         post.map((apost, i) => (
                           <GroupPost
                             post={getStateDataData(apost)}
                             key={i}
                             member={data.member}
-                            openReply={replyTab}
-                            setOpenReply={setStateReplyTab}
-                            setEditComment={setStateEditMode}
-                            onGoingComment={comment}
-                            setOnGoingComment={setStateOngoingComment}
                             onPostDelete={() => onPostDelete(i)}
+                            mychara={data.mychara}
+                            data={data}
+                            gid={id}
                           />
                         ))}
                       {post.length > 0 && pid && (
@@ -561,6 +585,9 @@ function dashboard() {
                           onPostDelete={() => onPostDelete(0)}
                           cid={cid}
                           rid={rid}
+                          gid={id}
+                          data={data}
+                          mychara={data.mychara}
                         />
                       )}
                     </PostContext.Provider>
@@ -574,7 +601,44 @@ function dashboard() {
                         <ModalCloseButton />
                         <Divider />
                         <ModalBody>
-                          
+                          <Text>เลือกตัวละครที่ใช้โพสต์</Text>
+                          <Menu>
+                            <MenuButton
+                              as={Button}
+                              rightIcon={<CaretDown size={8} />}
+                              mt={2}
+                              mb={2}
+                            >
+                              <Avatar
+                                src={
+                                  Object.keys(selectedchara).length > 0
+                                    ? selectedchara.photoURL
+                                    : ""
+                                }
+                                w={8}
+                                h={8}
+                              />
+                            </MenuButton>
+                            <MenuList>
+                              {data.mychara &&
+                                Object.values(data.mychara).map((cha) => (
+                                  <MenuItem
+                                    onClick={() => setSelectedchara(cha)}
+                                  >
+                                    <Flex alignItems={"center"}>
+                                      <Avatar
+                                        src={cha.photoURL}
+                                        w={8}
+                                        h={8}
+                                        mr={1}
+                                      />
+                                      <Text fontSize="sm">{cha.name}</Text>
+                                    </Flex>
+                                  </MenuItem>
+                                ))}
+                            </MenuList>
+                          </Menu>
+
                           <Textarea
                             onChange={(e) => setMessage(e.target.value)}
                             value={message}
@@ -588,6 +652,13 @@ function dashboard() {
                             display="none"
                             type="file"
                             ref={pasteInputRef}
+                          />
+                          <Input
+                            type="file"
+                            id="file"
+                            ref={inputFileRef}
+                            display="none"
+                            onChange={(e) => handleUploadFile(e)}
                           />
                           {/* {image && (
                             <Box>
@@ -632,15 +703,20 @@ function dashboard() {
                                 </Box>
                               ))}
                           </Box>
-                          <Button
-                            float={"right"}
-                            onClick={handleSent}
-                            disabled={
-                              isEmptyOrSpaces(message) && image.length == 0
-                            }
-                          >
-                            Send
-                          </Button>
+                          <Flex justifyContent={"flex-end"}>
+                            <IconButton
+                              icon={<ImageSquare size={16} />}
+                              onClick={handleFile}
+                            />
+                            <Button
+                              onClick={handleSent}
+                              disabled={
+                                (isEmptyOrSpaces(message) && image.length == 0) || Object.keys(selectedchara).length == 0
+                              }
+                            >
+                              Send
+                            </Button>
+                          </Flex>
                         </ModalBody>
                       </ModalContent>
                     </Modal>

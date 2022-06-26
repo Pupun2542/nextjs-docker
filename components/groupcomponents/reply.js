@@ -24,13 +24,14 @@ import {
   ChatCenteredText,
   Eye,
   DotsThreeVertical,
+  CaretDown
 } from "phosphor-react";
 import { useApp } from "../../src/hook/local";
 import axios from "axios";
 import { PostContext } from "../../pages/group/[id]/dashboard";
+import useCharaList from "../../src/hook/useCharaList";
 
-export const GroupReply = ({ reply }) => {
-
+export const GroupReply = ({ reply, data, gid, mychara }) => {
   const {
     setStateDataData,
     setStateDataEditMessage,
@@ -40,37 +41,34 @@ export const GroupReply = ({ reply }) => {
     getStateDataEdit,
   } = useContext(PostContext);
 
+  const { chara, refreshcharaList } = useCharaList(data, gid);
+  const checkChara = () => {
+    // console.log(chara[chara.findIndex(v => v.refererId = reply.charaId)])
+    if (chara[chara.findIndex(v => v.refererId == reply.charaId)]) {
+      return chara[chara.findIndex(v => v.refererId == reply.charaId)];
+    } else {
+      // refreshcharaList();
+      return ""
+    }
+  }
+  const postchara = checkChara();
+
   const rid = reply.rid;
   const love = reply.love;
-  // const love = getStateDataLove(rid);
-  const setLove = (value) => {
-    // setStateDataLove(value, rid);
-  }
   const text = reply.message;
   const setText = (value) => {
-    setStateDataData({ ...reply, message: value })
-  }
+    setStateDataData({ ...reply, message: value });
+  };
   const editMode = getStateDataEdit(rid);
   const setEditMode = (state) => {
     setStateDataEdit(state, rid);
-  }
+  };
   const editMessage = getStateDataEditMessage(rid);
   const setEditMessage = (value) => {
     setStateDataEditMessage(value, rid);
-  }
-
-  // const [love, setLove] = useState(false);
+  };
   const creator = reply.creator;
-  // console.log(reply);
   const { auth } = useApp();
-  // useEffect(() => {
-  //   if (reply.love.includes(auth.currentUser.uid)) {
-  //     setLove(true);
-  //   }
-  //   return () => {
-  //     setLove(false);
-  //   };
-  // }, [reply]);
 
   const handleDelete = async () => {
     const token = await auth.currentUser.getIdToken();
@@ -153,18 +151,13 @@ export const GroupReply = ({ reply }) => {
   };
 
   return (
-    <Flex w={'100%'}>
+    <Flex w={"100%"}>
       <Center m={2}>
         <VStack spacing={0}>
+          <Box borderWidth={2} borderColor={"gray.400"} h={10} ml={-4}></Box>
           <Box
             borderWidth={2}
-            borderColor={'gray.400'}
-            h={10}
-            ml={-4}
-          ></Box>
-          <Box
-            borderWidth={2}
-            borderColor={'gray.400'}
+            borderColor={"gray.400"}
             borderBottomLeftRadius={15}
             w={5}
           ></Box>
@@ -176,8 +169,8 @@ export const GroupReply = ({ reply }) => {
         p={2}
         boxShadow={"base"}
         w={"100%"}
-        direction={'column'}
-        float={'right'}
+        direction={"column"}
+        float={"right"}
         borderRadius={10}
       >
         <Flex w={"100%"}>
@@ -186,27 +179,27 @@ export const GroupReply = ({ reply }) => {
             rounded={"100%"}
             h={50}
             w={50}
-            src={creator.photoURL}
-            name={creator.displayName}
+            src={postchara.name ? postchara.photoURL : creator.photoURL}
+            name={postchara.name ? postchara.name : creator.displayName}
           />
 
           <VStack pl={2} pr={2} w={"100%"} spacing={0}>
-            <Box fontSize={18} w={'100%'}>{creator.displayName}</Box>
-            <Flex w={'100%'} fontSize={14} color={'gray.400'}>
-              <Box>{creator.displayName}</Box>
+            <Box fontSize={18} w={"100%"}>
+              {postchara.name ? postchara.name : creator.displayName}
+            </Box>
+            <Flex w={"100%"} fontSize={14} color={"gray.400"}>
+              <Box>{postchara.name ? creator.displayName : ""}</Box>
               <Spacer />
-              <Box float={'right'}>
-                {parseDate(reply.timestamp)}
-              </Box>
+              <Box float={"right"}>{parseDate(reply.timestamp)}</Box>
             </Flex>
             <Divider mb={2} />
 
-            <Flex justifyContent={'center'} w={'100%'}>
-              <Flex direction={'column'} w={'100%'}>
+            <Flex justifyContent={"center"} w={"100%"}>
+              <Flex direction={"column"} w={"100%"}>
                 {editMode ? (
                   // <InputGroup>
                   <Textarea
-                    w={'100%'}
+                    w={"100%"}
                     resize="none"
                     minHeight={11}
                     onKeyDown={(e) => {
@@ -239,8 +232,8 @@ export const GroupReply = ({ reply }) => {
                   //   />
                   // </InputRightElement>
                   // </InputGroup>
-                  <Box fontSize={14} w={'100%'}>
-                    <Text w={'100%'} whiteSpace="pre-line">
+                  <Box fontSize={14} w={"100%"}>
+                    <Text w={"100%"} whiteSpace="pre-line">
                       {text ? text : ""}
                     </Text>
                   </Box>
@@ -275,22 +268,27 @@ export const GroupReply = ({ reply }) => {
                 </HStack>
               </Flex>
             </Flex>
-
-
           </VStack>
 
           <Menu>
             <MenuButton m={2.5} h={10} w={10} borderRadius={100}>
-            <IconButton icon={<DotsThreeVertical size={20} />} rounded={'full'} />
+              <IconButton
+                icon={<DotsThreeVertical size={20} />}
+                rounded={"full"}
+              />
             </MenuButton>
             <MenuList>
               {auth.currentUser.uid == reply.uid ? (
                 <>
                   {/* {console.log(post)} */}
-                  <MenuItem onClick={() => {
-                    setEditMode(true);
-                    setEditMessage(text);
-                    }}>Edit</MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      setEditMode(true);
+                      setEditMessage(text);
+                    }}
+                  >
+                    Edit
+                  </MenuItem>
                   <MenuItem onClick={handleDelete}>Delete</MenuItem>
                 </>
               ) : (
@@ -300,10 +298,7 @@ export const GroupReply = ({ reply }) => {
           </Menu>
         </Flex>
       </Flex>
-
-
     </Flex>
-
   );
 };
 

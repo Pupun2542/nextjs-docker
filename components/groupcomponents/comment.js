@@ -27,6 +27,7 @@ import {
   ImageSquare,
   PaperPlaneRight,
   X,
+  CaretDown
 } from "phosphor-react";
 import {
   collection,
@@ -41,8 +42,10 @@ import axios from "axios";
 import { UploadGroupCommentImage } from "../../src/services/filestoreageservice";
 import { PostContext } from "../../pages/group/[id]/dashboard";
 import { useCollection } from "react-firebase-hooks/firestore";
+import useCharaList from "../../src/hook/useCharaList";
+import { isEmptyOrSpaces } from "../../src/services/utilsservice";
 
-export const GroupComment = ({ comment, member, setTo, rid }) => {
+export const GroupComment = ({ comment, member, data, gid, mychara }) => {
   const {
     setStateDataData,
     setStateDataEditMessage,
@@ -65,6 +68,20 @@ export const GroupComment = ({ comment, member, setTo, rid }) => {
   const TextareaRef = useRef(null);
   const love = comment.love;
   const editMode = getStateDataEdit(cid);
+  const [selectedchara, setSelectedchara] = useState({});
+
+  const { chara, refreshcharaList } = useCharaList(data, gid);
+  const checkChara = () => {
+    // console.log(chara[chara.findIndex(v => v.refererId = comment.charaId)])
+    if (chara[chara.findIndex(v => v.refererId == comment.charaId)]) {
+      return chara[chara.findIndex(v => v.refererId == comment.charaId)];
+    } else {
+      // refreshcharaList();
+      return ""
+    }
+  }
+  const postchara = checkChara();
+
   const setEditMode = (state) => {
     setStateDataEdit(state, cid);
   };
@@ -145,9 +162,6 @@ export const GroupComment = ({ comment, member, setTo, rid }) => {
     // In case you have a limitation
     // e.target.style.height = `${Math.min(e.target.scrollHeight, limit)}px`;
   };
-  function isEmptyOrSpaces(str) {
-    return str === null || str.match(/^ *$/) !== null;
-  }
 
   const handleSent = async () => {
     if (!isEmptyOrSpaces(message) || image) {
@@ -162,7 +176,7 @@ export const GroupComment = ({ comment, member, setTo, rid }) => {
       const token = await auth.currentUser.getIdToken();
       axios.post(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${comment.gid}/${comment.pid}/comment/${comment.cid}/reply/create`,
-        { message: message, imageUrl: dlurl, charaId: "" },
+        { message: message, imageUrl: dlurl, charaId: selectedchara.refererId },
         {
           headers: {
             Authorization: token,
@@ -286,20 +300,13 @@ export const GroupComment = ({ comment, member, setTo, rid }) => {
   };
 
   return (
-
     <Flex>
-
       <Center m={2}>
         <VStack spacing={0}>
+          <Box borderWidth={3} borderColor={"gray.400"} h={10} ml={-3.5}></Box>
           <Box
             borderWidth={3}
-            borderColor={'gray.400'}
-            h={10}
-            ml={-3.5}
-          ></Box>
-          <Box
-            borderWidth={3}
-            borderColor={'gray.400'}
+            borderColor={"gray.400"}
             borderBottomLeftRadius={10}
             w={5}
           ></Box>
@@ -310,40 +317,39 @@ export const GroupComment = ({ comment, member, setTo, rid }) => {
         mt={3}
         p={2}
         boxShadow={"base"}
-        direction={'column'}
-        float={'right'}
+        direction={"column"}
+        float={"right"}
         borderRadius={10}
-        w={'95%'}
+        w={"95%"}
       >
-
         <Flex w={"100%"}>
           <Avatar
             mr={2}
             rounded={"100%"}
             h={50}
             w={50}
-            src={creator.photoURL}
-            name={creator.displayName}
+            src={postchara.name ? postchara.photoURL : creator.photoURL}
+            name={postchara.name ? postchara.name : creator.displayName}
           />
 
           <VStack pl={2} pr={2} w={"100%"} spacing={0}>
-            <Box fontSize={18} w={'100%'}>{creator.displayName}</Box>
+            <Box fontSize={18} w={"100%"}>
+              {postchara.name ? postchara.name : creator.displayName}
+            </Box>
 
-            <Flex w={'100%'} fontSize={14} color={'gray.400'}>
-              <Box>{creator.displayName}</Box>
+            <Flex w={"100%"} fontSize={14} color={"gray.400"}>
+              <Box>{postchara.name ? creator.displayName : ""}</Box>
               <Spacer />
-              <Box float={'right'}>
-                {parseDate(comment.timestamp)}
-              </Box>
+              <Box float={"right"}>{parseDate(comment.timestamp)}</Box>
             </Flex>
             <Divider mb={2} />
 
-            <Flex justifyContent={'center'} w={'100%'}>
-              <Flex direction={'column'} w={'100%'}>
+            <Flex justifyContent={"center"} w={"100%"}>
+              <Flex direction={"column"} w={"100%"}>
                 {editMode ? (
                   // <InputGroup>
                   <Textarea
-                    w={'100%'}
+                    w={"100%"}
                     resize="none"
                     minHeight={11}
                     onKeyDown={(e) => {
@@ -376,8 +382,10 @@ export const GroupComment = ({ comment, member, setTo, rid }) => {
                   //   />
                   // </InputRightElement>
                   // </InputGroup>
-                  <Box fontSize={14} w={'100%'}>
-                    <Text w={'100%'} whiteSpace="pre-line">{text ? text : ""}</Text>
+                  <Box fontSize={14} w={"100%"}>
+                    <Text w={"100%"} whiteSpace="pre-line">
+                      {text ? text : ""}
+                    </Text>
                   </Box>
                 )}
 
@@ -399,11 +407,15 @@ export const GroupComment = ({ comment, member, setTo, rid }) => {
                     leftIcon={
                       <Heart
                         weight={
-                          love.includes(auth.currentUser.uid) ? "fill" : "regular"
+                          love.includes(auth.currentUser.uid)
+                            ? "fill"
+                            : "regular"
                         }
                       />
                     }
-                    color={love.includes(auth.currentUser.uid) ? "#EA4545" : "black"}
+                    color={
+                      love.includes(auth.currentUser.uid) ? "#EA4545" : "black"
+                    }
                     width={"40%"}
                     fontSize={16}
                     fontWeight={"light"}
@@ -441,13 +453,19 @@ export const GroupComment = ({ comment, member, setTo, rid }) => {
                     {reply
                       .map((rpy, i) => (
                         <Box key={i}>
-                          <GroupReply reply={rpy} key={i} member={member} />
+                          <GroupReply
+                            reply={rpy}
+                            key={i}
+                            member={member}
+                            gid={gid}
+                            mychara={mychara}
+                            data={data}
+                          />
                         </Box>
                       ))
                       .reverse()}
                   </>
                 )}
-
 
                 {image && (
                   <Box pos={"relative"}>
@@ -471,22 +489,27 @@ export const GroupComment = ({ comment, member, setTo, rid }) => {
                 )}
               </Flex>
             </Flex>
-
-
           </VStack>
 
           <Menu>
             <MenuButton m={2.5} h={10} w={10} borderRadius={100}>
-              <IconButton icon={<DotsThreeVertical size={20} />} rounded={'full'} />
+              <IconButton
+                icon={<DotsThreeVertical size={20} />}
+                rounded={"full"}
+              />
             </MenuButton>
             <MenuList>
               {auth.currentUser.uid == comment.uid ? (
                 <>
                   {/* {console.log(post)} */}
-                  <MenuItem onClick={() => {
-                    setEditMode(true);
-                    setEditMessage(text);
-                    }}>Edit</MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      setEditMode(true);
+                      setEditMessage(text);
+                    }}
+                  >
+                    Edit
+                  </MenuItem>
                   <MenuItem onClick={handleDelete}>Delete</MenuItem>
                 </>
               ) : (
@@ -494,8 +517,6 @@ export const GroupComment = ({ comment, member, setTo, rid }) => {
               )}
             </MenuList>
           </Menu>
-
-
 
           <Input
             type="file"
@@ -507,15 +528,31 @@ export const GroupComment = ({ comment, member, setTo, rid }) => {
         </Flex>
 
         <Flex mt={2}>
-          <Box w={"8%"} mr={1}>
-            <Avatar
-              mr={2}
-              rounded={"100%"}
-              h={42}
-              w={42}
-              src={auth.currentUser.photoURL}
-              name={auth.currentUser.displayName}
-            />
+          <Box mr={1}>
+            <Menu>
+              <MenuButton as={Button} rightIcon={<CaretDown size={8} />}>
+                <Avatar
+                  src={
+                    Object.keys(selectedchara).length > 0
+                      ? selectedchara.photoURL
+                      : ""
+                  }
+                  w={8}
+                  h={8}
+                />
+              </MenuButton>
+              <MenuList>
+                {mychara &&
+                  Object.values(mychara).map((cha) => (
+                    <MenuItem onClick={() => setSelectedchara(cha)}>
+                      <Flex alignItems={"center"}>
+                        <Avatar src={cha.photoURL} w={8} h={8} mr={1} />
+                        <Text fontSize="sm">{cha.name}</Text>
+                      </Flex>
+                    </MenuItem>
+                  ))}
+              </MenuList>
+            </Menu>
           </Box>
           <Textarea
             resize="none"
@@ -547,13 +584,12 @@ export const GroupComment = ({ comment, member, setTo, rid }) => {
               rounded={"full"}
               icon={<PaperPlaneRight size={28} />}
               onClick={handleSent}
+              disabled={(isEmptyOrSpaces(message) && image) || Object.keys(selectedchara).length == 0}
             />
           </Box>
         </Flex>
-
       </Flex>
     </Flex>
-
   );
 };
 

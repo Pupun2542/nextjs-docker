@@ -103,6 +103,11 @@ const useCharaList = (data, gid) => {
     return charadoc.data();
   };
 
+  const refreshcharaList = async () => {
+    const grpdoc = await getDoc(doc(db, "group", gid));
+    setChara(grpdoc.data().chara);
+  }
+
   return {
     chara,
     charaSearchResult,
@@ -111,6 +116,7 @@ const useCharaList = (data, gid) => {
     onUpdateChara,
     onRemoveChara,
     getDetailedChara,
+    refreshcharaList
   };
 };
 

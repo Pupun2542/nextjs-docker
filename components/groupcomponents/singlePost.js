@@ -29,6 +29,7 @@ import {
   ImageSquare,
   X,
   PaperPlaneRight,
+  CaretDown
 } from "phosphor-react";
 import { GroupComment } from "./comment";
 import {
@@ -50,7 +51,8 @@ import {
 import { PostContext } from "../../pages/group/[id]/dashboard";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { isEmptyOrSpaces } from "../../src/services/utilsservice";
-export const GroupSinglePost = ({ post, member, onPostDelete, cid, rid }) => {
+import useCharaList from "../../src/hook/useCharaList";
+export const GroupSinglePost = ({ post, member, onPostDelete, cid, rid, data, gid, mychara }) => {
     console.log(post);
   const {
     setStateDataData,
@@ -65,6 +67,20 @@ export const GroupSinglePost = ({ post, member, onPostDelete, cid, rid }) => {
     setStateDataReply,
     getStateDataReply,
   } = useContext(PostContext);
+
+  const {chara, refreshcharaList} = useCharaList(data, gid)
+  const [selectedchara, setSelectedchara] = useState({});
+
+  const checkChara = () => {
+    if (chara[chara.findIndex(v => v.refererId == post.charaId)]) {
+      return chara[chara.findIndex(v => v.refererId == post.charaId)];
+    } else {
+      // refreshcharaList();
+      return ""
+    }
+  }
+  const postchara = checkChara();
+
   const creator = Object.values(post.creator)[0];
   const getUser = useUser();
   const { auth, db } = useApp();
@@ -110,8 +126,6 @@ export const GroupSinglePost = ({ post, member, onPostDelete, cid, rid }) => {
     setStateDataReply(!isOpen, pid);
   };
 
-//   const [snapshot, setSnapshot] = useState(null);
-
   const [snapshot, loading, error] = useCollection(
     query(
       collection(db, "group", post.gid, "posts", post.pid, "comments"),
@@ -119,38 +133,6 @@ export const GroupSinglePost = ({ post, member, onPostDelete, cid, rid }) => {
       limit(fetchlimit),
     )
   );
-// const snapshotWithCommentFocus = async() => {
-//     const ref = await getDoc(doc(db, "group", post.gid, "posts", post.pid, "comments", cid));
-//     return onSnapshot(query(
-//         collection(db, "group", post.gid, "posts", post.pid, "comments"),
-//         orderBy("timestamp", "desc"),
-//         startAt(ref),
-//         limit(fetchlimit)
-//       ), (snapshot)=> {
-//         setSnapshot(snapshot)
-//         onOpen()
-//       })
-// }
-// const snapshotWithoutCommentFocus = async() => {
-//     return onSnapshot(query(
-//         collection(db, "group", post.gid, "posts", post.pid, "comments"),
-//         orderBy("timestamp", "desc"),
-//         limit(fetchlimit)
-//       ), (snapshot)=> {
-//         setSnapshot(snapshot)
-//         onOpen()
-//       })
-// }
-
-//   useEffect(()=> {
-//     let unsubscribe;
-//     if (!cid) {
-//         unsubscribe = snapshotWithoutCommentFocus();
-//     } else {
-//         unsubscribe = snapshotWithCommentFocus();
-//     }
-//     return ()=> unsubscribe();
-//   }, [post, rid, limit])
   let comment = [];
   if (snapshot) {
     Promise.all(
@@ -201,7 +183,7 @@ export const GroupSinglePost = ({ post, member, onPostDelete, cid, rid }) => {
       const token = await auth.currentUser.getIdToken();
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${post.gid}/${post.pid}/comment/create`,
-        { message: message, imageUrl: dlurl, charaId: "" },
+        { message: message, imageUrl: dlurl, charaId: selectedchara.refererId },
         {
           headers: {
             Authorization: token,
@@ -337,21 +319,21 @@ export const GroupSinglePost = ({ post, member, onPostDelete, cid, rid }) => {
         direction={"column"}
       >
         <Flex w={"100%"}>
-          <Avatar
+        <Avatar
             mr={2}
             rounded={"100%"}
             h={50}
             w={50}
-            src={creator.photoURL}
-            name={creator.displayName}
+            src={postchara.name? postchara.photoURL : creator.photoURL}
+            name={postchara.name? postchara.name : creator.displayName}
           />
           <VStack w={"100%"} spacing={0}>
             <Box fontSize={18} w={"100%"}>
-              {creator.displayName}
+            {postchara.name? postchara.name : creator.displayName}
             </Box>
 
             <Flex w={"100%"} fontSize={14} color={"gray.400"}>
-              <Box>{creator.displayName}</Box>
+              <Box>{postchara.name? creator.displayName: ""}</Box>
               <Spacer />
               <Box float={"right"}>
                 {post.timestamp
@@ -522,7 +504,7 @@ export const GroupSinglePost = ({ post, member, onPostDelete, cid, rid }) => {
                       comment
                         .map((cmt, i) => (
                           <Box key={i} id={cmt.cid}>
-                            <GroupComment comment={cmt} member={member} setTo={cid} rid={rid} />
+                            <GroupComment comment={cmt} member={member} data={data} gid={gid} mychara={mychara} />
                           </Box>
                         ))
                         .reverse()}
@@ -531,15 +513,34 @@ export const GroupSinglePost = ({ post, member, onPostDelete, cid, rid }) => {
               </Box>
 
               <Flex mt={2}>
-                <Box w={"8%"} mr={1}>
-                  <Avatar
-                    mr={2}
-                    rounded={"100%"}
-                    h={42}
-                    w={42}
-                    src={auth.currentUser.photoURL}
-                    name={auth.currentUser.displayName}
-                  />
+                <Box mr={1}>
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    rightIcon={<CaretDown size={8} />}
+                  >
+                    <Avatar
+                      src={
+                        Object.keys(selectedchara).length > 0
+                          ? selectedchara.photoURL
+                          : ""
+                      }
+                      w={8}
+                      h={8}
+                    />
+                  </MenuButton>
+                  <MenuList>
+                    {mychara &&
+                      Object.values(mychara).map((cha) => (
+                        <MenuItem onClick={() => setSelectedchara(cha)}>
+                          <Flex alignItems={"center"}>
+                            <Avatar src={cha.photoURL} w={8} h={8} mr={1} />
+                            <Text fontSize="sm">{cha.name}</Text>
+                          </Flex>
+                        </MenuItem>
+                      ))}
+                  </MenuList>
+                </Menu>
                 </Box>
                 <Textarea
                   resize="none"

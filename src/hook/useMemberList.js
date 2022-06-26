@@ -13,7 +13,7 @@ const useMemberList = (data, gid) => {
 
   const onAcceptPending = async (uid) => {
     const token = await auth.currentUser.getIdToken();
-    axios.post(
+    const res = await axios.post(
       `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${gid}/acceptPlayer`,
       { id: uid },
       {
@@ -22,6 +22,11 @@ const useMemberList = (data, gid) => {
         },
       }
     );
+    if (res.status === 200) {
+      setMember([...member, pendingMember.find(v=> v.uid == uid)]);
+      setPendingMember(pendingMember.filter((v, i) => v.uid != uid));
+    }
+    
   };
   const onRejectPending = async (uid) => {
     const token = await auth.currentUser.getIdToken();
@@ -34,6 +39,7 @@ const useMemberList = (data, gid) => {
         },
       }
     );
+    setPendingMember(pendingMember.filter((v, i) => v.uid != uid));
   };
   const onSearch = (str) => {
     setSearchResult(member.filter((v, i) => v.displayName.includes(str)));

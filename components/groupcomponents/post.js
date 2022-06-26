@@ -29,6 +29,7 @@ import {
   ImageSquare,
   X,
   PaperPlaneRight,
+  CaretDown
 } from "phosphor-react";
 import { GroupComment } from "./comment";
 import {
@@ -46,14 +47,13 @@ import {
 } from "../../src/services/filestoreageservice";
 import { PostContext } from "../../pages/group/[id]/dashboard";
 import { useCollection } from "react-firebase-hooks/firestore";
-export const GroupPost = ({ post, member, onPostDelete }) => {
+import { isEmptyOrSpaces } from "../../src/services/utilsservice";
+import useCharaList from "../../src/hook/useCharaList";
+export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) => {
   const {
     setStateData,
     getStateData,
     setStateDataData,
-    getStateDataData,
-    setStateDataEditMessage,
-    getStateDataEditMessage,
     setStateDataPendingMessage,
     getStateDataPendingMessage,
     setStateDataPendingImage,
@@ -64,20 +64,26 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
     getStateDataEdit,
     setStateDataReply,
     getStateDataReply,
-    postData,
-    setPostData,
-    setStateDataChild,
-    getStateDataChild,
   } = useContext(PostContext);
   const creator = Object.values(post.creator)[0];
   const getUser = useUser();
   const { auth, db } = useApp();
   const [fetchlimit, setFetchlimit] = useState(20);
-  // const [love, setLove] = useState(post.love)
+  const [selectedchara, setSelectedchara] = useState({});
   const inputFileRef = useRef(null);
   const pid = post.pid;
   const TextareaRef = useRef(null);
-  // const love = post.love;
+  const {chara, refreshcharaList} = useCharaList(data, gid)
+
+  const checkChara = () => {
+    if (chara[chara.findIndex(v => v.refererId == post.charaId)]) {
+      return chara[chara.findIndex(v => v.refererId == post.charaId)];
+    } else {
+      // refreshcharaList();
+      return ""
+    }
+  }
+  const postchara = checkChara();
   const love = getStateDataLove(pid);
   const setLove = (value) => {
     setStateDataLove(value, pid);
@@ -102,10 +108,6 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
   const setText = (value) => {
     setStateDataData({ ...post, message: value });
   };
-  // const comment = getStateDataChild(pid);
-  // const setComment = (value) => {
-  //   setStateDataChild(value, pid);
-  // };
 
   const isOpen = getStateDataReply(pid);
   const onOpen = () => {
@@ -162,9 +164,6 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
     // In case you have a limitation
     // e.target.style.height = `${Math.min(e.target.scrollHeight, limit)}px`;
   };
-  function isEmptyOrSpaces(str) {
-    return str === null || str.match(/^ *$/) !== null;
-  }
   const handleSent = async () => {
     if (!isEmptyOrSpaces(message) || image) {
       let dlurl = "";
@@ -177,9 +176,10 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
         // console.log(dlurl);
       }
       const token = await auth.currentUser.getIdToken();
+      console.log(selectedchara)
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${post.gid}/${post.pid}/comment/create`,
-        { message: message, imageUrl: dlurl, charaId: "" },
+        { message: message, imageUrl: dlurl, charaId: selectedchara.refererId },
         {
           headers: {
             Authorization: token,
@@ -320,16 +320,15 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
             rounded={"100%"}
             h={50}
             w={50}
-            src={creator.photoURL}
-            name={creator.displayName}
+            src={postchara.name? postchara.photoURL : creator.photoURL}
+            name={postchara.name? postchara.name : creator.displayName}
           />
           <VStack w={"100%"} spacing={0}>
             <Box fontSize={18} w={"100%"}>
-              {creator.displayName}
+              {postchara.name? postchara.name : creator.displayName}
             </Box>
-
             <Flex w={"100%"} fontSize={14} color={"gray.400"}>
-              <Box>{creator.displayName}</Box>
+              <Box>{postchara.name? creator.displayName: ""}</Box>
               <Spacer />
               <Box float={"right"}>
                 {post.timestamp
@@ -366,14 +365,8 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
             </MenuList>
           </Menu>
         </Flex>
-        
-        <Flex
-          p={2}
-          pl={55}
-          pr={55}
-          direction={"column"}
-        >
-          
+
+        <Flex p={2} pl={55} pr={55} direction={"column"}>
           {editMode ? (
             // <InputGroup>
             <Textarea
@@ -429,157 +422,183 @@ export const GroupPost = ({ post, member, onPostDelete }) => {
           </Center>
         </Flex>
         <VStack w={"100%"} spacing={0}>
-            <Flex direction={"column"} justifyContent={"center"} w={"100%"} pl={55} pr={55}>
-              <HStack
-                spacing={4}
-                w={"100%"}
-                fontSize={14}
-                color={"GrayText"}
-                pt={2}
+          <Flex
+            direction={"column"}
+            justifyContent={"center"}
+            w={"100%"}
+            pl={55}
+            pr={55}
+          >
+            <HStack
+              spacing={4}
+              w={"100%"}
+              fontSize={14}
+              color={"GrayText"}
+              pt={2}
+            >
+              <Button
+                leftIcon={
+                  <Heart
+                    weight={
+                      love.includes(auth.currentUser.uid) ? "fill" : "regular"
+                    }
+                  />
+                }
+                color={
+                  love.includes(auth.currentUser.uid) ? "#EA4545" : "black"
+                }
+                width={"40%"}
+                fontSize={16}
+                fontWeight={"light"}
+                boxShadow={"base"}
+                variant="solid"
+                onClick={HandleLove}
               >
-                <Button
-                  leftIcon={
-                    <Heart
-                      weight={
-                        love.includes(auth.currentUser.uid) ? "fill" : "regular"
-                      }
-                    />
-                  }
-                  color={
-                    love.includes(auth.currentUser.uid) ? "#EA4545" : "black"
-                  }
-                  width={"40%"}
-                  fontSize={16}
-                  fontWeight={"light"}
-                  boxShadow={"base"}
-                  variant="solid"
-                  onClick={HandleLove}
-                >
-                  {getStateDataLove(post.pid).length}
-                </Button>
-                <Button
-                  leftIcon={<ChatCenteredText />}
-                  color="black"
-                  width={"100%"}
-                  fontSize={16}
-                  fontWeight={"light"}
-                  boxShadow={"base"}
-                  variant="solid"
-                  onClick={onToggle}
-                >
-                  {post.comment > comment?.length
-                    ? post.comment
-                    : comment?.length}
-                </Button>
-                <Button
-                  leftIcon={<Eye />}
-                  color="black"
-                  width={"40%"}
-                  fontSize={16}
-                  fontWeight={"light"}
-                  boxShadow={"base"}
-                  variant="solid"
-                >
-                  {post.view}
-                </Button>
-              </HStack>
+                {getStateDataLove(post.pid).length}
+              </Button>
+              <Button
+                leftIcon={<ChatCenteredText />}
+                color="black"
+                width={"100%"}
+                fontSize={16}
+                fontWeight={"light"}
+                boxShadow={"base"}
+                variant="solid"
+                onClick={onToggle}
+              >
+                {post.comment > comment?.length
+                  ? post.comment
+                  : comment?.length}
+              </Button>
+              <Button
+                leftIcon={<Eye />}
+                color="black"
+                width={"40%"}
+                fontSize={16}
+                fontWeight={"light"}
+                boxShadow={"base"}
+                variant="solid"
+              >
+                {post.view}
+              </Button>
+            </HStack>
 
-              <Box>
-                {isOpen && (
-                  <>
-                    {post.comment > fetchlimit && (
-                      <Text
-                        decoration="underline"
-                        onClick={() => setFetchlimit(fetchlimit + 20)}
-                        cursor="pointer"
-                      >
-                        Load more
-                      </Text>
-                    )}
-                    {comment?.length > 0 &&
-                      comment
-                        .map((cmt, i) => (
-                          <Box key={i}>
-                            <GroupComment comment={cmt} member={member} />
-                          </Box>
-                        ))
-                        .reverse()}
-                  </>
-                )}
-              </Box>
-
-              <Flex mt={2}>
-                <Box w={"8%"} mr={1}>
-                  <Avatar
-                    mr={2}
-                    rounded={"100%"}
-                    h={42}
-                    w={42}
-                    src={auth.currentUser.photoURL}
-                    name={auth.currentUser.displayName}
-                  />
-                </Box>
-                <Textarea
-                  resize="none"
-                  minHeight={11}
-                  width="100%"
-                  placeholder="Write Something"
-                  height="42px"
-                  backgroundColor="gray.100"
-                  value={message}
-                  ref={TextareaRef}
-                  onKeyDown={(e) => {
-                    resizeTextArea(e);
-                    // if (e.key == "Enter" && !e.shiftKey) {
-                    //   handleSent();
-                    // }
-                  }}
-                  onChange={(e) => setMessage(e.target.value)}
-                  onPaste={handleImagePaste}
-                />
-                <Box pl={2} whiteSpace="nowrap">
-                  <IconButton
-                    rounded={"full"}
-                    icon={<ImageSquare size={28} />}
-                    mr={2}
-                    onClick={handleFile}
-                  />
-                  <IconButton
-                    rounded={"full"}
-                    icon={<PaperPlaneRight size={28} />}
-                    onClick={handleSent}
-                  />
-                </Box>
-              </Flex>
-              {image && (
-                <Box pos={"relative"}>
-                  <Image
-                    src={image}
-                    width="250px"
-                    height="250px"
-                    onClick={() => setModalOpen(true)}
-                    objectFit="cover"
-                  />
-                  <IconButton
-                    icon={<X size={16} color="black" />}
-                    position="absolute"
-                    top={0}
-                    left={200}
-                    backgroundColor="transparent"
-                    _hover={{ backgroundColor: "transparent" }}
-                    onClick={() => setImage(null)}
-                  ></IconButton>
-                </Box>
+            <Box>
+              {isOpen && (
+                <>
+                  {post.comment > fetchlimit && (
+                    <Text
+                      decoration="underline"
+                      onClick={() => setFetchlimit(fetchlimit + 20)}
+                      cursor="pointer"
+                    >
+                      Load more
+                    </Text>
+                  )}
+                  {comment?.length > 0 &&
+                    comment
+                      .map((cmt, i) => (
+                        <Box key={i}>
+                          <GroupComment comment={cmt} member={member} data={data} gid={gid} mychara={mychara} />
+                        </Box>
+                      ))
+                      .reverse()}
+                </>
               )}
+            </Box>
 
-              <Input
-                type="file"
-                id="file"
-                ref={inputFileRef}
-                display="none"
-                onChange={(e) => handleUploadFile(e)}
+            <Flex mt={2}>
+              <Box mr={1}>
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    rightIcon={<CaretDown size={8} />}
+                  >
+                    <Avatar
+                      src={
+                        Object.keys(selectedchara).length > 0
+                          ? selectedchara.photoURL
+                          : ""
+                      }
+                      w={8}
+                      h={8}
+                    />
+                  </MenuButton>
+                  <MenuList>
+                    {mychara &&
+                      Object.values(mychara).map((cha) => (
+                        <MenuItem onClick={() => setSelectedchara(cha)}>
+                          <Flex alignItems={"center"}>
+                            <Avatar src={cha.photoURL} w={8} h={8} mr={1} />
+                            <Text fontSize="sm">{cha.name}</Text>
+                          </Flex>
+                        </MenuItem>
+                      ))}
+                  </MenuList>
+                </Menu>
+              </Box>
+              <Textarea
+                resize="none"
+                minHeight={11}
+                width="100%"
+                placeholder="Write Something"
+                height="42px"
+                backgroundColor="gray.100"
+                value={message}
+                ref={TextareaRef}
+                onKeyDown={(e) => {
+                  resizeTextArea(e);
+                  // if (e.key == "Enter" && !e.shiftKey) {
+                  //   handleSent();
+                  // }
+                }}
+                onChange={(e) => setMessage(e.target.value)}
+                onPaste={handleImagePaste}
               />
+              <Box pl={2} whiteSpace="nowrap">
+                <IconButton
+                  rounded={"full"}
+                  icon={<ImageSquare size={28} />}
+                  mr={2}
+                  onClick={handleFile}
+                />
+                <IconButton
+                  rounded={"full"}
+                  icon={<PaperPlaneRight size={28} />}
+                  onClick={handleSent}
+                  disabled={(isEmptyOrSpaces(message) && image) || Object.keys(selectedchara).length == 0}
+                />
+              </Box>
             </Flex>
+            {image && (
+              <Box pos={"relative"}>
+                <Image
+                  src={image}
+                  width="250px"
+                  height="250px"
+                  onClick={() => setModalOpen(true)}
+                  objectFit="cover"
+                />
+                <IconButton
+                  icon={<X size={16} color="black" />}
+                  position="absolute"
+                  top={0}
+                  left={200}
+                  backgroundColor="transparent"
+                  _hover={{ backgroundColor: "transparent" }}
+                  onClick={() => setImage(null)}
+                ></IconButton>
+              </Box>
+            )}
+
+            <Input
+              type="file"
+              id="file"
+              ref={inputFileRef}
+              display="none"
+              onChange={(e) => handleUploadFile(e)}
+            />
+          </Flex>
         </VStack>
       </Flex>
     );

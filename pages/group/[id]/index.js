@@ -365,7 +365,7 @@ export default function Group() {
                         isDisabled
                       />
                       {console.log(data)}
-                      {user && Object.keys(data.creator).includes(user.uid) && (
+                      {user && Object.keys(data.creator).includes(auth.currentUser?.uid) && (
                         <Box>
                           <Menu>
                             <MenuButton
@@ -914,11 +914,11 @@ export default function Group() {
                                   }
                                   cursor="pointer"
                                 >
-                                  {Object.keys(data.member).includes(user.uid)
-                                    ? "ไปที่กลุ่ม"
-                                    : Object.keys(data.pendingmember).includes(
-                                        user.uid
-                                      )
+                                  {console.log(data.member, auth.currentUser?.uid)}
+                                  {Object.keys(data.member).includes(auth.currentUser?.uid)? "ไปที่กลุ่ม"
+                                    : (data.pendingmember && Object.keys(data.pendingmember).includes(
+                                      auth.currentUser?.uid
+                                      ))
                                     ? "รอการตอบรับ"
                                     : "เข้าร่วมกลุ่ม"}
                                 </Center>

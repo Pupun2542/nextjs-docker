@@ -97,7 +97,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
     contactlink: "",
     startDate: "",
     startDateraw: "",
-    rating: "",
+    rating: "G (เหมาะสำหรับทุกวัย)",
     rule: "",
     averageTime: "",
     averageTimeUnit: "",

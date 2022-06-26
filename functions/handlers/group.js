@@ -7,12 +7,12 @@ exports.createGroup = (req, res) => {
   if (req.user) {
     return db.collection("group")
         .add({
-          name: data.name,
+          name: data.name.trim(),
           creator: req.user.uid,
           type: data.type,
           privacy: data.privacy,
           tag: data.tag,
-          description: data.description,
+          description: data.description.trim(),
           maxplayer: data.maxplayer,
           genre: data.genre,
           contactlink: data.contactlink,
@@ -588,13 +588,16 @@ exports.getGroup = (req, res) =>{
             commentuser: Object.fromEntries(arrgrpmember.filter(([k, v], i)=>doc.data().commentuser.includes(v.uid))),
           };
           if (doc.data().chara) {
+            // console.log(doc.data().chara);
             const arrgrpchara = Object.entries(doc.data().chara);
+            // console.log(arrgrpchara);
             let newChara = [];
             arrgrpchara.map(([k, v])=> {
               console.log(v.parentId);
               const refname = grpmember[v.parentId].displayName;
               newChara = [...newChara, [k, {...v, parentName: refname}]];
             });
+            // console.log(Object.fromEntries(newChara));
             mappeddocdata = {
               ...mappeddocdata,
               chara: Object.fromEntries(newChara),
