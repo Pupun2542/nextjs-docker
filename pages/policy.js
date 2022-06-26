@@ -166,6 +166,7 @@ export default function policy() {
                             <Text pl={20}>Email: commuthor@gmail.com</Text>
                             <Text pl={20}>Facebook: https://www.facebook.com/ComuthorCorp/</Text>
                             <Text pl={20}>Facebook: Discord: https://discord.gg/BVrwyCPEHc/</Text>
+                
                         </Box>
                     </VStack>
                 </Flex>
