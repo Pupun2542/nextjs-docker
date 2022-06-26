@@ -293,7 +293,7 @@ function about() {
                     </Center>
                     <Center fontSize={14}>Co-Founder</Center>
                     <Center fontSize={14}>Frontend-Developer</Center>
-                    <Center fontSize={14} color={'white'}>.</Center>
+                    <Center fontSize={14}>Media Production</Center>
                   </Flex>
                 </Flex>
               </Flex>
@@ -401,7 +401,7 @@ function about() {
                     <Center fontSize={18} fontWeight={"extrabold"}>
                       UncertD
                     </Center>
-                    <Center fontSize={14}>Developer</Center>
+                    <Center fontSize={14}>Support-Developer</Center>
                     <Center fontSize={14} color={'white'}>.</Center>
                     <Center fontSize={14} color={'white'}>.</Center>
                   </Flex>

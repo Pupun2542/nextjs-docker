@@ -1292,6 +1292,7 @@ export default function Group() {
                           [{Object.keys(data.staff).length}]
                         </Center>
                       </Center>
+                      
                       <Wrap fontFamily={"Mitr"}>
                         {Object.values(data.staff).map((staff) => (
                           <WrapItem>

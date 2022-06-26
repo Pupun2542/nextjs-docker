@@ -401,8 +401,7 @@ function dashboard() {
         >
           <Box
             bg={"#F3F3F3"}
-            minH={896}
-            h={"auto"}
+            minH={1000}
             minW={800}
             maxW={800}
             boxShadow="base"
@@ -446,8 +445,8 @@ function dashboard() {
                           },
                         }}
                       >
-                        {data.desciption
-                          ? data.desciption
+                        {data.description
+                          ? data.description
                           : "ไม่มีคำอธิบายคอมมู"}
                       </PopoverBody>
                     </PopoverContent>

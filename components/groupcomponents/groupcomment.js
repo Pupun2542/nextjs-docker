@@ -373,7 +373,7 @@ export const Commentpost = ({
             placeholder="Write Something"
             height="45px"
             backgroundColor="gray.100"
-            mb={2.5}
+            mb={10}
           />
         ) : (
           //  <InputRightElement>
@@ -511,6 +511,7 @@ export const Commentpost = ({
                 resizeTextArea(e);
               }}
               value={rpymsg}
+              mt={2}
               onChange={(e) => setrpymsg(e.target.value)}
               // onChange={(e) => console.log(e.target.)}
               width="100%"

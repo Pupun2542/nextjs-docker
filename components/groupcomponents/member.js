@@ -77,6 +77,33 @@ export const Member = ({ data, gid }) => {
               </AccordionButton>
             </h2>
 
+<<<<<<< HEAD
+            <Box ml={'15px'} flex={1} textAlign={'left'} fontSize={20}>
+                สมาชิกในคอมมูนิตี้
+            </Box>
+
+            <SimpleGrid p={5} spacing={5} columns={2}>
+                <Flex bg={'white'} p={'5px'} h={'80px'} borderRadius={10} boxShadow={'base'}>
+                    <Avatar w={'70px'} h={'70px'}></Avatar>
+                    <VStack ml={'5px'} mr={'5px'} w={'100%'}>
+                        <Box
+                            mt={'5px'}
+                            fontSize={18}
+                            textAlign={'left'}
+                            width={'100%'}
+                        >
+                            Regulus
+                        </Box>
+                        <Box
+                            color={'gray.400'}
+                            fontSize={14}
+                            textAlign={'left'}
+                            width={'100%'}
+                        >
+                            อยากเป็นนายก ขอไปให้สุดหัวใจ
+                        </Box>
+                    </VStack>
+=======
             <AccordionPanel>
               {pendingMember.map((mem) => (
                 <Flex
@@ -91,6 +118,7 @@ export const Member = ({ data, gid }) => {
                     {mem.displayName}
                   </Text>
                   <HStack spacing={1}>
+>>>>>>> 361f0792a3650d63e0eb8f12f07385f891daa032
                     <IconButton
                       icon={<Check />}
                       onClick={() => {

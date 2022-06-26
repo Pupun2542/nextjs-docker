@@ -81,15 +81,15 @@ export default function profile() {
       const token = await user.getIdToken();
       const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/user/getdetailusers`, {
         users: [...new Set([id, user.uid])]
-      },         
-      {
-        headers: {
-          Authorization: token,
-        },
-      })
+      },
+        {
+          headers: {
+            Authorization: token,
+          },
+        })
       if (res.status === 200) {
-        let thisuser = res.data.find(v=>v.uid === id);
-        let myuser = res.data.find(v=>v.uid === user.uid);
+        let thisuser = res.data.find(v => v.uid === id);
+        let myuser = res.data.find(v => v.uid === user.uid);
         if (thisuser.pendingFriend?.includes(user.uid)) {
           setFriend(1); //onpending
         } else if (thisuser.friend?.includes(user.uid)) {
@@ -98,31 +98,31 @@ export default function profile() {
           setFriend(3); //onpending but reciever
         }
         if (user.uid === id && thisuser.pendingFriend && thisuser.pendingFriend.length > 0) {
-          
+
           const res2 = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/user/getdetailusers`, {
             users: [...thisuser.pendingFriend]
           },
-          {
-            headers: {
-              Authorization: token,
-            },
-          })
+            {
+              headers: {
+                Authorization: token,
+              },
+            })
           if (res2.status === 200) {
             console.log(thisuser.pendingFriend, res2.data);
-            thisuser = {...thisuser, pendingFriend: res2.data}
+            thisuser = { ...thisuser, pendingFriend: res2.data }
           }
         }
         if (thisuser.friend && thisuser.friend.length > 0) {
           const res3 = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/user/getdetailusers`, {
             users: [...thisuser.friend]
           },
-          {
-            headers: {
-              Authorization: token,
-            },
-          })
+            {
+              headers: {
+                Authorization: token,
+              },
+            })
           if (res3.status === 200) {
-            thisuser = {...thisuser, friend: res3.data}
+            thisuser = { ...thisuser, friend: res3.data }
           }
         }
         setUserDetail(thisuser);
@@ -369,6 +369,12 @@ export default function profile() {
               <TabList borderColor={"gray.400"} p={2}>
                 <Tab
                   _selected={{ color: "white", bg: "#9A9AB0" }}
+                  borderRadius={10}
+                >
+                  About me
+                </Tab>
+                <Tab
+                  _selected={{ color: "white", bg: "#9A9AB0" }}
                   isDisabled
                   borderRadius={10}
                 >
@@ -401,15 +407,15 @@ export default function profile() {
                 >
                   Bookshelf
                 </Tab>
-                <Tab
-                  _selected={{ color: "white", bg: "#9A9AB0" }}
-                  borderRadius={10}
-                >
-                  About me
-                </Tab>
+
               </TabList>
 
               <TabPanels>
+                {/* About */}
+                <TabPanel>
+                  <About data={userDetail} onRefresh={loaduserDetail} />
+                </TabPanel>
+                
                 {/* Timeline */}
                 <TabPanel>
                   <p>one!</p>
@@ -448,10 +454,7 @@ export default function profile() {
                   <p>?</p>
                 </TabPanel>
 
-                {/* About */}
-                <TabPanel>
-                  <About data={userDetail} onRefresh={loaduserDetail} />
-                </TabPanel>
+
               </TabPanels>
             </Tabs>
           </VStack>
