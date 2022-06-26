@@ -69,7 +69,7 @@ export default function policy() {
 
                         <Container>
                             คุณสามารถจัดการหรือลบคุกกี้ได้ตามต้องการ สำหรับรายละเอียด โปรดดูที่ AboutCookies.org คุณสามารถล้างคุกกี้ทั้งหมดที่จัดเก็บอยู่บนเครื่องคอมพิวเตอร์ของคุณ รวมทั้งเว็บเบราว์เซอร์ล่าสุดที่มีตัวเลือกในการบล็อกคุกกี้ แต่ในการบล็อกคุกกี้นั้น คุณจะต้องเปลี่ยนการตั้งค่าผู้ใช้งานของคุณทุกครั้งที่คุณเยี่ยมชมเว็บไซต์ของเรา 
-                            ดูวิธีการตั้งค่าคุกกี้สำหรับเบราว์เซอร์ของคุณที่นี่: Explorer > Google Chrome > Mozilla Firefox > Safari > Opera หากคุณล้างคุกกี้ คุณจำเป็นต้องเปลี่ยนการตั้งค่าของคุณเมื่อเยี่ยมชมเว็บไซต์ของ Comuthor.com ในครั้งถัดไป โปรดทราบว่าบริการบางอย่างของ Comuthor.com จำเป็นต้องมีการใช้คุกกี้ การปิดใช้งานคุกกี้อาจส่งผลต่อการใช้งานฟังก์ชันบางอย่างหรือทั้งหมดของบริการเหล่านี้
+                            {/* ดูวิธีการตั้งค่าคุกกี้สำหรับเบราว์เซอร์ของคุณที่นี่: Explorer &gt; Google Chrome &gt; Mozilla Firefox &gt; Safari &gt; Opera */} หากคุณล้างคุกกี้ คุณจำเป็นต้องเปลี่ยนการตั้งค่าของคุณเมื่อเยี่ยมชมเว็บไซต์ของ Comuthor.com ในครั้งถัดไป โปรดทราบว่าบริการบางอย่างของ Comuthor.com จำเป็นต้องมีการใช้คุกกี้ การปิดใช้งานคุกกี้อาจส่งผลต่อการใช้งานฟังก์ชันบางอย่างหรือทั้งหมดของบริการเหล่านี้
                         </Container>
 
                         <Text fontSize={20} pl={10} w={'100%'}>เราใช้ข้อมูลที่เราเก็บรวบรวมอย่างไร</Text>
@@ -166,9 +166,9 @@ export default function policy() {
                             <Text fontSize={20} pl={10} w={'100%'}>
                                 รายละเอียดการติดต่อ
                             </Text>
-                            <Text pl={20}>Email: commuthor@gmail.com</Text>
-                            <Text pl={20}>Facebook: https://www.facebook.com/ComuthorCorp/</Text>
-                            <Text pl={20}>Facebook: Discord: https://discord.gg/BVrwyCPEHc/</Text>
+                            <Text pl={20}>Email: <a href="mailto:comuthor@gmail.com">comuthor@gmail.com</a></Text>
+                            <Text pl={20}>Facebook: <a target="_blank" href="https://www.facebook.com/ComuthorCorp/">https://www.facebook.com/ComuthorCorp/</a></Text>
+                            <Text pl={20}>Facebook: Discord: <a target="_blank" href="https://discord.gg/BVrwyCPEHc/">https://discord.gg/BVrwyCPEHc/</a></Text>
 
                         </Box>
                     </VStack>
