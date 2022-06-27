@@ -22,17 +22,19 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  Avatar
 } from "@chakra-ui/react";
 import { Heart, DotsThreeVertical } from "phosphor-react";
 import { useApp } from "../../src/hook/local";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 export const Replypost = ({ replydoc, message, setMessage }) => {
   const [editMode, setEditMode] = useState(false);
   // const [message, setMessage] = useState("");
   const { auth } = useApp();
   const [love, setLove] = useState(false);
-  console.log(replydoc);
+  const router = useRouter();
   useEffect(() => {
     if (replydoc.love.includes(auth.currentUser.uid)) {
       setLove(true);
@@ -156,17 +158,20 @@ export const Replypost = ({ replydoc, message, setMessage }) => {
         marginTop="10px"
       >
         <Center flexGrow={1} w={75} h={70} m={2.5}>
-          <Image
+          <Avatar
             m={2.5}
             maxW={70}
             rounded={"full"}
             src={replydoc.creator.photoURL}
+            name={replydoc.creator.displayName}
+            onClick={()=>router.push("../profile/"+replydoc.creator?.uid)}
+            cursor={"pointer"}
           />
         </Center>
 
         <Flex flexDir="column" w={440} flexGrow={10} p={2.5}>
           <Flex justifyContent="space-between">
-            <Text fontSize={20}>
+            <Text fontSize={20} onClick={()=>router.push("../profile/"+replydoc.creator?.uid)} cursor={"pointer"}>
               {replydoc.creator.displayName
                 ? replydoc.creator.displayName
                 : "placeholder"}

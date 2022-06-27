@@ -34,6 +34,7 @@ import { Replypost } from "./groupreply";
 import { Heart, ChatCenteredText, DotsThreeVertical, X } from "phosphor-react";
 import axios from "axios";
 import { getpathfromUrl } from "../../src/services/filestoreageservice";
+import { useRouter } from "next/router";
 export const Commentpost = ({
   cdoc,
   commenters,
@@ -60,6 +61,7 @@ export const Commentpost = ({
   const inputFileRef = useRef(null);
   const [love, setLove] = useState(false);
   const commentinputref = useRef(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (cdoc.love.includes(auth.currentUser.uid)) {
@@ -110,11 +112,11 @@ export const Commentpost = ({
                   ];
                 }
               }
-              // console.log(foundmissing);
+              console.log(foundmissing);
               setReply(
                 snapshot.docs.map((doc) => ({
                   ...doc.data(),
-                  creator: foundmissing[doc.data().uid],
+                  creator: foundmissing.find(v=> v.uid === doc.data().uid),
                   cid: cdoc.cid,
                   rid: doc.id,
                   gid: cdoc.gid,
@@ -130,7 +132,7 @@ export const Commentpost = ({
                   Object.keys(commenters).includes(k)
                 )
               );
-              // console.log(mappedcommenters);
+              console.log(mappedcommenters);
               setReply(
                 snapshot.docs.map((doc) => ({
                   ...doc.data(),
@@ -333,12 +335,14 @@ export const Commentpost = ({
           h={70}
           src={commentdoc.creator?.photoURL}
           rounded={"full"}
+          onClick={()=>router.push("../profile/"+commentdoc.creator?.uid)}
+          cursor={"pointer"}
         />
       </Center>
 
       <Flex flexDir="column" flexGrow={10}>
         <Flex justifyContent="space-between">
-          <Text fontSize={20}>
+          <Text fontSize={20} onClick={()=>router.push("../profile/"+commentdoc.creator?.uid)} cursor={"pointer"}>
             {commentdoc.creator?.displayName
               ? commentdoc.creator?.displayName
               : "placeholder"}

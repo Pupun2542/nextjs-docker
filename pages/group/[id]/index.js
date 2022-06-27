@@ -1220,6 +1220,7 @@ export default function Group() {
 
                     <TabPanel
                       overflowY={"auto"}
+                      overflowX={"hidden"}
                       // maxH={'960'}
                       css={{
                         "&::-webkit-scrollbar": {
@@ -1236,7 +1237,7 @@ export default function Group() {
                         },
                       }}
                     >
-                      <Container
+                      <Center
                         ml={-4}
                         // w={850}
                         // h={500}
@@ -1245,11 +1246,12 @@ export default function Group() {
                           <Box
                             position={"static"}
                             as="iframe"
-                            src={data.doclink + "#toolbar=0"}
+                            src={data.doclink + "#toolbar=0&view=FitH"}
                             alt="demo"
                             w={900}
                             h={1000}
                             overflowY={"auto"}
+                            overflowX={"hidden"}
                             css={{
                               "&::-webkit-scrollbar": {
                                 width: "8px",
@@ -1274,7 +1276,7 @@ export default function Group() {
                           w="850"
                           h="100%"
                         ></Box> */}
-                      </Container>
+                      </Center>
                     </TabPanel>
 
                     <TabPanel>

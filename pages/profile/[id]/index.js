@@ -57,7 +57,7 @@ export default function profile() {
   const [editDisplayName, setEditDisplayName] = useState("");
   const [editAvartarMode, setEditAvatarMode] = useState(false);
   const [editCoverMode, setEditCoverMode] = useState(false);
-  const [tabIndex, setTabIndex] = useState(5);
+  const [tabIndex, setTabIndex] = useState(0);
   const {
     friend,
     setFriend,
@@ -72,7 +72,7 @@ export default function profile() {
   useEffect(()=> {
     console.log(tab)
     if (tab && tab == "friend") {
-      setTabIndex(3);
+      setTabIndex(5);
     }
   },[tab])
 
@@ -391,6 +391,7 @@ export default function profile() {
                   // isDisabled
                   _selected={{ color: "white", bg: "#9A9AB0" }}
                   borderRadius={10}
+                  isDisabled
                 >
                   OC
                 </Tab>

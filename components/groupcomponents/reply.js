@@ -30,6 +30,7 @@ import { useApp } from "../../src/hook/local";
 import axios from "axios";
 import { PostContext } from "../../pages/group/[id]/dashboard";
 import useCharaList from "../../src/hook/useCharaList";
+import { useRouter } from "next/router";
 
 export const GroupReply = ({ reply, data, gid, mychara }) => {
   const {
@@ -40,7 +41,7 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
     setStateDataEdit,
     getStateDataEdit,
   } = useContext(PostContext);
-
+  const router = useRouter();
   const { chara, refreshcharaList } = useCharaList(data, gid);
   const checkChara = () => {
     // console.log(chara[chara.findIndex(v => v.refererId = reply.charaId)])
@@ -174,21 +175,26 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
         borderRadius={10}
       >
         <Flex w={"100%"}>
-          <Avatar
+        <Avatar
             mr={2}
             rounded={"100%"}
             h={50}
             w={50}
-            src={postchara.name ? postchara.photoURL : creator.photoURL}
-            name={postchara.name ? postchara.name : creator.displayName}
+            src={postchara.name? postchara.photoURL : creator.photoURL}
+            name={postchara.name? postchara.name : creator.displayName}
+            
           />
-
-          <VStack pl={2} pr={2} w={"100%"} spacing={0}>
-            <Box fontSize={18} w={"100%"}>
-              {postchara.name ? postchara.name : creator.displayName}
+          <VStack w={"100%"} spacing={0}>
+            <Box fontSize={18} w={"100%"} onClick={postchara.name? ()=>{}: ()=>router.push("../../profile/"+creator?.uid)} cursor={"pointer"}>
+              {postchara.name? postchara.name : creator.displayName}
             </Box>
             <Flex w={"100%"} fontSize={14} color={"gray.400"}>
-              <Box>{postchara.name ? creator.displayName : ""}</Box>
+              <Box
+              cursor={"pointer"}
+                onClick={postchara.name? ()=>router.push("../../profile/"+creator?.uid): ()=>{}}
+              >
+                {postchara.name? creator.displayName: ""}
+              </Box>
               <Spacer />
               <Box float={"right"}>{parseDate(reply.timestamp)}</Box>
             </Flex>

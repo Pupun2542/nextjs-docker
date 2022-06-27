@@ -52,6 +52,7 @@ import { PostContext } from "../../pages/group/[id]/dashboard";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { isEmptyOrSpaces } from "../../src/services/utilsservice";
 import useCharaList from "../../src/hook/useCharaList";
+import { useRouter } from "next/router";
 export const GroupSinglePost = ({ post, member, onPostDelete, cid, rid, data, gid, mychara }) => {
     console.log(post);
   const {
@@ -67,7 +68,7 @@ export const GroupSinglePost = ({ post, member, onPostDelete, cid, rid, data, gi
     setStateDataReply,
     getStateDataReply,
   } = useContext(PostContext);
-
+  const router = useRouter();
   const {chara, refreshcharaList} = useCharaList(data, gid)
   const [selectedchara, setSelectedchara] = useState({});
 
@@ -319,21 +320,26 @@ export const GroupSinglePost = ({ post, member, onPostDelete, cid, rid, data, gi
         direction={"column"}
       >
         <Flex w={"100%"}>
-        <Avatar
+          <Avatar
             mr={2}
             rounded={"100%"}
             h={50}
             w={50}
             src={postchara.name? postchara.photoURL : creator.photoURL}
             name={postchara.name? postchara.name : creator.displayName}
+            
           />
           <VStack w={"100%"} spacing={0}>
-            <Box fontSize={18} w={"100%"}>
-            {postchara.name? postchara.name : creator.displayName}
+            <Box fontSize={18} w={"100%"} onClick={postchara.name? ()=>{}: ()=>router.push("../../profile/"+creator?.uid)} cursor={"pointer"}>
+              {postchara.name? postchara.name : creator.displayName}
             </Box>
-
             <Flex w={"100%"} fontSize={14} color={"gray.400"}>
-              <Box>{postchara.name? creator.displayName: ""}</Box>
+              <Box
+                onClick={postchara.name? ()=>router.push("../../profile/"+creator?.uid): ()=>{}}
+                cursor={"pointer"}
+              >
+                {postchara.name? creator.displayName: ""}
+              </Box>
               <Spacer />
               <Box float={"right"}>
                 {post.timestamp

@@ -62,6 +62,8 @@ import { GroupSinglePost } from "../../../components/groupcomponents/singlePost"
 import { isEmptyOrSpaces } from "../../../src/services/utilsservice";
 import { useDocument } from "@nandorojo/swr-firestore";
 import { doc } from "firebase/firestore";
+import { useGroupData } from "../../../src/hook/useGroupData";
+import { usePost } from "../../../src/hook/usePost";
 
 // export async function getServerSideProps(context) {
 //   const { params } = context;
@@ -74,7 +76,6 @@ import { doc } from "firebase/firestore";
 // }
 export const PostContext = createContext();
 function dashboard() {
-  const [data, setData] = useState(undefined);
   const [orderby, setOrderby] = useState("timestamp");
   const [loadLimit, selLoadlimit] = useState(20);
   const { app, auth, db } = useApp();
@@ -85,116 +86,18 @@ function dashboard() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [image, setImage] = useState([]);
   const pasteInputRef = useRef(undefined);
-  const [loading, setLoading] = useState(true);
-  const [post, setPost] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  // const [post, setPost] = useState([]);
   const [tabIndex, setTabIndex] = useState(0);
   const [selectedchara, setSelectedchara] = useState({});
   const inputFileRef = useRef(null);
 
+  const {data, loading, onRefresh} = useGroupData(id, auth.currentUser);
+  const { post, onPostDelete } = usePost(data, orderby, loadLimit, pid, setPostData)
+
   useEffect(()=>{
     console.log(selectedchara, data?.mychara)
   },[selectedchara])
-  
-
-  const onPostDelete = (n) => {
-    const newindex = post.filter((v, i) => i !== n);
-    setPost(newindex);
-  };
-
-  const fetchPost = async () => {
-    const token = await user.getIdToken();
-
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${id}?orderby=${orderby}&loadlimit=${loadLimit}`,
-      {
-        headers: {
-          Authorization: token,
-        },
-      }
-    );
-    if (res.status === 200) {
-      // console.log(res.data);
-      // setPost(res.data);
-      let item = {};
-      let postId = [];
-      res.data.map((data) => {
-        item = { ...item, [data.pid]: { data: data, love: data.love } };
-
-        // setStateData({data: data, love: data.love}, data.pid);
-        postId = [...postId, data.pid];
-      });
-      // console.log(item);
-      setPostData(item);
-      setPost(postId);
-    }
-  };
-  const fetchSinglePost = async () => {
-    const token = await user.getIdToken();
-
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${id}/post/${pid}`,
-      {
-        headers: {
-          Authorization: token,
-        },
-      }
-    );
-    if (res.status === 200) {
-      setPostData({ [pid]: { data: res.data, love: res.data.love } });
-      setPost(pid);
-    }
-  };
-  const fetchdata = async () => {
-    const token = await user.getIdToken();
-    const resdata = await axios.get(
-      `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${id}`,
-      {
-        headers: {
-          Authorization: token,
-        },
-      }
-    );
-    if (resdata.status === 200) {
-      let mappedData = {
-        ...data,
-        ...resdata.data,
-        isStaff: Object.keys(resdata.data.staff).includes(user.uid),
-      };
-      if (resdata.data.chara) {
-        console.log(resdata.data.chara)
-        console.log(Object.fromEntries(
-          Object.entries(resdata.data.chara).filter(
-            ([k, v], i) => v.parentId == user.uid
-          )
-        ))
-        mappedData = {
-          ...mappedData,
-          mychara: Object.fromEntries(
-            Object.entries(resdata.data.chara).filter(
-              ([k, v], i) => v.parentId == user.uid
-            )
-          ),
-        };
-      }
-      setData(mappedData);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (user && !userLoading) {
-      fetchdata();
-    }
-  }, [user, userLoading]);
-
-  useEffect(() => {
-    if (data && !pid) {
-      console.log(data, orderby, loadLimit)
-      fetchPost();
-    } else if (data && pid) {
-      fetchSinglePost();
-    }
-  }, [data, orderby, loadLimit, pid]);
 
   useEffect(() => {
     if (user && data && data.member) {
@@ -290,13 +193,6 @@ function dashboard() {
   const getStateDataReply = (id) => {
     return postData[id]?.reply ? postData[id].reply : false;
   };
-  //child
-  const setStateDataChild = (value, id) => {
-    dispatch({ type: "set", value: { child: value }, id: id });
-  };
-  const getStateDataChild = (id) => {
-    return postData[id]?.child ? postData[id].child : [];
-  };
   const pack = {
     setStateData,
     getStateData,
@@ -314,10 +210,6 @@ function dashboard() {
     getStateDataEdit,
     setStateDataReply,
     getStateDataReply,
-    postData,
-    setPostData,
-    setStateDataChild,
-    getStateDataChild,
   };
   const handleImagePaste = (e) => {
     if (e.clipboardData.files[0]) {

@@ -97,6 +97,8 @@ const Notitab = ({ notidata }) => {
         } else {
             return `คำขอเข้าร่วม ${group.name} ของคุณถูกปฏิเสธ`
         }
+    } else if (type == "011"){
+      return `${triggerer.displayName} ได้ชวน ${object.name} เข้ากลุ่ม ${group.name}`
     } else if (type == "101"){
         return `${triggerer.displayName} ได้สร้างโพสต์ใหม่ในกลุ่ม ${group.name}`
     } else if (type == "102"){
@@ -121,7 +123,7 @@ const Notitab = ({ notidata }) => {
       return `${triggerer.displayName} ${triggerer.displayName} ได้ส่งคำขอเป็นเพื่อนกับคุณ`
     } else if (type == "302"){
       return `${triggerer.displayName} ${triggerer.displayName} ได้ตอบรับคำขอเป็นเพื่อนกับคุณ`
-    } 
+    }
   }
 
   const caltime = (timestamp) => {

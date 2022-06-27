@@ -116,7 +116,8 @@ function CustomNavbar() {
   const [data, setData] = useState([]);
   const [unreadChat, setUnreadChat] = useState([]);
   const [unreadnoti, setUnreadnoti] = useState([]);
-  const [play] = useSound("/chatnoti.wav", { volume: 0.25 });
+  const [play] = useSound("/mixkit-shaker-bell-alert-599.mp3", { volume: 0.25 });
+  const [playNoti] = useSound("/mixkit-happy-bell-alert-601.wav", { volume: 0.25 });
 
   useEffect(() => {
     if (user && !loading) {
@@ -146,7 +147,11 @@ function CustomNavbar() {
 
   useEffect(() => {
     if (notidata.length > 0) {
-      setUnreadnoti(notidata.filter((v, i) => v.readed == false));
+      const unreadedItem = notidata.filter((v, i) => v.readed == false)
+      if (unreadedItem.length > 0) {
+        playNoti();
+      }
+      setUnreadnoti(unreadedItem);
     }
   }, [notidata]);
 
@@ -432,7 +437,7 @@ function CustomNavbar() {
                   {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
                 </Button> */}
 
-                <Center as="button" onClick={() => router.push("/profile/" + user.uid)}>
+                <Center as="button" onClick={user? () => router.push("/profile/" + user.uid) : ()=>{}}>
                   <Loadthumbnail />
                 </Center>
                 
@@ -688,7 +693,7 @@ const ChatNotiIcon = ({ data, user }) => {
           <Box>
             <Text>{display.name}</Text>
             <Text>
-              {data.senderId == user.uid ? "คุณ: " : ""} {data.lastmsg}
+              {data?.senderId == user?.uid ? "คุณ: " : ""} {data?.lastmsg}
             </Text>
           </Box>
         </Flex>
