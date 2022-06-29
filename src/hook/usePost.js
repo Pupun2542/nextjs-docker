@@ -1,13 +1,14 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
+import axios from "axios";
 
-export const usePost = (data, orderby, loadLimit, pid, reducer) => {
+export const usePost = (data, orderby, loadLimit, pid, reducer, user, gid) => {
   const [post, setPost] = useState([]);
 
   const fetchPost = async () => {
     const token = await user.getIdToken();
 
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${id}?orderby=${orderby}&loadlimit=${loadLimit}`,
+      `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${gid}?orderby=${orderby}&loadlimit=${loadLimit}`,
       {
         headers: {
           Authorization: token,
@@ -34,7 +35,7 @@ export const usePost = (data, orderby, loadLimit, pid, reducer) => {
     const token = await user.getIdToken();
 
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${id}/post/${pid}`,
+      `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${gid}/post/${pid}`,
       {
         headers: {
           Authorization: token,

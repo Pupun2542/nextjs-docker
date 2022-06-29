@@ -91,9 +91,14 @@ function dashboard() {
   const [tabIndex, setTabIndex] = useState(0);
   const [selectedchara, setSelectedchara] = useState({});
   const inputFileRef = useRef(null);
+  // console.log(id, auth.currentUser);
+  const {data, loading, onRefresh} = useGroupData(id, user);
 
-  const {data, loading, onRefresh} = useGroupData(id, auth.currentUser);
-  const { post, onPostDelete } = usePost(data, orderby, loadLimit, pid, setPostData)
+  const setPostData = (value) => {
+    dispatch({ type: "setMultiple", value: value });
+  };
+
+  const { post, onPostDelete } = usePost(data, orderby, loadLimit, pid, setPostData, user, id)
 
   useEffect(()=>{
     console.log(selectedchara, data?.mychara)
@@ -128,9 +133,7 @@ function dashboard() {
 
   const [postData, dispatch] = useReducer(reducer, {});
 
-  const setPostData = (value) => {
-    dispatch({ type: "setMultiple", value: value });
-  };
+
 
   //main
   const setStateData = (value, id) => {
@@ -259,6 +262,7 @@ function dashboard() {
         // console.log(dlurl);
       }
       const token = await user.getIdToken();
+      onClose();
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${id}/create/`,
         { message: message, imageUrl: dlurl, charaId: selectedchara.refererId },
@@ -273,7 +277,6 @@ function dashboard() {
       } else {
         alert(res.status + " : " + res.data);
       }
-      onClose();
       setMessage("");
       setImage([]);
     }

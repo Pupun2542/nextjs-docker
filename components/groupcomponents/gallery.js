@@ -8,9 +8,11 @@ const Gallery = ({ gid }) => {
   // const { isOpen, onOpen, onClose } = useDisclosure();
   const [modalImage, setModalImage] = useState("");
   const [gallery, setGallery] = useState([]);
-  console.log(gallery);
+  // console.log(gallery);
   useEffect(() => {
+    console.log(gid);
     const fetchGallery = async () => {
+      console.log("gallery");
       const token = await auth.currentUser.getIdToken();
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${gid}/media`,
@@ -20,8 +22,9 @@ const Gallery = ({ gid }) => {
           },
         }
       );
-      console.log(res);
+      // console.log(res);
       if (res.status === 200) {
+        console.log("response");
         setGallery(res.data);
       }
     };

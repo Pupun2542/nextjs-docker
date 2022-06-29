@@ -91,7 +91,9 @@ const { getChatHeader } = require("./handlers/chat");
 const app = express();
 app.use(express.json());
 app.use((req, res, next)=>{
-  console.log(req.url);
+  if (req.method == "GET" || req.method == "POST") {
+    console.log(req.url);
+  }
   next();
 });
 app.use(
@@ -104,7 +106,9 @@ app.use(
   }),
 );
 
-// app.get("/", async (req, res) => {});
+app.get("/", (req, res) => {
+  res.send("hello");
+});
 // app.post("/", DeletePreviewComment);
 
 app.post("/group/create", authmw, createGroup);

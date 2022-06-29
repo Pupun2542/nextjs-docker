@@ -1,8 +1,18 @@
-import React, { useState } from "react";
+import { doc, onSnapshot } from "firebase/firestore";
+import React, { useRef, useState, useEffect } from "react";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { useApp } from "./local";
+import axios from "axios";
 
 export const useGroupData = (gid, user) => {
+  // console.log(gid, user)
+  const {db} = useApp();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [listenerData, setListenerData] = useState(null);
+  // const [listenerData, listenerLoading, listenerError] = useDocumentData(doc(db, "group", gid));
+  const memberRef = useRef(null);
+  const charaRef = useRef(null);
 
   const fetchdata = async () => {
     const token = await user.getIdToken();
@@ -37,20 +47,33 @@ export const useGroupData = (gid, user) => {
             )
           ),
         };
+        memberRef.current = listenerData.member
+        charaRef.current = listenerData.chara
+        setData(mappedData);
+        setLoading(false);
       }
-      setData(mappedData);
-      setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (gid && user) {
+    if (listenerData && user && (listenerData.member != memberRef.current || listenerData.chara != charaRef.current )) {
       fetchdata();
     }
-  }, [gid, user]);
+  }, [listenerData, user]);
+
+  useEffect(()=> {
+    let unsubscribe = ()=>{};
+    if (gid) {
+      unsubscribe = onSnapshot(doc(db, "group", gid), (doc)=> {
+        if (doc.exists) {
+          setListenerData(doc.data());
+        }
+      })
+    }
+  }, [gid])
 
   const onRefresh = () => {
-    fetchdata();
+    // fetchdata();
   }
 
   return {data, loading, onRefresh}

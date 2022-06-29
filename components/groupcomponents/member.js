@@ -66,7 +66,7 @@ export const Member = ({ data, gid }) => {
     <Flex direction={"column"}>
       {/* Pending Zone */}
       {data?.isStaff && pendingMember.length > 0 && (
-        <Accordion allowToggle>
+        <Accordion allowToggle defaultIndex={1}>
           <AccordionItem>
             <h2>
               <AccordionButton>

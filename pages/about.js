@@ -314,7 +314,7 @@ function about() {
 
                   <Flex direction={"column"}>
                     <Center fontSize={18} fontWeight={"extrabold"}>
-                      WeFailedTheRodina
+                      Farsight
                     </Center>
                     <Center fontSize={14}>Leader Developer Team</Center>
                     <Center fontSize={14}>Back-end Developer</Center>

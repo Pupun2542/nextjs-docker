@@ -168,7 +168,7 @@ export default function policy() {
                             </Text>
                             <Text pl={20}>Email: <a href="mailto:comuthor@gmail.com">comuthor@gmail.com</a></Text>
                             <Text pl={20}>Facebook: <a target="_blank" href="https://www.facebook.com/ComuthorCorp/">https://www.facebook.com/ComuthorCorp/</a></Text>
-                            <Text pl={20}>Facebook: Discord: <a target="_blank" href="https://discord.gg/BVrwyCPEHc/">https://discord.gg/BVrwyCPEHc/</a></Text>
+                            <Text pl={20}>Discord: <a target="_blank" href="https://discord.gg/BVrwyCPEHc/">https://discord.gg/BVrwyCPEHc/</a></Text>
 
                         </Box>
                     </VStack>
