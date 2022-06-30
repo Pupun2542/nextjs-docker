@@ -62,5 +62,5 @@ export const usePost = (data, orderby, loadLimit, pid, reducer, user, gid) => {
     setPost(newindex);
   };
 
-  return { post, onPostDelete };
+  return { post, onPostDelete, fetchPost };
 };

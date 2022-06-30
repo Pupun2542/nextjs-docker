@@ -64,6 +64,7 @@ import { useDocument } from "@nandorojo/swr-firestore";
 import { doc } from "firebase/firestore";
 import { useGroupData } from "../../../src/hook/useGroupData";
 import { usePost } from "../../../src/hook/usePost";
+import { Skeletonpost } from "../../../components/groupcomponents/skeletonpost";
 
 // export async function getServerSideProps(context) {
 //   const { params } = context;
@@ -98,11 +99,7 @@ function dashboard() {
     dispatch({ type: "setMultiple", value: value });
   };
 
-  const { post, onPostDelete } = usePost(data, orderby, loadLimit, pid, setPostData, user, id)
-
-  useEffect(()=>{
-    console.log(selectedchara, data?.mychara)
-  },[selectedchara])
+  const { post, onPostDelete, fetchPost } = usePost(data, orderby, loadLimit, pid, setPostData, user, id)
 
   useEffect(() => {
     if (user && data && data.member) {
@@ -484,6 +481,9 @@ function dashboard() {
                           mychara={data.mychara}
                         />
                       )}
+                      {post.length == 0 && data && data.postcount && data.postcount > 0 &&(
+                        <Skeletonpost />
+                      )}
                     </PostContext.Provider>
                     <Modal isOpen={isOpen} onClose={onClose}>
                       <ModalOverlay
@@ -515,9 +515,10 @@ function dashboard() {
                             </MenuButton>
                             <MenuList>
                               {data.mychara &&
-                                Object.values(data.mychara).map((cha) => (
+                                Object.values(data.mychara).map((cha, i) => (
                                   <MenuItem
                                     onClick={() => setSelectedchara(cha)}
+                                    key={i}
                                   >
                                     <Flex alignItems={"center"}>
                                       <Avatar

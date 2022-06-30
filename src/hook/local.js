@@ -245,7 +245,8 @@ export const GroupNotiProvider = ({ children }) => {
         const tosend = {
           name: res.name,
           thumbnail: res.banner,
-          gid: groupId
+          gid: groupId,
+          tag: res.tag
         }
         DataDispatcher({ type: "addGroup", tosend })
         return tosend;

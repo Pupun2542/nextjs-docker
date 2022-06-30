@@ -429,33 +429,51 @@ exports.groupUnlove = (req, res) =>{
     return res.status(401).send("unauthorized");
   }
 };
-exports.groupPin = (req, res) =>{
+exports.groupPin = async (req, res) =>{
   if (req.user) {
     const user = req.user.uid;
     const docref = db.collection("group").doc(req.params.id);
-    docref.update({
-      pinned: admin.firestore.FieldValue.arrayUnion(user),
-    }).then(()=>{
-      docref.get().then((doc)=>{
-        sendNotifications(doc.data().staff, "003", user, req.params.id, "", `group/${req.params.id}`);
+    const userdocref = db.collection("userDetail").doc(user);
+    const doc = await docref.get();
+    if (doc.exists) {
+      const batch = db.batch();
+      batch.update(docref, {
+        pinned: admin.firestore.FieldValue.arrayUnion(user),
       });
-      return res.status(200).send("loved");
-    }).catch((e)=>{
-      return res.status(400).send("cannot loved : ", e);
-    });
+      batch.update(userdocref, {
+        pinned: admin.firestore.FieldValue.arrayUnion(req.params.id),
+      });
+      await batch.commit();
+      sendNotifications(doc.data().staff, "003", user, req.params.id, "", `group/${req.params.id}`);
+      return res.status(200).send("pinned");
+    } else {
+      return res.status(404).send("not found");
+    }
+  } else {
+    return res.status(401).send("unauthorized");
   }
 };
-exports.groupUnpin = (req, res) =>{
+exports.groupUnpin = async (req, res) =>{
   if (req.user) {
     const user = req.user.uid;
     const docref = db.collection("group").doc(req.params.id);
-    docref.update({
-      love: admin.firestore.FieldValue.arrayRemove(user),
-    }).then(()=>{
-      return res.status(200).send("loved");
-    }).catch((e)=>{
-      return res.status(400).send("cannot loved : ", e);
-    });
+    const userdocref = db.collection("userDetail").doc(user);
+    const doc = await docref.get();
+    if (doc.exists) {
+      const batch = db.batch();
+      batch.update(docref, {
+        pinned: admin.firestore.FieldValue.arrayRemove(user),
+      });
+      batch.update(userdocref, {
+        pinned: admin.firestore.FieldValue.arrayRemove(req.params.id),
+      });
+      await batch.commit();
+      return res.status(200).send("unpinned");
+    } else {
+      return res.status(404).send("not found");
+    }
+  } else {
+    return res.status(401).send("unauthorized");
   }
 };
 

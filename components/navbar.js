@@ -65,7 +65,13 @@ import {
   where,
   writeBatch,
 } from "firebase/firestore";
-import { useApp, useNotifications, useTab, useUser } from "../src/hook/local";
+import {
+  useApp,
+  useGroupHeader,
+  useNotifications,
+  useTab,
+  useUser,
+} from "../src/hook/local";
 import { Chatsidebar } from "./chat/Chatsidebar";
 import useSound from "use-sound";
 import Notitab from "./notitab";
@@ -112,25 +118,53 @@ function CustomNavbar() {
     xl: "1200px",
     "2xl": "1536px",
   };
-  
-  const [data, setData] = useState([]);
+
+  const [data, setData] = useState(undefined);
   const [unreadChat, setUnreadChat] = useState([]);
   const [unreadnoti, setUnreadnoti] = useState([]);
-  const [play] = useSound("/mixkit-shaker-bell-alert-599.mp3", { volume: 0.25 });
-  const [playNoti] = useSound("/mixkit-happy-bell-alert-601.wav", { volume: 0.25 });
+  const [play] = useSound("/mixkit-shaker-bell-alert-599.mp3", {
+    volume: 0.25,
+  });
+  const [playNoti] = useSound("/mixkit-happy-bell-alert-601.wav", {
+    volume: 0.25,
+  });
+  const getgroup = useGroupHeader();
+
+  // const fetchdata = async () => {
+  //   const usrdoc = await getDoc(doc(db, "userDetail", user.uid));
+  //   if (usrdoc.exists) {
+  //     const pinnedgroup = [];
+  //     if (usrdoc.data().pinned?.length > 0) {
+  //       await Promise.all(
+  //         usrdoc.data().pinned.map(async (gid) => {
+  //           const grp = await getgroup(gid);
+  //           pinnedgroup = [...pinnedgroup, grp];
+  //         })
+  //       );
+  //     }
+  //     setData({ ...usrdoc.data(), pinned: pinnedgroup });
+  //   }
+  // };
 
   useEffect(() => {
+    let unsubscribe = ()=>{};
     if (user && !loading) {
-      const QuerySnapshot = query(
-        collection(db, "userDetail", user.uid, "pinnedGroup")
-      );
-      getDocs(QuerySnapshot).then((snapshot) => {
-        // console.log(snapshot.docs)
-        if (snapshot.size > 0) {
-          setData(snapshot.docs.map((doc) => doc.data()));
+      unsubscribe = onSnapshot(doc(db, "userDetail", user.uid), async (usrdoc)=>{
+        if (usrdoc.exists) {
+          const pinnedgroup = [];
+          if (usrdoc.data().pinned?.length > 0) {
+            await Promise.all(
+              usrdoc.data().pinned.map(async (gid) => {
+                const grp = await getgroup(gid);
+                pinnedgroup = [...pinnedgroup, grp];
+              })
+            );
+          }
+          setData({ ...usrdoc.data(), pinned: pinnedgroup });
         }
-      });
+      })
     }
+    return ()=> unsubscribe()
   }, [user, loading]);
 
   useEffect(() => {
@@ -147,7 +181,7 @@ function CustomNavbar() {
 
   useEffect(() => {
     if (notidata.length > 0) {
-      const unreadedItem = notidata.filter((v, i) => v.readed == false)
+      const unreadedItem = notidata.filter((v, i) => v.readed == false);
       if (unreadedItem.length > 0) {
         playNoti();
       }
@@ -220,11 +254,13 @@ function CustomNavbar() {
   const readNotification = () => {
     const batch = writeBatch(db);
 
-    unreadnoti.map((noti)=>{
-      batch.update(doc(db, "userDetail", user.uid, "notification", noti.id), {readed: true});
-    })
+    unreadnoti.map((noti) => {
+      batch.update(doc(db, "userDetail", user.uid, "notification", noti.id), {
+        readed: true,
+      });
+    });
     batch.commit();
-  }
+  };
 
   return (
     <>
@@ -314,7 +350,7 @@ function CustomNavbar() {
                     cursor="pointer"
                     minW={0}
                     title="Notifications"
-                    onClick={()=>{
+                    onClick={() => {
                       onNotiToggle();
                       readNotification();
                     }}
@@ -415,10 +451,14 @@ function CustomNavbar() {
                     <ModalHeader bg={"gray.50"}>My Pinned</ModalHeader>
                     <ModalCloseButton rounded={"full"} />
                     <ModalBody>
-                      {data.length > 0 &&
-                        data.map((doc, k) => (
+                      {console.log(data)}
+                      {data?.pinned?.length > 0 &&
+                        data.pinned.map((doc, k) => (
                           <Text
-                            onClick={() => router.push("/group/" + doc.id)}
+                            onClick={() => {
+                              router.push("/group/" + doc.gid);
+                              onClose();
+                            }}
                             cursor={"pointer"}
                             key={k}
                             fontSize={18}
@@ -426,7 +466,7 @@ function CustomNavbar() {
                               backgroundColor: "gray.100",
                             }}
                           >
-                            [{doc.tag}]{doc.name}
+                            [{doc.tag}] {doc.name}
                           </Text>
                         ))}
                     </ModalBody>
@@ -437,10 +477,14 @@ function CustomNavbar() {
                   {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
                 </Button> */}
 
-                <Center as="button" onClick={user? () => router.push("/profile/" + user.uid) : ()=>{}}>
+                <Center
+                  as="button"
+                  onClick={
+                    user ? () => router.push("/profile/" + user.uid) : () => {}
+                  }
+                >
                   <Loadthumbnail />
                 </Center>
-                
 
                 {user && (
                   <Menu>
@@ -583,9 +627,9 @@ function CustomNavbar() {
         <Box bg={"gray.100"} p={2}>
           Notifications
         </Box>
-        
-        <Flex direction={'column'}>
-          <Notitab bg={'facebook'} notidata={notidata} />
+
+        <Flex direction={"column"}>
+          <Notitab bg={"facebook"} notidata={notidata} />
         </Flex>
 
         <Center
@@ -613,24 +657,23 @@ const ChatNotiIcon = ({ data, user }) => {
   });
 
   useEffect(() => {
-    
-    const getHeader = async() => {
+    const getHeader = async () => {
       if (data.type == "private" || data.type == "chara") {
         const filteredname = data.member.find((v) => v !== user.uid);
-        console.log(data.member)
+        console.log(data.member);
         const detail = await getUser([filteredname]);
         const thumbnail = detail[0].photoURL;
         const name = detail[0].displayName;
-        
+
         setDisplay({ thumbnail: thumbnail, name: name });
       } else {
         const thumbnail = data.thumbnail;
         const name = data.name;
-        // 
+        //
         setDisplay({ thumbnail: thumbnail, name: name });
       }
-    }
-    getHeader()
+    };
+    getHeader();
   }, [data, user]);
 
   const caltime = () => {

@@ -157,6 +157,7 @@ export const Commentpost = ({
       onClose();
       setLovecount(0);
       setMessage("");
+      setReply([]);
     };
   }, [cdoc, loadlimit]);
 

@@ -68,6 +68,7 @@ import {
   WrapItem,
   HStack,
   Avatar,
+  Image,
 } from "@chakra-ui/react";
 import Footer from "../../../components/footer";
 import {
@@ -163,32 +164,41 @@ export default function Group() {
   /* CSR */
   useEffect(() => {
     if (user) {
-      getDoc(doc(db, "userDetail", user.uid, "pinnedGroup", id)).then(
-        (snap) => {
-          if (snap.exists()) {
+      getDoc(doc(db, "userDetail", user.uid)).then((snap) => {
+        if (snap.exists()) {
+          if (snap.data().pinned?.includes(id)) {
             setPin(true);
           }
         }
-      );
+      });
     }
   }, [user]);
 
-  const pinHandler = () => {
+  const pinHandler = async () => {
+    const token = await user.getIdToken();
     if (user) {
       if (pin) {
-        deleteDoc(doc(db, "userDetail", user.uid, "pinnedGroup", id)).then(
-          () => {
-            setPin(false);
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${id}/unpin`,
+          {},
+          {
+            headers: {
+              Authorization: token,
+            },
           }
         );
+        setPin(false);
       } else {
-        setDoc(doc(db, "userDetail", user.uid, "pinnedGroup", id), {
-          name: data.name,
-          tag: data.tag,
-          id: id,
-        }).then(() => {
-          setPin(true);
-        });
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${id}/pin`,
+          {},
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+        setPin(true);
       }
     }
     // console.log("handledpin")
@@ -365,40 +375,43 @@ export default function Group() {
                         isDisabled
                       />
                       {console.log(data)}
-                      {user && Object.keys(data.creator).includes(auth.currentUser?.uid) && (
-                        <Box>
-                          <Menu>
-                            <MenuButton
-                              bg={"white"}
-                              rounded="full"
-                              h={38}
-                              w={38}
-                              mt={2.5}
-                              mr={2.5}
-                              icon={<DotsThreeVertical size={32} />}
-                              as={IconButton}
-                            />
+                      {user &&
+                        Object.keys(data.creator).includes(
+                          auth.currentUser?.uid
+                        ) && (
+                          <Box>
+                            <Menu>
+                              <MenuButton
+                                bg={"white"}
+                                rounded="full"
+                                h={38}
+                                w={38}
+                                mt={2.5}
+                                mr={2.5}
+                                icon={<DotsThreeVertical size={32} />}
+                                as={IconButton}
+                              />
 
-                            <MenuList minW={20} fontFamily={"Mitr"}>
-                              <MenuItem
-                                _hover={{ background: "#E2E8F0" }}
-                                onClick={
-                                  () => Router.push("/group/" + id + "/edit")
-                                  // console.log("edit")
-                                }
-                              >
-                                <Text>Edit</Text>
-                              </MenuItem>
-                              <MenuItem
-                                _hover={{ background: "#E2E8F0" }}
-                                onClick={onDelOpen}
-                              >
-                                <Text>Delete</Text>
-                              </MenuItem>
-                            </MenuList>
-                          </Menu>
-                        </Box>
-                      )}
+                              <MenuList minW={20} fontFamily={"Mitr"}>
+                                <MenuItem
+                                  _hover={{ background: "#E2E8F0" }}
+                                  onClick={
+                                    () => Router.push("/group/" + id + "/edit")
+                                    // console.log("edit")
+                                  }
+                                >
+                                  <Text>Edit</Text>
+                                </MenuItem>
+                                <MenuItem
+                                  _hover={{ background: "#E2E8F0" }}
+                                  onClick={onDelOpen}
+                                >
+                                  <Text>Delete</Text>
+                                </MenuItem>
+                              </MenuList>
+                            </Menu>
+                          </Box>
+                        )}
                     </Flex>
                   </Box>
                   <Spacer />
@@ -426,6 +439,83 @@ export default function Group() {
                   </TabList>
                   <TabPanels>
                     <TabPanel>
+                      <Flex
+                        fontFamily={"Mitr"}
+                        justifyContent={"space-between"}
+                        mb={5}
+                      >
+                        <Flex>
+                          <Center
+                            borderRadius={10}
+                            bg={"#6768AB"}
+                            w={350}
+                            h={70}
+                            p={5}
+                            color={"white"}
+                            shadow={"base"}
+                          >
+                            {data.privacy ? (
+                              data.privacy === "public" ? (
+                                <Flex
+                                  flexDir={"column"}
+                                  justifyContent="center"
+                                >
+                                  <Text
+                                    flex={1}
+                                    textAlign="center"
+                                    fontSize={20}
+                                  >
+                                    Public
+                                  </Text>
+                                  <Text
+                                    flex={1}
+                                    textAlign="center"
+                                    fontSize={12}
+                                  >
+                                    ทุกคนสามารถเข้าร่วมและเห็นการเคลื่อนไหวภายในกลุ่มได้
+                                  </Text>
+                                </Flex>
+                              ) : (
+                                <Flex flexDir="column" justifyContent="center">
+                                  <Text
+                                    flex={1}
+                                    textAlign="center"
+                                    fontSize={20}
+                                  >
+                                    Private
+                                  </Text>
+                                  <Text
+                                    flex={1}
+                                    textAlign="center"
+                                    fontSize={12}
+                                  >
+                                    คนเฉพาะกลุ่มเท่านั้นที่สามารถเข้าร่วมภายในกลุ่มได้
+                                  </Text>
+                                </Flex>
+                              )
+                            ) : (
+                              <Flex flexDir={"column"} justifyContent="center">
+                                <Text flex={1} textAlign="center" fontSize={20}>
+                                  Public
+                                </Text>
+                                <Text flex={1} textAlign="center" fontSize={12}>
+                                  ทุกคนสามารถเข้าร่วมและเห็นการเคลื่อนไหวภายในกลุ่มได้
+                                </Text>
+                              </Flex>
+                            )}
+                          </Center>
+                        </Flex>
+                        <Button
+                          h={70}
+                          alignContent={"center"}
+                          bg={"blackAlpha.900"}
+                          _hover={{ bg: "gray" }}
+                          w={155}
+                        >
+                          <Image src={Object.keys(data.member).includes(user.uid)? "/leave.svg" : "/joint.svg"} h={50} />
+                          <Text color={"white"}>{Object.keys(data.member).includes(user.uid)? "ออกจากกลุ่ม" : "เข้าร่วมกลุ่ม"}</Text>
+                        </Button>
+                      </Flex>
                       <Flex bg={"#F3F3F3"} shadow={"base"}>
                         <Accordion
                           w={850}
@@ -444,93 +534,6 @@ export default function Group() {
                             </h2>
                             <AccordionPanel spacing={0}>
                               <VStack>
-                                <Flex ml={10} w={750}>
-                                  <Center
-                                    borderRadius={10}
-                                    bg={"#6768AB"}
-                                    w={350}
-                                    h={70}
-                                    p={5}
-                                    color={"white"}
-                                    shadow={"base"}
-                                  >
-                                    {data.privacy ? (
-                                      data.privacy === "สาธารณะ" ? (
-                                        <Flex
-                                          flexDir={"column"}
-                                          justifyContent="center"
-                                        >
-                                          <Text
-                                            flex={1}
-                                            textAlign="center"
-                                            fontSize={20}
-                                          >
-                                            Public
-                                          </Text>
-                                          <Text
-                                            flex={1}
-                                            textAlign="center"
-                                            fontSize={12}
-                                          >
-                                            ทุกคนสามารถเข้าร่วมและเห็นการเคลื่อนไหวภายในกลุ่มได้
-                                          </Text>
-                                        </Flex>
-                                      ) : (
-                                        <Flex
-                                          flexDir="column"
-                                          justifyContent="center"
-                                        >
-                                          <Text
-                                            flex={1}
-                                            textAlign="center"
-                                            fontSize={20}
-                                          >
-                                            Private
-                                          </Text>
-                                          <Text
-                                            flex={1}
-                                            textAlign="center"
-                                            fontSize={12}
-                                          >
-                                            คนเฉพาะกลุ่มเท่านั้นที่สามารถเข้าร่วมภายในกลุ่มได้
-                                          </Text>
-                                        </Flex>
-                                      )
-                                    ) : (
-                                      <Flex
-                                        flexDir={"column"}
-                                        justifyContent="center"
-                                      >
-                                        <Text
-                                          flex={1}
-                                          textAlign="center"
-                                          fontSize={20}
-                                        >
-                                          Public
-                                        </Text>
-                                        <Text
-                                          flex={1}
-                                          textAlign="center"
-                                          fontSize={12}
-                                        >
-                                          ทุกคนสามารถเข้าร่วมและเห็นการเคลื่อนไหวภายในกลุ่มได้
-                                        </Text>
-                                      </Flex>
-                                    )}
-                                  </Center>
-                                  <Spacer />
-                                  {/* <Center
-                                    shadow={"base"}
-                                    borderRadius={10}
-                                    bg={color}
-                                    h={63}
-                                    w={350}
-                                    p={5}
-                                  >
-                                    {data.rating?data.rating:"G (เหมาะสำหรับทุกวัย)"}
-                                  </Center> */}
-                                </Flex>
-
                                 <Flex ml={0} w={750}>
                                   <Box
                                     bg={"white"}
@@ -914,11 +917,18 @@ export default function Group() {
                                   }
                                   cursor="pointer"
                                 >
-                                  {console.log(data.member, auth.currentUser?.uid)}
-                                  {Object.keys(data.member).includes(auth.currentUser?.uid)? "ไปที่กลุ่ม"
-                                    : (data.pendingmember && Object.keys(data.pendingmember).includes(
-                                      auth.currentUser?.uid
-                                      ))
+                                  {console.log(
+                                    data.member,
+                                    auth.currentUser?.uid
+                                  )}
+                                  {Object.keys(data.member).includes(
+                                    auth.currentUser?.uid
+                                  )
+                                    ? "ไปที่กลุ่ม"
+                                    : data.pendingmember &&
+                                      Object.keys(data.pendingmember).includes(
+                                        auth.currentUser?.uid
+                                      )
                                     ? "รอการตอบรับ"
                                     : "เข้าร่วมกลุ่ม"}
                                 </Center>
@@ -1294,7 +1304,7 @@ export default function Group() {
                           [{Object.keys(data.staff).length}]
                         </Center>
                       </Center>
-                      
+
                       <Wrap fontFamily={"Mitr"}>
                         {Object.values(data.staff).map((staff) => (
                           <WrapItem>

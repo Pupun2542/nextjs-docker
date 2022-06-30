@@ -39,6 +39,9 @@ exports.createPost = async (req, res) => {
           }),
         });
       }
+      batch.update(docref, {
+        postcount: admin.firestore.FieldValue.increment(1),
+      });
       batch.commit();
       sendNotifications(
           doc.data().member,
@@ -121,6 +124,9 @@ exports.deletePost = async (req, res) => {
           }
         });
       }
+      db.collection("group").doc(req.params.gid).update({
+        postcount: admin.firestore.FieldValue.increment(-1),
+      });
       await docref.delete();
       return res.status(200).send("delete post success");
     } else {

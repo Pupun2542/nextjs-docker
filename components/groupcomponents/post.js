@@ -422,6 +422,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
                     objectFit={"contain"}
                     display={"inline-block"}
                     borderRadius={10}
+                    loading="lazy"
                   />
                 ))}
             </Box>
