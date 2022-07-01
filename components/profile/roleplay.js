@@ -15,15 +15,14 @@ import {
 } from "@chakra-ui/react";
 import { Eye, EyeClosed } from "phosphor-react";
 
-export const Roleplay = () => {
+export const Roleplay = ({ value, onEdit }) => {
 
     return (
         <Flex direction={'column'}>
-
             <Flex fontSize={24} fontWeight={"extrabold"} ml={5}>
                 <Text>การโรลเพลย์</Text>
                 <Spacer />
-                <Text fontSize={14} mt={3}>Edit</Text>
+                <Text fontSize={14} mt={3} onClick={onEdit} cursor={'pointer'}>Edit</Text>
             </Flex>
 
             <VStack
@@ -56,7 +55,7 @@ export const Roleplay = () => {
                                     <Spacer />
 
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                        <Box>{value?.short ? value.short : 20}</Box>
                                         %
                                     </Center>
 
@@ -79,7 +78,7 @@ export const Roleplay = () => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                        <Box>{value?.long ? value.long : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -101,7 +100,7 @@ export const Roleplay = () => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                        <Box>{value?.fic ? value.fic : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -123,7 +122,7 @@ export const Roleplay = () => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                        <Box>{value?.wen ? value.wen : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -145,7 +144,7 @@ export const Roleplay = () => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                        <Box>{value?.draw ? value.draw : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -174,7 +173,7 @@ export const Roleplay = () => {
                                         <Center ml={2} mr={2}>ตลก</Center>
                                         <Spacer />
                                         <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
+                                            <Box>{value?.fun ? value.fun : 20}</Box>
                                             %
                                         </Center>
                                     </Flex>
@@ -194,7 +193,7 @@ export const Roleplay = () => {
                                         <Center ml={2} mr={2}>ดราม่า</Center>
                                         <Spacer />
                                         <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
+                                            <Box>{value?.drama ? value.drama : 20}</Box>
                                             %
                                         </Center>
                                     </Flex>
@@ -214,7 +213,7 @@ export const Roleplay = () => {
                                         <Center ml={2} mr={2}>โรแมนซ์</Center>
                                         <Spacer />
                                         <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
+                                            <Box>{value?.roman ? value.roman : 20}</Box>
                                             %
                                         </Center>
                                     </Flex>
@@ -234,7 +233,7 @@ export const Roleplay = () => {
                                         <Center ml={2} mr={2}>อีโรติก</Center>
                                         <Spacer />
                                         <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
+                                            <Box>{value?.ero ? value.ero : 20}</Box>
                                             %
                                         </Center>
                                     </Flex>
@@ -254,7 +253,7 @@ export const Roleplay = () => {
                                         <Center ml={2} mr={2}>มิตรภาพ</Center>
                                         <Spacer />
                                         <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
+                                            <Box>{value?.friendship ? value.friendship : 20}</Box>
                                             %
                                         </Center>
                                     </Flex>
@@ -274,7 +273,7 @@ export const Roleplay = () => {
                                         <Center ml={2} mr={2}>สยองขวัญ</Center>
                                         <Spacer />
                                         <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
+                                            <Box>{value?.horror ? value.horror : 20}</Box>
                                             %
                                         </Center>
                                     </Flex>
@@ -294,7 +293,7 @@ export const Roleplay = () => {
                                         <Center ml={2} mr={2}>ระทึกขวัญ</Center>
                                         <Spacer />
                                         <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
+                                            <Box>{value?.thriller ? value.thriller : 20}</Box>
                                             %
                                         </Center>
                                     </Flex>
@@ -314,7 +313,7 @@ export const Roleplay = () => {
                                         <Center ml={2} mr={2}>แอคชั่น</Center>
                                         <Spacer />
                                         <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
+                                            <Box>{value?.action ? value.action : 20}</Box>
                                             %
                                         </Center>
                                     </Flex>
@@ -334,7 +333,7 @@ export const Roleplay = () => {
                                         <Center ml={2} mr={2}>แฟนตาซี</Center>
                                         <Spacer />
                                         <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
+                                            <Box>{value?.fanta ? value.fanta : 20}</Box>
                                             %
                                         </Center>
                                     </Flex>
@@ -354,7 +353,7 @@ export const Roleplay = () => {
                                         <Center ml={2} mr={2}>ย้อนยุค</Center>
                                         <Spacer />
                                         <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
+                                            <Box>{value?.retro ? value.retro : 20}</Box>
                                             %
                                         </Center>
                                     </Flex>
@@ -374,8 +373,8 @@ export const Roleplay = () => {
                                         <Center ml={2} mr={2}>ไซไฟ</Center>
                                         <Spacer />
                                         <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                            <Box>20</Box>
-                                            %
+                                            <Box>{value?.sci ? value.sci : 20}</Box>
+                                            % {console.log(value)}
                                         </Center>
                                     </Flex>
                                 </Center>

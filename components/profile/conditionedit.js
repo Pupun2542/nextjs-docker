@@ -13,8 +13,25 @@ import {
     Center,
     Checkbox,
 } from "@chakra-ui/react";
+import useConditionEditState from "../../src/hook/useConditionEditState";
 
-export const Editcondition = () => {
+export const Editcondition = ({ value, onFinish, onRefresh, config }) => {
+    const initalvalue = {
+        doit: value?.doit?value.doit: "",
+        dontit: value?.dontit?value.dontit: "",
+        pobia: value?.pobia?value.pobia: "",
+        demand: value?.demand?value.demand: 1,
+        ref: value?.ref?value.ref: 1,
+        condition: value?.condition?value.condition: 1,
+        othercondition: value?.othercondition?value.othercondition: "",
+    }
+    const { doit, getDoit, dontit, getDontit, pobia, getPobia, demand, getDemand, ref, getRef, condition, getCondition, othercondition, getOthercondition, commit } = useConditionEditState(initalvalue);
+    // const initialconfig = {
+    //     doit: config?.doit?config.doit:false,
+    //     dontit: config?.dontit?config.dontit:false,
+    //     pobia: config?.pobia?config.pobia:false,
+    //     othercondition: config?.othercondition ? config.othercondition:false,
+    // }
 
     return (
         <Flex direction={'column'}>
@@ -24,15 +41,16 @@ export const Editcondition = () => {
                 <HStack>
                     <IconButton
                         icon={<Check />}
-                        onClick={() => {
-                            handleNameChange();
-                            setEditDisplayNameMode(false);
+                        onClick={async() => {
+                            await commit();
+                            onRefresh();
+                            onFinish();
                         }}
                     />
                     <IconButton
                         icon={<X />}
                         onClick={() => {
-                            setEditDisplayNameMode(false);
+                            onFinish();
                             // setEditDisplayName("");
                         }}
                     />
@@ -53,7 +71,7 @@ export const Editcondition = () => {
                         สิ่งที่ทำได้
                     </Box>
 
-                    <Input placeholder="กรอกข้อมูลตรงนี้" />
+                    <Input placeholder="กรอกข้อมูลตรงนี้" value={getValue("doit")} onChange={(e)=>setValue("doit", e.target.value)}/>
                 </Flex>
 
                 <Flex pl={3} pr={2} w={"100%"}>
@@ -61,7 +79,7 @@ export const Editcondition = () => {
                         สิ่งที่ไม่ควรทำ
                     </Box>
 
-                    <Input placeholder="กรอกข้อมูลตรงนี้" />
+                    <Input placeholder="กรอกข้อมูลตรงนี้" value={getValue("dontit")} onChange={(e)=>setValue("dontit", e.target.value)}/>
                 </Flex>
 
                 <Flex pl={3} pr={2} w={"100%"}>
@@ -69,7 +87,7 @@ export const Editcondition = () => {
                         โฟเบีย
                     </Box>
 
-                    <Input placeholder="กรอกข้อมูลตรงนี้" />
+                    <Input placeholder="กรอกข้อมูลตรงนี้" value={getValue("pobia")} onChange={(e)=>setValue("pobia", e.target.value)}/>
                 </Flex>
 
                 <Flex pl={3} pr={2} w={"100%"}>
@@ -77,7 +95,7 @@ export const Editcondition = () => {
                         การทวงโรล
                     </Box>
 
-                    <RadioGroup pt={2} w={'100%'}>
+                    <RadioGroup pt={2} w={'100%'} value={getValue("demand")} onChange={(e)=>setValue("demand", e)}>
                         <Stack direction='row'>
                             <Radio value='1' colorScheme='purple'>สะดวกใจ</Radio>
                             <Radio value='2' colorScheme='purple'>ไม่สะดวกใจ</Radio>
@@ -90,7 +108,7 @@ export const Editcondition = () => {
                         การอ้างอิงตัวละคร
                     </Box>
 
-                    <RadioGroup pt={2} w={'100%'}>
+                    <RadioGroup pt={2} w={'100%'} value={getValue("demand")} onChange={(e)=>setValue("demand", e)}>
                         <Stack direction='row'>
                             <Radio value='1' colorScheme='purple'>สะดวกใจ</Radio>
                             <Radio value='2' colorScheme='purple'>ขออนุญาตก่อน</Radio>
@@ -100,7 +118,7 @@ export const Editcondition = () => {
                 </Flex>
 
                 <Flex pl={3} pr={2} w={"100%"}>
-                    <Box pt={2} h={10} maxWidth={135} w={"100%"}>
+                    <Box pt={2} h={10} maxWidth={135} w={"100%"} value={getValue("demand")} onChange={(e)=>setValue("demand", e.target.value)}>
                         เงื่อนไขการมีปฏิสัมพันธ์
                     </Box>
 
@@ -121,7 +139,7 @@ export const Editcondition = () => {
                         เงื่อนไขอื่น ๆ
                     </Box>
 
-                    <Input placeholder="กรอกข้อมูลตรงนี้" />
+                    <Input placeholder="กรอกข้อมูลตรงนี้" value={getValue("othercondition")} onChange={(e)=>setValue("othercondition", e.target.value)}/>
                 </Flex>
             </VStack>
         </Flex>

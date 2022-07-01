@@ -14,14 +14,14 @@ import {
     SimpleGrid,
 } from "@chakra-ui/react";
 
-export const Playedcom = () => {
+export const Playedcom = ({ value, config, onEdit }) => {
 
     return (
         <Flex direction={'column'}>
             <Flex fontSize={24} fontWeight={"extrabold"} ml={5}>
                 <Text>การเล่นคอมมูนิตี้</Text>
                 <Spacer />
-                <Text fontSize={14} mt={3}>Edit</Text>
+                <Text fontSize={14} mt={3} onClick={onEdit} cursor={"pointer"}>Edit</Text>
             </Flex>
 
             <VStack
@@ -53,7 +53,7 @@ export const Playedcom = () => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                        <Box>{value?.survival ? value.survival : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -75,7 +75,7 @@ export const Playedcom = () => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                        <Box>{value?.slow ? value.slow : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -97,7 +97,7 @@ export const Playedcom = () => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                        <Box>{value?.slowsur ? value.slowsur : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -118,7 +118,7 @@ export const Playedcom = () => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                        <Box>{value?.vote ? value.vote : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -135,7 +135,7 @@ export const Playedcom = () => {
 
                     <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={12}>
                         <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={10}>
-                            ตำนานแฟนตาซี
+                            {value?.inter && !config?.inter ? value.inter : "นางเงือก"}
                         </Box>
                     </Center>
                 </Flex>

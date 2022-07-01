@@ -13,8 +13,20 @@ import {
     NumberInputField,
     SimpleGrid,
 } from "@chakra-ui/react";
+import usePlaycomEditState from "../../src/hook/usePlaycomEditState";
 
-export const Editplayedcom = () => {
+export const Editplayedcom = ({ value, config }) => {
+    const initalvalue = {
+        survival: value?.survival ? value.survival : 20,
+        slow: value?.slow ? value.slow : 20,
+        slowsur: value?.slowsur ? value.slowsur : 20,
+        vote: value?.vote ? value.vote : 20,
+        inter: value?.inter ? value.inter : ""
+    }
+    const { survival, setSurvival, slow, setSlow, slowsur, setSlowsur, vote, setVote, commit } = usePlaycomEditState(initalvalue)
+    // const initialconfig = {
+    //     inter: config?.inter ? config.inter: false
+    // }
 
     return (
         <Flex direction={'column'}>
@@ -24,15 +36,16 @@ export const Editplayedcom = () => {
                 <HStack>
                     <IconButton
                         icon={<Check />}
-                        onClick={() => {
-                            handleNameChange();
-                            setEditDisplayNameMode(false);
+                        onClick={async() => {
+                            await commit();
+                            onRefresh();
+                            onFinish();
                         }}
                     />
                     <IconButton
                         icon={<X />}
                         onClick={() => {
-                            setEditDisplayNameMode(false);
+                            onFinish();
                             // setEditDisplayName("");
                         }}
                     />
@@ -67,7 +80,7 @@ export const Editplayedcom = () => {
                                         Survival
                                     </Center>
                                     <Spacer />
-                                    <NumberInput min={0} max={100}>
+                                    <NumberInput min={0} max={100} onChange={(e)=>setSurvival(parseInt(e))} value={survival}>
                                         <NumberInputField fontSize={14}
                                             bg={"white"}
                                             borderRadius={10}
@@ -101,7 +114,7 @@ export const Editplayedcom = () => {
                                         Slowlife
                                     </Center>
                                     <Spacer />
-                                    <NumberInput min={0} max={100}>
+                                    <NumberInput min={0} max={100} onChange={(e)=>setSlow(parseInt(e))} value={slow}>
                                         <NumberInputField fontSize={14}
                                             bg={"white"}
                                             borderRadius={10}
@@ -135,7 +148,7 @@ export const Editplayedcom = () => {
                                         Slow-Survival
                                     </Center>
                                     <Spacer />
-                                    <NumberInput min={0} max={100}>
+                                    <NumberInput min={0} max={100} onChange={(e)=>setSlowsur(parseInt(e))} value={slowsur}>
                                         <NumberInputField fontSize={14}
                                             bg={"white"}
                                             borderRadius={10}
@@ -168,7 +181,7 @@ export const Editplayedcom = () => {
                                         Vote for Kill
                                     </Center>
                                     <Spacer />
-                                    <NumberInput min={0} max={100}>
+                                    <NumberInput min={0} max={100} onChange={(e)=>setVote(parseInt(e))} value={vote}>
                                         <NumberInputField fontSize={14}
                                             bg={"white"}
                                             borderRadius={10}
@@ -196,7 +209,8 @@ export const Editplayedcom = () => {
                         หมวดหมู่ที่สนใจ
                     </Box>
 
-                    <Input placeholder="กรอกข้อมูลตรงนี้" />
+                    <Input placeholder="กรอกข้อมูลตรงนี้"/>
+                    {/* ไม่ได้เขียนให้น้าาาาาา */}
                 </Flex>
             </VStack>
         </Flex>

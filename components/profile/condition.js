@@ -14,14 +14,14 @@ import {
     Checkbox,
 } from "@chakra-ui/react";
 
-export const Condition = () => {
+export const Condition = ({ value, config, onEdit }) => {
 
     return (
         <Flex direction={'column'}>
             <Flex fontSize={24} fontWeight={"extrabold"} ml={5}>
                 <Text>เงื่อนไข</Text>
                 <Spacer />
-                <Text fontSize={14} mt={3}>Edit</Text>
+                <Text fontSize={14} mt={3} onClick={onEdit} cursor={"pointer"}>Edit</Text>
             </Flex>
 
             <VStack
@@ -39,7 +39,7 @@ export const Condition = () => {
                     </Box>
                     <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={12}>
                         <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={10}>
-                            ทุกอย่างเลยค้าบ
+                        {value?.doit && !config?.doit ? value.doit : "ล้างจานต่างประเทศอุ ทำได้ทุกอย่างค้าบ"}
                         </Box>
                     </Center>
                 </Flex>
@@ -50,7 +50,7 @@ export const Condition = () => {
                     </Box>
                     <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={12}>
                         <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={10}>
-                            อย่าทิ้งกันเลยนะ
+                            {value?.dontit && !config?.dontit ? value.dontit : "อย่าทิ้งเราไปมีคนอื่น ได้แต่นึกถึงอดีตตตต"}
                         </Box>
                     </Center>
                 </Flex>
@@ -61,7 +61,7 @@ export const Condition = () => {
                     </Box>
                     <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={12}>
                         <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={10}>
-                            เรื่องเศร้า
+                            {value?.pobia && !config?.pobia ? value.pobia : "อย่าทิ้งเราไว้ในน้ำสิ"}
                         </Box>
                     </Center>
                 </Flex>
@@ -72,7 +72,7 @@ export const Condition = () => {
                     </Box>
                     <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={12}>
                         <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={10}>
-                            <RadioGroup w={'100%'}>
+                            <RadioGroup w={'100%'} value={value?.demand}>
                                 <Stack direction='row'>
                                     <Radio value='1' colorScheme='purple'>สะดวกใจ</Radio>
                                     <Radio value='2' colorScheme='purple'>ไม่สะดวกใจ</Radio>
@@ -89,7 +89,7 @@ export const Condition = () => {
                     </Box>
                     <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={12}>
                         <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={10}>
-                            <RadioGroup w={'100%'}>
+                            <RadioGroup w={'100%'} value={value?.ref}>
                                 <Stack direction='row'>
                                     <Radio value='1' colorScheme='purple'>สะดวกใจ</Radio>
                                     <Radio value='2' colorScheme='purple'>ขออนุญาตก่อน</Radio>
@@ -109,7 +109,7 @@ export const Condition = () => {
                     <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={'auto'}>
                         <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={'auto'}>
                             <Flex float={'left'} w={'100%'}>
-                                <SimpleGrid columns={2}>
+                                <SimpleGrid columns={2} value={value?.condition}>
                                     <Checkbox value='1' colorScheme='purple'>ต้องการให้แจ้งก่อนโดยตรง</Checkbox>
                                     <Checkbox value='2' colorScheme='purple'>ไม่ต้องการเปิดเผยความสัมพันธ์หน้าไมค์</Checkbox>
                                     <Checkbox value='3' colorScheme='purple'>สามารถปล่อยตามสถานการณ์</Checkbox>
@@ -129,7 +129,7 @@ export const Condition = () => {
                     </Box>
                     <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={12}>
                         <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={10}>
-                            Blah Bla bla
+                            {value?.othercondition && !config?.othercondition ? value.othercondition : "ชานมไข่มุกอร่อยน้าาาา"}
                         </Box>
                     </Center>
                 </Flex>
