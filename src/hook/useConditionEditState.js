@@ -32,7 +32,7 @@ const useConditionEditState = (initialvalue) => {
     const getOthercondition = (value) => {
         setEditValue("condition", {...getEditValue("condition"), othercondition:value})
     }
-    return ( doit, getDoit, dontit, getDontit, pobia, getPobia, demand, getDemand, ref, getRef, condition, getCondition, othercondition, getOthercondition, commit )
+    return { doit, getDoit, dontit, getDontit, pobia, getPobia, demand, getDemand, ref, getRef, condition, getCondition, othercondition, getOthercondition, commit }
 }
 
 export default useConditionEditState;
