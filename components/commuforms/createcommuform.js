@@ -167,6 +167,10 @@ export const Createcommuform = ({ data, uid, gid }) => {
     }
   }, [data]);
 
+  useEffect(()=> {
+    // console.log(fieldvalue)
+  },[fieldvalue])
+
   useEffect(() => {
     const search = async () => {
       const snap = await getDocs(
@@ -269,7 +273,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
     const spdatetime = localtime.split("T");
 
     const timebuild = spdatetime[0] + " เวลา " + spdatetime[1];
-    console.log(timebuild);
+    // console.log(timebuild);
     return timebuild;
   };
 
@@ -323,7 +327,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
       docUrl: docUrl,
       config: configvalue,
     };
-    // console.log(body)
+    console.log(body)
     if (data) {
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${gid}/update`,
@@ -842,14 +846,14 @@ export const Createcommuform = ({ data, uid, gid }) => {
                             w={"100%"}
                             value={fieldvalue.startDateraw}
                             onChange={(e) => {
+                              const ptime = parseTime(e.target.value)
+                              // console.log(ptime)
                               setFieldvalue({
                                 ...fieldvalue,
-                                startDate: parseTime(e.target.value),
-                              });
-                              setFieldvalue({
-                                ...fieldvalue,
+                                startDate: ptime,
                                 startDateraw: e.target.value,
                               });
+                              // console.log(parseTime(e.target.value))
                             }}
                             fontFamily={"Mitr"}
                           />

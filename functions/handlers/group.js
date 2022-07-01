@@ -19,7 +19,7 @@ exports.createGroup = (req, res) => {
           place: data.places,
           times: data.times,
           tws: data.tws,
-          // startDate: data.startDate,
+          startDate: data.startDate,
           startDateRaw: data.startDateraw,
           rating: data.rating,
           rule: data.rule,
@@ -52,46 +52,46 @@ exports.createGroup = (req, res) => {
   }
 };
 
-exports.updateGroup = (req, res) => {
+exports.updateGroup = async (req, res) => {
   if (req.user) {
     const user = req.user.uid;
     const data = req.body;
     const docref = db.collection("group").doc(req.params.id);
-    return docref.update({
-      name: data.name,
-      type: data.type,
-      privacy: data.privacy,
-      tag: data.tag,
-      description: data.description,
-      maxplayer: data.maxplayer,
-      genre: data.genre,
-      contactlink: data.contactlink,
-      place: data.places,
-      times: data.times,
-      tws: data.tws,
-      // startDate: data.startdate,
-      startDateRaw: data.startDateraw,
-      rating: data.rating,
-      rule: data.rule,
-      averageTime: data.averageTime,
-      averageTimeUnit: data.averageTimeUnit,
-      config: data.config,
-      registrationlink: data.registrationlink,
-      statuschecklink: data.statuschecklink,
-      // banner916: data.banner916,
-      // bannersqr: data.bannersqr,
-      banner: data.bannerUrl,
-      doclink: data.docUrl,
-      commentcount: 0,
-      commentuser: [],
-    }).then(() => {
-      docref.get().then((doc)=>{
-        sendNotifications([...doc.data().staff, ...doc.data().pinned], "002", user, req.params.id, "", `group/${req.params.id}`);
+    const doc = await docref.get();
+    if (doc.exists) {
+      await docref.update({
+        name: data.name,
+        type: data.type,
+        privacy: data.privacy,
+        tag: data.tag,
+        description: data.description,
+        maxplayer: data.maxplayer,
+        genre: data.genre,
+        contactlink: data.contactlink,
+        place: data.places,
+        times: data.times,
+        tws: data.tws,
+        startDate: data.startDate,
+        startDateRaw: data.startDateraw,
+        rating: data.rating,
+        rule: data.rule,
+        averageTime: data.averageTime,
+        averageTimeUnit: data.averageTimeUnit,
+        config: data.config,
+        registrationlink: data.registrationlink,
+        statuschecklink: data.statuschecklink,
+        // banner916: data.banner916,
+        // bannersqr: data.bannersqr,
+        banner: data.bannerUrl,
+        doclink: data.docUrl,
+        commentcount: 0,
+        commentuser: [],
       });
+      sendNotifications([...doc.data().staff, ...doc.data().pinned], "002", user, req.params.id, "", `group/${req.params.id}`);
       return res.status(200).send("update group sucessful");
-    }).catch((e) => {
-      return res.status(400).send("cannot update group : "+ e);
-    });
+    } else {
+      return res.status(403).send("forbidden");
+    }
   } else {
     return res.status(401).send("unauthorized");
   }

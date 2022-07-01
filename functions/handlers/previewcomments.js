@@ -80,7 +80,7 @@ exports.UpdatePreviewComment = async (req, res) =>{
 };
 
 exports.lovePreviewComment = async (req, res) =>{
-  console.log(req.user);
+  // console.log(req.user);
   if (req.user) {
     const commentnref= db.collection("group").doc(req.params.gid).collection("comments").doc(req.params.cid);
     const comment = await commentnref.get();
@@ -126,6 +126,7 @@ exports.getAllPreviewcomment = async (req, res) => {
       data = [...data, {...doc.data(), gid: req.params.gid, cid: doc.id}];
       creators = [...creators, doc.data().uid];
     });
+    creators = [...new Set(creators)];
     const identifiers = creators.map((id) =>({uid: id}));
     console.log(creators);
     const creator = await admin.auth().getUsers(identifiers);
