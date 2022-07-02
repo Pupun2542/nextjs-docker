@@ -35,7 +35,7 @@ const Createcharacterform = ({ onSubmit, onClose }) => {
   };
   return (
     <ModalContent>
-      <ModalHeader>Create Chara</ModalHeader>
+      <ModalHeader>Create Character</ModalHeader>
       <ModalCloseButton />
       <ModalBody>
         <VStack>
@@ -101,9 +101,9 @@ const Createcharacterform = ({ onSubmit, onClose }) => {
       </ModalBody>
 
       <ModalFooter>
-        <Button colorScheme="blue" mr={3} onClick={onClose}>
+        {/* <Button colorScheme="blue" mr={3} onClick={onClose}>
           ปิด
-        </Button>
+        </Button> */}
         <Button onClick={onCharaAdd}>ยืนยัน</Button>
       </ModalFooter>
       {/* <Input
