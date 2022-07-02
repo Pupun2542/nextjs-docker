@@ -140,11 +140,11 @@ function GroupCard() {
                   <Box>
                     [{value.tag}]&#160;{value.name}
                   </Box>
-                  <Box
+                  {/* <Box
                     fontSize={14}
                   >
                     นาย A, นายB และอีก 1 คน
-                  </Box>
+                  </Box> */}
                 </Box>
 
                 <Wrap
@@ -190,8 +190,8 @@ function GroupCard() {
                 </Wrap>
 
                 <Wrap fontFamily={'Mitr'} w={'100%'}>
-                  <Eye size={26} />
-                  <Box>100</Box>
+                  {/* <Eye size={26} />
+                  <Box>100</Box> */}
                   <Heart size={26} />
                   <Box>{value.love?.length}</Box>
                   <PushPin size={26} />

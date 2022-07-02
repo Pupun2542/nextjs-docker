@@ -380,6 +380,7 @@ function dashboard() {
                   >
                     Gallery
                   </Tab>
+                  
                   <Tab
                     _selected={{
                       color: "white",
@@ -406,6 +407,7 @@ function dashboard() {
                 </TabList>
 
                 <TabPanels>
+                  {/* Post */}
                   <TabPanel>
                     {/* ประกาศ */}
                     {/* <Flex
@@ -617,11 +619,14 @@ function dashboard() {
                     </Modal>
                   </TabPanel>
 
+                  {/* Gallery */}
                   <TabPanel>{tabIndex == 1 && <Gallery gid={id} />}</TabPanel>
 
+                  {/* Member */}
                   <TabPanel>
                     {tabIndex == 2 && <Member data={data} gid={id} />}
                   </TabPanel>
+                  {/* Settings */}
                   <TabPanel>
                     {tabIndex == 3 && <Setting data={data} gid={id} />}
                   </TabPanel>

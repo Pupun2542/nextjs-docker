@@ -572,7 +572,7 @@ function CustomNavbar() {
 
       <Box
         overflowY={"auto"}
-        w="300px"
+        w="400px"
         h="auto"
         bg="white"
         pos="fixed"
@@ -612,6 +612,7 @@ function CustomNavbar() {
       <Box
         overflowY={"auto"}
         minW="300px"
+        maxW={'500px'}
         h="auto"
         bg="white"
         pos="fixed"
