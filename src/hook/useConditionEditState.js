@@ -2,37 +2,37 @@ import useProfileEditor from "./useProfileEditor";
 
 const useConditionEditState = (initialvalue) => {
     const { setEditValue, getEditValue, commit } = useProfileEditor({
-        active: initialvalue
+        condition: initialvalue
     });
     const doit = getEditValue("condition").doit
-    const getDoit = (value) => {
+    const setDoit = (value) => {
         setEditValue("condition", {...getEditValue("condition"), doit:value})
     }
     const dontit = getEditValue("condition").dontit
-    const getDontit = (value) => {
+    const setDontit = (value) => {
         setEditValue("condition", {...getEditValue("condition"), dontit:value})
     }
-    const pobia = getDontit("condition").pobia
-    const getPobia = (value) => {
-        setEditValue("condition", {...getEditValue("condition"), pobia:value})
+    const phobia = getEditValue("condition").phobia
+    const setPhobia = (value) => {
+        setEditValue("condition", {...getEditValue("condition"), phobia:value})
     }
     const demand = getEditValue("condition").demand
-    const getDemand = (value) => {
+    const setDemand = (value) => {
         setEditValue("condition", {...getEditValue("condition"), demand:value})
     }
     const ref = getEditValue("condition").ref
-    const getRef = (value) => {
+    const setRef = (value) => {
         setEditValue("condition", {...getEditValue("condition"), ref:value})
     }
     const condition = getEditValue("condition").condition
-    const getCondition = (value) => {
+    const setCondition = (value) => {
         setEditValue("condition", {...getEditValue("condition"), condition:value})
     }
     const othercondition = getEditValue("condition").othercondition;
-    const getOthercondition = (value) => {
+    const setOthercondition = (value) => {
         setEditValue("condition", {...getEditValue("condition"), othercondition:value})
     }
-    return { doit, getDoit, dontit, getDontit, pobia, getPobia, demand, getDemand, ref, getRef, condition, getCondition, othercondition, getOthercondition, commit }
+    return { doit, setDoit, dontit, setDontit, phobia, setPhobia, demand, setDemand, ref, setRef, condition, setCondition, othercondition, setOthercondition, commit }
 }
 
 export default useConditionEditState;

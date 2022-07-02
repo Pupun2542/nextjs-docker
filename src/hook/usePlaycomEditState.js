@@ -2,7 +2,7 @@ import useProfileEditor from "./useProfileEditor";
 
 const usePlaycomEditState = (initialvalue) => {
     const { setEditValue, getEditValue, commit } = useProfileEditor({
-        active: initialvalue
+        playcom: initialvalue
     });
     const survival = getEditValue("playcom").survival
     const setSurvival = (value) => {
@@ -21,6 +21,6 @@ const usePlaycomEditState = (initialvalue) => {
         setEditValue("playcom", {...getEditValue("playcom"), vote:value})
     }
     // ตัวไหนที่เป็น String ไม่เขียนให้นะคะ ไม่กล้าเขียนไม่รู้มันจะถูกรึเปล่า inter
-    return ( survival, setSurvival, slow, setSlow, slowsur, setSlowsur, vote, setVote, commit );
+    return { survival, setSurvival, slow, setSlow, slowsur, setSlowsur, vote, setVote, commit };
 }
 export default usePlaycomEditState;

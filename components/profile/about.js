@@ -97,11 +97,11 @@ export const About = ({ data, onRefresh }) => {
       )}
 
       {isOpen("condition") ? (
-        <Editplayedcom
+        <Editcondition
           onFinish={() => onClose("condition")}
           value={data.condition}
           onRefresh={onRefresh}
-        ></Editplayedcom>
+        ></Editcondition>
       ) : (
         <Condition
           onEdit={() => onOpen("condition")}

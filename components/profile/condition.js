@@ -14,7 +14,7 @@ import {
     Checkbox,
 } from "@chakra-ui/react";
 
-export const Condition = ({ value, config, onEdit }) => {
+export const Condition = ({ value, onEdit }) => {
 
     return (
         <Flex direction={'column'}>
@@ -39,7 +39,7 @@ export const Condition = ({ value, config, onEdit }) => {
                     </Box>
                     <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={12}>
                         <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={10}>
-                        {value?.doit && !config?.doit ? value.doit : "ล้างจานต่างประเทศอุ ทำได้ทุกอย่างค้าบ"}
+                        {value?.doit ? value.doit : "ล้างจานต่างประเทศอุ ทำได้ทุกอย่างค้าบ"}
                         </Box>
                     </Center>
                 </Flex>
@@ -50,7 +50,7 @@ export const Condition = ({ value, config, onEdit }) => {
                     </Box>
                     <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={12}>
                         <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={10}>
-                            {value?.dontit && !config?.dontit ? value.dontit : "อย่าทิ้งเราไปมีคนอื่น ได้แต่นึกถึงอดีตตตต"}
+                            {value?.dontit ? value.dontit : "อย่าทิ้งเราไปมีคนอื่น ได้แต่นึกถึงอดีตตตต"}
                         </Box>
                     </Center>
                 </Flex>
@@ -61,7 +61,7 @@ export const Condition = ({ value, config, onEdit }) => {
                     </Box>
                     <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={12}>
                         <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={10}>
-                            {value?.pobia && !config?.pobia ? value.pobia : "อย่าทิ้งเราไว้ในน้ำสิ"}
+                            {value?.phobia ? value.pobia : "อย่าทิ้งเราไว้ในน้ำสิ"}
                         </Box>
                     </Center>
                 </Flex>
@@ -72,7 +72,7 @@ export const Condition = ({ value, config, onEdit }) => {
                     </Box>
                     <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={12}>
                         <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={10}>
-                            <RadioGroup w={'100%'} value={value?.demand}>
+                            <RadioGroup w={'100%'} value={value?.demand} isDisabled>
                                 <Stack direction='row'>
                                     <Radio value='1' colorScheme='purple'>สะดวกใจ</Radio>
                                     <Radio value='2' colorScheme='purple'>ไม่สะดวกใจ</Radio>
@@ -129,7 +129,7 @@ export const Condition = ({ value, config, onEdit }) => {
                     </Box>
                     <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={12}>
                         <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={10}>
-                            {value?.othercondition && !config?.othercondition ? value.othercondition : "ชานมไข่มุกอร่อยน้าาาา"}
+                            {value?.othercondition ? value.othercondition : "ชานมไข่มุกอร่อยน้าาาา"}
                         </Box>
                     </Center>
                 </Flex>
