@@ -13,14 +13,14 @@ import {
     NumberInputField,
 } from "@chakra-ui/react";
 
-export const Relationship = () => {
+export const Relationship = ({ value, config, onEdit }) => {
 
     return (
         <Flex direction={'column'}>
             <Flex fontSize={24} fontWeight={"extrabold"} ml={5}>
                 <Text>ความสัมพันธ์ตัวละคร</Text>
                 <Spacer />
-                <Text fontSize={14} mt={3}>Edit</Text>
+                <Text fontSize={14} mt={3} onClick={onEdit} cursor={"pointer"}>Edit</Text>
             </Flex>
 
             <VStack
@@ -52,7 +52,7 @@ export const Relationship = () => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                        <Box>{value?.heroto ? value.heroto : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -74,7 +74,7 @@ export const Relationship = () => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                        <Box>{value?.blove ? value.blove : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -96,7 +96,7 @@ export const Relationship = () => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                        <Box>{value?.glove ? value.glove : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -118,7 +118,7 @@ export const Relationship = () => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                        <Box>{value?.nlove ? value.nlove : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -140,7 +140,7 @@ export const Relationship = () => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                        <Box>{value?.fwb ? value.fwb : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -162,7 +162,7 @@ export const Relationship = () => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                        <Box>{value?.fz ? value.fz : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -184,7 +184,7 @@ export const Relationship = () => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                        <Box>{value?.onenight ? value.onenight : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -200,7 +200,7 @@ export const Relationship = () => {
                     </Box>
                     <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={12}>
                         <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={10}>
-                            ไม่น่ามี
+                            {value?.noplay && !config?.noplay ? value.noplay : "ไม่น่านะ"}
                         </Box>
                     </Center>
                 </Flex>
@@ -225,7 +225,7 @@ export const Relationship = () => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                        <Box>{value?.top ? value.top : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -247,7 +247,7 @@ export const Relationship = () => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                        <Box>{value?.bottom ? value.bottom : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -269,7 +269,7 @@ export const Relationship = () => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                        <Box>{value?.switchs ? value.switchs : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -291,7 +291,7 @@ export const Relationship = () => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                        <Box>{value?.submissive ? value.submissive : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -313,7 +313,7 @@ export const Relationship = () => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>20</Box>
+                                        <Box>{value?.dominant ? value.dominant : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -330,7 +330,7 @@ export const Relationship = () => {
 
                     <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={12}>
                         <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={10}>
-                            รักตัวเองครับ
+                            {value?.taste && !config?.taste ? value.taste : "หนูรักตัวเอง"}
                         </Box>
                     </Center>
                 </Flex>

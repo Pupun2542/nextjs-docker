@@ -90,7 +90,7 @@ export const Active = ({ onEdit, value }) => {
                     borderWidth={1}
                     borderColor={"black"}
                   >
-                    <Box>{value?.font ? value.font : 50}</Box>%
+                    <Box>{value?.front ? value.front : 50}</Box>%
                   </Center>
                 </Flex>
               </Center>

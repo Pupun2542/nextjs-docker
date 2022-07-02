@@ -12,8 +12,43 @@ import {
     NumberInput,
     NumberInputField,
 } from "@chakra-ui/react";
+import useRelationshipEditState from "../../src/hook/useRelationshipEditState";
 
-export const Editrelationship = () => {
+export const Editrelationship = ({ value, config }) => {
+    
+    const initalvalue = {
+        heroto: value?.heroto ? value.heroto : 20,
+        blove: value?.blove ? value.blove : 20,
+        glove: value?.glove ? value.glove : 20,
+        nlove: value?.nlove ? value.nlove : 20,
+        fwb: value?.fwb ? value.fwb : 20,
+        fz: value?.fz ? value.fz : 20,
+        onenight: value?.onenight ? value.onenight : 20,
+        noplay: value?.noplay ? value.noplay : "", //string
+        top: value?.top ? value.top : 20,
+        bottom: value?.bottom ? value.bottom : 20,
+        switchs: value?.switchs ? value.switchs: 20,
+        submissive: value?.submissive ? value.submissive : 20,
+        dominant: value?.dominant ? value.dominant : 20,
+        taste: value?.taste ? value.taste: "" //string
+    }
+    const { heroto, setHeroto,
+        blove, setBlove,
+        glove, setGlove,
+        nlove, setNlove,
+        fwb, setFwb,
+        fz, setFz,
+        onenight, setOnenight,
+        top, setTop,
+        bottom, setBottom,
+        switchs, setSwitch,
+        submissive, setSubmissive,
+        dominant, setDominant,
+        commit } = useRelationshipEditState(initalvalue)
+    const initialconfig = {
+        noplay: config?.noplay ? config.noplay : false,
+        taste: config?.taste ? config.taste : false
+    }
 
     return (
         <Flex direction={'column'}>
@@ -23,15 +58,16 @@ export const Editrelationship = () => {
                 <HStack>
                     <IconButton
                         icon={<Check />}
-                        onClick={() => {
-                            handleNameChange();
-                            setEditDisplayNameMode(false);
+                        onClick={async() => {
+                            await commit();
+                            onRefresh();
+                            onFinish();
                         }}
                     />
                     <IconButton
                         icon={<X />}
                         onClick={() => {
-                            setEditDisplayNameMode(false);
+                            onFinish();
                             // setEditDisplayName("");
                         }}
                     />
@@ -66,7 +102,7 @@ export const Editrelationship = () => {
                                         Heroto Love
                                     </Center>
                                     <Spacer />
-                                    <NumberInput min={0} max={100}>
+                                    <NumberInput min={0} max={100} onChange={(e)=>setHeroto(parseInt(e))} value={heroto}>
                                         <NumberInputField fontSize={14}
                                             bg={"white"}
                                             borderRadius={10}
@@ -100,7 +136,7 @@ export const Editrelationship = () => {
                                         Boy Love
                                     </Center>
                                     <Spacer />
-                                    <NumberInput min={0} max={100}>
+                                    <NumberInput min={0} max={100} onChange={(e)=>setBlove(parseInt(e))} value={blove}>
                                         <NumberInputField fontSize={14}
                                             bg={"white"}
                                             borderRadius={10}
@@ -134,7 +170,7 @@ export const Editrelationship = () => {
                                         Girl Love
                                     </Center>
                                     <Spacer />
-                                    <NumberInput min={0} max={100}>
+                                    <NumberInput min={0} max={100} onChange={(e)=>setGlove(parseInt(e))} value={glove}>
                                         <NumberInputField fontSize={14}
                                             bg={"white"}
                                             borderRadius={10}
@@ -168,7 +204,7 @@ export const Editrelationship = () => {
                                         No Love
                                     </Center>
                                     <Spacer />
-                                    <NumberInput min={0} max={100}>
+                                    <NumberInput min={0} max={100} onChange={(e)=>setNlove(parseInt(e))} value={nlove}>
                                         <NumberInputField fontSize={14}
                                             bg={"white"}
                                             borderRadius={10}
@@ -202,7 +238,7 @@ export const Editrelationship = () => {
                                         Friend with Benefit
                                     </Center>
                                     <Spacer />
-                                    <NumberInput min={0} max={100}>
+                                    <NumberInput min={0} max={100} onChange={(e)=>setFwb(parseInt(e))} value={fwb}>
                                         <NumberInputField fontSize={14}
                                             bg={"white"}
                                             borderRadius={10}
@@ -236,7 +272,7 @@ export const Editrelationship = () => {
                                         Friend Zone
                                     </Center>
                                     <Spacer />
-                                    <NumberInput min={0} max={100}>
+                                    <NumberInput min={0} max={100} onChange={(e)=>setFz(parseInt(e))} value={fz}>
                                         <NumberInputField fontSize={14}
                                             bg={"white"}
                                             borderRadius={10}
@@ -270,7 +306,7 @@ export const Editrelationship = () => {
                                         One Night Stand
                                     </Center>
                                     <Spacer />
-                                    <NumberInput min={0} max={100}>
+                                    <NumberInput min={0} max={100} onChange={(e)=>setOnenight(parseInt(e))} value={onenight}>
                                         <NumberInputField fontSize={14}
                                             bg={"white"}
                                             borderRadius={10}
@@ -299,6 +335,7 @@ export const Editrelationship = () => {
                     </Box>
 
                     <Input placeholder="กรอกข้อมูลตรงนี้" />
+                    {/* ไม่ได้ใส่ value ให้นะคะ */}
                 </Flex>
 
                 <Flex pl={3} pr={2} w={"100%"}>
@@ -320,7 +357,7 @@ export const Editrelationship = () => {
                                         Top
                                     </Center>
                                     <Spacer />
-                                    <NumberInput min={0} max={100}>
+                                    <NumberInput min={0} max={100} onChange={(e)=>setTop(parseInt(e))} value={top}>
                                         <NumberInputField fontSize={14}
                                             bg={"white"}
                                             borderRadius={10}
@@ -354,7 +391,7 @@ export const Editrelationship = () => {
                                         Bottom
                                     </Center>
                                     <Spacer />
-                                    <NumberInput min={0} max={100}>
+                                    <NumberInput min={0} max={100} onChange={(e)=>setBottom(parseInt(e))} value={bottom}>
                                         <NumberInputField fontSize={14}
                                             bg={"white"}
                                             borderRadius={10}
@@ -388,7 +425,7 @@ export const Editrelationship = () => {
                                         Switch
                                     </Center>
                                     <Spacer />
-                                    <NumberInput min={0} max={100}>
+                                    <NumberInput min={0} max={100} onChange={(e)=>setSwitch(parseInt(e))} value={switchs}>
                                         <NumberInputField fontSize={14}
                                             bg={"white"}
                                             borderRadius={10}
@@ -422,7 +459,7 @@ export const Editrelationship = () => {
                                         Submissive
                                     </Center>
                                     <Spacer />
-                                    <NumberInput min={0} max={100}>
+                                    <NumberInput min={0} max={100} onChange={(e)=>setSubmissive(parseInt(e))} value={submissive}>
                                         <NumberInputField fontSize={14}
                                             bg={"white"}
                                             borderRadius={10}
@@ -456,7 +493,7 @@ export const Editrelationship = () => {
                                         Dominant
                                     </Center>
                                     <Spacer />
-                                    <NumberInput min={0} max={100}>
+                                    <NumberInput min={0} max={100} onChange={(e)=>setDominant(parseInt(e))} value={dominant}>
                                         <NumberInputField fontSize={14}
                                             bg={"white"}
                                             borderRadius={10}
@@ -484,7 +521,8 @@ export const Editrelationship = () => {
                         รสนิยม
                     </Box>
 
-                    <Input placeholder="กรอกข้อมูลตรงนี้" />
+                    <Input placeholder="กรอกข้อมูลตรงนี้"/>
+                    {/* ไม่ได้เขียนให้นะคะ */}
                 </Flex>
             </VStack>
         </Flex>

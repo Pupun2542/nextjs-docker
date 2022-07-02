@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Flex } from "@chakra-ui/react";
 import { Personal } from "./pesonal";
-import { Roleplay } from "./roleplay";
 import { Active } from "./active";
-import { Relationship } from "./relationship";
-import { Playedcom } from "./playedcom";
-import { Condition } from "./condition";
 import { EditPersonal } from "./pesonaledit";
 import useProfileState from "../../src/hook/useProfileState";
 import { EditActive } from "./activeedit";
+
+import { Roleplay } from "./roleplay";
+import { Editroleplay } from "./roleplayedite";
+
+import { Relationship } from "./relationship";
+import { Editrelationship } from "./relationshipedit";
+
+import { Playedcom } from "./playedcom";
+import { Editplayedcom } from "./playedcomedit";
+
+import { Condition } from "./condition";
+import { Editcondition } from "./conditionedit";
 
 export const About = ({ data, onRefresh }) => {
   const { isOpen, onOpen, onClose } = useProfileState({
@@ -36,7 +44,18 @@ export const About = ({ data, onRefresh }) => {
         ></Personal>
       )}
 
-      <Roleplay></Roleplay>
+      {isOpen("roleplay") ? (
+        <Editroleplay
+          onFinish={() => onClose("roleplay")}
+          value={data.roleplay}
+          onRefresh={onRefresh}
+        ></Editroleplay>
+      ) : (
+        <Roleplay
+          onEdit={() => onOpen("roleplay")}
+          value={data.roleplay}
+        ></Roleplay>
+      )}
 
       {isOpen("active") ? (
         <EditActive
@@ -51,11 +70,44 @@ export const About = ({ data, onRefresh }) => {
         ></Active>
       )}
 
-      <Relationship></Relationship>
+      {isOpen("relationship") ? (
+        <Editrelationship
+          onFinish={() => onClose("relationship")}
+          value={data.relationship}
+          onRefresh={onRefresh}
+        ></Editrelationship>
+      ) : (
+        <Relationship
+          onEdit={() => onOpen("relationship")}
+          value={data.relationship}
+        ></Relationship>
+      )}
 
-      <Playedcom></Playedcom>
+      {isOpen("playcom") ? (
+        <Editplayedcom
+          onFinish={() => onClose("playcom")}
+          value={data.playcom}
+          onRefresh={onRefresh}
+        ></Editplayedcom>
+      ) : (
+        <Playedcom
+          onEdit={() => onOpen("playcom")}
+          value={data.playcom}
+        ></Playedcom>
+      )}
 
-      <Condition></Condition>
+      {isOpen("condition") ? (
+        <Editcondition
+          onFinish={() => onClose("condition")}
+          value={data.condition}
+          onRefresh={onRefresh}
+        ></Editcondition>
+      ) : (
+        <Condition
+          onEdit={() => onOpen("condition")}
+          value={data.condition}
+        ></Condition>
+      )}
     </Flex>
   );
 };

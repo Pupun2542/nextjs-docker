@@ -20,7 +20,7 @@ import useActiveEditState from "../../src/hook/useActiveEditState";
 export const EditActive = ({onFinish, value, onRefresh}) => {
     const initalvalue = {
         front: value?.front?value.front: 50,
-        back: value?.back?value.back: 50,
+        back: value?.back?value .back: 50,
         time: value?.time?value.time: 1,
     }
     const  { limit, front, setFront, back, setBack, time, setTime, commit } = useActiveEditState(initalvalue)
