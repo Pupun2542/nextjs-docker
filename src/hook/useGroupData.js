@@ -31,14 +31,14 @@ export const useGroupData = (gid, user) => {
         isStaff: Object.keys(resdata.data.staff).includes(user.uid),
       };
       if (resdata.data.chara) {
-        console.log(resdata.data.chara);
-        console.log(
-          Object.fromEntries(
-            Object.entries(resdata.data.chara).filter(
-              ([k, v], i) => v.parentId == user.uid
-            )
-          )
-        );
+        // console.log(resdata.data.chara);
+        // console.log(
+        //   Object.fromEntries(
+        //     Object.entries(resdata.data.chara).filter(
+        //       ([k, v], i) => v.parentId == user.uid
+        //     )
+        //   )
+        // );
         mappedData = {
           ...mappedData,
           mychara: Object.fromEntries(
@@ -47,16 +47,20 @@ export const useGroupData = (gid, user) => {
             )
           ),
         };
-        memberRef.current = listenerData.member
-        charaRef.current = listenerData.chara
-        setData(mappedData);
-        setLoading(false);
       }
+      memberRef.current = listenerData.member
+      charaRef.current = listenerData.chara
+      console.log(mappedData)
+      setData(mappedData);
+      setLoading(false);
+    } else {
+      alert("something went wrong")
     }
   };
 
   useEffect(() => {
-    if (listenerData && user && (listenerData.member != memberRef.current || listenerData.chara != charaRef.current )) {
+    if (listenerData && user && (listenerData.member !== memberRef.current || listenerData.chara !== charaRef.current )) {
+      // console.log("algorithm return true")
       fetchdata();
     }
   }, [listenerData, user]);
