@@ -168,7 +168,7 @@ function about() {
                   justifyContent={"center"}
                 >
                   <Flex w={"100%"} justifyContent={"center"}>
-                    <Image src="Ko-fi_Icon_RGB_rounded.png" w={150} />
+                    <a target="_blank" href="https://ko-fi.com/comuthor"><Image src="Ko-fi_Icon_RGB_rounded.png" w={150}/></a>
                   </Flex>
 
                   <Flex m={2} direction={"column"} fontSize={20}>
@@ -193,9 +193,9 @@ function about() {
                 pl={5}
                 borderColor={"black"}
                 as={"button"}
-                onClick={() => router.push("https://discord.gg/BVrwyCPEHc")}
+                onClick={() => router.push("https://discord.gg/BVrwyCPEHc")} //<a target="_blank" href="https://discord.com/invite/BVrwyCPEHc"></a>
               >
-                <DiscordLogo size={60} />
+                <a><DiscordLogo size={60} /></a>
 
                 <Center h={55} pl={3} fontSize={18}>
                   Discord
@@ -212,7 +212,7 @@ function about() {
                 borderColor={"black"}
                 as={"button"}
                 onClick={() =>
-                  router.push("https://www.facebook.com/ComuthorCorp")
+                  router.push("https://www.facebook.com/ComuthorCorp") //<a target="_blank" href="https://www.facebook.com/ComuthorCorp"></a>
                 }
               >
                 <FacebookLogo size={60} />
@@ -228,7 +228,7 @@ function about() {
                 color={"white"}
                 pl={5}
                 borderColor={"black"}
-                cursor={"not-allowed"}
+                cursor={"not-allowed"} //<a target="_blank" href="https://twitter.com/comuthor"></a>
               >
                 <TwitterLogo size={60} />
 
