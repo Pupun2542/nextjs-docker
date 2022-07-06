@@ -342,7 +342,7 @@ export default function Group() {
                             }
                             color={
                               data.love?.includes(auth.currentUser.uid)
-                                ? "red"
+                                ? "#EA4545"
                                 : "black"
                             }
                           />
