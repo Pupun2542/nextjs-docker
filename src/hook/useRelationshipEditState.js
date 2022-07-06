@@ -2,7 +2,7 @@ import useProfileEditor from "./useProfileEditor";
 
 const useRelationshipEditState = (initialvalue) => {
     const { setEditValue, getEditValue, commit } = useProfileEditor({
-        active: initialvalue,
+        relationship: initialvalue,
     });
     const heroto = getEditValue("relationship").heroto;
     const setHeroto = (value) => {

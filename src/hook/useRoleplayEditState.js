@@ -2,7 +2,7 @@ import useProfileEditor from "./useProfileEditor";
 
 const useRoleplayEditState = (initialvalue) => {
   const { setEditValue, getEditValue, commit } = useProfileEditor({
-    active: initialvalue,
+    roleplay: initialvalue,
   });
   const short = getEditValue("roleplay").short;
   const setShort = (value) => {

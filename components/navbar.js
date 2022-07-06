@@ -151,7 +151,7 @@ function CustomNavbar() {
     if (user && !loading) {
       unsubscribe = onSnapshot(doc(db, "userDetail", user.uid), async (usrdoc)=>{
         if (usrdoc.exists) {
-          const pinnedgroup = [];
+          let pinnedgroup = [];
           if (usrdoc.data().pinned?.length > 0) {
             await Promise.all(
               usrdoc.data().pinned.map(async (gid) => {
@@ -451,7 +451,7 @@ function CustomNavbar() {
                     <ModalHeader bg={"gray.50"}>My Pinned</ModalHeader>
                     <ModalCloseButton rounded={"full"} />
                     <ModalBody>
-                      {console.log(data)}
+                      {/* {console.log(data)} */}
                       {data?.pinned?.length > 0 &&
                         data.pinned.map((doc, k) => (
                           <Text

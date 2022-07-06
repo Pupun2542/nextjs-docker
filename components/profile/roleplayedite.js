@@ -12,8 +12,11 @@ import {
     NumberInput,
     NumberInputField,
     SimpleGrid,
+    HStack,
+    IconButton,
+
 } from "@chakra-ui/react";
-import { Eye, EyeClosed } from "phosphor-react";
+import { Check, X } from "phosphor-react";
 import useRoleplayEditState from "../../src/hook/useRoleplayEditState";
 
 export const Editroleplay = ({ value, onFinish, onRefresh }) => {

@@ -279,7 +279,7 @@ function dashboard() {
     }
   };
 
-  // console.log(loading, data);
+  console.log(loading, data);
   if (!loading && data) {
     return (
       <Box>

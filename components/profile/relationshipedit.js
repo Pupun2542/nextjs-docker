@@ -11,10 +11,13 @@ import {
     Text,
     NumberInput,
     NumberInputField,
+    HStack,
+    IconButton,
 } from "@chakra-ui/react";
+import { Check, X } from "phosphor-react";
 import useRelationshipEditState from "../../src/hook/useRelationshipEditState";
 
-export const Editrelationship = ({ value, config }) => {
+export const Editrelationship = ({ value, onFinish }) => {
     
     const initalvalue = {
         heroto: value?.heroto ? value.heroto : 20,
@@ -45,10 +48,6 @@ export const Editrelationship = ({ value, config }) => {
         submissive, setSubmissive,
         dominant, setDominant,
         commit } = useRelationshipEditState(initalvalue)
-    const initialconfig = {
-        noplay: config?.noplay ? config.noplay : false,
-        taste: config?.taste ? config.taste : false
-    }
 
     return (
         <Flex direction={'column'}>
