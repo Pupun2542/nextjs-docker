@@ -167,12 +167,17 @@ function about() {
                   color={"white"}
                   justifyContent={"center"}
                 >
-                  <Flex w={"100%"} justifyContent={"center"}>
-                    <a target="_blank" href="https://ko-fi.com/comuthor"><Image src="Ko-fi_Icon_RGB_rounded.png" w={150}/></a>
+                  <Flex w={"100%"} justifyContent={"center"}><Image src="Ko-fi_Icon_RGB_rounded.png" w={150}/>
+                    
                   </Flex>
 
                   <Flex m={2} direction={"column"} fontSize={20}>
-                    <Center>Soon</Center>
+                    <a target="_blank" href="https://ko-fi.com/comuthor">
+                      <Center>
+                        <Text as={'U'}>Click</Text>
+                        </Center>
+                    </a>
+                    
                   </Flex>
                 </Flex>
               </Center>
@@ -193,9 +198,9 @@ function about() {
                 pl={5}
                 borderColor={"black"}
                 as={"button"}
-                onClick={() => router.push("https://discord.gg/BVrwyCPEHc")} //<a target="_blank" href="https://discord.com/invite/BVrwyCPEHc"></a>
+                 //<a target="_blank" href="https://discord.com/invite/BVrwyCPEHc"></a>
               >
-                <a><DiscordLogo size={60} /></a>
+                <a target="_blank" href="https://discord.com/invite/BVrwyCPEHc"><DiscordLogo size={60} /></a>
 
                 <Center h={55} pl={3} fontSize={18}>
                   Discord
@@ -211,12 +216,9 @@ function about() {
                 pl={5}
                 borderColor={"black"}
                 as={"button"}
-                onClick={() =>
-                  router.push("https://www.facebook.com/ComuthorCorp") //<a target="_blank" href="https://www.facebook.com/ComuthorCorp"></a>
-                }
               >
-                <FacebookLogo size={60} />
-
+                <a target="_blank" href="https://www.facebook.com/ComuthorCorp"><FacebookLogo size={60} /></a>
+              
                 <Center h={55} pl={3} fontSize={18}>Facebook</Center>
               </Flex>
 
@@ -228,9 +230,10 @@ function about() {
                 color={"white"}
                 pl={5}
                 borderColor={"black"}
-                cursor={"not-allowed"} //<a target="_blank" href="https://twitter.com/comuthor"></a>
+                //cursor={"not-allowed"}
               >
-                <TwitterLogo size={60} />
+                <a target="_blank" href="https://twitter.com/comuthor"><TwitterLogo size={60} /></a>
+                
 
                 <Center h={55} pl={3} fontSize={18}>Twitter</Center>
               </Flex>
