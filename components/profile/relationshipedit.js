@@ -17,7 +17,7 @@ import {
 import { Check, X } from "phosphor-react";
 import useRelationshipEditState from "../../src/hook/useRelationshipEditState";
 
-export const Editrelationship = ({ value, onFinish }) => {
+export const Editrelationship = ({ value, onFinish, onRefresh }) => {
     
     const initalvalue = {
         heroto: value?.heroto ? value.heroto : 20,
@@ -47,6 +47,8 @@ export const Editrelationship = ({ value, onFinish }) => {
         switchs, setSwitch,
         submissive, setSubmissive,
         dominant, setDominant,
+        noplay, setNoplay,
+        taste, setTaste,
         commit } = useRelationshipEditState(initalvalue)
 
     return (
@@ -333,7 +335,7 @@ export const Editrelationship = ({ value, onFinish }) => {
                         สายที่ไม่เล่น
                     </Box>
 
-                    <Input placeholder="กรอกข้อมูลตรงนี้" />
+                    <Input placeholder="กรอกข้อมูลตรงนี้" value={noplay} onChange={(e)=>setNoplay(e.target.value)} />
                     {/* ไม่ได้ใส่ value ให้นะคะ */}
                 </Flex>
 
@@ -520,7 +522,7 @@ export const Editrelationship = ({ value, onFinish }) => {
                         รสนิยม
                     </Box>
 
-                    <Input placeholder="กรอกข้อมูลตรงนี้"/>
+                    <Input placeholder="กรอกข้อมูลตรงนี้" value={taste} onChange={(e)=>setTaste(e.target.value)}/>
                     {/* ไม่ได้เขียนให้นะคะ */}
                 </Flex>
             </VStack>

@@ -18,7 +18,7 @@ import {
 import { Check, X } from "phosphor-react";
 import usePlaycomEditState from "../../src/hook/usePlaycomEditState";
 
-export const Editplayedcom = ({ value, onFinish }) => {
+export const Editplayedcom = ({ value, onFinish, onRefresh }) => {
   const initalvalue = {
     survival: value?.survival ? value.survival : 20,
     slow: value?.slow ? value.slow : 20,
@@ -35,6 +35,8 @@ export const Editplayedcom = ({ value, onFinish }) => {
     setSlowsur,
     vote,
     setVote,
+    inter,
+    setInter,
     commit,
   } = usePlaycomEditState(initalvalue);
   // const initialconfig = {
@@ -239,7 +241,7 @@ export const Editplayedcom = ({ value, onFinish }) => {
             หมวดหมู่ที่สนใจ
           </Box>
 
-          <Input placeholder="กรอกข้อมูลตรงนี้" />
+          <Input placeholder="กรอกข้อมูลตรงนี้" value={inter} onChange={(e)=>setInter(e.target.value)} />
           {/* ไม่ได้เขียนให้น้าาาาาา */}
         </Flex>
       </VStack>

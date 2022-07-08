@@ -37,6 +37,7 @@ export const Editroleplay = ({ value, onFinish, onRefresh }) => {
         fanta: value?.fanta ? value.fanta : 20,
         retro: value?.retro ? value.retro : 20,
         sci: value?.sci ? value.sci : 20,
+        other: value?.other ? value.other : "",
     }
     const { commit,
         short, setShort, 
@@ -54,7 +55,8 @@ export const Editroleplay = ({ value, onFinish, onRefresh }) => {
         action, setAction, 
         fanta, setFanta, 
         retro, setRetro, 
-        sci, setSci 
+        sci, setSci,
+        other, setOther
     } = useRoleplayEditState(initalvalue)
 
     return (
@@ -630,7 +632,7 @@ export const Editroleplay = ({ value, onFinish, onRefresh }) => {
                             </WrapItem>
                         </SimpleGrid>
 
-                        <Input placeholder="กรอกข้อมูลตรงนี้" />
+                        <Input placeholder="อื่นๆ ในกรณีที่มีหลายข้อ ให้ขั้นด้วย ',' " value={other} onChange={(e)=> setOther(e.target.value)} />
                     </VStack>
 
                 </Flex>

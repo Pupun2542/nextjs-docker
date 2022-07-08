@@ -68,6 +68,10 @@ const useRoleplayEditState = (initialvalue) => {
   const setSci = (value) => {
     setEditValue("roleplay", {...getEditValue("roleplay"), sci:value})
   }
+  const other = getEditValue("roleplay").other;
+  const setOther = (value) => {
+    setEditValue("roleplay", {...getEditValue("roleplay"), other:value})
+  }
   
   return {
             short, setShort, 
@@ -86,6 +90,7 @@ const useRoleplayEditState = (initialvalue) => {
             fanta, setFanta, 
             retro, setRetro, 
             sci, setSci ,
+            other, setOther,
             commit
         };
 };

@@ -26,6 +26,7 @@ const useConditionEditState = (initialvalue) => {
     }
     const condition = getEditValue("condition").condition
     const setCondition = (value) => {
+        console.log(value)
         setEditValue("condition", {...getEditValue("condition"), condition:value})
     }
     const othercondition = getEditValue("condition").othercondition;
