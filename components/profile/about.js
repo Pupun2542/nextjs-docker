@@ -17,8 +17,10 @@ import { Editplayedcom } from "./playedcomedit";
 
 import { Condition } from "./condition";
 import { Editcondition } from "./conditionedit";
+import { useApp } from "../../src/hook/local";
 
 export const About = ({ data, onRefresh }) => {
+  const { auth } = useApp()
   const { isOpen, onOpen, onClose } = useProfileState({
     personal: false,
     roleplay: false,
@@ -27,6 +29,7 @@ export const About = ({ data, onRefresh }) => {
     playedcom: false,
     condition: false,
   });
+  const isOwner = data.uid == auth.currentUser.uid;
   return (
     <Flex direction={"column"}>
       {isOpen("personal") ? (
@@ -41,6 +44,7 @@ export const About = ({ data, onRefresh }) => {
           onEdit={() => onOpen("personal")}
           value={data.personalvalue}
           config={data.personalconfig}
+          isOwner = {isOwner}
         ></Personal>
       )}
 
@@ -54,6 +58,7 @@ export const About = ({ data, onRefresh }) => {
         <Roleplay
           onEdit={() => onOpen("roleplay")}
           value={data.roleplay}
+          isOwner = {isOwner}
         ></Roleplay>
       )}
 
@@ -67,6 +72,7 @@ export const About = ({ data, onRefresh }) => {
         <Active
           onEdit={() => onOpen("active")}
           value={data.active}
+          isOwner = {isOwner}
         ></Active>
       )}
 
@@ -80,6 +86,7 @@ export const About = ({ data, onRefresh }) => {
         <Relationship
           onEdit={() => onOpen("relationship")}
           value={data.relationship}
+          isOwner = {isOwner}
         ></Relationship>
       )}
 
@@ -93,6 +100,7 @@ export const About = ({ data, onRefresh }) => {
         <Playedcom
           onEdit={() => onOpen("playcom")}
           value={data.playcom}
+          isOwner = {isOwner}
         ></Playedcom>
       )}
 
@@ -106,6 +114,7 @@ export const About = ({ data, onRefresh }) => {
         <Condition
           onEdit={() => onOpen("condition")}
           value={data.condition}
+          isOwner = {isOwner}
         ></Condition>
       )}
     </Flex>

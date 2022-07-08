@@ -11,16 +11,17 @@ import {
   Center,
 } from "@chakra-ui/react";
 
-export const Personal = ({ onEdit, value, config }) => {
-
+export const Personal = ({ onEdit, value, config, isOwner }) => {
   return (
     <Flex direction={"column"}>
       <Flex fontSize={24} fontWeight={"extrabold"} ml={5}>
         <Text>ข้อมูลส่วนตัว</Text>
         <Spacer />
-        <Text fontSize={14} mt={3} onClick={onEdit} cursor={"pointer"}>
-          Edit
-        </Text>
+        {isOwner && (
+          <Text fontSize={14} mt={3} onClick={onEdit} cursor={"pointer"}>
+            Edit
+          </Text>
+        )}
       </Flex>
 
       <VStack
