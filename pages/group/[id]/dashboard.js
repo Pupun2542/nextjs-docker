@@ -45,6 +45,7 @@ import {
   MenuList,
   MenuItem,
   Avatar,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { CaretDown, ImageSquare } from "phosphor-react";
 
@@ -628,7 +629,10 @@ function dashboard() {
                   </TabPanel>
                   {/* Settings */}
                   <TabPanel>
-                    {tabIndex == 3 && <Setting data={data} gid={id} />}
+                    <SimpleGrid column={2} spacing={5}>
+                      {tabIndex == 3 && <Setting data={data} gid={id} />}
+                    </SimpleGrid>
+                    
                   </TabPanel>
                 </TabPanels>
               </Tabs>

@@ -1,4 +1,4 @@
-import { Box, Flex, Input, Avatar, Text } from "@chakra-ui/react";
+import { Box, Flex, Input, Avatar, Text, Center } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import useUserSearch from "../../src/hook/useUserSearch";
 
@@ -6,20 +6,25 @@ const UserSearchInput = ({ onSelect }) => {
   const { searchStr, setSearchStr, result } = useUserSearch();
 
   return (
-    <Flex mt={5} pos="relative">
-      <Input
-        mr={1}
-        value={searchStr}
-        onChange={(e) => setSearchStr(e.target.value)}
-      />
+    <Flex width={'100%'} pos="relative" mb={1.5}>
+      <Center width={'100%'}>
+        <Input
+          bg={'#FFFFFF'}
+          mr={1}
+          value={searchStr}
+          onChange={(e) => setSearchStr(e.target.value)}
+          height={46}
+        />
+      </Center>
+
       <Flex display={result.length > 0 ? "initial" : "none"} pos="absolute" mt={10} zIndex={10000} bg="white">
-        {result.map((user, index) => ( 
+        {result.map((user, index) => (
           <Flex
             justifyContent={"space-between"}
             mt={5}
             onClick={() => {
-                onSelect(user);
-                setSearchStr("");
+              onSelect(user);
+              setSearchStr("");
             }}
             _hover={{
               backgroundColor: "gray.200",
