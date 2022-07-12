@@ -330,7 +330,7 @@ export const Relationship = ({ value, config, onEdit }) => {
 
                     <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={12}>
                         <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={10}>
-                            {value?.taste && !config?.taste ? value.taste : "หนูรักตัวเอง"}
+                            {value?.taste && !config?.taste ? value.taste : ""}
                         </Box>
                     </Center>
                 </Flex>
