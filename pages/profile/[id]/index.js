@@ -373,13 +373,13 @@ export default function profile() {
                 >
                   About me
                 </Tab>
-                <Tab
+                {/* <Tab
                   _selected={{ color: "white", bg: "#9A9AB0" }}
                   isDisabled
                   borderRadius={10}
                 >
                   Timeline
-                </Tab>
+                </Tab> */}
                 <Tab
                   _selected={{ color: "white", bg: "#9A9AB0" }}
                   isDisabled
@@ -393,7 +393,7 @@ export default function profile() {
                   borderRadius={10}
                   isDisabled
                 >
-                  OC
+                  Original Character
                 </Tab>
                 <Tab
                   _selected={{ color: "white", bg: "#9A9AB0" }}
@@ -401,13 +401,13 @@ export default function profile() {
                 >
                   Friend
                 </Tab>
-                <Tab
+                {/* <Tab
                   _selected={{ color: "white", bg: "#9A9AB0" }}
                   isDisabled
                   borderRadius={10}
                 >
                   Bookshelf
-                </Tab>
+                </Tab> */}
 
               </TabList>
 

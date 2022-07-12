@@ -1,4 +1,5 @@
 import Image from "next/image";
+
 import styles from "../styles/Home.module.css";
 import "../src/config/firebase.config";
 import CustomNavbar from "../components/navbar";
@@ -59,7 +60,7 @@ export default function Home() {
 
       <Flex>
         <Spacer />
-        <VStack bg={'white'} w={[500, 1000]} boxShadow='Base' fontFamily={'Mitr'} marginTop={55}>
+        <VStack bg={'white'} w={[500, 1000]} boxShadow='Base' fontFamily={'THSarabunNew'} marginTop={55}>
           <Flex
             align="center"
             justify={{ base: "center", md: "space-around", xl: "space-between" }}

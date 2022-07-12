@@ -52,7 +52,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>{value?.heroto ? value.heroto : 20}</Box>
+                                        <Box>{value && value.heroto !== undefined && value.heroto !== null ? value.heroto : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -74,7 +74,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>{value?.blove ? value.blove : 20}</Box>
+                                        <Box>{value && value.blove !== undefined && value.blove !== null ? value.blove : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -96,7 +96,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>{value?.glove ? value.glove : 20}</Box>
+                                        <Box>{value && value.glove !== undefined && value.glove !== null ? value.glove : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -118,7 +118,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>{value?.nlove ? value.nlove : 20}</Box>
+                                        <Box>{value && value.nlove !== undefined && value.nlove !== null ? value.nlove : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -140,7 +140,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>{value?.fwb ? value.fwb : 20}</Box>
+                                        <Box>{value && value.fwb !== undefined && value.fwb !== null ? value.fwb : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -162,7 +162,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>{value?.fz ? value.fz : 20}</Box>
+                                        <Box>{value && value.fz !== undefined && value.fz !== null ? value.fz : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -184,7 +184,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>{value?.onenight ? value.onenight : 20}</Box>
+                                        <Box>{value && value.onenight !== undefined && value.onenight !== null ? value.onenight : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -200,7 +200,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                     </Box>
                     <Center w={'100%'} borderRadius={10} bg={'gray.300'} p={1} h={12}>
                         <Box w={'100%'} borderRadius={10} bg={'white'} p={2} h={10}>
-                            {value?.noplay && !config?.noplay ? value.noplay : "ไม่น่านะ"}
+                            {value?.noplay && !config?.noplay ? value.noplay : ""}
                         </Box>
                     </Center>
                 </Flex>
@@ -225,7 +225,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>{value?.top ? value.top : 20}</Box>
+                                        <Box>{value && value.top !== undefined && value.top !== null ? value.top : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -247,7 +247,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>{value?.bottom ? value.bottom : 20}</Box>
+                                        <Box>{value && value.bottom !== undefined && value.bottom !== null ? value.bottom : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -269,7 +269,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>{value?.switchs ? value.switchs : 20}</Box>
+                                        <Box>{value && value.switchs !== undefined && value.switchs !== null ? value.switchs : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -291,7 +291,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>{value?.submissive ? value.submissive : 20}</Box>
+                                        <Box>{value && value.submissive !== undefined && value.submissive !== null ? value.submissive : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
@@ -313,7 +313,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                     </Center>
                                     <Spacer />
                                     <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>{value?.dominant ? value.dominant : 20}</Box>
+                                        <Box>{value && value.dominant !== undefined && value.dominant !== null ? value.dominant : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
