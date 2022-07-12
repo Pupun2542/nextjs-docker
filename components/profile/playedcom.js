@@ -15,6 +15,15 @@ import {
 } from "@chakra-ui/react";
 
 export const Playedcom = ({ value, config, onEdit, isOwner }) => {
+
+  const breakpoints = {
+    sm: '30em',
+    md: '48em',
+    lg: '62em',
+    xl: '80em',
+    '2xl': '96em',
+  }
+
   return (
     <Flex direction={"column"}>
       <Flex fontSize={24} fontWeight={"extrabold"} ml={5}>
@@ -41,7 +50,7 @@ export const Playedcom = ({ value, config, onEdit, isOwner }) => {
             ประเภทที่สนใจ
           </Box>
 
-          <SimpleGrid columns={4} spacing={4}>
+          <SimpleGrid columns={{ '2xl': '4', xl: '4', lg: '3', md: '3', sm: '2' }} spacing={4}>
             <WrapItem>
               <Center>
                 <Flex
@@ -60,11 +69,12 @@ export const Playedcom = ({ value, config, onEdit, isOwner }) => {
                     bg={"white"}
                     pl={1}
                     pr={1}
+                    w={50}
                     borderRadius={10}
                     borderWidth={1}
                     borderColor={"black"}
                   >
-                    <Box>{value?.survival ? value.survival : 20}</Box>%
+                    <Box>{value && value.survival !== undefined && value.survival !== null ? value.survival : 20}</Box>%
                   </Center>
                 </Flex>
               </Center>
@@ -88,11 +98,12 @@ export const Playedcom = ({ value, config, onEdit, isOwner }) => {
                     bg={"white"}
                     pl={1}
                     pr={1}
+                    w={50}
                     borderRadius={10}
                     borderWidth={1}
                     borderColor={"black"}
                   >
-                    <Box>{value?.slow ? value.slow : 20}</Box>%
+                    <Box>{value && value.slow !== undefined && value.slow !== null ? value.slow : 20}</Box>%
                   </Center>
                 </Flex>
               </Center>
@@ -116,11 +127,12 @@ export const Playedcom = ({ value, config, onEdit, isOwner }) => {
                     bg={"white"}
                     pl={1}
                     pr={1}
+                    w={50}
                     borderRadius={10}
                     borderWidth={1}
                     borderColor={"black"}
                   >
-                    <Box>{value?.slowsur ? value.slowsur : 20}</Box>%
+                    <Box>{value && value.slowsur !== undefined && value.slowsur !== null ? value.slowsur : 20}</Box>%
                   </Center>
                 </Flex>
               </Center>
@@ -144,11 +156,12 @@ export const Playedcom = ({ value, config, onEdit, isOwner }) => {
                     bg={"white"}
                     pl={1}
                     pr={1}
+                    w={50}
                     borderRadius={10}
                     borderWidth={1}
                     borderColor={"black"}
                   >
-                    <Box>{value?.vote ? value.vote : 20}</Box>%
+                    <Box>{value && value.vote !== undefined && value.vote !== null ? value.vote : 20}</Box>%
                   </Center>
                 </Flex>
               </Center>

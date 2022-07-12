@@ -51,7 +51,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                         Heroto Love
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
+                                    <Center ml={1} bg={'white'} w={50} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
                                         <Box>{value && value.heroto !== undefined && value.heroto !== null ? value.heroto : 20}</Box>
                                         %
                                     </Center>
@@ -73,7 +73,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                         Boy Love
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
+                                    <Center ml={1} bg={'white'} w={50} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
                                         <Box>{value && value.blove !== undefined && value.blove !== null ? value.blove : 20}</Box>
                                         %
                                     </Center>
@@ -95,7 +95,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                         Girl Love
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
+                                    <Center ml={1} bg={'white'} w={50} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
                                         <Box>{value && value.glove !== undefined && value.glove !== null ? value.glove : 20}</Box>
                                         %
                                     </Center>
@@ -117,7 +117,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                         No Love
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
+                                    <Center ml={1} bg={'white'} w={50} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
                                         <Box>{value && value.nlove !== undefined && value.nlove !== null ? value.nlove : 20}</Box>
                                         %
                                     </Center>
@@ -139,7 +139,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                         Friend with Benefit
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
+                                    <Center ml={1} bg={'white'} w={50} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
                                         <Box>{value && value.fwb !== undefined && value.fwb !== null ? value.fwb : 20}</Box>
                                         %
                                     </Center>
@@ -161,7 +161,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                         Friend Zone
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
+                                    <Center ml={1} bg={'white'} w={50} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
                                         <Box>{value && value.fz !== undefined && value.fz !== null ? value.fz : 20}</Box>
                                         %
                                     </Center>
@@ -183,7 +183,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                         One Night Stand
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
+                                    <Center ml={1} bg={'white'} w={50} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
                                         <Box>{value && value.onenight !== undefined && value.onenight !== null ? value.onenight : 20}</Box>
                                         %
                                     </Center>
@@ -224,7 +224,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                         Top
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
+                                    <Center ml={1} w={50} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
                                         <Box>{value && value.top !== undefined && value.top !== null ? value.top : 20}</Box>
                                         %
                                     </Center>
@@ -246,7 +246,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                         Bottom
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
+                                    <Center ml={1} w={50} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
                                         <Box>{value && value.bottom !== undefined && value.bottom !== null ? value.bottom : 20}</Box>
                                         %
                                     </Center>
@@ -268,7 +268,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                         Switch
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
+                                    <Center ml={1} w={50} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
                                         <Box>{value && value.switchs !== undefined && value.switchs !== null ? value.switchs : 20}</Box>
                                         %
                                     </Center>
@@ -290,7 +290,7 @@ export const Relationship = ({ value, config, onEdit }) => {
                                         Submissive
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
+                                    <Center ml={1} w={50} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
                                         <Box>{value && value.submissive !== undefined && value.submissive !== null ? value.submissive : 20}</Box>
                                         %
                                     </Center>
@@ -312,8 +312,8 @@ export const Relationship = ({ value, config, onEdit }) => {
                                         Dominant
                                     </Center>
                                     <Spacer />
-                                    <Center ml={1} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
-                                        <Box>{value?.dominant ? value.dominant : 20}</Box>
+                                    <Center ml={1} w={50} bg={'white'} pl={1} pr={1} borderRadius={10} borderWidth={1} borderColor={'black'}>
+                                        <Box>{value && value.dominant !== undefined && value.dominant !== null ? value.dominant : 20}</Box>
                                         %
                                     </Center>
                                 </Flex>
