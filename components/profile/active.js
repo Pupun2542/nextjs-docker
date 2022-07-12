@@ -14,15 +14,17 @@ import {
   NumberInputField,
 } from "@chakra-ui/react";
 
-export const Active = ({ onEdit, value }) => {
+export const Active = ({ onEdit, value, isOwner }) => {
   return (
     <Flex direction={"column"}>
       <Flex fontSize={24} fontWeight={"extrabold"} ml={5}>
         <Text>ความแอคทีฟ</Text>
         <Spacer />
-        <Text fontSize={14} mt={3} onClick={onEdit} cursor={"pointer"}>
-          Edit
-        </Text>
+        {isOwner && (
+          <Text fontSize={14} mt={3} onClick={onEdit} cursor={"pointer"}>
+            Edit
+          </Text>
+        )}
       </Flex>
 
       <VStack
@@ -105,10 +107,13 @@ export const Active = ({ onEdit, value }) => {
 
           <Center w={"100%"} borderRadius={10} bg={"gray.300"} p={1} h={12}>
             <Box w={"100%"} borderRadius={10} bg={"white"} p={2} h={10}>
-                {console.log(value)}
-              {(!value|| value?.time === undefined || value?.time == "1") && (<Text>ตอบกลับตามความสะดวกของตนเอง</Text>)}
-              {value?.time == "2" && (<Text>ตอบกลับภายใน 1 - 2 ชั่วโมง</Text>)}
-              {value?.time == "3" && (<Text>ตอบกลับภายใน 3 - 6 ชั่วโมง</Text>)}
+              {console.log(value)}
+              {(!value || value?.time === undefined || value?.time == "1") && (
+                <Text>ตอบกลับตามความสะดวกของตนเอง</Text>
+              )}
+              {value?.time == "2" && <Text>ตอบกลับภายใน 1 - 2 ชั่วโมง</Text>}
+              {value?.time == "3" && <Text>ตอบกลับภายใน 3 - 6 ชั่วโมง</Text>}
+              {value?.time == "4" && <Text>ตอบกลับทันที</Text>}
             </Box>
           </Center>
         </Flex>

@@ -54,40 +54,10 @@ export const Personal = ({ onEdit, value, config, isOwner }) => {
           <Center w={"100%"} borderRadius={10} bg={"gray.300"} p={1} h={12}>
             <Box w={"100%"} borderRadius={10} bg={"white"} p={2} h={10}>
               <RadioGroup w={"100%"} value={value?.gender} defaultValue="3">
-                <Stack direction="row">
-                  <Radio
-                    value="1"
-                    w={"25%"}
-                    colorScheme="purple"
-                    isDisabled={true}
-                  >
-                    ชาย
-                  </Radio>
-                  <Radio
-                    value="2"
-                    w={"25%"}
-                    colorScheme="purple"
-                    isDisabled={true}
-                  >
-                    หญิง
-                  </Radio>
-                  <Radio
-                    value="3"
-                    w={"25%"}
-                    colorScheme="purple"
-                    isDisabled={true}
-                  >
-                    ไม่ระบุ
-                  </Radio>
-                  <Radio
-                    value="4"
-                    w={"25%"}
-                    colorScheme="purple"
-                    isDisabled={true}
-                  >
-                    {value?.gender === 4 ? value.othergender : "อื่น ๆ"}{" "}
-                  </Radio>
-                </Stack>
+                  {value?.gender == "1" && <Text>ชาย</Text>}
+                  {value?.gender == "2" && <Text>หญิง</Text>}
+                  {value?.gender == "3" && <Text>ไม่ระบุ</Text>}
+                  {value?.gender == "4" && <Text>{value.othergender? value.othergender : "ไม่ระบุ"}</Text>}
               </RadioGroup>
             </Box>
           </Center>

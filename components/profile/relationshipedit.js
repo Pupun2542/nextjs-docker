@@ -47,6 +47,8 @@ export const Editrelationship = ({ value, onFinish, onRefresh }) => {
         switchs, setSwitch,
         submissive, setSubmissive,
         dominant, setDominant,
+        noplay, setNoplay,
+        taste, setTaste,
         commit } = useRelationshipEditState(initalvalue)
 
     return (
@@ -333,7 +335,7 @@ export const Editrelationship = ({ value, onFinish, onRefresh }) => {
                         สายที่ไม่เล่น
                     </Box>
 
-                    <Input placeholder="กรอกข้อมูลตรงนี้" />
+                    <Input placeholder="กรอกข้อมูลตรงนี้" value={noplay} onChange={(e)=>setNoplay(e.target.value)} />
                     {/* ไม่ได้ใส่ value ให้นะคะ */}
                 </Flex>
 
@@ -520,7 +522,7 @@ export const Editrelationship = ({ value, onFinish, onRefresh }) => {
                         รสนิยม
                     </Box>
 
-                    <Input placeholder="กรอกข้อมูลตรงนี้"/>
+                    <Input placeholder="กรอกข้อมูลตรงนี้" value={taste} onChange={(e)=>setTaste(e.target.value)}/>
                     {/* ไม่ได้เขียนให้นะคะ */}
                 </Flex>
             </VStack>

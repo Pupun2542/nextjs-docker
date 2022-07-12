@@ -53,6 +53,14 @@ const useRelationshipEditState = (initialvalue) => {
     const setDominant = (value) => {
         setEditValue("relationship", {...getEditValue("relationship"), dominant:value})
     }
+    const taste = getEditValue("relationship").taste;
+    const setTaste = (value) => {
+        setEditValue("relationship", {...getEditValue("relationship"), taste:value})
+    }
+    const noplay = getEditValue("relationship").noplay;
+    const setNoplay = (value) => {
+        setEditValue("relationship", {...getEditValue("relationship"), noplay:value})
+    }
     // ตัวไหนที่เป็น String ไม่เขียนให้นะคะ ไม่กล้าเขียนไม่รู้มันจะถูกรึเปล่า taste
     return {
         heroto, setHeroto,
@@ -67,6 +75,8 @@ const useRelationshipEditState = (initialvalue) => {
         switchs, setSwitch,
         submissive, setSubmissive,
         dominant, setDominant,
+        taste, setTaste,
+        noplay, setNoplay,
         commit
     }
 }

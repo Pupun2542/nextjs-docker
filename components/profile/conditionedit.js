@@ -171,24 +171,24 @@ export const Editcondition = ({ value, onFinish, onRefresh }) => {
           </Box>
 
           <Flex float={"left"} pt={2} w={"100%"}>
-            <CheckboxGroup defaultValue={condition} onChange={(e)=>setCondition(e)}>
+            <CheckboxGroup defaultValue={condition} onChange={(e)=>setCondition(e)} colorScheme={"purple"}>
               <SimpleGrid columns={2}>
-                <Checkbox value={1} colorScheme="purple">
+                <Checkbox value="1">
                   ต้องการให้แจ้งก่อนโดยตรง
                 </Checkbox>
-                <Checkbox value={2} colorScheme="purple">
+                <Checkbox value="2">
                   ไม่ต้องการเปิดเผยความสัมพันธ์หน้าไมค์
                 </Checkbox>
-                <Checkbox value={3} colorScheme="purple">
+                <Checkbox value="3">
                   สามารถปล่อยตามสถานการณ์
                 </Checkbox>
-                <Checkbox value={4} colorScheme="purple">
+                <Checkbox value="4">
                   ไม่ใช้คำหยาบคาย
                 </Checkbox>
-                <Checkbox value={5} colorScheme="purple">
+                <Checkbox value="5">
                   ไม่รับเจ้าของตัวละครที่เป็นเพศชาย
                 </Checkbox>
-                <Checkbox value={6} colorScheme="purple">
+                <Checkbox value="6">
                   ไม่รับเจ้าของตัวละครที่เป็นเพศหญิง
                 </Checkbox>
               </SimpleGrid>

@@ -20,7 +20,11 @@ const usePlaycomEditState = (initialvalue) => {
     const setVote = (value) => {
         setEditValue("playcom", {...getEditValue("playcom"), vote:value})
     }
+    const inter = getEditValue("playcom").inter
+    const setInter = (value) => {
+        setEditValue("playcom", {...getEditValue("playcom"), inter:value})
+    }
     // ตัวไหนที่เป็น String ไม่เขียนให้นะคะ ไม่กล้าเขียนไม่รู้มันจะถูกรึเปล่า inter
-    return { survival, setSurvival, slow, setSlow, slowsur, setSlowsur, vote, setVote, commit };
+    return { survival, setSurvival, slow, setSlow, slowsur, setSlowsur, vote, setVote, inter , setInter , commit };
 }
 export default usePlaycomEditState;
