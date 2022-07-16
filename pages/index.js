@@ -1,4 +1,5 @@
 import Image from "next/image";
+
 import styles from "../styles/Home.module.css";
 import "../src/config/firebase.config";
 import CustomNavbar from "../components/navbar";
@@ -59,7 +60,7 @@ export default function Home() {
 
       <Flex>
         <Spacer />
-        <VStack bg={'white'} w={[500, 1000]} boxShadow='Base' fontFamily={'Mitr'} marginTop={55}>
+        <VStack bg={'white'} w={[500, 1000]} boxShadow='Base' fontFamily={'Sarabun-Regular.ttf'} marginTop={55}>
           <Flex
             align="center"
             justify={{ base: "center", md: "space-around", xl: "space-between" }}
@@ -68,11 +69,11 @@ export default function Home() {
             <Box w={400} m={5}>
               <Spacer minH={[0, 30]} />
               <Heading fontFamily={'Mitr'} fontSize={[42, 48]} fontWeight={'bold'} textAlign={['center', 'center', 'left']}>Comuthor</Heading>
-              <Box fontSize={[18, 24]} fontWeight={600} textAlign={['center', 'center', 'left']}>เว็บไซต์คอมมูนิตี้โรลเพลย์เพื่อส่วนรวม</Box>
-              <Box pl={[0, 8]} pt={2} textAlign={['center', 'left']}>
+              <Box fontSize={[18, 24]} fontFamily={'Mitr'} fontWeight={600} textAlign={['center', 'center', 'left']}>เว็บไซต์คอมมูนิตี้โรลเพลย์เพื่อส่วนรวม</Box>
+              <Box pl={[0, 8]} pt={2}textAlign={['center', 'left']}>
                 แพล็ตฟอร์มสำหรับผู้สร้างสรรค์ผลงานประกอบการเล่น
               </Box>
-              <Box textAlign={['center', 'left']}>
+              <Box fontWeight={'extrabold'} textAlign={['center', 'left']}>
                 บทบาทสมมติ โดยมีระบบช่วยเหลือ สำหรับผู้ใช้งาน มีการจัดเก็บข้อมูลภายในคอมมูนิตี้ได้<b>สะดวก เรียบร้อย เป็นระบบ</b> ภายในเว็บไซต์เดียว
               </Box>
               <Flex m={5}>

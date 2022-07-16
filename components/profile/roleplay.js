@@ -16,6 +16,14 @@ import {
 import { Eye, EyeClosed } from "phosphor-react";
 
 export const Roleplay = ({ value, onEdit, isOwner }) => {
+
+  const breakpoints = {
+    sm: '30em',
+    md: '48em',
+    lg: '62em',
+    xl: '80em',
+    '2xl': '96em',
+  }
   return (
     <Flex direction={"column"}>
       <Flex fontSize={24} fontWeight={"extrabold"} ml={5}>
@@ -42,7 +50,7 @@ export const Roleplay = ({ value, onEdit, isOwner }) => {
             สไตล์การเล่น
           </Box>
 
-          <SimpleGrid columns={4} spacing={2}>
+          <SimpleGrid columns={{ '2xl': '4', xl: '4', lg: '3', md: '3', sm: '1' }} spacing={2}>
             <WrapItem>
               <Center>
                 <Flex
@@ -65,8 +73,9 @@ export const Roleplay = ({ value, onEdit, isOwner }) => {
                     borderRadius={10}
                     borderWidth={1}
                     borderColor={"black"}
+                    w={50}
                   >
-                    <Box>{value?.short ? value.short : 20}</Box>%
+                    <Box>{value && value.short !== undefined && value.short !== null ? value.short : 20}</Box>%
                   </Center>
                 </Flex>
               </Center>
@@ -93,8 +102,9 @@ export const Roleplay = ({ value, onEdit, isOwner }) => {
                     borderRadius={10}
                     borderWidth={1}
                     borderColor={"black"}
+                    w={50}
                   >
-                    <Box>{value?.long ? value.long : 20}</Box>%
+                    <Box>{value && value.long !== undefined && value.long !== null ? value.long : 20}</Box>%
                   </Center>
                 </Flex>
               </Center>
@@ -121,8 +131,9 @@ export const Roleplay = ({ value, onEdit, isOwner }) => {
                     borderRadius={10}
                     borderWidth={1}
                     borderColor={"black"}
+                    w={50}
                   >
-                    <Box>{value?.fic ? value.fic : 20}</Box>%
+                    <Box>{value && value.fic !== undefined && value.fic !== null ? value.fic : 20}</Box>%
                   </Center>
                 </Flex>
               </Center>
@@ -149,8 +160,9 @@ export const Roleplay = ({ value, onEdit, isOwner }) => {
                     borderRadius={10}
                     borderWidth={1}
                     borderColor={"black"}
+                    w={50}
                   >
-                    <Box>{value?.wen ? value.wen : 20}</Box>%
+                    <Box>{value && value.wen !== undefined && value.wen !== null ? value.wen : 20}</Box>%
                   </Center>
                 </Flex>
               </Center>
@@ -177,8 +189,9 @@ export const Roleplay = ({ value, onEdit, isOwner }) => {
                     borderRadius={10}
                     borderWidth={1}
                     borderColor={"black"}
+                    w={50}
                   >
-                    <Box>{value?.draw ? value.draw : 20}</Box>%
+                    <Box>{value && value.draw !== undefined && value.draw !== null ? value.draw : 20}</Box>%
                   </Center>
                 </Flex>
               </Center>
@@ -192,7 +205,7 @@ export const Roleplay = ({ value, onEdit, isOwner }) => {
           </Box>
 
           <VStack>
-            <SimpleGrid columns={5} spacing={2}>
+            <SimpleGrid columns={{ '2xl': '5', xl: '5', lg: '5', md: '4', sm: '2' }} spacing={2}>
               <WrapItem>
                 <Center>
                   <Flex
@@ -214,8 +227,9 @@ export const Roleplay = ({ value, onEdit, isOwner }) => {
                       borderRadius={10}
                       borderWidth={1}
                       borderColor={"black"}
+                      w={50}
                     >
-                      <Box>{value?.fun ? value.fun : 20}</Box>%
+                      <Box>{value && value.fun !== undefined && value.fun !== null ? value.fun : 20}</Box>%
                     </Center>
                   </Flex>
                 </Center>
@@ -242,8 +256,9 @@ export const Roleplay = ({ value, onEdit, isOwner }) => {
                       borderRadius={10}
                       borderWidth={1}
                       borderColor={"black"}
+                      w={50}
                     >
-                      <Box>{value?.drama ? value.drama : 20}</Box>%
+                      <Box>{value && value.drama !== undefined && value.drama !== null ? value.drama : 20}</Box>%
                     </Center>
                   </Flex>
                 </Center>
@@ -270,8 +285,9 @@ export const Roleplay = ({ value, onEdit, isOwner }) => {
                       borderRadius={10}
                       borderWidth={1}
                       borderColor={"black"}
+                      w={50}
                     >
-                      <Box>{value?.roman ? value.roman : 20}</Box>%
+                      <Box>{value && value.roman !== undefined && value.roman !== null ? value.roman : 20}</Box>%
                     </Center>
                   </Flex>
                 </Center>
@@ -298,8 +314,9 @@ export const Roleplay = ({ value, onEdit, isOwner }) => {
                       borderRadius={10}
                       borderWidth={1}
                       borderColor={"black"}
+                      w={50}
                     >
-                      <Box>{value?.ero ? value.ero : 20}</Box>%
+                      <Box>{value && value.ero !== undefined && value.ero !== null ? value.ero : 20}</Box>%
                     </Center>
                   </Flex>
                 </Center>
@@ -326,8 +343,9 @@ export const Roleplay = ({ value, onEdit, isOwner }) => {
                       borderRadius={10}
                       borderWidth={1}
                       borderColor={"black"}
+                      w={50}
                     >
-                      <Box>{value?.friendship ? value.friendship : 20}</Box>%
+                      <Box>{value && value.friendship !== undefined && value.friendship !== null ? value.friendship : 20}</Box>%
                     </Center>
                   </Flex>
                 </Center>
@@ -354,8 +372,9 @@ export const Roleplay = ({ value, onEdit, isOwner }) => {
                       borderRadius={10}
                       borderWidth={1}
                       borderColor={"black"}
+                      w={50}
                     >
-                      <Box>{value?.horror ? value.horror : 20}</Box>%
+                      <Box>{value && value.horror !== undefined && value.horror !== null ? value.horror : 20}</Box>%
                     </Center>
                   </Flex>
                 </Center>
@@ -382,8 +401,9 @@ export const Roleplay = ({ value, onEdit, isOwner }) => {
                       borderRadius={10}
                       borderWidth={1}
                       borderColor={"black"}
+                      w={50}
                     >
-                      <Box>{value?.thriller ? value.thriller : 20}</Box>%
+                      <Box>{value && value.thriller !== undefined && value.thriller !== null ? value.thriller : 20}</Box>%
                     </Center>
                   </Flex>
                 </Center>
@@ -410,8 +430,9 @@ export const Roleplay = ({ value, onEdit, isOwner }) => {
                       borderRadius={10}
                       borderWidth={1}
                       borderColor={"black"}
+                      w={50}
                     >
-                      <Box>{value?.action ? value.action : 20}</Box>%
+                      <Box>{value && value.action !== undefined && value.action !== null ? value.action : 20}</Box>%
                     </Center>
                   </Flex>
                 </Center>
@@ -438,8 +459,9 @@ export const Roleplay = ({ value, onEdit, isOwner }) => {
                       borderRadius={10}
                       borderWidth={1}
                       borderColor={"black"}
+                      w={50}
                     >
-                      <Box>{value?.fanta ? value.fanta : 20}</Box>%
+                      <Box>{value && value.fanta !== undefined && value.fanta !== null ? value.fanta : 20}</Box>%
                     </Center>
                   </Flex>
                 </Center>
@@ -466,8 +488,9 @@ export const Roleplay = ({ value, onEdit, isOwner }) => {
                       borderRadius={10}
                       borderWidth={1}
                       borderColor={"black"}
+                      w={50}
                     >
-                      <Box>{value?.retro ? value.retro : 20}</Box>%
+                      <Box>{value && value.retro !== undefined && value.retro !== null ? value.retro : 20}</Box>%
                     </Center>
                   </Flex>
                 </Center>
@@ -494,8 +517,9 @@ export const Roleplay = ({ value, onEdit, isOwner }) => {
                       borderRadius={10}
                       borderWidth={1}
                       borderColor={"black"}
+                      w={50}
                     >
-                      <Box>{value?.sci ? value.sci : 20}</Box>%
+                      <Box>{value && value.sci !== undefined && value.sci !== null ? value.sci : 20}</Box>%
                     </Center>
                   </Flex>
                 </Center>
@@ -507,7 +531,7 @@ export const Roleplay = ({ value, onEdit, isOwner }) => {
                 {value?.other &&
                   value.other.split(",").map((segment) => (
                     <Box
-                      p={1}
+                      p={1.5}
                       borderRadius={10}
                       boxShadow={"base"}
                       w={"auto"}

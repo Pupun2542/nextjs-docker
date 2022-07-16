@@ -20,19 +20,19 @@ import useRelationshipEditState from "../../src/hook/useRelationshipEditState";
 export const Editrelationship = ({ value, onFinish, onRefresh }) => {
     
     const initalvalue = {
-        heroto: value?.heroto ? value.heroto : 20,
-        blove: value?.blove ? value.blove : 20,
-        glove: value?.glove ? value.glove : 20,
-        nlove: value?.nlove ? value.nlove : 20,
-        fwb: value?.fwb ? value.fwb : 20,
-        fz: value?.fz ? value.fz : 20,
-        onenight: value?.onenight ? value.onenight : 20,
+        heroto: value && value.heroto !== undefined && value.heroto !== null ? value.heroto : 20,
+        blove: value && value.blove !== undefined && value.blove !== null ? value.blove : 20,
+        glove: value && value.glove !== undefined && value.glove !== null ? value.glove : 20,
+        nlove: value && value.nlove !== undefined && value.nlove !== null ? value.nlove : 20,
+        fwb: value && value.fwb !== undefined && value.fwb !== null ? value.fwb : 20,
+        fz: value && value.fz !== undefined && value.fz !== null ? value.fz : 20,
+        onenight: value && value.onenight !== undefined && value.onenight !== null ? value.onenight : 20,
         noplay: value?.noplay ? value.noplay : "", //string
-        top: value?.top ? value.top : 20,
-        bottom: value?.bottom ? value.bottom : 20,
-        switchs: value?.switchs ? value.switchs: 20,
-        submissive: value?.submissive ? value.submissive : 20,
-        dominant: value?.dominant ? value.dominant : 20,
+        top: value && value.top !== undefined && value.top !== null ? value.top : 20,
+        bottom: value && value.bottom !== undefined && value.bottom !== null ? value.bottom : 20,
+        switchs: value && value.switchs !== undefined && value.switchs !== null ? value.switchs : 20,
+        submissive: value && value.submissive !== undefined && value.submissive !== null ? value.submissive : 20,
+        dominant: value && value.dominant !== undefined && value.dominant !== null ? value.dominant : 20,
         taste: value?.taste ? value.taste: "" //string
     }
     const { heroto, setHeroto,

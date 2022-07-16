@@ -63,8 +63,9 @@ export const Active = ({ onEdit, value, isOwner }) => {
                     borderRadius={10}
                     borderWidth={1}
                     borderColor={"black"}
+                    w={50}
                   >
-                    <Box>{value?.back ? value.back : 50}</Box>%
+                    <Box>{value && value.back !== undefined && value.back !== null ? value.back : 50}</Box>%
                   </Center>
                 </Flex>
               </Center>
@@ -91,8 +92,9 @@ export const Active = ({ onEdit, value, isOwner }) => {
                     borderRadius={10}
                     borderWidth={1}
                     borderColor={"black"}
+                    w={50}
                   >
-                    <Box>{value?.front ? value.front : 50}</Box>%
+                    <Box>{value && value.front !== undefined && value.front !== null ? value.front : 50}</Box>%
                   </Center>
                 </Flex>
               </Center>

@@ -20,10 +20,10 @@ import usePlaycomEditState from "../../src/hook/usePlaycomEditState";
 
 export const Editplayedcom = ({ value, onFinish, onRefresh }) => {
   const initalvalue = {
-    survival: value?.survival ? value.survival : 20,
-    slow: value?.slow ? value.slow : 20,
-    slowsur: value?.slowsur ? value.slowsur : 20,
-    vote: value?.vote ? value.vote : 20,
+    survival: value && value.survival !== undefined && value.survival !== null ? value.survival : 20,
+    slow: value && value.slow !== undefined && value.slow !== null ? value.slow : 20,
+    slowsur: value && value.slowsur !== undefined && value.slowsur !== null ? value.slowsur : 20,
+    vote: value && value.vote !== undefined && value.vote !== null ? value.vote : 20,
     inter: value?.inter ? value.inter : "",
   };
   const {
