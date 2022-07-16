@@ -61,8 +61,6 @@ import { Member } from "../../../components/groupcomponents/member";
 import Setting from "../../../components/groupcomponents/setting";
 import { GroupSinglePost } from "../../../components/groupcomponents/singlePost";
 import { isEmptyOrSpaces } from "../../../src/services/utilsservice";
-import { useDocument } from "@nandorojo/swr-firestore";
-import { doc } from "firebase/firestore";
 import { useGroupData } from "../../../src/hook/useGroupData";
 import { usePost } from "../../../src/hook/usePost";
 import { Skeletonpost } from "../../../components/groupcomponents/skeletonpost";
@@ -88,14 +86,10 @@ function dashboard() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [image, setImage] = useState([]);
   const pasteInputRef = useRef(undefined);
-  // const [loading, setLoading] = useState(true);
-  // const [post, setPost] = useState([]);
   const [tabIndex, setTabIndex] = useState(0);
   const [selectedchara, setSelectedchara] = useState({});
   const inputFileRef = useRef(null);
-  // console.log(id, auth.currentUser);
   const {data, loading, onRefresh} = useGroupData(id, user);
-
   const setPostData = (value) => {
     dispatch({ type: "setMultiple", value: value });
   };
@@ -130,8 +124,6 @@ function dashboard() {
   };
 
   const [postData, dispatch] = useReducer(reducer, {});
-
-
 
   //main
   const setStateData = (value, id) => {
@@ -310,8 +302,7 @@ function dashboard() {
                   fontSize={28}
                   bg={"#6768AB"}
                 >
-                  {/* [LTLEC]Land of the lustrous : Eternity cycle */}[
-                  {data?.tag}] {data?.name}
+                  [{data?.tag}] {data?.name}
                 </Center>
 
                 <Box bg={"#6768AB"} cursor={"pointer"}>

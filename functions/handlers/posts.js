@@ -212,45 +212,15 @@ exports.getAllPost = async (req, res) => {
             .orderBy(req.query.orderby, "desc")
             .limit(parseInt(req.query.loadlimit))
             .get();
-        let post = [];
-        await Promise.all(
-            snapshot.docs.map(async (postdoc) => {
-              let identifiers = [];
-              postdoc.data().viewer.map((view) => {
-                identifiers = [...identifiers, {uid: view}];
-              });
-              const users = await admin.auth().getUsers(identifiers);
-              let viewer = {};
-              users.users.map((auser) => {
-                viewer = {
-                  ...viewer,
-                  [auser.uid]: {
-                    uid: auser.uid,
-                    displayName: auser.displayName,
-                    photoURL: auser.photoURL,
-                  },
-                };
-              });
-              const arrviewer = Object.entries(viewer);
-              const mappeddocdata = {
-                ...postdoc.data(),
-                pid: postdoc.id,
-                gid: req.params.gid,
-                creator: Object.fromEntries([
-                  arrviewer.find(([k, v]) => v.uid === postdoc.data().uid),
-                ]),
-                viewer: viewer,
-                follower: Object.fromEntries(
-                    arrviewer.filter(([k, v], i) =>
-                      postdoc.data().follower.includes(v.uid),
-                    ),
-                ),
-              };
-              const finaldata = {...postdoc.data(), ...mappeddocdata};
-              post = [...post, finaldata];
-            }),
-        );
-        return res.status(200).json(post);
+        const postdoc = snapshot.docs.map((doc)=>{
+          return {
+            ...doc.data(),
+            pid: doc.id,
+            gid: req.params.gid,
+          };
+        });
+        // const post = {postdoc};
+        return res.status(200).json(postdoc);
       } else {
         return res.status(403).send("forbidden");
       }

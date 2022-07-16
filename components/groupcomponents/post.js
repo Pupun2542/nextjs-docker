@@ -64,7 +64,8 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
     setStateDataReply,
     getStateDataReply,
   } = useContext(PostContext);
-  const creator = Object.values(post.creator)[0];
+  const creator = member[Object.keys(member).find(v=>v === post.uid)];
+  console.log(creator)
   const getUser = useUser();
   const { auth, db } = useApp();
   const [fetchlimit, setFetchlimit] = useState(20);
@@ -130,27 +131,17 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
 
   let comment = [];
   if (!loading) {
-    Promise.all(
-      snapshot.docs.map(async (doc) => {
-        let mappedcommentData = {};
-        let creator = {};
-        // console.log(member, doc.data().uid)
-        if (member[doc.data().uid]) {
-          creator = member[doc.data().uid];
-        } else {
-          const usr = await getUser([doc.data().uid]);
-          creator = usr[0];
-        }
-        mappedcommentData = {
+      snapshot.docs.map((doc) => {
+        console.log(member[doc.data().uid])
+        const mappedcommentData = {
           ...doc.data(),
-          creator: creator,
+          creator: member[doc.data().uid],
           cid: doc.id,
           pid: post.pid,
           gid: post.gid,
         };
         comment = [...comment, mappedcommentData];
       })
-    );
   }
 
   const resizeTextArea = (e) => {
