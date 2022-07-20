@@ -135,22 +135,6 @@ function CustomNavbar() {
   });
   const getgroup = useGroupHeader();
 
-  // const fetchdata = async () => {
-  //   const usrdoc = await getDoc(doc(db, "userDetail", user.uid));
-  //   if (usrdoc.exists) {
-  //     const pinnedgroup = [];
-  //     if (usrdoc.data().pinned?.length > 0) {
-  //       await Promise.all(
-  //         usrdoc.data().pinned.map(async (gid) => {
-  //           const grp = await getgroup(gid);
-  //           pinnedgroup = [...pinnedgroup, grp];
-  //         })
-  //       );
-  //     }
-  //     setData({ ...usrdoc.data(), pinned: pinnedgroup });
-  //   }
-  // };
-
   useEffect(() => {
     let unsubscribe = ()=>{};
     if (user && !loading) {
@@ -173,7 +157,7 @@ function CustomNavbar() {
   }, [user, loading]);
 
   useEffect(() => {
-    if (chatNotiData.length > 0) {
+    if (chatNotiData.length > 0 && user) {
       const unreadedItem = chatNotiData.filter(
         (v, i) => !v.readedby.includes(user.uid)
       );
@@ -664,7 +648,7 @@ const ChatNotiIcon = ({ data, user }) => {
 
   useEffect(() => {
     const getHeader = async () => {
-      if (data.type == "private" || data.type == "chara") {
+      if (user&&(data.type == "private" || data.type == "chara")) {
         const filteredname = data.member.find((v) => v !== user.uid);
         console.log(data.member);
         const detail = await getUser([filteredname]);
