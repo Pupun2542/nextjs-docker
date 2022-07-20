@@ -109,6 +109,11 @@ function CustomNavbar() {
     onClose: onChatClose,
     onToggle: onChatToggle,
   } = useDisclosure();
+  const {
+    isOpen: isSinginOpen,
+    onOpen: onSigninOpen,
+    onClose: onSigninClose,
+  } = useDisclosure();
   const router = useRouter();
   const [user, loading, error] = useAuthState(auth);
   const breakpoints = {
