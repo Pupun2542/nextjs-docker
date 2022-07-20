@@ -15,7 +15,6 @@ import {
 } from "@chakra-ui/react";
 import { getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import "../src/config/firebase.config";
 import {
