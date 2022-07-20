@@ -35,12 +35,17 @@ import {
   Show,
   Badge,
   IconButton,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  DrawerHeader,
 } from "@chakra-ui/react";
 import style from "../styles/navbar.module.css";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import React from "react";
-
+import { SignIn } from "../components/signin";
 import {
   UsersThree,
   Plus,
@@ -110,7 +115,7 @@ function CustomNavbar() {
     onToggle: onChatToggle,
   } = useDisclosure();
   const {
-    isOpen: isSinginOpen,
+    isOpen: isSigninOpen,
     onOpen: onSigninOpen,
     onClose: onSigninClose,
   } = useDisclosure();
@@ -123,7 +128,7 @@ function CustomNavbar() {
     xl: "1200px",
     "2xl": "1536px",
   };
-
+  const btnRef = React.useRef()
   const [data, setData] = useState(undefined);
   const [unreadChat, setUnreadChat] = useState([]);
   const [unreadnoti, setUnreadnoti] = useState([]);
@@ -136,9 +141,9 @@ function CustomNavbar() {
   const getgroup = useGroupHeader();
 
   useEffect(() => {
-    let unsubscribe = ()=>{};
+    let unsubscribe = () => { };
     if (user && !loading) {
-      unsubscribe = onSnapshot(doc(db, "userDetail", user.uid), async (usrdoc)=>{
+      unsubscribe = onSnapshot(doc(db, "userDetail", user.uid), async (usrdoc) => {
         if (usrdoc.exists) {
           let pinnedgroup = [];
           if (usrdoc.data().pinned?.length > 0) {
@@ -153,7 +158,7 @@ function CustomNavbar() {
         }
       })
     }
-    return ()=> unsubscribe()
+    return () => unsubscribe()
   }, [user, loading]);
 
   useEffect(() => {
@@ -192,11 +197,11 @@ function CustomNavbar() {
             _hover={{
               textDecoration: "none",
             }}
-            // onClick={() => {
-            //   user.getIdToken().then((token) => {
-            //     console.log(token);
-            //   });
-            // }}
+          // onClick={() => {
+          //   user.getIdToken().then((token) => {
+          //     console.log(token);
+          //   });
+          // }}
           >
             <Center
               bg="white"
@@ -230,12 +235,29 @@ function CustomNavbar() {
       <Center bg={"#FFC75A"} rounded={"10"}>
         <Button
           variant="primary"
-          onClick={() => router.push("/login")}
+          onClick={onSigninOpen}
           title="Login"
           color="#6768AB"
         >
           Login
         </Button>
+
+        <Drawer
+          isOpen={isSigninOpen}
+          placement='right'
+          onClose={onSigninClose}
+          finalFocusRef={btnRef}
+          size={'sm'}
+        >
+          <DrawerOverlay />
+          <DrawerContent mt={55}>
+            <DrawerCloseButton />
+            <DrawerHeader>Sign in</DrawerHeader>
+
+            <SignIn />
+
+          </DrawerContent>
+        </Drawer>
       </Center>
     );
   };
@@ -469,7 +491,7 @@ function CustomNavbar() {
                 <Center
                   as="button"
                   onClick={
-                    user ? () => router.push("/profile/" + user.uid) : () => {}
+                    user ? () => router.push("/profile/" + user.uid) : () => { }
                   }
                 >
                   <Loadthumbnail />
