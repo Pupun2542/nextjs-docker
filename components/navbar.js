@@ -197,11 +197,6 @@ function CustomNavbar() {
             _hover={{
               textDecoration: "none",
             }}
-          // onClick={() => {
-          //   user.getIdToken().then((token) => {
-          //     console.log(token);
-          //   });
-          // }}
           >
             <Center
               bg="white"
@@ -212,7 +207,7 @@ function CustomNavbar() {
               onClick={() => router.push("/profile/" + user.uid)}
             >
               <Center px={0}>
-                <Avatar h={41} w={41} src={user.photoURL} />
+                <Avatar h={41} w={41} src={user.photoURL} loading={"lazy"} />
               </Center>
 
               <Show above="lg">
@@ -736,7 +731,7 @@ const ChatNotiIcon = ({ data, user }) => {
         bg: "gray.200",
       }}
     >
-      <Flex justifyContent="space-between" marginLeft={2} marginRight={2}>
+      <Flex justifyContent="space-between" marginLeft={2} marginRight={2}  >
         <Flex justifyContent="start">
           <Image
             src={display.thumbnail}
@@ -745,7 +740,7 @@ const ChatNotiIcon = ({ data, user }) => {
             rounded={100}
             marginRight="15px"
           />
-          <Box>
+          <Box maxW={250} whiteSpace={"nowrap"} overflow={"hidden"} textOverflow={"ellipsis"}>
             <Text fontWeight={'bold'}>{display.name}</Text>
             <Text fontSize={14}>
               {data?.senderId == user?.uid ? "คุณ: " : ""} {data?.lastmsg}

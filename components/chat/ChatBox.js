@@ -189,9 +189,15 @@ export const ChatBox = ({
               value={msg}
               onKeyDown={(e) => {
                 resizeTextArea(e);
+                if (e.key == "Enter" && !e.shiftKey) {
+                  handleSent(user.uid, msg, image);
+                  setMsg("");
+                  setImage("");
+                } 
               }}
               onChange={(e) => setMsg(e.target.value)}
               onPaste={handleImagePaste}
+
             />
           </Box>
           <Button
