@@ -38,7 +38,7 @@ import {
 import CustomNavbar from "../../../components/navbar";
 import { Check, X } from "phosphor-react";
 import UploadImageModal from "../../../components/universalUploadModal";
-import { Uploadprofileimg } from "../../../src/services/filestoreageservice";
+import { Uploadprofilebannerimg, Uploadprofileimg } from "../../../src/services/filestoreageservice";
 import Footer from "../../../components/footer";
 import { About } from "../../../components/profile/about";
 import { Myfriends } from "../../../components/profile/myfriends";
@@ -153,7 +153,7 @@ export default function profile() {
     }
   };
   const handleCoverChange = async (newcover) => {
-    const dlurl = await Uploadprofileimg(newcover, user.uid);
+    const dlurl = await Uploadprofilebannerimg(newcover, user.uid);
     if (dlurl) {
       await updateDoc(doc(db, "userDetail", user.uid), {
         coverImage: dlurl,

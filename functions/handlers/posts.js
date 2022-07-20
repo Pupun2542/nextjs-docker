@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 const {db, admin} = require("../utils/admin");
 const {sendNotifications} = require("../utils/notifications");
-const {getUsersById} = require("../utils/userMapper");
+// const {getUsersById} = require("../utils/userMapper");
 
 exports.createPost = async (req, res) => {
   if (req.user) {
@@ -232,53 +232,34 @@ exports.getAllPost = async (req, res) => {
   }
 };
 
-exports.getPost = (req, res) => {
+exports.getPost = async (req, res) => {
   if (req.user) {
     const user = req.user.uid;
     const groupref = db.collection("group").doc(req.params.gid);
-    groupref.get().then((doc) => {
-      if (doc.exists) {
-        // eslint-disable-next-line max-len
-        if (
-          (doc.data().privacy == "private" &&
-            doc.data().member.includes(user)) ||
-          doc.data().privacy != "private"
-        ) {
-          return groupref
-              .collection("posts")
-              .doc(req.params.pid)
-              .get()
-              .then((snapshot) => {
-              // const post = snapshot.docs.map((docs)=>docs.data());
-                if (snapshot.exists) {
-                  getUsersById(doc.data().member).then((usr) => {
-                    const mappedusr = Object.entries(usr);
-                    const usrdata = {
-                      ...snapshot.data(),
-                      viewer: Object.fromEntries(
-                          mappedusr.filter(([k, v], i) =>
-                            snapshot.data().viewer.includes(k),
-                          ),
-                      ),
-                      creator: Object.fromEntries(
-                          mappedusr.filter(([k, v], i) => snapshot.data().uid === k),
-                      ),
-                      gid: req.params.gid,
-                      pid: req.params.pid,
-                    };
-                    return res.status(200).json(usrdata);
-                  });
-                }
-              });
+    const doc = await groupref.get();
+    if (doc.exists) {
+      if (
+        (doc.data().privacy == "private" &&
+          doc.data().member.includes(user)) ||
+        doc.data().privacy != "private"
+      ) {
+        const snapshot = await groupref
+            .collection("posts")
+            .doc(req.params.pid)
+            .get();
+        if (snapshot.exists) {
+          return res.status(200).json({...snapshot.data(), pid: req.params.pid, gid: req.params.gid});
         } else {
-          return res.status(403).send("forbidden");
+          return res.status(404).send("post not found");
         }
       } else {
-        return res.status(404).send("group not found");
+        return res.status(403).send("forbidden");
       }
-    });
+    } else {
+      return res.status(404).send("group not found");
+    }
   } else {
-    return res.status(40).send("unauthorized");
+    return res.status(400).send("unauthorized");
   }
 };
 

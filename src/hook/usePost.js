@@ -43,8 +43,8 @@ export const usePost = (data, orderby, loadLimit, pid, reducer, user, gid) => {
       }
     );
     if (res.status === 200) {
-      setPostData({ [pid]: { data: res.data, love: res.data.love } });
-      setPost(pid);
+      reducer({ [pid]: { data: res.data, love: res.data.love } });
+      setPost([pid]);
     }
   };
 

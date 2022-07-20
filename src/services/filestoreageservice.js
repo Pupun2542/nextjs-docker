@@ -9,26 +9,31 @@ import {
 } from "firebase/storage";
 import { getApp } from "firebase/app";
 import { getAuth, updateProfile } from "firebase/auth";
-// import { store } from "./firebaseadminservice";
+import imageCompression from "browser-image-compression";
 
 const app = getApp();
 const store = getStorage(app);
 const auth = getAuth(app);
 
 export async function Uploadprofileimg(file, creator) {
+  const file2 =  await compressImage(file);
+  const storeRef = ref(store, `images/${creator}/${creator}${Date.now()}.jpg`);
+  const snapsnot = await uploadString(storeRef, file2, "data_url");
+  const downloadurl = await getDownloadURL(snapsnot.ref);
+  return downloadurl;
+}
+export async function Uploadprofilebannerimg(file, creator) {
   const storeRef = ref(store, `images/${creator}/${creator}${Date.now()}.jpg`);
   const snapsnot = await uploadString(storeRef, file, "data_url");
-  // console.log(snapsnot.ref)
   const downloadurl = await getDownloadURL(snapsnot.ref);
   return downloadurl;
 }
 
+
 export async function UploadBannerImage(file, creator) {
-  // const file = new File([file], name)
   if (!file) {
     return;
   }
-  // const blob = new Blob(file);
   const storageref = ref(
     store,
     `publicResource/uploadImages/${creator}${Date.now()}.jpg`
@@ -109,4 +114,13 @@ export function getpathfromUrl(url) {
 
 export const getpMutiPathfromUrl = (url) =>{
   return url.map((lnk)=>(ref(store, lnk)));
+}
+
+const compressImage = async (dataurl) => {
+  const file = await imageCompression.getFilefromDataUrl(dataurl, "defaule.jpg", Date.now())
+  const compress = await imageCompression(file, {
+    maxWidthOrHeight: 250
+  })
+  const ret = await imageCompression.getDataUrlFromFile(compress);
+  return ret
 }

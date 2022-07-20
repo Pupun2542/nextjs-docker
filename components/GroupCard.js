@@ -17,8 +17,6 @@ import {
   Heart,
 } from "phosphor-react";
 import { useRouter } from "next/router";
-import Link from "next/link";
-import { getAuth } from "firebase/auth";
 import {
   Box,
   Flex,
@@ -104,7 +102,11 @@ function GroupCard() {
           return (
             <Flex
               onClick={() => {
-                Router.push("/group/" + value.id);
+                if (value.member.includes(auth.currentUser.uid)) {
+                  Router.push("/group/" + value.id + "/dashboard");
+                } else {
+                  Router.push("/group/" + value.id);
+                }
               }}
               bg={"#F3F3F3"}
               mr={5}

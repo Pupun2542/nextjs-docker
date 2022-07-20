@@ -64,8 +64,8 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
     setStateDataReply,
     getStateDataReply,
   } = useContext(PostContext);
+  // console.log({ post, member, onPostDelete, data, gid, mychara })
   const creator = member[Object.keys(member).find(v=>v === post.uid)];
-  console.log(creator)
   const getUser = useUser();
   const { auth, db } = useApp();
   const [fetchlimit, setFetchlimit] = useState(20);
@@ -132,7 +132,6 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
   let comment = [];
   if (!loading) {
       snapshot.docs.map((doc) => {
-        console.log(member[doc.data().uid])
         const mappedcommentData = {
           ...doc.data(),
           creator: member[doc.data().uid],
@@ -268,7 +267,6 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
     setMessage("");
     setImage(null);
     onPostDelete();
-    setComment([]);
   };
 
   const handleUploadFile = (e) => {

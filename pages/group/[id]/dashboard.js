@@ -89,12 +89,21 @@ function dashboard() {
   const [tabIndex, setTabIndex] = useState(0);
   const [selectedchara, setSelectedchara] = useState({});
   const inputFileRef = useRef(null);
-  const {data, loading, onRefresh} = useGroupData(id, user);
+  const submitRef = useRef(null);
+  const { data, loading, onRefresh } = useGroupData(id, user);
   const setPostData = (value) => {
     dispatch({ type: "setMultiple", value: value });
   };
 
-  const { post, onPostDelete, fetchPost } = usePost(data, orderby, loadLimit, pid, setPostData, user, id)
+  const { post, onPostDelete, fetchPost } = usePost(
+    data,
+    orderby,
+    loadLimit,
+    pid,
+    setPostData,
+    user,
+    id
+  );
 
   useEffect(() => {
     if (user && data && data.member) {
@@ -245,6 +254,7 @@ function dashboard() {
   };
 
   const handleSent = async () => {
+    console.log(!isEmptyOrSpaces(message) , image.length > 0)
     if (!isEmptyOrSpaces(message) || image.length > 0) {
       let dlurl = "";
       if (image.length > 0) {
@@ -372,7 +382,7 @@ function dashboard() {
                   >
                     Gallery
                   </Tab>
-                  
+
                   <Tab
                     _selected={{
                       color: "white",
@@ -451,7 +461,7 @@ function dashboard() {
                     {/* {console.log(post)} */}
                     <PostContext.Provider value={pack}>
                       {post &&
-                        !pid && Array.isArray(post) &&
+                        Array.isArray(post) &&
                         post.map((apost, i) => (
                           <GroupPost
                             post={getStateDataData(apost)}
@@ -463,7 +473,7 @@ function dashboard() {
                             gid={id}
                           />
                         ))}
-                      {post.length > 0 && pid && (
+                      {/* {post.length > 0 && pid && (
                         <GroupSinglePost
                           post={getStateDataData(pid)}
                           member={data.member}
@@ -474,10 +484,11 @@ function dashboard() {
                           data={data}
                           mychara={data.mychara}
                         />
-                      )}
-                      {post.length == 0 && data && data.postcount && data.postcount > 0 &&(
-                        <Skeletonpost />
-                      )}
+                      )} */}
+                      {post.length == 0 &&
+                        data &&
+                        data.postcount &&
+                        data.postcount > 0 && <Skeletonpost />}
                     </PostContext.Provider>
                     <Modal isOpen={isOpen} onClose={onClose}>
                       <ModalOverlay
@@ -598,10 +609,16 @@ function dashboard() {
                               onClick={handleFile}
                             />
                             <Button
-                              onClick={handleSent}
+                              onClick={() => {
+                                handleSent();
+                                submitRef.current.disabled = true;
+                              }}
                               disabled={
-                                (isEmptyOrSpaces(message) && image.length == 0) || Object.keys(selectedchara).length == 0
+                                (isEmptyOrSpaces(message) &&
+                                  image.length == 0) ||
+                                Object.keys(selectedchara).length == 0
                               }
+                              ref={submitRef}
                             >
                               Send
                             </Button>
@@ -623,7 +640,6 @@ function dashboard() {
                     <SimpleGrid column={2} spacing={5}>
                       {tabIndex == 3 && <Setting data={data} gid={id} />}
                     </SimpleGrid>
-                    
                   </TabPanel>
                 </TabPanels>
               </Tabs>

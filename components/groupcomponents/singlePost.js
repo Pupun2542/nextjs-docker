@@ -71,7 +71,7 @@ export const GroupSinglePost = ({ post, member, onPostDelete, cid, rid, data, gi
   const router = useRouter();
   const {chara, refreshcharaList} = useCharaList(data, gid)
   const [selectedchara, setSelectedchara] = useState({});
-
+  console.log(post, member, onPostDelete, cid, rid, data, gid, mychara)
   const checkChara = () => {
     if (chara[chara.findIndex(v => v.refererId == post.charaId)]) {
       return chara[chara.findIndex(v => v.refererId == post.charaId)];
