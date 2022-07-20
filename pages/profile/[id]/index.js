@@ -418,9 +418,9 @@ export default function profile() {
                 </TabPanel>
                 
                 {/* Timeline */}
-                <TabPanel>
+                {/* <TabPanel>
                   <p>one!</p>
-                </TabPanel>
+                </TabPanel> */}
 
                 {/* Community */}
                 <TabPanel>
@@ -451,9 +451,9 @@ export default function profile() {
                 </TabPanel>
 
                 {/* Bookshelf */}
-                <TabPanel>
+                {/* <TabPanel>
                   <p>?</p>
-                </TabPanel>
+                </TabPanel> */}
 
 
               </TabPanels>

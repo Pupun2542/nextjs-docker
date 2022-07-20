@@ -218,7 +218,6 @@ function about() {
                 as={"button"}
               >
                 <a target="_blank" href="https://www.facebook.com/ComuthorCorp"><FacebookLogo size={60} /></a>
-              
                 <Center h={55} pl={3} fontSize={18}>Facebook</Center>
               </Flex>
 
