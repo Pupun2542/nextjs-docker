@@ -66,7 +66,7 @@ export default function Home() {
   };
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
-  const {auth} = useApp()
+  const { auth } = useApp()
   const [user] = useAuthState(auth)
   return (
 
@@ -84,7 +84,9 @@ export default function Home() {
             align="center"
             justify={{ base: "center", md: "space-around", xl: "space-between" }}
             direction={{ base: "column-reverse", md: "row" }}
-            wrap="no-wrap">
+            wrap="no-wrap"
+            boxShadow='Base'
+          >
             <Box w={400} m={5}>
               <Spacer minH={[0, 30]} />
               <Heading fontFamily={'Mitr'} fontSize={[42, 48]} fontWeight={'bold'} textAlign={['center', 'center', 'left']}>Comuthor</Heading>
@@ -92,8 +94,8 @@ export default function Home() {
               <Box fontFamily={'Sarabun'} pl={[0, 8]} pt={2} textAlign={['center', 'left']}>
                 แพล็ตฟอร์มสำหรับผู้สร้างสรรค์ผลงานประกอบการเล่น
               </Box>
-              <Box fontWeight={'extrabold'} textAlign={['center', 'left']}>
-                บทบาทสมมติ โดยมีระบบช่วยเหลือ สำหรับผู้ใช้งาน มีการจัดเก็บข้อมูลภายในคอมมูนิตี้ได้<b>สะดวก เรียบร้อย เป็นระบบ</b> ภายในเว็บไซต์เดียว
+              <Box textAlign={['center', 'left']}>
+                บทบาทสมมติ โดยมีระบบช่วยเหลือ สำหรับผู้ใช้งาน มีการจัดเก็บข้อมูลภายในคอมมูนิตี้ได้ <b>สะดวก เรียบร้อย เป็นระบบ</b> ภายในเว็บไซต์เดียว
               </Box>
               <Flex m={5}>
                 <Spacer />
@@ -160,10 +162,7 @@ export default function Home() {
               <Center fontSize={24} fontWeight={600}>Patch 1</Center>
             </Flex>
 
-
             <Center fontWeight={400} fontSize={16}>ประกาศอัพเดทครั้งใหม่! เพิ่มเติมระบบภายในคอมมูนิตี้ให้หลากหลายมากขึ้น</Center>
-
-            <Spacer />
 
             <Flex maxW={550}
               align="center"
@@ -182,7 +181,7 @@ export default function Home() {
                 mb={'2.5'}
               >
                 <Center bg={'#6768AB'} color={'#FFC75A'} borderRadius={100} h={42} w={42}><UsersThree size={32} /></Center>
-                <Center fontWeight={500} fontSize={18}>Community</Center>
+                <Center fontWeight={500} fontSize={18}><b>Community</b></Center>
                 <Center fontWeight={400} fontSize={14}>โปรโมทและเข้าชม</Center>
                 <Center fontWeight={400} fontSize={14}>คอมมูนิตี้ได้ที่นี่</Center>
               </VStack>
@@ -198,8 +197,9 @@ export default function Home() {
                 h={180}
               >
                 <Center bg={'#6768AB'} color={'#FFC75A'} borderRadius={100} h={42} w={42}><Bell size={32} /></Center>
-                <Center fontWeight={500} fontSize={18}>Notification</Center>
-                <Center fontWeight={400} fontSize={14}>coming soon..</Center>
+                <Center fontWeight={500} fontSize={18}><b>Notification</b></Center>
+                <Center fontWeight={400} fontSize={14}>การแจ้งเตือน</Center>
+                <Center fontWeight={400} fontSize={14}>และประกาศข่าวสาร</Center>
                 {/* <Center fontWeight={400} fontSize={14}>และประกาศข่าวสาร</Center> */}
               </VStack>
 
@@ -214,12 +214,30 @@ export default function Home() {
                 h={180}
               >
                 <Center bg={'#6768AB'} color={'#FFC75A'} borderRadius={100} h={42} w={42}><Chats size={32} /></Center>
-                <Center fontWeight={500} fontSize={18}>Chat</Center>
-                <Center fontWeight={400} fontSize={14}>กำลังทดสอบระบบ</Center>
+                <Center fontWeight={500} fontSize={18}><b>Chat</b></Center>
+                <Center fontWeight={400} fontSize={14}>แชทสำหรับพูดคุย</Center>
+                <Center fontWeight={400} fontSize={14}>แบบส่วนตัว</Center>
                 {/* <Center fontWeight={400} fontSize={14}>ในคอมมูและส่วนตัว</Center> */}
               </VStack>
 
             </Flex>
+
+          </VStack >
+
+          <Spacer />
+
+          <VStack
+            p={10}
+            m={10}
+            boxShadow='base'
+            bg={'#FAFAFA'}
+            w={[275, 413, 825]}
+            borderRadius={10}
+          >
+
+            <Center fontWeight={700} fontSize={24}>แผนการพัฒนาเว็บไซต์</Center>
+            <Center fontWeight={400} fontSize={16}>ในอนาคตอันใกล้นี้พวกเราทำให้เว็บไซต์ Comuthor</Center>
+            <Center fontWeight={400} fontSize={16}>กลายเป็นพื้นที่ที่ทุก ๆ ท่านสามารถเล่นและมีปฏิสัมพันธ์กันภายในคอมมูได้</Center>
 
             <Flex
               align="center"
@@ -296,60 +314,88 @@ export default function Home() {
             align="center"
             justify={{ base: "center", md: "space-around", xl: "space-between" }}
             direction={{ base: "column", md: "row" }}>
-            <VStack
-              p={5}
-              bg={'#FAFAFA'}
-              boxShadow='base'
-              borderRadius={10}
-              w={275}
-            >
-              <Center><FacebookLogo
-                onClick={() => router.push("https://www.facebook.com/ComuthorCorp")}
-                size={100}
-                color="#343434"
-                as='button'
-                cursor={"pointer"}
-                weight="fill"
-              /></Center>
-              <Hide below='md'>
-                <Center fontWeight={500} fontSize={18} overflow={"hidden"} >Facebook Fanpage</Center>
-              </Hide>
-              <Center
-                fontWeight={400}
-                fontSize={14}
-                as='button'
-                cursor={"pointer"}
-                onClick={() => router.push("https://www.facebook.com/ComuthorCorp")}
+
+            <a target="_blank" href="https://www.facebook.com/ComuthorCorp">
+              <VStack
+                p={5}
+                bg={'#F3F3F3'}
+                boxShadow='base'
+                borderRadius={10}
+                w={275}
+                as={"button"}
+                _hover={{
+                  backgroundColor: 'gray.200'
+                }}
               >
-                Comuthor
-              </Center>
-            </VStack>
+                <Center>
+                  <a target="_blank" href="https://www.facebook.com/ComuthorCorp" >
+                    <FacebookLogo
+                      size={100}
+                      color="#343434"
+                      as='button'
+                      cursor={"pointer"}
+                      weight="fill"
+                    />
+                  </a>
+
+                </Center>
+                <Hide below='md'>
+                  <a target="_blank" href="https://www.facebook.com/ComuthorCorp">
+                    <Center fontWeight={500} fontSize={18} overflow={"hidden"} >Facebook Fanpage</Center>
+                  </a>
+
+                </Hide>
+                <Center
+                  fontWeight={400}
+                  fontSize={14}
+                  as='button'
+                  cursor={"pointer"}
+                  onClick={() => router.push("https://www.facebook.com/ComuthorCorp")}
+                >
+                  Comuthor
+                </Center>
+              </VStack>
+            </a>
+
             <Spacer />
-            <VStack
-              p={5}
-              bg={'#FAFAFA'}
-              boxShadow='base'
-              borderRadius={10}
-              w={275}
-            >
 
-              <Center><DiscordLogo
-                size={100}
-                color="#343434"
-                weight="fill"
-                as='button'
-                cursor={"pointer"}
-                onClick={() => router.push("https://discord.gg/BVrwyCPEHc")}
-              /></Center>
-              <Hide below='md'>
-                <Center fontWeight={500} fontSize={18}>Discord</Center>
-              </Hide>
-              <Center fontWeight={400} as='button'
-                cursor={"pointer"}
-                onClick={() => router.push("https://discord.gg/BVrwyCPEHc")}
-                fontSize={14}>Comuthor Community</Center>
+            <a target="_blank" href="https://discord.com/invite/BVrwyCPEHc">
+              <VStack
+                p={5}
+                bg={'#F3F3F3'}
+                boxShadow='base'
+                borderRadius={10}
+                w={275}
+                _hover={{
+                  backgroundColor: 'gray.200'
+                }}
+              >
+                <a target="_blank" href="https://discord.com/invite/BVrwyCPEHc">
+                  <Center>
+                    <a target="_blank" href="https://discord.com/invite/BVrwyCPEHc">
+                      <DiscordLogo
+                        size={100}
+                        color="#343434"
+                        weight="fill"
+                        as='button'
+                        cursor={"pointer"}
+                      />
+                    </a>
 
-            </VStack>
+                  </Center>
+                </a>
+
+                <Hide below='md'>
+                  <Center fontWeight={500} fontSize={18}>Discord</Center>
+                </Hide>
+                <Center fontWeight={400} as='button'
+                  cursor={"pointer"}
+                  onClick={() => router.push("https://discord.gg/BVrwyCPEHc")}
+                  fontSize={14}>Comuthor Community</Center>
+
+              </VStack>
+            </a>
+
 
           </Flex>
 
