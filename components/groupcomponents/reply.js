@@ -153,22 +153,26 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
 
   return (
     <Flex w={"100%"}>
-      <Center m={2}>
-        <VStack spacing={0}>
-          <Box borderWidth={2} borderColor={"gray.400"} h={10} ml={-4}></Box>
+      {/* <Center m={1}>
+        <VStack spacing={0} mt={2} >
+          <Box w={'22px'} borderColor={'#636363'} height={'50'} borderLeftWidth={3} ></Box>
           <Box
-            borderWidth={2}
-            borderColor={"gray.400"}
-            borderBottomLeftRadius={15}
-            w={5}
+            borderColor={'#636363'}
+            borderBottomLeftRadius={10}
+            borderBottomStyle={'solid'}
+            borderBottomWidth={3}
+            borderLeftWidth={3}
+            height={'45px'}
+            w={'22px'}
+            borderLeftStyle={'solid'}
           ></Box>
         </VStack>
-      </Center>
+      </Center> */}
 
       <Flex
         mt={3}
         p={2}
-        boxShadow={"base"}
+        boxShadow={"0 0 2px #000000"}
         w={"100%"}
         direction={"column"}
         float={"right"}
@@ -239,7 +243,7 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
                   // </InputRightElement>
                   // </InputGroup>
                   <Box fontSize={14} w={"100%"}>
-                    <Text w={"100%"} whiteSpace="pre-line">
+                    <Text mt={2} w={"100%"} whiteSpace="pre-line">
                       {text ? text : ""}
                     </Text>
                   </Box>

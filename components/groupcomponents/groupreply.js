@@ -132,7 +132,7 @@ export const Replypost = ({ replydoc, message, setMessage }) => {
 
   return (
     <Flex>
-      <VStack spacing={0} mt={5} mr={5}>
+      {/* <VStack spacing={0} mt={5} mr={5}>
         <Box
           w={"22px"}
           borderColor={"#636363"}
@@ -149,7 +149,7 @@ export const Replypost = ({ replydoc, message, setMessage }) => {
           w={"22px"}
           borderLeftStyle={"solid"}
         ></Box>
-      </VStack>
+      </VStack> */}
 
       <Flex
         width="100%"
@@ -224,7 +224,7 @@ export const Replypost = ({ replydoc, message, setMessage }) => {
             // </InputRightElement>
             // </InputGroup>
             <Box m={1} minW={440} w={"100%"} maxW={440} fontSize={14}>
-              <Text>{replydoc.message ? replydoc.message : ""}</Text>
+              <Text whiteSpace={'pre-line'}>{replydoc.message ? replydoc.message : ""}</Text>
             </Box>
           )}
 

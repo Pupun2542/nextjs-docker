@@ -459,7 +459,7 @@ if (!loading) {
   return (
     <Flex
       p={2.5}
-      fontFamily={"Mitr"}
+      fontFamily={"Sarabun"}
       width="100%"
       backgroundColor="#FFFFFF"
       boxShadow="0 0 2px #000000"
@@ -798,7 +798,7 @@ const ReplyPost = ({ cdoc, commentId, id }) => {
 
     <Flex>
       <VStack spacing={0} mt={5} mr={5} >
-        <Box w={'22px'} borderColor={'#636363'} height={'50'} borderLeftWidth={3} ></Box>
+        <Box w={'22px'} borderColor={'#636363'} height={'auto'} borderLeftWidth={3} ></Box>
         <Box
           borderColor={'#636363'}
           borderBottomLeftRadius={10}

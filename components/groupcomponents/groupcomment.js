@@ -323,10 +323,10 @@ export const Commentpost = ({
   return (
     <Flex
       p={2.5}
-      fontFamily={"Mitr"}
+      fontFamily={"Sarabun"}
       width="100%"
       backgroundColor="#FFFFFF"
-      boxShadow="0 0 2px #000000"
+      boxShadow="base"
       borderRadius={10}
       marginTop="10px"
     >
@@ -393,7 +393,7 @@ export const Commentpost = ({
           // </InputRightElement>
           // </InputGroup>
           <Box fontSize={14} minW={"625"} w={"auto"} maxW={600}>
-            <Text whiteSpace="pre-line">
+            <Text mt={2} whiteSpace="pre-line">
               {message ? message : ""}
             </Text>
           </Box>

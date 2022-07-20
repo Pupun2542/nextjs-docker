@@ -392,7 +392,7 @@ export default function Group() {
                                 as={IconButton}
                               />
 
-                              <MenuList minW={20} fontFamily={"Mitr"}>
+                              <MenuList minW={20} fontFamily={"Sarabun"}>
                                 <MenuItem
                                   _hover={{ background: "#E2E8F0" }}
                                   onClick={
@@ -423,7 +423,7 @@ export default function Group() {
                   h={62}
                   bg={"#6768AB"}
                   w={850}
-                  fontFamily="Mitr"
+                  fontFamily="Sarabun"
                   color={"white"}
                   fontSize={22}
                 >
@@ -432,15 +432,15 @@ export default function Group() {
                 </Center>
 
                 <Tabs isFitted w={850}>
-                  <TabList fontFamily={"Mitr"}>
+                  <TabList fontFamily={"Sarabun"}>
                     <Tab>Detail</Tab>
                     <Tab>Document</Tab>
                     <Tab>Staff List</Tab>
                   </TabList>
                   <TabPanels>
                     <TabPanel>
-                      <Flex
-                        fontFamily={"Mitr"}
+                      <HStack
+                        fontFamily={"Sarabun"}
                         justifyContent={"space-between"}
                         mb={5}
                       >
@@ -505,21 +505,52 @@ export default function Group() {
                             )}
                           </Center>
                         </Flex>
+                        <Center
+                          shadow={"base"}
+                          borderRadius={10}
+                          bg={color}
+                          w={"49.5%"}
+                          h={70}
+                          p={5}
+                          color={"white"}
+                        >
+                          {data.rating
+                            ? data.rating
+                            : "G (เหมาะสำหรับทุกวัย)"}
+                        </Center>
                         <Button
                           h={70}
                           alignContent={"center"}
-                          bg={"blackAlpha.900"}
-                          _hover={{ bg: "gray" }}
+                          bg={"#303030"}
+                          _hover={{ bg: "gray.800" }}
+                          color={"#FFC75A"}
                           w={155}
+                          onClick={
+                            () => {
+                              handleEnterGroup();
+                            }
+                          }
                         >
-                          <Image src={Object.keys(data.member).includes(user.uid)? "/leave.svg" : "/joint.svg"} h={50} />
-                          <Text color={"white"}>{Object.keys(data.member).includes(user.uid)? "ออกจากกลุ่ม" : "เข้าร่วมกลุ่ม"}</Text>
+                          {console.log(
+                            data.member,
+                            auth.currentUser?.uid
+                          )}
+                          {Object.keys(data.member).includes(
+                            auth.currentUser?.uid
+                          )
+                            ? "ไปที่กลุ่ม"
+                            : data.pendingmember &&
+                              Object.keys(data.pendingmember).includes(
+                                auth.currentUser?.uid
+                              )
+                              ? "รอการตอบรับ"
+                              : "เข้าร่วมกลุ่ม"}
                         </Button>
-                      </Flex>
+                      </HStack>
                       <Flex bg={"#F3F3F3"} shadow={"base"}>
                         <Accordion
                           w={850}
-                          fontFamily={"Mitr"}
+                          fontFamily={"Sarabun"}
                           defaultIndex={[0]}
                           allowMultiple
                         >
@@ -617,19 +648,19 @@ export default function Group() {
                                     {/* {console.log(data.genre)} */}
                                     {data.times && data.genre.length > 0
                                       ? data.genre.map((genre, index) => (
-                                          <Box
-                                            key={index}
-                                            marginLeft={2.5}
-                                            maxW={600}
-                                            float={"left"}
-                                            bg={"#6768AB"}
-                                            p={2}
-                                            color={"white"}
-                                            borderRadius={"10"}
-                                          >
-                                            {genre}
-                                          </Box>
-                                        ))
+                                        <Box
+                                          key={index}
+                                          marginLeft={2.5}
+                                          maxW={600}
+                                          float={"left"}
+                                          bg={"#6768AB"}
+                                          p={2}
+                                          color={"white"}
+                                          borderRadius={"5"}
+                                        >
+                                          {genre}
+                                        </Box>
+                                      ))
                                       : "ไม่มีหมวดหมู่"}
                                   </Box>
                                 </Flex>
@@ -659,16 +690,16 @@ export default function Group() {
                                   >
                                     {data.times && data.place.length > 0
                                       ? data.place.map((genre, index) => (
-                                          <Box
-                                            key={index}
-                                            className={style.tag}
-                                            marginLeft={2.5}
-                                            maxW={600}
-                                            float={"left"}
-                                          >
-                                            {genre}
-                                          </Box>
-                                        ))
+                                        <Box
+                                          key={index}
+                                          className={style.tag}
+                                          marginLeft={2.5}
+                                          maxW={600}
+                                          float={"left"}
+                                        >
+                                          {genre}
+                                        </Box>
+                                      ))
                                       : "ไม่มีหมวดหมู่"}
                                   </Box>
                                 </Flex>
@@ -699,16 +730,16 @@ export default function Group() {
                                     {/* {console.log(data.genre)} */}
                                     {data.times && data.times.length > 0
                                       ? data.times.map((genre, index) => (
-                                          <Box
-                                            key={index}
-                                            className={style.tag}
-                                            marginLeft={2.5}
-                                            maxW={600}
-                                            float={"left"}
-                                          >
-                                            {genre}
-                                          </Box>
-                                        ))
+                                        <Box
+                                          key={index}
+                                          className={style.tag}
+                                          marginLeft={2.5}
+                                          maxW={600}
+                                          float={"left"}
+                                        >
+                                          {genre}
+                                        </Box>
+                                      ))
                                       : "ไม่มีหมวดหมู่"}
                                   </Box>
                                 </Flex>
@@ -739,18 +770,18 @@ export default function Group() {
                                     {data.tws
                                       ? data.tws.length > 0
                                         ? data.tws.map((tw, index) => (
-                                            <Box
-                                              bg={"#6768AB"}
-                                              p={2}
-                                              borderRadius={10}
-                                              color={"white"}
-                                              m={1}
-                                              key={index}
-                                              float="left"
-                                            >
-                                              {tw}
-                                            </Box>
-                                          ))
+                                          <Box
+                                            bg={"#EA4545"}
+                                            p={2}
+                                            borderRadius={5}
+                                            color={"white"}
+                                            m={1}
+                                            key={index}
+                                            float="left"
+                                          >
+                                            {tw}
+                                          </Box>
+                                        ))
                                         : "ไม่มีคำเตือน"
                                       : "ไม่มีคำเตือน"}
                                   </Box>
@@ -813,8 +844,8 @@ export default function Group() {
                                     >
                                       {data.averageTime
                                         ? data.averageTime +
-                                          " " +
-                                          data.averageTimeUnit
+                                        " " +
+                                        data.averageTimeUnit
                                         : "ไม่มีระยะเวลาโดยประมาณ"}
                                     </Box>
                                   </Flex>
@@ -863,19 +894,7 @@ export default function Group() {
 
                                   <Spacer />
 
-                                  <Center
-                                    shadow={"base"}
-                                    borderRadius={10}
-                                    bg={color}
-                                    w={"49.5%"}
-                                    h={63}
-                                    p={5}
-                                    color={"white"}
-                                  >
-                                    {data.rating
-                                      ? data.rating
-                                      : "G (เหมาะสำหรับทุกวัย)"}
-                                  </Center>
+
                                 </Flex>
 
                                 <Modal
@@ -884,7 +903,7 @@ export default function Group() {
                                   isCentered
                                 >
                                   <ModalOverlay />
-                                  <ModalContent fontFamily={"Mitr"}>
+                                  <ModalContent fontFamily={"Sarabun"}>
                                     <ModalHeader>Rule&Agreement</ModalHeader>
                                     <ModalCloseButton />
                                     <ModalBody>
@@ -897,7 +916,7 @@ export default function Group() {
                                   </ModalContent>
                                 </Modal>
 
-                                <Center
+                                <Button
                                   bg={"#303030"}
                                   shadow={"base"}
                                   color={"#FFC75A"}
@@ -915,6 +934,7 @@ export default function Group() {
                                       handleEnterGroup();
                                     }
                                   }
+                                  _hover={{ bg: "gray.800" }}
                                   cursor="pointer"
                                 >
                                   {console.log(
@@ -929,9 +949,9 @@ export default function Group() {
                                       Object.keys(data.pendingmember).includes(
                                         auth.currentUser?.uid
                                       )
-                                    ? "รอการตอบรับ"
-                                    : "เข้าร่วมกลุ่ม"}
-                                </Center>
+                                      ? "รอการตอบรับ"
+                                      : "เข้าร่วมกลุ่ม"}
+                                </Button>
                               </VStack>
                             </AccordionPanel>
                           </AccordionItem>
@@ -1249,8 +1269,8 @@ export default function Group() {
                     >
                       <Center
                         ml={-4}
-                        // w={850}
-                        // h={500}
+                      // w={850}
+                      // h={500}
                       >
                         {data.doclink && (
                           <Box
@@ -1276,8 +1296,8 @@ export default function Group() {
                                 borderRadius: "24px",
                               },
                             }}
-                            // maxH={"75%"}
-                            // maxW={"70%"}
+                          // maxH={"75%"}
+                          // maxW={"70%"}
                           />
                         )}
                         {/* <Box
@@ -1295,7 +1315,7 @@ export default function Group() {
                         p={3}
                         color={"white"}
                         bg={"#6768AB"}
-                        fontFamily={"Mitr"}
+                        fontFamily={"Sarabun"}
                         fontSize={"xl"}
                         mb={5}
                       >
@@ -1305,7 +1325,7 @@ export default function Group() {
                         </Center>
                       </Center>
 
-                      <Wrap fontFamily={"Mitr"}>
+                      <Wrap fontFamily={"Sarabun"}>
                         {Object.values(data.staff).map((staff) => (
                           <WrapItem>
                             <Center
@@ -1356,6 +1376,7 @@ export default function Group() {
                   </TabPanels>
                 </Tabs>
               </VStack>
+              
               <Box>
                 <Commentsection
                   gid={id}
@@ -1375,7 +1396,7 @@ export default function Group() {
         )}
         <Modal onClose={onDelClose} isOpen={isDelOpen} isCentered>
           <ModalOverlay />
-          <ModalContent fontFamily={"Mitr"}>
+          <ModalContent fontFamily={"Sarabun"}>
             <ModalHeader>ยืนยันลบกลุ่ม</ModalHeader>
             <ModalCloseButton />
             <ModalBody>

@@ -65,7 +65,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
     getStateDataReply,
   } = useContext(PostContext);
   // console.log({ post, member, onPostDelete, data, gid, mychara })
-  const creator = member[Object.keys(member).find(v=>v === post.uid)];
+  const creator = member[Object.keys(member).find(v => v === post.uid)];
   const getUser = useUser();
   const { auth, db } = useApp();
   const [fetchlimit, setFetchlimit] = useState(20);
@@ -73,7 +73,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
   const inputFileRef = useRef(null);
   const pid = post.pid;
   const TextareaRef = useRef(null);
-  const {chara, refreshcharaList} = useCharaList(data, gid)
+  const { chara, refreshcharaList } = useCharaList(data, gid)
   const router = useRouter();
 
   const checkChara = () => {
@@ -131,16 +131,16 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
 
   let comment = [];
   if (!loading) {
-      snapshot.docs.map((doc) => {
-        const mappedcommentData = {
-          ...doc.data(),
-          creator: member[doc.data().uid],
-          cid: doc.id,
-          pid: post.pid,
-          gid: post.gid,
-        };
-        comment = [...comment, mappedcommentData];
-      })
+    snapshot.docs.map((doc) => {
+      const mappedcommentData = {
+        ...doc.data(),
+        creator: member[doc.data().uid],
+        cid: doc.id,
+        pid: post.pid,
+        gid: post.gid,
+      };
+      comment = [...comment, mappedcommentData];
+    })
   }
 
   const resizeTextArea = (e) => {
@@ -302,6 +302,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
         bg={"white"}
         borderRadius={10}
         direction={"column"}
+        fontFamily={'Sarabun'}
       >
         <Flex w={"100%"}>
           <Avatar
@@ -309,20 +310,20 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
             rounded={"100%"}
             h={50}
             w={50}
-            src={postchara.name? postchara.photoURL : creator.photoURL}
-            name={postchara.name? postchara.name : creator.displayName}
-            
+            src={postchara.name ? postchara.photoURL : creator.photoURL}
+            name={postchara.name ? postchara.name : creator.displayName}
+
           />
           <VStack w={"100%"} spacing={0}>
-            <Box fontSize={18} w={"100%"} onClick={postchara.name? ()=>{}: ()=>router.push("../../profile/"+creator?.uid)} cursor={"pointer"}>
-              {postchara.name? postchara.name : creator.displayName}
+            <Box fontSize={18} w={"100%"} onClick={postchara.name ? () => { } : () => router.push("../../profile/" + creator?.uid)} cursor={"pointer"}>
+              {postchara.name ? postchara.name : creator.displayName}
             </Box>
             <Flex w={"100%"} fontSize={14} color={"gray.400"}>
               <Box
-                onClick={postchara.name? ()=>router.push("../../profile/"+creator?.uid): ()=>{}}
+                onClick={postchara.name ? () => router.push("../../profile/" + creator?.uid) : () => { }}
                 cursor={"pointer"}
               >
-                {postchara.name? creator.displayName: ""}
+                {postchara.name ? creator.displayName : ""}
               </Box>
               <Spacer />
               <Box float={"right"}>
@@ -361,7 +362,8 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
           </Menu>
         </Flex>
 
-        <Flex p={2} pl={55} pr={55} direction={"column"}>
+        <Flex pl={55} pr={55} direction={"column"}>
+          <Tag m={2}  w={50} color={'black'} bg={'gray.200'}>Day1</Tag>
           {editMode ? (
             // <InputGroup>
             <Textarea
@@ -426,15 +428,20 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
             pr={55}
           >
             <HStack
+              mt={2}
               spacing={4}
               w={"100%"}
               fontSize={14}
               color={"GrayText"}
-              pt={2}
+              p={2}
+              boxShadow={'base'}
+              bg={'gray.100'}
+              borderRadius={5}
             >
               <Button
                 leftIcon={
                   <Heart
+                    size={18}
                     weight={
                       love.includes(auth.currentUser.uid) ? "fill" : "regular"
                     }
@@ -443,37 +450,44 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
                 color={
                   love.includes(auth.currentUser.uid) ? "#EA4545" : "black"
                 }
-                width={"40%"}
+                width={"35%"}
                 fontSize={16}
                 fontWeight={"light"}
                 boxShadow={"base"}
                 variant="solid"
                 onClick={HandleLove}
+                bg={'white'}
+                h={34}
               >
-                {getStateDataLove(post.pid).length}
+                <Text color={'gray.500'}>{getStateDataLove(post.pid).length}</Text>
               </Button>
               <Button
                 leftIcon={<ChatCenteredText />}
                 color="black"
-                width={"100%"}
+                width={"35%"}
                 fontSize={16}
                 fontWeight={"light"}
                 boxShadow={"base"}
                 variant="solid"
                 onClick={onToggle}
+                bg={'white'}
+                h={34}
               >
-                {post.comment > comment?.length
-                  ? post.comment
-                  : comment?.length}
+                <Text color={'gray.500'}>
+                  {post.comment > comment?.length
+                    ? post.comment
+                    : comment?.length}
+                </Text>
               </Button>
+              <Box w={'50%'}></Box>
               <Button
                 leftIcon={<Eye />}
                 color="black"
-                width={"40%"}
+                width={"35%"}
                 fontSize={16}
                 fontWeight={"light"}
-                boxShadow={"base"}
                 variant="solid"
+                h={34}
               >
                 {post.view}
               </Button>

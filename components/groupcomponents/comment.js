@@ -302,17 +302,21 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
 
   return (
     <Flex>
-      <Center m={2}>
-        <VStack spacing={0}>
-          <Box borderWidth={3} borderColor={"gray.400"} h={10} ml={-3.5}></Box>
+      {/* <Center m={1}>
+        <VStack spacing={0} mt={2} >
+          <Box w={'22px'} borderColor={'#636363'} height={'120'} borderLeftWidth={3} ></Box>
           <Box
-            borderWidth={3}
-            borderColor={"gray.400"}
+            borderColor={'#636363'}
             borderBottomLeftRadius={10}
-            w={5}
+            borderBottomStyle={'solid'}
+            borderBottomWidth={3}
+            borderLeftWidth={3}
+            height={'45px'}
+            w={'22px'}
+            borderLeftStyle={'solid'}
           ></Box>
         </VStack>
-      </Center>
+      </Center> */}
 
       <Flex
         mt={3}
@@ -321,28 +325,28 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
         direction={"column"}
         float={"right"}
         borderRadius={10}
-        w={"95%"}
+        w={"100%"}
       >
         <Flex w={"100%"}>
-        <Avatar
+          <Avatar
             mr={2}
             rounded={"100%"}
             h={50}
             w={50}
-            src={postchara.name? postchara.photoURL : creator.photoURL}
-            name={postchara.name? postchara.name : creator.displayName}
-            
+            src={postchara.name ? postchara.photoURL : creator.photoURL}
+            name={postchara.name ? postchara.name : creator.displayName}
+
           />
           <VStack w={"100%"} spacing={0}>
-            <Box fontSize={18} w={"100%"} onClick={postchara.name? ()=>{}: ()=>router.push("../../profile/"+creator?.uid)} cursor={"pointer"}>
-              {postchara.name? postchara.name : creator.displayName}
+            <Box fontSize={18} w={"100%"} onClick={postchara.name ? () => { } : () => router.push("../../profile/" + creator?.uid)} cursor={"pointer"}>
+              {postchara.name ? postchara.name : creator.displayName}
             </Box>
             <Flex w={"100%"} fontSize={14} color={"gray.400"}>
               <Box
-              cursor={"pointer"}
-                onClick={postchara.name? ()=>router.push("../../profile/"+creator?.uid): ()=>{}}
+                cursor={"pointer"}
+                onClick={postchara.name ? () => router.push("../../profile/" + creator?.uid) : () => { }}
               >
-                {postchara.name? creator.displayName: ""}
+                {postchara.name ? creator.displayName : ""}
               </Box>
               <Spacer />
               <Box float={"right"}>{parseDate(comment.timestamp)}</Box>
@@ -388,7 +392,7 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
                   // </InputRightElement>
                   // </InputGroup>
                   <Box fontSize={14} w={"100%"}>
-                    <Text w={"100%"} whiteSpace="pre-line">
+                    <Text mt={2} w={"100%"} whiteSpace="pre-line">
                       {text ? text : ""}
                     </Text>
                   </Box>

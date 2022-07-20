@@ -144,7 +144,7 @@ export const Commentsection = ({ gid, commenters, initialcomment }) => {
       marginRight="100px"
       marginTop="20px"
       marginBottom="50px"
-      fontFamily={"Mitr"}
+      fontFamily={"Sarabun"}
     >
       <Text fontSize={32} fontWeight={"bold"}>
         ความคิดเห็น - [
@@ -171,15 +171,15 @@ export const Commentsection = ({ gid, commenters, initialcomment }) => {
           />
           <InputRightElement>
             <IconButton
-              paddingTop={1}
-              h={15}
-              w={11}
-              borderRadius={100}
+              mt={1}
+              mr={1}
+              rounded={'full'}
               onClick={handleFile}
-              icon={<ImageSquare size={32} weight="bold" />}
+              icon={<ImageSquare size={22} />}
             />
           </InputRightElement>
         </InputGroup>
+        
         <Input
           type="file"
           id="file"
