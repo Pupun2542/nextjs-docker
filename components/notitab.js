@@ -169,9 +169,9 @@ const Notitab = ({ notidata }) => {
         <Flex borderRadius={5} boxShadow={'base'} p={2} mt={0.5} mb={0.5} onClick={()=>router.push(data.path)} cursor="pointer" _hover={{backgroundColor: "gray.100"}} key={k}>
           {/* {console.log(data)} */}
           <Avatar size={"lg"} src={data.triggerer.photoURL}></Avatar>
-          <VStack pl={2} w={"100%"} float={"left"}>
+          <VStack pt={2} pl={2} w={"100%"} float={"left"} spacing={0}>
             <Text w={"100%"}>{data.message}</Text>
-            <Text w={"100%"}>{data.time}</Text>
+            <Text w={"100%"} fontSize={14} color={'gray.500'}>{data.time}</Text>
           </VStack>
         </Flex>
       ))}

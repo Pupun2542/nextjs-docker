@@ -217,7 +217,7 @@ function CustomNavbar() {
 
               <Show above="lg">
                 <Center width={"auto"} h={41} px={5}>
-                  <Center fontFamily={"Mitr"} fontWeight={150} color={"black"}>
+                  <Center fontFamily={"Sarabun"} fontWeight={150} color={"black"}>
                     {user.displayName}
                   </Center>
                 </Center>
@@ -594,10 +594,10 @@ function CustomNavbar() {
         borderRadius={10}
         display={isChatOpen ? "initial" : "none"}
         zIndex={20000}
-        fontFamily={"Mitr"}
+        fontFamily={"Sarabun"}
       >
-        <Box bg={"gray.100"} p={2}>
-          Chat
+        <Box p={2} pl={5} pt={3} fontSize={23} fontWeight={700}>
+          กล่องข้อความ
         </Box>
         <Box w={"100%"}>
           {chatNotiData ? (
@@ -616,7 +616,7 @@ function CustomNavbar() {
             bg: "gray.200",
           }}
         >
-          ดูแชททั้งหมด
+          ดูข้อความทั้งหมด
         </Center>
       </Box>
 
@@ -634,10 +634,10 @@ function CustomNavbar() {
         borderRadius={10}
         display={isNotiOpen ? "initial" : "none"}
         zIndex={20000}
-        fontFamily={"Mitr"}
+        fontFamily={"Sarabun"}
       >
-        <Box bg={"gray.100"} p={2}>
-          Notifications
+        <Box p={2} pl={5} pt={3} fontSize={23} fontWeight={700}>
+          การแจ้งเตือน
         </Box>
 
         <Flex direction={"column"}>
@@ -730,7 +730,7 @@ const ChatNotiIcon = ({ data, user }) => {
       mt="2.5px"
       mb={"2.5px"}
       p={2}
-      fontFamily={"Mitr"}
+      fontFamily={'Sarabun'}
       cursor="pointer"
       _hover={{
         bg: "gray.200",
@@ -740,19 +740,19 @@ const ChatNotiIcon = ({ data, user }) => {
         <Flex justifyContent="start">
           <Image
             src={display.thumbnail}
-            height="48px"
-            weight="48px"
+            height="55px"
+            weight="55px"
             rounded={100}
             marginRight="15px"
           />
           <Box>
-            <Text>{display.name}</Text>
-            <Text>
+            <Text fontWeight={'bold'}>{display.name}</Text>
+            <Text fontSize={14}>
               {data?.senderId == user?.uid ? "คุณ: " : ""} {data?.lastmsg}
             </Text>
           </Box>
         </Flex>
-        {data.timestamp && <Text>{caltime()}</Text>}
+        {data.timestamp && <Text color={'gray.400'} fontSize={14}>{caltime()}</Text>}
       </Flex>
     </Box>
   );
