@@ -37,6 +37,7 @@ export const ChatItem = ({ doc, user }) => {
                     p={2}
                     w={'auto'}
                     maxW={250}
+                    whiteSpace="pre-line"
                   >
                     {doc.text}
                   </Text>
@@ -49,6 +50,7 @@ export const ChatItem = ({ doc, user }) => {
                     h="150px"
                     objectFit="cover"
                     onClick={() => setModalOpen(true)}
+                    loading={"lazy"}
                   />
                 )}
               </Box>
@@ -71,6 +73,7 @@ export const ChatItem = ({ doc, user }) => {
                     p={2}
                     width='auto'
                     maxWidth={250}
+                    whiteSpace="pre-line"
                   >
                     {doc.text}
                   </Text>
@@ -83,6 +86,7 @@ export const ChatItem = ({ doc, user }) => {
                     h={150}
                     objectFit="cover"
                     onClick={() => setModalOpen(true)}
+                    loading={"lazy"}
                   />
                 )}
               </Box>
