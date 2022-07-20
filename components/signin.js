@@ -9,6 +9,7 @@ import {
     Checkbox,
     Link,
     Button,
+    useDisclosure,
 } from "@chakra-ui/react";
 import { getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
