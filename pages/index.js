@@ -53,6 +53,7 @@ import { useRouter } from 'next/router'
 import React from "react";
 import { SignIn } from "../components/signin";
 import { useApp } from "../src/hook/local";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function Home() {
   const router = useRouter();
@@ -66,6 +67,7 @@ export default function Home() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
   const {auth} = useApp()
+  const [user] = useAuthState(auth)
   return (
 
     <Box
@@ -106,7 +108,7 @@ export default function Home() {
                   fontSize={24}
                   onClick={onOpen}
                   ref={btnRef}
-                  isDisabled={!auth.currentUser}
+                  isDisabled={user}
                 >
                   Register !
                 </Button>
