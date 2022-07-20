@@ -5,10 +5,7 @@ import {
     Center,
     DrawerBody,
     DrawerFooter,
-    Center,
     Flex,
-    Spacer,
-    VStack,
     Checkbox,
     Link,
     Button,
@@ -22,7 +19,6 @@ import {
     SignInWithFacebook,
     SignInWithEmailAndPassword,
 } from "../src/services/authservice";
-import { useState } from "react";
 import CustomNavbar from "../components/navbar";
 import { Router, useRouter } from "next/router";
 import Head from "next/head";
