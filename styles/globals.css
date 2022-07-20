@@ -14,3 +14,11 @@ a {
 * {
   box-sizing: border-box;
 }
+
+@font-face {
+  font-family: "Sarabun";
+  src: url('../assets/Sarabun-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+

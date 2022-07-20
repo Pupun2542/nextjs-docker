@@ -23,6 +23,17 @@ import {
   HStack,
   Show,
   Hide,
+  useDisclosure,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  DrawerHeader,
+  DrawerBody,
+  DrawerFooter,
+  Input,
+  Checkbox,
+  Link,
 } from "@chakra-ui/react"
 import Footer from "../components/footer";
 import {
@@ -39,6 +50,8 @@ import {
   DiscordLogo
 } from "phosphor-react";
 import { useRouter } from 'next/router'
+import React from "react";
+import { SignIn } from "../components/signin";
 
 export default function Home() {
   const router = useRouter();
@@ -48,7 +61,10 @@ export default function Home() {
     lg: '62em',
     xl: '80em',
     '2xl': '96em',
-  }
+  };
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const btnRef = React.useRef()
+
   return (
 
     <Box
@@ -60,7 +76,7 @@ export default function Home() {
 
       <Flex>
         <Spacer />
-        <VStack bg={'white'} w={[500, 1000]} boxShadow='Base' fontFamily={'Sarabun-Regular.ttf'} marginTop={55}>
+        <VStack bg={'white'} w={[500, 1000]} boxShadow='Base' fontFamily={'Sarabun'} marginTop={55}>
           <Flex
             align="center"
             justify={{ base: "center", md: "space-around", xl: "space-between" }}
@@ -70,7 +86,7 @@ export default function Home() {
               <Spacer minH={[0, 30]} />
               <Heading fontFamily={'Mitr'} fontSize={[42, 48]} fontWeight={'bold'} textAlign={['center', 'center', 'left']}>Comuthor</Heading>
               <Box fontSize={[18, 24]} fontFamily={'Mitr'} fontWeight={600} textAlign={['center', 'center', 'left']}>เว็บไซต์คอมมูนิตี้โรลเพลย์เพื่อส่วนรวม</Box>
-              <Box pl={[0, 8]} pt={2}textAlign={['center', 'left']}>
+              <Box fontFamily={'Sarabun'} pl={[0, 8]} pt={2} textAlign={['center', 'left']}>
                 แพล็ตฟอร์มสำหรับผู้สร้างสรรค์ผลงานประกอบการเล่น
               </Box>
               <Box fontWeight={'extrabold'} textAlign={['center', 'left']}>
@@ -87,10 +103,34 @@ export default function Home() {
                   w={250}
                   fontWeight={'bold'}
                   fontSize={24}
-                  onClick={() => router.push("/login")}
+                  onClick={onOpen}
+                  ref={btnRef}
                 >
                   Register !
                 </Button>
+
+                <Drawer
+                  isOpen={isOpen}
+                  placement='right'
+                  onClose={onClose}
+                  finalFocusRef={btnRef}
+                  size={'sm'}
+                >
+                  <DrawerOverlay />
+                  <DrawerContent mt={55}>
+                    <DrawerCloseButton />
+                    <DrawerHeader>Sign in</DrawerHeader>
+
+                    <SignIn />
+
+                    <DrawerFooter>
+                      <Button variant='outline' mr={3} onClick={onClose}>
+                        Cancel
+                      </Button>
+                      <Button colorScheme='blue'>Save</Button>
+                    </DrawerFooter>
+                  </DrawerContent>
+                </Drawer>
                 <Spacer />
               </Flex>
 
