@@ -152,7 +152,7 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
   };
 
   return (
-    <Flex w={"100%"}>
+    <Flex borderRadius={5} bg={'gray.100'} mt={2} p={1} boxShadow={'base'} w={"100%"}>
       {/* <Center m={1}>
         <VStack spacing={0} mt={2} >
           <Box w={'22px'} borderColor={'#636363'} height={'50'} borderLeftWidth={3} ></Box>
@@ -170,34 +170,35 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
       </Center> */}
 
       <Flex
-        mt={3}
+        bg={'white'}
         p={2}
-        boxShadow={"0 0 2px #000000"}
+        // boxShadow={'"0 0 2px #000000"'}
+        boxShadow={'base'}
         w={"100%"}
         direction={"column"}
         float={"right"}
         borderRadius={10}
       >
         <Flex w={"100%"}>
-        <Avatar
+          <Avatar
             mr={2}
             rounded={"100%"}
             h={50}
             w={50}
-            src={postchara.name? postchara.photoURL : creator.photoURL}
-            name={postchara.name? postchara.name : creator.displayName}
-            
+            src={postchara.name ? postchara.photoURL : creator.photoURL}
+            name={postchara.name ? postchara.name : creator.displayName}
+
           />
           <VStack w={"100%"} spacing={0}>
-            <Box fontSize={18} w={"100%"} onClick={postchara.name? ()=>{}: ()=>router.push("../../profile/"+creator?.uid)} cursor={"pointer"}>
-              {postchara.name? postchara.name : creator.displayName}
+            <Box fontSize={18} w={"100%"} onClick={postchara.name ? () => { } : () => router.push("../../profile/" + creator?.uid)} cursor={"pointer"}>
+              {postchara.name ? postchara.name : creator.displayName}
             </Box>
             <Flex w={"100%"} fontSize={14} color={"gray.400"}>
               <Box
-              cursor={"pointer"}
-                onClick={postchara.name? ()=>router.push("../../profile/"+creator?.uid): ()=>{}}
+                cursor={"pointer"}
+                onClick={postchara.name ? () => router.push("../../profile/" + creator?.uid) : () => { }}
               >
-                {postchara.name? creator.displayName: ""}
+                {postchara.name ? creator.displayName : ""}
               </Box>
               <Spacer />
               <Box float={"right"}>{parseDate(reply.timestamp)}</Box>
@@ -262,10 +263,28 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
                   )}
                 </Center>
 
-                <HStack spacing={4} fontSize={14} color={"GrayText"} pt={2}>
+                <HStack
+                  mt={2}
+                  spacing={4}
+                  w={"100%"}
+                  fontSize={14}
+                  color={"GrayText"}
+                  p={1}
+                  boxShadow={'base'}
+                  bg={'gray.100'}
+                  borderRadius={5}
+                >
                   <Button
-                    leftIcon={<Heart />}
-                    color="black"
+                    leftIcon={<Heart
+                      weight={
+                        love.includes(auth.currentUser.uid)
+                          ? "fill"
+                          : "regular"
+                      }
+                    />}
+                    color={
+                      love.includes(auth.currentUser.uid) ? "#EA4545" : "black"
+                    }
                     width={"40%"}
                     fontSize={16}
                     fontWeight={"light"}
@@ -275,6 +294,7 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
                   >
                     {reply.love.length}
                   </Button>
+                  <Box w={'100%'}></Box>
                 </HStack>
               </Flex>
             </Flex>

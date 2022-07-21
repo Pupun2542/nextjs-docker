@@ -301,7 +301,7 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
   };
 
   return (
-    <Flex>
+    <Flex borderRadius={5} bg={'gray.100'} mt={2} p={1} boxShadow={'base'}>
       {/* <Center m={1}>
         <VStack spacing={0} mt={2} >
           <Box w={'22px'} borderColor={'#636363'} height={'120'} borderLeftWidth={3} ></Box>
@@ -319,7 +319,7 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
       </Center> */}
 
       <Flex
-        mt={3}
+        bg={'white'}
         p={2}
         boxShadow={"base"}
         direction={"column"}
@@ -411,7 +411,17 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
                   )}
                 </Center>
 
-                <HStack spacing={4} fontSize={14} color={"GrayText"} pt={2}>
+                <HStack
+                  mt={2}
+                  spacing={4}
+                  w={"100%"}
+                  fontSize={14}
+                  color={"GrayText"}
+                  p={1}
+                  boxShadow={'base'}
+                  bg={'gray.100'}
+                  borderRadius={5}
+                >
                   <Button
                     leftIcon={
                       <Heart
@@ -425,27 +435,32 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
                     color={
                       love.includes(auth.currentUser.uid) ? "#EA4545" : "black"
                     }
-                    width={"40%"}
+                    width={"35%"}
                     fontSize={16}
                     fontWeight={"light"}
                     boxShadow={"base"}
                     variant="solid"
                     onClick={HandleLove}
+                    bg={'white'}
+                    h={34}
                   >
                     {love.length}
                   </Button>
                   <Button
                     leftIcon={<ChatCenteredText />}
                     color="black"
-                    width={"100%"}
+                    width={"35%"}
                     fontSize={16}
                     fontWeight={"light"}
                     boxShadow={"base"}
                     variant="solid"
                     onClick={onToggle}
+                    bg={'white'}
+                    h={34}
                   >
                     {comment.reply}
                   </Button>
+                  <Box w={'100%'}></Box>
                 </HStack>
                 {/* {console.log(reply)} */}
                 {isOpen && (
@@ -501,7 +516,7 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
           </VStack>
 
           <Menu>
-            <MenuButton m={2.5} h={10} w={10} borderRadius={100}>
+            <MenuButton m={2} w={42} h={42} borderRadius={100}>
               <IconButton
                 icon={<DotsThreeVertical size={20} />}
                 rounded={"full"}
@@ -539,15 +554,22 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
         <Flex mt={2}>
           <Box mr={1}>
             <Menu>
-              <MenuButton as={Button} rightIcon={<CaretDown size={8} />}>
+              <MenuButton 
+                w={42}
+                h={42}
+                _hover={{
+                  bg: 'gray.100',
+                  borderRadius: '5'
+                }}
+              >
                 <Avatar
                   src={
                     Object.keys(selectedchara).length > 0
                       ? selectedchara.photoURL
                       : ""
                   }
-                  w={8}
-                  h={8}
+                  w={30}
+                  h={30}
                 />
               </MenuButton>
               <MenuList>
@@ -555,8 +577,8 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
                   Object.values(mychara).map((cha) => (
                     <MenuItem onClick={() => setSelectedchara(cha)}>
                       <Flex alignItems={"center"}>
-                        <Avatar src={cha.photoURL} w={8} h={8} mr={1} />
-                        <Text fontSize="sm">{cha.name}</Text>
+                        <Avatar src={cha.photoURL} w={30} h={30} mr={2} />
+                        <Text fontSize={16}>{cha.name}</Text>
                       </Flex>
                     </MenuItem>
                   ))}

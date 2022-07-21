@@ -254,7 +254,7 @@ function dashboard() {
   };
 
   const handleSent = async () => {
-    console.log(!isEmptyOrSpaces(message) , image.length > 0)
+    console.log(!isEmptyOrSpaces(message), image.length > 0)
     if (!isEmptyOrSpaces(message) || image.length > 0) {
       let dlurl = "";
       if (image.length > 0) {
@@ -285,116 +285,96 @@ function dashboard() {
   console.log(loading, data);
   if (!loading && data) {
     return (
-      <Box>
+      <Box bg={'#F3F3F3'}>
         <CustomNavbar />
 
-        <Flex
-          pt={55}
-          fontFamily={"mitr"}
-          justifyContent={"center"}
-          boxShadow="base"
-        >
-          <Box
-            bg={"#F3F3F3"}
-            minH={1000}
-            minW={800}
-            maxW={800}
+        <Flex justifyContent={"center"} boxShadow="base">
+          <Flex
+            pt={55}
+            fontFamily={"mitr"}
+            justifyContent={"center"}
             boxShadow="base"
+            minW={950}
+            bg={'white'}
           >
-            <VStack spacing={0}>
-              <Flex>
-                <Center
-                  color={"white"}
-                  minWidth={778}
-                  pl={22}
-                  fontWeight={"700"}
-                  minH={75}
-                  fontSize={28}
-                  bg={"#6768AB"}
+            <Box
+              bg={"#F3F3F3"}
+              minH={1000}
+              minW={800}
+              maxW={800}
+              boxShadow='base'
+            >
+              <VStack spacing={0}>
+                <Flex>
+                  <Center
+                    color={"white"}
+                    minWidth={778}
+                    pl={22}
+                    fontWeight={"700"}
+                    minH={75}
+                    fontSize={28}
+                    bg={"#6768AB"}
+                  >
+                    [{data?.tag}] {data?.name}
+                  </Center>
+
+                  <Box bg={"#6768AB"} cursor={"pointer"}>
+                    <Popover bg={"#6768AB"}>
+                      <PopoverTrigger>
+                        <Info color="#FFC75A" size={22} weight="fill" />
+                      </PopoverTrigger>
+                      <PopoverContent>
+                        <PopoverArrow />
+                        <PopoverCloseButton />
+                        <PopoverBody
+                          maxH={500}
+                          overflowY={"auto"}
+                          css={{
+                            "&::-webkit-scrollbar": {
+                              width: "4px",
+                            },
+                            "&::-webkit-scrollbar-track": {
+                              width: "6px",
+                            },
+                            "&::-webkit-scrollbar-thumb": {
+                              background: "#727272",
+                              borderRadius: "24px",
+                            },
+                          }}
+                        >
+                          {data.description
+                            ? data.description
+                            : "ไม่มีคำอธิบายคอมมู"}
+                        </PopoverBody>
+                      </PopoverContent>
+                    </Popover>
+                  </Box>
+                </Flex>
+
+                <Tabs
+                  w={"100%"}
+                  maxW={800}
+                  isFitted
+                  index={tabIndex}
+                  onChange={(e) => setTabIndex(e)}
                 >
-                  [{data?.tag}] {data?.name}
-                </Center>
-
-                <Box bg={"#6768AB"} cursor={"pointer"}>
-                  <Popover bg={"#6768AB"}>
-                    <PopoverTrigger>
-                      <Info color="#FFC75A" size={22} weight="fill" />
-                    </PopoverTrigger>
-                    <PopoverContent>
-                      <PopoverArrow />
-                      <PopoverCloseButton />
-                      <PopoverBody
-                        maxH={500}
-                        overflowY={"auto"}
-                        css={{
-                          "&::-webkit-scrollbar": {
-                            width: "4px",
-                          },
-                          "&::-webkit-scrollbar-track": {
-                            width: "6px",
-                          },
-                          "&::-webkit-scrollbar-thumb": {
-                            background: "#727272",
-                            borderRadius: "24px",
-                          },
-                        }}
-                      >
-                        {data.description
-                          ? data.description
-                          : "ไม่มีคำอธิบายคอมมู"}
-                      </PopoverBody>
-                    </PopoverContent>
-                  </Popover>
-                </Box>
-              </Flex>
-
-              <Tabs
-                w={"100%"}
-                maxW={800}
-                isFitted
-                index={tabIndex}
-                onChange={(e) => setTabIndex(e)}
-              >
-                {/* หัว tab */}
-                <TabList mb="1em">
-                  <Tab
-                    _selected={{
-                      color: "white",
-                      bg: "#9A9AB0",
-                      margin: "2",
-                      borderRadius: "10",
-                    }}
-                    onClick={() =>
-                      Router.replace("/group/" + id + "/dashboard", undefined, {
-                        shallow: true,
-                      })
-                    }
-                  >
-                    Post
-                  </Tab>
-                  <Tab
-                    _selected={{
-                      color: "white",
-                      bg: "#9A9AB0",
-                      margin: "2",
-                      borderRadius: "10",
-                    }}
-                  >
-                    Gallery
-                  </Tab>
-
-                  <Tab
-                    _selected={{
-                      color: "white",
-                      bg: "#9A9AB0",
-                      margin: "2",
-                      borderRadius: "10",
-                    }}
-                  >
-                    Member
-                  </Tab>
-                  {/* {console.log(data)} */}
-                  {data?.isStaff && (
+                  {/* หัว tab */}
+                  <TabList mb="1em">
+                    <Tab
+                      _selected={{
+                        color: "white",
+                        bg: "#9A9AB0",
+                        margin: "2",
+                        borderRadius: "10",
+                      }}
+                      onClick={() =>
+                        Router.replace("/group/" + id + "/dashboard", undefined, {
+                          shallow: true,
+                        })
+                      }
+                    >
+                      Post
+                    </Tab>
                     <Tab
                       _selected={{
                         color: "white",
@@ -403,16 +383,39 @@ function dashboard() {
                         borderRadius: "10",
                       }}
                     >
-                      Setting
+                      Gallery
                     </Tab>
-                  )}
-                </TabList>
 
-                <TabPanels>
-                  {/* Post */}
-                  <TabPanel>
-                    {/* ประกาศ */}
-                    {/* <Flex
+                    <Tab
+                      _selected={{
+                        color: "white",
+                        bg: "#9A9AB0",
+                        margin: "2",
+                        borderRadius: "10",
+                      }}
+                    >
+                      Member
+                    </Tab>
+                    {/* {console.log(data)} */}
+                    {data?.isStaff && (
+                      <Tab
+                        _selected={{
+                          color: "white",
+                          bg: "#9A9AB0",
+                          margin: "2",
+                          borderRadius: "10",
+                        }}
+                      >
+                        Setting
+                      </Tab>
+                    )}
+                  </TabList>
+
+                  <TabPanels>
+                    {/* Post */}
+                    <TabPanel>
+                      {/* ประกาศ */}
+                      {/* <Flex
                       w={"100%"}
                       bg={"white"}
                       boxShadow="base"
@@ -436,44 +439,44 @@ function dashboard() {
                         เพิ่มเติม
                       </Center>
                     </Flex> */}
-                    {/* กล่องข้อความ */}
-                    <Flex
-                      mt={3}
-                      p={2}
-                      boxShadow={"base"}
-                      bg={"white"}
-                      borderRadius={10}
-                      cursor={"pointer"}
-                    >
-                      <Image
-                        mr={2}
-                        rounded={"100%"}
-                        h={42}
-                        w={42}
-                        src={user.photoURL}
-                      />
-                      <Text w="93%" onClick={onOpen}>
-                        {message ? message : "Something"}
-                      </Text>
-                      {/* <Input placeholder='Basic usage' w={'93%'} /> */}
-                    </Flex>
-                    {/* โพสต์ */}
-                    {/* {console.log(post)} */}
-                    <PostContext.Provider value={pack}>
-                      {post &&
-                        Array.isArray(post) &&
-                        post.map((apost, i) => (
-                          <GroupPost
-                            post={getStateDataData(apost)}
-                            key={i}
-                            member={data.member}
-                            onPostDelete={() => onPostDelete(i)}
-                            mychara={data.mychara}
-                            data={data}
-                            gid={id}
-                          />
-                        ))}
-                      {/* {post.length > 0 && pid && (
+                      {/* กล่องข้อความ */}
+                      <Flex
+                        mt={3}
+                        p={2}
+                        boxShadow={"base"}
+                        bg={"white"}
+                        borderRadius={10}
+                        cursor={"pointer"}
+                      >
+                        <Image
+                          mr={2}
+                          rounded={"100%"}
+                          h={42}
+                          w={42}
+                          src={user.photoURL}
+                        />
+                        <Text w="93%" onClick={onOpen}>
+                          {message ? message : "Something"}
+                        </Text>
+                        {/* <Input placeholder='Basic usage' w={'93%'} /> */}
+                      </Flex>
+                      {/* โพสต์ */}
+                      {/* {console.log(post)} */}
+                      <PostContext.Provider value={pack}>
+                        {post &&
+                          Array.isArray(post) &&
+                          post.map((apost, i) => (
+                            <GroupPost
+                              post={getStateDataData(apost)}
+                              key={i}
+                              member={data.member}
+                              onPostDelete={() => onPostDelete(i)}
+                              mychara={data.mychara}
+                              data={data}
+                              gid={id}
+                            />
+                          ))}
+                        {/* {post.length > 0 && pid && (
                         <GroupSinglePost
                           post={getStateDataData(pid)}
                           member={data.member}
@@ -485,82 +488,82 @@ function dashboard() {
                           mychara={data.mychara}
                         />
                       )} */}
-                      {post.length == 0 &&
-                        data &&
-                        data.postcount &&
-                        data.postcount > 0 && <Skeletonpost />}
-                    </PostContext.Provider>
-                    <Modal isOpen={isOpen} onClose={onClose}>
-                      <ModalOverlay
-                        bg="blackAlpha.300"
-                        backdropFilter="blur(10px) hue-rotate(90deg)"
-                      />
-                      <ModalContent>
-                        <ModalHeader>Create Post</ModalHeader>
-                        <ModalCloseButton />
-                        <Divider />
-                        <ModalBody>
-                          <Text>เลือกตัวละครที่ใช้โพสต์</Text>
-                          <Menu>
-                            <MenuButton
-                              as={Button}
-                              rightIcon={<CaretDown size={8} />}
-                              mt={2}
-                              mb={2}
-                            >
-                              <Avatar
-                                src={
-                                  Object.keys(selectedchara).length > 0
-                                    ? selectedchara.photoURL
-                                    : ""
-                                }
-                                w={8}
-                                h={8}
-                              />
-                            </MenuButton>
-                            <MenuList>
-                              {data.mychara &&
-                                Object.values(data.mychara).map((cha, i) => (
-                                  <MenuItem
-                                    onClick={() => setSelectedchara(cha)}
-                                    key={i}
-                                  >
-                                    <Flex alignItems={"center"}>
-                                      <Avatar
-                                        src={cha.photoURL}
-                                        w={8}
-                                        h={8}
-                                        mr={1}
-                                      />
-                                      <Text fontSize="sm">{cha.name}</Text>
-                                    </Flex>
-                                  </MenuItem>
-                                ))}
-                            </MenuList>
-                          </Menu>
+                        {post.length == 0 &&
+                          data &&
+                          data.postcount &&
+                          data.postcount > 0 && <Skeletonpost />}
+                      </PostContext.Provider>
+                      <Modal isOpen={isOpen} onClose={onClose}>
+                        <ModalOverlay
+                          bg="blackAlpha.300"
+                          backdropFilter="blur(10px) hue-rotate(90deg)"
+                        />
+                        <ModalContent>
+                          <ModalHeader>Create Post</ModalHeader>
+                          <ModalCloseButton />
+                          <Divider />
+                          <ModalBody>
+                            <Text>เลือกตัวละครที่ใช้โพสต์</Text>
+                            <Menu>
+                              <MenuButton
+                                as={Button}
+                                rightIcon={<CaretDown size={8} />}
+                                mt={2}
+                                mb={2}
+                              >
+                                <Avatar
+                                  src={
+                                    Object.keys(selectedchara).length > 0
+                                      ? selectedchara.photoURL
+                                      : ""
+                                  }
+                                  w={8}
+                                  h={8}
+                                />
+                              </MenuButton>
+                              <MenuList>
+                                {data.mychara &&
+                                  Object.values(data.mychara).map((cha, i) => (
+                                    <MenuItem
+                                      onClick={() => setSelectedchara(cha)}
+                                      key={i}
+                                    >
+                                      <Flex alignItems={"center"}>
+                                        <Avatar
+                                          src={cha.photoURL}
+                                          w={8}
+                                          h={8}
+                                          mr={1}
+                                        />
+                                        <Text fontSize="sm">{cha.name}</Text>
+                                      </Flex>
+                                    </MenuItem>
+                                  ))}
+                              </MenuList>
+                            </Menu>
 
-                          <Textarea
-                            onChange={(e) => setMessage(e.target.value)}
-                            value={message}
-                            onPaste={handleImagePaste}
-                            onKeyDown={resizeTextArea}
-                          />
-                          <Input
-                            mt={2}
-                            p={2}
-                            h={"auto"}
-                            display="none"
-                            type="file"
-                            ref={pasteInputRef}
-                          />
-                          <Input
-                            type="file"
-                            id="file"
-                            ref={inputFileRef}
-                            display="none"
-                            onChange={(e) => handleUploadFile(e)}
-                          />
-                          {/* {image && (
+                            <Textarea
+                              onChange={(e) => setMessage(e.target.value)}
+                              value={message}
+                              onPaste={handleImagePaste}
+                              onKeyDown={resizeTextArea}
+                            />
+                            <Input
+                              mt={2}
+                              p={2}
+                              h={"auto"}
+                              display="none"
+                              type="file"
+                              ref={pasteInputRef}
+                            />
+                            <Input
+                              type="file"
+                              id="file"
+                              ref={inputFileRef}
+                              display="none"
+                              onChange={(e) => handleUploadFile(e)}
+                            />
+                            {/* {image && (
                             <Box>
                               <Box></Box>
                               <Box
@@ -568,84 +571,86 @@ function dashboard() {
                               ></Box>
                             </Box>
                           )} */}
-                          <Box
-                            w="100%"
-                            height={150}
-                            overflowX="auto"
-                            overflowY="hidden"
-                            whiteSpace="nowrap"
-                            display={image.length > 0 ? "inline-block" : "none"}
-                          >
-                            {image.length > 0 &&
-                              image.map((img, k) => (
-                                <Box
-                                  key={k}
-                                  display={"inline-block"}
-                                  pos={"relative"}
-                                >
-                                  <Image
-                                    src={img}
-                                    width={150}
-                                    height={150}
-                                    objectFit="cover"
-                                  />
-                                  <IconButton
-                                    icon={<X size={16} color="black" />}
-                                    position="absolute"
-                                    top={"-6px"}
-                                    left={114}
-                                    backgroundColor="transparent"
-                                    _hover={{ backgroundColor: "transparent" }}
-                                    onClick={() =>
-                                      setImage(image.filter((v, i) => i !== k))
-                                    }
-                                  ></IconButton>
-                                </Box>
-                              ))}
-                          </Box>
-                          <Flex justifyContent={"flex-end"}>
-                            <IconButton
-                              icon={<ImageSquare size={16} />}
-                              onClick={handleFile}
-                            />
-                            <Button
-                              onClick={() => {
-                                handleSent();
-                                submitRef.current.disabled = true;
-                              }}
-                              disabled={
-                                (isEmptyOrSpaces(message) &&
-                                  image.length == 0) ||
-                                Object.keys(selectedchara).length == 0
-                              }
-                              ref={submitRef}
+                            <Box
+                              w="100%"
+                              height={150}
+                              overflowX="auto"
+                              overflowY="hidden"
+                              whiteSpace="nowrap"
+                              display={image.length > 0 ? "inline-block" : "none"}
                             >
-                              Send
-                            </Button>
-                          </Flex>
-                        </ModalBody>
-                      </ModalContent>
-                    </Modal>
-                  </TabPanel>
+                              {image.length > 0 &&
+                                image.map((img, k) => (
+                                  <Box
+                                    key={k}
+                                    display={"inline-block"}
+                                    pos={"relative"}
+                                  >
+                                    <Image
+                                      src={img}
+                                      width={150}
+                                      height={150}
+                                      objectFit="cover"
+                                    />
+                                    <IconButton
+                                      icon={<X size={16} color="black" />}
+                                      position="absolute"
+                                      top={"-6px"}
+                                      left={114}
+                                      backgroundColor="transparent"
+                                      _hover={{ backgroundColor: "transparent" }}
+                                      onClick={() =>
+                                        setImage(image.filter((v, i) => i !== k))
+                                      }
+                                    ></IconButton>
+                                  </Box>
+                                ))}
+                            </Box>
+                            <Flex justifyContent={"flex-end"}>
+                              <IconButton
+                                icon={<ImageSquare size={16} />}
+                                onClick={handleFile}
+                              />
+                              <Button
+                                onClick={() => {
+                                  handleSent();
+                                  submitRef.current.disabled = true;
+                                }}
+                                disabled={
+                                  (isEmptyOrSpaces(message) &&
+                                    image.length == 0) ||
+                                  Object.keys(selectedchara).length == 0
+                                }
+                                ref={submitRef}
+                              >
+                                Send
+                              </Button>
+                            </Flex>
+                          </ModalBody>
+                        </ModalContent>
+                      </Modal>
+                    </TabPanel>
 
-                  {/* Gallery */}
-                  <TabPanel>{tabIndex == 1 && <Gallery gid={id} />}</TabPanel>
+                    {/* Gallery */}
+                    <TabPanel>{tabIndex == 1 && <Gallery gid={id} />}</TabPanel>
 
-                  {/* Member */}
-                  <TabPanel>
-                    {tabIndex == 2 && <Member data={data} gid={id} />}
-                  </TabPanel>
-                  {/* Settings */}
-                  <TabPanel>
-                    <SimpleGrid column={2} spacing={5}>
-                      {tabIndex == 3 && <Setting data={data} gid={id} />}
-                    </SimpleGrid>
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-            </VStack>
-          </Box>
+                    {/* Member */}
+                    <TabPanel>
+                      {tabIndex == 2 && <Member data={data} gid={id} />}
+                    </TabPanel>
+                    {/* Settings */}
+                    <TabPanel>
+                      <SimpleGrid column={2} spacing={5}>
+                        {tabIndex == 3 && <Setting data={data} gid={id} />}
+                      </SimpleGrid>
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+              </VStack>
+            </Box>
+          </Flex>
         </Flex>
+
       </Box>
     );
   } else {

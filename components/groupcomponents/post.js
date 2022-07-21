@@ -334,13 +334,17 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
             </Flex>
             <Divider />
           </VStack>
+
           <Menu>
-            <MenuButton ml={5}>
+            <MenuButton 
+              ml={5}
+            >
               <IconButton
                 icon={<DotsThreeVertical size={20} />}
                 rounded={"full"}
               />
             </MenuButton>
+
             <MenuList>
               {auth.currentUser.uid == post.uid ? (
                 <>
@@ -363,7 +367,9 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
         </Flex>
 
         <Flex pl={55} pr={55} direction={"column"}>
-          <Tag m={2}  w={50} color={'black'} bg={'gray.200'}>Day1</Tag>
+          
+          <Tag m={2} w={50} color={'black'} bg={'gray.200'}>Day1</Tag>
+          
           {editMode ? (
             // <InputGroup>
             <Textarea
@@ -394,13 +400,15 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
             </Box>
           )}
 
-          <Center mt={3} w={"100%"} borderRadius={10} boxShadow={"base"}>
+          <Center mt={3} w={"100%"} borderRadius={10} boxShadow={"0px 0px 15px rgba(0, 0, 0, 0.25)"}>
             <Box
               display={"flex"}
               overflowX="auto"
               overflowY="hidden"
               whiteSpace="nowrap"
               alignContent={"center"}
+              // boxShadow={'base'}
+              // p={1}
             >
               {post.imageUrl &&
                 post.imageUrl.map((img, k) => (
@@ -433,7 +441,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
               w={"100%"}
               fontSize={14}
               color={"GrayText"}
-              p={2}
+              p={1}
               boxShadow={'base'}
               bg={'gray.100'}
               borderRadius={5}
@@ -479,8 +487,8 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
                     : comment?.length}
                 </Text>
               </Button>
-              <Box w={'50%'}></Box>
-              <Button
+              <Box w={'100%'}></Box>
+              {/* <Button
                 leftIcon={<Eye />}
                 color="black"
                 width={"35%"}
@@ -490,7 +498,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
                 h={34}
               >
                 {post.view}
-              </Button>
+              </Button> */}
             </HStack>
 
             <Box>
@@ -521,8 +529,12 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
               <Box mr={1}>
                 <Menu>
                   <MenuButton
-                    as={Button}
-                    rightIcon={<CaretDown size={8} />}
+                    w={42}
+                    h={42}
+                    _hover={{
+                      bg: 'gray.100',
+                      borderRadius: '5'
+                    }}
                   >
                     <Avatar
                       src={
@@ -530,8 +542,8 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
                           ? selectedchara.photoURL
                           : ""
                       }
-                      w={8}
-                      h={8}
+                      w={30}
+                      h={30}
                     />
                   </MenuButton>
                   <MenuList>
@@ -539,8 +551,8 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
                       Object.values(mychara).map((cha) => (
                         <MenuItem onClick={() => setSelectedchara(cha)}>
                           <Flex alignItems={"center"}>
-                            <Avatar src={cha.photoURL} w={8} h={8} mr={1} />
-                            <Text fontSize="sm">{cha.name}</Text>
+                            <Avatar src={cha.photoURL} w={30} h={30} mr={2} />
+                            <Text fontSize={16}>{cha.name}</Text>
                           </Flex>
                         </MenuItem>
                       ))}
