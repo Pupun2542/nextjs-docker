@@ -661,4 +661,43 @@ exports.JoinDebug = (req, res) =>{
   // return res.status(200).send("add new member success");
 };
 
+exports.addAlbum = async (req, res) => {
+  if (req.user) {
+    const groupref = db.collection("group").doc(req.params.gid);
+    const group = await groupref.get();
+    if (group.exists && group.data().member.includes(req.user.uid)) {
+      const data = req.body.data;
+      await groupref.collection("album").doc(req.body.aid).set({
+        "name": data.name,
+        "type": data.type,
+        "uid": data.uid,
+        "description": data.description,
+        "thumbnail": data.thumbnail,
+        "mediaList": data.mediaList,
+      });
+      return res.status(200).send("create album success");
+    } else {
+      return res.status(403).send("forbidden");
+    }
+  } else {
+    return res.status(401).send("unauthorized");
+  }
+};
+
+exports.getAlbums = async (req, res) => {
+  if (req.user) {
+    const groupref = db.collection("group").doc(req.params.gid);
+    const group = await groupref.get();
+    if (group.exists && group.data().member.includes(req.user.uid)) {
+      const albumsnapshot = await groupref.collection("album").get();
+      const albums = albumsnapshot.docs.map((doc)=>doc.data());
+      return albums;
+    } else {
+      return res.status(403).send("forbidden");
+    }
+  } else {
+    return res.status(401).send("unauthorized");
+  }
+};
+
 

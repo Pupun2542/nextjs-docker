@@ -124,9 +124,11 @@ exports.deletePost = async (req, res) => {
           }
         });
       }
-      db.collection("group").doc(req.params.gid).update({
-        postcount: admin.firestore.FieldValue.increment(-1),
-      });
+      db.collection("group")
+          .doc(req.params.gid)
+          .update({
+            postcount: admin.firestore.FieldValue.increment(-1),
+          });
       await docref.delete();
       return res.status(200).send("delete post success");
     } else {
@@ -137,60 +139,46 @@ exports.deletePost = async (req, res) => {
   }
 };
 
-exports.lovePost = (req, res) => {
+exports.lovePost = async (req, res) => {
   if (req.user) {
     const user = req.user.uid;
     const groupref = db.collection("group").doc(req.params.gid);
     const docref = groupref.collection("posts").doc(req.params.pid);
-    docref.get().then((doc) => {
-      if (doc.exists) {
-        return docref
-            .update({
-              love: admin.firestore.FieldValue.arrayUnion(req.user.uid),
-            })
-            .then(() => {
-              sendNotifications(
-                  doc.data().uid,
-                  "104",
-                  user,
-                  req.params.gid,
-                  "",
-                  `group/${req.params.gid}/dashboard?pid=${req.params.pid}`,
-              );
-              return res.status(200).send("update post success");
-            })
-            .catch((e) => {
-              return res.status(400).send("update post not success ", e);
-            });
-      } else {
-        res.status(404).send("post not found");
-      }
-    });
+    const doc = await docref.get();
+    if (doc.exists) {
+      await docref.update({
+        love: admin.firestore.FieldValue.arrayUnion(req.user.uid),
+      });
+      sendNotifications(
+          doc.data().uid,
+          "104",
+          user,
+          req.params.gid,
+          "",
+          `group/${req.params.gid}/dashboard?pid=${req.params.pid}`,
+      );
+      return res.status(200).send("update post success");
+    } else {
+      res.status(404).send("post not found");
+    }
   } else {
     return res.status(401).send("unauthorized");
   }
 };
 
-exports.unlovePost = (req, res) => {
+exports.unlovePost = async (req, res) => {
   if (req.user) {
     const groupref = db.collection("group").doc(req.params.gid);
     const docref = groupref.collection("posts").doc(req.params.pid);
-    docref.get().then((doc) => {
-      if (doc.exists && doc.data().uid == req.user.uid) {
-        return docref
-            .update({
-              love: admin.firestore.FieldValue.arrayRemove(req.user.uid),
-            })
-            .then(() => {
-              return res.status(200).send("update post success");
-            })
-            .catch((e) => {
-              return res.status(400).send("update post not success ", e);
-            });
-      } else {
-        res.status(403).send("forbidden");
-      }
-    });
+    const doc = await docref.get();
+    if (doc.exists && doc.data().love.includes(req.user.uid)) {
+      await docref.update({
+        love: admin.firestore.FieldValue.arrayRemove(req.user.uid),
+      });
+      return res.status(200).send("update post success");
+    } else {
+      res.status(403).send("forbidden");
+    }
   } else {
     return res.status(401).send("unauthorized");
   }
@@ -212,7 +200,7 @@ exports.getAllPost = async (req, res) => {
             .orderBy(req.query.orderby, "desc")
             .limit(parseInt(req.query.loadlimit))
             .get();
-        const postdoc = snapshot.docs.map((doc)=>{
+        const postdoc = snapshot.docs.map((doc) => {
           return {
             ...doc.data(),
             pid: doc.id,
@@ -239,8 +227,7 @@ exports.getPost = async (req, res) => {
     const doc = await groupref.get();
     if (doc.exists) {
       if (
-        (doc.data().privacy == "private" &&
-          doc.data().member.includes(user)) ||
+        (doc.data().privacy == "private" && doc.data().member.includes(user)) ||
         doc.data().privacy != "private"
       ) {
         const snapshot = await groupref
@@ -248,7 +235,13 @@ exports.getPost = async (req, res) => {
             .doc(req.params.pid)
             .get();
         if (snapshot.exists) {
-          return res.status(200).json({...snapshot.data(), pid: req.params.pid, gid: req.params.gid});
+          return res
+              .status(200)
+              .json({
+                ...snapshot.data(),
+                pid: req.params.pid,
+                gid: req.params.gid,
+              });
         } else {
           return res.status(404).send("post not found");
         }

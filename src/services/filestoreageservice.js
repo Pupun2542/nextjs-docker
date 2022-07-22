@@ -16,7 +16,7 @@ const store = getStorage(app);
 const auth = getAuth(app);
 
 export async function Uploadprofileimg(file, creator) {
-  const file2 =  await compressImage(file);
+  const file2 = await compressImage(file);
   const storeRef = ref(store, `images/${creator}/${creator}${Date.now()}.jpg`);
   const snapsnot = await uploadString(storeRef, file2, "data_url");
   const downloadurl = await getDownloadURL(snapsnot.ref);
@@ -28,7 +28,6 @@ export async function Uploadprofilebannerimg(file, creator) {
   const downloadurl = await getDownloadURL(snapsnot.ref);
   return downloadurl;
 }
-
 
 export async function UploadBannerImage(file, creator) {
   if (!file) {
@@ -73,7 +72,9 @@ export async function UploadGroupImage(files, creator, group) {
       files.map(async (file) => {
         const storeRef = ref(
           store,
-          `group/${group}/album/${creator}${Date.now()}.jpg`
+          `group/${group}/album/${creator}${
+            Date.now() + Math.floor(Math.random() * 1000)
+          }.jpg`
         );
         const snapsnot = await uploadString(storeRef, file, "data_url");
         // console.log(snapsnot.ref)
@@ -86,11 +87,24 @@ export async function UploadGroupImage(files, creator, group) {
   return undefined;
 }
 
+export async function UploadGroupAlbumImage(file, creator, group, album) {
+  if (file) {
+    // const storeRef = ref(
+    //   store,
+    //   `group/${group}/album/${album}/${creator}${
+    //     Date.now() + Math.floor(Math.random() * 1000)
+    //   }.jpg`
+    // );
+    // const snapsnot = await uploadString(storeRef, file, "data_url");
+    // const downloadurl = await getDownloadURL(snapsnot.ref);
+    // return { dlurl: downloadurl, path: snapsnot.ref.fullPath };
+    return { dlurl: file, path: ""};
+  }
+  return undefined;
+}
+
 export async function UploadChatImage(file, creator, crid) {
-  const storeRef = ref(
-    store,
-    `chatrooms/${crid}/${creator}${Date.now()}.jpg`
-  );
+  const storeRef = ref(store, `chatrooms/${crid}/${creator}${Date.now()}.jpg`);
   const snapsnot = await uploadString(storeRef, file, "data_url");
   // console.log(snapsnot.ref)
   const downloadurl = await getDownloadURL(snapsnot.ref);
@@ -112,15 +126,19 @@ export function getpathfromUrl(url) {
   return ref(store, url);
 }
 
-export const getpMutiPathfromUrl = (url) =>{
-  return url.map((lnk)=>(ref(store, lnk)));
-}
+export const getpMutiPathfromUrl = (url) => {
+  return url.map((lnk) => ref(store, lnk));
+};
 
 const compressImage = async (dataurl) => {
-  const file = await imageCompression.getFilefromDataUrl(dataurl, "defaule.jpg", Date.now())
+  const file = await imageCompression.getFilefromDataUrl(
+    dataurl,
+    "defaule.jpg",
+    Date.now()
+  );
   const compress = await imageCompression(file, {
-    maxWidthOrHeight: 250
-  })
+    maxWidthOrHeight: 250,
+  });
   const ret = await imageCompression.getDataUrlFromFile(compress);
-  return ret
-}
+  return ret;
+};

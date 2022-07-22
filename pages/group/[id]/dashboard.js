@@ -299,7 +299,7 @@ function dashboard() {
           >
             <Box
               bg={"#F3F3F3"}
-              minH={1000}
+              minH={"calc(100vh - 55px)"}
               minW={800}
               maxW={800}
               boxShadow='base'
@@ -632,7 +632,7 @@ function dashboard() {
                     </TabPanel>
 
                     {/* Gallery */}
-                    <TabPanel>{tabIndex == 1 && <Gallery gid={id} />}</TabPanel>
+                    <TabPanel>{tabIndex == 1 && <Gallery gid={id} mychara={data.mychara} />}</TabPanel>
 
                     {/* Member */}
                     <TabPanel>

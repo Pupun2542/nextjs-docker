@@ -187,7 +187,7 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
       setMessage("");
       setImage("");
       onOpen();
-      TextareaRef.current?.scrollIntoView();
+      // TextareaRef.current?.scrollIntoView();
     }
   };
 

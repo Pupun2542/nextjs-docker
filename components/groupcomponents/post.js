@@ -179,13 +179,14 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
       setMessage("");
       setImage("");
       onOpen();
-      TextareaRef.current?.scrollIntoView();
+      // TextareaRef.current?.scrollIntoView();
     }
   };
 
   const HandleLove = async () => {
     const token = await auth.currentUser.getIdToken();
     if (love.includes(auth.currentUser.uid)) {
+      setLove(love.filter((v, i) => v !== auth.currentUser.uid));
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${post.gid}/${post.pid}/unlove`,
         {},
@@ -195,10 +196,11 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
           },
         }
       );
-      if (res.status === 200) {
-        setLove(love.filter((v, i) => v !== auth.currentUser.uid));
+      if (res.status !== 200) {
+        alert("เกิดข้อผิดพลาดกับระบบ กรุณาแจ้งทีมงาน")
       }
     } else {
+      setLove([...love, auth.currentUser.uid]);
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${post.gid}/${post.pid}/love`,
         {},
@@ -208,8 +210,8 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
           },
         }
       );
-      if (res.status === 200) {
-        setLove([...love, auth.currentUser.uid]);
+      if (res.status !== 200) {
+        alert("เกิดข้อผิดพลาดกับระบบ กรุณาแจ้งทีมงาน")
       }
     }
   };
