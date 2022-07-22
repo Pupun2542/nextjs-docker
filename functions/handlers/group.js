@@ -667,13 +667,16 @@ exports.addAlbum = async (req, res) => {
     const group = await groupref.get();
     if (group.exists && group.data().member.includes(req.user.uid)) {
       const data = req.body.data;
+      console.log(req.body.aid);
       await groupref.collection("album").doc(req.body.aid).set({
         "name": data.name,
         "type": data.type,
         "uid": data.uid,
+        "caid": data.caid,
         "description": data.description,
         "thumbnail": data.thumbnail,
         "mediaList": data.mediaList,
+        "aid": req.body.aid,
       });
       return res.status(200).send("create album success");
     } else {
@@ -691,7 +694,7 @@ exports.getAlbums = async (req, res) => {
     if (group.exists && group.data().member.includes(req.user.uid)) {
       const albumsnapshot = await groupref.collection("album").get();
       const albums = albumsnapshot.docs.map((doc)=>doc.data());
-      return albums;
+      return res.status(200).json(albums);
     } else {
       return res.status(403).send("forbidden");
     }
@@ -700,4 +703,36 @@ exports.getAlbums = async (req, res) => {
   }
 };
 
-
+exports.albumLove = (req, res) =>{
+  if (req.user) {
+    const user = req.user.uid;
+    const docref = db.collection("group").doc(req.params.gid).collection("album").doc(req.params.aid);
+    docref.update({
+      love: admin.firestore.FieldValue.arrayUnion(user),
+    }).then(()=>{
+      docref.get().then((doc)=>{
+        sendNotifications(req.user.uid, "013", user, req.params.gid, "", `group/${req.params.gid}/?album=${req.params.aid}`);
+      });
+      return res.status(200).send("loved");
+    }).catch((e)=>{
+      return res.status(400).send("cannot love : ", e);
+    });
+  } else {
+    return res.status(401).send("unauthorized");
+  }
+};
+exports.albumUnlove = (req, res) =>{
+  if (req.user) {
+    const user = req.user.uid;
+    const docref = db.collection("group").doc(req.params.gid).collection("album").doc(req.params.aid);
+    docref.update({
+      love: admin.firestore.FieldValue.arrayRemove(user),
+    }).then(()=>{
+      return res.status(200).send("unloved");
+    }).catch((e)=>{
+      return res.status(400).send("cannot unlove : ", e);
+    });
+  } else {
+    return res.status(401).send("unauthorized");
+  }
+};

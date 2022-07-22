@@ -282,7 +282,6 @@ function dashboard() {
     }
   };
 
-  console.log(loading, data);
   if (!loading && data) {
     return (
       <Box bg={'#F3F5F8'}>
@@ -635,7 +634,7 @@ function dashboard() {
                     </TabPanel>
 
                     {/* Gallery */}
-                    <TabPanel>{tabIndex == 1 && <Gallery gid={id} mychara={data.mychara} />}</TabPanel>
+                    <TabPanel>{tabIndex == 1 && <Gallery gid={id} mychara={data.mychara} data={data} />}</TabPanel>
 
                     {/* Member */}
                     <TabPanel>

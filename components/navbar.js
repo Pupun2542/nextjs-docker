@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import {
   Box,
   Flex,
@@ -82,26 +82,13 @@ import useSound from "use-sound";
 import Notitab from "./notitab";
 // import { useLocalStorage } from "../src/hook/uselocalstorage";
 
-const NavLink = ({ children }) => (
-  <Link
-    px={2}
-    py={1}
-    rounded={"md"}
-    _hover={{
-      textDecoration: "none",
-      bg: useColorModeValue("gray.200", "gray.700"),
-    }}
-    href={"#"}
-  >
-    {children}
-  </Link>
-);
-
 function CustomNavbar() {
   const { app, auth, db } = useApp();
   const { notidata, chatNotiData } = useNotifications();
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const chatTabRef = useRef(null);
+  const notiTabRef = useRef(null);
   const {
     isOpen: isNotiOpen,
     onOpen: onNotiOpen,
@@ -140,6 +127,18 @@ function CustomNavbar() {
   });
   const getgroup = useGroupHeader();
 
+  if (typeof window !== 'undefined') {
+    document.addEventListener("mousedown", (e) => {
+      if (chatTabRef.current && !chatTabRef.current.contains(e.target)) {
+        onChatClose();
+      }
+    });
+    document.addEventListener("mousedown", (e) => {
+      if (notiTabRef.current && !notiTabRef.current.contains(e.target)) {
+        onNotiClose();
+      }
+    });
+  }
   useEffect(() => {
     let unsubscribe = () => { };
     if (user && !loading) {
@@ -319,7 +318,7 @@ function CustomNavbar() {
                       cursor="pointer"
                       minW={0}
                       title="Chats"
-                      onClick={onChatToggle}
+                      onClick={onChatOpen}
                       position="relative"
                     >
                       <Center
@@ -357,7 +356,7 @@ function CustomNavbar() {
                     minW={0}
                     title="Notifications"
                     onClick={() => {
-                      onNotiToggle();
+                      onNotiOpen();
                       readNotification();
                     }}
                     pos="relative"
@@ -590,11 +589,12 @@ function CustomNavbar() {
         display={isChatOpen ? "initial" : "none"}
         zIndex={20000}
         fontFamily={"Sarabun"}
+        ref={chatTabRef}
       >
         <Box p={2} pl={5} pt={3} fontSize={23} fontWeight={700}>
           กล่องข้อความ
         </Box>
-        <Box w={"100%"}>
+        <Box w={"100%"} onClick={onChatClose}>
           {chatNotiData ? (
             chatNotiData.map((data, k) => (
               <ChatNotiIcon data={data} user={user} key={k} />
@@ -630,12 +630,13 @@ function CustomNavbar() {
         display={isNotiOpen ? "initial" : "none"}
         zIndex={20000}
         fontFamily={"Sarabun"}
+        ref={notiTabRef}
       >
         <Box p={2} pl={5} pt={3} fontSize={23} fontWeight={700}>
           การแจ้งเตือน
         </Box>
 
-        <Flex direction={"column"}>
+        <Flex direction={"column"} onClick={onNotiClose}>
           <Notitab bg={"facebook"} notidata={notidata} />
         </Flex>
 
@@ -667,7 +668,6 @@ const ChatNotiIcon = ({ data, user }) => {
     const getHeader = async () => {
       if (user&&(data.type == "private" || data.type == "chara")) {
         const filteredname = data.member.find((v) => v !== user.uid);
-        console.log(data.member);
         const detail = await getUser([filteredname]);
         const thumbnail = detail[0].photoURL;
         const name = detail[0].displayName;

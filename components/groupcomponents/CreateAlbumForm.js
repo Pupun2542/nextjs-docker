@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Text,
   Divider,
@@ -12,17 +12,32 @@ import {
   Image,
   IconButton,
   Spinner,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+  ModalOverlay
 } from "@chakra-ui/react";
 import { CaretDown, ImageSquare, X } from "phosphor-react";
 import { isEmptyOrSpaces } from "../../src/services/utilsservice";
 import { useApp } from "../../src/hook/local";
-import { UploadGroupAlbumImage } from "../../src/services/filestoreageservice";
+import {
+  deleteImage,
+  UploadGroupAlbumImage,
+} from "../../src/services/filestoreageservice";
 import { collection, doc } from "firebase/firestore";
 import axios from "axios";
 
-export const CreateAlbumForm = ({ isOpen, onClose, mychara, gid, setAlb }) => {
+export const CreateAlbumForm = ({
+  onClose,
+  mychara,
+  gid,
+  setAlb,
+  alb,
+}) => {
   const chara = Object.values(mychara);
-  const [formMode, setFormMode] = useState(0);
+  const [formMode, setFormMode] = useState(1);
   const {
     isOpen: isCharSelectOpen,
     onOpen: onCharSelectOpen,
@@ -37,6 +52,9 @@ export const CreateAlbumForm = ({ isOpen, onClose, mychara, gid, setAlb }) => {
   const [albDesc, setAlbDesc] = useState("");
   const { auth, db } = useApp();
   const [loading, setLoading] = useState(false);
+  const [modalImage, setModalImage] = useState("");
+  // const newImageRef = useRef(null);
+  const deletedImageRef = useRef([]);
 
   document.addEventListener("mousedown", (e) => {
     if (dropdownref.current && !dropdownref.current.contains(e.target)) {
@@ -44,27 +62,56 @@ export const CreateAlbumForm = ({ isOpen, onClose, mychara, gid, setAlb }) => {
     }
   });
 
+  useEffect(() => {
+    if (alb?.aid) {
+      // console.log(alb);
+      // console.log(mychara[alb.caid]);
+      setSelectedImage(alb.mediaList);
+      setSelectedchara(mychara[alb.caid]);
+      setAlbName(alb.name);
+      setAlbDesc(alb.description);
+    }
+    return ()=>{
+      setSelectedImage([]);
+      setSelectedchara({});
+      setAlbName("");
+      setAlbDesc("");
+    }
+  }, [alb]);
+
   const HandleSubmit = async () => {
     if (!isEmptyOrSpaces(albName)) {
       if ((formMode == 1 && selectedChar.name) || formMode == 0) {
         setLoading(true);
-        const aid = doc(collection(db, "group", gid, "album"));
+        const aid = (alb.aid? alb.aid : doc(collection(db, "group", gid, "album")).id);
+        console.log(aid);
         let dlurl = [];
         if (selectedImage.length > 0) {
           dlurl = await Promise.all(
             selectedImage.map(async (img) => {
-              const url = await UploadGroupAlbumImage(
-                img.url,
-                auth.currentUser.uid,
-                gid,
-                aid.id
-              );
-              const mappedImage = {
-                url: url.dlurl,
-                path: url.path,
-                desc: albDesc,
-                uid: auth.currentUser.uid,
-              };
+              let mappedImage;
+              if (!img.url.startsWith("https://")) {
+                const url = await UploadGroupAlbumImage(
+                  img.url,
+                  auth.currentUser.uid,
+                  gid,
+                  aid
+                );
+                mappedImage = {
+                  url: url.dlurl,
+                  path: url.path,
+                  desc: img.desc,
+                  uid: auth.currentUser.uid,
+                };
+              } else {
+                mappedImage = {
+                  url: img.url,
+                  path: img.path,
+                  desc: img.desc,
+                  uid: img.uid,
+                };
+              }
+              console.log(mappedImage);
               return mappedImage;
             })
           );
@@ -74,13 +121,15 @@ export const CreateAlbumForm = ({ isOpen, onClose, mychara, gid, setAlb }) => {
           caid: selectedChar.refererId,
           name: albName,
           type: formMode,
+          thumbnail: 0,
           description: albDesc,
           mediaList: dlurl,
         };
+        // console.log(data)
         const token = await auth.currentUser.getIdToken();
         const res = await axios.post(
           `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${gid}/album/create/`,
-          { aid: aid.id, data: data },
+          { aid: aid, data: data },
           {
             headers: {
               Authorization: token,
@@ -88,7 +137,18 @@ export const CreateAlbumForm = ({ isOpen, onClose, mychara, gid, setAlb }) => {
           }
         );
         if (res.status === 200) {
-          setAlb(data);
+          if (deletedImageRef.current.length > 0) {
+            await Promise.all(
+              deletedImageRef.current.map(async (ref) => {
+                await deleteImage(ref);
+              })
+            );
+          }
+          setLoading(false);
+          if (!alb.aid) {
+            setAlb(data);
+          }
+          onClose();
         }
       }
     }
@@ -110,9 +170,20 @@ export const CreateAlbumForm = ({ isOpen, onClose, mychara, gid, setAlb }) => {
     setSelectedImage(newSelected);
   };
 
+  const onRemoveImage = (k) => {
+    if (selectedImage[k].url.startsWith("https://")) {
+      deletedImageRef.current = [
+        ...deletedImageRef.current,
+        selectedImage[k].path,
+      ];
+    }
+    setSelectedImage(selectedImage.filter((v, i) => i !== k));
+    uploadRef.current.value = "";
+  };
+
   return (
     <Flex
-      display={isOpen ? "flex" : "none"}
+      // display={isOpen ? "flex" : "none"}
       flexDirection={"column"}
       justifyContent={"space-between"}
       minHeight={"calc(100vh - 238px)"}
@@ -120,7 +191,7 @@ export const CreateAlbumForm = ({ isOpen, onClose, mychara, gid, setAlb }) => {
       <Box>
         <Box bg={"white"} borderRadius={10} boxShadow={"base"} pl={5} pr={5}>
           <Text textAlign={"center"} p={5} fontSize={22} fontWeight={"bold"}>
-            สร้างอัลบั้มใหม่
+            {alb?.aid? "แก้ไขอัลบั้ม" : "สร้างอัลบั้มใหม่"}
           </Text>
           <Divider />
           <Box pt={5}>
@@ -172,6 +243,7 @@ export const CreateAlbumForm = ({ isOpen, onClose, mychara, gid, setAlb }) => {
                   borderBottomLeftRadius={5}
                 >
                   <Text position={"relative"} bottom="-4px" pl={1} pr={1}>
+                    {/* {console.log(selectedChar)} */}
                     {selectedChar.name ? selectedChar.name : "เลือกตัวละคร"}
                   </Text>
                 </Box>
@@ -221,14 +293,12 @@ export const CreateAlbumForm = ({ isOpen, onClose, mychara, gid, setAlb }) => {
                 width={225}
                 borderRadius={10}
                 boxShadow={"base"}
+                key={k}
               >
                 <IconButton
                   icon={<X />}
                   position={"absolute"}
-                  onClick={() => {
-                    setSelectedImage(selectedImage.filter((v, i) => i !== k));
-                    uploadRef.current.value = "";
-                  }}
+                  onClick={() => onRemoveImage(k)}
                   right={0}
                   bg={"transparent"}
                 ></IconButton>
@@ -241,7 +311,7 @@ export const CreateAlbumForm = ({ isOpen, onClose, mychara, gid, setAlb }) => {
                   objectFit={"contain"}
                   borderTopRadius={10}
                   loading={"lazy"}
-                  // onClick={() => setModalImage(img.url)}
+                  onClick={() => setModalImage(img.url)}
                 />
                 <Textarea
                   value={img.desc ? img.desc : ""}
@@ -298,7 +368,13 @@ export const CreateAlbumForm = ({ isOpen, onClose, mychara, gid, setAlb }) => {
         accept="image/png, image/gif, image/jpeg"
         onChange={(e) => handleUploadFile(e)}
       />
-      <Box position={"fixed"} top={"50vh"} left={"50vw"} zIndex={9999}>
+      <Box
+        position={"fixed"}
+        display={loading ? "initial" : "none"}
+        top={"50vh"}
+        left={"50vw"}
+        zIndex={9999}
+      >
         <Spinner
           thickness="4px"
           speed="0.65s"
@@ -307,6 +383,16 @@ export const CreateAlbumForm = ({ isOpen, onClose, mychara, gid, setAlb }) => {
           size="xl"
         />
       </Box>
+      <Modal size={"2xl"} isOpen={modalImage} onClose={() => setModalImage("")}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+
+          <ModalBody>
+            <Image src={modalImage} height="90%" width="90%"></Image>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Flex>
   );
 };

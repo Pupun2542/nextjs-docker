@@ -27,6 +27,10 @@ const {
   addChara,
   updateChara,
   removeChara,
+  addAlbum,
+  getAlbums,
+  albumLove,
+  albumUnlove,
 } = require("./handlers/group");
 const { db, admin } = require("./utils/admin");
 const authmw = require("./utils/auth");
@@ -186,6 +190,10 @@ app.post("/user/rejectfriend", authmw, rejectfriend);
 app.post("/user/removeaddfriend", authmw, removeaddfriend);
 app.post("/user/getdetailusers", authmw, getDetailedUsers);
 app.get("/chat/getchatheader/:crid", authmw, getChatHeader);
+app.post("/group/:gid/album/create", authmw, addAlbum);
+app.post("/group/:gid/album/:aid/love", authmw, albumLove);
+app.post("/group/:gid/album/:aid/unlove", authmw, albumUnlove);
+app.get("/group/:gid/album/", authmw, getAlbums);
 
 app.post("/debug/group/:gid/join/", authmw, JoinDebug);
 

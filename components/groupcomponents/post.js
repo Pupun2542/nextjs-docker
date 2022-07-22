@@ -552,8 +552,8 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
                   </MenuButton>
                   <MenuList>
                     {mychara &&
-                      Object.values(mychara).map((cha) => (
-                        <MenuItem onClick={() => setSelectedchara(cha)}>
+                      Object.values(mychara).map((cha,k) => (
+                        <MenuItem onClick={() => setSelectedchara(cha)} key={k}>
                           <Flex alignItems={"center"}>
                             <Avatar src={cha.photoURL} w={30} h={30} mr={2} />
                             <Text fontSize={16}>{cha.name}</Text>

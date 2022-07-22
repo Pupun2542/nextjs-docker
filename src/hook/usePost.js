@@ -50,7 +50,6 @@ export const usePost = (data, orderby, loadLimit, pid, reducer, user, gid) => {
 
   useEffect(() => {
     if (data && !pid) {
-      console.log(data, orderby, loadLimit);
       fetchPost();
     } else if (data && pid) {
       fetchSinglePost();

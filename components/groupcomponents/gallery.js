@@ -25,15 +25,16 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { CreateAlbumForm } from "./CreateAlbumForm";
+import Albuminfo from "./albuminfo";
 
-const Gallery = ({ gid, mychara }) => {
+const Gallery = ({ gid, mychara, data }) => {
   const { auth } = useApp();
-  // const { isOpen, onOpen, onClose } = useDisclosure();
   const [modalImage, setModalImage] = useState("");
   const [gallery, setGallery] = useState([]);
   const [album, setAlbum] = useState([]);
   const [tabindex, setTabindex] = useState(0);
   const [isCreateAlbOpen, setCreateAlbOpen] = useState(false);
+  const [specificAlbum, setSpecificAlbum] = useState({});
   const fetchGallery = async () => {
     const token = await auth.currentUser.getIdToken();
     const res = await axios.get(
@@ -49,6 +50,7 @@ const Gallery = ({ gid, mychara }) => {
     }
   };
   const fetchAlbum = async () => {
+    console.log("fetchalbum");
     const token = await auth.currentUser.getIdToken();
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${gid}/album/`,
@@ -64,12 +66,13 @@ const Gallery = ({ gid, mychara }) => {
   };
 
   useEffect(() => {
+    console.log(tabindex);
     if (tabindex == 0) {
       fetchGallery();
     } else {
-      // fetchAlbum();
+      fetchAlbum();
     }
-  }, [gid]);
+  }, [gid, tabindex]);
 
   return (
     <Box>
@@ -82,7 +85,10 @@ const Gallery = ({ gid, mychara }) => {
         <Flex justifyContent={"space-between"} pt={2} pb={2} pl={5} pr={5}>
           <Box color={"white"}>
             <Button
-              onClick={() => setTabindex(0)}
+              onClick={() => {
+                setTabindex(0);
+                setSpecificAlbum({});
+              }}
               mr={5}
               bg={tabindex == 0 ? "#4C4D88" : "#9999AF"}
               _hover={{ color: "white" }}
@@ -90,14 +96,17 @@ const Gallery = ({ gid, mychara }) => {
               Picture
             </Button>
             <Button
-              onClick={() => setTabindex(1)}
+              onClick={() => {
+                setTabindex(1);
+                setSpecificAlbum({});
+              }}
               bg={tabindex == 1 ? "#4C4D88" : "#9999AF"}
               _hover={{ color: "white" }}
             >
               Album
             </Button>
           </Box>
-          {tabindex == 0 && (
+          {tabindex == 0 && !specificAlbum.uid && (
             <Button
               bg={"#FBBC43"}
               borderWidth={2}
@@ -107,7 +116,7 @@ const Gallery = ({ gid, mychara }) => {
               Add Picture
             </Button>
           )}
-          {tabindex == 1 && (
+          {tabindex == 1 && !specificAlbum.uid && (
             <Button
               bg={"#FBBC43"}
               borderWidth={2}
@@ -116,6 +125,17 @@ const Gallery = ({ gid, mychara }) => {
               onClick={() => setCreateAlbOpen(true)}
             >
               Add Albums
+            </Button>
+          )}
+          {specificAlbum.uid && specificAlbum.uid === auth.currentUser.uid && (
+            <Button
+              bg={"#FBBC43"}
+              borderWidth={2}
+              borderColor={"black"}
+              borderRadius={10}
+              onClick={() => setCreateAlbOpen(true)}
+            >
+              Edit Albums
             </Button>
           )}
         </Flex>
@@ -142,38 +162,55 @@ const Gallery = ({ gid, mychara }) => {
               </SimpleGrid>
             </TabPanel>
             <TabPanel>
-              <SimpleGrid columns={3} rowGap={3}>
-                {gallery.length > 0 &&
-                  album.map((alb, k) => (
-                    <Box key={k}>
-                      <Image
-                        cursor={"pointer"}
-                        src={alb.medialist[0].url}
-                        fallback={<Spinner />}
-                        width={225}
-                        height={225}
-                        objectFit={"contain"}
-                        borderRadius={10}
-                        boxShadow={"base"}
-                        loading={"lazy"}
-                      />
-                      <Text>{alb.name}</Text>
-                    </Box>
-                  ))}
-              </SimpleGrid>
+              {specificAlbum.uid ? (
+                <Albuminfo data={specificAlbum} chara={data.chara} gid={gid} />
+              ) : (
+                <SimpleGrid columns={3} rowGap={3}>
+                  {gallery.length > 0 &&
+                    album.map((alb, k) => (
+                      <Box key={k} onClick={() => setSpecificAlbum(alb)}>
+                        <Image
+                          cursor={"pointer"}
+                          src={alb.mediaList[0].url}
+                          fallback={<Spinner />}
+                          width={225}
+                          height={225}
+                          objectFit={"contain"}
+                          borderRadius={10}
+                          boxShadow={"base"}
+                          loading={"lazy"}
+                        />
+                        <Text textAlign={"center"}>{alb.name}</Text>
+                      </Box>
+                    ))}
+                </SimpleGrid>
+              )}
             </TabPanel>
           </TabPanels>
         </Tabs>
       </Box>
-      <CreateAlbumForm
-        onClose={() => setCreateAlbOpen(false)}
-        isOpen={isCreateAlbOpen}
-        mychara={mychara}
-        gid={gid}
-        setAlb={(data) => setAlbum(...album, data)}
-      />
+      {isCreateAlbOpen && (
+        <>
+          {specificAlbum.aid ? (
+            <CreateAlbumForm
+              onClose={() => setCreateAlbOpen(false)}
+              mychara={mychara}
+              gid={gid}
+              setAlb={(data) => setAlbum(...album, data)}
+              alb={specificAlbum}
+            />
+          ) : (
+            <CreateAlbumForm
+              onClose={() => setCreateAlbOpen(false)}
+              mychara={mychara}
+              gid={gid}
+              setAlb={(data) => setAlbum(...album, data)}
+            />
+          )}
+        </>
+      )}
 
-      <Modal size={"7xl"} isOpen={modalImage} onClose={() => setModalImage("")}>
+      <Modal size={"2xl"} isOpen={modalImage} onClose={() => setModalImage("")}>
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />

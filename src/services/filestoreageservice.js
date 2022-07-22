@@ -6,6 +6,7 @@ import {
   uploadBytesResumable,
   uploadBytes,
   uploadString,
+  deleteObject,
 } from "firebase/storage";
 import { getApp } from "firebase/app";
 import { getAuth, updateProfile } from "firebase/auth";
@@ -89,16 +90,16 @@ export async function UploadGroupImage(files, creator, group) {
 
 export async function UploadGroupAlbumImage(file, creator, group, album) {
   if (file) {
-    // const storeRef = ref(
-    //   store,
-    //   `group/${group}/album/${album}/${creator}${
-    //     Date.now() + Math.floor(Math.random() * 1000)
-    //   }.jpg`
-    // );
-    // const snapsnot = await uploadString(storeRef, file, "data_url");
-    // const downloadurl = await getDownloadURL(snapsnot.ref);
-    // return { dlurl: downloadurl, path: snapsnot.ref.fullPath };
-    return { dlurl: file, path: ""};
+    const storeRef = ref(
+      store,
+      `group/${group}/album/${album}/${creator}${
+        Date.now() + Math.floor(Math.random() * 1000)
+      }.jpg`
+    );
+    const snapsnot = await uploadString(storeRef, file, "data_url");
+    const downloadurl = await getDownloadURL(snapsnot.ref);
+    return { dlurl: downloadurl, path: snapsnot.ref.fullPath };
+    // return { dlurl: file, path: ""};
   }
   return undefined;
 }
@@ -129,6 +130,11 @@ export function getpathfromUrl(url) {
 export const getpMutiPathfromUrl = (url) => {
   return url.map((lnk) => ref(store, lnk));
 };
+
+export const deleteImage = async (path) => {
+  // const storeRef = ref(store, path);
+  await deleteObject(path);
+}
 
 const compressImage = async (dataurl) => {
   const file = await imageCompression.getFilefromDataUrl(

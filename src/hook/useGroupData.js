@@ -50,7 +50,6 @@ export const useGroupData = (gid, user) => {
       }
       memberRef.current = listenerData.member
       charaRef.current = listenerData.chara
-      console.log(mappedData)
       setData(mappedData);
       setLoading(false);
     } else {
