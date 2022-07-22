@@ -331,8 +331,8 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
           <Avatar
             mr={2}
             rounded={"100%"}
-            h={50}
-            w={50}
+            h={45}
+            w={45}
             src={postchara.name ? postchara.photoURL : creator.photoURL}
             name={postchara.name ? postchara.name : creator.displayName}
 
@@ -442,7 +442,7 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
                     variant="solid"
                     onClick={HandleLove}
                     bg={'white'}
-                    h={34}
+                    h={30}
                   >
                     {love.length}
                   </Button>
@@ -456,7 +456,7 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
                     variant="solid"
                     onClick={onToggle}
                     bg={'white'}
-                    h={34}
+                    h={30}
                   >
                     {comment.reply}
                   </Button>
@@ -516,10 +516,11 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
           </VStack>
 
           <Menu>
-            <MenuButton m={2} w={42} h={42} borderRadius={100}>
+            <MenuButton ml={1} h={10} w={10}>
               <IconButton
-                icon={<DotsThreeVertical size={20} />}
+                icon={<DotsThreeVertical size={15} />}
                 rounded={"full"}
+                size={'sm'}
               />
             </MenuButton>
             <MenuList>

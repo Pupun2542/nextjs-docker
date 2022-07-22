@@ -337,11 +337,12 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
 
           <Menu>
             <MenuButton 
-              ml={5}
+              ml={1} h={10} w={10}
             >
               <IconButton
-                icon={<DotsThreeVertical size={20} />}
+                icon={<DotsThreeVertical size={15} />}
                 rounded={"full"}
+                size={'sm'}
               />
             </MenuButton>
 
@@ -400,7 +401,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
             </Box>
           )}
 
-          <Center mt={3} w={"100%"} borderRadius={10} boxShadow={"0px 0px 15px rgba(0, 0, 0, 0.25)"}>
+          <Center mt={3} w={"100%"} borderRadius={10} boxShadow={'xs'}>
             <Box
               display={"flex"}
               overflowX="auto"
@@ -443,7 +444,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
               color={"GrayText"}
               p={1}
               boxShadow={'base'}
-              bg={'gray.100'}
+              bg={'#F3F5F8'}
               borderRadius={5}
             >
               <Button
@@ -465,7 +466,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
                 variant="solid"
                 onClick={HandleLove}
                 bg={'white'}
-                h={34}
+                h={30}
               >
                 <Text color={'gray.500'}>{getStateDataLove(post.pid).length}</Text>
               </Button>
@@ -479,7 +480,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
                 variant="solid"
                 onClick={onToggle}
                 bg={'white'}
-                h={34}
+                h={30}
               >
                 <Text color={'gray.500'}>
                   {post.comment > comment?.length
@@ -488,17 +489,18 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
                 </Text>
               </Button>
               <Box w={'100%'}></Box>
-              {/* <Button
-                leftIcon={<Eye />}
+              <Center
                 color="black"
                 width={"35%"}
                 fontSize={16}
                 fontWeight={"light"}
                 variant="solid"
-                h={34}
+                h={30}
+                borderRadius={5}
+                _hover={{bg: 'gray.200'}}
               >
-                {post.view}
-              </Button> */}
+                <Eye />{post.view}
+              </Center>
             </HStack>
 
             <Box>
@@ -565,7 +567,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
                 width="100%"
                 placeholder="Write Something"
                 height="42px"
-                backgroundColor="gray.100"
+                backgroundColor="#F3F5F8"
                 value={message}
                 ref={TextareaRef}
                 onKeyDown={(e) => {
