@@ -285,31 +285,32 @@ function dashboard() {
   console.log(loading, data);
   if (!loading && data) {
     return (
-      <Box bg={'#F3F3F3'}>
+      <Box bg={'#F3F5F8'}>
         <CustomNavbar />
 
-        <Flex justifyContent={"center"} boxShadow="base">
+        <Flex justifyContent={"center"}>
           <Flex
             pt={55}
-            fontFamily={"mitr"}
+            fontFamily={"Sarabun"}
             justifyContent={"center"}
             boxShadow="base"
             minW={950}
             bg={'white'}
           >
             <Box
-              bg={"#F3F3F3"}
               minH={"calc(100vh - 55px)"}
+              bg={"#F3F5F8"}
               minW={800}
               maxW={800}
-              boxShadow='base'
+              boxShadow="base"
             >
-              <VStack spacing={0}>
-                <Flex>
+              <VStack w={'100%'} spacing={0}>
+                <Flex w={'100%'}>
                   <Center
                     color={"white"}
-                    minWidth={778}
                     pl={22}
+                    w={'100%'}
+                    maxW={800}
                     fontWeight={"700"}
                     minH={75}
                     fontSize={28}
@@ -318,15 +319,17 @@ function dashboard() {
                     [{data?.tag}] {data?.name}
                   </Center>
 
-                  <Box bg={"#6768AB"} cursor={"pointer"}>
-                    <Popover bg={"#6768AB"}>
+                  <Box p={1} bg={"#6768AB"} cursor={"pointer"}>
+                    <Popover bg={"#6768AB"} >
                       <PopoverTrigger>
                         <Info color="#FFC75A" size={22} weight="fill" />
                       </PopoverTrigger>
+
                       <PopoverContent>
                         <PopoverArrow />
                         <PopoverCloseButton />
                         <PopoverBody
+                          whiteSpace={'pre-line'}
                           maxH={500}
                           overflowY={"auto"}
                           css={{

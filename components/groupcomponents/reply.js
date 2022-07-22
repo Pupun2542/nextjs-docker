@@ -152,7 +152,14 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
   };
 
   return (
-    <Flex borderRadius={5} bg={'gray.100'} mt={2} p={1} boxShadow={'base'} w={"100%"}>
+    <Flex
+      borderRadius={5}
+      bg={'gray.100'}
+      mt={2}
+      p={1}
+      boxShadow={'base'}
+      w={"100%"}
+    >
       {/* <Center m={1}>
         <VStack spacing={0} mt={2} >
           <Box w={'22px'} borderColor={'#636363'} height={'50'} borderLeftWidth={3} ></Box>
@@ -183,8 +190,8 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
           <Avatar
             mr={2}
             rounded={"100%"}
-            h={50}
-            w={50}
+            h={45}
+            w={45}
             src={postchara.name ? postchara.photoURL : creator.photoURL}
             name={postchara.name ? postchara.name : creator.displayName}
 
@@ -291,6 +298,8 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
                     boxShadow={"base"}
                     variant="solid"
                     onClick={HandleLove}
+                    bg={'white'}
+                    h={30}
                   >
                     {reply.love.length}
                   </Button>
@@ -301,9 +310,10 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
           </VStack>
 
           <Menu>
-            <MenuButton m={2.5} h={10} w={10} borderRadius={100}>
+            <MenuButton ml={1} h={10} w={10}>
               <IconButton
-                icon={<DotsThreeVertical size={20} />}
+                size={'sm'}
+                icon={<DotsThreeVertical size={15} />}
                 rounded={"full"}
               />
             </MenuButton>
