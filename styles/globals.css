@@ -22,3 +22,16 @@ a {
   font-style: normal;
 }
 
+@font-face {
+  font-family: "MitrSB";
+  src: url('../assets/Mitr-SemiBold.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SarabunSB";
+  src: url('../assets/Sarabun-SemiBold.ttf');
+  font-weight: normal;
+  font-style: normal;
+}

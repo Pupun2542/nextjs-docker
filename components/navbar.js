@@ -211,7 +211,7 @@ function CustomNavbar() {
 
               <Show above="lg">
                 <Center width={"auto"} h={41} px={5}>
-                  <Center fontFamily={"Sarabun"} fontWeight={150} color={"black"}>
+                  <Center fontFamily={"SarabunSB"} fontWeight={150} color={"black"}>
                     {user.displayName}
                   </Center>
                 </Center>
@@ -283,7 +283,7 @@ function CustomNavbar() {
             </Flex>
           </Hide>
 
-          <Hide below="md">
+          {/* <Hide below="md">
             <Stack
               marginLeft="5"
               bg="white"
@@ -303,7 +303,7 @@ function CustomNavbar() {
                 />
               </InputGroup>
             </Stack>
-          </Hide>
+          </Hide> */}
 
           <Spacer />
 
@@ -522,6 +522,7 @@ function CustomNavbar() {
                       borderWidth={3}
                       borderColor={"black"}
                       w={100}
+                      fontFamily={'Sarabun'}
                     >
                       <br />
 
@@ -534,20 +535,21 @@ function CustomNavbar() {
                         />
                       </Center>
 
-                      <br />
-
                       <Center>
-                        <Box fontSize={20} fontWeight={"semibold"}>
+                        <Text
+                          p={3}
+                          fontSize={16}
+                          fontFamily={'SarabunSB'}
+                          fontWeight={"semibold"}
+                        >
                           {user.displayName}
-                        </Box>
+                        </Text>
                       </Center>
-
-                      <br />
 
                       <MenuDivider />
                       {/* <MenuItem>Your Servers</MenuItem> */}
                       <MenuItem
-                        className={style.prName}
+                        fontFamily={'SarabunSB'}
                         _hover={{
                           backgroundColor: "gray.300",
                         }}
@@ -556,7 +558,7 @@ function CustomNavbar() {
                         Account Settings
                       </MenuItem>
                       <MenuItem
-                        className={style.prName}
+                      fontFamily={'SarabunSB'}
                         onClick={() => router.push("/logout")}
                         _hover={{
                           backgroundColor: "gray.300",
@@ -666,7 +668,7 @@ const ChatNotiIcon = ({ data, user }) => {
 
   useEffect(() => {
     const getHeader = async () => {
-      if (user&&(data.type == "private" || data.type == "chara")) {
+      if (user && (data.type == "private" || data.type == "chara")) {
         const filteredname = data.member.find((v) => v !== user.uid);
         const detail = await getUser([filteredname]);
         const thumbnail = detail[0].photoURL;
@@ -740,7 +742,7 @@ const ChatNotiIcon = ({ data, user }) => {
             rounded={100}
             marginRight="15px"
           />
-          <Box maxW={250} whiteSpace={"nowrap"} overflow={"hidden"} textOverflow={"ellipsis"}>
+          <Box maxW={245} whiteSpace={"nowrap"} overflow={"hidden"} textOverflow={"ellipsis"}>
             <Text fontWeight={'bold'}>{display.name}</Text>
             <Text fontSize={14}>
               {data?.senderId == user?.uid ? "คุณ: " : ""} {data?.lastmsg}

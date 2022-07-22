@@ -80,7 +80,9 @@ export const ChatBox = ({
         display={"flex"}
         background="white"
         borderColor={"black"}
-        borderWidth={2}
+        borderLeftWidth={2}
+        borderRightWidth={2}
+        borderTopWidth={2}
         borderTopRadius={10}
         width={340}
         height={455}
@@ -98,13 +100,13 @@ export const ChatBox = ({
         >
           <Image
             src={mappedRoomDetail.thumbnail}
-            w={31}
-            h={31}
+            w={30}
+            h={30}
             rounded="full"
             float="left"
             margin={1}
           />
-          <Box float="left" marginLeft={2} marginTop={2}>
+          <Box float="left" marginLeft={2} marginTop={2} fontSize={'16'}>
             {mappedRoomDetail.name}
           </Box>
           <Box float="right">
@@ -178,7 +180,7 @@ export const ChatBox = ({
           p={1}
           alignItems={"flex-end"}
         >
-          <Box fontFamily={"Mitr"} w="70%" marginLeft={2}>
+          <Box fontFamily={"Sarabun"} w="70%" marginLeft={2}>
             <Textarea
               resize="none"
               minHeight={11}

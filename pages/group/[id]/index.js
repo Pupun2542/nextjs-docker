@@ -69,6 +69,7 @@ import {
   HStack,
   Avatar,
   Image,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import Footer from "../../../components/footer";
 import {
@@ -311,19 +312,19 @@ export default function Group() {
 
   return (
     <Box>
-      <Box bg={"#FFFFFF"}>
+      <Box bg={"#F3F5F8"}>
         <CustomNavbar />
         {!loading && data && (
-          <Flex>
+          <Flex
+            justifyCsontent={'center'}
+          >
             {/* {console.log(data)} */}
-            <Box w={400} minH={1000} bg={"#F3F3F3"}></Box>
-            <Spacer bg={"#F3F3F3"} />
 
-            <Box marginTop={55}>
+
+            <Box marginTop={55} bg={'white'} boxShadow={'base'}>
               <VStack spacing={0}>
-                <Flex w={1000} bg={"#FDFDFD"}>
-                  <Spacer />
-                  <Box bg={"#FFFFFF"} w={850} boxShadow="base">
+                <Flex w={1000} justifyContent={'center'}>
+                  <Box w={850} boxShadow="base">
                     <Flex h={62} bg={"#6768AB"}>
                       <IconButton
                         bg={"white"}
@@ -414,381 +415,264 @@ export default function Group() {
                         )}
                     </Flex>
                   </Box>
-                  <Spacer />
                 </Flex>
 
                 <img src={data.banner} height={478} width={850}></img>
 
-                <Center
-                  h={62}
-                  bg={"#6768AB"}
-                  w={850}
-                  fontFamily="Sarabun"
-                  color={"white"}
-                  fontSize={22}
-                >
-                  {data.tag ? data.tag : "ชื่อย่อคอมมู"} |{" "}
-                  {data.name ? data.name : "ชื่อคอมมู"}
-                </Center>
+                <Flex direction={'column'} bg={'#F3F5F8'} boxShadow={'base'}>
+                  <Center
+                    h={62}
+                    bg={"#6768AB"}
+                    w={850}
+                    fontFamily="Sarabun"
+                    color={"white"}
+                    fontSize={22}
+                  >
+                    {data.tag ? data.tag : "ชื่อย่อคอมมู"} |{" "}
+                    {data.name ? data.name : "ชื่อคอมมู"}
+                  </Center>
 
-                <Tabs isFitted w={850}>
-                  <TabList fontFamily={"Sarabun"}>
-                    <Tab>Detail</Tab>
-                    <Tab>Document</Tab>
-                    <Tab>Staff List</Tab>
-                  </TabList>
-                  <TabPanels>
-                    <TabPanel>
-                      <HStack
-                        fontFamily={"Sarabun"}
-                        justifyContent={"space-between"}
-                        mb={5}
-                      >
-                        <Flex>
-                          <Center
-                            borderRadius={10}
-                            bg={"#6768AB"}
-                            w={350}
-                            h={70}
-                            p={5}
-                            color={"white"}
-                            shadow={"base"}
-                          >
-                            {data.privacy ? (
-                              data.privacy === "public" ? (
-                                <Flex
-                                  flexDir={"column"}
-                                  justifyContent="center"
-                                >
-                                  <Text
-                                    flex={1}
-                                    textAlign="center"
-                                    fontSize={20}
+                  <Tabs isFitted w={850}>
+                    <TabList fontFamily={"Sarabun"}>
+                      <Tab>Detail</Tab>
+                      <Tab>Document</Tab>
+                      <Tab>Staff List</Tab>
+                    </TabList>
+                    <TabPanels>
+                      <TabPanel>
+                        <HStack
+                          fontFamily={"Sarabun"}
+                          justifyContent={"space-between"}
+                          mb={5}
+                        >
+                          <Flex>
+                            <Center
+                              borderRadius={10}
+                              bg={"#6768AB"}
+                              w={350}
+                              h={70}
+                              p={5}
+                              color={"white"}
+                              shadow={"base"}
+                            >
+                              {data.privacy ? (
+                                data.privacy === "public" ? (
+                                  <Flex
+                                    flexDir={"column"}
+                                    justifyContent="center"
                                   >
+                                    <Text
+                                      flex={1}
+                                      textAlign="center"
+                                      fontSize={20}
+                                    >
+                                      Public
+                                    </Text>
+                                    <Text
+                                      flex={1}
+                                      textAlign="center"
+                                      fontSize={12}
+                                    >
+                                      ทุกคนสามารถเข้าร่วมและเห็นการเคลื่อนไหวภายในกลุ่มได้
+                                    </Text>
+                                  </Flex>
+                                ) : (
+                                  <Flex flexDir="column" justifyContent="center">
+                                    <Text
+                                      flex={1}
+                                      textAlign="center"
+                                      fontSize={20}
+                                    >
+                                      Private
+                                    </Text>
+                                    <Text
+                                      flex={1}
+                                      textAlign="center"
+                                      fontSize={12}
+                                    >
+                                      คนเฉพาะกลุ่มเท่านั้นที่สามารถเข้าร่วมภายในกลุ่มได้
+                                    </Text>
+                                  </Flex>
+                                )
+                              ) : (
+                                <Flex flexDir={"column"} justifyContent="center">
+                                  <Text flex={1} textAlign="center" fontSize={20}>
                                     Public
                                   </Text>
-                                  <Text
-                                    flex={1}
-                                    textAlign="center"
-                                    fontSize={12}
-                                  >
+                                  <Text flex={1} textAlign="center" fontSize={12}>
                                     ทุกคนสามารถเข้าร่วมและเห็นการเคลื่อนไหวภายในกลุ่มได้
                                   </Text>
                                 </Flex>
-                              ) : (
-                                <Flex flexDir="column" justifyContent="center">
-                                  <Text
-                                    flex={1}
-                                    textAlign="center"
-                                    fontSize={20}
-                                  >
-                                    Private
-                                  </Text>
-                                  <Text
-                                    flex={1}
-                                    textAlign="center"
-                                    fontSize={12}
-                                  >
-                                    คนเฉพาะกลุ่มเท่านั้นที่สามารถเข้าร่วมภายในกลุ่มได้
-                                  </Text>
-                                </Flex>
-                              )
-                            ) : (
-                              <Flex flexDir={"column"} justifyContent="center">
-                                <Text flex={1} textAlign="center" fontSize={20}>
-                                  Public
-                                </Text>
-                                <Text flex={1} textAlign="center" fontSize={12}>
-                                  ทุกคนสามารถเข้าร่วมและเห็นการเคลื่อนไหวภายในกลุ่มได้
-                                </Text>
-                              </Flex>
-                            )}
+                              )}
+                            </Center>
+                          </Flex>
+                          <Center
+                            shadow={"base"}
+                            borderRadius={10}
+                            bg={color}
+                            w={"49.5%"}
+                            h={70}
+                            p={5}
+                            color={"white"}
+                          >
+                            {data.rating
+                              ? data.rating
+                              : "G (เหมาะสำหรับทุกวัย)"}
                           </Center>
-                        </Flex>
-                        <Center
-                          shadow={"base"}
-                          borderRadius={10}
-                          bg={color}
-                          w={"49.5%"}
-                          h={70}
-                          p={5}
-                          color={"white"}
-                        >
-                          {data.rating
-                            ? data.rating
-                            : "G (เหมาะสำหรับทุกวัย)"}
-                        </Center>
-                        <Button
-                          h={70}
-                          alignContent={"center"}
-                          bg={"#303030"}
-                          _hover={{ bg: "gray.800" }}
-                          color={"#FFC75A"}
-                          w={155}
-                          onClick={
-                            () => {
-                              handleEnterGroup();
+                          <Button
+                            h={70}
+                            alignContent={"center"}
+                            bg={"#303030"}
+                            _hover={{ bg: "gray.800" }}
+                            color={"#FFC75A"}
+                            w={155}
+                            onClick={
+                              () => {
+                                handleEnterGroup();
+                              }
                             }
-                          }
-                        >
-                          {console.log(
-                            data.member,
-                            auth.currentUser?.uid
-                          )}
-                          {Object.keys(data.member).includes(
-                            auth.currentUser?.uid
-                          )
-                            ? "ไปที่กลุ่ม"
-                            : data.pendingmember &&
-                              Object.keys(data.pendingmember).includes(
-                                auth.currentUser?.uid
-                              )
-                              ? "รอการตอบรับ"
-                              : "เข้าร่วมกลุ่ม"}
-                        </Button>
-                      </HStack>
-                      <Flex bg={"#F3F3F3"} shadow={"base"}>
-                        <Accordion
-                          w={850}
-                          fontFamily={"Sarabun"}
-                          defaultIndex={[0]}
-                          allowMultiple
-                        >
-                          <AccordionItem>
-                            <h2>
-                              <AccordionButton>
-                                <AccordionIcon mr={5} />
-                                <Box fontSize={25} flex="1" textAlign="left">
-                                  Basic Information
-                                </Box>
-                              </AccordionButton>
-                            </h2>
-                            <AccordionPanel spacing={0}>
-                              <VStack>
-                                <Flex ml={0} w={750}>
-                                  <Box
-                                    bg={"white"}
-                                    w={200}
-                                    h={63}
-                                    pt={5}
-                                    pl={5}
-                                    shadow={"base"}
-                                    borderRightColor={"gray.400"}
-                                    borderRightWidth={3}
-                                    borderLeftRadius={10}
-                                  >
-                                    จำนวนผู้เล่น
-                                  </Box>
-                                  <Box
-                                    bg={"white"}
-                                    w={170}
-                                    h={63}
-                                    pt={5}
-                                    pl={5}
-                                    shadow={"base"}
-                                    borderRightRadius={10}
-                                  >
-                                    {data.maxplayer
-                                      ? data.maxplayer
-                                      : "ไม่จำกัดจำนวนรับ"}
-                                  </Box>
-                                  <Spacer />
-                                  <Box
-                                    bg={"white"}
-                                    w={200}
-                                    h={63}
-                                    pt={5}
-                                    pl={5}
-                                    shadow={"base"}
-                                    borderRightColor={"gray.400"}
-                                    borderRightWidth={3}
-                                    borderLeftRadius={10}
-                                  >
-                                    ประเภท
-                                  </Box>
-                                  <Box
-                                    bg={"white"}
-                                    w={170}
-                                    h={63}
-                                    pt={5}
-                                    pl={5}
-                                    shadow={"base"}
-                                    borderRightRadius={10}
-                                  >
-                                    {data.type ? data.type : "Slow-Life"}
-                                  </Box>
-                                </Flex>
+                          >
+                            {console.log(
+                              data.member,
+                              auth.currentUser?.uid
+                            )}
+                            {Object.keys(data.member).includes(
+                              auth.currentUser?.uid
+                            )
+                              ? "ไปที่กลุ่ม"
+                              : data.pendingmember &&
+                                Object.keys(data.pendingmember).includes(
+                                  auth.currentUser?.uid
+                                )
+                                ? "รอการตอบรับ"
+                                : "เข้าร่วมกลุ่ม"}
+                          </Button>
+                        </HStack>
 
-                                <Flex ml={10} w={750}>
+                        <Flex bg={"#F3F5F8"}>
+                          <Accordion
+                            w={850}
+                            fontFamily={"Sarabun"}
+                            defaultIndex={[0]}
+                            allowMultiple
+                          >
+                            <AccordionItem>
+                              <h2>
+                                <AccordionButton>
+                                  <AccordionIcon mr={5} />
                                   <Box
-                                    bg={"white"}
-                                    w={200}
-                                    h={63}
-                                    pt={5}
-                                    pl={5}
-                                    shadow={"base"}
-                                    borderLeftRadius={10}
-                                    borderRightColor={"gray.400"}
-                                    borderRightWidth={3}
+                                    fontFamily={'SarabunSB'}
+                                    fontSize={25}
+                                    flex="1"
+                                    textAlign="left"
                                   >
-                                    หมวดหมู่
+                                    Basic Information
                                   </Box>
-                                  <Box
-                                    bg={"white"}
-                                    w={550}
-                                    minH={63}
-                                    pt={3}
-                                    pl={1}
-                                    pb={2}
-                                    pr={1}
-                                    // h={'auto'}
-                                    shadow={"base"}
-                                    borderRightRadius={10}
-                                  >
-                                    {/* {console.log(data.genre)} */}
-                                    {data.times && data.genre.length > 0
-                                      ? data.genre.map((genre, index) => (
-                                        <Box
-                                          key={index}
-                                          marginLeft={2.5}
-                                          maxW={600}
-                                          float={"left"}
-                                          bg={"#6768AB"}
-                                          p={2}
-                                          color={"white"}
-                                          borderRadius={"5"}
-                                        >
-                                          {genre}
-                                        </Box>
-                                      ))
-                                      : "ไม่มีหมวดหมู่"}
-                                  </Box>
-                                </Flex>
+                                </AccordionButton>
+                              </h2>
+                              <AccordionPanel spacing={0}>
+                                <VStack>
+                                  <Flex ml={0} w={750}>
+                                    <Box
+                                      bg={"white"}
+                                      w={200}
+                                      h={63}
+                                      pt={5}
+                                      pl={5}
+                                      shadow={"base"}
+                                      borderRightColor={"gray.400"}
+                                      borderRightWidth={3}
+                                      borderLeftRadius={10}
+                                    >
+                                      จำนวนผู้เล่น
+                                    </Box>
+                                    <Box
+                                      bg={"white"}
+                                      w={170}
+                                      h={63}
+                                      pt={5}
+                                      pl={5}
+                                      shadow={"base"}
+                                      borderRightRadius={10}
+                                    >
+                                      {data.maxplayer
+                                        ? data.maxplayer
+                                        : "ไม่จำกัดจำนวนรับ"}
+                                    </Box>
+                                    <Spacer />
+                                    <Box
+                                      bg={"white"}
+                                      w={200}
+                                      h={63}
+                                      pt={5}
+                                      pl={5}
+                                      shadow={"base"}
+                                      borderRightColor={"gray.400"}
+                                      borderRightWidth={3}
+                                      borderLeftRadius={10}
+                                    >
+                                      ประเภท
+                                    </Box>
+                                    <Box
+                                      bg={"white"}
+                                      w={170}
+                                      h={63}
+                                      pt={5}
+                                      pl={5}
+                                      shadow={"base"}
+                                      borderRightRadius={10}
+                                    >
+                                      {data.type ? data.type : "Slow-Life"}
+                                    </Box>
+                                  </Flex>
 
-                                <Flex ml={10} w={750}>
-                                  <Box
-                                    bg={"white"}
-                                    w={200}
-                                    h={63}
-                                    pt={5}
-                                    pl={5}
-                                    shadow={"base"}
-                                    borderLeftRadius={10}
-                                    borderRightColor={"gray.400"}
-                                    borderRightWidth={3}
-                                  >
-                                    สถานที่ภายในคอมมูนิตี้
-                                  </Box>
-                                  <Box
-                                    bg={"white"}
-                                    w={550}
-                                    minH={63}
-                                    pt={5}
-                                    pl={3}
-                                    shadow={"base"}
-                                    borderRightRadius={10}
-                                  >
-                                    {data.times && data.place.length > 0
-                                      ? data.place.map((genre, index) => (
-                                        <Box
-                                          key={index}
-                                          className={style.tag}
-                                          marginLeft={2.5}
-                                          maxW={600}
-                                          float={"left"}
-                                        >
-                                          {genre}
-                                        </Box>
-                                      ))
-                                      : "ไม่มีหมวดหมู่"}
-                                  </Box>
-                                </Flex>
-
-                                <Flex ml={10} w={750}>
-                                  <Box
-                                    bg={"white"}
-                                    w={200}
-                                    h={63}
-                                    pt={5}
-                                    pl={5}
-                                    shadow={"base"}
-                                    borderLeftRadius={10}
-                                    borderRightColor={"gray.400"}
-                                    borderRightWidth={3}
-                                  >
-                                    ยุคสมัยของคอมมูนิตี้
-                                  </Box>
-                                  <Box
-                                    bg={"white"}
-                                    w={550}
-                                    minH={63}
-                                    pt={5}
-                                    pl={3}
-                                    shadow={"base"}
-                                    borderRightRadius={10}
-                                  >
-                                    {/* {console.log(data.genre)} */}
-                                    {data.times && data.times.length > 0
-                                      ? data.times.map((genre, index) => (
-                                        <Box
-                                          key={index}
-                                          className={style.tag}
-                                          marginLeft={2.5}
-                                          maxW={600}
-                                          float={"left"}
-                                        >
-                                          {genre}
-                                        </Box>
-                                      ))
-                                      : "ไม่มีหมวดหมู่"}
-                                  </Box>
-                                </Flex>
-
-                                <Flex ml={10} w={750}>
-                                  <Box
-                                    bg={"white"}
-                                    w={200}
-                                    h={63}
-                                    pt={5}
-                                    pl={5}
-                                    shadow={"base"}
-                                    borderLeftRadius={10}
-                                    borderRightColor={"gray.400"}
-                                    borderRightWidth={3}
-                                  >
-                                    คำเตือน
-                                  </Box>
-                                  <Box
-                                    bg={"white"}
-                                    w={550}
-                                    h={63}
-                                    pt={2}
-                                    pl={5}
-                                    shadow={"base"}
-                                    borderRightRadius={10}
-                                  >
-                                    {data.tws
-                                      ? data.tws.length > 0
-                                        ? data.tws.map((tw, index) => (
+                                  <Flex ml={10} w={750}>
+                                    <Box
+                                      bg={"white"}
+                                      w={200}
+                                      h={63}
+                                      pt={5}
+                                      pl={5}
+                                      shadow={"base"}
+                                      borderLeftRadius={10}
+                                      borderRightColor={"gray.400"}
+                                      borderRightWidth={3}
+                                    >
+                                      หมวดหมู่
+                                    </Box>
+                                    <Box
+                                      bg={"white"}
+                                      w={550}
+                                      minH={63}
+                                      pt={3}
+                                      pl={1}
+                                      pb={2}
+                                      pr={1}
+                                      // h={'auto'}
+                                      shadow={"base"}
+                                      borderRightRadius={10}
+                                    >
+                                      {/* {console.log(data.genre)} */}
+                                      {data.times && data.genre.length > 0
+                                        ? data.genre.map((genre, index) => (
                                           <Box
-                                            bg={"#EA4545"}
-                                            p={2}
-                                            borderRadius={5}
-                                            color={"white"}
-                                            m={1}
                                             key={index}
-                                            float="left"
+                                            marginLeft={2.5}
+                                            maxW={600}
+                                            float={"left"}
+                                            bg={"#6768AB"}
+                                            p={2}
+                                            color={"white"}
+                                            borderRadius={"5"}
                                           >
-                                            {tw}
+                                            {genre}
                                           </Box>
                                         ))
-                                        : "ไม่มีคำเตือน"
-                                      : "ไม่มีคำเตือน"}
-                                  </Box>
-                                </Flex>
+                                        : "ไม่มีหมวดหมู่"}
+                                    </Box>
+                                  </Flex>
 
-                                <Flex ml={10} w={750}>
-                                  <Flex>
+                                  <Flex ml={10} w={750}>
                                     <Box
                                       bg={"white"}
                                       w={200}
@@ -800,26 +684,34 @@ export default function Group() {
                                       borderRightColor={"gray.400"}
                                       borderRightWidth={3}
                                     >
-                                      วันที่เริ่มเล่น
+                                      สถานที่ภายในคอมมูนิตี้
                                     </Box>
                                     <Box
                                       bg={"white"}
-                                      w={170}
-                                      h={63}
+                                      w={550}
+                                      minH={63}
                                       pt={5}
-                                      pl={5}
+                                      pl={3}
                                       shadow={"base"}
                                       borderRightRadius={10}
                                     >
-                                      {data.startDate
-                                        ? data.startDate
-                                        : "ยังไม่ได้ลงวันเริ่มเล่น"}
+                                      {data.times && data.place.length > 0
+                                        ? data.place.map((genre, index) => (
+                                          <Box
+                                            key={index}
+                                            className={style.tag}
+                                            marginLeft={2.5}
+                                            maxW={600}
+                                            float={"left"}
+                                          >
+                                            {genre}
+                                          </Box>
+                                        ))
+                                        : "ไม่มีหมวดหมู่"}
                                     </Box>
                                   </Flex>
 
-                                  <Spacer />
-
-                                  <Flex>
+                                  <Flex ml={10} w={750}>
                                     <Box
                                       bg={"white"}
                                       w={200}
@@ -831,569 +723,696 @@ export default function Group() {
                                       borderRightColor={"gray.400"}
                                       borderRightWidth={3}
                                     >
-                                      ระยะเวลาโดยประมาณ
+                                      ยุคสมัยของคอมมูนิตี้
                                     </Box>
                                     <Box
                                       bg={"white"}
-                                      w={170}
+                                      w={550}
+                                      minH={63}
+                                      pt={5}
+                                      pl={3}
+                                      shadow={"base"}
+                                      borderRightRadius={10}
+                                    >
+                                      {/* {console.log(data.genre)} */}
+                                      {data.times && data.times.length > 0
+                                        ? data.times.map((genre, index) => (
+                                          <Box
+                                            key={index}
+                                            className={style.tag}
+                                            marginLeft={2.5}
+                                            maxW={600}
+                                            float={"left"}
+                                          >
+                                            {genre}
+                                          </Box>
+                                        ))
+                                        : "ไม่มีหมวดหมู่"}
+                                    </Box>
+                                  </Flex>
+
+                                  <Flex ml={10} w={750}>
+                                    <Box
+                                      bg={"white"}
+                                      w={200}
                                       h={63}
                                       pt={5}
                                       pl={5}
                                       shadow={"base"}
+                                      borderLeftRadius={10}
+                                      borderRightColor={"gray.400"}
+                                      borderRightWidth={3}
+                                    >
+                                      คำเตือน
+                                    </Box>
+                                    <Box
+                                      bg={"white"}
+                                      w={550}
+                                      h={63}
+                                      pt={2}
+                                      pl={5}
+                                      shadow={"base"}
                                       borderRightRadius={10}
                                     >
-                                      {data.averageTime
-                                        ? data.averageTime +
-                                        " " +
-                                        data.averageTimeUnit
-                                        : "ไม่มีระยะเวลาโดยประมาณ"}
+                                      {data.tws
+                                        ? data.tws.length > 0
+                                          ? data.tws.map((tw, index) => (
+                                            <Box
+                                              bg={"#EA4545"}
+                                              p={2}
+                                              borderRadius={5}
+                                              color={"white"}
+                                              m={1}
+                                              key={index}
+                                              float="left"
+                                            >
+                                              {tw}
+                                            </Box>
+                                          ))
+                                          : "ไม่มีคำเตือน"
+                                        : "ไม่มีคำเตือน"}
                                     </Box>
                                   </Flex>
-                                </Flex>
 
-                                <Flex ml={10} w={750}>
-                                  <Box
-                                    bg={"white"}
-                                    w={200}
-                                    minH={63}
-                                    pt={5}
-                                    pl={5}
-                                    shadow={"base"}
-                                    borderLeftRadius={10}
-                                    borderRightColor={"gray.400"}
-                                    borderRightWidth={3}
-                                  >
-                                    คำอธิบาย
-                                  </Box>
-                                  <Container
-                                    bg={"white"}
-                                    w={550}
-                                    minH={63}
-                                    p={5}
-                                    shadow={"base"}
-                                    borderRightRadius={10}
-                                    whiteSpace="pre-line"
-                                  >
-                                    {data.description}
-                                  </Container>
-                                </Flex>
+                                  <Flex ml={10} w={750}>
+                                    <Flex>
+                                      <Box
+                                        bg={"white"}
+                                        w={200}
+                                        h={63}
+                                        pt={5}
+                                        pl={5}
+                                        shadow={"base"}
+                                        borderLeftRadius={10}
+                                        borderRightColor={"gray.400"}
+                                        borderRightWidth={3}
+                                      >
+                                        วันที่เริ่มเล่น
+                                      </Box>
+                                      <Box
+                                        bg={"white"}
+                                        w={170}
+                                        h={63}
+                                        pt={5}
+                                        pl={5}
+                                        shadow={"base"}
+                                        borderRightRadius={10}
+                                      >
+                                        {data.startDate
+                                          ? data.startDate
+                                          : "ยังไม่ได้ลงวันเริ่มเล่น"}
+                                      </Box>
+                                    </Flex>
 
-                                <Flex ml={10} w={750}>
-                                  <Center
-                                    borderRadius={10}
-                                    bg={"#FBBC43"}
-                                    w={"49.5%"}
+                                    <Spacer />
+
+                                    <Flex>
+                                      <Box
+                                        bg={"white"}
+                                        w={200}
+                                        h={63}
+                                        pt={5}
+                                        pl={5}
+                                        shadow={"base"}
+                                        borderLeftRadius={10}
+                                        borderRightColor={"gray.400"}
+                                        borderRightWidth={3}
+                                      >
+                                        ระยะเวลาโดยประมาณ
+                                      </Box>
+                                      <Box
+                                        bg={"white"}
+                                        w={170}
+                                        h={63}
+                                        pt={5}
+                                        pl={5}
+                                        shadow={"base"}
+                                        borderRightRadius={10}
+                                      >
+                                        {data.averageTime
+                                          ? data.averageTime +
+                                          " " +
+                                          data.averageTimeUnit
+                                          : "ไม่มีระยะเวลาโดยประมาณ"}
+                                      </Box>
+                                    </Flex>
+                                  </Flex>
+
+                                  <Flex w={750}>
+                                    <Box
+                                      bg={"white"}
+                                      w={200}
+                                      minH={63}
+                                      pt={5}
+                                      pl={5}
+                                      shadow={"base"}
+                                      borderLeftRadius={10}
+                                      borderRightColor={"gray.400"}
+                                      borderRightWidth={3}
+                                    >
+                                      คำอธิบาย
+                                    </Box>
+
+                                    <Box
+                                      bg={"white"}
+                                      w={550}
+                                      minH={63}
+                                      p={5}
+                                      shadow={"base"}
+                                      borderRightRadius={10}
+                                      whiteSpace="pre-line"
+                                    >
+                                      {data.description}
+                                    </Box>
+                                  </Flex>
+
+                                  <Flex ml={10} w={750}>
+                                    <Center
+                                      borderRadius={10}
+                                      bg={"#FBBC43"}
+                                      w={"100%"}
+                                      h={63}
+                                      p={5}
+                                      as={"button"}
+                                      onClick={onOpen}
+                                      shadow={"base"}
+                                    >
+                                      กฎกติกาและข้อตกลง
+                                    </Center>
+
+                                    <Spacer />
+
+
+                                  </Flex>
+
+                                  <Modal
+                                    onClose={onClose}
+                                    isOpen={isOpen}
+                                    isCentered
+                                  >
+                                    <ModalOverlay />
+                                    <ModalContent fontFamily={"Sarabun"}>
+                                      <ModalHeader>Rule&Agreement</ModalHeader>
+                                      <ModalCloseButton />
+                                      <ModalBody>
+                                        <Container whiteSpace="pre-line">
+                                          {data.rule
+                                            ? data.rule
+                                            : "ไม่มีกฎและข้อตกลง"}
+                                        </Container>
+                                      </ModalBody>
+                                    </ModalContent>
+                                  </Modal>
+
+                                  <Button
+                                    bg={"#303030"}
+                                    shadow={"base"}
+                                    color={"#FFC75A"}
                                     h={63}
-                                    p={5}
-                                    as={"button"}
-                                    onClick={onOpen}
-                                    shadow={"base"}
-                                  >
-                                    กฎกติกาและข้อตกลง
-                                  </Center>
-
-                                  <Spacer />
-
-
-                                </Flex>
-
-                                <Modal
-                                  onClose={onClose}
-                                  isOpen={isOpen}
-                                  isCentered
-                                >
-                                  <ModalOverlay />
-                                  <ModalContent fontFamily={"Sarabun"}>
-                                    <ModalHeader>Rule&Agreement</ModalHeader>
-                                    <ModalCloseButton />
-                                    <ModalBody>
-                                      <Container whiteSpace="pre-line">
-                                        {data.rule
-                                          ? data.rule
-                                          : "ไม่มีกฎและข้อตกลง"}
-                                      </Container>
-                                    </ModalBody>
-                                  </ModalContent>
-                                </Modal>
-
-                                <Button
-                                  bg={"#303030"}
-                                  shadow={"base"}
-                                  color={"#FFC75A"}
-                                  h={63}
-                                  w={750}
-                                  borderRadius={10}
-                                  borderColor={"black"}
-                                  borderWidth={2}
-                                  fontSize={18}
-                                  onClick={
-                                    // data.smlink
-                                    //   ? () => outsidenavigate(data.smlink)
-                                    //   : () => alert("ไม่มีลิงก์กลุ่ม")
-                                    () => {
-                                      handleEnterGroup();
+                                    w={750}
+                                    borderRadius={10}
+                                    borderColor={"black"}
+                                    borderWidth={2}
+                                    fontSize={18}
+                                    onClick={
+                                      // data.smlink
+                                      //   ? () => outsidenavigate(data.smlink)
+                                      //   : () => alert("ไม่มีลิงก์กลุ่ม")
+                                      () => {
+                                        handleEnterGroup();
+                                      }
                                     }
-                                  }
-                                  _hover={{ bg: "gray.800" }}
-                                  cursor="pointer"
-                                >
-                                  {console.log(
-                                    data.member,
-                                    auth.currentUser?.uid
-                                  )}
-                                  {Object.keys(data.member).includes(
-                                    auth.currentUser?.uid
-                                  )
-                                    ? "ไปที่กลุ่ม"
-                                    : data.pendingmember &&
-                                      Object.keys(data.pendingmember).includes(
-                                        auth.currentUser?.uid
-                                      )
-                                      ? "รอการตอบรับ"
-                                      : "เข้าร่วมกลุ่ม"}
-                                </Button>
-                              </VStack>
-                            </AccordionPanel>
-                          </AccordionItem>
-
-                          <AccordionItem>
-                            <h2>
-                              <AccordionButton>
-                                <AccordionIcon mr={5} />
-                                <Box fontSize={25} flex="1" textAlign="left">
-                                  Registration
-                                </Box>
-                              </AccordionButton>
-                            </h2>
-                            <AccordionPanel pb={4}>
-                              {data.registrationlink?.map((link) => (
-                                <VStack>
-                                  <Flex w={"100%"}>
-                                    <Center w={50}></Center>
-                                    <Flex
-                                      w={"100%"}
-                                      bg={"white"}
-                                      boxShadow={"base"}
-                                      borderRadius={10}
-                                    >
-                                      <Box
-                                        p={4}
-                                        minW={180}
-                                        borderRightColor={"#C4C4C4"}
-                                        borderRightWidth={3}
-                                      >
-                                        <Box>
-                                          <Text float="left">
-                                            หัวข้อการรับสมัคร
-                                          </Text>
-                                        </Box>
-                                      </Box>
-
-                                      <Center
-                                        w={"100%"}
-                                        pl={1.5}
-                                        pr={1.5}
-                                        position="relative"
-                                      >
-                                        {link.name}
-                                      </Center>
-                                    </Flex>
-                                    <Center w={50}></Center>
-                                  </Flex>
-
-                                  <Flex w={"100%"}>
-                                    <Center w={50}></Center>
-                                    <VStack w={50} spacing={0}>
-                                      <Box
-                                        mt={2.5}
-                                        h={5}
-                                        w={3.5}
-                                        borderLeftWidth={3}
-                                        borderLeftColor="gray.400"
-                                      ></Box>
-                                      <Box
-                                        borderBottomLeftRadius={10}
-                                        borderLeftWidth={3}
-                                        borderBottomWidth={3}
-                                        borderColor="gray.400"
-                                        h={2}
-                                        w={3.5}
-                                      ></Box>
-                                    </VStack>
-                                    <Flex
-                                      w={"100%"}
-                                      bg={"white"}
-                                      boxShadow={"base"}
-                                      borderRadius={10}
-                                    >
-                                      <Center></Center>
-
-                                      <Box
-                                        p={4}
-                                        minW={180}
-                                        borderRightColor={"#C4C4C4"}
-                                        borderRightWidth={3}
-                                      >
-                                        <Box>
-                                          <Text float="left">
-                                            วันที่และเวลา
-                                          </Text>
-                                        </Box>
-                                      </Box>
-                                      <Center
-                                        w={"100%"}
-                                        pl={1.5}
-                                        pr={1.5}
-                                        position="relative"
-                                      >
-                                        {link.fromdate} ถึง {link.todate}
-                                      </Center>
-                                    </Flex>
-                                    <Center w={50}></Center>
-                                  </Flex>
-
-                                  <Flex w={"100%"}>
-                                    <Center w={50}></Center>
-                                    <VStack w={50} spacing={0}>
-                                      <Box
-                                        mt={2.5}
-                                        h={5}
-                                        w={3.5}
-                                        borderLeftWidth={3}
-                                        borderLeftColor="gray.400"
-                                      ></Box>
-                                      <Box
-                                        borderBottomLeftRadius={10}
-                                        borderLeftWidth={3}
-                                        borderBottomWidth={3}
-                                        borderColor="gray.400"
-                                        h={2}
-                                        w={3.5}
-                                      ></Box>
-                                    </VStack>
-                                    <Flex
-                                      w={"100%"}
-                                      bg={"white"}
-                                      boxShadow={"base"}
-                                      borderRadius={10}
-                                    >
-                                      <Center></Center>
-
-                                      <Box
-                                        p={4}
-                                        minW={180}
-                                        borderRightColor={"#C4C4C4"}
-                                        borderRightWidth={3}
-                                      >
-                                        <Box>
-                                          <Text float="left">ลิงก์</Text>
-                                        </Box>
-                                      </Box>
-
-                                      <Center
-                                        w={"100%"}
-                                        pl={1.5}
-                                        pr={1.5}
-                                        position="relative"
-                                      >
-                                        {link.link}
-                                      </Center>
-                                    </Flex>
-                                    <Center w={50}></Center>
-                                  </Flex>
+                                    _hover={{ bg: "gray.800" }}
+                                    cursor="pointer"
+                                  >
+                                    {console.log(
+                                      data.member,
+                                      auth.currentUser?.uid
+                                    )}
+                                    {Object.keys(data.member).includes(
+                                      auth.currentUser?.uid
+                                    )
+                                      ? "ไปที่กลุ่ม"
+                                      : data.pendingmember &&
+                                        Object.keys(data.pendingmember).includes(
+                                          auth.currentUser?.uid
+                                        )
+                                        ? "รอการตอบรับ"
+                                        : "เข้าร่วมกลุ่ม"}
+                                  </Button>
                                 </VStack>
-                              ))}
-                            </AccordionPanel>
-                            <AccordionPanel pb={4}>
-                              {data.statuschecklink?.map((link) => (
-                                <VStack>
-                                  <Flex w={"100%"}>
-                                    <Center w={50}></Center>
-                                    <Flex
-                                      w={"100%"}
-                                      bg={"white"}
-                                      boxShadow={"base"}
-                                      borderRadius={10}
-                                    >
-                                      <Box
-                                        p={4}
-                                        minW={180}
-                                        borderRightColor={"#C4C4C4"}
-                                        borderRightWidth={3}
-                                      >
-                                        <Box>
-                                          <Text float="left">
-                                            หัวข้อการรับสมัคร
-                                          </Text>
-                                        </Box>
-                                      </Box>
+                              </AccordionPanel>
+                            </AccordionItem>
 
-                                      <Center
+                            <AccordionItem>
+                              <h2>
+                                <AccordionButton>
+                                  <AccordionIcon mr={5} />
+                                  <Box fontFamily={'SarabunSB'} fontSize={25} flex="1" textAlign="left">
+                                    Registration
+                                  </Box>
+                                </AccordionButton>
+                              </h2>
+                              <AccordionPanel pb={4}>
+                                {data.registrationlink?.map((link) => (
+                                  <VStack>
+                                    <Flex w={"100%"}>
+                                      <Center w={50}></Center>
+                                      <Flex
                                         w={"100%"}
-                                        pl={1.5}
-                                        pr={1.5}
-                                        position="relative"
+                                        bg={"white"}
+                                        boxShadow={"base"}
+                                        borderRadius={10}
                                       >
-                                        {link.name}
-                                      </Center>
-                                    </Flex>
-                                    <Center w={50}></Center>
-                                  </Flex>
-
-                                  <Flex w={"100%"}>
-                                    <Center w={50}></Center>
-                                    <VStack w={50} spacing={0}>
-                                      <Box
-                                        mt={2.5}
-                                        h={5}
-                                        w={3.5}
-                                        borderLeftWidth={3}
-                                        borderLeftColor="gray.400"
-                                      ></Box>
-                                      <Box
-                                        borderBottomLeftRadius={10}
-                                        borderLeftWidth={3}
-                                        borderBottomWidth={3}
-                                        borderColor="gray.400"
-                                        h={2}
-                                        w={3.5}
-                                      ></Box>
-                                    </VStack>
-                                    <Flex
-                                      w={"100%"}
-                                      bg={"white"}
-                                      boxShadow={"base"}
-                                      borderRadius={10}
-                                    >
-                                      <Center></Center>
-
-                                      <Box
-                                        p={4}
-                                        minW={180}
-                                        borderRightColor={"#C4C4C4"}
-                                        borderRightWidth={3}
-                                      >
-                                        <Box>
-                                          <Text float="left">
-                                            วันที่และเวลา
-                                          </Text>
+                                        <Box
+                                          p={4}
+                                          minW={180}
+                                          borderRightColor={"#C4C4C4"}
+                                          borderRightWidth={3}
+                                        >
+                                          <Box>
+                                            <Text float="left">
+                                              หัวข้อการรับสมัคร
+                                            </Text>
+                                          </Box>
                                         </Box>
-                                      </Box>
-                                      <Center
-                                        w={"100%"}
-                                        pl={1.5}
-                                        pr={1.5}
-                                        position="relative"
-                                      >
-                                        {link.fromdate} ถึง {link.todate}
-                                      </Center>
+
+                                        <Center
+                                          w={"100%"}
+                                          pl={1.5}
+                                          pr={1.5}
+                                          position="relative"
+                                        >
+                                          {link.name}
+                                        </Center>
+                                      </Flex>
+                                      <Center w={50}></Center>
                                     </Flex>
-                                    <Center w={50}></Center>
-                                  </Flex>
 
-                                  <Flex w={"100%"}>
-                                    <Center w={50}></Center>
-                                    <VStack w={50} spacing={0}>
-                                      <Box
-                                        mt={2.5}
-                                        h={5}
-                                        w={3.5}
-                                        borderLeftWidth={3}
-                                        borderLeftColor="gray.400"
-                                      ></Box>
-                                      <Box
-                                        borderBottomLeftRadius={10}
-                                        borderLeftWidth={3}
-                                        borderBottomWidth={3}
-                                        borderColor="gray.400"
-                                        h={2}
-                                        w={3.5}
-                                      ></Box>
-                                    </VStack>
-                                    <Flex
-                                      w={"100%"}
-                                      bg={"white"}
-                                      boxShadow={"base"}
-                                      borderRadius={10}
-                                    >
-                                      <Center></Center>
-
-                                      <Box
-                                        p={4}
-                                        minW={180}
-                                        borderRightColor={"#C4C4C4"}
-                                        borderRightWidth={3}
+                                    <Flex w={"100%"}>
+                                      <Center w={50}></Center>
+                                      <VStack w={50} spacing={0}>
+                                        <Box
+                                          mt={2.5}
+                                          h={5}
+                                          w={3.5}
+                                          borderLeftWidth={3}
+                                          borderLeftColor="gray.400"
+                                        ></Box>
+                                        <Box
+                                          borderBottomLeftRadius={10}
+                                          borderLeftWidth={3}
+                                          borderBottomWidth={3}
+                                          borderColor="gray.400"
+                                          h={2}
+                                          w={3.5}
+                                        ></Box>
+                                      </VStack>
+                                      <Flex
+                                        w={"100%"}
+                                        bg={"white"}
+                                        boxShadow={"base"}
+                                        borderRadius={10}
                                       >
-                                        <Box>
-                                          <Text float="left">ลิงก์</Text>
+                                        <Center></Center>
+
+                                        <Box
+                                          p={4}
+                                          minW={180}
+                                          borderRightColor={"#C4C4C4"}
+                                          borderRightWidth={3}
+                                        >
+                                          <Box>
+                                            <Text float="left">
+                                              วันที่และเวลา
+                                            </Text>
+                                          </Box>
                                         </Box>
-                                      </Box>
-
-                                      <Center
-                                        w={"100%"}
-                                        pl={1.5}
-                                        pr={1.5}
-                                        position="relative"
-                                      >
-                                        {link.link}
-                                      </Center>
+                                        <Center
+                                          w={"100%"}
+                                          pl={1.5}
+                                          pr={1.5}
+                                          position="relative"
+                                        >
+                                          {link.fromdate} ถึง {link.todate}
+                                        </Center>
+                                      </Flex>
+                                      <Center w={50}></Center>
                                     </Flex>
-                                    <Center w={50}></Center>
-                                  </Flex>
-                                </VStack>
-                              ))}
-                            </AccordionPanel>
-                          </AccordionItem>
-                        </Accordion>
-                      </Flex>
-                    </TabPanel>
 
-                    <TabPanel
-                      overflowY={"auto"}
-                      overflowX={"hidden"}
-                      // maxH={'960'}
-                      css={{
-                        "&::-webkit-scrollbar": {
-                          width: "8px",
-                          height: "8px",
-                        },
-                        "&::-webkit-scrollbar-track": {
-                          width: "8px",
-                          height: "8px",
-                        },
-                        "&::-webkit-scrollbar-thumb": {
-                          background: "#727272",
-                          borderRadius: "24px",
-                        },
-                      }}
-                    >
-                      <Center
-                        ml={-4}
-                      // w={850}
-                      // h={500}
+                                    <Flex w={"100%"}>
+                                      <Center w={50}></Center>
+                                      <VStack w={50} spacing={0}>
+                                        <Box
+                                          mt={2.5}
+                                          h={5}
+                                          w={3.5}
+                                          borderLeftWidth={3}
+                                          borderLeftColor="gray.400"
+                                        ></Box>
+                                        <Box
+                                          borderBottomLeftRadius={10}
+                                          borderLeftWidth={3}
+                                          borderBottomWidth={3}
+                                          borderColor="gray.400"
+                                          h={2}
+                                          w={3.5}
+                                        ></Box>
+                                      </VStack>
+                                      <Flex
+                                        w={"100%"}
+                                        bg={"white"}
+                                        boxShadow={"base"}
+                                        borderRadius={10}
+                                      >
+                                        <Center></Center>
+
+                                        <Box
+                                          p={4}
+                                          minW={180}
+                                          borderRightColor={"#C4C4C4"}
+                                          borderRightWidth={3}
+                                        >
+                                          <Box>
+                                            <Text float="left">ลิงก์</Text>
+                                          </Box>
+                                        </Box>
+
+                                        <Center
+                                          w={"100%"}
+                                          pl={1.5}
+                                          pr={1.5}
+                                          position="relative"
+                                        >
+                                          {link.link}
+                                        </Center>
+                                      </Flex>
+                                      <Center w={50}></Center>
+                                    </Flex>
+                                  </VStack>
+                                ))}
+                              </AccordionPanel>
+                              <AccordionPanel pb={4}>
+                                {data.statuschecklink?.map((link) => (
+                                  <VStack>
+                                    <Flex w={"100%"}>
+                                      <Center w={50}></Center>
+                                      <Flex
+                                        w={"100%"}
+                                        bg={"white"}
+                                        boxShadow={"base"}
+                                        borderRadius={10}
+                                      >
+                                        <Box
+                                          p={4}
+                                          minW={180}
+                                          borderRightColor={"#C4C4C4"}
+                                          borderRightWidth={3}
+                                        >
+                                          <Box>
+                                            <Text float="left">
+                                              หัวข้อการรับสมัคร
+                                            </Text>
+                                          </Box>
+                                        </Box>
+
+                                        <Center
+                                          w={"100%"}
+                                          pl={1.5}
+                                          pr={1.5}
+                                          position="relative"
+                                        >
+                                          {link.name}
+                                        </Center>
+                                      </Flex>
+                                      <Center w={50}></Center>
+                                    </Flex>
+
+                                    <Flex w={"100%"}>
+                                      <Center w={50}></Center>
+                                      <VStack w={50} spacing={0}>
+                                        <Box
+                                          mt={2.5}
+                                          h={5}
+                                          w={3.5}
+                                          borderLeftWidth={3}
+                                          borderLeftColor="gray.400"
+                                        ></Box>
+                                        <Box
+                                          borderBottomLeftRadius={10}
+                                          borderLeftWidth={3}
+                                          borderBottomWidth={3}
+                                          borderColor="gray.400"
+                                          h={2}
+                                          w={3.5}
+                                        ></Box>
+                                      </VStack>
+                                      <Flex
+                                        w={"100%"}
+                                        bg={"white"}
+                                        boxShadow={"base"}
+                                        borderRadius={10}
+                                      >
+                                        <Center></Center>
+
+                                        <Box
+                                          p={4}
+                                          minW={180}
+                                          borderRightColor={"#C4C4C4"}
+                                          borderRightWidth={3}
+                                        >
+                                          <Box>
+                                            <Text float="left">
+                                              วันที่และเวลา
+                                            </Text>
+                                          </Box>
+                                        </Box>
+                                        <Center
+                                          w={"100%"}
+                                          pl={1.5}
+                                          pr={1.5}
+                                          position="relative"
+                                        >
+                                          {link.fromdate} ถึง {link.todate}
+                                        </Center>
+                                      </Flex>
+                                      <Center w={50}></Center>
+                                    </Flex>
+
+                                    <Flex w={"100%"}>
+                                      <Center w={50}></Center>
+                                      <VStack w={50} spacing={0}>
+                                        <Box
+                                          mt={2.5}
+                                          h={5}
+                                          w={3.5}
+                                          borderLeftWidth={3}
+                                          borderLeftColor="gray.400"
+                                        ></Box>
+                                        <Box
+                                          borderBottomLeftRadius={10}
+                                          borderLeftWidth={3}
+                                          borderBottomWidth={3}
+                                          borderColor="gray.400"
+                                          h={2}
+                                          w={3.5}
+                                        ></Box>
+                                      </VStack>
+                                      <Flex
+                                        w={"100%"}
+                                        bg={"white"}
+                                        boxShadow={"base"}
+                                        borderRadius={10}
+                                      >
+                                        <Center></Center>
+
+                                        <Box
+                                          p={4}
+                                          minW={180}
+                                          borderRightColor={"#C4C4C4"}
+                                          borderRightWidth={3}
+                                        >
+                                          <Box>
+                                            <Text float="left">ลิงก์</Text>
+                                          </Box>
+                                        </Box>
+
+                                        <Center
+                                          w={"100%"}
+                                          pl={1.5}
+                                          pr={1.5}
+                                          position="relative"
+                                        >
+                                          {link.link}
+                                        </Center>
+                                      </Flex>
+                                      <Center w={50}></Center>
+                                    </Flex>
+                                  </VStack>
+                                ))}
+                              </AccordionPanel>
+                            </AccordionItem>
+                          </Accordion>
+                        </Flex>
+                      </TabPanel>
+
+                      <TabPanel
+                        overflowY={"auto"}
+                        overflowX={"hidden"}
+                        // maxH={'960'}
+                        css={{
+                          "&::-webkit-scrollbar": {
+                            width: "8px",
+                            height: "8px",
+                          },
+                          "&::-webkit-scrollbar-track": {
+                            width: "8px",
+                            height: "8px",
+                          },
+                          "&::-webkit-scrollbar-thumb": {
+                            background: "#727272",
+                            borderRadius: "24px",
+                          },
+                        }}
                       >
-                        {data.doclink && (
-                          <Box
-                            position={"static"}
-                            as="iframe"
-                            src={data.doclink + "#toolbar=0&view=FitH"}
-                            alt="demo"
-                            w={900}
-                            h={1000}
-                            overflowY={"auto"}
-                            overflowX={"hidden"}
-                            css={{
-                              "&::-webkit-scrollbar": {
-                                width: "8px",
-                                height: "8px",
-                              },
-                              "&::-webkit-scrollbar-track": {
-                                width: "8px",
-                                height: "8px",
-                              },
-                              "&::-webkit-scrollbar-thumb": {
-                                background: "#727272",
-                                borderRadius: "24px",
-                              },
-                            }}
-                          // maxH={"75%"}
-                          // maxW={"70%"}
-                          />
-                        )}
-                        {/* <Box
+                        <Center
+                          ml={-4}
+                        // w={850}
+                        // h={500}
+                        >
+                          {data.doclink && (
+                            <Box
+                              position={"static"}
+                              as="iframe"
+                              src={data.doclink + "#toolbar=0&view=FitH"}
+                              alt="demo"
+                              w={900}
+                              h={1000}
+                              overflowY={"auto"}
+                              overflowX={"hidden"}
+                              css={{
+                                "&::-webkit-scrollbar": {
+                                  width: "8px",
+                                  height: "8px",
+                                },
+                                "&::-webkit-scrollbar-track": {
+                                  width: "8px",
+                                  height: "8px",
+                                },
+                                "&::-webkit-scrollbar-thumb": {
+                                  background: "#727272",
+                                  borderRadius: "24px",
+                                },
+                              }}
+                            // maxH={"75%"}
+                            // maxW={"70%"}
+                            />
+                          )}
+                          {/* <Box
                           as="iframe"
                           src={data.doclink}
                           w="850"
                           h="100%"
                         ></Box> */}
-                      </Center>
-                    </TabPanel>
-
-                    <TabPanel>
-                      <Center
-                        w={"100%"}
-                        p={3}
-                        color={"white"}
-                        bg={"#6768AB"}
-                        fontFamily={"Sarabun"}
-                        fontSize={"xl"}
-                        mb={5}
-                      >
-                        รายชื่อผู้สร้าง
-                        <Center pl={1}>
-                          [{Object.keys(data.staff).length}]
                         </Center>
-                      </Center>
+                      </TabPanel>
 
-                      <Wrap fontFamily={"Sarabun"}>
-                        {Object.values(data.staff).map((staff) => (
-                          <WrapItem>
-                            <Center
-                              w="180px"
-                              h="180px"
-                              bg="gray.100"
-                              boxShadow={"base"}
-                              rounded={10}
+                      <TabPanel>
+                        <Center
+                          w={"100%"}
+                          p={3}
+                          color={"white"}
+                          bg={"#6768AB"}
+                          fontFamily={"Sarabun"}
+                          fontSize={"xl"}
+                          mb={5}
+                        >
+                          รายชื่อผู้สร้าง
+                          <Center pl={2}>
+                            [{Object.keys(data.staff).length}]
+                          </Center>
+                        </Center>
+
+                        <SimpleGrid columns={3} spacing={10}>
+                          {Object.values(data.staff).map((staff) => (
+                            <Flex
+                              bg={'white'}
+                              borderRadius={'full'}
+                              // borderRightRadius={5}
+                              boxShadow='base'
                             >
-                              <VStack spacing={0}>
+                              <Flex
+                                bg={'#6768AB'}
+                                borderLeftRadius='full'
+                              // borderBottomLeftRadius={''}
+                              >
                                 <Avatar
                                   rounded={"full"}
                                   w={75}
                                   h={75}
-                                  mb={1}
                                   color={"white"}
                                   src={staff.photoURL}
                                   name={staff.displayName}
                                 />
-                                <Center
-                                  bg={"#6768AB"}
-                                  w={120}
-                                  color={"white"}
-                                  p={1}
-                                  borderTopRadius={10}
-                                  mt={1}
-                                  wordBreak="break-word"
-                                  textAlign="center"
-                                >
-                                  {staff.displayName}
-                                </Center>
-                                <Center
-                                  bg={"White"}
-                                  w={120}
-                                  borderBottomRadius={10}
-                                  p={1}
+                              </Flex>
+
+                              <Flex direction={'column'}>
+                                <Box
+                                  w={'100%'}
+                                  bg={'#6768AB'}
+                                  fontSize={18}
+                                  color={'white'}
+                                  borderTopRightRadius={5}
                                 >
                                   {Object.keys(data.creator).includes(staff.uid)
                                     ? "Owner"
                                     : "Staff"}
-                                </Center>
-                              </VStack>
-                            </Center>
-                          </WrapItem>
-                        ))}
-                      </Wrap>
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
+                                </Box>
+
+                                <Box
+                                  bg={'white'}
+                                  borderBottomRightRadius={5}
+                                  ml={-10}
+                                  pl={12}
+                                >
+                                  {staff.displayName}
+                                </Box>
+
+                              </Flex>
+
+
+
+
+                            </Flex>
+
+                          ))}
+                        </SimpleGrid>
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Flex>
+
               </VStack>
-              
-              <Box>
-                <Commentsection
-                  gid={id}
-                  initialcomment={data.commentcount ? data.commentcount : 0}
-                  commenters={data.commentuser ? data.commentuser : {}}
-                />
-              </Box>
+
+              <Flex justifyContent={'center'}>
+                <Flex justifyContent={'center'} boxShadow={'base'} bg={'#F3F5F8'} w={850}>
+                  <Commentsection
+                    gid={id}
+                    initialcomment={data.commentcount ? data.commentcount : 0}
+                    commenters={data.commentuser ? data.commentuser : {}}
+                  />
+
+                </Flex>
+              </Flex>
+
 
               {/* <Text>TEST 1234</Text> */}
             </Box>
 
-            <Spacer bg={"#F3F3F3"} />
-            <Box w={400} minH={1000} bg={"#F3F3F3"}>
-              {" "}
-            </Box>
+
           </Flex>
         )}
+
         <Modal onClose={onDelClose} isOpen={isDelOpen} isCentered>
           <ModalOverlay />
           <ModalContent fontFamily={"Sarabun"}>

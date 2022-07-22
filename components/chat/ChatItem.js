@@ -20,7 +20,7 @@ export const ChatItem = ({ doc, user }) => {
         alignSelf={"flex-end"}
         padding="5px"
       >
-        <Box fontFamily={"Mitr"}>
+        <Box fontFamily={"Sarabun"}>
           {doc.sender.uid == user.uid ? (
             <VStack align={'stretch'} spacing={0} float={'right'} minW={280} maxW={320} marginBottom={0}>
               <Box>
@@ -31,9 +31,9 @@ export const ChatItem = ({ doc, user }) => {
                   <Text
                     float={'right'}
                     fontSize={16}
-                    backgroundColor={"blue.100"}
+                    backgroundColor={"blue.50"}
                     rounded="5"
-                    fontFamily={"Mitr"}
+                    fontFamily={"Sarabun"}
                     p={2}
                     w={'auto'}
                     maxW={250}
@@ -67,7 +67,6 @@ export const ChatItem = ({ doc, user }) => {
                   <Text
                   float={'left'}
                     fontSize={16}
-                    fontFamily="Mitr"
                     backgroundColor={"red.100"}
                     rounded="5"
                     p={2}

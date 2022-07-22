@@ -146,7 +146,7 @@ export const Commentsection = ({ gid, commenters, initialcomment }) => {
       marginBottom="50px"
       fontFamily={"Sarabun"}
     >
-      <Text fontSize={32} fontWeight={"bold"}>
+      <Text fontSize={32}>
         ความคิดเห็น - [
         {commentcount}]
       </Text>
@@ -166,16 +166,18 @@ export const Commentsection = ({ gid, commenters, initialcomment }) => {
             width="100%"
             placeholder="Write Something"
             height="45px"
-            backgroundColor="gray.100"
+            backgroundColor="white"
+            fontSize={18}
             onPaste={handleImagePaste}
           />
           <InputRightElement>
             <IconButton
+              size={'sm'}
               mt={1}
               mr={1}
               rounded={'full'}
               onClick={handleFile}
-              icon={<ImageSquare size={22} />}
+              icon={<ImageSquare size={18} />}
             />
           </InputRightElement>
         </InputGroup>

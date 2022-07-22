@@ -60,13 +60,17 @@ export default function Groups() {
     if (user) {
       return (
         <Box
-          bg={'#F3F3F3'}
+          bg={'#F3F5F8'}
           minH={950}
         >
 
           <CustomNavbar />
 
-          <Flex boxShadow={'base'} justifyContent={'center'} paddingTop={55}>
+          <Flex 
+          boxShadow={'base'} 
+          justifyContent={'center'} 
+          paddingTop={55}
+          >
 
             <Center bg={'white'} boxShadow={'base'} flexDir={'column'} >
               {/* <Button

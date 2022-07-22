@@ -71,7 +71,7 @@ export default function Home() {
   return (
 
     <Box
-      bg={'#F3F3F3'}
+      bg={'#F3F5F8'}
       justifySelf={'center'}
       textAlign={['center', 'left']}
     >
@@ -79,7 +79,13 @@ export default function Home() {
 
       <Flex>
         <Spacer />
-        <VStack bg={'white'} w={[500, 1000]} boxShadow='Base' fontFamily={'Sarabun'} marginTop={55}>
+        <VStack
+          bg={'white'}
+          w={[500, 1000]}
+          boxShadow='base'
+          fontFamily={'Sarabun'}
+          marginTop={55}
+        >
           <Flex
             align="center"
             justify={{ base: "center", md: "space-around", xl: "space-between" }}
@@ -89,7 +95,7 @@ export default function Home() {
           >
             <Box w={400} m={5}>
               <Spacer minH={[0, 30]} />
-              <Heading fontFamily={'Mitr'} fontSize={[42, 48]} fontWeight={'bold'} textAlign={['center', 'center', 'left']}>Comuthor</Heading>
+              <Heading fontFamily={'MitrSB'} fontSize={[42, 48]} fontWeight={'bold'} textAlign={['center', 'center', 'left']}>Comuthor</Heading>
               <Box fontSize={[18, 24]} fontFamily={'Mitr'} fontWeight={600} textAlign={['center', 'center', 'left']}>เว็บไซต์คอมมูนิตี้โรลเพลย์เพื่อส่วนรวม</Box>
               <Box fontFamily={'Sarabun'} pl={[0, 8]} pt={2} textAlign={['center', 'left']}>
                 แพล็ตฟอร์มสำหรับผู้สร้างสรรค์ผลงานประกอบการเล่น
@@ -136,9 +142,28 @@ export default function Home() {
 
             </Box>
 
-            <Center h={[100, 200, 400]} w={[100, 200, 400]} m={5} borderRadius={[250, 500, 1000]} shadow={'inner'} bg={'#FDFDFD'}>
-              <Center h={[88, 175, 350]} w={[88, 175, 350]} borderRadius={[250, 500, 1000]} shadow={'inner'} bg={'#F5F5F5'}>
-                <Center h={[79, 158, 315]} w={[79, 158, 315]} borderRadius={[250, 500, 1000]} bg={'#E7E7E7'} shadow={'inner'}>
+            <Center
+              h={[100, 200, 400]}
+              w={[100, 200, 400]}
+              m={5}
+              borderRadius={[250, 500, 1000]}
+              shadow={'inner'}
+              bg={'#FDFDFD'}
+            >
+              <Center
+                h={[88, 175, 350]}
+                w={[88, 175, 350]}
+                borderRadius={[250, 500, 1000]}
+                shadow={'inner'}
+              // bg={'#F5F7F8'}
+              >
+                <Center
+                  h={[79, 158, 315]}
+                  w={[79, 158, 315]}
+                  borderRadius={[250, 500, 1000]}
+                  bg={'#F3F5F8'}
+                  shadow={'inner'}
+                >
                   <img src="Comuthor1.png" height={[350]} width={[350]}></img>
                 </Center>
               </Center>
@@ -149,7 +174,7 @@ export default function Home() {
             p={10}
             m={10}
             boxShadow='base'
-            bg={'#FAFAFA'}
+            bg={'#F3F5F8'}
             w={[275, 413, 825]}
             borderRadius={10}>
 
@@ -230,7 +255,7 @@ export default function Home() {
             p={10}
             m={10}
             boxShadow='base'
-            bg={'#FAFAFA'}
+            bg={'#F3F5F8'}
             w={[275, 413, 825]}
             borderRadius={10}
           >
@@ -273,7 +298,7 @@ export default function Home() {
 
               {/* <Spacer /> */}
 
-              <VStack
+              {/* <VStack
                 p={5}
                 borderRadius={10}
                 justifyContent='center'
@@ -284,11 +309,11 @@ export default function Home() {
                 <Center fontWeight={'extrabold'} fontSize={22}>Search</Center>
                 <Center fontWeight={400} fontSize={14}>สามารถค้นหา</Center>
                 <Center fontWeight={400} fontSize={14}>ได้ตามความสนใจ</Center>
-              </VStack>
+              </VStack> */}
 
               {/* <Spacer /> */}
 
-              <VStack
+              {/* <VStack
                 p={5}
                 borderRadius={10}
               // w={170}
@@ -298,7 +323,7 @@ export default function Home() {
                 <Center fontWeight={'extrabold'} fontSize={22}>Pin</Center>
                 <Center fontWeight={400} fontSize={14}>ปักหมุด</Center>
                 <Center fontWeight={400} fontSize={14}>รับการแจ้งเตือน</Center>
-              </VStack>
+              </VStack> */}
             </Flex>
 
           </VStack >
@@ -318,7 +343,7 @@ export default function Home() {
             <a target="_blank" href="https://www.facebook.com/ComuthorCorp">
               <VStack
                 p={5}
-                bg={'#F3F3F3'}
+                bg={'#F3F5F8'}
                 boxShadow='base'
                 borderRadius={10}
                 w={275}
@@ -362,7 +387,7 @@ export default function Home() {
             <a target="_blank" href="https://discord.com/invite/BVrwyCPEHc">
               <VStack
                 p={5}
-                bg={'#F3F3F3'}
+                bg={'#F3F5F8'}
                 boxShadow='base'
                 borderRadius={10}
                 w={275}
@@ -404,6 +429,8 @@ export default function Home() {
 
           <Center fontWeight={400} fontSize={[16, 18]} textAlign={['center', 'left']}>ขอขอบคุณทุก ๆ ท่านที่ให้ความสนใจเว็บไซต์ของพวกเราด้วยนะ</Center>
           <Center fontWeight={400} fontSize={[16, 18]} textAlign={['center', 'left']}>พวกเราจะพยายามพัฒนาเว็บไซต์นี้กันอย่างสุดความสามารถเลยล่ะ !</Center>
+          <Spacer />
+          <Spacer />
           <Spacer />
           <Spacer />
         </VStack>

@@ -116,7 +116,7 @@ export const Commentpost = ({
               setReply(
                 snapshot.docs.map((doc) => ({
                   ...doc.data(),
-                  creator: foundmissing.find(v=> v.uid === doc.data().uid),
+                  creator: foundmissing.find(v => v.uid === doc.data().uid),
                   cid: cdoc.cid,
                   rid: doc.id,
                   gid: cdoc.gid,
@@ -161,9 +161,9 @@ export const Commentpost = ({
     };
   }, [cdoc, loadlimit]);
 
-  useEffect(()=>{
+  useEffect(() => {
     setEditMessage(cdoc.message)
-  },[editMode])
+  }, [editMode])
 
   useEffect(() => {
     // console.log(isOpen, rpymsg);
@@ -187,7 +187,7 @@ export const Commentpost = ({
         }
       );
       if (res.status === 200) {
-        setLovecount(lovecount-1)
+        setLovecount(lovecount - 1)
         setLove(false);
       }
     } else {
@@ -201,7 +201,7 @@ export const Commentpost = ({
         }
       );
       if (res.status === 200) {
-        setLovecount(lovecount+1)
+        setLovecount(lovecount + 1)
         setLove(true);
       }
     }
@@ -309,13 +309,13 @@ export const Commentpost = ({
         },
       }
     );
-      if (res.status === 200) {
-        setMessage(editMessage);
-        setEditMode(false);
-      } else {
-        alert(res.data);
-      }
-    
+    if (res.status === 200) {
+      setMessage(editMessage);
+      setEditMode(false);
+    } else {
+      alert(res.data);
+    }
+
     // setMessage(editMessage);
     // console.log(getpathfromUrl(commentdoc.imageURL))
   };
@@ -336,14 +336,14 @@ export const Commentpost = ({
           h={70}
           src={commentdoc.creator?.photoURL}
           rounded={"full"}
-          onClick={()=>router.push("../profile/"+commentdoc.creator?.uid)}
+          onClick={() => router.push("../profile/" + commentdoc.creator?.uid)}
           cursor={"pointer"}
         />
       </Center>
 
       <Flex flexDir="column" flexGrow={10}>
         <Flex justifyContent="space-between">
-          <Text fontSize={20} onClick={()=>router.push("../profile/"+commentdoc.creator?.uid)} cursor={"pointer"}>
+          <Text fontSize={20} onClick={() => router.push("../profile/" + commentdoc.creator?.uid)} cursor={"pointer"}>
             {commentdoc.creator?.displayName
               ? commentdoc.creator?.displayName
               : "placeholder"}
@@ -454,16 +454,17 @@ export const Commentpost = ({
           <></>
         )}
 
-        <Box>
+        <Box mt={2} p={1} borderRadius={5} bg={'#F3F5F8'} boxShadow={'base'}>
           <Button
-            mt={2}
-            mr={2}
-            p={2}
+            h={30}
+            boxShadow={'base'}
             w={"auto"}
+            bg={'white'}
+            mr={1}
             onClick={HandleLove}
             // backgroundColor={cdoc.data().love.includes(auth.currentUser.uid)? "red.400" : "white"}
             _hover={{
-              backgroundColor: "gray.100",
+              backgroundColor: "#F3F5F7",
             }}
           >
             <Box p={1}>
@@ -477,7 +478,16 @@ export const Commentpost = ({
             <Box p={1}>{lovecount}</Box>
           </Button>
 
-          <Button mt={2} mr={2} onClick={onToggle}>
+          <Button 
+            h={30}
+            ml={1}
+            boxShadow={'base'}
+            bg={'white'}
+            onClick={onToggle}
+            _hover={{
+              backgroundColor: "#F3F5F7",
+            }}
+          >
             <Box p={1}>
               <ChatCenteredText size={16} color="#000000" />
             </Box>
@@ -549,8 +559,16 @@ export const Commentpost = ({
         )}
       </Flex>
       <Menu>
-        <MenuButton m={2.5} h={10} w={10} borderRadius={100}>
-          <DotsThreeVertical size={30} />
+        <MenuButton
+          m={2.5}
+          h={25}
+          w={25}
+          borderRadius={100}
+          _hover={{
+            bg: '#F3F5F8s'
+          }}
+        >
+          <DotsThreeVertical size={22} />
         </MenuButton>
         <MenuList>
           {auth.currentUser.uid == commentdoc.creator.uid ? (
