@@ -40,7 +40,7 @@ import { GroupReply } from "./reply";
 import { useApp, useUser } from "../../src/hook/local";
 import axios from "axios";
 import { UploadGroupCommentImage } from "../../src/services/filestoreageservice";
-import { PostContext } from "../../pages/group/[id]/dashboard";
+import { PostContext } from "./Postsection";
 import { useCollection } from "react-firebase-hooks/firestore";
 import useCharaList from "../../src/hook/useCharaList";
 import { isEmptyOrSpaces } from "../../src/services/utilsservice";

@@ -28,7 +28,7 @@ import {
 } from "phosphor-react";
 import { useApp } from "../../src/hook/local";
 import axios from "axios";
-import { PostContext } from "../../pages/group/[id]/dashboard";
+import { PostContext } from "./Postsection";
 import useCharaList from "../../src/hook/useCharaList";
 import { useRouter } from "next/router";
 

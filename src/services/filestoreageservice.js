@@ -132,8 +132,8 @@ export const getpMutiPathfromUrl = (url) => {
 };
 
 export const deleteImage = async (path) => {
-  // const storeRef = ref(store, path);
-  await deleteObject(path);
+  const storeRef = ref(store, path);
+  await deleteObject(storeRef);
 }
 
 const compressImage = async (dataurl) => {

@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-const {admin, db} = require("../utils/admin");
+const {admin, db, bucket} = require("../utils/admin");
 const {sendNotifications} = require("../utils/notifications");
 
 exports.createGroup = (req, res) => {
@@ -667,7 +667,6 @@ exports.addAlbum = async (req, res) => {
     const group = await groupref.get();
     if (group.exists && group.data().member.includes(req.user.uid)) {
       const data = req.body.data;
-      console.log(req.body.aid);
       await groupref.collection("album").doc(req.body.aid).set({
         "name": data.name,
         "type": data.type,
@@ -678,6 +677,47 @@ exports.addAlbum = async (req, res) => {
         "mediaList": data.mediaList,
         "aid": req.body.aid,
       });
+      return res.status(200).send("create album success");
+    } else {
+      return res.status(403).send("forbidden");
+    }
+  } else {
+    return res.status(401).send("unauthorized");
+  }
+};
+
+exports.updateAlbum = async (req, res) => {
+  if (req.user) {
+    const groupref = db.collection("group").doc(req.params.gid);
+    const group = await groupref.get();
+    if (group.exists && group.data().member.includes(req.user.uid)) {
+      const data = req.body.data;
+      await groupref.collection("album").doc(req.body.aid).update({
+        "name": data.name,
+        "type": data.type,
+        "uid": data.uid,
+        "caid": data.caid,
+        "description": data.description,
+        "thumbnail": data.thumbnail,
+        "mediaList": data.mediaList,
+      });
+      return res.status(200).send("create album success");
+    } else {
+      return res.status(403).send("forbidden");
+    }
+  } else {
+    return res.status(401).send("unauthorized");
+  }
+};
+
+exports.deleteAlbum = async (req, res) => {
+  if (req.user) {
+    const groupref = db.collection("group").doc(req.params.gid);
+    const group = await groupref.get();
+    if (group.exists && group.data().member.includes(req.user.uid)) {
+      await groupref.collection("album").doc(req.body.aid).delete();
+      const store = admin.storage();
+      await store.bucket(bucket).deleteFiles({prefix: `/group/${req.params.gid}/album/${req.body.aid}`});
       return res.status(200).send("create album success");
     } else {
       return res.status(403).send("forbidden");

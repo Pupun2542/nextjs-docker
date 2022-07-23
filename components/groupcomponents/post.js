@@ -45,7 +45,7 @@ import {
   UploadGroupCommentImage,
   getpMutiPathfromUrl,
 } from "../../src/services/filestoreageservice";
-import { PostContext } from "../../pages/group/[id]/dashboard";
+import { PostContext } from "./Postsection";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { isEmptyOrSpaces } from "../../src/services/utilsservice";
 import useCharaList from "../../src/hook/useCharaList";

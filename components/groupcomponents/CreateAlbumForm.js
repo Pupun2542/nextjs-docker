@@ -83,7 +83,7 @@ export const CreateAlbumForm = ({
     if (!isEmptyOrSpaces(albName)) {
       if ((formMode == 1 && selectedChar.name) || formMode == 0) {
         setLoading(true);
-        const aid = (alb.aid? alb.aid : doc(collection(db, "group", gid, "album")).id);
+        const aid = (alb?.aid? alb.aid : doc(collection(db, "group", gid, "album")).id);
         console.log(aid);
         let dlurl = [];
         if (selectedImage.length > 0) {
@@ -111,7 +111,7 @@ export const CreateAlbumForm = ({
                   uid: img.uid,
                 };
               }
-              console.log(mappedImage);
+              // console.log(mappedImage);
               return mappedImage;
             })
           );
@@ -125,10 +125,10 @@ export const CreateAlbumForm = ({
           description: albDesc,
           mediaList: dlurl,
         };
-        // console.log(data)
+        
         const token = await auth.currentUser.getIdToken();
         const res = await axios.post(
-          `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${gid}/album/create/`,
+          `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${gid}/album/${alb && alb.aid? "update": "create"}/`,
           { aid: aid, data: data },
           {
             headers: {
@@ -145,9 +145,9 @@ export const CreateAlbumForm = ({
             );
           }
           setLoading(false);
-          if (!alb.aid) {
-            setAlb(data);
-          }
+          // if (!(alb && alb.aid)) {
+            setAlb({...data, aid: aid});
+          // }
           onClose();
         }
       }

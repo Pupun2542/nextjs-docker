@@ -194,7 +194,7 @@ export const GroupSinglePost = ({ post, member, onPostDelete, cid, rid, data, gi
       setMessage("");
       setImage("");
       onOpen();
-      TextareaRef.current?.scrollIntoView();
+      // TextareaRef.current?.scrollIntoView();
     }
   };
 

@@ -74,6 +74,21 @@ const Gallery = ({ gid, mychara, data }) => {
     }
   }, [gid, tabindex]);
 
+  const editAlbum = (value) => {
+    console.log(value);
+    const index = album.findIndex((v)=> v.aid === value.aid);
+    let newalbum = [...album];
+    newalbum[index] = value;
+    if (specificAlbum.aid == value.aid) {
+      setSpecificAlbum({...specificAlbum, ...value});
+    }
+    setAlbum(newalbum);
+  }
+
+  useEffect(()=>{
+    console.log(album)
+  },[album])
+
   return (
     <Box>
       <Box
@@ -196,7 +211,7 @@ const Gallery = ({ gid, mychara, data }) => {
               onClose={() => setCreateAlbOpen(false)}
               mychara={mychara}
               gid={gid}
-              setAlb={(data) => setAlbum(...album, data)}
+              setAlb={(data) => editAlbum(data)}
               alb={specificAlbum}
             />
           ) : (

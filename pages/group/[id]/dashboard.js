@@ -64,6 +64,7 @@ import { isEmptyOrSpaces } from "../../../src/services/utilsservice";
 import { useGroupData } from "../../../src/hook/useGroupData";
 import { usePost } from "../../../src/hook/usePost";
 import { Skeletonpost } from "../../../components/groupcomponents/skeletonpost";
+import Postsection from "../../../components/groupcomponents/Postsection";
 
 // export async function getServerSideProps(context) {
 //   const { params } = context;
@@ -76,215 +77,216 @@ import { Skeletonpost } from "../../../components/groupcomponents/skeletonpost";
 // }
 export const PostContext = createContext();
 function dashboard() {
-  const [orderby, setOrderby] = useState("timestamp");
-  const [loadLimit, selLoadlimit] = useState(20);
+  // const [orderby, setOrderby] = useState("timestamp");
+  // const [loadLimit, selLoadlimit] = useState(20);
   const { app, auth, db } = useApp();
   const [user, userLoading, error] = useAuthState(auth);
   const Router = useRouter();
   const { id, pid, cid, rid } = Router.query;
-  const [message, setMessage] = useState("");
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [image, setImage] = useState([]);
-  const pasteInputRef = useRef(undefined);
+  // const [message, setMessage] = useState("");
+  // const { isOpen, onOpen, onClose } = useDisclosure();
+  // const [image, setImage] = useState([]);
+  // const pasteInputRef = useRef(undefined);
   const [tabIndex, setTabIndex] = useState(0);
-  const [selectedchara, setSelectedchara] = useState({});
-  const inputFileRef = useRef(null);
-  const submitRef = useRef(null);
+  // const [selectedchara, setSelectedchara] = useState({});
+  // const inputFileRef = useRef(null);
+  // const submitRef = useRef(null);
   const { data, loading, onRefresh } = useGroupData(id, user);
-  const setPostData = (value) => {
-    dispatch({ type: "setMultiple", value: value });
-  };
+  
+  // const setPostData = (value) => {
+  //   dispatch({ type: "setMultiple", value: value });
+  // };
 
-  const { post, onPostDelete, fetchPost } = usePost(
-    data,
-    orderby,
-    loadLimit,
-    pid,
-    setPostData,
-    user,
-    id
-  );
+  // const { post, onPostDelete, fetchPost } = usePost(
+  //   data,
+  //   orderby,
+  //   loadLimit,
+  //   pid,
+  //   setPostData,
+  //   user,
+  //   id
+  // );
 
-  useEffect(() => {
-    if (user && data && data.member) {
-      const isMember = Object.keys(data.member).find((v) => v == user.uid);
-      if (!isMember) {
-        Router.push(`/group/${id}`);
-      }
-      // if (find)
-    }
-  }, [data, user]);
+  // useEffect(() => {
+  //   if (user && data && data.member) {
+  //     const isMember = Object.keys(data.member).find((v) => v == user.uid);
+  //     if (!isMember) {
+  //       Router.push(`/group/${id}`);
+  //     }
+  //     // if (find)
+  //   }
+  // }, [data, user]);
 
-  const reducer = (state, action) => {
-    switch (action.type) {
-      case "set": {
-        // console.log(action.id, action.value, state[action.id])
-        return {
-          ...state,
-          [action.id]: { ...state[action.id], ...action.value },
-        };
-      }
-      case "setMultiple": {
-        return { ...state, ...action.value };
-      }
-      default:
-        return state;
-    }
-  };
+  // const reducer = (state, action) => {
+  //   switch (action.type) {
+  //     case "set": {
+  //       // console.log(action.id, action.value, state[action.id])
+  //       return {
+  //         ...state,
+  //         [action.id]: { ...state[action.id], ...action.value },
+  //       };
+  //     }
+  //     case "setMultiple": {
+  //       return { ...state, ...action.value };
+  //     }
+  //     default:
+  //       return state;
+  //   }
+  // };
 
-  const [postData, dispatch] = useReducer(reducer, {});
+  // const [postData, dispatch] = useReducer(reducer, {});
 
-  //main
-  const setStateData = (value, id) => {
-    dispatch({ type: "set", value: value, id: id });
-  };
-  const getStateData = (id) => {
-    return postData[id];
-  };
+  // //main
+  // const setStateData = (value, id) => {
+  //   dispatch({ type: "set", value: value, id: id });
+  // };
+  // const getStateData = (id) => {
+  //   return postData[id];
+  // };
 
-  //data
-  const setStateDataData = (value, id) => {
-    dispatch({ type: "set", value: { data: value }, id: id });
-  };
-  const getStateDataData = (id) => {
-    return postData[id]?.data;
-  };
+  // //data
+  // const setStateDataData = (value, id) => {
+  //   dispatch({ type: "set", value: { data: value }, id: id });
+  // };
+  // const getStateDataData = (id) => {
+  //   return postData[id]?.data;
+  // };
 
-  //editMessage
-  const setStateDataEditMessage = (value, id) => {
-    dispatch({ type: "set", value: { editMessage: value }, id: id });
-  };
-  const getStateDataEditMessage = (id) => {
-    return postData[id]?.editMessage ? postData[id].editMessage : "";
-  };
+  // //editMessage
+  // const setStateDataEditMessage = (value, id) => {
+  //   dispatch({ type: "set", value: { editMessage: value }, id: id });
+  // };
+  // const getStateDataEditMessage = (id) => {
+  //   return postData[id]?.editMessage ? postData[id].editMessage : "";
+  // };
 
-  //pendingMessage
-  const setStateDataPendingMessage = (value, id) => {
-    dispatch({ type: "set", value: { pendingMessage: value }, id: id });
-  };
-  const getStateDataPendingMessage = (id) => {
-    return postData[id]?.pendingMessage ? postData[id].pendingMessage : "";
-  };
-  //pendingImage
-  const setStateDataPendingImage = (value, id) => {
-    dispatch({ type: "set", value: { pendingImage: value }, id: id });
-  };
-  const getStateDataPendingImage = (id) => {
-    return postData[id]?.pendingImage;
-  };
-  //love
-  const setStateDataLove = (value, id) => {
-    dispatch({ type: "set", value: { love: value }, id: id });
-  };
-  const getStateDataLove = (id) => {
-    return postData[id]?.love ? postData[id]?.love : [];
-  };
+  // //pendingMessage
+  // const setStateDataPendingMessage = (value, id) => {
+  //   dispatch({ type: "set", value: { pendingMessage: value }, id: id });
+  // };
+  // const getStateDataPendingMessage = (id) => {
+  //   return postData[id]?.pendingMessage ? postData[id].pendingMessage : "";
+  // };
+  // //pendingImage
+  // const setStateDataPendingImage = (value, id) => {
+  //   dispatch({ type: "set", value: { pendingImage: value }, id: id });
+  // };
+  // const getStateDataPendingImage = (id) => {
+  //   return postData[id]?.pendingImage;
+  // };
+  // //love
+  // const setStateDataLove = (value, id) => {
+  //   dispatch({ type: "set", value: { love: value }, id: id });
+  // };
+  // const getStateDataLove = (id) => {
+  //   return postData[id]?.love ? postData[id]?.love : [];
+  // };
 
-  //edit
-  const setStateDataEdit = (state, id) => {
-    dispatch({ type: "set", value: { edit: state }, id: id });
-  };
-  const getStateDataEdit = (id) => {
-    return postData[id]?.edit ? postData[id].edit : false;
-  };
+  // //edit
+  // const setStateDataEdit = (state, id) => {
+  //   dispatch({ type: "set", value: { edit: state }, id: id });
+  // };
+  // const getStateDataEdit = (id) => {
+  //   return postData[id]?.edit ? postData[id].edit : false;
+  // };
 
-  //reply
-  const setStateDataReply = (state, id) => {
-    dispatch({ type: "set", value: { reply: state }, id: id });
-  };
-  const getStateDataReply = (id) => {
-    return postData[id]?.reply ? postData[id].reply : false;
-  };
-  const pack = {
-    setStateData,
-    getStateData,
-    setStateDataData,
-    getStateDataData,
-    setStateDataEditMessage,
-    getStateDataEditMessage,
-    setStateDataPendingMessage,
-    getStateDataPendingMessage,
-    setStateDataPendingImage,
-    getStateDataPendingImage,
-    setStateDataLove,
-    getStateDataLove,
-    setStateDataEdit,
-    getStateDataEdit,
-    setStateDataReply,
-    getStateDataReply,
-  };
-  const handleImagePaste = (e) => {
-    if (e.clipboardData.files[0]) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          if (image.length < 4) {
-            setImage([...image, reader.result]);
-          } else {
-            alert("ใส่รูปได้ไม่เกิน 4 รูปต่อ 1 โพสต์");
-          }
-        }
-      };
-      reader.readAsDataURL(e.clipboardData.files[0]);
-    }
-  };
+  // //reply
+  // const setStateDataReply = (state, id) => {
+  //   dispatch({ type: "set", value: { reply: state }, id: id });
+  // };
+  // const getStateDataReply = (id) => {
+  //   return postData[id]?.reply ? postData[id].reply : false;
+  // };
+  // const pack = {
+  //   setStateData,
+  //   getStateData,
+  //   setStateDataData,
+  //   getStateDataData,
+  //   setStateDataEditMessage,
+  //   getStateDataEditMessage,
+  //   setStateDataPendingMessage,
+  //   getStateDataPendingMessage,
+  //   setStateDataPendingImage,
+  //   getStateDataPendingImage,
+  //   setStateDataLove,
+  //   getStateDataLove,
+  //   setStateDataEdit,
+  //   getStateDataEdit,
+  //   setStateDataReply,
+  //   getStateDataReply,
+  // };
+  // const handleImagePaste = (e) => {
+  //   if (e.clipboardData.files[0]) {
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       if (reader.readyState === 2) {
+  //         if (image.length < 4) {
+  //           setImage([...image, reader.result]);
+  //         } else {
+  //           alert("ใส่รูปได้ไม่เกิน 4 รูปต่อ 1 โพสต์");
+  //         }
+  //       }
+  //     };
+  //     reader.readAsDataURL(e.clipboardData.files[0]);
+  //   }
+  // };
 
-  const handleUploadFile = (e) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        if (image.length < 4) {
-          setImage([...image, reader.result]);
-        } else {
-          alert("ใส่รูปได้ไม่เกิน 4 รูปต่อ 1 โพสต์");
-        }
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
-  };
-  const handleFile = () => {
-    inputFileRef.current.click();
-  };
+  // const handleUploadFile = (e) => {
+  //   const reader = new FileReader();
+  //   reader.onload = () => {
+  //     if (reader.readyState === 2) {
+  //       if (image.length < 4) {
+  //         setImage([...image, reader.result]);
+  //       } else {
+  //         alert("ใส่รูปได้ไม่เกิน 4 รูปต่อ 1 โพสต์");
+  //       }
+  //     }
+  //   };
+  //   reader.readAsDataURL(e.target.files[0]);
+  // };
+  // const handleFile = () => {
+  //   inputFileRef.current.click();
+  // };
 
-  const resizeTextArea = (e) => {
-    e.target.style.height = "inherit";
-    e.target.style.height = `${e.target.scrollHeight}px`;
-    // In case you have a limitation
-    // e.target.style.height = `${Math.min(e.target.scrollHeight, limit)}px`;
-  };
+  // const resizeTextArea = (e) => {
+  //   e.target.style.height = "inherit";
+  //   e.target.style.height = `${e.target.scrollHeight}px`;
+  //   // In case you have a limitation
+  //   // e.target.style.height = `${Math.min(e.target.scrollHeight, limit)}px`;
+  // };
 
-  const handleSent = async () => {
-    console.log(!isEmptyOrSpaces(message), image.length > 0)
-    if (!isEmptyOrSpaces(message) || image.length > 0) {
-      let dlurl = "";
-      if (image.length > 0) {
-        dlurl = await UploadGroupImage(image, user.uid, id);
-        // console.log(dlurl);
-      }
-      const token = await user.getIdToken();
-      onClose();
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${id}/create/`,
-        { message: message, imageUrl: dlurl, charaId: selectedchara.refererId },
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-      if (res.status === 200) {
-        fetchPost();
-      } else {
-        alert(res.status + " : " + res.data);
-      }
-      setMessage("");
-      setImage([]);
-    }
-  };
+  // const handleSent = async () => {
+  //   console.log(!isEmptyOrSpaces(message), image.length > 0);
+  //   if (!isEmptyOrSpaces(message) || image.length > 0) {
+  //     let dlurl = "";
+  //     if (image.length > 0) {
+  //       dlurl = await UploadGroupImage(image, user.uid, id);
+  //       // console.log(dlurl);
+  //     }
+  //     const token = await user.getIdToken();
+  //     onClose();
+  //     const res = await axios.post(
+  //       `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${id}/create/`,
+  //       { message: message, imageUrl: dlurl, charaId: selectedchara.refererId },
+  //       {
+  //         headers: {
+  //           Authorization: token,
+  //         },
+  //       }
+  //     );
+  //     if (res.status === 200) {
+  //       fetchPost();
+  //     } else {
+  //       alert(res.status + " : " + res.data);
+  //     }
+  //     setMessage("");
+  //     setImage([]);
+  //   }
+  // };
 
   if (!loading && data) {
     return (
-      <Box bg={'#F3F5F8'}>
+      <Box bg={"#F3F5F8"}>
         <CustomNavbar />
 
         <Flex justifyContent={"center"}>
@@ -294,7 +296,7 @@ function dashboard() {
             justifyContent={"center"}
             boxShadow="base"
             minW={950}
-            bg={'white'}
+            bg={"white"}
           >
             <Box
               minH={"calc(100vh - 55px)"}
@@ -303,12 +305,12 @@ function dashboard() {
               maxW={800}
               boxShadow="base"
             >
-              <VStack w={'100%'} spacing={0}>
-                <Flex w={'100%'}>
+              <VStack w={"100%"} spacing={0}>
+                <Flex w={"100%"}>
                   <Center
                     color={"white"}
                     pl={22}
-                    w={'100%'}
+                    w={"100%"}
                     maxW={800}
                     fontWeight={"700"}
                     minH={75}
@@ -319,7 +321,7 @@ function dashboard() {
                   </Center>
 
                   <Box p={1} bg={"#6768AB"} cursor={"pointer"}>
-                    <Popover bg={"#6768AB"} >
+                    <Popover bg={"#6768AB"}>
                       <PopoverTrigger>
                         <Info color="#FFC75A" size={22} weight="fill" />
                       </PopoverTrigger>
@@ -328,7 +330,7 @@ function dashboard() {
                         <PopoverArrow />
                         <PopoverCloseButton />
                         <PopoverBody
-                          whiteSpace={'pre-line'}
+                          whiteSpace={"pre-line"}
                           maxH={500}
                           overflowY={"auto"}
                           css={{
@@ -370,9 +372,13 @@ function dashboard() {
                         borderRadius: "10",
                       }}
                       onClick={() =>
-                        Router.replace("/group/" + id + "/dashboard", undefined, {
-                          shallow: true,
-                        })
+                        Router.replace(
+                          "/group/" + id + "/dashboard",
+                          undefined,
+                          {
+                            shallow: true,
+                          }
+                        )
                       }
                     >
                       Post
@@ -417,6 +423,7 @@ function dashboard() {
                     {/* Post */}
                     <TabPanel>
                       {/* ประกาศ */}
+                      <Postsection data={data} pid={pid} user={user} id={id} />
                       {/* <Flex
                       w={"100%"}
                       bg={"white"}
@@ -440,8 +447,8 @@ function dashboard() {
                       <Center w={"65"} color={"gray.500"}>
                         เพิ่มเติม
                       </Center>
-                    </Flex> */}
-                      {/* กล่องข้อความ */}
+                    </Flex>
+                      กล่องข้อความ
                       <Flex
                         mt={3}
                         p={2}
@@ -457,13 +464,18 @@ function dashboard() {
                           w={42}
                           src={user.photoURL}
                         />
-                        <Text w="93%" mt={2} color={'GrayText'} onClick={onOpen}>
+                        <Text
+                          w="93%"
+                          mt={2}
+                          color={"GrayText"}
+                          onClick={onOpen}
+                        >
                           {message ? message : "Say Something"}
                         </Text>
-                        {/* <Input placeholder='Basic usage' w={'93%'} /> */}
+                        <Input placeholder='Basic usage' w={'93%'} />
                       </Flex>
-                      {/* โพสต์ */}
-                      {/* {console.log(post)} */}
+                      โพสต์
+                      {console.log(post)}
                       <PostContext.Provider value={pack}>
                         {post &&
                           Array.isArray(post) &&
@@ -478,7 +490,7 @@ function dashboard() {
                               gid={id}
                             />
                           ))}
-                        {/* {post.length > 0 && pid && (
+                        {post.length > 0 && pid && (
                         <GroupSinglePost
                           post={getStateDataData(pid)}
                           member={data.member}
@@ -489,20 +501,22 @@ function dashboard() {
                           data={data}
                           mychara={data.mychara}
                         />
-                      )} */}
+                      )}
                         {post.length == 0 &&
                           data &&
                           data.postcount &&
                           data.postcount > 0 && <Skeletonpost />}
                       </PostContext.Provider>
 
-                      <Modal isOpen={isOpen} size={'3xl'} onClose={onClose}>
+                      <Modal isOpen={isOpen} size={"3xl"} onClose={onClose}>
                         <ModalOverlay
                           bg="blackAlpha.300"
                           backdropFilter="blur(10px) hue-rotate(90deg)"
                         />
                         <ModalContent>
-                          <ModalHeader fontFamily={'SarabunSB'}>Create Post</ModalHeader>
+                          <ModalHeader fontFamily={"SarabunSB"}>
+                            Create Post
+                          </ModalHeader>
                           <ModalCloseButton />
                           <Divider />
                           <ModalBody>
@@ -515,36 +529,48 @@ function dashboard() {
                                     : ""
                                 }
                               />
-                              <Flex spacing={0} direction={'column'}>
-                                <Text>Name Profile</Text>
+                              <Flex spacing={0} direction={"column"}>
+                                <Text>
+                                  {Object.keys(selectedchara).length > 0
+                                    ? selectedchara.name
+                                    : "Chara Name"}
+                                </Text>
                                 <Menu>
                                   <MenuButton
                                     as={Button}
                                     rightIcon={<CaretDown size={6} />}
                                     height={26}
-                                    w={'auto'}
+                                    w={"auto"}
                                   >
-                                    <Text fontSize="sm">{selectedchara.name}</Text>
+                                    <Text fontSize="sm">
+                                      {selectedchara.name}
+                                    </Text>
                                   </MenuButton>
 
                                   <MenuList>
                                     {data.mychara &&
-                                      Object.values(data.mychara).map((cha, i) => (
-                                        <MenuItem
-                                          onClick={() => setSelectedchara(cha)}
-                                          key={i}
-                                        >
-                                          <Flex alignItems={"center"}>
-                                            <Avatar
-                                              src={cha.photoURL}
-                                              w={8}
-                                              h={8}
-                                              mr={1}
-                                            />
-                                            <Text fontSize="sm">{cha.name}</Text>
-                                          </Flex>
-                                        </MenuItem>
-                                      ))}
+                                      Object.values(data.mychara).map(
+                                        (cha, i) => (
+                                          <MenuItem
+                                            onClick={() =>
+                                              setSelectedchara(cha)
+                                            }
+                                            key={i}
+                                          >
+                                            <Flex alignItems={"center"}>
+                                              <Avatar
+                                                src={cha.photoURL}
+                                                w={8}
+                                                h={8}
+                                                mr={1}
+                                              />
+                                              <Text fontSize="sm">
+                                                {cha.name}
+                                              </Text>
+                                            </Flex>
+                                          </MenuItem>
+                                        )
+                                      )}
                                   </MenuList>
                                 </Menu>
                               </Flex>
@@ -575,33 +601,37 @@ function dashboard() {
                             />
 
                             <Center
-                              w={'100%'}
-                              bg={'#F3F5F8'}
+                              w={"100%"}
+                              bg={"#F3F5F8"}
                               mb={2}
                               rounded={5}
                             >
-                              <Flex width={'100%'}>
-                                <Center pl={3} pr={2} fontFamily={'SarabunSB'}>Tag</Center>
-                                <Center p={1} width={'100%'}>
-                                  <Input width={'100%'} bg={'white'}></Input>
+                              <Flex width={"100%"}>
+                                <Center pl={3} pr={2} fontFamily={"SarabunSB"}>
+                                  Tag
+                                </Center>
+                                <Center p={1} width={"100%"}>
+                                  <Input width={"100%"} bg={"white"}></Input>
                                 </Center>
                               </Flex>
                             </Center>
-                            {/* {image && (
+                            {image && (
                             <Box>
                               <Box></Box>
                               <Box
                                 display={image.length > 2 ? "initial" : "none"}
                               ></Box>
                             </Box>
-                          )} */}
+                          )}
                             <Box
                               w="100%"
                               height={150}
                               overflowX="auto"
                               overflowY="hidden"
                               whiteSpace="nowrap"
-                              display={image.length > 0 ? "inline-block" : "none"}
+                              display={
+                                image.length > 0 ? "inline-block" : "none"
+                              }
                             >
                               {image.length > 0 &&
                                 image.map((img, k) => (
@@ -622,9 +652,13 @@ function dashboard() {
                                       top={"-6px"}
                                       left={114}
                                       backgroundColor="transparent"
-                                      _hover={{ backgroundColor: "transparent" }}
+                                      _hover={{
+                                        backgroundColor: "transparent",
+                                      }}
                                       onClick={() =>
-                                        setImage(image.filter((v, i) => i !== k))
+                                        setImage(
+                                          image.filter((v, i) => i !== k)
+                                        )
                                       }
                                     ></IconButton>
                                   </Box>
@@ -634,10 +668,10 @@ function dashboard() {
                               <Button
                                 leftIcon={<ImageSquare size={16} />}
                                 onClick={handleFile}
-                                fontFamily={'Sarabun'}
-                                fontWeight={'light'}
+                                fontFamily={"Sarabun"}
+                                fontWeight={"light"}
                                 fontSize={14}
-                                boxShadow='base'
+                                boxShadow="base"
                               >
                                 เพิ่มรูปภาพ
                               </Button>
@@ -659,11 +693,15 @@ function dashboard() {
                             </Flex>
                           </ModalBody>
                         </ModalContent>
-                      </Modal>
+                      </Modal> */}
                     </TabPanel>
 
                     {/* Gallery */}
-                    <TabPanel>{tabIndex == 1 && <Gallery gid={id} mychara={data.mychara} data={data} />}</TabPanel>
+                    <TabPanel>
+                      {tabIndex == 1 && (
+                        <Gallery gid={id} mychara={data.mychara} data={data} />
+                      )}
+                    </TabPanel>
 
                     {/* Member */}
                     <TabPanel>
@@ -681,7 +719,6 @@ function dashboard() {
             </Box>
           </Flex>
         </Flex>
-
       </Box>
     );
   } else {
