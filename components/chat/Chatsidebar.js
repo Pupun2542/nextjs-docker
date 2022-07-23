@@ -3,7 +3,7 @@ import { useTab } from "../../src/hook/local";
 import { ChatIcon } from "./ChatIcon";
 import { ChatBox } from "./ChatBox";
 import { useEffect, useState } from "react";
-export const Chatsidebar = ({ user, db, forcedopenTab }) => {
+export const Chatsidebar = ({ user, isExpanded }) => {
   const { tabState } = useTab();
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
   const [roomDetail, setRoomDetail] = useState({});
@@ -13,12 +13,12 @@ export const Chatsidebar = ({ user, db, forcedopenTab }) => {
   return (
     <Box
       position="fixed"
-      right={3}
+      right={isExpanded ? "180px" : "56px"}
       zIndex={10000}
       bottom={0}
       alignItems="flex-end"
     >
-      <Flex flexDirection="column" float="right">
+      {/* <Flex flexDirection="column" float="right">
         {tabState &&
           tabState.othertab.length > 0 &&
           tabState.othertab.map((atab, k) => (
@@ -31,7 +31,7 @@ export const Chatsidebar = ({ user, db, forcedopenTab }) => {
               
             />
           ))}
-      </Flex>
+      </Flex> */}
       {tabState.opentab && tabState.opentab != "" && isOpen && (
         <ChatBox
           crid={tabState.opentab}

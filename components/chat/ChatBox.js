@@ -87,7 +87,7 @@ export const ChatBox = ({
         width={340}
         height={455}
         float="left"
-        marginRight={5}
+        // marginRight={5}
         flexDirection="column"
         justifyContent="space-between"
       >

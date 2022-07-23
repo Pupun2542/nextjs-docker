@@ -436,9 +436,9 @@ export default function Home() {
         </VStack>
 
         <Spacer />
-        {user && (
+        {/* {user && (
           <ChatBar />
-        )}
+        )} */}
       </Flex>
 
 

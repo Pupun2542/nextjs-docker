@@ -88,10 +88,6 @@ export default function Groups() {
 
               <GroupCard />
             </Center>
-
-            {user && (
-              <ChatBar />
-            )}
           </Flex>
           <Footer />
         </Box>
