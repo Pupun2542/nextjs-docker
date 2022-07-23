@@ -34,11 +34,18 @@ import {
   Avatar,
   Input,
   Image,
+  Textarea,
+  Text,
+  Spinner,
+  Skeleton,
 } from "@chakra-ui/react";
 import CustomNavbar from "../../../components/navbar";
 import { Check, X } from "phosphor-react";
 import UploadImageModal from "../../../components/universalUploadModal";
-import { Uploadprofilebannerimg, Uploadprofileimg } from "../../../src/services/filestoreageservice";
+import {
+  Uploadprofilebannerimg,
+  Uploadprofileimg,
+} from "../../../src/services/filestoreageservice";
 import Footer from "../../../components/footer";
 import { About } from "../../../components/profile/about";
 import { Myfriends } from "../../../components/profile/myfriends";
@@ -57,6 +64,7 @@ export default function profile() {
   const [editDisplayName, setEditDisplayName] = useState("");
   const [editAvartarMode, setEditAvatarMode] = useState(false);
   const [editCoverMode, setEditCoverMode] = useState(false);
+  const [editDescription, setEditDescription] = useState("");
   const [tabIndex, setTabIndex] = useState(0);
   const {
     friend,
@@ -69,27 +77,30 @@ export default function profile() {
   } = useFriendManager();
   const { handlePrivateMessage } = UseChatManager();
 
-  useEffect(()=> {
-    console.log(tab)
+  useEffect(() => {
+    console.log(tab);
     if (tab && tab == "friend") {
       setTabIndex(5);
     }
-  },[tab])
+  }, [tab]);
 
   const loaduserDetail = async () => {
     if (!loading) {
       const token = await user.getIdToken();
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/user/getdetailusers`, {
-        users: [...new Set([id, user.uid])]
-      },
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/user/getdetailusers`,
+        {
+          users: [...new Set([id, user.uid])],
+        },
         {
           headers: {
             Authorization: token,
           },
-        })
+        }
+      );
       if (res.status === 200) {
-        let thisuser = res.data.find(v => v.uid === id);
-        let myuser = res.data.find(v => v.uid === user.uid);
+        let thisuser = res.data.find((v) => v.uid === id);
+        let myuser = res.data.find((v) => v.uid === user.uid);
         if (thisuser.pendingFriend?.includes(user.uid)) {
           setFriend(1); //onpending
         } else if (thisuser.friend?.includes(user.uid)) {
@@ -97,32 +108,41 @@ export default function profile() {
         } else if (myuser.pendingFriend?.includes(id)) {
           setFriend(3); //onpending but reciever
         }
-        if (user.uid === id && thisuser.pendingFriend && thisuser.pendingFriend.length > 0) {
-
-          const res2 = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/user/getdetailusers`, {
-            users: [...thisuser.pendingFriend]
-          },
+        if (
+          user.uid === id &&
+          thisuser.pendingFriend &&
+          thisuser.pendingFriend.length > 0
+        ) {
+          const res2 = await axios.post(
+            `${process.env.NEXT_PUBLIC_USE_API_URL}/user/getdetailusers`,
+            {
+              users: [...thisuser.pendingFriend],
+            },
             {
               headers: {
                 Authorization: token,
               },
-            })
+            }
+          );
           if (res2.status === 200) {
             console.log(thisuser.pendingFriend, res2.data);
-            thisuser = { ...thisuser, pendingFriend: res2.data }
+            thisuser = { ...thisuser, pendingFriend: res2.data };
           }
         }
         if (thisuser.friend && thisuser.friend.length > 0) {
-          const res3 = await axios.post(`${process.env.NEXT_PUBLIC_USE_API_URL}/user/getdetailusers`, {
-            users: [...thisuser.friend]
-          },
+          const res3 = await axios.post(
+            `${process.env.NEXT_PUBLIC_USE_API_URL}/user/getdetailusers`,
+            {
+              users: [...thisuser.friend],
+            },
             {
               headers: {
                 Authorization: token,
               },
-            })
+            }
+          );
           if (res3.status === 200) {
-            thisuser = { ...thisuser, friend: res3.data }
+            thisuser = { ...thisuser, friend: res3.data };
           }
         }
         setUserDetail(thisuser);
@@ -139,6 +159,7 @@ export default function profile() {
     await updateProfile(user, { displayName: editDisplayName });
     await updateDoc(doc(db, "userDetail", user.uid), {
       displayName: editDisplayName,
+      description: editDescription,
     });
     await loaduserDetail();
   };
@@ -168,7 +189,12 @@ export default function profile() {
       {/* {user&&(
         <Chatsidebar db={db} user={user} forcedopenTab={newtab}/>
       )} */}
-      <Flex flexGrow={0.8} justifyContent="center" pt={55}>
+      <Flex
+        flexGrow={0.8}
+        justifyContent="center"
+        pt={55}
+        minH="calc(100vh - 180px)"
+      >
         {userDetail && (
           <VStack
             bg={"#EBEBEB"}
@@ -254,17 +280,30 @@ export default function profile() {
                   {userDetail && (
                     <Box fontFamily={"Mitr"} fontSize={30}>
                       {editDisplayNameMode ? (
-                        <Input
-                          value={editDisplayName}
-                          onChange={(e) => setEditDisplayName(e.target.value)}
-                        />
+                        <Box>
+                          <Input
+                            value={editDisplayName}
+                            onChange={(e) => setEditDisplayName(e.target.value)}
+                          />
+                          <Textarea
+                            value={editDescription}
+                            onChange={(e) => setEditDescription(e.target.value)}
+                          />
+                        </Box>
                       ) : (
-                        <>{userDetail?.displayName}</>
+                        <Box>
+                          <Text>{userDetail?.displayName}</Text>
+                          <Text fontSize={14}>
+                            {userDetail?.description
+                              ? userDetail.description
+                              : "ตรงนี้คือ Profile Description!!"}
+                          </Text>
+                        </Box>
                       )}
                     </Box>
                   )}
 
-                  <Box>ตรงนี้คือ Profile Description!!</Box>
+                  {/* <Box>ตรงนี้คือ Profile Description!!</Box> */}
                 </Flex>
 
                 <Spacer />
@@ -355,7 +394,7 @@ export default function profile() {
                     <Button
                       colorScheme="teal"
                       variant="outline"
-                      onClick={()=>handlePrivateMessage(user, id)}
+                      onClick={() => handlePrivateMessage(user, id)}
                       position="initial"
                     >
                       Message
@@ -365,7 +404,14 @@ export default function profile() {
               </Flex>
             </Flex>
 
-            <Tabs w={"100%"} bg={"tomato2"} isFitted spacing={0} index={tabIndex} onChange={(e)=>setTabIndex(e)}>
+            <Tabs
+              w={"100%"}
+              bg={"tomato2"}
+              isFitted
+              spacing={0}
+              index={tabIndex}
+              onChange={(e) => setTabIndex(e)}
+            >
               <TabList borderColor={"gray.400"} p={2}>
                 <Tab
                   _selected={{ color: "white", bg: "#9A9AB0" }}
@@ -408,7 +454,6 @@ export default function profile() {
                 >
                   Bookshelf
                 </Tab> */}
-
               </TabList>
 
               <TabPanels>
@@ -416,7 +461,7 @@ export default function profile() {
                 <TabPanel>
                   <About data={userDetail} onRefresh={loaduserDetail} />
                 </TabPanel>
-                
+
                 {/* Timeline */}
                 {/* <TabPanel>
                   <p>one!</p>
@@ -454,11 +499,20 @@ export default function profile() {
                 {/* <TabPanel>
                   <p>?</p>
                 </TabPanel> */}
-
-
               </TabPanels>
             </Tabs>
           </VStack>
+        )}
+        {!userDetail && (
+          <Center>
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              color="blue.500"
+              size="xl"
+            />
+          </Center>
         )}
       </Flex>
       <UploadImageModal

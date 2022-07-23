@@ -70,6 +70,7 @@ import {
   Avatar,
   Image,
   SimpleGrid,
+  Spinner
 } from "@chakra-ui/react";
 import Footer from "../../../components/footer";
 import {
@@ -311,15 +312,23 @@ export default function Group() {
   };
 
   return (
-    <Box bg={'F3F5F8'}>
+    <Box bg={"F3F5F8"}>
       <CustomNavbar />
-      <Flex  justifyContent={'center'} direction={'column'}>
+      <Flex
+        justifyContent={"center"}
+        direction={"column"}
+        minH="calc(100vh - 180px)"
+      >
         {!loading && data && (
-
-          <Flex bg={'#F3F5F8'} justifyContent={'center'}>
-            <Flex direction={'column'} marginTop={55} bg={'white'} boxShadow={'base'} >
-              <VStack spacing={0} >
-                <Flex w={1000} justifyContent={'center'}>
+          <Flex bg={"#F3F5F8"} justifyContent={"center"}>
+            <Flex
+              direction={"column"}
+              marginTop={55}
+              bg={"white"}
+              boxShadow={"base"}
+            >
+              <VStack spacing={0}>
+                <Flex w={1000} justifyContent={"center"}>
                   <Box w={850} boxShadow="base">
                     <Flex h={62} bg={"#6768AB"}>
                       <IconButton
@@ -413,9 +422,14 @@ export default function Group() {
                   </Box>
                 </Flex>
 
-                <img boxShadow={'base'} src={data.banner} height={478} width={850}></img>
+                <img
+                  boxShadow={"base"}
+                  src={data.banner}
+                  height={478}
+                  width={850}
+                ></img>
 
-                <Flex direction={'column'} bg={'#F3F5F8'} boxShadow={'base'}>
+                <Flex direction={"column"} bg={"#F3F5F8"} boxShadow={"base"}>
                   <Center
                     h={62}
                     bg={"#6768AB"}
@@ -428,7 +442,7 @@ export default function Group() {
                     {data.name ? data.name : "ชื่อคอมมู"}
                   </Center>
 
-                  <Tabs isFitted w={850} boxShadow={'base'}>
+                  <Tabs isFitted w={850} boxShadow={"base"}>
                     <TabList fontFamily={"Sarabun"}>
                       <Tab>Detail</Tab>
                       <Tab>Document</Tab>
@@ -473,7 +487,10 @@ export default function Group() {
                                     </Text>
                                   </Flex>
                                 ) : (
-                                  <Flex flexDir="column" justifyContent="center">
+                                  <Flex
+                                    flexDir="column"
+                                    justifyContent="center"
+                                  >
                                     <Text
                                       flex={1}
                                       textAlign="center"
@@ -491,11 +508,22 @@ export default function Group() {
                                   </Flex>
                                 )
                               ) : (
-                                <Flex flexDir={"column"} justifyContent="center">
-                                  <Text flex={1} textAlign="center" fontSize={20}>
+                                <Flex
+                                  flexDir={"column"}
+                                  justifyContent="center"
+                                >
+                                  <Text
+                                    flex={1}
+                                    textAlign="center"
+                                    fontSize={20}
+                                  >
                                     Public
                                   </Text>
-                                  <Text flex={1} textAlign="center" fontSize={12}>
+                                  <Text
+                                    flex={1}
+                                    textAlign="center"
+                                    fontSize={12}
+                                  >
                                     ทุกคนสามารถเข้าร่วมและเห็นการเคลื่อนไหวภายในกลุ่มได้
                                   </Text>
                                 </Flex>
@@ -522,16 +550,11 @@ export default function Group() {
                             _hover={{ bg: "gray.800" }}
                             color={"#FFC75A"}
                             w={155}
-                            onClick={
-                              () => {
-                                handleEnterGroup();
-                              }
-                            }
+                            onClick={() => {
+                              handleEnterGroup();
+                            }}
                           >
-                            {console.log(
-                              data.member,
-                              auth.currentUser?.uid
-                            )}
+                            {console.log(data.member, auth.currentUser?.uid)}
                             {Object.keys(data.member).includes(
                               auth.currentUser?.uid
                             )
@@ -540,8 +563,8 @@ export default function Group() {
                                 Object.keys(data.pendingmember).includes(
                                   auth.currentUser?.uid
                                 )
-                                ? "รอการตอบรับ"
-                                : "เข้าร่วมกลุ่ม"}
+                              ? "รอการตอบรับ"
+                              : "เข้าร่วมกลุ่ม"}
                           </Button>
                         </HStack>
 
@@ -557,7 +580,7 @@ export default function Group() {
                                 <AccordionButton>
                                   <AccordionIcon mr={5} />
                                   <Box
-                                    fontFamily={'SarabunSB'}
+                                    fontFamily={"SarabunSB"}
                                     fontSize={25}
                                     flex="1"
                                     textAlign="left"
@@ -651,23 +674,23 @@ export default function Group() {
                                       {/* {console.log(data.genre)} */}
                                       {data.times && data.genre.length > 0
                                         ? data.genre.map((genre, index) => (
-                                          <Box
-                                            key={index}
-                                            marginLeft={2.5}
-                                            maxW={600}
-                                            float={"left"}
-                                            bg={"white"}
-                                            p={1}
-                                            pl={2}
-                                            pr={2}
-                                            borderColor={'black'}
-                                            borderWidth={2}
-                                            color={"black"}
-                                            borderRadius={"5"}
-                                          >
-                                            {genre}
-                                          </Box>
-                                        ))
+                                            <Box
+                                              key={index}
+                                              marginLeft={2.5}
+                                              maxW={600}
+                                              float={"left"}
+                                              bg={"white"}
+                                              p={1}
+                                              pl={2}
+                                              pr={2}
+                                              borderColor={"black"}
+                                              borderWidth={2}
+                                              color={"black"}
+                                              borderRadius={"5"}
+                                            >
+                                              {genre}
+                                            </Box>
+                                          ))
                                         : "ไม่มีหมวดหมู่"}
                                     </Box>
                                   </Flex>
@@ -697,16 +720,16 @@ export default function Group() {
                                     >
                                       {data.times && data.place.length > 0
                                         ? data.place.map((genre, index) => (
-                                          <Box
-                                            key={index}
-                                            className={style.tag}
-                                            marginLeft={2.5}
-                                            maxW={600}
-                                            float={"left"}
-                                          >
-                                            {genre}
-                                          </Box>
-                                        ))
+                                            <Box
+                                              key={index}
+                                              className={style.tag}
+                                              marginLeft={2.5}
+                                              maxW={600}
+                                              float={"left"}
+                                            >
+                                              {genre}
+                                            </Box>
+                                          ))
                                         : "ไม่มีหมวดหมู่"}
                                     </Box>
                                   </Flex>
@@ -737,16 +760,16 @@ export default function Group() {
                                       {/* {console.log(data.genre)} */}
                                       {data.times && data.times.length > 0
                                         ? data.times.map((genre, index) => (
-                                          <Box
-                                            key={index}
-                                            className={style.tag}
-                                            marginLeft={2.5}
-                                            maxW={600}
-                                            float={"left"}
-                                          >
-                                            {genre}
-                                          </Box>
-                                        ))
+                                            <Box
+                                              key={index}
+                                              className={style.tag}
+                                              marginLeft={2.5}
+                                              maxW={600}
+                                              float={"left"}
+                                            >
+                                              {genre}
+                                            </Box>
+                                          ))
                                         : "ไม่มีหมวดหมู่"}
                                     </Box>
                                   </Flex>
@@ -777,18 +800,18 @@ export default function Group() {
                                       {data.tws
                                         ? data.tws.length > 0
                                           ? data.tws.map((tw, index) => (
-                                            <Box
-                                              bg={"#EA4545"}
-                                              p={2}
-                                              borderRadius={5}
-                                              color={"white"}
-                                              m={1}
-                                              key={index}
-                                              float="left"
-                                            >
-                                              {tw}
-                                            </Box>
-                                          ))
+                                              <Box
+                                                bg={"#EA4545"}
+                                                p={2}
+                                                borderRadius={5}
+                                                color={"white"}
+                                                m={1}
+                                                key={index}
+                                                float="left"
+                                              >
+                                                {tw}
+                                              </Box>
+                                            ))
                                           : "ไม่มีคำเตือน"
                                         : "ไม่มีคำเตือน"}
                                     </Box>
@@ -851,8 +874,8 @@ export default function Group() {
                                       >
                                         {data.averageTime
                                           ? data.averageTime +
-                                          " " +
-                                          data.averageTimeUnit
+                                            " " +
+                                            data.averageTimeUnit
                                           : "ไม่มีระยะเวลาโดยประมาณ"}
                                       </Box>
                                     </Flex>
@@ -901,8 +924,6 @@ export default function Group() {
                                     </Center>
 
                                     <Spacer />
-
-
                                   </Flex>
 
                                   <Modal
@@ -954,11 +975,11 @@ export default function Group() {
                                     )
                                       ? "ไปที่กลุ่ม"
                                       : data.pendingmember &&
-                                        Object.keys(data.pendingmember).includes(
-                                          auth.currentUser?.uid
-                                        )
-                                        ? "รอการตอบรับ"
-                                        : "เข้าร่วมกลุ่ม"}
+                                        Object.keys(
+                                          data.pendingmember
+                                        ).includes(auth.currentUser?.uid)
+                                      ? "รอการตอบรับ"
+                                      : "เข้าร่วมกลุ่ม"}
                                   </Button>
                                 </VStack>
                               </AccordionPanel>
@@ -968,7 +989,12 @@ export default function Group() {
                               <h2>
                                 <AccordionButton>
                                   <AccordionIcon mr={5} />
-                                  <Box fontFamily={'SarabunSB'} fontSize={25} flex="1" textAlign="left">
+                                  <Box
+                                    fontFamily={"SarabunSB"}
+                                    fontSize={25}
+                                    flex="1"
+                                    textAlign="left"
+                                  >
                                     Registration
                                   </Box>
                                 </AccordionButton>
@@ -1104,7 +1130,7 @@ export default function Group() {
                                           pr={1.5}
                                           // position="relative"
                                           maxWidth={180}
-                                          h={'auto'}
+                                          h={"auto"}
                                         >
                                           {link.link}
                                         </Center>
@@ -1279,8 +1305,8 @@ export default function Group() {
                       >
                         <Center
                           ml={-4}
-                        // w={850}
-                        // h={500}
+                          // w={850}
+                          // h={500}
                         >
                           {data.doclink && (
                             <Box
@@ -1306,8 +1332,8 @@ export default function Group() {
                                   borderRadius: "24px",
                                 },
                               }}
-                            // maxH={"75%"}
-                            // maxW={"70%"}
+                              // maxH={"75%"}
+                              // maxW={"70%"}
                             />
                           )}
                           {/* <Box
@@ -1338,38 +1364,38 @@ export default function Group() {
                         <SimpleGrid columns={3} spacing={2} pl={1} pr={1}>
                           {Object.values(data.staff).map((staff) => (
                             <Flex
-                              bg={'white'}
-                              borderRadius={'full'}
-                            // borderRightRadius={5}
-                            // boxShadow='base'
+                              bg={"white"}
+                              borderRadius={"full"}
+                              // borderRightRadius={5}
+                              // boxShadow='base'
                             >
                               <Flex
-                                bg={'#6768AB'}
-                                borderLeftRadius='full'
-                              // borderBottomLeftRadius={''}
+                                bg={"#6768AB"}
+                                borderLeftRadius="full"
+                                // borderBottomLeftRadius={''}
                               >
                                 <Avatar
                                   rounded={"full"}
                                   w={75}
                                   h={75}
                                   color={"white"}
-                                  boxShadow={'base'}
+                                  boxShadow={"base"}
                                   src={staff.photoURL}
                                   name={staff.displayName}
                                 />
                               </Flex>
 
-                              <Flex direction={'column'}>
+                              <Flex direction={"column"}>
                                 <Box
                                   minWidth={190}
-                                  w={'100%'}
-                                  bg={'#6768AB'}
+                                  w={"100%"}
+                                  bg={"#6768AB"}
                                   fontSize={18}
-                                  color={'white'}
+                                  color={"white"}
                                   borderTopRightRadius={5}
                                   pl={2}
-                                  boxShadow={'base'}
-                                  fontFamily={'SarabunSB'}
+                                  boxShadow={"base"}
+                                  fontFamily={"SarabunSB"}
                                 >
                                   {Object.keys(data.creator).includes(staff.uid)
                                     ? "Owner"
@@ -1377,50 +1403,43 @@ export default function Group() {
                                 </Box>
 
                                 <Box
-                                  h={'100%'}
-                                  bg={'white'}
+                                  h={"100%"}
+                                  bg={"white"}
                                   borderBottomRightRadius={5}
                                   ml={-10}
                                   pl={12}
                                   mt={2}
-                                  fontFamily={'Sarabun'}
-                                  boxShadow={'base'}
+                                  fontFamily={"Sarabun"}
+                                  boxShadow={"base"}
                                 >
                                   {staff.displayName}
                                 </Box>
-
                               </Flex>
-
-
-
-
                             </Flex>
-
                           ))}
                         </SimpleGrid>
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
                 </Flex>
-
               </VStack>
 
-              <Flex justifyContent={'center'} >
-                <Flex justifyContent={'center'} boxShadow={'base'} bg={'#F3F5F8'} w={850}>
+              <Flex justifyContent={"center"}>
+                <Flex
+                  justifyContent={"center"}
+                  boxShadow={"base"}
+                  bg={"#F3F5F8"}
+                  w={850}
+                >
                   <Commentsection
                     gid={id}
                     initialcomment={data.commentcount ? data.commentcount : 0}
                     commenters={data.commentuser ? data.commentuser : {}}
                   />
-
                 </Flex>
               </Flex>
-
-
-
             </Flex>
           </Flex>
-
         )}
 
         <Modal onClose={onDelClose} isOpen={isDelOpen} isCentered>
@@ -1442,10 +1461,19 @@ export default function Group() {
             </ModalFooter>
           </ModalContent>
         </Modal>
-
-        <Footer />
+        {loading || !data&& (
+          <Center>
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              color="blue.500"
+              size="xl"
+            />
+          </Center>
+        )}
       </Flex>
-
+      <Footer />
     </Box>
   );
 }
