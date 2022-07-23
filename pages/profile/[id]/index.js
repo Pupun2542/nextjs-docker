@@ -56,7 +56,6 @@ import UseChatManager from "../../../src/hook/useChatManager";
 export default function profile() {
   const router = useRouter();
   const { id, tab } = router.query;
-  // console.log(router.query);
   const { app, auth, db } = useApp();
   const [user, loading, error] = useAuthState(auth);
   const [userDetail, setUserDetail] = useState(null);
@@ -78,7 +77,6 @@ export default function profile() {
   const { handlePrivateMessage } = UseChatManager();
 
   useEffect(() => {
-    console.log(tab);
     if (tab && tab == "friend") {
       setTabIndex(5);
     }
@@ -101,7 +99,7 @@ export default function profile() {
       if (res.status === 200) {
         let thisuser = res.data.find((v) => v.uid === id);
         let myuser = res.data.find((v) => v.uid === user.uid);
-        if (thisuser.pendingFriend?.includes(user.uid)) {
+        if (thisuser?.pendingFriend?.includes(user.uid)) {
           setFriend(1); //onpending
         } else if (thisuser.friend?.includes(user.uid)) {
           setFriend(2); //friended
@@ -110,7 +108,7 @@ export default function profile() {
         }
         if (
           user.uid === id &&
-          thisuser.pendingFriend &&
+          thisuser?.pendingFriend &&
           thisuser.pendingFriend.length > 0
         ) {
           const res2 = await axios.post(
@@ -125,7 +123,6 @@ export default function profile() {
             }
           );
           if (res2.status === 200) {
-            console.log(thisuser.pendingFriend, res2.data);
             thisuser = { ...thisuser, pendingFriend: res2.data };
           }
         }
@@ -151,7 +148,6 @@ export default function profile() {
   };
 
   useEffect(() => {
-    // console.log(id);
     loaduserDetail();
   }, [loading, id]);
 
