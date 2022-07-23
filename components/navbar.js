@@ -660,7 +660,8 @@ function CustomNavbar() {
           ดูแจ้งเตือนทั้งหมด
         </Center>
       </Box>
-      <ChatBar chatnotidata={chatNotiData} user={user} isExpanded={isCSBExpanded} onEnter={onEnter} onLeave={onLeave} />
+      {user && (<ChatBar chatnotidata={chatNotiData} user={user} isExpanded={isCSBExpanded} onEnter={onEnter} onLeave={onLeave} />)}
+      
     </Box>
   );
 }
