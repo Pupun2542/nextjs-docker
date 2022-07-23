@@ -54,6 +54,7 @@ import React from "react";
 import { SignIn } from "../components/signin";
 import { useApp } from "../src/hook/local";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { ChatBar } from "../components/ChatBar";
 
 export default function Home() {
   const router = useRouter();
@@ -77,14 +78,13 @@ export default function Home() {
     >
       <CustomNavbar />
 
-      <Flex>
+      <Flex pt={55}>
         <Spacer />
         <VStack
           bg={'white'}
           w={[500, 1000]}
           boxShadow='base'
           fontFamily={'Sarabun'}
-          marginTop={55}
         >
           <Flex
             align="center"
@@ -436,7 +436,13 @@ export default function Home() {
         </VStack>
 
         <Spacer />
+        {user && (
+          <ChatBar />
+        )}
       </Flex>
+
+
+
       <Footer></Footer>
     </Box>
   );
