@@ -80,7 +80,7 @@ import {
 import { Chatsidebar } from "./chat/Chatsidebar";
 import useSound from "use-sound";
 import Notitab from "./notitab";
-// import { useLocalStorage } from "../src/hook/uselocalstorage";
+import { ChatBar } from "./ChatBar";
 
 function CustomNavbar() {
   const { app, auth, db } = useApp();
@@ -126,6 +126,14 @@ function CustomNavbar() {
     volume: 0.25,
   });
   const getgroup = useGroupHeader();
+
+  const [isCSBExpanded, setCSBExpand] = useState(false);
+  const onEnter = () => {
+    setCSBExpand(true);
+  };
+  const onLeave = () => {
+    setCSBExpand(false);
+  };
 
   if (typeof window !== 'undefined') {
     document.addEventListener("mousedown", (e) => {
@@ -268,7 +276,7 @@ function CustomNavbar() {
   };
 
   return (
-    <>
+    <Box>
       <Box bg="#4C4D88" h="auto" w="100%" px={5} pos="fixed" zIndex={10000}>
         <Flex h={55} alignItems={"center"} justifyContent={"space-between"}>
           <Hide below="md">
@@ -575,7 +583,7 @@ function CustomNavbar() {
         </Flex>
       </Box>
 
-      <Chatsidebar user={user} db={db} />
+      <Chatsidebar user={user} db={db} isExpanded={isCSBExpanded} />
 
       <Box
         overflowY={"auto"}
@@ -652,7 +660,8 @@ function CustomNavbar() {
           ดูแจ้งเตือนทั้งหมด
         </Center>
       </Box>
-    </>
+      <ChatBar chatnotidata={chatNotiData} user={user} isExpanded={isCSBExpanded} onEnter={onEnter} onLeave={onLeave} />
+    </Box>
   );
 }
 
