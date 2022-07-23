@@ -131,7 +131,7 @@ export const Replypost = ({ replydoc, message, setMessage }) => {
   };
 
   return (
-    <Flex>
+    <Flex mt={2} p={1} borderRadius={5} boxShadow={'base'} bg={'#F3F5F8'}>
       {/* <VStack spacing={0} mt={5} mr={5}>
         <Box
           w={"22px"}
@@ -153,25 +153,26 @@ export const Replypost = ({ replydoc, message, setMessage }) => {
 
       <Flex
         width="100%"
+        bg={'white'}
         borderRadius={10}
-        boxShadow="0 0 2px #000000"
-        marginTop="10px"
+        boxShadow="base"
+        // marginTop="10px"
       >
-        <Center flexGrow={1} w={75} h={70} m={2.5}>
+        <Center flexGrow={1} h={70} m={2.5}>
           <Avatar
-            m={2.5}
-            maxW={70}
+            w={65}
+            h={65}
             rounded={"full"}
             src={replydoc.creator.photoURL}
             name={replydoc.creator.displayName}
-            onClick={()=>router.push("../profile/"+replydoc.creator?.uid)}
+            onClick={() => router.push("../profile/" + replydoc.creator?.uid)}
             cursor={"pointer"}
           />
         </Center>
 
-        <Flex flexDir="column" w={440} flexGrow={10} p={2.5}>
+        <Flex flexDir="column" w={440} flexGrow={10} p={2.5} pl={-2.5}>
           <Flex justifyContent="space-between">
-            <Text fontSize={20} onClick={()=>router.push("../profile/"+replydoc.creator?.uid)} cursor={"pointer"}>
+            <Text fontSize={20} onClick={() => router.push("../profile/" + replydoc.creator?.uid)} cursor={"pointer"}>
               {replydoc.creator.displayName
                 ? replydoc.creator.displayName
                 : "placeholder"}
@@ -228,9 +229,17 @@ export const Replypost = ({ replydoc, message, setMessage }) => {
             </Box>
           )}
 
-          <Box>
-            <Button onClick={HandleLove}>
-              <Box>
+          <Box bg={'#F3F5F8'} boxShadow={'base'} p={1} borderRadius={5}>
+            <Button
+              h={30}
+              onClick={HandleLove}
+              bg={'white'}
+              _hover={{
+                backgroundColor: "#F3F5F7",
+              }}
+              boxShadow={'base'}
+            >
+              <Box mr={1}>
                 <Heart
                   size={16}
                   color={"red"}
@@ -242,7 +251,7 @@ export const Replypost = ({ replydoc, message, setMessage }) => {
                 />
               </Box>
 
-              <Box p={1}>{replydoc.love ? replydoc.love.length : "0"}</Box>
+              <Box ml={1}>{replydoc.love ? replydoc.love.length : "0"}</Box>
             </Button>
           </Box>
         </Flex>

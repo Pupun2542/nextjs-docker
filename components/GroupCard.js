@@ -108,7 +108,7 @@ function GroupCard() {
                   Router.push("/group/" + value.id);
                 }
               }}
-              bg={"#F3F3F3"}
+              bg={"#F3F5F8"}
               mr={5}
               ml={5}
               mt={2}
@@ -116,10 +116,10 @@ function GroupCard() {
               p={5}
               w={900}
               h={'auto'}
-              boxShadow={'0px 0px 2px rgba(0, 0, 0.25)'}
+              boxShadow={'base'}
               borderRadius={10}
               _hover={{
-                background: "gray.300"
+                background: "gray.200"
               }}
               // as="button"
               cursor="pointer"
@@ -135,7 +135,7 @@ function GroupCard() {
                   color="black"
                   w={'100%'}
                   fontSize={24}
-                  fontFamily={'Mitr'}
+                  fontFamily={'Sarabun'}
                   borderBottomWidth={2}
                   borderBottomColor={'black'}
                 >
@@ -159,9 +159,10 @@ function GroupCard() {
                       bg={"white"}
                       m={1}
                       borderRadius={10}
-                      pt={1} pb={1} pl={2} pr={2}
-                      fontFamily={'Mitr'}
+                      pt={0.5} pb={0.5} pl={2} pr={2}
+                      fontFamily={'Sarabun'}
                       borderWidth={2}
+                      fontSize={14}
                       borderColor={'black'}
                     >{tag}</WrapItem>;
                   })}
@@ -171,33 +172,64 @@ function GroupCard() {
                       bg={"#EA4545"}
                       m={1}
                       borderRadius={10}
-                      pt={1} pb={1} pl={2} pr={2}
-                      fontFamily={'Mitr'}
+                      pt={0.5} pb={0.5} pl={2} pr={2}
+                      fontFamily={'Sarabun'}
+                      fontSize={14}
                       color={'white'}
-                    >{tag}
+                      
+                    >
+                      <Center minWidth={35}>
+                        {tag}
+                      </Center>
                     </WrapItem>;
                   })}
 
                   {/* <Center> */}
                   <WrapItem
-                      bg={value.color}
-                      m={1}
-                      borderRadius={10}
-                      pt={1} pb={1} pl={2} pr={2}
-                      fontFamily={'Mitr'}
-                      color={'white'}
-                    >{value.rating.split(" ", 1)[0]}
-                    </WrapItem>
+                    bg={value.color}
+                    m={1}
+                    borderRadius={10}
+                    pt={0.5} pb={0.5} pl={2} pr={2}
+                    fontFamily={'Sarabun'}
+                    fontSize={13}
+                    color={'white'}
+                    justifyItems={'center'}
+                  >
+                    <Center minWidth={35}>{value.rating.split(" ", 1)[0]}</Center>
+                  </WrapItem>
                   {/* </Center> */}
                 </Wrap>
 
-                <Wrap fontFamily={'Mitr'} w={'100%'}>
+                <Wrap
+                  bg={'white'}
+                  fontFamily={'Sarabun'}
+                  w={'100%'}
+                  boxShadow={'base'}
+                  p={1}
+                  rounded={5}
+                >
                   {/* <Eye size={26} />
                   <Box>100</Box> */}
-                  <Heart size={26} />
-                  <Box>{value.love?.length}</Box>
-                  <PushPin size={26} />
-                  <Box>{value.pinned?.length}</Box>
+                  <Center
+                    bg={'#F3F5F8'}
+                    p={1}
+                    rounded={5}
+                    w={'30%'}
+                  >
+                    <Heart size={26} />
+                    <Box pl={5}>{value.love?.length}</Box>
+                  </Center>
+
+                  <Center
+                    bg={'#F3F5F8'}
+                    p={1}
+                    rounded={5}
+                    w={'30%'}
+                  >
+                    <PushPin size={26} />
+                    <Box pl={5}>{value.pinned?.length}</Box>
+                  </Center>
+
                 </Wrap>
               </VStack>
             </Flex>
