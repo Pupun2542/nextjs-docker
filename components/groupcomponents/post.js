@@ -491,7 +491,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
                 </Text>
               </Button>
               <Box w={'100%'}></Box>
-              <Center
+              {/* <Center
                 color="black"
                 width={"35%"}
                 fontSize={16}
@@ -502,7 +502,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
                 _hover={{bg: 'gray.200'}}
               >
                 <Eye />{post.view}
-              </Center>
+              </Center> */}
             </HStack>
 
             <Box>

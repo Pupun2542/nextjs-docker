@@ -457,8 +457,8 @@ function dashboard() {
                           w={42}
                           src={user.photoURL}
                         />
-                        <Text w="93%" onClick={onOpen}>
-                          {message ? message : "Something"}
+                        <Text w="93%" mt={2} color={'GrayText'} onClick={onOpen}>
+                          {message ? message : "Say Something"}
                         </Text>
                         {/* <Input placeholder='Basic usage' w={'93%'} /> */}
                       </Flex>
@@ -495,56 +495,64 @@ function dashboard() {
                           data.postcount &&
                           data.postcount > 0 && <Skeletonpost />}
                       </PostContext.Provider>
-                      <Modal isOpen={isOpen} onClose={onClose}>
+
+                      <Modal isOpen={isOpen} size={'3xl'} onClose={onClose}>
                         <ModalOverlay
                           bg="blackAlpha.300"
                           backdropFilter="blur(10px) hue-rotate(90deg)"
                         />
                         <ModalContent>
-                          <ModalHeader>Create Post</ModalHeader>
+                          <ModalHeader fontFamily={'SarabunSB'}>Create Post</ModalHeader>
                           <ModalCloseButton />
                           <Divider />
                           <ModalBody>
-                            <Text>เลือกตัวละครที่ใช้โพสต์</Text>
-                            <Menu>
-                              <MenuButton
-                                as={Button}
-                                rightIcon={<CaretDown size={8} />}
-                                mt={2}
-                                mb={2}
-                              >
-                                <Avatar
-                                  src={
-                                    Object.keys(selectedchara).length > 0
-                                      ? selectedchara.photoURL
-                                      : ""
-                                  }
-                                  w={8}
-                                  h={8}
-                                />
-                              </MenuButton>
-                              <MenuList>
-                                {data.mychara &&
-                                  Object.values(data.mychara).map((cha, i) => (
-                                    <MenuItem
-                                      onClick={() => setSelectedchara(cha)}
-                                      key={i}
-                                    >
-                                      <Flex alignItems={"center"}>
-                                        <Avatar
-                                          src={cha.photoURL}
-                                          w={8}
-                                          h={8}
-                                          mr={1}
-                                        />
-                                        <Text fontSize="sm">{cha.name}</Text>
-                                      </Flex>
-                                    </MenuItem>
-                                  ))}
-                              </MenuList>
-                            </Menu>
+                            <Flex mb={1}>
+                              <Avatar
+                                mr={2}
+                                src={
+                                  Object.keys(selectedchara).length > 0
+                                    ? selectedchara.photoURL
+                                    : ""
+                                }
+                              />
+                              <Flex spacing={0} direction={'column'}>
+                                <Text>Name Profile</Text>
+                                <Menu>
+                                  <MenuButton
+                                    as={Button}
+                                    rightIcon={<CaretDown size={6} />}
+                                    height={26}
+                                    w={'auto'}
+                                  >
+                                    <Text fontSize="sm">{selectedchara.name}</Text>
+                                  </MenuButton>
+
+                                  <MenuList>
+                                    {data.mychara &&
+                                      Object.values(data.mychara).map((cha, i) => (
+                                        <MenuItem
+                                          onClick={() => setSelectedchara(cha)}
+                                          key={i}
+                                        >
+                                          <Flex alignItems={"center"}>
+                                            <Avatar
+                                              src={cha.photoURL}
+                                              w={8}
+                                              h={8}
+                                              mr={1}
+                                            />
+                                            <Text fontSize="sm">{cha.name}</Text>
+                                          </Flex>
+                                        </MenuItem>
+                                      ))}
+                                  </MenuList>
+                                </Menu>
+                              </Flex>
+                            </Flex>
 
                             <Textarea
+                              mt={1}
+                              mb={2}
                               onChange={(e) => setMessage(e.target.value)}
                               value={message}
                               onPaste={handleImagePaste}
@@ -565,6 +573,20 @@ function dashboard() {
                               display="none"
                               onChange={(e) => handleUploadFile(e)}
                             />
+
+                            <Center
+                              w={'100%'}
+                              bg={'#F3F5F8'}
+                              mb={2}
+                              rounded={5}
+                            >
+                              <Flex width={'100%'}>
+                                <Center pl={3} pr={2} fontFamily={'SarabunSB'}>Tag</Center>
+                                <Center p={1} width={'100%'}>
+                                  <Input width={'100%'} bg={'white'}></Input>
+                                </Center>
+                              </Flex>
+                            </Center>
                             {/* {image && (
                             <Box>
                               <Box></Box>
@@ -609,10 +631,17 @@ function dashboard() {
                                 ))}
                             </Box>
                             <Flex justifyContent={"flex-end"}>
-                              <IconButton
-                                icon={<ImageSquare size={16} />}
+                              <Button
+                                leftIcon={<ImageSquare size={16} />}
                                 onClick={handleFile}
-                              />
+                                fontFamily={'Sarabun'}
+                                fontWeight={'light'}
+                                fontSize={14}
+                                boxShadow='base'
+                              >
+                                เพิ่มรูปภาพ
+                              </Button>
+                              <Spacer />
                               <Button
                                 onClick={() => {
                                   handleSent();
