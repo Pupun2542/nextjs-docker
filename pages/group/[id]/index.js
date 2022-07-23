@@ -660,9 +660,13 @@ export default function Group() {
                                             marginLeft={2.5}
                                             maxW={600}
                                             float={"left"}
-                                            bg={"#6768AB"}
-                                            p={2}
-                                            color={"white"}
+                                            bg={"white"}
+                                            p={1}
+                                            pl={2}
+                                            pr={2}
+                                            borderColor={'black'}
+                                            borderWidth={2}
+                                            color={"black"}
                                             borderRadius={"5"}
                                           >
                                             {genre}
@@ -1102,9 +1106,11 @@ export default function Group() {
                                           w={"100%"}
                                           pl={1.5}
                                           pr={1.5}
-                                          position="relative"
+                                          // position="relative"
+                                          maxWidth={180}
+                                          h={'auto'}
                                         >
-                                          {link.link}
+                                            {link.link} 
                                         </Center>
                                       </Flex>
                                       <Center w={50}></Center>

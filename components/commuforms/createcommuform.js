@@ -167,9 +167,9 @@ export const Createcommuform = ({ data, uid, gid }) => {
     }
   }, [data]);
 
-  useEffect(()=> {
+  useEffect(() => {
     // console.log(fieldvalue)
-  },[fieldvalue])
+  }, [fieldvalue])
 
   useEffect(() => {
     const search = async () => {
@@ -258,8 +258,9 @@ export const Createcommuform = ({ data, uid, gid }) => {
               maxW={200}
               float="left"
               mr={0.5}
-              ml={0.5}
+              ml={1}
               mb={2}
+              mt={0.5}
               fontSize={16}
               h={31}
             />
@@ -444,9 +445,9 @@ export const Createcommuform = ({ data, uid, gid }) => {
   };
 
   return (
-    <Flex justifyContent={"center"} bg={"#F3F3F3"}>
+    <Flex justifyContent={"center"} bg={"#F3F5F8"}>
       <Center
-        fontFamily={"Mitr"}
+        fontFamily={"Sarabun"}
         bg={"white"}
         maxW={1000}
         width={"100%"}
@@ -485,13 +486,17 @@ export const Createcommuform = ({ data, uid, gid }) => {
             </Flex>
           </Center>
 
-          <Accordion allowMultiple bg={"#F3F3F3"}>
+          <Accordion allowMultiple bg={"#F3F5F8"}>
             <AccordionItem w={"100%"}>
               <h2>
                 <AccordionButton>
                   <AccordionIcon color={"Black"} w={50} h={50} />
 
-                  <Box className={style.Accordion} color="Black">
+                  <Box
+                    fontFamily={'SarabunSB'}
+                    fontSize={27}
+                    color="Black"
+                  >
                     Basic Information
                   </Box>
                 </AccordionButton>
@@ -538,7 +543,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
                           h={46}
                           bg={"white"}
                           placeholder={"..."}
-                          className={style.search}
+                          fontSize={18}
                         />
                       </Center>
                     </Flex>
@@ -617,7 +622,6 @@ export const Createcommuform = ({ data, uid, gid }) => {
                           color="black"
                           size="lg"
                           defaultValue={"public"}
-                          fontFamily={"Mitr"}
                           value={
                             fieldvalue.privacy
                               ? fieldvalue.privacy
@@ -722,7 +726,6 @@ export const Createcommuform = ({ data, uid, gid }) => {
                           bg={"white"}
                           color="black"
                           size="lg"
-                          fontFamily={"Mitr"}
                           value={fieldvalue.type}
                           onChange={(e) =>
                             setFieldvalue({
@@ -784,7 +787,9 @@ export const Createcommuform = ({ data, uid, gid }) => {
                       </Box>
 
                       <Center w={"100%"} height="auto" position="relative">
-                        <Container
+                        <Box
+                          pl={1.5} 
+                          pr={1.5}
                           w={"100%"}
                           h="auto"
                           minH={46}
@@ -796,7 +801,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
                             state={genre}
                             setState={setGenre}
                           />
-                        </Container>
+                        </Box>
                       </Center>
                     </Flex>
                     <Center w={50}></Center>
@@ -855,7 +860,6 @@ export const Createcommuform = ({ data, uid, gid }) => {
                               });
                               // console.log(parseTime(e.target.value))
                             }}
-                            fontFamily={"Mitr"}
                           />
                         </Center>
                       </Center>
@@ -892,7 +896,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         borderRightWidth={3}
                       >
                         <Box>
-                          <Text float="left">ระยะเวลาโดยประมาณ</Text>
+                          <Text fontSize={16} float="left">ระยะเวลา</Text>
                         </Box>
                       </Box>
 
@@ -932,7 +936,6 @@ export const Createcommuform = ({ data, uid, gid }) => {
                           color="black"
                           size="lg"
                           isDisabled={!configvalue.Averagesw}
-                          fontFamily={"Mitr"}
                           value={fieldvalue.averageTimeUnit}
                           onChange={(e) =>
                             setFieldvalue({
@@ -990,20 +993,21 @@ export const Createcommuform = ({ data, uid, gid }) => {
 
                       <Center w={"100%"} pr={1.5} position="relative">
                         <Center w={"100%"}>
-                          <Container
+                          <Box
                             w={"100%"}
                             h="auto"
                             minH={46}
                             bg={"white"}
                             borderRadius={10}
-                            mt={1.5}
+                            mt={0.5}
+                            pl={1.5}
                           >
                             <Hashtag
                               state={places}
                               setState={setPlaces}
                               isDisabled={!configvalue.Locationsw}
                             />
-                          </Container>
+                          </Box>
                         </Center>
                       </Center>
                     </Flex>
@@ -1043,20 +1047,21 @@ export const Createcommuform = ({ data, uid, gid }) => {
                       </Box>
 
                       <Center w={"100%"} pr={1.5} position="relative">
-                        <Container
+                        <Box
                           w={"100%"}
                           h="auto"
                           minH={46}
                           bg={"white"}
                           borderRadius={10}
-                          mt={2}
+                          mt={0.5}
+                          pl={1.5}
                         >
                           <Hashtag
                             state={times}
                             setState={setTimes}
                             isDisabled={!configvalue.Timelinesw}
                           />
-                        </Container>
+                        </Box>
                       </Center>
                     </Flex>
                     <Center w={50}></Center>
@@ -1178,20 +1183,21 @@ export const Createcommuform = ({ data, uid, gid }) => {
                       </Box>
 
                       <Center w={"100%"} position="relative">
-                        <Container
+                        <Box
                           minW={"100%"}
                           h="auto"
                           minH={46}
                           bg={"white"}
                           borderRadius={10}
-                          mt={2}
+                          mt={0.5}
+                          pl={1.5}
                         >
                           <Hashtag
                             state={tws}
                             setState={settws}
                             isDisabled={!configvalue.Triggersw}
                           />
-                        </Container>
+                        </Box>
                       </Center>
                     </Flex>
                     <Center w={50}></Center>
@@ -1357,13 +1363,17 @@ export const Createcommuform = ({ data, uid, gid }) => {
 
           {/* Registration */}
 
-          <Accordion allowMultiple bg={"#F3F3F3"}>
+          <Accordion allowMultiple bg={"#F3F5F8"}>
             <AccordionItem w={"100%"}>
               <h2>
                 <AccordionButton>
                   <AccordionIcon color={"Black"} w={50} h={50} />
 
-                  <Box className={style.Accordion} color="Black">
+                  <Box
+                    fontFamily={'SarabunSB'}
+                    fontSize={27}
+                    color="Black"
+                  >
                     Registration
                   </Box>
                 </AccordionButton>
@@ -1509,7 +1519,6 @@ export const Createcommuform = ({ data, uid, gid }) => {
                 onClick={onOpen}
                 color={"black"}
                 bg={"#FFC75A"}
-                fontFamily="Mitr"
                 fontWeight={100}
                 fontSize={20}
                 h={50}
@@ -1526,7 +1535,6 @@ export const Createcommuform = ({ data, uid, gid }) => {
               onClick={onCropPicOpen}
               color={"black"}
               bg={"#FFC75A"}
-              fontFamily="Mitr"
               fontWeight={100}
               fontSize={20}
               h={50}
@@ -1542,7 +1550,6 @@ export const Createcommuform = ({ data, uid, gid }) => {
               onClick={HandleSubmit}
               color={"#FBBC43"}
               bg={"#343434"}
-              fontFamily="Mitr"
               fontWeight={100}
               fontSize={20}
               h={50}
