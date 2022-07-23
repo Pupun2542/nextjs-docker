@@ -311,18 +311,14 @@ export default function Group() {
   };
 
   return (
-    <Box>
-      <Box bg={"#F3F5F8"}>
-        <CustomNavbar />
+    <Box bg={'F3F5F8'}>
+      <CustomNavbar />
+      <Flex  justifyContent={'center'} direction={'column'}>
         {!loading && data && (
-          <Flex
-            justifyCsontent={'center'}
-          >
-            {/* {console.log(data)} */}
 
-
-            <Box marginTop={55} bg={'white'} boxShadow={'base'}>
-              <VStack spacing={0}>
+          <Flex bg={'#F3F5F8'} justifyContent={'center'}>
+            <Flex direction={'column'} marginTop={55} bg={'white'} boxShadow={'base'} >
+              <VStack spacing={0} >
                 <Flex w={1000} justifyContent={'center'}>
                   <Box w={850} boxShadow="base">
                     <Flex h={62} bg={"#6768AB"}>
@@ -417,7 +413,7 @@ export default function Group() {
                   </Box>
                 </Flex>
 
-                <img src={data.banner} height={478} width={850}></img>
+                <img boxShadow={'base'} src={data.banner} height={478} width={850}></img>
 
                 <Flex direction={'column'} bg={'#F3F5F8'} boxShadow={'base'}>
                   <Center
@@ -432,7 +428,7 @@ export default function Group() {
                     {data.name ? data.name : "ชื่อคอมมู"}
                   </Center>
 
-                  <Tabs isFitted w={850}>
+                  <Tabs isFitted w={850} boxShadow={'base'}>
                     <TabList fontFamily={"Sarabun"}>
                       <Tab>Detail</Tab>
                       <Tab>Document</Tab>
@@ -1110,7 +1106,7 @@ export default function Group() {
                                           maxWidth={180}
                                           h={'auto'}
                                         >
-                                            {link.link} 
+                                          {link.link}
                                         </Center>
                                       </Flex>
                                       <Center w={50}></Center>
@@ -1315,11 +1311,11 @@ export default function Group() {
                             />
                           )}
                           {/* <Box
-                          as="iframe"
-                          src={data.doclink}
-                          w="850"
-                          h="100%"
-                        ></Box> */}
+                as="iframe"
+                src={data.doclink}
+                w="850"
+                h="100%"
+              ></Box> */}
                         </Center>
                       </TabPanel>
 
@@ -1344,8 +1340,8 @@ export default function Group() {
                             <Flex
                               bg={'white'}
                               borderRadius={'full'}
-                              // borderRightRadius={5}
-                              // boxShadow='base'
+                            // borderRightRadius={5}
+                            // boxShadow='base'
                             >
                               <Flex
                                 bg={'#6768AB'}
@@ -1409,7 +1405,7 @@ export default function Group() {
 
               </VStack>
 
-              <Flex justifyContent={'center'}>
+              <Flex justifyContent={'center'} >
                 <Flex justifyContent={'center'} boxShadow={'base'} bg={'#F3F5F8'} w={850}>
                   <Commentsection
                     gid={id}
@@ -1421,11 +1417,10 @@ export default function Group() {
               </Flex>
 
 
-              {/* <Text>TEST 1234</Text> */}
-            </Box>
 
-
+            </Flex>
           </Flex>
+
         )}
 
         <Modal onClose={onDelClose} isOpen={isDelOpen} isCentered>
@@ -1449,7 +1444,8 @@ export default function Group() {
         </Modal>
 
         <Footer />
-      </Box>
+      </Flex>
+
     </Box>
   );
 }
