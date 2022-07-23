@@ -118,7 +118,7 @@ export const Member = ({ data, gid }) => {
       <Box overflowX={"auto"} mt={5} mb={5}>
         <Box
           padding={2}
-          bg="blue"
+          bg="blue.300"
           textColor={"white"}
           display="inline-block"
           borderRadius={10}
@@ -138,6 +138,7 @@ export const Member = ({ data, gid }) => {
         }}
         value={searchstr}
         bg="white"
+        placeholder="ชื่อโปรไฟล์ที่ใช่"
       />
 
       <Flex mt={3} justifyContent={"space-between"}>
@@ -252,6 +253,7 @@ export const Member = ({ data, gid }) => {
         }}
         value={searchstr}
         bg="white"
+        placeholder="ชื่อคาร์แรกเตอร์ที่ชอบ"
       />
       <Flex mt={3} justifyContent={"space-between"}>
         <Flex>

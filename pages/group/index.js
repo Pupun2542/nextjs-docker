@@ -29,6 +29,7 @@ import {
   Button,
 } from '@chakra-ui/react';
 import Footer from "../../components/footer";
+import { ChatBar } from "../../components/ChatBar";
 
 
 export default function Groups() {
@@ -66,10 +67,10 @@ export default function Groups() {
 
           <CustomNavbar />
 
-          <Flex 
-          boxShadow={'base'} 
-          justifyContent={'center'} 
-          paddingTop={55}
+          <Flex
+            boxShadow={'base'}
+            justifyContent={'center'}
+            paddingTop={55}
           >
 
             <Center bg={'white'} boxShadow={'base'} flexDir={'column'} >
@@ -88,6 +89,9 @@ export default function Groups() {
               <GroupCard />
             </Center>
 
+            {user && (
+              <ChatBar />
+            )}
           </Flex>
           <Footer />
         </Box>
