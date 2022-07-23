@@ -1333,13 +1333,13 @@ export default function Group() {
                           </Center>
                         </Center>
 
-                        <SimpleGrid columns={3} spacing={10}>
+                        <SimpleGrid columns={3} spacing={2} pl={1} pr={1}>
                           {Object.values(data.staff).map((staff) => (
                             <Flex
                               bg={'white'}
                               borderRadius={'full'}
                               // borderRightRadius={5}
-                              boxShadow='base'
+                              // boxShadow='base'
                             >
                               <Flex
                                 bg={'#6768AB'}
@@ -1351,6 +1351,7 @@ export default function Group() {
                                   w={75}
                                   h={75}
                                   color={"white"}
+                                  boxShadow={'base'}
                                   src={staff.photoURL}
                                   name={staff.displayName}
                                 />
@@ -1358,11 +1359,15 @@ export default function Group() {
 
                               <Flex direction={'column'}>
                                 <Box
+                                  minWidth={190}
                                   w={'100%'}
                                   bg={'#6768AB'}
                                   fontSize={18}
                                   color={'white'}
                                   borderTopRightRadius={5}
+                                  pl={2}
+                                  boxShadow={'base'}
+                                  fontFamily={'SarabunSB'}
                                 >
                                   {Object.keys(data.creator).includes(staff.uid)
                                     ? "Owner"
@@ -1370,10 +1375,14 @@ export default function Group() {
                                 </Box>
 
                                 <Box
+                                  h={'100%'}
                                   bg={'white'}
                                   borderBottomRightRadius={5}
                                   ml={-10}
                                   pl={12}
+                                  mt={2}
+                                  fontFamily={'Sarabun'}
+                                  boxShadow={'base'}
                                 >
                                   {staff.displayName}
                                 </Box>

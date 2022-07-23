@@ -131,7 +131,7 @@ export const Replypost = ({ replydoc, message, setMessage }) => {
   };
 
   return (
-    <Flex>
+    <Flex mt={2} p={1} borderRadius={5} boxShadow={'base'} bg={'#F3F5F8'}>
       {/* <VStack spacing={0} mt={5} mr={5}>
         <Box
           w={"22px"}
@@ -153,9 +153,10 @@ export const Replypost = ({ replydoc, message, setMessage }) => {
 
       <Flex
         width="100%"
+        bg={'white'}
         borderRadius={10}
         boxShadow="base"
-        marginTop="10px"
+        // marginTop="10px"
       >
         <Center flexGrow={1} h={70} m={2.5}>
           <Avatar

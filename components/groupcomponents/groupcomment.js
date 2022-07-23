@@ -531,8 +531,7 @@ export const Commentpost = ({
               // onChange={(e) => console.log(e.target.)}
               width="100%"
               placeholder="Write Something"
-              height="45px"
-              backgroundColor="gray.100"
+              backgroundColor="#F3F5F8"
               onPaste={handleImagePaste}
               ref={commentinputref}
             />
