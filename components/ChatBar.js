@@ -115,23 +115,24 @@ export const ChatBar = ({
     <Box
       bg={"#343434"}
       position={"fixed"}
-      right={"0"}
+      right={isExpanded ? "0" : "-110px"}
+      transition={'all 0.2s'}
       p={1}
       h={"100vh"}
       pt={"55px"}
-      w={isExpanded ? "180px" : "70px"}
+      w={"180px"}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
-      display={[
-        "none",
-        "none",
-        displayWithMsg.length > 0 && displayNoMsg.length > 0
-          ? "initial"
-          : "none",
-        displayWithMsg.length > 0 && displayNoMsg.length > 0
-          ? "initial"
-          : "none",
-      ]}
+      // display={[
+      //   "none",
+      //   "none",
+      //   displayWithMsg.length > 0 && displayNoMsg.length > 0
+      //     ? "initial"
+      //     : "none",
+      //   displayWithMsg.length > 0 && displayNoMsg.length > 0
+      //     ? "initial"
+      //     : "none",
+      // ]}
     >
       <VStack align={"start"} spacing={0} mt={1} mb={1}>
         {displayWithMsg?.map((data) => (
