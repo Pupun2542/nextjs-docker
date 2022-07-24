@@ -57,6 +57,7 @@ const UseChatManager = () => {
           member: [user.uid],
           type: "group",
           name: groupName,
+          gid: gid
         });
         await updateDoc(doc(db, "group", gid),{
           mainchatgroup: ref.id
@@ -84,6 +85,7 @@ const UseChatManager = () => {
         changeTab(docId.id);
       }
     } else {
+      console.log(gid)
       alert("คอมมูยังไม่มีแช็ทกลุ่ม")
     }
   };

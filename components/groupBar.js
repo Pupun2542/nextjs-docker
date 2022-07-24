@@ -98,12 +98,11 @@ export const GroupBar = ({ id, data, user }) => {
             <Button maxW={330} w={"100%"}>
                 Pin
             </Button>
-            {console.log((true && true) || false)}
             {((data.isStaff && data.mainchatgroup) || !data.isStaff) && (
                 <Button
                     maxW={330}
                     w={"100%"}
-                    onClick={() => goToCommuGroupMessage(data, id, user)}
+                    onClick={() => goToCommuGroupMessage(id, user)}
                 >
                     Group chat
                 </Button>

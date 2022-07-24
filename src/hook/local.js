@@ -94,6 +94,7 @@ export const OpenChatTabProvider = ({ children }) => {
     tabDispatcher({ type: "removeTab", payload });
   };
   const changeTab = (payload) => {
+    console.log(payload);
     tabDispatcher({ type: "changeOpenTab", payload });
   };
   const CloseTab = () => {
