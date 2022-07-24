@@ -76,11 +76,11 @@ const UseChatManager = () => {
     );
     if (!snapshot.empty) {
       const docId = snapshot.docs[0];
-      if (docId.data().member.includes(user.id)) {
+      if (docId.data().member.includes(user.uid)) {
         changeTab(docId.id);
       } else {
         await updateDoc(doc(db, "chatrooms", docId.id), {
-          member: arrayUnion(user.id),
+          member: arrayUnion(user.uid),
         });
         changeTab(docId.id);
       }
