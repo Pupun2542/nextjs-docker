@@ -65,6 +65,7 @@ import { useGroupData } from "../../../src/hook/useGroupData";
 import { usePost } from "../../../src/hook/usePost";
 import { Skeletonpost } from "../../../components/groupcomponents/skeletonpost";
 import Postsection from "../../../components/groupcomponents/Postsection";
+import { GroupBar } from "../../../components/groupBar";
 
 // export async function getServerSideProps(context) {
 //   const { params } = context;
@@ -92,7 +93,7 @@ function dashboard() {
   // const inputFileRef = useRef(null);
   // const submitRef = useRef(null);
   const { data, loading, onRefresh } = useGroupData(id, user);
-  
+
   // const setPostData = (value) => {
   //   dispatch({ type: "setMultiple", value: value });
   // };
@@ -290,6 +291,7 @@ function dashboard() {
         <CustomNavbar />
 
         <Flex justifyContent={"center"}>
+          <GroupBar />
           <Flex
             pt={55}
             fontFamily={"Sarabun"}
@@ -305,6 +307,7 @@ function dashboard() {
               maxW={800}
               boxShadow="base"
             >
+
               <VStack w={"100%"} spacing={0}>
                 <Flex w={"100%"}>
                   <Center
