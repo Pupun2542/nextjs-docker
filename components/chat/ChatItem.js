@@ -10,6 +10,7 @@ import {
   ModalBody,
   ModalCloseButton,
   VStack,
+  Avatar,
 } from "@chakra-ui/react";
 
 export const ChatItem = ({ doc, user }) => {
@@ -59,9 +60,10 @@ export const ChatItem = ({ doc, user }) => {
 
         ) : (
           <VStack float={'left'} spacing={0} align={'stretch'} minW={280} maxW={320} marginBottom={0}>
-            <Box>
+            <Flex alignContent={"center"}>
+              <Avatar src={doc.sender.photoURL} name={doc.sender.displayName} h={"18px"} w={"18px"}/>
               <Text fontSize={12}>{doc.sender.displayName}</Text>
-            </Box>
+            </Flex>
 
             <Box>
               {doc.text && (

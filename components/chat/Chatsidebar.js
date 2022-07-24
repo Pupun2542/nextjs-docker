@@ -14,6 +14,7 @@ export const Chatsidebar = ({ user, isExpanded }) => {
     <Box
       position="fixed"
       right={isExpanded ? "180px" : "70px"}
+      transition={"all 0.2s"}
       zIndex={10000}
       bottom={0}
       alignItems="flex-end"

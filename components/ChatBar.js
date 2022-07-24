@@ -123,6 +123,7 @@ export const ChatBar = ({
       w={"180px"}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
+      display={{sm: "none", lg:"initial"}}
       // display={[
       //   "none",
       //   "none",
