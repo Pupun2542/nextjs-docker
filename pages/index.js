@@ -58,13 +58,6 @@ import { ChatBar } from "../components/ChatBar";
 
 export default function Home() {
   const router = useRouter();
-  const breakpoints = {
-    sm: '30em',
-    md: '48em',
-    lg: '62em',
-    xl: '80em',
-    '2xl': '96em',
-  };
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
   const { auth } = useApp()
@@ -82,7 +75,7 @@ export default function Home() {
         <Spacer />
         <VStack
           bg={'white'}
-          w={[500, 1000]}
+          minW={["100%", "100%", "500px", "1000px"]}
           boxShadow='base'
           fontFamily={'Sarabun'}
         >

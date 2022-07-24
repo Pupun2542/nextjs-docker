@@ -11,6 +11,8 @@ import {
   collection,
   doc,
   getDocs,
+  limit,
+  onSnapshot,
   orderBy,
   query,
   where,
@@ -29,106 +31,89 @@ export const ChatBar = ({
   const { db } = useApp();
 
   const getUser = useUser();
-  const [display, setDisplay] = useState([]);
-  const { tabState, addTab, removeTab, changeTab, closeTab } = useTab();
-  const [chatroom, setChatroom] = useState([]);
-  const [chatRoomdisplay, setChatRoomDisplay] = useState([]);
+  const [displayWithMsg, setDisplayWithMsg] = useState([]);
+  const { changeTab } = useTab();
+  const [displayNoMsg, setDisplayNoMsg] = useState([]);
+
+  const getHeader = async (chatroomdata) => {
+    let mappeduser = [];
+    await Promise.all(
+      chatroomdata.map(async (data) => {
+        if (user && data.type == "private") {
+          const filteredname = data.member.find((v) => v !== user.uid);
+          const detail = await getUser([filteredname]);
+          const thumbnail = detail[0].photoURL;
+          const name = detail[0].displayName;
+          const isUnreaded = data.readedby?.includes(user.uid) ? true : false;
+          mappeduser = [
+            ...mappeduser,
+            {
+              thumbnail: thumbnail,
+              name: name,
+              id: data.id,
+              unreaded: isUnreaded,
+            },
+          ];
+        } else if (user && data.type == "group") {
+          const thumbnail = data.thumbnail;
+          const name = data.name;
+          const isUnreaded = data.readedby?.includes(user.uid) ? true : false;
+          mappeduser = [
+            ...mappeduser,
+            {
+              thumbnail: thumbnail,
+              name: name,
+              id: data.id,
+              unreaded: isUnreaded,
+            },
+          ];
+        }
+      })
+    );
+    return mappeduser;
+  };
 
   useEffect(() => {
-    const fetchChatRoom = async () => {
-      if (user) {
-        const chatRoomsSnapshot = await getDocs(
-          query(
-            collection(db, "chatrooms"),
-            where("member", "array-contains", user.uid)
-          )
-        );
-        const chatroomdata = chatRoomsSnapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-        chatroomdata.sort((a, b) => {
-          const atime = a.timestamp ? a.timestamp.toDate() : 0;
-          const btime = b.timestamp ? b.timestamp.toDate() : 0;
-          return btime - atime;
-        });
-        setChatroom(chatroomdata);
-      }
-    };
-    fetchChatRoom();
-  }, [user]);
+    const unsubscribe = onSnapshot(
+      query(
+        collection(db, "chatrooms"),
+        where("member", "array-contains", user.uid),
+        limit(20)
+      ),
+      async (chatRoomsSnapshot) => {
+        if (user) {
+          if (!chatRoomsSnapshot.empty) {
+            const chatroomdata = chatRoomsSnapshot.docs.map((doc) => ({
+              ...doc.data(),
+              id: doc.id,
+            }));
+            const chatrommwithmsg = chatroomdata
+              .filter((v, i) => v.timestamp)
+              .slice(0, 5);
+            const chatroomnomsg = chatroomdata.filter((v) => {
+              if (chatrommwithmsg.find((dv) => dv.id == v.id)) {
+                return false;
+              } else {
+                return true;
+              }
+            });
+            chatrommwithmsg.sort((a, b) => {
+              const atime = a.timestamp ? a.timestamp.toDate() : 0;
+              const btime = b.timestamp ? b.timestamp.toDate() : 0;
+              return btime - atime;
+            });
 
-  useEffect(() => {
-    const getHeader = async () => {
-      if (user && chatnotidata) {
-        let mappeduser = [];
-        await Promise.all(
-          chatnotidata.map(async (data) => {
-            if (user && data.type == "private") {
-              const filteredname = data.member.find((v) => v !== user.uid);
-              const detail = await getUser([filteredname]);
-              const thumbnail = detail[0].photoURL;
-              const name = detail[0].displayName;
-              mappeduser = [
-                ...mappeduser,
-                { thumbnail: thumbnail, name: name, id: data.id },
-              ];
-            } else if (user && data.type == "group") {
-              const thumbnail = data.thumbnail;
-              const name = data.name;
-              mappeduser = [
-                ...mappeduser,
-                { thumbnail: thumbnail, name: name, id: data.id },
-              ];
-            }
-          })
-        );
-        // console.log(mappeduser);
-        setDisplay(mappeduser);
-      }
-    };
-    getHeader();
-  }, [user, chatnotidata]);
+            const mappedwithmsg = await getHeader(chatrommwithmsg);
+            const mappednomsg = await getHeader(chatroomnomsg);
 
-  useEffect(() => {
-    const getChatroomHeader = async () => {
-      if (user && (chatroom.length > 0 || display.length > 0)) {
-        let mappeduser = [];
-        const filteredchatroom = chatroom.filter((v) => {
-          if (display.find((dv) => dv.id == v.id)) {
-            return false;
-          } else {
-            return true;
+            setDisplayWithMsg(mappedwithmsg);
+            setDisplayNoMsg(mappednomsg);
           }
-        });
-        // console.log(filteredchatroom);
-        await Promise.all(
-          filteredchatroom.map(async (data) => {
-            if (user && data.type == "private") {
-              const filteredname = data.member.find((v) => v !== user.uid);
-              const detail = await getUser([filteredname]);
-              const thumbnail = detail[0].photoURL;
-              const name = detail[0].displayName;
-              mappeduser = [
-                ...mappeduser,
-                { thumbnail: thumbnail, name: name, id: data.id },
-              ];
-            } else if (user && data.type == "group") {
-              const thumbnail = data.thumbnail;
-              const name = data.name;
-              mappeduser = [
-                ...mappeduser,
-                { thumbnail: thumbnail, name: name, id: data.id },
-              ];
-            }
-          })
-        );
-        // console.log(mappeduser);
-        setChatRoomDisplay(mappeduser);
+        }
       }
-    };
-    getChatroomHeader();
-  }, [chatroom, display]);
+    );
+    return () => unsubscribe();
+  }, [user]);
   return (
     <Box
       bg={"#343434"}
@@ -137,12 +122,22 @@ export const ChatBar = ({
       p={1}
       h={"100vh"}
       pt={"55px"}
-      w={isExpanded ? "180px" : "60px"}
+      w={[null, null, isExpanded ? "180px" : "60px", "180px"]}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
+      display={[
+        "none",
+        "none",
+        displayWithMsg.length > 0 && displayNoMsg.length > 0
+          ? "initial"
+          : "none",
+        displayWithMsg.length > 0 && displayNoMsg.length > 0
+          ? "initial"
+          : "none",
+      ]}
     >
       <VStack align={"start"}>
-        {display?.map((data) => (
+        {displayWithMsg?.map((data) => (
           <HStack
             fontFamily={"mitr"}
             color={"white"}
@@ -154,8 +149,15 @@ export const ChatBar = ({
             {isExpanded && <Text>{data.name}</Text>}
           </HStack>
         ))}
-        <Divider bg={"white"} />
-        {chatRoomdisplay?.map((data) => (
+        <Divider
+          bg={"white"}
+          display={
+            displayWithMsg.length > 0 && displayNoMsg.length > 0
+              ? "initial"
+              : "none"
+          }
+        />
+        {displayNoMsg?.map((data) => (
           <HStack
             fontFamily={"mitr"}
             color={"white"}
