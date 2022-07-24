@@ -2,7 +2,7 @@ import { Avatar, Box, HStack, VStack, Text, Flex, Button } from "@chakra-ui/reac
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-export const GroupBar = ({id}) => {
+export const GroupBar = ({id, data, user}) => {
 
     const router = useRouter();
 
@@ -18,13 +18,13 @@ export const GroupBar = ({id}) => {
             rounded={10}
         >
             <HStack>
-                <Avatar />
+                <Avatar src={user.photoURL} name={user.displayName} />
 
                 <Box>
-                    <Text>Name</Text>
+                    <Text>{user.displayName}</Text>
                     <Flex>
                         <Text mr={2}>Status:</Text>
-                        <Text>Admin/Staff/Player/Guest</Text>
+                        <Text>{data.isOwner? "Owner" : data.isStaff? "Staff" : "Player"}</Text>
                     </Flex>
                 </Box>
             </HStack>
@@ -32,11 +32,11 @@ export const GroupBar = ({id}) => {
             <Button
                 maxW={330}
                 w={'100%'}
-                onClick={() => router.push('../'+id)}
+                onClick={() => router.push(`/group/${id}`)}
             >
                 Lobby
             </Button>
-            <Button maxW={330} w={'100%'}>Dashboard</Button>
+            <Button maxW={330} w={'100%'} onClick={() => router.push(`/group/${id}/dashboard`)}>Dashboard</Button>
             <Button maxW={330} w={'100%'}>Pin</Button>
         </VStack>
     )

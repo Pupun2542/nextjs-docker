@@ -83,31 +83,7 @@ import { Comments } from "../../../components/comments";
 import axios from "axios";
 import { Commentsection } from "../../../components/groupcomponents/previewcommentsection";
 
-// export async function getServerSideProps(context) {
-//   const { params } = context;
-//   const { id } = params;
-//   const res = await fetch(`${process.env.NEXT_PUBLIC_USE_API_URL}/group/${id}`);
-//   let data = await res.json();
-//   let color = "";
-//   if (data.rating === "NC-21 (ไม่เหมาะสำหรับเยาวชน)") {
-//     color = "#EA4545";
-//     // console.log(d.data().rating);
-//   } else if (data.rating === "R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)") {
-//     color = "#FF912B";
-//     // console.log(d.data().rating);
-//   } else if (data.rating === "R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)") {
-//     color = "#FBBC43";
-//     // console.log(d.data().rating);
-//   } else {
-//     color = "#72994C";
-//     // console.log(d.data().rating);
-//   }
-//   data = {...data, color:color};
-//   return { props: { data } };
-// }
-
 export default function Group() {
-  //{ data }
   const [data, setData] = useState(undefined);
   const { app, auth, db } = useApp();
   const Router = useRouter();
@@ -121,16 +97,12 @@ export default function Group() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [user, loading] = useAuthState(auth);
   const [color, setColor] = useState("");
-  // const color = data.color;
-  // const [loading, setLoading] = useState(false);
   const getUser = useUser();
   const buttonRef = useRef(null);
 
   const { id } = Router.query;
-  /* CSR */
   useEffect(() => {
     const Fetchdata = async () => {
-      // console.log(auth.currentUser)
       const token = await auth.currentUser.getIdToken();
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${id}`,
@@ -144,18 +116,13 @@ export default function Group() {
       let color = "";
       if (data.rating === "NC-21 (ไม่เหมาะสำหรับเยาวชน)") {
         color = "#EA4545";
-        // console.log(d.data().rating);
       } else if (data.rating === "R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)") {
         color = "#FF912B";
-        // console.log(d.data().rating);
       } else if (data.rating === "R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)") {
         color = "#FBBC43";
-        // console.log(d.data().rating);
       } else {
         color = "#72994C";
-        // console.log(d.data().rating);
       }
-      // data = { ...data, color: color };
       setColor(color);
       setData(data);
     };
@@ -163,7 +130,6 @@ export default function Group() {
       Fetchdata();
     }
   }, [id, loading]);
-  /* CSR */
   useEffect(() => {
     if (user) {
       getDoc(doc(db, "userDetail", user.uid)).then((snap) => {
@@ -203,11 +169,9 @@ export default function Group() {
         setPin(true);
       }
     }
-    // console.log("handledpin")
   };
 
   const removehandler = () => {
-    // console.log("remove");
     if (user && user.uid == data.creator.uid) {
       onDelOpen();
     }
@@ -217,7 +181,6 @@ export default function Group() {
       deleteDoc(doc(db, "group", id));
       Router.push("/group");
     } else {
-      // console.log(text, data.tag);
       alert("กรุณากรอกข้อมูลอีกครั้ง");
     }
   };
@@ -258,9 +221,7 @@ export default function Group() {
             },
           }
         );
-        console.log(res);
         if (res.status === 200) {
-          console.log(data.love.filter((v, i) => v !== user.uid));
           setData({
             ...data,
             love: data.love.filter((v, i) => v !== user.uid),
@@ -286,7 +247,6 @@ export default function Group() {
           },
         }
       );
-      console.log(res);
       Router.push(`/group/${id}/dashboard`);
     }
   };
@@ -380,7 +340,6 @@ export default function Group() {
                         icon={<CalendarBlank size={32} />}
                         isDisabled
                       />
-                      {console.log(data)}
                       {user &&
                         Object.keys(data.creator).includes(
                           auth.currentUser?.uid
@@ -403,7 +362,6 @@ export default function Group() {
                                   _hover={{ background: "#E2E8F0" }}
                                   onClick={
                                     () => Router.push("/group/" + id + "/edit")
-                                    // console.log("edit")
                                   }
                                 >
                                   <Text>Edit</Text>
@@ -554,7 +512,6 @@ export default function Group() {
                               handleEnterGroup();
                             }}
                           >
-                            {console.log(data.member, auth.currentUser?.uid)}
                             {Object.keys(data.member).includes(
                               auth.currentUser?.uid
                             )
@@ -671,7 +628,6 @@ export default function Group() {
                                       shadow={"base"}
                                       borderRightRadius={10}
                                     >
-                                      {/* {console.log(data.genre)} */}
                                       {data.times && data.genre.length > 0
                                         ? data.genre.map((genre, index) => (
                                             <Box
@@ -757,7 +713,6 @@ export default function Group() {
                                       shadow={"base"}
                                       borderRightRadius={10}
                                     >
-                                      {/* {console.log(data.genre)} */}
                                       {data.times && data.times.length > 0
                                         ? data.times.map((genre, index) => (
                                             <Box
@@ -966,10 +921,6 @@ export default function Group() {
                                     _hover={{ bg: "gray.800" }}
                                     cursor="pointer"
                                   >
-                                    {console.log(
-                                      data.member,
-                                      auth.currentUser?.uid
-                                    )}
                                     {Object.keys(data.member).includes(
                                       auth.currentUser?.uid
                                     )

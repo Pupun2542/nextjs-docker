@@ -29,6 +29,7 @@ export const useGroupData = (gid, user) => {
         ...data,
         ...resdata.data,
         isStaff: Object.keys(resdata.data.staff).includes(user.uid),
+        isOwner: Object.keys(resdata.data.creator).includes(user.uid),
       };
       if (resdata.data.chara) {
         // console.log(resdata.data.chara);
