@@ -22,7 +22,6 @@ function MyApp({ Component, pageProps }) {
         "::-webkit-scrollbar-track": {
           width: "8px",
           height: "8px",
-          backgroundColor: "darkGray"
         },
         "::-webkit-scrollbar-thumb": {
           background: "#727272",
