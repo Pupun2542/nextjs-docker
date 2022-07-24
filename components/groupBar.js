@@ -2,7 +2,7 @@ import { Avatar, Box, HStack, VStack, Text, Flex, Button } from "@chakra-ui/reac
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-export const GroupBar = ({ }) => {
+export const GroupBar = ({id}) => {
 
     const router = useRouter();
 
@@ -32,7 +32,7 @@ export const GroupBar = ({ }) => {
             <Button
                 maxW={330}
                 w={'100%'}
-                onClick={() => router.push('./group/[id]')}
+                onClick={() => router.push('../'+id)}
             >
                 Lobby
             </Button>

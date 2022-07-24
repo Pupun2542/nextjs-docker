@@ -291,7 +291,7 @@ function dashboard() {
         <CustomNavbar />
 
         <Flex justifyContent={"center"}>
-          <GroupBar />
+          <GroupBar id={id} />
           <Flex
             pt={55}
             fontFamily={"Sarabun"}
