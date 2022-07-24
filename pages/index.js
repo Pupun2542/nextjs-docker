@@ -46,7 +46,7 @@ export default function Home() {
   const { auth } = useApp();
   const [user] = useAuthState(auth);
   return (
-    <Box bg={"#F3F5F8"} textAlign={["center", "left"]}>
+    <Box bg={"#F3F5F8"} fontFamily={'Sarabun'} textAlign={["center", "left"]}>
       <CustomNavbar />
 
       <Flex pt={55} justifyContent={"center"}>
@@ -55,7 +55,7 @@ export default function Home() {
           maxW={["100%", "100%", "1000px", "1000px"]}
           bg={"white"}
         >
-          <VStack align={"center"}>
+          <VStack align={"center"} mt={2}>
             <Flex
               align="center"
               justify={{
