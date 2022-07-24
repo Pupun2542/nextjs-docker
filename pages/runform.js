@@ -1,9 +1,19 @@
-import { Box, Flex } from "@chakra-ui/react";
-import React from "react";
+import { Box, Flex, Button } from "@chakra-ui/react";
+import React, { useRef } from "react";
 import { RunFormTemplate } from "../components/commuforms/runForm/runFormTemplate";
 import CustomNavbar from "../components/navbar";
+import Clock from 'react-live-clock';
 
 const Runform = () => {
+  const clockref = useRef(null);
+
+  const onSubmit = () => {
+    for (let index = 0; index < 5; index++) {
+      console.log(clockref.current)
+    }
+    
+  }
+
   return (
     <Box bg={"#F3F5F8"}>
       <CustomNavbar />
@@ -24,6 +34,8 @@ const Runform = () => {
             maxW={800}
             boxShadow="base"
           >
+            <Clock format={'HH:mm:ss'} ticking={true} timezone={'Asia/Bangkok'} interval={1} onChange={(now)=>{clockref.current = now}} />
+            <Button onClick={onSubmit}>submit</Button>
             <RunFormTemplate />
           </Box>
         </Flex>

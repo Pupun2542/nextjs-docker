@@ -44,6 +44,7 @@
     "react-dropzone": "^11.5.1",
     "react-firebase-hooks": "^4.0.1",
     "react-icons": "^4.3.1",
+    "react-live-clock": "^6.0.4",
     "slate": "^0.77.0",
     "slate-history": "^0.66.0",
     "slate-react": "^0.77.0",

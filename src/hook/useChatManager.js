@@ -65,18 +65,23 @@ const UseChatManager = () => {
       }
     }
 
-  const goToCommuGroupMessage = async (data, id, user) => {
-    // console.log(Object.keys(data.member).includes(user.uid))
-    if (data.mainchatgroup) {
-      if (Object.keys(data.member).includes(user.uid)) {
-        console.log("case 1")
-        changeTab(data.mainchatgroup);
+  const goToCommuGroupMessage = async (gid, user) => {
+    const snapshot = await getDocs(
+      query(
+        collection(db, "chatrooms"),
+        where("type", "==", "group"),
+        where("gid", "==", gid)
+      )
+    );
+    if (!snapshot.empty) {
+      const docId = snapshot.docs[0];
+      if (docId.data().member.includes(user.id)) {
+        changeTab(docId.id);
       } else {
-        console.log("case 2")
-        await updateDoc(doc(db, "chatrooms", id), {
-          member: arrayUnion(user.uid),
+        await updateDoc(doc(db, "chatrooms", docId.id), {
+          member: arrayUnion(user.id),
         });
-        changeTab(data.mainchatgroup);
+        changeTab(docId.id);
       }
     } else {
       alert("คอมมูยังไม่มีแช็ทกลุ่ม")
