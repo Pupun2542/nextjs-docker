@@ -20,7 +20,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import UseChatManager from "../src/hook/useChatManager";
-import { FacebookLogo, DiscordLogo } from "phosphor-react";
+import { FacebookLogo, DiscordLogo, ChatCenteredText, ListPlus } from "phosphor-react";
 
 export const GroupBar = ({ id, data, user }) => {
     const router = useRouter();
@@ -83,6 +83,25 @@ export const GroupBar = ({ id, data, user }) => {
                         </DrawerFooter>
                     </DrawerContent>
                 </Drawer>
+                {((data.isStaff && data.mainchatgroup) || !data.isStaff) && (
+                    <IconButton
+                        colorScheme='twitter'
+                        icon={<ListPlus />}
+                        ref={btnRef}
+                        onClick={() => goToCommuGroupMessage(id, user)}
+                        rounded={'full'}
+                    />
+                )}
+
+                {data.isStaff && !data.mainchatgroup && (
+                    <IconButton
+                        colorScheme='facebook'
+                        icon={<ListPlus />}
+                        ref={btnRef}
+                        onClick={() => handleCommuGroupMessage(user, id, data.name)}
+                        rounded={'full'}
+                    />
+                )}
             </HStack>
 
             <Button maxW={330} w={"100%"} onClick={() => router.push(`/group/${id}`)}>
@@ -98,24 +117,6 @@ export const GroupBar = ({ id, data, user }) => {
             <Button maxW={330} w={"100%"}>
                 Pin
             </Button>
-            {((data.isStaff && data.mainchatgroup) || !data.isStaff) && (
-                <Button
-                    maxW={330}
-                    w={"100%"}
-                    onClick={() => goToCommuGroupMessage(id, user)}
-                >
-                    Group chat
-                </Button>
-            )}
-            {data.isStaff && !data.mainchatgroup && (
-                <Button
-                    maxW={330}
-                    w={"100%"}
-                    onClick={() => handleCommuGroupMessage(user, id, data.name)}
-                >
-                    Crate group chat
-                </Button>
-            )}
         </VStack>
     );
 };
