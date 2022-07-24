@@ -8,6 +8,9 @@ import {
   Button,
   Flex,
   Textarea,
+  VStack,
+  StackDivider,
+  Text,
 } from "@chakra-ui/react";
 import { useApp, useTab } from "../../src/hook/local";
 import { doc, runTransaction, arrayUnion } from "firebase/firestore";
@@ -31,6 +34,13 @@ export const ChatBox = ({
   const [image, setImage] = useState(null);
   const [msg, setMsg] = useState("");
   const messagesEndRef = useRef(null);
+  const dropdownref = useRef(null);
+
+  const {
+    isOpen: isSettingOpen,
+    onOpen: onSettingOpen,
+    onClose: onSettingClose,
+  } = useDisclosure();
   const {
     mappedRoomDetail,
     mappedMessage,
@@ -49,6 +59,18 @@ export const ChatBox = ({
       messagesEndRef.current?.scrollIntoView();
     }
   }, [mappedMessage]);
+
+  if (typeof window !== 'undefined') {
+    document.addEventListener("mousedown", (e) => {
+      if (dropdownref.current && !dropdownref.current.contains(e.target)) {
+        onSettingClose();
+      }
+    });
+  }
+
+  useEffect(() => {
+    handleFocus();
+  }, [crid]);
 
   const handleImagePaste = (e) => {
     if (e.clipboardData.files[0]) {
@@ -92,24 +114,35 @@ export const ChatBox = ({
         justifyContent="space-between"
       >
         {/* <Box width="100%"> */}
-        <Box
+        <Flex
           bg={"gray.50"}
           justifyContent="space-between"
           borderTopRadius={10}
           id="headerbox"
+          pos={"relative"}
+          // alignContent={"center"}
         >
           <Image
             src={mappedRoomDetail.thumbnail}
             w={30}
             h={30}
             rounded="full"
-            float="left"
+            // float="left"
             margin={1}
           />
-          <Box float="left" marginLeft={2} marginTop={2} fontSize={'16'}>
-            {mappedRoomDetail.name}
-          </Box>
-          <Box float="right">
+          <Flex
+            width={"calc(100% - 112px)"}
+            // marginLeft={2}
+            // marginTop={2}
+            fontSize={"16"}
+            alignContent={"center"}
+            onClick={onSettingOpen}
+          >
+            <Text paddingTop={"7px"}>{mappedRoomDetail.name}</Text>
+          </Flex>
+          <Box 
+          // float="right"
+          >
             <IconButton
               size={"sm"}
               onClick={onClose}
@@ -128,7 +161,24 @@ export const ChatBox = ({
               float={"left"}
             />
           </Box>
-        </Box>
+          <VStack
+            display={
+              isSettingOpen && mappedRoomDetail.type === "group"
+                ? "initial"
+                : "none"
+            }
+            position={"absolute"}
+            left={"45px"}
+            top={"35px"}
+            bg={"white"}
+            boxShadow="base"
+            divider={<StackDivider borderColor={"gray.200"} />}
+            ref={dropdownref}
+          >
+            <Box>Name</Box>
+            <Box>thumbnail</Box>
+          </VStack>
+        </Flex>
 
         <Box
           overflowY="auto"
@@ -180,7 +230,12 @@ export const ChatBox = ({
           p={1}
           alignItems={"flex-end"}
         >
-          <Box fontFamily={"Sarabun"} w="70%" marginLeft={2}>
+          <Box
+            fontFamily={"Sarabun"}
+            w="70%"
+            marginLeft={2}
+            onClick={handleFocus}
+          >
             <Textarea
               resize="none"
               minHeight={11}
@@ -195,11 +250,10 @@ export const ChatBox = ({
                   handleSent(user.uid, msg, image);
                   setMsg("");
                   setImage("");
-                } 
+                }
               }}
               onChange={(e) => setMsg(e.target.value)}
               onPaste={handleImagePaste}
-
             />
           </Box>
           <Button
