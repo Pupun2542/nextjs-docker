@@ -45,17 +45,20 @@ function GroupCard() {
   const [loading, setLoading] = useState(true);
   const chooseColor = (rating) => {
     // let color = "";
-    if (rating === "NC-21 (ไม่เหมาะสำหรับเยาวชน)") {
-      return "#EA4545";
+    if (rating === "NC-17 (ผู้ที่อายุต่ำกว่า 17 ปีควรไม่ควรรับชม)") {
+      return "#4D4D88";
       // console.log(d.data().rating);
-    } else if (rating === "R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)") {
-      return "#FF912B";
+    } else if (rating === "R (เด็กอายุต่ำกว่า 17 ปีควรได้รับคำแนะนำ)") {
+      return "#FFC75A";
       // console.log(d.data().rating);
-    } else if (rating === "R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)") {
-      return "#FBBC43";
+    } else if (rating === "PG-13 (เด็กอายุต่ำกว่า 13 ปีควรได้รับคำแนะนำ)") {
+      return "#6768AB";
+      // console.log(d.data().rating);
+    } else if (rating === "PG (เด็กควรได้รับคำแนะนำ)") {
+      return "#535353";
       // console.log(d.data().rating);
     } else {
-      return "#72994C";
+      return "#C6C6C6";
       // console.log(d.data().rating);
     }
 
