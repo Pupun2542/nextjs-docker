@@ -114,14 +114,16 @@ export default function Group() {
       );
       let data = res.data;
       let color = "";
-      if (data.rating === "NC-21 (ไม่เหมาะสำหรับเยาวชน)") {
-        color = "#EA4545";
-      } else if (data.rating === "R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)") {
-        color = "#FF912B";
-      } else if (data.rating === "R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)") {
-        color = "#FBBC43";
+      if (data.rating === "NC-17 (ผู้ที่อายุต่ำกว่า 17 ปีควรไม่ควรรับชม)") {
+        color = "#4D4D88";
+      } else if (data.rating === "R (เด็กอายุต่ำกว่า 17 ปีควรได้รับคำแนะนำ)") {
+        color = "#FFC75A";
+      } else if (data.rating === "PG-13 (เด็กอายุต่ำกว่า 13 ปีควรได้รับคำแนะนำ)") {
+        color = "#6768AB";
+      } else if (data.rating === "PG (เด็กควรได้รับคำแนะนำ)") {
+        color = "#535353";
       } else {
-        color = "#72994C";
+        color = "#C6C6C6";
       }
       setColor(color);
       setData(data);

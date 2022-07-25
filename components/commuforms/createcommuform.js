@@ -1128,21 +1128,27 @@ export const Createcommuform = ({ data, uid, gid }) => {
                           </option>
                           <option
                             style={{ backgroundColor: "White" }}
-                            value="R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)"
+                            value="PG (เด็กควรได้รับคำแนะนำ)"
                           >
-                            R-13 (เหมาะสำหรับอายุ 13 ปีขึ้นไป)
+                            PG (เด็กควรได้รับคำแนะนำ)
                           </option>
                           <option
                             style={{ backgroundColor: "White" }}
-                            value="R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)"
+                            value="PG-13 (เด็กอายุต่ำกว่า 13 ปีควรได้รับคำแนะนำ)"
                           >
-                            R-18 (เหมาะสำหรับอายุ 18 ปีขึ้นไป)
+                            PG-13 (เด็กอายุต่ำกว่า 13 ปีควรได้รับคำแนะนำ)
                           </option>
                           <option
                             style={{ backgroundColor: "White" }}
-                            value="NC-21 (ไม่เหมาะสำหรับเยาวชน)"
+                            value="R (เด็กอายุต่ำกว่า 17 ปีควรได้รับคำแนะนำ)"
                           >
-                            NC-21 (ไม่เหมาะสำหรับเยาวชน)
+                            R (เด็กอายุต่ำกว่า 17 ปีควรได้รับคำแนะนำ)
+                          </option>
+                          <option
+                            style={{ backgroundColor: "White" }}
+                            value="NC-17 (ผู้ที่อายุต่ำกว่า 17 ปีควรไม่ควรรับชม)"
+                          >
+                            NC-17 (ผู้ที่อายุต่ำกว่า 17 ปีควรไม่ควรรับชม)
                           </option>
                         </Select>
                       </Center>
