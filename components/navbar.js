@@ -475,7 +475,9 @@ function CustomNavbar() {
                             cursor={"pointer"}
                             key={k}
                             fontSize={18}
+                            p={1}
                             _hover={{
+                              borderRadius: '5',
                               backgroundColor: "gray.100",
                             }}
                           >
