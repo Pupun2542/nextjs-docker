@@ -11,6 +11,7 @@ import {
   VStack,
   StackDivider,
   Text,
+  Avatar,
 } from "@chakra-ui/react";
 import { useApp, useTab } from "../../src/hook/local";
 import { doc, runTransaction, arrayUnion } from "firebase/firestore";
@@ -99,6 +100,7 @@ export const ChatBox = ({
   if (!loading && mappedRoomDetail) {
     return (
       <Box
+        fontFamily={'Sarabun'}
         display={"flex"}
         background="white"
         borderColor={"black"}
@@ -115,14 +117,14 @@ export const ChatBox = ({
       >
         {/* <Box width="100%"> */}
         <Flex
-          bg={"gray.50"}
+          bg={"gray.100"}
           justifyContent="space-between"
           borderTopRadius={10}
           id="headerbox"
           pos={"relative"}
           // alignContent={"center"}
         >
-          <Image
+          <Avatar
             src={mappedRoomDetail.thumbnail}
             w={30}
             h={30}
@@ -162,6 +164,7 @@ export const ChatBox = ({
             />
           </Box>
           <VStack
+            spacing={0}
             display={
               isSettingOpen && mappedRoomDetail.type === "group"
                 ? "initial"
@@ -172,11 +175,12 @@ export const ChatBox = ({
             top={"35px"}
             bg={"white"}
             boxShadow="base"
-            divider={<StackDivider borderColor={"gray.200"} />}
+            rounded={'5'}
+            divider={<StackDivider borderColor={"gray.300"} />}
             ref={dropdownref}
           >
-            <Box>Name</Box>
-            <Box>thumbnail</Box>
+            <Box p={1}>Name</Box>
+            <Box p={1}>thumbnail</Box>
           </VStack>
         </Flex>
 

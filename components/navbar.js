@@ -745,10 +745,11 @@ const ChatNotiIcon = ({ data, user }) => {
     >
       <Flex justifyContent="space-between" marginLeft={2} marginRight={2}  >
         <Flex justifyContent="start">
-          <Image
+          <Avatar
             src={display.thumbnail}
-            height="55px"
-            weight="55px"
+            // height="53px"
+            // weight="53px"
+            size={'md'}
             rounded={100}
             marginRight="15px"
           />
