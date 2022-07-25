@@ -1,6 +1,6 @@
 import React from 'react'
-import { Flex, Box, Center, VStack, Spacer, Divider } from '@chakra-ui/react'
-import { FacebookLogo, DiscordLogo } from 'phosphor-react'
+import { Flex, Box, Center, VStack, Spacer, Divider, HStack } from '@chakra-ui/react'
+import { FacebookLogo, DiscordLogo, TwitterLogo } from 'phosphor-react'
 import { useRouter } from "next/router";
 
 
@@ -13,31 +13,41 @@ function Footer() {
       bg={'#343434'}
       h={180}
       w="100%"
-
+      fontFamily={'Sarabun'}
     >
       <Flex>
         <Center>
           <VStack m={5}>
-            <Box fontFamily={'mitr'} color={'#FFFFFF'}>Comuthor © 2022</Box>
-            <Flex>
-              <FacebookLogo
-                size={32}
-                weight='fill'
-                color={'#FFFFFF'}
-                as='button'
-                cursor={"pointer"}
-                onClick={() => router.push("https://www.facebook.com/ComuthorCorp")}
-              />
-              <Spacer w={5} />
-              <DiscordLogo
-                as='button'
-                cursor={"pointer"}
-                size={32}
-                weight={'fill'}
-                color={'#FFFFFF'}
-                onClick={() => router.push("https://discord.gg/BVrwyCPEHc")}
-              />
-            </Flex>
+            <Box color={'#FFFFFF'}>Comuthor © 2022</Box>
+            <HStack>
+              <a target="_blank" href="https://www.facebook.com/ComuthorCorp">
+                <FacebookLogo
+                  size={32}
+                  weight='fill'
+                  color={'#FFFFFF'}
+                  as='button'
+                  title={'Facebook'}
+                />
+              </a>
+              <a target="_blank" href="https://twitter.com/comuthor">
+                <TwitterLogo
+                  size={32}
+                  weight='fill'
+                  color={'#FFFFFF'}
+                  as='button'
+                />
+              </a>
+
+              <a target="_blank" href="https://discord.com/invite/BVrwyCPEHc">
+                <DiscordLogo
+                  size={32}
+                  weight='fill'
+                  color={'#FFFFFF'}
+                  as='button'
+                />
+              </a>
+
+            </HStack>
           </VStack>
 
         </Center>
@@ -47,7 +57,7 @@ function Footer() {
         </Center>
 
         <Center>
-          <VStack fontFamily={'Mitr'} m={5} color={'#FFFFFF'}>
+          <VStack m={5} color={'#FFFFFF'}>
             <Box
               as='button'
               onClick={() => router.push("/about")}
@@ -65,7 +75,7 @@ function Footer() {
         </Center>
 
         <Center>
-          <VStack m={5} fontFamily={'Mitr'} color={'#FFFFFF'}>
+          <VStack m={5} color={'#FFFFFF'}>
             <Box
               as='button'
               onClick={() => router.push("/policy")}
