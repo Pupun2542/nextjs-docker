@@ -793,7 +793,7 @@ export default function Group() {
                                         bg={"white"}
                                         w={170}
                                         h={63}
-                                        pt={5}
+                                        pt={2}
                                         pl={5}
                                         shadow={"base"}
                                         borderRightRadius={10}
