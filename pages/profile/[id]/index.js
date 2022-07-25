@@ -180,7 +180,7 @@ export default function profile() {
   };
 
   return (
-    <Box fontFamily={"Mitr"}>
+    <Box fontFamily={"Sarabun"}>
       <CustomNavbar />
       {/* {user&&(
         <Chatsidebar db={db} user={user} forcedopenTab={newtab}/>
@@ -193,7 +193,7 @@ export default function profile() {
       >
         {userDetail && (
           <VStack
-            bg={"#EBEBEB"}
+            bg={"#F3F5F8"}
             width="100%"
             maxW={1000}
             minH={914}
@@ -204,7 +204,7 @@ export default function profile() {
               <Center
                 width="100%"
                 maxW={1000}
-                h={563}
+                maxH={563}
                 fontSize={30}
                 boxShadow={"base"}
                 borderBottomRadius={10}
@@ -222,7 +222,7 @@ export default function profile() {
               <Center
                 width="100%"
                 maxW={1000}
-                h={563}
+                maxH={563}
                 fontSize={30}
                 boxShadow={"base"}
                 borderBottomRadius={10}
@@ -272,9 +272,9 @@ export default function profile() {
               </Center>
 
               <Flex w={770} m={2} p={2}>
-                <Flex flexDir={"column"} fontFamily={"Mitr"} w={"75%"}>
+                <Flex flexDir={"column"} w={"100%"} mr={2}>
                   {userDetail && (
-                    <Box fontFamily={"Mitr"} fontSize={30}>
+                    <Box fontSize={30}>
                       {editDisplayNameMode ? (
                         <Box>
                           <Input
@@ -289,7 +289,7 @@ export default function profile() {
                       ) : (
                         <Box>
                           <Text>{userDetail?.displayName}</Text>
-                          <Text fontSize={14}>
+                          <Text whiteSpace={'pre-line'} fontSize={14}>
                             {userDetail?.description
                               ? userDetail.description
                               : "ตรงนี้คือ Profile Description!!"}
