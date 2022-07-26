@@ -290,9 +290,10 @@ export default function Group() {
               marginTop={55}
               bg={"white"}
               boxShadow={"base"}
+              minW={950}
             >
               <VStack spacing={0}>
-                <Flex w={1000} justifyContent={"center"}>
+                <Flex justifyContent={"center"}>
                   <Box w={850} boxShadow="base">
                     <Flex h={62} bg={"#6768AB"}>
                       <IconButton

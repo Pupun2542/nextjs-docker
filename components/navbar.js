@@ -213,15 +213,12 @@ function CustomNavbar() {
               borderColor={"black"}
               onClick={() => router.push("/profile/" + user.uid)}
             >
-              <Center px={0}>
-                <Avatar 
-                borderWidth={2} 
-                borderColor={"black"} 
-                h={41} w={41} 
-                src={user.photoURL} 
-                loading={"lazy"} 
+                <Avatar
+                  h={41} w={41}
+                  src={user.photoURL}
+                  loading={"lazy"}
                 />
-              </Center>
+
 
               <Show above="lg">
                 <Center width={"auto"} h={41} px={5}>
@@ -574,7 +571,7 @@ function CustomNavbar() {
                         Account Settings
                       </MenuItem>
                       <MenuItem
-                      fontFamily={'SarabunSB'}
+                        fontFamily={'SarabunSB'}
                         onClick={() => router.push("/logout")}
                         _hover={{
                           backgroundColor: "gray.300",
@@ -669,7 +666,7 @@ function CustomNavbar() {
         </Center>
       </Box>
       {user && (<ChatBar chatnotidata={chatNotiData} user={user} isExpanded={isCSBExpanded} onEnter={onEnter} onLeave={onLeave} />)}
-      
+
     </Box>
   );
 }
