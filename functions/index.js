@@ -212,19 +212,26 @@ exports.onNotificationAdd = functions
     if (!Array.isArray(sendTo)) {
       sendTo = [sendTo];
     }
-    if (snap.data().notitype === "002" || snap.data().notitype === "101") {
+    if (["002", "101", "101A", "102A", "103A"].includes(snap.data().notitype)) {
       sendTo.map((target) => {
         if (target != snap.data().triggerer) {
           return batch.set(
             db.collection(`userDetail/${target}/notification`).doc(),
             {
-              notitype: snap.data().notitype,
+              notitype: snap.data().other &&
+                snap.data().other.priorityTarget.includes(target) &&
+                snap.data().other.specialType ?
+                snap.data().other.specialType : snap.data().notitype,
               triggerer: [snap.data().triggerer],
               group: snap.data().group,
               object: snap.data().object,
               timestamp: snap.data().timestamp,
               readed: false,
               path: snap.data().path,
+              specialPayload: snap.data().other &&
+                snap.data().other.priorityTarget.includes(target) &&
+                snap.data().other.specialPayload ?
+                snap.data().other.specialPayload : null,
             },
           );
         } else {
@@ -260,13 +267,20 @@ exports.onNotificationAdd = functions
               return batch.set(
                 db.collection(`userDetail/${target}/notification`).doc(),
                 {
-                  notitype: snap.data().notitype,
+                  notitype: snap.data().other &&
+                    snap.data().other.priorityTarget.includes(target) &&
+                    snap.data().other.specialType ?
+                    snap.data().other.specialType : snap.data().notitype,
                   triggerer: [snap.data().triggerer],
                   group: snap.data().group,
                   object: snap.data().object,
                   timestamp: snap.data().timestamp,
                   readed: false,
                   path: snap.data().path,
+                  specialPayload: snap.data().other &&
+                    snap.data().other.priorityTarget.includes(target) &&
+                    snap.data().other.specialPayload ?
+                    snap.data().other.specialPayload : null,
                 },
               );
             }

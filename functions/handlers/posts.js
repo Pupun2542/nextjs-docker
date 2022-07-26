@@ -20,6 +20,8 @@ exports.createPost = async (req, res) => {
         lastactive: admin.firestore.FieldValue.serverTimestamp(),
         charaId: req.body.charaId,
         viewer: [user],
+        mention: req.body.mention,
+        tag: req.body.tag,
       });
       const batch = db.batch();
       if (req.body.imageUrl.length > 0) {
@@ -50,6 +52,14 @@ exports.createPost = async (req, res) => {
           req.params.gid,
           "",
           `group/${req.params.gid}/dashboard?pid=${ref.id}`,
+          req.body.mention? {
+            priorityTarget: req.body.mention.map((tgt)=> tgt.parentId),
+            specialPayload: {
+              mention: req.body.mention,
+              charapost: req.body.charaId,
+            },
+            specialType: "101A",
+          } : undefined,
       );
       return res.status(200).send("create post success");
     } else {
