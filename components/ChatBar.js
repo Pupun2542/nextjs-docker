@@ -124,7 +124,7 @@ export const ChatBar = ({
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
       display={{sm: "none", lg:"initial"}}
-      zIndex={10000}
+      zIndex={9999}
       // display={[
       //   "none",
       //   "none",
