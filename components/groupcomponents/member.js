@@ -251,7 +251,7 @@ export const Member = ({ data, gid }) => {
           onSearchChara(e.target.value.trim());
           setSearchcharastr(e.target.value.trim());
         }}
-        value={searchstr}
+        value={searchcharastr}
         bg="white"
         placeholder="ชื่อคาร์แรกเตอร์ที่ชอบ"
       />

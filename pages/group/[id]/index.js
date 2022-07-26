@@ -82,6 +82,7 @@ import {
 import { Comments } from "../../../components/comments";
 import axios from "axios";
 import { Commentsection } from "../../../components/groupcomponents/previewcommentsection";
+import { GroupBar } from "../../../components/groupBar";
 
 export default function Group() {
   const [data, setData] = useState(undefined);
@@ -283,6 +284,7 @@ export default function Group() {
       >
         {!loading && data && (
           <Flex bg={"#F3F5F8"} justifyContent={"center"}>
+            <GroupBar id={id} data={data} user={user} />
             <Flex
               direction={"column"}
               marginTop={55}

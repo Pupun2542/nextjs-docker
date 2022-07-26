@@ -29,6 +29,10 @@ import {
   MenuItem,
   Avatar,
   useDisclosure,
+  VStack,
+  HStack,
+  CloseButton,
+  Wrap,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { Skeletonpost } from "./skeletonpost";
@@ -36,6 +40,9 @@ import { usePost } from "../../src/hook/usePost";
 import { CaretDown, ImageSquare } from "phosphor-react";
 import { isEmptyOrSpaces } from "../../src/services/utilsservice";
 import { GroupPost } from "./post";
+import DropdownCheckBox from "../commonComponent/DropdownCheckBox";
+import useCharaList from "../../src/hook/useCharaList";
+import MentionBox from "../commonComponent/MentionBox";
 export const PostContext = createContext();
 const Postsection = ({ data, pid, user, id }) => {
   const [orderby, setOrderby] = useState("timestamp");
@@ -47,6 +54,25 @@ const Postsection = ({ data, pid, user, id }) => {
   const [selectedchara, setSelectedchara] = useState({});
   const inputFileRef = useRef(null);
   const submitRef = useRef(null);
+  const [tag, setTag] = useState([]);
+
+  const {
+    isOpen: isMentionOpen,
+    onOpen: onMentionOpen,
+    onClose: onMentionClose,
+  } = useDisclosure();
+  const mentionRef = useRef(null);
+  const [mention, setMention] = useState([]);
+  const { charaSearchResult, onSearchChara } = useCharaList(data, id);
+  const [searchstr, setsearchstr] = useState("");
+
+  if (typeof window !== "undefined") {
+    document.addEventListener("mousedown", (e) => {
+      if (mentionRef.current && !mentionRef.current.contains(e.target)) {
+        onMentionClose();
+      }
+    });
+  }
 
   const reducer = (state, action) => {
     switch (action.type) {
@@ -205,24 +231,22 @@ const Postsection = ({ data, pid, user, id }) => {
 
   const resizeTextArea = (e) => {
     e.target.style.height = "inherit";
-    e.target.style.height = `${e.target.scrollHeight}px`;
+    e.target.style.height = `${e.target.scrollHeight}px`; 
     // In case you have a limitation
     // e.target.style.height = `${Math.min(e.target.scrollHeight, limit)}px`;
   };
 
   const handleSent = async () => {
-    console.log(!isEmptyOrSpaces(message), image.length > 0);
     if (!isEmptyOrSpaces(message) || image.length > 0) {
       let dlurl = "";
       if (image.length > 0) {
         dlurl = await UploadGroupImage(image, user.uid, id);
-        // console.log(dlurl);
       }
       const token = await user.getIdToken();
       onClose();
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${id}/create/`,
-        { message: message, imageUrl: dlurl, charaId: selectedchara.refererId },
+        { message: message, imageUrl: dlurl, charaId: selectedchara.refererId, tag: tag, mention: mention },
         {
           headers: {
             Authorization: token,
@@ -237,6 +261,90 @@ const Postsection = ({ data, pid, user, id }) => {
       setMessage("");
       setImage([]);
     }
+  };
+
+  const removeTags = (indexToRemove) => {
+    setMention([...mention.filter((_, index) => index !== indexToRemove)]);
+  };
+  const onSelectChara = (chara) => {
+    setMention([...mention, chara]);
+    onSearchChara("");
+    setsearchstr("");
+  };
+
+  const filteredcharaSearchResult = charaSearchResult.filter((v,i)=> !mention.includes(v));
+  // console.log(filteredcharaSearchResult)
+
+  const Hashtag = (props) => {
+    const removeTags = (indexToRemove) => {
+      props.setState([
+        ...props.state.filter((_, index) => index !== indexToRemove),
+      ]);
+    };
+    const addTags = (event) => {
+      let tag = event.target.value.replace(",", "");
+      tag = tag.trim();
+      if (tag !== "") {
+        props.setState([...props.state, tag]);
+        // props.selectedTags([...props.state, tag]);
+        event.target.value = "";
+      }
+    };
+    return (
+      <Box w={"100%"} h={"auto"} float={"left"}>
+        <Box>
+          <Box id="tags" mt={1.5} mb={1.5}>
+            {props.state.map((tag, index) => (
+              <HStack
+                key={index}
+                bg={"#6768AB"}
+                color="white"
+                borderRadius={10}
+                pt={1}
+                pb={1}
+                pl={2}
+                pr={2}
+                // maxW={200}
+                float="left"
+                spacing={2.5}
+                mr={0.5}
+                ml={0.5}
+                mt={0.5}
+                mb={0.5}
+                fontSize={16}
+                w={"auto"}
+              >
+                <Box>{tag}</Box>
+                <CloseButton
+                  onClick={() => removeTags(index)}
+                  rounded={"full"}
+                  bg="white"
+                  color={"black"}
+                  h={5}
+                  w={5}
+                />
+              </HStack>
+            ))}
+            <Input
+              type="text"
+              onKeyUp={(event) => (event.key === "," ? addTags(event) : null)}
+              placeholder=" ใช้ , เพื่อแบ่งประเภท"
+              w={"auto"}
+              isDisabled={props.isDisabled}
+              // border="hidden"
+              maxW={200}
+              float="left"
+              mr={0.5}
+              ml={1}
+              mb={2}
+              mt={0.5}
+              fontSize={16}
+              h={31}
+            />
+          </Box>
+        </Box>
+      </Box>
+    );
   };
 
   return (
@@ -284,7 +392,6 @@ const Postsection = ({ data, pid, user, id }) => {
       {/* โพสต์ */}
       {/* {console.log(post)} */}
       <PostContext.Provider value={pack}>
-        
         {post &&
           Array.isArray(post) &&
           post.map((apost, i) => (
@@ -395,7 +502,18 @@ const Postsection = ({ data, pid, user, id }) => {
                   Tag
                 </Center>
                 <Center p={1} width={"100%"}>
-                  <Input width={"100%"} bg={"white"}></Input>
+                  <Hashtag state={tag} setState={setTag} />
+                </Center>
+              </Flex>
+            </Center>
+
+            <Center w={"100%"} bg={"#F3F5F8"} mb={2} rounded={5}>
+              <Flex width={"100%"}>
+                <Center pl={3} pr={2} fontFamily={"SarabunSB"}>
+                  Mention
+                </Center>
+                <Center p={1} width={"100%"}>
+                  <MentionBox data={data} id={id} mention={mention} setMention={setMention} />
                 </Center>
               </Flex>
             </Center>
@@ -438,7 +556,7 @@ const Postsection = ({ data, pid, user, id }) => {
                   </Box>
                 ))}
             </Box>
-            <Flex justifyContent={"flex-end"}>
+            <Flex justifyContent={"flex-end"} pos={"relative"}>
               <Button
                 leftIcon={<ImageSquare size={16} />}
                 onClick={handleFile}
@@ -449,6 +567,20 @@ const Postsection = ({ data, pid, user, id }) => {
               >
                 เพิ่มรูปภาพ
               </Button>
+              {/* <Button
+                leftIcon={<ImageSquare size={16} />}
+                onClick={onMentionOpen}
+                fontFamily={"Sarabun"}
+                fontWeight={"light"}
+                fontSize={14}
+                boxShadow="base"
+              >
+                กล่าวถึง
+              </Button>
+              <Box position={"absolute"} display={isMentionOpen? "initial": "none"} left={0} top={"50px"} ref={mentionRef}>
+                <DropdownCheckBox data={data} gid={id} onSubmit={()=>{}}/>
+              </Box> */}
+
               <Spacer />
               <Button
                 onClick={() => {
@@ -463,6 +595,7 @@ const Postsection = ({ data, pid, user, id }) => {
               >
                 Send
               </Button>
+              <Box position={"absolute"}></Box>
             </Flex>
           </ModalBody>
         </ModalContent>
