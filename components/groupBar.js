@@ -92,11 +92,13 @@ export const GroupBar = ({ id, data, user }) => {
                         ref={btnRef}
                         onClick={() => goToCommuGroupMessage(id, user)}
                         rounded={'full'}
+                        title='Chats'
                     />
                 )}
 
                 {data.isStaff && !data.mainchatgroup && (
                     <IconButton
+                        title='Chats'
                         colorScheme='facebook'
                         icon={<ListPlus />}
                         ref={btnRef}
