@@ -1,4 +1,4 @@
-import { Box, Button, Center, Flex, HStack, Spinner } from '@chakra-ui/react'
+import { Box, Button, Center, Flex, HStack, Spinner, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import React from 'react'
 import useStaffList from '../../src/hook/useStaffList'
 import Staffcard from './staffcard'
@@ -11,19 +11,36 @@ const Setting = ({ data, gid }) => {
 
   return (
     <Box>
-      <HStack w={'100%'}>
-        <UserSearchInput onSelect={(v) => addStaff(v.uid, v)} />
+      <Tabs orientation='vertical'>
+        <TabList fontFamily={'SarabunSB'} maxW={'150px'} w={'100%'}>
+          <Tab>Admin Setting</Tab>
+          <Tab>Two</Tab>
+        </TabList>
 
-        <Center>
-          <Button onClick={commitStaffChange} justifySelf={"end"} bg={'teal'} color={'white'} disabled={loading}>ยืนยัน</Button>
-          {loading && (<Spinner />)}
-        </Center>
+        <TabPanels>
+          {/* initially mounted */}
+          <TabPanel>
+            <HStack w={'100%'}>
+              <UserSearchInput onSelect={(v) => addStaff(v.uid, v)} />
 
-      </HStack>
+              <Center>
+                <Button onClick={commitStaffChange} justifySelf={"end"} bg={'teal'} color={'white'} disabled={loading}>บันทึก</Button>
+                {loading && (<Spinner />)}
+              </Center>
 
-      {getStaff()?.map((staff) => (
-        <Staffcard detail={staff} role={Object.keys(data.creator).includes(staff.uid) ? "owner" : "staff"} onRemove={() => removeStaff(staff.uid)} />
-      ))}
+            </HStack>
+
+            {getStaff()?.map((staff) => (
+              <Staffcard detail={staff} role={Object.keys(data.creator).includes(staff.uid) ? "owner" : "staff"} onRemove={() => removeStaff(staff.uid)} />
+            ))}
+          </TabPanel>
+          {/* initially not mounted */}
+          <TabPanel>
+            <p>two!</p>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+
     </Box>
   )
 }

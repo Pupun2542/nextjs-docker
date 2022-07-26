@@ -38,11 +38,13 @@ export const GroupBar = ({ id, data, user }) => {
             p={5}
             bg={"white"}
             rounded={10}
+            w={'100%'}
+            maxWidth={'445px'}
         >
-            <HStack>
+            <HStack w={'100%'} >
                 <Avatar src={user.photoURL} name={user.displayName} />
 
-                <Box>
+                <Box w={'100%'}>
                     <Text>{user.displayName}</Text>
                     <Flex>
                         <Text mr={2}>Status:</Text>
@@ -52,13 +54,13 @@ export const GroupBar = ({ id, data, user }) => {
                     </Flex>
                 </Box>
 
-                <IconButton
+                {/* <IconButton
                     colorScheme='facebook'
                     icon={<FacebookLogo />}
                     ref={btnRef}
                     onClick={onOpen}
                     rounded={'full'}
-                />
+                /> */}
 
                 <Drawer
                     isOpen={isOpen}
@@ -104,17 +106,16 @@ export const GroupBar = ({ id, data, user }) => {
                 )}
             </HStack>
 
-            <Button maxW={330} w={"100%"} onClick={() => router.push(`/group/${id}`)}>
+            <Button w={"100%"} onClick={() => router.push(`/group/${id}`)}>
                 Lobby
             </Button>
             <Button
-                maxW={330}
                 w={"100%"}
                 onClick={() => router.push(`/group/${id}/dashboard`)}
             >
                 Dashboard
             </Button>
-            <Button maxW={330} w={"100%"}>
+            <Button w={"100%"}>
                 Pin
             </Button>
         </VStack>

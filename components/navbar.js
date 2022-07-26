@@ -207,14 +207,20 @@ function CustomNavbar() {
           >
             <Center
               bg="white"
-              rounded={50}
+              rounded={'full'}
               minHeight={38}
               borderWidth={2}
               borderColor={"black"}
               onClick={() => router.push("/profile/" + user.uid)}
             >
               <Center px={0}>
-                <Avatar h={41} w={41} src={user.photoURL} loading={"lazy"} />
+                <Avatar 
+                borderWidth={2} 
+                borderColor={"black"} 
+                h={41} w={41} 
+                src={user.photoURL} 
+                loading={"lazy"} 
+                />
               </Center>
 
               <Show above="lg">
