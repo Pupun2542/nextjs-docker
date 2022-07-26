@@ -40,6 +40,7 @@ export const GroupBar = ({ id, data, user }) => {
             rounded={10}
             w={'100%'}
             maxWidth={'445px'}
+            display={{sm: "none", lg:"initial"}}
         >
             <HStack w={'100%'} >
                 <Avatar src={user.photoURL} name={user.displayName} />

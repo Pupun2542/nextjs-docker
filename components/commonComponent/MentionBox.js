@@ -70,21 +70,32 @@ const MentionBox = ({ data, id, mention, setMention }) => {
               type="text"
               placeholder={"เลือกตัวละครที่ต้องการกล่าวถึง"}
               w={"auto"}
-              maxW={200}
+              maxW={330}
               float="left"
-              mr={0.5}
-              ml={1}
-              mb={2}
-              mt={0.5}
+              // mr={0.5}
+              // ml={1}
+              // mb={2}
+              // mt={0.5}
               fontSize={16}
               h={31}
-            ></Input>
-            <VStack position={"absolute"} top={"30px"} bg={"white"}>
+            />
+            <VStack 
+            position={"absolute"} 
+            p={1} 
+            top={"35px"} 
+            bg={"white"}
+            borderRadius={5}
+            >
               {filteredcharaSearchResult.map((char) => (
                 <Box
                   onClick={() => onSelectChara(char)}
                   width={"100%"}
+                  borderRadius={5}
                   cursor={"pointer"}
+                  p={1}
+                  _hover={{
+                    bg: '#F3F5F8'
+                  }}
                 >
                   {char.name}
                 </Box>
