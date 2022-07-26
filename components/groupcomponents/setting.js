@@ -11,9 +11,14 @@ const Setting = ({ data, gid }) => {
 
   return (
     <Box>
-      <Tabs orientation='vertical'>
-        <TabList fontFamily={'SarabunSB'} maxW={'150px'} w={'100%'}>
-          <Tab>Admin Setting</Tab>
+      <Tabs orientation='vertical' variant='unstyled' colorScheme='green'>
+        <TabList 
+          fontFamily={'SarabunSB'} 
+          maxW={'150px'} 
+          w={'100%'}
+          borderRightWidth={'3px'}
+          >
+          <Tab mr={2} _selected={{ color: 'white', bg: 'blue.500', borderRadius: '10px' }}>Admin Setting</Tab>
         </TabList>
 
         <TabPanels>
