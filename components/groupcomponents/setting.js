@@ -14,7 +14,6 @@ const Setting = ({ data, gid }) => {
       <Tabs orientation='vertical'>
         <TabList fontFamily={'SarabunSB'} maxW={'150px'} w={'100%'}>
           <Tab>Admin Setting</Tab>
-          <Tab>Two</Tab>
         </TabList>
 
         <TabPanels>
@@ -35,9 +34,7 @@ const Setting = ({ data, gid }) => {
             ))}
           </TabPanel>
           {/* initially not mounted */}
-          <TabPanel>
-            <p>two!</p>
-          </TabPanel>
+          
         </TabPanels>
       </Tabs>
 
