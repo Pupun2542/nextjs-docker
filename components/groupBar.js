@@ -66,7 +66,7 @@ export const GroupBar = ({
           bg={"white"}
           rounded={10}
           w={"100%"}
-          maxWidth={"300px"}
+          maxWidth={{ xl: '350px', '2xl':"450px"}}
           display={{ sm: "none", xl: "initial" }}
           zIndex={20000}
         >
@@ -77,7 +77,7 @@ export const GroupBar = ({
             />
 
             <Box w={"100%"}>
-              <Menu display={data?.mychara || (page && page=="preview")? "initial" : "none"}>
+              <Menu display={data?.mychara || (page && page == "preview") ? "initial" : "none"}>
                 <MenuButton
                   as={Button}
                   rightIcon={<CaretDown size={6} />}
@@ -113,10 +113,10 @@ export const GroupBar = ({
                   {displayUser.isOwner
                     ? "Owner"
                     : displayUser.isStaff
-                    ? "Staff"
-                    : displayUser.refererId
-                    ? "character"
-                    : "visitor"}
+                      ? "Staff"
+                      : displayUser.refererId
+                        ? "character"
+                        : "visitor"}
                 </Text>
               </Flex>
             </Box>
@@ -190,14 +190,14 @@ export const GroupBar = ({
           fontFamily={"Sarabun"}
           position={"fixed"}
           left={4}
-          top={125}
-          // p={5}
+          top={70}
           rounded={10}
-          w={"48px"}
+          w={"60px"}
           display={{ sm: "initial", xl: "none" }}
           zIndex={20000}
+          spacing={0}
         >
-          {responsivebar.isOpen && data?.mychara && page && page!=="preview" ? (
+          {responsivebar.isOpen && data?.mychara && page && page !== "preview" ? (
             <Circle
               width={"48px"}
               height={"48px"}
@@ -211,6 +211,7 @@ export const GroupBar = ({
               src={displayUser.photoURL}
               name={displayUser.displayName || displayUser.name}
               onClick={responsivebar.onToggle}
+              m={'6px'}
             />
           )}
           <VStack
@@ -219,6 +220,10 @@ export const GroupBar = ({
               "opacity 150ms ease-in-out, transform 150ms ease-in-out"
             }
             opacity={responsivebar.isOpen ? 1 : 0}
+            bg={'#F3F5F8'}
+            py={2}
+            borderRadius={5}
+            boxShadow={'base'}
           >
             <Box position={"relative"}>
               <Avatar
