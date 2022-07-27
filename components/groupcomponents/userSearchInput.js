@@ -17,11 +17,12 @@ const UserSearchInput = ({ onSelect }) => {
         />
       </Center>
 
-      <Flex display={result.length > 0 ? "initial" : "none"} pos="absolute" mt={10} zIndex={10000} bg="white">
+      <Flex display={result.length > 0 ? "initial" : "none"} pos="absolute" mt={45} p={1} zIndex={10000} bg="white">
         {result.map((user, index) => (
           <Flex
             justifyContent={"space-between"}
-            mt={5}
+            p={1}
+            borderRadius={10}
             onClick={() => {
               onSelect(user);
               setSearchStr("");

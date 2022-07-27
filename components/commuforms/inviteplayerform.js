@@ -72,9 +72,7 @@ const Inviteplayerform = ({ onPendingSubmit, onClose, checklist }) => {
       </ModalBody>
 
       <ModalFooter>
-        <Button colorScheme="blue" mr={3} onClick={onClose}>
-          ปิด
-        </Button>
+
         <Button onClick={onSubmit}>ยืนยัน</Button>
       </ModalFooter>
     </ModalContent>

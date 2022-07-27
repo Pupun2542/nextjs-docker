@@ -64,7 +64,7 @@ export default function Home() {
     <Box>
       <CustomNavbar />
       <Flex fontFamily={'Sarabun'} bg="#F3F5F8" justifyContent={'center'}>
-        <Flex maxW={1000} w={'100%'} bg={'white'} justifyContent={'center'} pt={55}>
+        <Flex maxW={1000} w={'100%'} bg={'white'} boxShadow={'base'} justifyContent={'center'} pt={55}>
           <Flex justifyContent={'center'} bg={'#F3F5F8'} w={'100%'} maxW={900} boxShadow={'base'}>
             <VStack w={'100%'} spacing={0} boxShadow={'base'} >
               <Center
@@ -79,7 +79,9 @@ export default function Home() {
                 Create Character
               </Center>
 
-              <Box fontFamily={'SarabunSB'} fontSize={20} pl={10} py={2} w={'full'}>Picture Gallery</Box>
+              <Box fontFamily={'SarabunSB'} fontSize={20} pl={10} py={2} w={'full'}>
+                Picture Gallery
+              </Box>
 
               <Center
                 bg={'tomato'}

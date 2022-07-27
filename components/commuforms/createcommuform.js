@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import style from "../../styles/creategroup.module.css";
+import style from "../../styles/create.module.css";
 import { useState, useEffect } from "react";
 import "../Banner";
 import { useApp } from "../../src/hook/local";
