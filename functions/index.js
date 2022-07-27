@@ -219,6 +219,7 @@ exports.onNotificationAdd = functions
             db.collection(`userDetail/${target}/notification`).doc(),
             {
               notitype: snap.data().other &&
+                snap.data().other.priorityTarget &&
                 snap.data().other.priorityTarget.includes(target) &&
                 snap.data().other.specialType ?
                 snap.data().other.specialType : snap.data().notitype,
@@ -229,7 +230,6 @@ exports.onNotificationAdd = functions
               readed: false,
               path: snap.data().path,
               specialPayload: snap.data().other &&
-                snap.data().other.priorityTarget.includes(target) &&
                 snap.data().other.specialPayload ?
                 snap.data().other.specialPayload : null,
             },
@@ -268,6 +268,7 @@ exports.onNotificationAdd = functions
                 db.collection(`userDetail/${target}/notification`).doc(),
                 {
                   notitype: snap.data().other &&
+                    snap.data().other.priorityTarget &&
                     snap.data().other.priorityTarget.includes(target) &&
                     snap.data().other.specialType ?
                     snap.data().other.specialType : snap.data().notitype,
@@ -278,7 +279,6 @@ exports.onNotificationAdd = functions
                   readed: false,
                   path: snap.data().path,
                   specialPayload: snap.data().other &&
-                    snap.data().other.priorityTarget.includes(target) &&
                     snap.data().other.specialPayload ?
                     snap.data().other.specialPayload : null,
                 },

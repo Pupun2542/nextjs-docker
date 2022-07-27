@@ -42,9 +42,8 @@ const Notitab = ({ notidata }) => {
         );
         const other = data.triggerer.length - 1;
         const object = detaileduser.find((v) => data.object === v?.uid);
-        console.log(data.specialPayload);
-        const chara = group.chara[data.specialPayload?.charapost];
-        const mentionchara = data.specialPayload?.mention.filter(
+        const chara = group?.chara[data.specialPayload?.charapost];
+        const mentionchara = data.specialPayload?.mention?.filter(
           (v, i) => v.parentId === auth.currentUser.uid
         );
         mappedNotiData = [
@@ -82,10 +81,8 @@ const Notitab = ({ notidata }) => {
     mentionchara
   ) => {
     const mentionTostring = () => {
-      console.log(mentionchara);
       let str = "";
       if (mentionchara) {
-        
         mentionchara.map((cha, k) => {
           str =
             str + mentionchara.length == 1
@@ -144,9 +141,16 @@ const Notitab = ({ notidata }) => {
     } else if (type == "011") {
       return `${triggerer.displayName} ได้ชวน ${object.name} เข้ากลุ่ม ${group.name}`;
     } else if (type == "101") {
-      return `${
-        chara ? chara.name : triggerer.displayName
-      } ได้สร้างโพสต์ใหม่ในกลุ่ม ${group.name}`;
+      if (chara) {
+        return `${
+          chara.name
+        } ได้สร้างโรลใหม่ในกลุ่ม ${group.name}`;
+      } else {
+        return `${
+          triggerer.displayName
+        } ได้สร้างโพสต์ใหม่ในกลุ่ม ${group.name}`;
+      }
+      
     } else if (type == "101A") {
       return `${
         chara ? chara.name : triggerer.displayName

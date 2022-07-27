@@ -181,7 +181,7 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
       const token = await auth.currentUser.getIdToken();
       axios.post(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${comment.gid}/${comment.pid}/comment/${comment.cid}/reply/create`,
-        { message: message, imageUrl: dlurl, charaId: selectedchara.refererId },
+        { message: message, imageUrl: dlurl, charaId: selectedchara.refererId, mention: mention },
         {
           headers: {
             Authorization: token,

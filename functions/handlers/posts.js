@@ -52,14 +52,18 @@ exports.createPost = async (req, res) => {
           req.params.gid,
           "",
           `group/${req.params.gid}/dashboard?pid=${ref.id}`,
-          req.body.mention? {
+          req.body.mention.length > 0? {
             priorityTarget: req.body.mention.map((tgt)=> tgt.parentId),
             specialPayload: {
               mention: req.body.mention,
               charapost: req.body.charaId,
             },
             specialType: "101A",
-          } : undefined,
+          } : {
+            specialPayload: {
+              charapost: req.body.charaId,
+            },
+          },
       );
       return res.status(200).send("create post success");
     } else {
