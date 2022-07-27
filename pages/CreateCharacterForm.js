@@ -51,8 +51,6 @@ export default function Home() {
         name: false,
     })
 
-
-
     const breakpoints = {
         sm: '30em',
         md: '48em',
@@ -60,6 +58,7 @@ export default function Home() {
         xl: '80em',
         '2xl': '96em',
     }
+    
     return (
 
         <Box>
@@ -74,8 +73,18 @@ export default function Home() {
             >
                 <CustomNavbar />
 
-                <Center pt={55} fontFamily={'Mitr'} bg={'white'} maxW={1000} width={'100%'} boxShadow={'base'}>
-                    <Box maxW={950} width={'100%'} boxShadow={'base'}>
+                <Center
+                    pt={55}
+                    fontFamily={'Sarabun'}
+                    bg={'white'}
+                    maxW={1000}
+                    width={'100%'}
+                    boxShadow={'base'}>
+                    <Box
+                        maxW={950}
+                        width={'100%'}
+                        boxShadow={'base'}
+                    >
                         <Center
                             w={'100%'}
                             bg={'#6768AB'}
@@ -125,6 +134,7 @@ export default function Home() {
                                         <AccordionIcon color={"Black"} w={50} h={50} />
 
                                         <Box
+                                            theme={'theme'}
                                             color="Black"
                                             fontWeight={'bold'}
                                             fontSize={22}
@@ -158,7 +168,7 @@ export default function Home() {
                                                 ชื่อ
                                             </Box>
                                             <Center p={1} w={'75%'}><Input placeholder='ชื่อ-นามสกุล' disabled={hiddenState.name} /></Center>
-                                            <IconButton m={1} aria-label='Search database' icon={hiddenState.name?<EyeClosed/>:<Eye/>} onClick={()=>setHiddenState({...hiddenState, name: !hiddenState.name})} />
+                                            <IconButton m={1} aria-label='Search database' icon={hiddenState.name ? <EyeClosed /> : <Eye />} onClick={() => setHiddenState({ ...hiddenState, name: !hiddenState.name })} />
                                         </Flex>
 
                                         {/* ชื่ออื่น ๆ */}
@@ -248,7 +258,7 @@ export default function Home() {
                                         >
                                             <Flex
                                                 boxShadow={'base'}
-                                                w={{base: '400', md: "800"}}
+                                                w={{ base: '400', md: "800" }}
                                                 borderRadius={10}
                                                 bg={'white'}
                                                 minW={55}
@@ -282,7 +292,7 @@ export default function Home() {
                                                 bg={'white'}
                                                 borderRadius={10}
                                                 maxW={392}
-                                                w={{base: '400', md: "800"}}
+                                                w={{ base: '400', md: "800" }}
                                                 boxShadow={'base'}
                                             >
                                                 <Box

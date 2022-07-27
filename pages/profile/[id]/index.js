@@ -430,7 +430,6 @@ export default function profile() {
                   Community
                 </Tab>
                 <Tab
-                  // isDisabled
                   _selected={{ color: "white", bg: "#9A9AB0" }}
                   borderRadius={10}
                   isDisabled
@@ -469,7 +468,7 @@ export default function profile() {
                 </TabPanel>
 
                 {/* OC */}
-                <TabPanel>
+                {/* <TabPanel>
                   <Center
                     h={150}
                     w={150}
@@ -484,7 +483,7 @@ export default function profile() {
                   >
                     Create
                   </Center>
-                </TabPanel>
+                </TabPanel> */}
 
                 {/* Friend */}
                 <TabPanel>
