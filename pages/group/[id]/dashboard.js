@@ -75,6 +75,7 @@ function dashboard() {
   const { id, pid, cid, rid } = Router.query;
   const [tabIndex, setTabIndex] = useState(0);
   const { data, loading, onRefresh } = useGroupData(id, user);
+  const [selectedchara, setSelectedchara] = useState({});
 
   if (!loading && data) {
     return (
@@ -82,7 +83,7 @@ function dashboard() {
         <CustomNavbar />
 
         <Flex justifyContent={"center"}>
-          <GroupBar id={id} data={data} user={user} />
+          <GroupBar id={id} data={data} user={user}   selectedchara={selectedchara} setSelectedchara={setSelectedchara} />
           <Flex
             pt={55}
             fontFamily={"Sarabun"}
@@ -217,7 +218,7 @@ function dashboard() {
                     {/* Post */}
                     <TabPanel>
                       {/* ประกาศ */}
-                      <Postsection data={data} pid={pid} user={user} id={id} />
+                      <Postsection data={data} pid={pid} user={user} id={id} selectedchara={selectedchara} setSelectedchara={setSelectedchara} />
                       {/* <Flex
                       w={"100%"}
                       bg={"white"}

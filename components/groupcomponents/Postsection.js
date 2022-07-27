@@ -40,18 +40,17 @@ import { usePost } from "../../src/hook/usePost";
 import { CaretDown, ImageSquare } from "phosphor-react";
 import { isEmptyOrSpaces } from "../../src/services/utilsservice";
 import { GroupPost } from "./post";
-import DropdownCheckBox from "../commonComponent/DropdownCheckBox";
 import useCharaList from "../../src/hook/useCharaList";
 import MentionBox from "../commonComponent/MentionBox";
 export const PostContext = createContext();
-const Postsection = ({ data, pid, user, id }) => {
+const Postsection = ({ data, pid, user, id, selectedchara, setSelectedchara }) => {
   const [orderby, setOrderby] = useState("timestamp");
   const [loadLimit, selLoadlimit] = useState(20);
   const [message, setMessage] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [image, setImage] = useState([]);
   const pasteInputRef = useRef(undefined);
-  const [selectedchara, setSelectedchara] = useState({});
+  // const [selectedchara, setSelectedchara] = useState({});
   const inputFileRef = useRef(null);
   const submitRef = useRef(null);
   const [tag, setTag] = useState([]);
@@ -195,6 +194,8 @@ const Postsection = ({ data, pid, user, id }) => {
     getStateDataEdit,
     setStateDataReply,
     getStateDataReply,
+    selectedchara,
+    setSelectedchara
   };
   const handleImagePaste = (e) => {
     if (e.clipboardData.files[0]) {
@@ -259,21 +260,11 @@ const Postsection = ({ data, pid, user, id }) => {
         alert(res.status + " : " + res.data);
       }
       setMessage("");
+      setMention([]);
+      setTag([]);
       setImage([]);
     }
   };
-
-  const removeTags = (indexToRemove) => {
-    setMention([...mention.filter((_, index) => index !== indexToRemove)]);
-  };
-  const onSelectChara = (chara) => {
-    setMention([...mention, chara]);
-    onSearchChara("");
-    setsearchstr("");
-  };
-
-  const filteredcharaSearchResult = charaSearchResult.filter((v,i)=> !mention.includes(v));
-  // console.log(filteredcharaSearchResult)
 
   const Hashtag = (props) => {
     const removeTags = (indexToRemove) => {

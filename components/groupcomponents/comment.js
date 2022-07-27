@@ -45,6 +45,7 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import useCharaList from "../../src/hook/useCharaList";
 import { isEmptyOrSpaces } from "../../src/services/utilsservice";
 import { useRouter } from "next/router";
+import MentionBox from "../commonComponent/MentionBox";
 
 export const GroupComment = ({ comment, member, data, gid, mychara }) => {
   const {
@@ -59,7 +60,10 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
     getStateDataEdit,
     setStateDataReply,
     getStateDataReply,
+    selectedchara,
+    setSelectedchara
   } = useContext(PostContext);
+  const [mention, setMention] = useState([]);
   const creator = comment.creator;
   const getUser = useUser();
   const { auth, db } = useApp();
@@ -69,7 +73,7 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
   const TextareaRef = useRef(null);
   const love = comment.love;
   const editMode = getStateDataEdit(cid);
-  const [selectedchara, setSelectedchara] = useState({});
+  // const [selectedchara, setSelectedchara] = useState({});
   const router = useRouter();
   const { chara, refreshcharaList } = useCharaList(data, gid);
   const checkChara = () => {
@@ -186,6 +190,7 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
       );
       setMessage("");
       setImage("");
+      setMention([]);
       onOpen();
       // TextareaRef.current?.scrollIntoView();
     }
@@ -620,6 +625,7 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
             />
           </Box>
         </Flex>
+        <MentionBox data={data} id={gid} mention={mention} setMention={setMention} />
       </Flex>
     </Flex>
   );

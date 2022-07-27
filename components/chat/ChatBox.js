@@ -145,7 +145,7 @@ export const ChatBox = ({
           <Box 
           // float="right"
           >
-            <IconButton
+            {/* <IconButton
               size={"sm"}
               onClick={onClose}
               icon={<Minus size={10} weight="bold" />}
@@ -153,7 +153,7 @@ export const ChatBox = ({
               m={1}
               mr={-0.5}
               rounded={"full"}
-            />
+            /> */}
             <IconButton
               rounded={"full"}
               m={1}

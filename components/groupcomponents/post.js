@@ -50,6 +50,7 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { isEmptyOrSpaces } from "../../src/services/utilsservice";
 import useCharaList from "../../src/hook/useCharaList";
 import { useRouter } from "next/router";
+import MentionBox from "../commonComponent/MentionBox";
 export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) => {
   const {
     setStateDataData,
@@ -63,13 +64,15 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
     getStateDataEdit,
     setStateDataReply,
     getStateDataReply,
+    selectedchara,
+    setSelectedchara
   } = useContext(PostContext);
-  // console.log({ post, member, onPostDelete, data, gid, mychara })
+  const [mention, setMention] = useState([]);
   const creator = member[Object.keys(member).find(v => v === post.uid)];
   const getUser = useUser();
   const { auth, db } = useApp();
   const [fetchlimit, setFetchlimit] = useState(20);
-  const [selectedchara, setSelectedchara] = useState({});
+  // const [selectedchara, setSelectedchara] = useState({});
   const inputFileRef = useRef(null);
   const pid = post.pid;
   const TextareaRef = useRef(null);
@@ -178,6 +181,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
       );
       setMessage("");
       setImage("");
+      setMention([]);
       onOpen();
       // TextareaRef.current?.scrollIntoView();
     }
@@ -340,11 +344,14 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
           <Menu>
             <MenuButton 
               ml={1} h={10} w={10}
+              
             >
               <IconButton
                 icon={<DotsThreeVertical size={15} />}
                 rounded={"full"}
                 size={'sm'}
+                // backgroundColor="black"
+                _hover={{backgroundColor:"black"}}
               />
             </MenuButton>
 
@@ -397,6 +404,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
               backgroundColor="gray.100"
               mb={2.5}
             />
+            
           ) : (
             <Box w={"100%"} fontSize={16}>
               <Text whiteSpace="pre-line">{text ? text : ""}</Text>
@@ -596,6 +604,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
                 />
               </Box>
             </Flex>
+            <MentionBox data={data} id={gid} mention={mention} setMention={setMention} />
             {image && (
               <Box pos={"relative"}>
                 <Image

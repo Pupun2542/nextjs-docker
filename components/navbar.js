@@ -115,7 +115,7 @@ function CustomNavbar() {
     xl: "1200px",
     "2xl": "1536px",
   };
-  const btnRef = React.useRef()
+  const btnRef = React.useRef();
   const [data, setData] = useState(undefined);
   const [unreadChat, setUnreadChat] = useState([]);
   const [unreadnoti, setUnreadnoti] = useState([]);
@@ -135,7 +135,7 @@ function CustomNavbar() {
     setCSBExpand(false);
   };
 
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     document.addEventListener("mousedown", (e) => {
       if (chatTabRef.current && !chatTabRef.current.contains(e.target)) {
         onChatClose();
@@ -148,24 +148,27 @@ function CustomNavbar() {
     });
   }
   useEffect(() => {
-    let unsubscribe = () => { };
+    let unsubscribe = () => {};
     if (user && !loading) {
-      unsubscribe = onSnapshot(doc(db, "userDetail", user.uid), async (usrdoc) => {
-        if (usrdoc.exists) {
-          let pinnedgroup = [];
-          if (usrdoc.data().pinned?.length > 0) {
-            await Promise.all(
-              usrdoc.data().pinned.map(async (gid) => {
-                const grp = await getgroup(gid);
-                pinnedgroup = [...pinnedgroup, grp];
-              })
-            );
+      unsubscribe = onSnapshot(
+        doc(db, "userDetail", user.uid),
+        async (usrdoc) => {
+          if (usrdoc.exists) {
+            let pinnedgroup = [];
+            if (usrdoc.data().pinned?.length > 0) {
+              await Promise.all(
+                usrdoc.data().pinned.map(async (gid) => {
+                  const grp = await getgroup(gid);
+                  pinnedgroup = [...pinnedgroup, grp];
+                })
+              );
+            }
+            setData({ ...usrdoc.data(), pinned: pinnedgroup });
           }
-          setData({ ...usrdoc.data(), pinned: pinnedgroup });
         }
-      })
+      );
     }
-    return () => unsubscribe()
+    return () => unsubscribe();
   }, [user, loading]);
 
   useEffect(() => {
@@ -207,22 +210,20 @@ function CustomNavbar() {
           >
             <Center
               bg="white"
-              rounded={'full'}
+              rounded={"full"}
               minHeight={38}
               borderWidth={2}
               borderColor={"black"}
               onClick={() => router.push("/profile/" + user.uid)}
             >
-                <Avatar
-                  h={41} w={41}
-                  src={user.photoURL}
-                  loading={"lazy"}
-                />
-
-
+              <Avatar h={41} w={41} src={user.photoURL} loading={"lazy"} />
               <Show above="lg">
                 <Center width={"auto"} h={41} px={5}>
-                  <Center fontFamily={"SarabunSB"} fontWeight={150} color={"black"}>
+                  <Center
+                    fontFamily={"SarabunSB"}
+                    fontWeight={150}
+                    color={"black"}
+                  >
                     {user.displayName}
                   </Center>
                 </Center>
@@ -249,10 +250,10 @@ function CustomNavbar() {
 
         <Drawer
           isOpen={isSigninOpen}
-          placement='right'
+          placement="right"
           onClose={onSigninClose}
           finalFocusRef={btnRef}
-          size={'sm'}
+          size={"sm"}
         >
           <DrawerOverlay />
           <DrawerContent mt={55}>
@@ -260,7 +261,6 @@ function CustomNavbar() {
             <DrawerHeader>Sign in</DrawerHeader>
 
             <SignIn />
-
           </DrawerContent>
         </Drawer>
       </Center>
@@ -291,6 +291,7 @@ function CustomNavbar() {
               >
                 Comuthor
               </Text>
+              {/* <Avatar src={user.photoURL} size="md"></Avatar> */}
             </Flex>
           </Hide>
 
@@ -480,7 +481,7 @@ function CustomNavbar() {
                             fontSize={18}
                             p={1}
                             _hover={{
-                              borderRadius: '5',
+                              borderRadius: "5",
                               backgroundColor: "gray.100",
                             }}
                           >
@@ -494,15 +495,58 @@ function CustomNavbar() {
                 {/* <Button onClick={toggleColorMode}>
                   {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
                 </Button> */}
-
-                <Center
-                  as="button"
-                  onClick={
-                    user ? () => router.push("/profile/" + user.uid) : () => { }
-                  }
-                >
-                  <Loadthumbnail />
-                </Center>
+                {user && (
+                  <Center
+                    as="button"
+                    onClick={
+                      user
+                        ? () => router.push("/profile/" + user.uid)
+                        : () => {}
+                    }
+                  >
+                    <Menu>
+                      <MenuButton
+                        as={Button}
+                        rounded={"full"}
+                        variant={"link"}
+                        cursor={"pointer"}
+                        minW={0}
+                        minH={0}
+                        _hover={{
+                          textDecoration: "none",
+                        }}
+                      >
+                        <Center
+                          bg="white"
+                          rounded={"full"}
+                          minHeight={38}
+                          borderWidth={2}
+                          borderColor={"black"}
+                          onClick={() => router.push("/profile/" + user.uid)}
+                        >
+                          <Avatar
+                            h={41}
+                            w={41}
+                            src={user.photoURL}
+                            loading={"lazy"}
+                          />
+                          <Show above="lg">
+                            <Center width={"auto"} h={41} px={5}>
+                              <Center
+                                fontFamily={"SarabunSB"}
+                                fontWeight={150}
+                                color={"black"}
+                              >
+                                {user.displayName}
+                              </Center>
+                            </Center>
+                          </Show>
+                        </Center>
+                      </MenuButton>
+                    </Menu>
+                    {/* <Loadthumbnail /> */}
+                  </Center>
+                )}
 
                 {user && (
                   <Menu>
@@ -535,7 +579,7 @@ function CustomNavbar() {
                       borderWidth={3}
                       borderColor={"black"}
                       w={100}
-                      fontFamily={'Sarabun'}
+                      fontFamily={"Sarabun"}
                     >
                       <br />
 
@@ -552,7 +596,7 @@ function CustomNavbar() {
                         <Text
                           p={3}
                           fontSize={16}
-                          fontFamily={'SarabunSB'}
+                          fontFamily={"SarabunSB"}
                           fontWeight={"semibold"}
                         >
                           {user.displayName}
@@ -562,7 +606,7 @@ function CustomNavbar() {
                       <MenuDivider />
                       {/* <MenuItem>Your Servers</MenuItem> */}
                       <MenuItem
-                        fontFamily={'SarabunSB'}
+                        fontFamily={"SarabunSB"}
                         _hover={{
                           backgroundColor: "gray.300",
                         }}
@@ -571,7 +615,7 @@ function CustomNavbar() {
                         Account Settings
                       </MenuItem>
                       <MenuItem
-                        fontFamily={'SarabunSB'}
+                        fontFamily={"SarabunSB"}
                         onClick={() => router.push("/logout")}
                         _hover={{
                           backgroundColor: "gray.300",
@@ -633,7 +677,7 @@ function CustomNavbar() {
       <Box
         overflowY={"auto"}
         minW="300px"
-        maxW={'500px'}
+        maxW={"500px"}
         h="auto"
         bg="white"
         pos="fixed"
@@ -665,8 +709,15 @@ function CustomNavbar() {
           ดูแจ้งเตือนทั้งหมด
         </Center>
       </Box>
-      {user && (<ChatBar chatnotidata={chatNotiData} user={user} isExpanded={isCSBExpanded} onEnter={onEnter} onLeave={onLeave} />)}
-
+      {user && (
+        <ChatBar
+          chatnotidata={chatNotiData}
+          user={user}
+          isExpanded={isCSBExpanded}
+          onEnter={onEnter}
+          onLeave={onLeave}
+        />
+      )}
     </Box>
   );
 }
@@ -742,30 +793,39 @@ const ChatNotiIcon = ({ data, user }) => {
       mt="2.5px"
       mb={"2.5px"}
       p={2}
-      fontFamily={'Sarabun'}
+      fontFamily={"Sarabun"}
       cursor="pointer"
       _hover={{
         bg: "gray.200",
       }}
     >
-      <Flex justifyContent="space-between" marginLeft={2} marginRight={2}  >
+      <Flex justifyContent="space-between" marginLeft={2} marginRight={2}>
         <Flex justifyContent="start">
           <Avatar
             src={display.thumbnail}
             // height="53px"
             // weight="53px"
-            size={'md'}
+            size={"md"}
             rounded={100}
             marginRight="15px"
           />
-          <Box maxW={245} whiteSpace={"nowrap"} overflow={"hidden"} textOverflow={"ellipsis"}>
-            <Text fontWeight={'bold'}>{display.name}</Text>
+          <Box
+            maxW={245}
+            whiteSpace={"nowrap"}
+            overflow={"hidden"}
+            textOverflow={"ellipsis"}
+          >
+            <Text fontWeight={"bold"}>{display.name}</Text>
             <Text fontSize={14}>
               {data?.senderId == user?.uid ? "คุณ: " : ""} {data?.lastmsg}
             </Text>
           </Box>
         </Flex>
-        {data.timestamp && <Text color={'gray.400'} fontSize={14}>{caltime()}</Text>}
+        {data.timestamp && (
+          <Text color={"gray.400"} fontSize={14}>
+            {caltime()}
+          </Text>
+        )}
       </Flex>
     </Box>
   );
