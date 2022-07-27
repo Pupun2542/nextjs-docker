@@ -159,9 +159,9 @@ const Notitab = ({ notidata }) => {
         } ได้แสดงความคิดเห็นในโพสในกลุ่ม ${group.name}`;
       }
     } else if (type == "102A") {
-      return `${triggerer.displayName} ${
-        other > 0 ? `และคนอื่นๆ อีก ${other} คน` : ""
-      } ได้แสดงความคิดเห็นในโพสในกลุ่ม ${group.name}`;
+      return `${
+        chara ? chara.name : triggerer.displayName
+      } กล่าวถึง ${mentionTostring()} ในการตอบโรลในกลุ่ม ${group.name}`;
     } else if (type == "103") {
       if (chara) {
         return `${chara.name}  ได้ตอบกลับโรลในกลุ่ม ${group.name}`;
@@ -171,9 +171,9 @@ const Notitab = ({ notidata }) => {
         } ได้ตอบกลับความคิดเห็นในโพสในกลุ่ม ${group.name}`;
       }
     } else if (type == "103A") {
-      return `${triggerer.displayName} ${
-        other > 0 ? `และคนอื่นๆ อีก ${other} คน` : ""
-      } ได้ตอบกลับความคิดเห็นในโพสในกลุ่ม ${group.name}`;
+      return `${
+        chara ? chara.name : triggerer.displayName
+      } กล่าวถึง ${mentionTostring()} ในการตอบกลับโรลในกลุ่ม ${group.name}`;
     } else if (type == "104") {
       return `${triggerer.displayName} ${
         other > 0 ? `และคนอื่นๆ อีก ${other} คน` : ""
