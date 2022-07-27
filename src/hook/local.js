@@ -244,7 +244,7 @@ export const GroupNotiProvider = ({ children }) => {
         const res = snapshot.data()
         // console.log(res);
         const tosend = {
-          name: res.name,
+          ...res,
           thumbnail: res.banner,
           gid: groupId,
           tag: res.tag
