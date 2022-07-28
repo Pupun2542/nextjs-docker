@@ -220,8 +220,10 @@ export const GroupBar = ({
               "opacity 150ms ease-in-out, transform 150ms ease-in-out"
             }
             opacity={responsivebar.isOpen ? 1 : 0}
-            bg={'#F3F5F8'}
+            bg={'white'}
             py={2}
+            borderWidth={'2px'}
+            borderColor={'black'}
             borderRadius={5}
             boxShadow={'base'}
           >

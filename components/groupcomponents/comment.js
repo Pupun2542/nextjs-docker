@@ -19,6 +19,7 @@ import {
   MenuList,
   MenuItem,
   VStack,
+  Tag,
 } from "@chakra-ui/react";
 import {
   Heart,
@@ -358,6 +359,14 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
             </Flex>
             <Divider mb={2} />
 
+            <HStack w={'100%'} pt={1}>
+              <Text fontSize={14} color={'gray.400'}>ได้กล่าวถึง</Text>
+              <Tag color={'black'} bg={'gray.200'}>Mister Daruma</Tag>
+              <Tag colorScheme={'cyan'}>Day 1</Tag>
+              <Tag colorScheme={'orange'}>Talking</Tag>
+            </HStack>
+
+
             <Flex justifyContent={"center"} w={"100%"}>
               <Flex direction={"column"} w={"100%"}>
                 {editMode ? (
@@ -560,7 +569,7 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
         <Flex mt={2}>
           <Box mr={1}>
             <Menu>
-              <MenuButton 
+              <MenuButton
                 w={42}
                 h={42}
                 _hover={{
@@ -591,6 +600,7 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
               </MenuList>
             </Menu>
           </Box>
+
           <Textarea
             resize="none"
             minHeight={11}
@@ -625,7 +635,10 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
             />
           </Box>
         </Flex>
-        <MentionBox data={data} id={gid} mention={mention} setMention={setMention} />
+        <Flex boxShadow={'base'} mt={2} bg={'#F3F5F8'} rounded={5}>
+          <Text mx={2} fontSize={23}>@</Text>
+          <MentionBox data={data} id={gid} mention={mention} setMention={setMention} />
+        </Flex>
       </Flex>
     </Flex>
   );

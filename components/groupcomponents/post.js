@@ -342,16 +342,16 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
           </VStack>
 
           <Menu>
-            <MenuButton 
+            <MenuButton
               ml={1} h={10} w={10}
-              
+
             >
               <IconButton
                 icon={<DotsThreeVertical size={15} />}
                 rounded={"full"}
                 size={'sm'}
                 // backgroundColor="black"
-                _hover={{backgroundColor:"black"}}
+                _hover={{ backgroundColor: "black" }}
               />
             </MenuButton>
 
@@ -377,9 +377,13 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
         </Flex>
 
         <Flex pl={55} pr={55} direction={"column"}>
-          
-          <Tag m={2} w={50} color={'black'} bg={'gray.200'}>Day1</Tag>
-          
+          <HStack m={2}>
+            <Text fontSize={14} color={'gray.400'}>ได้กล่าวถึง</Text>
+            <Tag color={'black'} bg={'gray.200'}>Mister Daruma</Tag>
+            <Tag colorScheme={'cyan'}>Day 1</Tag>
+            <Tag colorScheme={'orange'}>Talking</Tag>
+          </HStack>
+
           {editMode ? (
             // <InputGroup>
             <Textarea
@@ -404,7 +408,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
               backgroundColor="gray.100"
               mb={2.5}
             />
-            
+
           ) : (
             <Box w={"100%"} fontSize={16}>
               <Text whiteSpace="pre-line">{text ? text : ""}</Text>
@@ -418,8 +422,8 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
               overflowY="hidden"
               whiteSpace="nowrap"
               alignContent={"center"}
-              // boxShadow={'base'}
-              // p={1}
+            // boxShadow={'base'}
+            // p={1}
             >
               {post.imageUrl &&
                 post.imageUrl.map((img, k) => (
@@ -560,7 +564,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
                   </MenuButton>
                   <MenuList>
                     {mychara &&
-                      Object.values(mychara).map((cha,k) => (
+                      Object.values(mychara).map((cha, k) => (
                         <MenuItem onClick={() => setSelectedchara(cha)} key={k}>
                           <Flex alignItems={"center"}>
                             <Avatar src={cha.photoURL} w={30} h={30} mr={2} />
@@ -604,27 +608,32 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
                 />
               </Box>
             </Flex>
-            <MentionBox data={data} id={gid} mention={mention} setMention={setMention} />
-            {image && (
-              <Box pos={"relative"}>
-                <Image
-                  src={image}
-                  width="250px"
-                  height="250px"
-                  onClick={() => setModalOpen(true)}
-                  objectFit="cover"
-                />
-                <IconButton
-                  icon={<X size={16} color="black" />}
-                  position="absolute"
-                  top={0}
-                  left={200}
-                  backgroundColor="transparent"
-                  _hover={{ backgroundColor: "transparent" }}
-                  onClick={() => setImage(null)}
-                ></IconButton>
-              </Box>
-            )}
+
+            <Flex boxShadow={'base'} mt={2} bg={'#F3F5F8'} rounded={5}>
+              <Text mx={2} fontSize={23}>@</Text>
+              <MentionBox data={data} id={gid} mention={mention} setMention={setMention} />
+              {image && (
+                <Box pos={"relative"}>
+                  <Image
+                    src={image}
+                    width="250px"
+                    height="250px"
+                    onClick={() => setModalOpen(true)}
+                    objectFit="cover"
+                  />
+                  <IconButton
+                    icon={<X size={16} color="black" />}
+                    position="absolute"
+                    top={0}
+                    left={200}
+                    backgroundColor="transparent"
+                    _hover={{ backgroundColor: "transparent" }}
+                    onClick={() => setImage(null)}
+                  ></IconButton>
+                </Box>
+              )}
+            </Flex>
+
 
             <Input
               type="file"

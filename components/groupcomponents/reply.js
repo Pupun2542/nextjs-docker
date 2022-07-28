@@ -212,6 +212,13 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
             </Flex>
             <Divider mb={2} />
 
+            <HStack w={'100%'} pt={1}>
+              <Text fontSize={14} color={'gray.400'}>ได้กล่าวถึง</Text>
+              <Tag color={'black'} bg={'gray.200'}>Mister Daruma</Tag>
+              <Tag colorScheme={'cyan'}>Day 1</Tag>
+              <Tag colorScheme={'orange'}>Talking</Tag>
+            </HStack>
+
             <Flex justifyContent={"center"} w={"100%"}>
               <Flex direction={"column"} w={"100%"}>
                 {editMode ? (
