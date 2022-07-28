@@ -64,7 +64,7 @@ export const Commentpost = ({
   const router = useRouter();
 
   useEffect(() => {
-    if (cdoc.love.includes(auth.currentUser.uid)) {
+    if (auth.currentUser && cdoc.love.includes(auth.currentUser.uid)) {
       setLove(true);
     }
     if (rpymsg) {
@@ -466,6 +466,7 @@ export const Commentpost = ({
             _hover={{
               backgroundColor: "#F3F5F7",
             }}
+            disabled={!auth.currentUser}
           >
             <Box p={1}>
               <Heart
@@ -570,7 +571,7 @@ export const Commentpost = ({
           <DotsThreeVertical size={22} />
         </MenuButton>
         <MenuList>
-          {auth.currentUser.uid == commentdoc.creator.uid ? (
+          {auth.currentUser && auth.currentUser.uid == commentdoc.creator.uid ? (
             <>
               <MenuItem onClick={() => setEditMode(true)}>Edit</MenuItem>
               <MenuItem onClick={handleDelete}>Delete</MenuItem>

@@ -98,7 +98,7 @@ function GroupCard() {
           return (
             <Flex
               onClick={() => {
-                if (value.member.includes(auth.currentUser.uid)) {
+                if (auth.currentUser && value.member.includes(auth.currentUser.uid)) {
                   Router.push("/group/" + value.id + "/dashboard");
                 } else {
                   Router.push("/group/" + value.id);

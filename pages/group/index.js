@@ -39,11 +39,11 @@ export default function Groups() {
   const CurrentUser = () => {
     const [user, loading, error] = useAuthState(auth);
 
-    useEffect(() => {
-      if (!loading && !user) {
-        Router.push("/login");
-      }
-    }, [user, loading]);
+    // useEffect(() => {
+    //   if (!loading && !user) {
+    //     Router.push("/login");
+    //   }
+    // }, [user, loading]);
 
     if (loading) {
       return (
@@ -58,7 +58,7 @@ export default function Groups() {
       );
     }
 
-    if (user) {
+    // if (user) {
       return (
         <Box
           bg={'#F3F5F8'}
@@ -92,8 +92,8 @@ export default function Groups() {
           <Footer />
         </Box>
       );
-    }
-    return <></>;
+    // }
+    // return <></>;
   };
 
   return CurrentUser();

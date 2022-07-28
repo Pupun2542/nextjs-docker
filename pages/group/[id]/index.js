@@ -70,7 +70,7 @@ import {
   Avatar,
   Image,
   SimpleGrid,
-  Spinner
+  Spinner,
 } from "@chakra-ui/react";
 import Footer from "../../../components/footer";
 import {
@@ -104,12 +104,12 @@ export default function Group() {
   const { id } = Router.query;
   useEffect(() => {
     const Fetchdata = async () => {
-      const token = await auth.currentUser.getIdToken();
+      const token = await auth.currentUser?.getIdToken();
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${id}`,
         {
           headers: {
-            Authorization: token,
+            Authorization: token || "",
           },
         }
       );
@@ -119,7 +119,9 @@ export default function Group() {
         color = "#4D4D88";
       } else if (data.rating === "R (เด็กอายุต่ำกว่า 17 ปีควรได้รับคำแนะนำ)") {
         color = "#FFC75A";
-      } else if (data.rating === "PG-13 (เด็กอายุต่ำกว่า 13 ปีควรได้รับคำแนะนำ)") {
+      } else if (
+        data.rating === "PG-13 (เด็กอายุต่ำกว่า 13 ปีควรได้รับคำแนะนำ)"
+      ) {
         color = "#6768AB";
       } else if (data.rating === "PG (เด็กควรได้รับคำแนะนำ)") {
         color = "#535353";
@@ -284,7 +286,10 @@ export default function Group() {
       >
         {!loading && data && (
           <Flex bg={"#F3F5F8"} justifyContent={"center"}>
-            <GroupBar id={id} data={data} user={user} />
+            {user&&(
+              <GroupBar id={id} data={data} user={user} />
+            )}
+            
             <Flex
               direction={"column"}
               marginTop={55}
@@ -296,42 +301,46 @@ export default function Group() {
                 <Flex justifyContent={"center"}>
                   <Box w={850} boxShadow="base">
                     <Flex h={62} bg={"#6768AB"}>
-                      <IconButton
-                        bg={"white"}
-                        rounded="full"
-                        h={38}
-                        w={38}
-                        mt={2.5}
-                        ml={2.5}
-                        icon={
-                          <Heart
-                            size={32}
-                            weight={
-                              data.love?.includes(auth.currentUser.uid)
-                                ? "fill"
-                                : "regular"
+                      {user && (
+                        <>
+                          <IconButton
+                            bg={"white"}
+                            rounded="full"
+                            h={38}
+                            w={38}
+                            mt={2.5}
+                            ml={2.5}
+                            icon={
+                              <Heart
+                                size={32}
+                                weight={
+                                  data.love?.includes(auth.currentUser.uid)
+                                    ? "fill"
+                                    : "regular"
+                                }
+                                color={
+                                  data.love?.includes(auth.currentUser.uid)
+                                    ? "#EA4545"
+                                    : "black"
+                                }
+                              />
                             }
-                            color={
-                              data.love?.includes(auth.currentUser.uid)
-                                ? "#EA4545"
-                                : "black"
-                            }
+                            isDisabled={!user}
+                            onClick={HandleLove}
                           />
-                        }
-                        isDisabled={!user}
-                        onClick={HandleLove}
-                      />
 
-                      <IconButton
-                        bg={pin ? "#FFC75A" : "white"}
-                        rounded="full"
-                        h={38}
-                        w={38}
-                        mt={2.5}
-                        ml={2.5}
-                        icon={<PushPin size={32} />}
-                        onClick={pinHandler}
-                      />
+                          <IconButton
+                            bg={pin ? "#FFC75A" : "white"}
+                            rounded="full"
+                            h={38}
+                            w={38}
+                            mt={2.5}
+                            ml={2.5}
+                            icon={<PushPin size={32} />}
+                            onClick={pinHandler}
+                          />
+                        </>
+                      )}
 
                       <Spacer />
 
@@ -365,8 +374,8 @@ export default function Group() {
                               <MenuList minW={20} fontFamily={"Sarabun"}>
                                 <MenuItem
                                   _hover={{ background: "#E2E8F0" }}
-                                  onClick={
-                                    () => Router.push("/group/" + id + "/edit")
+                                  onClick={() =>
+                                    Router.push("/group/" + id + "/edit")
                                   }
                                 >
                                   <Text>Edit</Text>
@@ -516,6 +525,7 @@ export default function Group() {
                             onClick={() => {
                               handleEnterGroup();
                             }}
+                            disabled={!auth.currentUser}
                           >
                             {Object.keys(data.member).includes(
                               auth.currentUser?.uid
@@ -925,6 +935,7 @@ export default function Group() {
                                     }
                                     _hover={{ bg: "gray.800" }}
                                     cursor="pointer"
+                                    disabled={!auth.currentUser}
                                   >
                                     {Object.keys(data.member).includes(
                                       auth.currentUser?.uid
@@ -1417,17 +1428,18 @@ export default function Group() {
             </ModalFooter>
           </ModalContent>
         </Modal>
-        {loading || !data&& (
-          <Center>
-            <Spinner
-              thickness="4px"
-              speed="0.65s"
-              emptyColor="gray.200"
-              color="blue.500"
-              size="xl"
-            />
-          </Center>
-        )}
+        {loading ||
+          (!data && (
+            <Center>
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="xl"
+              />
+            </Center>
+          ))}
       </Flex>
       <Footer />
     </Box>

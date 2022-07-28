@@ -436,30 +436,33 @@ function CustomNavbar() {
                   >
                     <House size={32} />
                   </MenuItem>
+                  {user && (
+                    <MenuItem
+                      minH="48px"
+                      as={"a"}
+                      onClick={() => router.push("/creategroup")}
+                      title="Create Commu"
+                      _hover={{
+                        backgroundColor: "gray.200",
+                      }}
+                    >
+                      <Plus size={32} />
+                    </MenuItem>
+                  )}
 
-                  <MenuItem
-                    minH="48px"
-                    as={"a"}
-                    onClick={() => router.push("/creategroup")}
-                    title="Create Commu"
-                    _hover={{
-                      backgroundColor: "gray.200",
-                    }}
-                  >
-                    <Plus size={32} />
-                  </MenuItem>
-
-                  <MenuItem
-                    minH="48px"
-                    as={"button"}
-                    title="Pin"
-                    onClick={onOpen}
-                    _hover={{
-                      backgroundColor: "gray.200",
-                    }}
-                  >
-                    <PushPin size={32} />
-                  </MenuItem>
+                  {user && (
+                    <MenuItem
+                      minH="48px"
+                      as={"button"}
+                      title="Pin"
+                      onClick={onOpen}
+                      _hover={{
+                        backgroundColor: "gray.200",
+                      }}
+                    >
+                      <PushPin size={32} />
+                    </MenuItem>
+                  )}
                 </MenuList>
 
                 <Modal isOpen={isOpen} onClose={onClose}>
@@ -473,7 +476,13 @@ function CustomNavbar() {
                         data.pinned.map((doc, k) => (
                           <Text
                             onClick={() => {
-                              router.push("/group/" + doc.gid);
+                              router.push(
+                                "/group/" +
+                                  doc.gid +
+                                  (doc.member?.includes(user.uid)
+                                    ? "/dashboard"
+                                    : "")
+                              );
                               onClose();
                             }}
                             cursor={"pointer"}

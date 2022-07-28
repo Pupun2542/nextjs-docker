@@ -36,7 +36,7 @@ export const Replypost = ({ replydoc, message, setMessage }) => {
   const [love, setLove] = useState(false);
   const router = useRouter();
   useEffect(() => {
-    if (replydoc.love.includes(auth.currentUser.uid)) {
+    if (auth.currentUser && replydoc.love.includes(auth.currentUser.uid)) {
       setLove(true);
     }
     return () => setLove(false);
@@ -238,13 +238,14 @@ export const Replypost = ({ replydoc, message, setMessage }) => {
                 backgroundColor: "#F3F5F7",
               }}
               boxShadow={'base'}
+              disabled={!auth.currentUser}
             >
               <Box mr={1}>
                 <Heart
                   size={16}
                   color={"red"}
                   weight={
-                    replydoc.love.includes(auth.currentUser.uid)
+                    love
                       ? "fill"
                       : "regular"
                   }
@@ -261,7 +262,7 @@ export const Replypost = ({ replydoc, message, setMessage }) => {
             <DotsThreeVertical size={30} />
           </MenuButton>
           <MenuList>
-            {auth.currentUser.uid == replydoc.creator.uid ? (
+            {auth.currentUser?.uid == replydoc.creator.uid ? (
               <>
                 <MenuItem onClick={() => setEditMode(true)}>Edit</MenuItem>
                 <MenuItem onClick={handleDelete}>Delete</MenuItem>
