@@ -432,7 +432,6 @@ export default function profile() {
                 <Tab
                   _selected={{ color: "white", bg: "#9A9AB0" }}
                   borderRadius={10}
-                  isDisabled
                 >
                   Original Character
                 </Tab>
@@ -463,12 +462,12 @@ export default function profile() {
                 </TabPanel> */}
 
                 {/* Community */}
-                {/* <TabPanel>
+                <TabPanel>
                   <p>?</p>
-                </TabPanel> */}
+                </TabPanel>
 
                 {/* OC */}
-                {/* <TabPanel>
+                <TabPanel>
                   <Center
                     h={150}
                     w={150}
@@ -483,7 +482,7 @@ export default function profile() {
                   >
                     Create
                   </Center>
-                </TabPanel> */}
+                </TabPanel>
 
                 {/* Friend */}
                 <TabPanel>
