@@ -478,7 +478,7 @@ export default function profile() {
                     _hover={{
                       backgroundColor: "whatsapp.600",
                     }}
-                    onClick={() => router.push("/CreateCharacterForm")}
+                    onClick={() => router.push("/CreateChara")}
                   >
                     Create
                   </Center>

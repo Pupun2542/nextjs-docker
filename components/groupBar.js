@@ -51,7 +51,7 @@ export const GroupBar = ({
   const responsivebar = useDisclosure();
   const changeCharacter = useDisclosure();
 
-  const displayUser = selectedchara?.name ? selectedchara : user || null;
+  const displayUser = selectedchara?.name ? selectedchara : {...user, isOwner: data.isOwner, isStaff: data.isStaff} || null;
 
   if (displayUser) {
     return (
