@@ -94,7 +94,7 @@ const Notitab = ({ notidata }) => {
               : `${cha.name} `;
         });
       }
-      return str
+      return str;
     };
     if (type === "002") {
       return `${group.name} มีการอัพเดตรายละเอียดกลุ่ม`;
@@ -142,27 +142,38 @@ const Notitab = ({ notidata }) => {
       return `${triggerer.displayName} ได้ชวน ${object.name} เข้ากลุ่ม ${group.name}`;
     } else if (type == "101") {
       if (chara) {
-        return `${
-          chara.name
-        } ได้สร้างโรลใหม่ในกลุ่ม ${group.name}`;
+        return `${chara.name} ได้สร้างโรลใหม่ในกลุ่ม ${group.name}`;
       } else {
-        return `${
-          triggerer.displayName
-        } ได้สร้างโพสต์ใหม่ในกลุ่ม ${group.name}`;
+        return `${triggerer.displayName} ได้สร้างโพสต์ใหม่ในกลุ่ม ${group.name}`;
       }
-      
     } else if (type == "101A") {
       return `${
         chara ? chara.name : triggerer.displayName
       } กล่าวถึง ${mentionTostring()} ในโรลในกลุ่ม ${group.name}`;
     } else if (type == "102") {
-      return `${triggerer.displayName} ${
-        other > 0 ? `และคนอื่นๆ อีก ${other} คน` : ""
-      } ได้แสดงความคิดเห็นในโพสในกลุ่ม ${group.name}`;
+      if (chara) {
+        return `${chara.name}  ได้ตอบโรลในกลุ่ม ${group.name}`;
+      } else {
+        return `${triggerer.displayName} ${
+          other > 0 ? `และคนอื่นๆ อีก ${other} คน` : ""
+        } ได้แสดงความคิดเห็นในโพสในกลุ่ม ${group.name}`;
+      }
+    } else if (type == "102A") {
+      return `${
+        chara ? chara.name : triggerer.displayName
+      } กล่าวถึง ${mentionTostring()} ในการตอบโรลในกลุ่ม ${group.name}`;
     } else if (type == "103") {
-      return `${triggerer.displayName} ${
-        other > 0 ? `และคนอื่นๆ อีก ${other} คน` : ""
-      } ได้ตอบกลับความคิดเห็นในโพสในกลุ่ม ${group.name}`;
+      if (chara) {
+        return `${chara.name}  ได้ตอบกลับโรลในกลุ่ม ${group.name}`;
+      } else {
+        return `${triggerer.displayName} ${
+          other > 0 ? `และคนอื่นๆ อีก ${other} คน` : ""
+        } ได้ตอบกลับความคิดเห็นในโพสในกลุ่ม ${group.name}`;
+      }
+    } else if (type == "103A") {
+      return `${
+        chara ? chara.name : triggerer.displayName
+      } กล่าวถึง ${mentionTostring()} ในการตอบกลับโรลในกลุ่ม ${group.name}`;
     } else if (type == "104") {
       return `${triggerer.displayName} ${
         other > 0 ? `และคนอื่นๆ อีก ${other} คน` : ""
