@@ -102,7 +102,7 @@ export const EditPersonal = ({onFinish, value, config, onRefresh}) => {
                         อายุ
                     </Box>
 
-                    <NumberInput w={"100%"} value={getValue("age")} onChange={(e)=>setValue("age", parseInt(e))}>
+                    <NumberInput w={"100%"} value={getValue("age")} min={1} onChange={(e)=>setValue("age", parseInt(e))}>
                         <NumberInputField placeholder="2" min={0} />
                         <NumberInputStepper>
                             <NumberIncrementStepper />

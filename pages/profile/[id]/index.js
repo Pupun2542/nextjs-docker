@@ -463,9 +463,9 @@ export default function profile() {
                 </TabPanel> */}
 
                 {/* Community */}
-                <TabPanel>
+                {/* <TabPanel>
                   <p>?</p>
-                </TabPanel>
+                </TabPanel> */}
 
                 {/* OC */}
                 {/* <TabPanel>
