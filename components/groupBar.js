@@ -35,6 +35,7 @@ import {
   ChatsCircle,
   CaretDown,
 } from "phosphor-react";
+import { useGroupHeader, useUser } from "../src/hook/local";
 
 export const GroupBar = ({
   id,
@@ -50,8 +51,36 @@ export const GroupBar = ({
   const btnRef = React.useRef();
   const responsivebar = useDisclosure();
   const changeCharacter = useDisclosure();
+  const pinTab = useDisclosure();
+  const getUser = useUser();
+  const getgroup = useGroupHeader();
+  const [usr, setusr] = useState({});
 
-  const displayUser = selectedchara?.name ? selectedchara : {...user, isOwner: data.isOwner, isStaff: data.isStaff} || null;
+  useEffect(() => {
+    const getusr = async () => {
+      let ussr = await getUser([user.uid]);
+      ussr = ussr[0];
+      if (ussr.pinned) {
+        const header = await Promise.all(
+          ussr.pinned.map(async (pin) => await getgroup(pin))
+        );
+        ussr = { ...ussr, pinned: header };
+      }
+      setusr(ussr);
+    };
+    if (id && user) {
+      getusr();
+    }
+  }, [id, user]);
+
+  const displayUser = selectedchara?.name
+    ? selectedchara
+    : {
+        ...user,
+        isOwner: data.isOwner,
+        isStaff: data.isStaff,
+        isMember: Object.keys(data.member).includes(user.uid),
+      } || null;
   // console.log(displayUser)
 
   if (displayUser) {
@@ -67,7 +96,7 @@ export const GroupBar = ({
           bg={"white"}
           rounded={10}
           w={"100%"}
-          maxWidth={{ xl: '350px', '2xl':"450px"}}
+          maxWidth={{ xl: "350px", "2xl": "450px" }}
           display={{ sm: "none", xl: "initial" }}
           zIndex={20000}
         >
@@ -78,7 +107,13 @@ export const GroupBar = ({
             />
 
             <Box w={"100%"}>
-              <Menu display={data?.mychara || (page && page == "preview") ? "initial" : "none"}>
+              <Menu
+                display={
+                  data?.mychara || (page && page == "preview")
+                    ? "initial"
+                    : "none"
+                }
+              >
                 <MenuButton
                   as={Button}
                   rightIcon={<CaretDown size={6} />}
@@ -114,11 +149,12 @@ export const GroupBar = ({
                   {displayUser.isOwner
                     ? "Owner"
                     : displayUser.isStaff
-                      ? "Staff"
-                      : Object.keys(data.member).includes(user.uid) ? "member" :
-                      displayUser.refererId
-                        ? "character"
-                        : "visitor"}
+                    ? "Staff"
+                    : displayUser.isMember
+                    ? "member"
+                    : displayUser.refererId
+                    ? "character"
+                    : "visitor"}
                 </Text>
               </Flex>
             </Box>
@@ -177,12 +213,17 @@ export const GroupBar = ({
             )}
           </HStack>
 
-          <Button w={"100%"} onClick={() => router.push(`/group/${id}`)}>
+          <Button
+            w={"100%"}
+            onClick={() => router.push(`/group/${id}`)}
+            disabled={!displayUser.isMember}
+          >
             Lobby
           </Button>
           <Button
             w={"100%"}
             onClick={() => router.push(`/group/${id}/dashboard`)}
+            disabled={!displayUser.isMember}
           >
             Dashboard
           </Button>
@@ -199,7 +240,10 @@ export const GroupBar = ({
           zIndex={20000}
           spacing={0}
         >
-          {responsivebar.isOpen && data?.mychara && page && page !== "preview" ? (
+          {responsivebar.isOpen &&
+          data?.mychara &&
+          page &&
+          page !== "preview" ? (
             <Circle
               width={"48px"}
               height={"48px"}
@@ -213,7 +257,7 @@ export const GroupBar = ({
               src={displayUser.photoURL}
               name={displayUser.displayName || displayUser.name}
               onClick={responsivebar.onToggle}
-              m={'6px'}
+              m={"6px"}
             />
           )}
           <VStack
@@ -222,12 +266,12 @@ export const GroupBar = ({
               "opacity 150ms ease-in-out, transform 150ms ease-in-out"
             }
             opacity={responsivebar.isOpen ? 1 : 0}
-            bg={'white'}
+            bg={"white"}
             py={2}
-            borderWidth={'2px'}
-            borderColor={'black'}
+            borderWidth={"2px"}
+            borderColor={"black"}
             borderRadius={5}
-            boxShadow={'base'}
+            boxShadow={"base"}
           >
             <Box position={"relative"}>
               <Avatar
@@ -271,6 +315,7 @@ export const GroupBar = ({
             </Box>
             {((data.isStaff && data.mainchatgroup) || !data.isStaff) && (
               <IconButton
+                as={"button"}
                 colorScheme="twitter"
                 icon={<ChatsCircle />}
                 ref={btnRef}
@@ -279,11 +324,13 @@ export const GroupBar = ({
                 title="Chats"
                 w={"48px"}
                 h={"48px"}
+                disabled={!displayUser.isMember}
               />
             )}
 
             {data.isStaff && !data.mainchatgroup && (
               <IconButton
+                as={"button"}
                 title="Chats"
                 colorScheme="facebook"
                 icon={<ChatsCircle />}
@@ -292,27 +339,66 @@ export const GroupBar = ({
                 rounded={"full"}
                 w={"48px"}
                 h={"48px"}
+                disabled={!displayUser.isMember}
               />
             )}
             <Circle
+              as={"button"}
               w={"48px"}
               h={"48px"}
               bg={"lightgray"}
               onClick={() => router.push(`/group/${id}`)}
+              disabled={!displayUser.isMember}
             >
               LB
             </Circle>
             <Circle
+              as={"button"}
               w={"48px"}
               h={"48px"}
               bg={"lightgray"}
               onClick={() => router.push(`/group/${id}/dashboard`)}
+              disabled={!displayUser.isMember}
             >
               DB
             </Circle>
-            <Circle w={"48px"} h={"48px"} bg={"lightgray"}>
+
+            <Circle
+              w={"48px"}
+              h={"48px"}
+              bg={"lightgray"}
+              as={"button"}
+              onClick={pinTab.onToggle}
+            >
               P
             </Circle>
+            
+            {pinTab.isOpen && (
+              <VStack
+                translateY={"-20px"}
+                transition={
+                  "opacity 150ms ease-in-out, transform 150ms ease-in-out"
+                }
+                opacity={pinTab.isOpen ? 1 : 0}
+                bg={"white"}
+              >
+                {console.log(usr)}
+                {usr.pinned?.map((pin, k) => (
+                  <Circle
+                    as={"button"}
+                    w={"48px"}
+                    h={"48px"}
+                    bg={"lightgray"}
+                    onClick={() => router.push(`/group/${pin.gid}/`)}
+                    key={k}
+                    // disabled={!displayUser.isMember}
+                  >
+                    {console.log(pin)}
+                    <Avatar src={pin.bannersqr} name={pin.name} />
+                  </Circle>
+                ))}
+              </VStack>
+            )}
           </VStack>
         </VStack>
       </>

@@ -104,16 +104,6 @@ const Postsection = ({ data, pid, user, id, selectedchara, setSelectedchara }) =
     id
   );
 
-  useEffect(() => {
-    if (user && data && data.member) {
-      const isMember = Object.keys(data.member).find((v) => v == user.uid);
-      if (!isMember) {
-        Router.push(`/group/${id}`);
-      }
-      // if (find)
-    }
-  }, [data, user]);
-
   //main
   const setStateData = (value, id) => {
     dispatch({ type: "set", value: value, id: id });

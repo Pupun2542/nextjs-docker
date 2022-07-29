@@ -77,6 +77,16 @@ function dashboard() {
   const { data, loading, onRefresh } = useGroupData(id, user);
   const [selectedchara, setSelectedchara] = useState({});
 
+  useEffect(() => {
+    if (user && data && data.member) {
+      const isMember = Object.keys(data.member).find((v) => v == user.uid);
+      if (!isMember) {
+        Router.push(`/group/${id}`);
+      }
+      // if (find)
+    }
+  }, [data, user]);
+
   if (!loading && data) {
     return (
       <Box bg={"#F3F5F8"}>
