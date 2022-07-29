@@ -140,15 +140,14 @@ export const Commentsection = ({ gid, commenters, initialcomment }) => {
   };
   return (
     <Box
-      marginLeft="100px"
-      marginRight="100px"
+      width={"90%"}
       marginTop="20px"
       marginBottom="50px"
       fontFamily={"Sarabun"}
     >
       <Text fontSize={32}>
         ความคิดเห็น - [
-        {commentcount}]
+        {commentcount||0}]
       </Text>
       <Box>
         <InputGroup>

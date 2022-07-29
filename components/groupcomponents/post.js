@@ -316,8 +316,8 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
             rounded={"100%"}
             h={50}
             w={50}
-            src={postchara.name ? postchara.photoURL : creator.photoURL}
-            name={postchara.name ? postchara.name : creator.displayName}
+            src={postchara.name ? postchara.photoURL : creator?.photoURL}
+            name={postchara.name ? postchara.name : creator?.displayName}
 
           />
           <VStack w={"100%"} spacing={0}>
@@ -329,7 +329,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
                 onClick={postchara.name ? () => router.push("../../profile/" + creator?.uid) : () => { }}
                 cursor={"pointer"}
               >
-                {postchara.name ? creator.displayName : ""}
+                {postchara.name ? creator?.displayName : ""}
               </Box>
               <Spacer />
               <Box float={"right"}>
@@ -378,10 +378,11 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
 
         <Flex pl={55} pr={55} direction={"column"}>
           <HStack m={2}>
-            <Text fontSize={14} color={'gray.400'}>ได้กล่าวถึง</Text>
-            <Tag color={'black'} bg={'gray.200'}>Mister Daruma</Tag>
-            <Tag colorScheme={'cyan'}>Day 1</Tag>
-            <Tag colorScheme={'orange'}>Talking</Tag>
+            {post.mention&&post.mention.length > 0 &&(<Text fontSize={14} color={'gray.400'}>ได้กล่าวถึง</Text>)}
+            {post.mention?.map((tag)=> (<Tag color={'black'} bg={'gray.200'}>{tag.name}</Tag>))}
+            {post.tag?.map((tag)=> (<Tag colorScheme={'cyan'}>{tag}</Tag>))}
+            {/* <Tag colorScheme={'cyan'}>Day 1</Tag> */}
+            {/* <Tag colorScheme={'orange'}>Talking</Tag> */}
           </HStack>
 
           {editMode ? (

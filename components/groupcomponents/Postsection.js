@@ -62,8 +62,6 @@ const Postsection = ({ data, pid, user, id, selectedchara, setSelectedchara }) =
   } = useDisclosure();
   const mentionRef = useRef(null);
   const [mention, setMention] = useState([]);
-  const { charaSearchResult, onSearchChara } = useCharaList(data, id);
-  const [searchstr, setsearchstr] = useState("");
 
   if (typeof window !== "undefined") {
     document.addEventListener("mousedown", (e) => {
@@ -319,6 +317,7 @@ const Postsection = ({ data, pid, user, id, selectedchara, setSelectedchara }) =
             <Input
               type="text"
               onKeyUp={(event) => (event.key === "," ? addTags(event) : null)}
+              onBlur={addTags}
               placeholder=" ใช้ , เพื่อแบ่งประเภท"
               w={"auto"}
               isDisabled={props.isDisabled}

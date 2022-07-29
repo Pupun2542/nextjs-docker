@@ -394,12 +394,12 @@ export default function Group() {
                   </Box>
                 </Flex>
 
-                <img
+                <Image
                   boxShadow={"base"}
                   src={data.banner}
                   height={478}
                   width={850}
-                ></img>
+                ></Image>
 
                 <Flex direction={"column"} bg={"#F3F5F8"} boxShadow={"base"}>
                   <Center

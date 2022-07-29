@@ -52,6 +52,7 @@ export const GroupBar = ({
   const changeCharacter = useDisclosure();
 
   const displayUser = selectedchara?.name ? selectedchara : {...user, isOwner: data.isOwner, isStaff: data.isStaff} || null;
+  // console.log(displayUser)
 
   if (displayUser) {
     return (
@@ -114,7 +115,8 @@ export const GroupBar = ({
                     ? "Owner"
                     : displayUser.isStaff
                       ? "Staff"
-                      : displayUser.refererId
+                      : Object.keys(data.member).includes(user.uid) ? "member" :
+                      displayUser.refererId
                         ? "character"
                         : "visitor"}
                 </Text>

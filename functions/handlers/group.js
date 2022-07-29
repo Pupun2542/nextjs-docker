@@ -567,72 +567,72 @@ exports.getGroup = (req, res) =>{
   db.collection("group").doc(req.params.gid).get().then((doc)=>{
     if (doc.exists) {
       const data = doc.data();
-      if (data.privacy == "private" && req.user && data.member.includes(req.user.uid) || data.privacy != "private") {
-        let identifiers = [];
-        doc.data().member.map((mem)=> {
+      // if (data.privacy == "private" && req.user && data.member.includes(req.user.uid) || data.privacy != "private") {
+      let identifiers = [];
+      doc.data().member.map((mem)=> {
+        identifiers = [...identifiers, {uid: mem}];
+      });
+      doc.data().commentuser.map((mem)=> {
+        identifiers = [...identifiers, {uid: mem}];
+      });
+      if (doc.data().pendingmember) {
+        doc.data().pendingmember.map((mem)=> {
           identifiers = [...identifiers, {uid: mem}];
         });
-        doc.data().commentuser.map((mem)=> {
-          identifiers = [...identifiers, {uid: mem}];
-        });
-        if (doc.data().pendingmember) {
-          doc.data().pendingmember.map((mem)=> {
-            identifiers = [...identifiers, {uid: mem}];
-          });
-        }
-        const identifierschk = identifiers.reduce((all, one, i) => {
-          const ch = Math.floor(i/100);
-          all[ch] = [].concat((all[ch]||[]), one);
-          return all;
-        }, []);
-
-        Promise.all(identifierschk.map((identifiers)=> admin.auth().getUsers(identifiers))).then((result)=>{
-          const member = result[0];
-          let grpmember = {};
-          member.users.map((auser)=>{
-            grpmember = {...grpmember,
-              [auser.uid]: {
-                uid: auser.uid,
-                displayName: auser.displayName,
-                photoURL: auser.photoURL,
-              }};
-          });
-          const arrgrpmember = Object.entries(grpmember);
-          let mappeddocdata = {
-            ...doc.data(),
-            creator: Object.fromEntries([arrgrpmember.find(([k, v])=>v.uid === doc.data().creator)]),
-            member: Object.fromEntries(arrgrpmember.filter(([k, v], i)=>doc.data().member.includes(v.uid))),
-            staff: Object.fromEntries(arrgrpmember.filter(([k, v], i)=>doc.data().staff.includes(v.uid))),
-            commentuser: Object.fromEntries(arrgrpmember.filter(([k, v], i)=>doc.data().commentuser.includes(v.uid))),
-          };
-          if (doc.data().chara) {
-            // console.log(doc.data().chara);
-            const arrgrpchara = Object.entries(doc.data().chara);
-            // console.log(arrgrpchara);
-            let newChara = [];
-            arrgrpchara.map(([k, v])=> {
-              console.log(v.parentId);
-              const refname = grpmember[v.parentId].displayName;
-              newChara = [...newChara, [k, {...v, parentName: refname}]];
-            });
-            // console.log(Object.fromEntries(newChara));
-            mappeddocdata = {
-              ...mappeddocdata,
-              chara: Object.fromEntries(newChara),
-            };
-          }
-          if (doc.data().pendingmember) {
-            mappeddocdata = {
-              ...mappeddocdata,
-              pendingmember: Object.fromEntries(arrgrpmember.filter(([k, v], i)=>doc.data().pendingmember.includes(v.uid))),
-            };
-          }
-          const senddata = {...data, ...mappeddocdata};
-          return res.status(200).json(senddata);
-        });
-      } else {
-        return res.status(403).send("this is private group");
       }
+      const identifierschk = identifiers.reduce((all, one, i) => {
+        const ch = Math.floor(i/100);
+        all[ch] = [].concat((all[ch]||[]), one);
+        return all;
+      }, []);
+
+      Promise.all(identifierschk.map((identifiers)=> admin.auth().getUsers(identifiers))).then((result)=>{
+        const member = result[0];
+        let grpmember = {};
+        member.users.map((auser)=>{
+          grpmember = {...grpmember,
+            [auser.uid]: {
+              uid: auser.uid,
+              displayName: auser.displayName,
+              photoURL: auser.photoURL,
+            }};
+        });
+        const arrgrpmember = Object.entries(grpmember);
+        let mappeddocdata = {
+          ...doc.data(),
+          creator: Object.fromEntries([arrgrpmember.find(([k, v])=>v.uid === doc.data().creator)]),
+          member: Object.fromEntries(arrgrpmember.filter(([k, v], i)=>doc.data().member.includes(v.uid))),
+          staff: Object.fromEntries(arrgrpmember.filter(([k, v], i)=>doc.data().staff.includes(v.uid))),
+          commentuser: Object.fromEntries(arrgrpmember.filter(([k, v], i)=>doc.data().commentuser.includes(v.uid))),
+        };
+        if (doc.data().chara) {
+          // console.log(doc.data().chara);
+          const arrgrpchara = Object.entries(doc.data().chara);
+          // console.log(arrgrpchara);
+          let newChara = [];
+          arrgrpchara.map(([k, v])=> {
+            console.log(v.parentId);
+            const refname = grpmember[v.parentId].displayName;
+            newChara = [...newChara, [k, {...v, parentName: refname}]];
+          });
+          // console.log(Object.fromEntries(newChara));
+          mappeddocdata = {
+            ...mappeddocdata,
+            chara: Object.fromEntries(newChara),
+          };
+        }
+        if (doc.data().pendingmember) {
+          mappeddocdata = {
+            ...mappeddocdata,
+            pendingmember: Object.fromEntries(arrgrpmember.filter(([k, v], i)=>doc.data().pendingmember.includes(v.uid))),
+          };
+        }
+        const senddata = {...data, ...mappeddocdata};
+        return res.status(200).json(senddata);
+      });
+      // } else {
+      //   return res.status(403).send("this is private group");
+      // }
     } else {
       return res.status(404).send("cannot find group");
     }

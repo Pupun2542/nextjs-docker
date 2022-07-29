@@ -251,6 +251,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
             <Input
               type="text"
               onKeyUp={(event) => (event.key === "," ? addTags(event) : null)}
+              onBlur={addTags}
               placeholder=" ใช้ , เพื่อแบ่งประเภท"
               w={"auto"}
               isDisabled={props.isDisabled}

@@ -85,6 +85,7 @@ const MentionBox = ({ data, id, mention, setMention }) => {
             top={"35px"} 
             bg={"white"}
             borderRadius={5}
+            display={searchstr ? "initial" : "none"}
             >
               {filteredcharaSearchResult.map((char) => (
                 <Box

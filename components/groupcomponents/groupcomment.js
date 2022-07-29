@@ -112,7 +112,7 @@ export const Commentpost = ({
                   ];
                 }
               }
-              console.log(foundmissing);
+              // console.log(foundmissing);
               setReply(
                 snapshot.docs.map((doc) => ({
                   ...doc.data(),
