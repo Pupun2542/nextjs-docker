@@ -52,6 +52,7 @@ import { Myfriends } from "../../../components/profile/myfriends";
 import axios from "axios";
 import useFriendManager from "../../../components/groupcomponents/friendhooks";
 import UseChatManager from "../../../src/hook/useChatManager";
+import CharactersSection from "../../../components/character/CharacterSection";
 
 export default function profile() {
   const router = useRouter();
@@ -468,20 +469,7 @@ export default function profile() {
 
                 {/* OC */}
                 <TabPanel>
-                  <Center
-                    h={150}
-                    w={150}
-                    boxShadow={"base"}
-                    rounded={10}
-                    as={"button"}
-                    bg={"whatsapp.500"}
-                    _hover={{
-                      backgroundColor: "whatsapp.600",
-                    }}
-                    onClick={() => router.push("/CreateChara")}
-                  >
-                    Create
-                  </Center>
+                  <CharactersSection />
                 </TabPanel>
 
                 {/* Friend */}
