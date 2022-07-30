@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Flex,
   Box,
@@ -27,6 +27,7 @@ import { DotsThreeVertical } from "phosphor-react";
 
 export const CharactersSection = ({ }) => {
   const router = useRouter();
+    
 
   return (
     <VStack w={'100%'}>

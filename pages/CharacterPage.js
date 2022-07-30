@@ -23,16 +23,56 @@ import {
   TabPanels,
   TabPanel,
   Spacer,
+  Switch,
 } from "@chakra-ui/react";
-import { Eye } from "phosphor-react";
+import { useState } from "react";
+import { Columns, Eye, Rows, Table } from "phosphor-react";
 import CustomNavbar from "../components/navbar";
 
 export const Characterpage = ({ }) => {
+  const [ToggleGridView, setToggleGridView] = useState(false);
+
+  const SwitchGrid = () => setToggleGridView(ToggleGridView => !ToggleGridView);
   return (
     <Box bg={'#F3F5F8'} h={'100vh'}>
       <CustomNavbar />
-      <Flex px={20} w={'100%'} fontFamily={'SarabunSB'} justifyContent={'center'} pt={55}>
-        <Flex mr={2} w={'100%'} direction={'column'} boxShadow={'base'} bg={'white'} px={'50px'}>
+      <Flex
+        px={20}
+        w={'100%'}
+        fontFamily={'SarabunSB'}
+        justifyContent={'center'}
+        pt={55}
+        direction={ToggleGridView ? "row" : "column"}
+      >
+
+
+        <Flex w={'100%'} direction={'column'} boxShadow={'base'} bg={'white'} px={'50px'}>
+          <Flex
+            bg={'#6768AB'}
+            px={1}
+            py={3}
+            fontSize={25}
+            color={'white'}
+            fontWeight='extrabold'
+          >
+            <Center w={'95%'} ml={'5%'}>Gallery</Center>
+            <Center w={'5%'}>
+              <IconButton
+                rounded={'full'}
+                icon={ToggleGridView ? <Rows size={'25px'} /> : <Columns size={'25px'} />}
+                onClick={SwitchGrid}
+                bg={'#FFC75A'}
+                color={'black'}
+                borderColor={'black'}
+                borderWidth={2}
+              />
+            </Center>
+          </Flex>
+
+
+        </Flex>
+
+        <Flex w={'100%'} direction={'column'} boxShadow={'base'} bg={'white'} px={'50px'}>
           <Center
             bg={'#6768AB'}
             w={'100%'}
@@ -109,21 +149,6 @@ export const Characterpage = ({ }) => {
             <Spacer />
             <Button bg={'#FFC75A'} borderWidth={2} borderColor={'black'}>บันทึกและเผยแพร่</Button>
           </Flex>
-        </Flex>
-
-        <Flex ml={2} w={'100%'} direction={'column'} boxShadow={'base'} bg={'white'} px={'50px'}>
-          <Center
-            bg={'#6768AB'}
-            w={'100%'}
-            py={3}
-            fontSize={25}
-            color={'white'}
-            fontWeight='extrabold'
-          >
-            Information
-          </Center>
-
-          
         </Flex>
       </Flex>
     </Box>
