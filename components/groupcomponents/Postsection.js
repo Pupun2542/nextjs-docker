@@ -33,6 +33,7 @@ import {
   HStack,
   CloseButton,
   Wrap,
+  useOutsideClick,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { Skeletonpost } from "./skeletonpost";
