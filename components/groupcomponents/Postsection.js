@@ -62,14 +62,11 @@ const Postsection = ({ data, pid, user, id, selectedchara, setSelectedchara }) =
   } = useDisclosure();
   const mentionRef = useRef(null);
   const [mention, setMention] = useState([]);
-
-  if (typeof window !== "undefined") {
-    document.addEventListener("mousedown", (e) => {
-      if (mentionRef.current && !mentionRef.current.contains(e.target)) {
-        onMentionClose();
-      }
-    });
-  }
+  
+  useOutsideClick({
+    ref: mentionRef,
+    handler: onMentionClose
+  })
 
   const reducer = (state, action) => {
     switch (action.type) {

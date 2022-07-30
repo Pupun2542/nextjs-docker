@@ -40,6 +40,7 @@ import {
   DrawerContent,
   DrawerCloseButton,
   DrawerHeader,
+  useOutsideClick,
 } from "@chakra-ui/react";
 import style from "../styles/navbar.module.css";
 import { useRouter } from "next/router";
@@ -134,19 +135,27 @@ function CustomNavbar() {
   const onLeave = () => {
     setCSBExpand(false);
   };
+  useOutsideClick({
+    ref: chatTabRef,
+    handler: onChatClose
+  })
+  useOutsideClick({
+    ref: notiTabRef,
+    handler: onNotiClose
+  })
 
-  if (typeof window !== "undefined") {
-    document.addEventListener("mousedown", (e) => {
-      if (chatTabRef.current && !chatTabRef.current.contains(e.target)) {
-        onChatClose();
-      }
-    });
-    document.addEventListener("mousedown", (e) => {
-      if (notiTabRef.current && !notiTabRef.current.contains(e.target)) {
-        onNotiClose();
-      }
-    });
-  }
+  // if (typeof window !== "undefined") {
+  //   document.addEventListener("mousedown", (e) => {
+  //     if (chatTabRef.current && !chatTabRef.current.contains(e.target)) {
+  //       onChatClose();
+  //     }
+  //   });
+  //   document.addEventListener("mousedown", (e) => {
+  //     if (notiTabRef.current && !notiTabRef.current.contains(e.target)) {
+  //       onNotiClose();
+  //     }
+  //   });
+  // }
   useEffect(() => {
     let unsubscribe = () => {};
     if (user && !loading) {
