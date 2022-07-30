@@ -433,6 +433,7 @@ export default function profile() {
                 <Tab
                   _selected={{ color: "white", bg: "#9A9AB0" }}
                   borderRadius={10}
+                  isDisabled
                 >
                   Original Character
                 </Tab>
