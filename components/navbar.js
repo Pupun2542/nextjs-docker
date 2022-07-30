@@ -143,19 +143,6 @@ function CustomNavbar() {
     ref: notiTabRef,
     handler: onNotiClose
   })
-
-  // if (typeof window !== "undefined") {
-  //   document.addEventListener("mousedown", (e) => {
-  //     if (chatTabRef.current && !chatTabRef.current.contains(e.target)) {
-  //       onChatClose();
-  //     }
-  //   });
-  //   document.addEventListener("mousedown", (e) => {
-  //     if (notiTabRef.current && !notiTabRef.current.contains(e.target)) {
-  //       onNotiClose();
-  //     }
-  //   });
-  // }
   useEffect(() => {
     let unsubscribe = () => {};
     if (user && !loading) {
