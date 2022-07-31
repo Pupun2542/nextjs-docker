@@ -238,11 +238,9 @@ export const GroupNotiProvider = ({ children }) => {
     if (group) {
       return group
     } else {
-      // console.log(groupId);
       const snapshot = await getDoc(doc(db, "group", groupId));
-      if (snapshot.exists){
+      if (snapshot.exists()){
         const res = snapshot.data()
-        // console.log(res);
         const tosend = {
           ...res,
           thumbnail: res.banner,
