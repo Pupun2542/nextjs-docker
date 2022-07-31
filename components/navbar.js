@@ -109,13 +109,7 @@ function CustomNavbar() {
   } = useDisclosure();
   const router = useRouter();
   const [user, loading, error] = useAuthState(auth);
-  const breakpoints = {
-    sm: "320px",
-    md: "768px",
-    lg: "960px",
-    xl: "1200px",
-    "2xl": "1536px",
-  };
+  // console.log({bp: router.basePath, ap: router.asPath})
   const btnRef = React.useRef();
   const [data, setData] = useState(undefined);
   const [unreadChat, setUnreadChat] = useState([]);
@@ -181,6 +175,7 @@ function CustomNavbar() {
 
   useEffect(() => {
     if (notidata.length > 0) {
+      // notidata
       const unreadedItem = notidata.filter((v, i) => v.readed == false);
       if (unreadedItem.length > 0) {
         playNoti();

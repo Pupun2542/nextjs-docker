@@ -213,7 +213,7 @@ export default function profile() {
               >
                 <Image
                   borderBottomRadius={10}
-                  src={userDetail?.coverImage}
+                  // src={userDetail?.coverImage}
                   w="100%"
                   h="100%"
                   fallback={<Box></Box>}

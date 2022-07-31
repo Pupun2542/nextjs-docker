@@ -36,6 +36,9 @@ export const ChatBox = ({
   const [msg, setMsg] = useState("");
   const messagesEndRef = useRef(null);
   const dropdownref = useRef(null);
+  const chatboxref = useRef(null)
+
+  const firstload = useRef(true);
 
   const {
     isOpen: isSettingOpen,
@@ -57,7 +60,11 @@ export const ChatBox = ({
 
   useEffect(() => {
     if (!loading && mappedRoomDetail) {
-      messagesEndRef.current?.scrollIntoView();
+      if (firstload.current){
+        messagesEndRef.current?.scrollIntoView();
+        firstload.current == false;
+      }
+      
     }
   }, [mappedMessage]);
 
@@ -96,6 +103,12 @@ export const ChatBox = ({
     // In case you have a limitation
     e.target.style.height = `${Math.min(e.target.scrollHeight, 50)}px`;
   };
+
+  const scrollTopHandler = (e) => {
+    if (e.target.scrollTop == 0) {
+      loadmore();
+    }
+  }
 
   if (!loading && mappedRoomDetail) {
     return (
@@ -203,6 +216,8 @@ export const ChatBox = ({
           }}
           // alignItems="end"
           onClick={handleFocus}
+          onScroll={scrollTopHandler}
+          ref={chatboxref}
         >
           {mappedMessage &&
             mappedRoomDetail &&

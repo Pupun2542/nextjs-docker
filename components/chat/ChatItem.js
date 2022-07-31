@@ -17,16 +17,16 @@ export const ChatItem = ({ doc, user }) => {
   const [modalOpen, setModalOpen] = useState(false);
   return (
     <Flex
-      flexDirection={doc.sender.uid == user.uid ? "row-reverse" : "row"}
+      flexDirection={doc.sender?.uid == user.uid ? "row-reverse" : "row"}
       alignSelf={"flex-end"}
       padding="5px"
 
     >
       <Box fontFamily={"Sarabun"}>
-        {doc.sender.uid == user.uid ? (
+        {doc.sender?.uid == user.uid ? (
           <VStack align={'stretch'} spacing={0} float={'right'} minW={280} maxW={320} marginBottom={0}>
             <Flex justifyContent={"end"} alignContent={"center"} mb={1}>
-              <Text fontSize={12} pt={"8px"}>{doc.sender.displayName}</Text>
+              <Text fontSize={12} pt={"8px"}>{doc.sender?.displayName}</Text>
             </Flex>
             <Box>
               {/* <Avatar src={doc.sender.photoURL} name={doc.sender.displayName} h={"36px"} w={"36px"} mr={1} /> */}
@@ -63,13 +63,13 @@ export const ChatItem = ({ doc, user }) => {
         ) : (
           <VStack float={'left'} spacing={0} align={'stretch'} minW={280} maxW={320} marginBottom={0}>
             <Flex justifyContent={"start"} alignContent={"center"} mb={1}>
-              <Text fontSize={12} pt={"8px"} pl={10}>{doc.sender.displayName}</Text>
+              <Text fontSize={12} pt={"8px"} pl={10}>{doc.sender?.displayName}</Text>
             </Flex>
 
             <Flex>
               <Avatar
-                src={doc.sender.photoURL}
-                name={doc.sender.displayName}
+                src={doc.sender?.photoURL}
+                name={doc.sender?.displayName}
                 h={"30px"}
                 w={"30px"}
                 mr={1}

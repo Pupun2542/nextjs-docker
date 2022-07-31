@@ -36,7 +36,7 @@ export const CreateAlbumForm = ({
   setAlb,
   alb,
 }) => {
-  const chara = Object.values(mychara);
+  const chara = mychara ? Object.values(mychara) : [];
   const [formMode, setFormMode] = useState(1);
   const {
     isOpen: isCharSelectOpen,
@@ -118,7 +118,7 @@ export const CreateAlbumForm = ({
         }
         const data = {
           uid: auth.currentUser.uid,
-          caid: selectedChar.refererId,
+          caid: selectedChar.refererId || "",
           name: albName,
           type: formMode,
           thumbnail: 0,
