@@ -37,34 +37,39 @@ const Notitab = ({ notidata }) => {
       const mappedNotiData = [];
       notidata.map((data) => {
         const group = detailedgroup.find((v) => v?.gid === data.group);
-        const triggerer = detaileduser.find(
-          (v) => data.triggerer[data.triggerer.length - 1] === v?.uid
-        );
-        const other = data.triggerer.length - 1;
-        const object = detaileduser.find((v) => data.object === v?.uid);
-        const chara = group?.chara[data.specialPayload?.charapost];
-        const mentionchara = data.specialPayload?.mention?.filter(
-          (v, i) => v.parentId === auth.currentUser.uid
-        );
-        mappedNotiData = [
-          ...mappedNotiData,
-          {
-            ...data,
-            group: group,
-            triggerer: chara ? chara : triggerer,
-            message: notimessage(
-              data.notitype,
-              group,
-              object,
-              triggerer,
-              other,
-              chara,
-              mentionchara
-            ),
-            time: caltime(data.timestamp),
-            path: data.path.startsWith("/") ? data.path : "/" + data.path,
-          },
-        ];
+        if (group) {
+          const triggerer = detaileduser.find(
+            (v) => data.triggerer[data.triggerer.length - 1] === v?.uid
+          );
+          const other = data.triggerer.length - 1;
+          const object = detaileduser.find((v) => data.object === v?.uid);
+          const chara = group.chara
+            ? group?.chara[data.specialPayload?.charapost]
+            : {};
+          const mentionchara = data.specialPayload?.mention?.filter(
+            (v, i) => v.parentId === auth.currentUser?.uid
+          );
+          mappedNotiData = [
+            ...mappedNotiData,
+            {
+              ...data,
+              group: group,
+              triggerer: chara ? chara : triggerer,
+              message: notimessage(
+                data.notitype,
+                group,
+                object,
+                triggerer,
+                other,
+                chara,
+                mentionchara
+              ),
+              time: caltime(data.timestamp),
+              path: data.path.startsWith("/") ? data.path : "/" + data.path,
+            },
+          ];
+        }
+        // }
       });
       setNewNotiData(mappedNotiData);
     };
