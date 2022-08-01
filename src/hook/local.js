@@ -265,7 +265,6 @@ const initialchara = {
 const charaReducer = (state, action) => {
   switch (action.type) {
     case "addUser":
-      console.log(state.data, action.userDetail)
       return {
         ...state,
         // data: {...state.data, [action.uid]:action.payload}
@@ -294,12 +293,10 @@ export const charaProvider = ({ children }) => {
         if (!docData.empty) {
           userDetail = docData.docs.map((doc) => doc.data());
           DataDispatcher({ type: "addUser", userDetail });
-          console.log("new:", userDetail)
           return userDetail;
         }
         
       } else {
-        console.log("found: ",users)
         return users;
       }
     }

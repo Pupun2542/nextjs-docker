@@ -52,7 +52,6 @@ export const RunFormTemplate = () => {
     }
   };
   const onFormValueChange = (index, value) => {
-    console.log(value);
     let newform = [...form];
     newform[index] = value;
     setForm(newform);
@@ -125,7 +124,6 @@ const FormItem = ({
   value,
 }) => {
   const onInputChange = (field, val) => {
-    console.log(value);
     onValueChange({ ...value, [field]: val });
   };
   return (

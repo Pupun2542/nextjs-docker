@@ -24,7 +24,6 @@ export async function SignInWithEmailAndPassword(email, password){
     await signInWithEmailAndPassword(email, password);
 }
 export async function RegisterWithEmail(email, password, displayname){
-    console.log("into regis")
     let error = ""
     const phprofileurl = "https://firebasestorage.googleapis.com/v0/b/comuthor-36139.appspot.com/o/profileimg%2Fistockphoto-1223671392-612x612.jpg?alt=media&token=2e2848e9-864f-48db-a20b-0d62022f02c6"
     await createUserWithEmailAndPassword(auth, email, password).catch((e)=>{

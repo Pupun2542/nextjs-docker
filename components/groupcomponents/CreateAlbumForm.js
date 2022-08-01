@@ -64,8 +64,6 @@ export const CreateAlbumForm = ({
 
   useEffect(() => {
     if (alb?.aid) {
-      // console.log(alb);
-      // console.log(mychara[alb.caid]);
       setSelectedImage(alb.mediaList);
       setSelectedchara(mychara[alb.caid]);
       setAlbName(alb.name);
@@ -84,7 +82,6 @@ export const CreateAlbumForm = ({
       if ((formMode == 1 && selectedChar.name) || formMode == 0) {
         setLoading(true);
         const aid = (alb?.aid? alb.aid : doc(collection(db, "group", gid, "album")).id);
-        console.log(aid);
         let dlurl = [];
         if (selectedImage.length > 0) {
           dlurl = await Promise.all(

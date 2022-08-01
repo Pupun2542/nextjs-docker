@@ -78,7 +78,6 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
   const router = useRouter();
   const { chara, refreshcharaList } = useCharaList(data, gid);
   const checkChara = () => {
-    // console.log(chara[chara.findIndex(v => v.refererId = comment.charaId)])
     if (chara[chara.findIndex(v => v.refererId == comment.charaId)]) {
       return chara[chara.findIndex(v => v.refererId == comment.charaId)];
     } else {
@@ -142,7 +141,6 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
       snapshot.docs.map(async (doc) => {
         let mappedcommentData = {};
         let creator = {};
-        // console.log(member, doc.data().uid)
         if (member[doc.data().uid]) {
           creator = member[doc.data().uid];
         } else {
@@ -225,7 +223,6 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
       );
     }
     // setMessage("");
-    // console.log(getpathfromUrl(commentdoc.imageURL))
   };
 
   const handleEdit = async () => {
@@ -248,7 +245,6 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
       alert(res.data);
     }
     // setMessage(editMessage);
-    // console.log(getpathfromUrl(commentdoc.imageURL))
   };
 
   const HandleLove = async () => {
@@ -474,7 +470,6 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
                   </Button>
                   <Box w={'100%'}></Box>
                 </HStack>
-                {/* {console.log(reply)} */}
                 {isOpen && (
                   <>
                     {comment.reply > fetchlimit && (
@@ -538,7 +533,6 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
             <MenuList>
               {auth.currentUser.uid == comment.uid ? (
                 <>
-                  {/* {console.log(post)} */}
                   <MenuItem
                     onClick={() => {
                       setEditMode(true);
@@ -611,7 +605,6 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
             onKeyDown={(e) => {
               resizeTextArea(e);
               // if (e.key == "Enter" && !e.shiftKey) {
-              //   // console.log('message sent')
               //   handleSent();
               // }
             }}
@@ -654,7 +647,5 @@ const parseDate = (seconds) => {
   });
   const spdate = formatted.split(" ");
   const formatted2 = `${spdate[0]} [${spdate[1]}]`;
-  // console.log(formatted2)
   return formatted2;
-  // console.log(seconds.toDate());
 };

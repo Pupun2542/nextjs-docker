@@ -55,15 +55,12 @@ export default function UploadImageModal({ aspectRatio, isOpen, onOpen, onClose,
   const onCrop = () => {
     const imageElement = cropperRef.current;
     const cropper = imageElement.cropper;
-    // console.log(cropper.getCroppedCanvas().toDataURL());
     const cropped = cropper.getCroppedCanvas().toDataURL();
-    console.log(cropped);
     setImage(cropped);
     onCropClose();
 
     onSubmit(cropped);
   };
-  // console.log(image);
   return (
     <Box>
       <Modal

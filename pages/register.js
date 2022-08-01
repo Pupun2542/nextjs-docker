@@ -13,7 +13,6 @@ export default function Register() {
 
     const regist = () =>{
         if (password == c_password){
-            console.log(email, password, displayname);
             RegisterWithEmail(email, password, displayname);
             // setEmail("");
             // setPassword("");

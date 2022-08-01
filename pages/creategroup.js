@@ -79,12 +79,10 @@ export default function CreateGroup() {
     } else {
       if (user) {
         user.getIdToken().then((token) => {
-          // console.log(`token : ${token}`);
           axios
             .get(`${process.env.NEXT_PUBLIC_USE_API_URL}/`, {
               headers: { authorization: token },
             })
-            .then((res) => console.log(res));
         });
       }
     }

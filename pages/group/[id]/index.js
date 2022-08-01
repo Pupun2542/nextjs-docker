@@ -971,8 +971,8 @@ export default function Group() {
                                 </AccordionButton>
                               </h2>
                               <AccordionPanel pb={4}>
-                                {data.registrationlink?.map((link) => (
-                                  <VStack>
+                                {data.registrationlink?.map((link, k) => (
+                                  <VStack key={k}>
                                     <Flex w={"100%"}>
                                       <Center w={50}></Center>
                                       <Flex
@@ -1112,8 +1112,8 @@ export default function Group() {
                                 ))}
                               </AccordionPanel>
                               <AccordionPanel pb={4}>
-                                {data.statuschecklink?.map((link) => (
-                                  <VStack>
+                                {data.statuschecklink?.map((link, k) => (
+                                  <VStack key={k}>
                                     <Flex w={"100%"}>
                                       <Center w={50}></Center>
                                       <Flex
@@ -1333,12 +1333,13 @@ export default function Group() {
                         </Center>
 
                         <SimpleGrid columns={3} spacing={2} pl={1} pr={1}>
-                          {Object.values(data.staff).map((staff) => (
+                          {Object.values(data.staff).map((staff, k) => (
                             <Flex
                               bg={"white"}
                               borderRadius={"full"}
                             // borderRightRadius={5}
                             // boxShadow='base'
+                            key={k}
                             >
                               <Flex
                                 bg={"#6768AB"}

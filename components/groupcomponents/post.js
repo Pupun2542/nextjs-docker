@@ -169,7 +169,6 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
         // console.log(dlurl);
       }
       const token = await auth.currentUser.getIdToken();
-      console.log(selectedchara)
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${post.gid}/${post.pid}/comment/create`,
         { message: message, imageUrl: dlurl, charaId: selectedchara.refererId, mention: mention },

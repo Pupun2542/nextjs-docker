@@ -68,7 +68,6 @@ export const Replypost = ({ replydoc, message, setMessage }) => {
       );
       if (res.status === 200) {
         setLove(true);
-        console.log(res.request, res.statusText);
       } else {
         console.log(res.status, res.data);
       }

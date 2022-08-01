@@ -61,15 +61,12 @@ export default function UploadImageModal({ setBannerBlob, BannerBlob }) {
   const onCrop = () => {
     const imageElement = cropperRef.current;
     const cropper = imageElement.cropper;
-    // console.log(cropper.getCroppedCanvas().toDataURL());
     const cropped = cropper.getCroppedCanvas().toDataURL();
-    console.log(cropped);
     setImage(cropped);
     onCropClose();
 
     setBannerBlob(cropped);
   };
-  // console.log(image);
   return (
     <Box>
       <Box>

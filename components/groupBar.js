@@ -81,7 +81,6 @@ export const GroupBar = ({
         isStaff: data.isStaff,
         isMember: Object.keys(data.member).includes(user.uid),
       } || null;
-  // console.log(displayUser)
 
   if (displayUser) {
     return (
@@ -207,7 +206,7 @@ export const GroupBar = ({
                 colorScheme="facebook"
                 icon={<ChatsCircle />}
                 ref={btnRef}
-                onClick={() => handleCommuGroupMessage(user, id, data.name)}
+                onClick={() => handleCommuGroupMessage(user, id, data)}
                 rounded={"full"}
               />
             )}
@@ -335,7 +334,7 @@ export const GroupBar = ({
                 colorScheme="facebook"
                 icon={<ChatsCircle />}
                 ref={btnRef}
-                onClick={() => handleCommuGroupMessage(user, id, data.name)}
+                onClick={() => handleCommuGroupMessage(user, id, data)}
                 rounded={"full"}
                 w={"48px"}
                 h={"48px"}
@@ -382,7 +381,6 @@ export const GroupBar = ({
                 opacity={pinTab.isOpen ? 1 : 0}
                 bg={"white"}
               >
-                {console.log(usr)}
                 {usr.pinned?.map((pin, k) => (
                   <Circle
                     as={"button"}
@@ -393,7 +391,6 @@ export const GroupBar = ({
                     key={k}
                     // disabled={!displayUser.isMember}
                   >
-                    {console.log(pin)}
                     <Avatar src={pin.bannersqr} name={pin.name} />
                   </Circle>
                 ))}

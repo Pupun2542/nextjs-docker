@@ -11,9 +11,6 @@ import {
 import { Minus, Hash } from "phosphor-react";
 
 export const AddStaffForm = ({ item, onChange, onDelete }) => {
-  {
-    console.log(item);
-  }
   const setState = (key, value) => {
     onChange({
       ...item,

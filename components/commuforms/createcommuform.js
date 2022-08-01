@@ -4,14 +4,7 @@ import { useState, useEffect } from "react";
 import "../Banner";
 import { useApp } from "../../src/hook/local";
 import UploadImageModal from "../Banner";
-import {
-  getBlob,
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytes,
-  uploadString,
-} from "firebase/storage";
+import { getStorage } from "firebase/storage";
 
 import {
   Box,
@@ -19,20 +12,17 @@ import {
   Flex,
   Center,
   IconButton,
-  Container,
   Spacer,
   Accordion,
   AccordionItem,
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
-  Stack,
   VStack,
   Input,
   Select,
   CloseButton,
   Switch,
-  FormControl,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
@@ -52,28 +42,22 @@ import {
   Tooltip,
   Divider,
   Avatar,
+  Image,
 } from "@chakra-ui/react";
-import {
-  CaretLeft,
-  CaretRight,
-  Plus,
-  Minus,
-  FacebookLogo,
-  DiscordLogo,
-  ArrowRight,
-  Hash,
-} from "phosphor-react";
+import { Plus, Hash } from "phosphor-react";
 import { Regisform } from "./regisform";
 import { Checkform } from "./checkform";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { creategroup } from "../../src/services/firestoreservice";
 import { AddStaffForm } from "./addStaffForm";
 import {
+  compressImage,
   UploadBannerImage,
+  UploadBannerSquareImage,
   UploadDoc,
 } from "../../src/services/filestoreageservice";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, doc, getDocs, query, where } from "firebase/firestore";
+import UniversalUploadModal from "../universalUploadModal";
 
 export const Createcommuform = ({ data, uid, gid }) => {
   const { app, auth, db } = useApp();
@@ -107,6 +91,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
     statuschecklink: [],
     creator: uid,
     staff: [],
+    bannersqr: "",
   });
   const [bannerBlob, setBannerBlob] = useState(null);
   const [genre, setGenre] = useState([]);
@@ -125,6 +110,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
     Triggersw: true,
     Rulesw: true,
   });
+  const [sqrmodal, setSqrmodal] = useState(false);
   useEffect(() => {
     if (data) {
       setFieldvalue({
@@ -147,6 +133,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
         staff: data.staff,
         registrationlink: data.registrationlink,
         statuschecklink: data.statuschecklink,
+        bannersqr: data.bannersqr,
       });
       if (data.config) {
         setConfigValue({
@@ -166,10 +153,6 @@ export const Createcommuform = ({ data, uid, gid }) => {
       setBannerBlob(data.banner);
     }
   }, [data]);
-
-  useEffect(() => {
-    // console.log(fieldvalue)
-  }, [fieldvalue])
 
   useEffect(() => {
     const search = async () => {
@@ -209,7 +192,6 @@ export const Createcommuform = ({ data, uid, gid }) => {
       tag = tag.trim();
       if (tag !== "") {
         props.setState([...props.state, tag]);
-        // props.selectedTags([...props.state, tag]);
         event.target.value = "";
       }
     };
@@ -227,7 +209,6 @@ export const Createcommuform = ({ data, uid, gid }) => {
                 pb={1}
                 pl={2}
                 pr={2}
-                // maxW={200}
                 float="left"
                 spacing={2.5}
                 mr={0.5}
@@ -271,16 +252,13 @@ export const Createcommuform = ({ data, uid, gid }) => {
     );
   };
   const parseTime = (localtime) => {
-    // console.log(localtime);
     const spdatetime = localtime.split("T");
 
     const timebuild = spdatetime[0] + " เวลา " + spdatetime[1];
-    // console.log(timebuild);
     return timebuild;
   };
 
   const parseRawTime = (localtime) => {
-    console.log(localtime);
     const spdatetime = localtime.split("T");
     const spdate = spdatetime[0].split("/");
     const sptime = spdatetime[1].split(":");
@@ -290,29 +268,49 @@ export const Createcommuform = ({ data, uid, gid }) => {
     // timebuild.setMonth(spdate[1]+1);
     timebuild.setFullYear(spdate[2], spdate[1] + 1, spdate[0]);
     timebuild.setHours(sptime[0], sptime[0]);
-
-    console.log(timebuild);
     return timebuild;
   };
 
-  // console.log(inputref.current.value);
+  const handleSquareSelect = async (image) => {
+    const compressed = await compressImage(image, 500);
+    setFieldvalue({
+      ...fieldvalue,
+      bannersqr: compressed,
+    });
+  };
+
+  const closeImageModal = () => {
+    setFieldvalue({
+      ...fieldvalue,
+      bannersqr: "",
+    });
+    onCropPicClose()
+  };
+  const submitImageModal = () => {
+    onCropPicClose()
+  };
 
   const HandleSubmit = async () => {
     let bannerUrl = data?.banner ? data.banner : "";
+    let sqrUrl = data?.bannersqr || "";
     let docUrl = data?.doclink ? data.doclink : "";
     const token = await auth.currentUser.getIdToken();
+    const groupId = gid || doc(collection(db, "group")).id;
 
     if (bannerBlob && !bannerBlob.startsWith("http")) {
-      // console.log("upload")
-      bannerUrl = await UploadBannerImage(bannerBlob, auth.currentUser.uid);
+      bannerUrl = await UploadBannerImage(bannerBlob, auth.currentUser.uid, groupId);
     } else {
-      // console.log("not upload")
       bannerUrl = bannerBlob;
+    }
+
+    if (fieldvalue.bannersqr && !fieldvalue.bannersqr.startsWith("http")) {
+      sqrUrl = await UploadBannerSquareImage(fieldvalue.bannersqr, auth.currentUser.uid, groupId);
+    } else {
+      sqrUrl = bannerBlob;
     }
 
     if (fieldvalue.docfile) {
       if (fieldvalue.docfile.name.split(".").pop() == "pdf") {
-        // console.log("uploaddoc")
         docUrl = await UploadDoc(fieldvalue.docfile, auth.currentUser.uid);
       } else {
         alert("เอกสารคอมมูต้องเป็นรูปแบบไฟล์ pdf เท่านั้น");
@@ -327,12 +325,13 @@ export const Createcommuform = ({ data, uid, gid }) => {
       tws: tws,
       bannerUrl: bannerUrl,
       docUrl: docUrl,
+      sqrUrl: sqrUrl,
       config: configvalue,
     };
-    console.log(body)
+
     if (data) {
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${gid}/update`,
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${groupId}/update`,
         body,
         {
           headers: {
@@ -340,13 +339,12 @@ export const Createcommuform = ({ data, uid, gid }) => {
           },
         }
       );
-      console.log(res.data);
       if (res.status === 200) {
         Router.push(`/group/${gid}`);
       }
     } else {
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_USE_API_URL}/group/create`,
+        `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${groupId}/create`,
         body,
         {
           headers: {
@@ -354,9 +352,8 @@ export const Createcommuform = ({ data, uid, gid }) => {
           },
         }
       );
-      console.log(res.data);
       if (res.status === 200) {
-        Router.push(`/group/${res.data}`);
+        Router.push(`/group/${groupId}`);
       }
     }
   };
@@ -415,7 +412,6 @@ export const Createcommuform = ({ data, uid, gid }) => {
   };
 
   const addStaff = (dat) => {
-    console.log(dat);
     if (
       dat.uid != auth.currentUser.uid &&
       !fieldvalue.staff.includes(dat.uid)
@@ -493,11 +489,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
                 <AccordionButton>
                   <AccordionIcon color={"Black"} w={50} h={50} />
 
-                  <Box
-                    fontFamily={'SarabunSB'}
-                    fontSize={27}
-                    color="Black"
-                  >
+                  <Box fontFamily={"SarabunSB"} fontSize={27} color="Black">
                     Basic Information
                   </Box>
                 </AccordionButton>
@@ -789,7 +781,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
 
                       <Center w={"100%"} height="auto" position="relative">
                         <Box
-                          pl={1.5} 
+                          pl={1.5}
                           pr={1.5}
                           w={"100%"}
                           h="auto"
@@ -852,14 +844,12 @@ export const Createcommuform = ({ data, uid, gid }) => {
                             w={"100%"}
                             value={fieldvalue.startDateraw}
                             onChange={(e) => {
-                              const ptime = parseTime(e.target.value)
-                              // console.log(ptime)
+                              const ptime = parseTime(e.target.value);
                               setFieldvalue({
                                 ...fieldvalue,
                                 startDate: ptime,
                                 startDateraw: e.target.value,
                               });
-                              // console.log(parseTime(e.target.value))
                             }}
                           />
                         </Center>
@@ -897,7 +887,9 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         borderRightWidth={3}
                       >
                         <Box>
-                          <Text fontSize={16} float="left">ระยะเวลา</Text>
+                          <Text fontSize={16} float="left">
+                            ระยะเวลา
+                          </Text>
                         </Box>
                       </Box>
 
@@ -1335,6 +1327,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
                         <Input
                           type="file"
                           ref={inputref}
+                          accept="application/pdf"
                           onChange={(e) =>
                             setFieldvalue({
                               ...fieldvalue,
@@ -1376,11 +1369,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
                 <AccordionButton>
                   <AccordionIcon color={"Black"} w={50} h={50} />
 
-                  <Box
-                    fontFamily={'SarabunSB'}
-                    fontSize={27}
-                    color="Black"
-                  >
+                  <Box fontFamily={"SarabunSB"} fontSize={27} color="Black">
                     Registration
                   </Box>
                 </AccordionButton>
@@ -1689,24 +1678,42 @@ export const Createcommuform = ({ data, uid, gid }) => {
         blockScrollOnMount={false}
         isOpen={isCropPicOpen}
         onClose={onCropPicClose}
-        size={'2xl'}
+        size={"2xl"}
       >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Modal Title</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Box w={250} h={250} bg={'tomato'}>pic</Box>
+            <Box
+              w={"250px"}
+              h={"250px"}
+              bg={"tomato"}
+              onClick={() => setSqrmodal(true)}
+            >
+              <Image
+                src={fieldvalue.bannersqr}
+                fallbackSrc={"/placeholder.png"}
+                w="100%"
+                h="100%"
+              ></Image>
+            </Box>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
+            <Button colorScheme="blue" mr={3} onClick={submitImageModal}>
+              ยืนยัน
             </Button>
-            <Button variant="ghost">Secondary Action</Button>
+            <Button variant="ghost" onClick={closeImageModal}>ปิด</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
+      <UniversalUploadModal
+        aspectRatio={1 / 1}
+        isOpen={sqrmodal}
+        onClose={() => setSqrmodal(false)}
+        onSubmit={handleSquareSelect}
+      />
     </Flex>
   );
 };
