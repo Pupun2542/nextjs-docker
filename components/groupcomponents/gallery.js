@@ -114,7 +114,7 @@ const Gallery = ({ gid, mychara, data }) => {
               Album
             </Button>
           </Box>
-          {tabindex == 0 && !specificAlbum.uid && (
+          {/* {tabindex == 0 && !specificAlbum.uid && (
             <Button
               bg={"#FBBC43"}
               borderWidth={2}
@@ -123,7 +123,7 @@ const Gallery = ({ gid, mychara, data }) => {
             >
               Add Picture
             </Button>
-          )}
+          )} */}
           {tabindex == 1 && !specificAlbum.uid && (
             <Button
               bg={"#FBBC43"}

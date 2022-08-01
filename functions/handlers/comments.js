@@ -26,8 +26,21 @@ exports.createComment = async (req, res) => {
         follower: admin.firestore.FieldValue.arrayUnion(user),
       });
       const postdoc = await postref.get();
+
+      const existInboth = (arr1, arr2) => {
+        const unfiltered = arr1.map((a) => {
+          if (arr2.includes(a)) {
+            return a;
+          } else {
+            return;
+          }
+        });
+        const filtered = unfiltered.filter((v) => v);
+        return filtered;
+      };
+
       sendNotifications(
-          postdoc.data().follower,
+          existInboth(grpdoc.data().member, postdoc.data().follower),
           102,
           user,
           req.params.gid,

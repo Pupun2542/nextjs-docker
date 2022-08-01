@@ -146,7 +146,6 @@ exports.acceptPlayer = (req, res)=>{
   }
 };
 exports.removePlayer = (req, res) =>{
-  // staff กด
   if (req.user) {
     const user = req.user.uid;
     const id = req.body.id;
@@ -609,8 +608,12 @@ exports.getGroup = (req, res) =>{
           const arrgrpchara = Object.entries(doc.data().chara);
           let newChara = [];
           arrgrpchara.map(([k, v])=> {
-            const refname = grpmember[v.parentId].displayName;
-            newChara = [...newChara, [k, {...v, parentName: refname}]];
+            if (grpmember[v.parentId]) {
+              const refname = grpmember[v.parentId].displayName;
+              newChara = [...newChara, [k, {...v, parentName: refname}]];
+            } else {
+              newChara = [...newChara, [k, {...v, parentName: "อดีตสมาชิก"}]];
+            }
           });
           mappeddocdata = {
             ...mappeddocdata,

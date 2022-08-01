@@ -84,7 +84,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
       return chara[chara.findIndex(v => v.refererId == post.charaId)];
     } else {
       // refreshcharaList();
-      return ""
+      return {}
     }
   }
   const postchara = checkChara();
@@ -166,7 +166,6 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
           auth.currentUser.uid,
           post.gid
         );
-        // console.log(dlurl);
       }
       const token = await auth.currentUser.getIdToken();
       const res = await axios.post(
@@ -316,16 +315,15 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
             h={50}
             w={50}
             src={postchara.name ? postchara.photoURL : creator?.photoURL}
-            name={postchara.name ? postchara.name : creator?.displayName}
-
+            name={postchara.name ? postchara.name : creator?.displayName || "Dummy"}
           />
           <VStack w={"100%"} spacing={0}>
-            <Box fontSize={18} w={"100%"} onClick={postchara.name ? () => { } : () => router.push("../../profile/" + creator?.uid)} cursor={"pointer"}>
-              {postchara.name ? postchara.name : creator.displayName}
+            <Box fontSize={18} w={"100%"} onClick={postchara.name ? () => { } : creator ? () => router.push("../../profile/" + creator?.uid) : ()=>{}} cursor={"pointer"}>
+              {postchara.name ? postchara.name : creator.displayName || "Dummy"}
             </Box>
             <Flex w={"100%"} fontSize={14} color={"gray.400"}>
               <Box
-                onClick={postchara.name ? () => router.push("../../profile/" + creator?.uid) : () => { }}
+                onClick={postchara.name && creator ? () => router.push("../../profile/" + creator?.uid) : () => { }}
                 cursor={"pointer"}
               >
                 {postchara.name ? creator?.displayName : ""}
@@ -357,7 +355,6 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
             <MenuList>
               {auth.currentUser.uid == post.uid ? (
                 <>
-                  {/* {console.log(post)} */}
                   <MenuItem
                     onClick={() => {
                       setEditMode(true);
@@ -380,8 +377,6 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
             {post.mention&&post.mention.length > 0 &&(<Text fontSize={14} color={'gray.400'}>ได้กล่าวถึง</Text>)}
             {post.mention?.map((tag)=> (<Tag color={'black'} bg={'gray.200'}>{tag.name}</Tag>))}
             {post.tag?.map((tag)=> (<Tag colorScheme={'cyan'}>{tag}</Tag>))}
-            {/* <Tag colorScheme={'cyan'}>Day 1</Tag> */}
-            {/* <Tag colorScheme={'orange'}>Talking</Tag> */}
           </HStack>
 
           {editMode ? (

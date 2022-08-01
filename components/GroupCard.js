@@ -43,19 +43,14 @@ function GroupCard() {
     // let color = "";
     if (rating === "NC-17 (ผู้ที่อายุต่ำกว่า 17 ปีควรไม่ควรรับชม)") {
       return "#4D4D88";
-      // console.log(d.data().rating);
     } else if (rating === "R (เด็กอายุต่ำกว่า 17 ปีควรได้รับคำแนะนำ)") {
       return "#FFC75A";
-      // console.log(d.data().rating);
     } else if (rating === "PG-13 (เด็กอายุต่ำกว่า 13 ปีควรได้รับคำแนะนำ)") {
       return "#6768AB";
-      // console.log(d.data().rating);
     } else if (rating === "PG (เด็กควรได้รับคำแนะนำ)") {
       return "#535353";
-      // console.log(d.data().rating);
     } else {
       return "#C6C6C6";
-      // console.log(d.data().rating);
     }
   };
 

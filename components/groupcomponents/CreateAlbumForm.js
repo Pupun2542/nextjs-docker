@@ -17,7 +17,8 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
-  ModalOverlay
+  ModalOverlay,
+  Tooltip,
 } from "@chakra-ui/react";
 import { CaretDown, ImageSquare, X } from "phosphor-react";
 import { isEmptyOrSpaces } from "../../src/services/utilsservice";
@@ -29,15 +30,9 @@ import {
 import { collection, doc } from "firebase/firestore";
 import axios from "axios";
 
-export const CreateAlbumForm = ({
-  onClose,
-  mychara,
-  gid,
-  setAlb,
-  alb,
-}) => {
+export const CreateAlbumForm = ({ onClose, mychara, gid, setAlb, alb }) => {
   const chara = mychara ? Object.values(mychara) : [];
-  const [formMode, setFormMode] = useState(1);
+  const [formMode, setFormMode] = useState(mychara ? 1 : 0);
   const {
     isOpen: isCharSelectOpen,
     onOpen: onCharSelectOpen,
@@ -69,19 +64,21 @@ export const CreateAlbumForm = ({
       setAlbName(alb.name);
       setAlbDesc(alb.description);
     }
-    return ()=>{
+    return () => {
       setSelectedImage([]);
       setSelectedchara({});
       setAlbName("");
       setAlbDesc("");
-    }
+    };
   }, [alb]);
 
   const HandleSubmit = async () => {
     if (!isEmptyOrSpaces(albName)) {
       if ((formMode == 1 && selectedChar.name) || formMode == 0) {
         setLoading(true);
-        const aid = (alb?.aid? alb.aid : doc(collection(db, "group", gid, "album")).id);
+        const aid = alb?.aid
+          ? alb.aid
+          : doc(collection(db, "group", gid, "album")).id;
         let dlurl = [];
         if (selectedImage.length > 0) {
           dlurl = await Promise.all(
@@ -122,10 +119,12 @@ export const CreateAlbumForm = ({
           description: albDesc,
           mediaList: dlurl,
         };
-        
+
         const token = await auth.currentUser.getIdToken();
         const res = await axios.post(
-          `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${gid}/album/${alb && alb.aid? "update": "create"}/`,
+          `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${gid}/album/${
+            alb && alb.aid ? "update" : "create"
+          }/`,
           { aid: aid, data: data },
           {
             headers: {
@@ -143,7 +142,7 @@ export const CreateAlbumForm = ({
           }
           setLoading(false);
           // if (!(alb && alb.aid)) {
-            setAlb({...data, aid: aid});
+          setAlb({ ...data, aid: aid });
           // }
           onClose();
         }
@@ -188,7 +187,7 @@ export const CreateAlbumForm = ({
       <Box>
         <Box bg={"white"} borderRadius={10} boxShadow={"base"} pl={5} pr={5}>
           <Text textAlign={"center"} p={5} fontSize={22} fontWeight={"bold"}>
-            {alb?.aid? "แก้ไขอัลบั้ม" : "สร้างอัลบั้มใหม่"}
+            {alb?.aid ? "แก้ไขอัลบั้ม" : "สร้างอัลบั้มใหม่"}
           </Text>
           <Divider />
           <Box pt={5}>
@@ -208,15 +207,22 @@ export const CreateAlbumForm = ({
                 >
                   ทั่วไป
                 </Button>
-                <Button
-                  minWidth="150px"
-                  onClick={() => setFormMode(1)}
-                  bg={formMode == 1 ? "#4C4D88" : "#9999AF"}
-                  color="white"
-                  _hover={{ color: "white" }}
+                <Tooltip
+                  label={"ต้องสร้างตัวละครก่อนถึงจะสร้างอัลบัมตัวละครได้"}
+                  shouldWrapChildren
+                  isDisabled={mychara}
                 >
-                  ตัวละคร
-                </Button>
+                  <Button
+                    isDisabled={!mychara}
+                    minWidth="150px"
+                    onClick={() => setFormMode(1)}
+                    bg={formMode == 1 ? "#4C4D88" : "#9999AF"}
+                    color="white"
+                    _hover={{ color: "white" }}
+                  >
+                    ตัวละคร
+                  </Button>
+                </Tooltip>
               </SimpleGrid>
             </Flex>
           </Box>

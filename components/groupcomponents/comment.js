@@ -28,7 +28,7 @@ import {
   ImageSquare,
   PaperPlaneRight,
   X,
-  CaretDown
+  CaretDown,
 } from "phosphor-react";
 import {
   collection,
@@ -62,7 +62,7 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
     setStateDataReply,
     getStateDataReply,
     selectedchara,
-    setSelectedchara
+    setSelectedchara,
   } = useContext(PostContext);
   const [mention, setMention] = useState([]);
   const creator = comment.creator;
@@ -78,13 +78,13 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
   const router = useRouter();
   const { chara, refreshcharaList } = useCharaList(data, gid);
   const checkChara = () => {
-    if (chara[chara.findIndex(v => v.refererId == comment.charaId)]) {
-      return chara[chara.findIndex(v => v.refererId == comment.charaId)];
+    if (chara[chara.findIndex((v) => v.refererId == comment.charaId)]) {
+      return chara[chara.findIndex((v) => v.refererId == comment.charaId)];
     } else {
       // refreshcharaList();
-      return ""
+      return "";
     }
-  }
+  };
   const postchara = checkChara();
 
   const setEditMode = (state) => {
@@ -180,7 +180,12 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
       const token = await auth.currentUser.getIdToken();
       axios.post(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${comment.gid}/${comment.pid}/comment/${comment.cid}/reply/create`,
-        { message: message, imageUrl: dlurl, charaId: selectedchara.refererId, mention: mention },
+        {
+          message: message,
+          imageUrl: dlurl,
+          charaId: selectedchara.refererId,
+          mention: mention,
+        },
         {
           headers: {
             Authorization: token,
@@ -303,7 +308,7 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
   };
 
   return (
-    <Flex borderRadius={5} bg={'gray.100'} mt={2} p={1} boxShadow={'base'}>
+    <Flex borderRadius={5} bg={"gray.100"} mt={2} p={1} boxShadow={"base"}>
       {/* <Center m={1}>
         <VStack spacing={0} mt={2} >
           <Box w={'22px'} borderColor={'#636363'} height={'120'} borderLeftWidth={3} ></Box>
@@ -321,7 +326,7 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
       </Center> */}
 
       <Flex
-        bg={'white'}
+        bg={"white"}
         p={2}
         boxShadow={"base"}
         direction={"column"}
@@ -336,30 +341,57 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
             h={45}
             w={45}
             src={postchara.name ? postchara.photoURL : creator.photoURL}
-            name={postchara.name ? postchara.name : creator.displayName}
-
+            name={
+              postchara.name ? postchara.name : creator?.displayName || "Dummy"
+            }
           />
           <VStack w={"100%"} spacing={0}>
-            <Box fontSize={18} w={"100%"} onClick={postchara.name ? () => { } : () => router.push("../../profile/" + creator?.uid)} cursor={"pointer"}>
-              {postchara.name ? postchara.name : creator.displayName}
+            <Box
+              fontSize={18}
+              w={"100%"}
+              onClick={
+                postchara.name
+                  ? () => {}
+                  : creator
+                  ? () => router.push("../../profile/" + creator?.uid)
+                  : () => {}
+              }
+              cursor={"pointer"}
+            >
+              {postchara.name ? postchara.name : creator.displayName || "Dummy"}
             </Box>
             <Flex w={"100%"} fontSize={14} color={"gray.400"}>
               <Box
+                onClick={
+                  postchara.name && creator
+                    ? () => router.push("../../profile/" + creator?.uid)
+                    : () => {}
+                }
                 cursor={"pointer"}
-                onClick={postchara.name ? () => router.push("../../profile/" + creator?.uid) : () => { }}
               >
-                {postchara.name ? creator.displayName : ""}
+                {postchara.name ? creator?.displayName : ""}
               </Box>
               <Spacer />
-              <Box float={"right"}>{parseDate(comment.timestamp)}</Box>
+              <Box float={"right"}>
+                {comment.timestamp
+                  ? parseDate(comment.timestamp)
+                  : "01/01/1970:00.00"}
+              </Box>
             </Flex>
             <Divider mb={2} />
 
-            <HStack w={'100%'} pt={1}>
-            {comment.mention?.length > 0 &&(<Text fontSize={14} color={'gray.400'}>ได้กล่าวถึง</Text>)}
-            {comment.mention?.map((tag)=> (<Tag color={'black'} bg={'gray.200'}>{tag.name}</Tag>))}
+            <HStack w={"100%"} pt={1}>
+              {comment.mention?.length > 0 && (
+                <Text fontSize={14} color={"gray.400"}>
+                  ได้กล่าวถึง
+                </Text>
+              )}
+              {comment.mention?.map((tag) => (
+                <Tag color={"black"} bg={"gray.200"}>
+                  {tag.name}
+                </Tag>
+              ))}
             </HStack>
-
 
             <Flex justifyContent={"center"} w={"100%"}>
               <Flex direction={"column"} w={"100%"}>
@@ -426,8 +458,8 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
                   fontSize={14}
                   color={"GrayText"}
                   p={1}
-                  boxShadow={'base'}
-                  bg={'gray.100'}
+                  boxShadow={"base"}
+                  bg={"gray.100"}
                   borderRadius={5}
                 >
                   <Button
@@ -449,7 +481,7 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
                     boxShadow={"base"}
                     variant="solid"
                     onClick={HandleLove}
-                    bg={'white'}
+                    bg={"white"}
                     h={30}
                   >
                     {love.length}
@@ -463,12 +495,12 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
                     boxShadow={"base"}
                     variant="solid"
                     onClick={onToggle}
-                    bg={'white'}
+                    bg={"white"}
                     h={30}
                   >
                     {comment.reply}
                   </Button>
-                  <Box w={'100%'}></Box>
+                  <Box w={"100%"}></Box>
                 </HStack>
                 {isOpen && (
                   <>
@@ -527,7 +559,7 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
               <IconButton
                 icon={<DotsThreeVertical size={15} />}
                 rounded={"full"}
-                size={'sm'}
+                size={"sm"}
               />
             </MenuButton>
             <MenuList>
@@ -565,8 +597,8 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
                 w={42}
                 h={42}
                 _hover={{
-                  bg: 'gray.100',
-                  borderRadius: '5'
+                  bg: "gray.100",
+                  borderRadius: "5",
                 }}
               >
                 <Avatar
@@ -622,13 +654,23 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
               rounded={"full"}
               icon={<PaperPlaneRight size={28} />}
               onClick={handleSent}
-              disabled={(isEmptyOrSpaces(message) && image) || Object.keys(selectedchara).length == 0}
+              disabled={
+                (isEmptyOrSpaces(message) && image) ||
+                Object.keys(selectedchara).length == 0
+              }
             />
           </Box>
         </Flex>
-        <Flex boxShadow={'base'} mt={2} bg={'#F3F5F8'} rounded={5}>
-          <Text mx={2} fontSize={23}>@</Text>
-          <MentionBox data={data} id={gid} mention={mention} setMention={setMention} />
+        <Flex boxShadow={"base"} mt={2} bg={"#F3F5F8"} rounded={5}>
+          <Text mx={2} fontSize={23}>
+            @
+          </Text>
+          <MentionBox
+            data={data}
+            id={gid}
+            mention={mention}
+            setMention={setMention}
+          />
         </Flex>
       </Flex>
     </Flex>

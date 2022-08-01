@@ -48,7 +48,6 @@ const GameCard = () => {
                 QuerySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
             )
             setLoading(false);
-            // console.log(game.length)
         };
         return Fetchdata();
     });

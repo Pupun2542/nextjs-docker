@@ -68,7 +68,6 @@ const Notitab = ({ notidata }) => {
             },
           ];
         }
-        // }
       });
       setNewNotiData(mappedNotiData);
     };

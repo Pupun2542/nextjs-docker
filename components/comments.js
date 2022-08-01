@@ -82,7 +82,6 @@ export const Comments = ({ id }) => {
         store,
         `group/${id}/comments/${auth.currentUser.uid}${Date.now()}`
       );
-      console.log(storeRef.name);
       uploadString(storeRef, image, "data_url").then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
           addDoc(collection(db, "group", id, "comments"), {
@@ -110,7 +109,6 @@ export const Comments = ({ id }) => {
     }
     setMessage("");
     setImage(null);
-    // console.log(image);
   };
   const handleUploadFile = (e) => {
     const reader = new FileReader();
@@ -135,9 +133,7 @@ export const Comments = ({ id }) => {
       reader.readAsDataURL(e.clipboardData.files[0]);
     }
   };
-  // console.log(message)
   if (snapshot) {
-    //   console.log(snapshot.size)
     return (
       <Box
         marginLeft="100px"
@@ -157,9 +153,7 @@ export const Comments = ({ id }) => {
               resize="none"
               minHeight={11}
               onKeyDown={(e) => {
-                // console.log(e.key)
                 if (e.key == "Enter" && !e.shiftKey) {
-                  // console.log('message sent')
                   handleMessage();
                 }
               }}
@@ -265,9 +259,7 @@ export const Comments = ({ id }) => {
             resize="none"
             minHeight={11}
             onKeyDown={(e) => {
-              // console.log(e.key)
               if (e.key == "Enter" && !e.shiftKey) {
-                // console.log('message sent')
                 handleMessage();
               }
             }}
@@ -403,7 +395,6 @@ const Commentpost = ({ cdoc, id }) => {
 
   const handleEdit = () => {
     // if (image != checkImage.current) {
-    // console.log(image, checkImage.current);
     // if (image) {
     //   const storeRef = ref(store, cdoc.data().imageRef);
     //   uploadString(storeRef, image, "data_url").then((snapshot) => {
@@ -488,9 +479,7 @@ if (!loading) {
           // <InputGroup>
           <Input
             onKeyDown={(e) => {
-              // console.log(e.key)
               if (e.key == "Enter" && !e.shiftKey) {
-                // console.log('message sent')
                 handleEdit();
               } else if (e.key == "Escape") {
                 if (image != checkImage.current) {
@@ -647,7 +636,6 @@ const Reply = ({ id, setReply, commentId }) => {
   //     orderBy("timestamp", "asc")
   //   )
   // );
-  // // console.log(id, commentId, snapshot)
   // useEffect(() => {
   //   if (!loading && snapshot && !snapshot.empty) {
   //     setReply(snapshot.size);
@@ -657,7 +645,6 @@ const Reply = ({ id, setReply, commentId }) => {
   const [message, setMessage] = useState("");
 
   const handleMessage = () => {
-    //   console.log(messageref.current)
     addDoc(collection(db, "group", id, "comments", commentId, "reply"), {
       thumbnail: auth.currentUser.photoURL,
       displayName: auth.currentUser.displayName,
@@ -681,9 +668,7 @@ const Reply = ({ id, setReply, commentId }) => {
         <Box>
           <Input
             onKeyDown={(e) => {
-              // console.log(e.key)
               if (e.key == "Enter" && !e.shiftKey) {
-                // console.log('message sent')
                 handleMessage();
               }
             }}
@@ -703,9 +688,7 @@ const Reply = ({ id, setReply, commentId }) => {
     <Box>
       <Input
         onKeyDown={(e) => {
-          // console.log(e.key)
           if (e.key == "Enter" && !e.shiftKey) {
-            // console.log('message sent')
             handleMessage();
           }
         }}
@@ -742,7 +725,6 @@ const ReplyPost = ({ cdoc, commentId, id }) => {
 
   const handleEdit = () => {
     // if (image != checkImage.current) {
-    // console.log(image, checkImage.current);
     // if (image) {
     //   const storeRef = ref(store, cdoc.data().imageRef);
     //   uploadString(storeRef, image, "data_url").then((snapshot) => {
@@ -831,7 +813,6 @@ const ReplyPost = ({ cdoc, commentId, id }) => {
               {cdoc.data().timestamp
                 ? parseDate(cdoc.data().timestamp)
                 : "01/01/1970:00.00"}
-              {/* {console.log(doc.data().timestamp)} */}
               {/* 01/01/1970:00.00 */}
             </Text>
           </Flex>
@@ -841,9 +822,7 @@ const ReplyPost = ({ cdoc, commentId, id }) => {
             // <InputGroup>
             <Input
               onKeyDown={(e) => {
-                // console.log(e.key)
                 if (e.key == "Enter" && !e.shiftKey) {
-                  // console.log('message sent')
                   handleEdit();
                 } else if (e.key == "Escape") {
                   setEditMode(false);
@@ -929,7 +908,5 @@ const parseDate = (seconds) => {
   });
   const spdate = formatted.split(" ");
   const formatted2 = `${spdate[0]} [${spdate[1]}]`;
-  // console.log(formatted2)
   return formatted2;
-  // console.log(seconds.toDate());
 };
