@@ -1538,7 +1538,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
               </Button>
             )}
 
-            <Button
+            {/* <Button
               onClick={onCropPicOpen}
               color={"black"}
               bg={"#FFC75A"}
@@ -1551,7 +1551,7 @@ export const Createcommuform = ({ data, uid, gid }) => {
               borderColor={"black"}
             >
               เพิ่มรูปแบนเนอร์
-            </Button>
+            </Button> */}
 
             <Button
               onClick={HandleSubmit}
