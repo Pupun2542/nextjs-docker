@@ -1689,15 +1689,14 @@ export const Createcommuform = ({ data, uid, gid }) => {
         blockScrollOnMount={false}
         isOpen={isCropPicOpen}
         onClose={onCropPicClose}
+        size={'2xl'}
       >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Modal Title</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text fontWeight="bold" mb="1rem">
-              You can scroll the content behind the moon
-            </Text>
+            <Box w={250} h={250} bg={'tomato'}>pic</Box>
           </ModalBody>
 
           <ModalFooter>
