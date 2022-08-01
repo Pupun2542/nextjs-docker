@@ -139,7 +139,7 @@ const Gallery = ({ gid, mychara, data }) => {
               borderRadius={10}
               onClick={() => setCreateAlbOpen(true)}
             >
-              Add Albums
+              Add Album
             </Button>
           )}
           {specificAlbum.uid && specificAlbum.uid === auth.currentUser.uid && (

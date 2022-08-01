@@ -286,10 +286,10 @@ export default function Group() {
       >
         {!loading && data && (
           <Flex bg={"#F3F5F8"} justifyContent={"center"}>
-            {user&&(
+            {user && (
               <GroupBar id={id} data={data} user={user} />
             )}
-            
+
             <Flex
               direction={"column"}
               marginTop={55}
@@ -330,13 +330,17 @@ export default function Group() {
                           />
 
                           <IconButton
-                            bg={pin ? "#FFC75A" : "white"}
+                            bg="white"
                             rounded="full"
                             h={38}
                             w={38}
                             mt={2.5}
                             ml={2.5}
-                            icon={<PushPin size={32} />}
+                            icon={<PushPin
+                              size={32}
+                              weight={pin ? "fill" : "regular"}
+                              color={pin ? "#FFC75A" : "black"}
+                            />}
                             onClick={pinHandler}
                           />
                         </>
@@ -535,8 +539,8 @@ export default function Group() {
                                 Object.keys(data.pendingmember).includes(
                                   auth.currentUser?.uid
                                 )
-                              ? "รอการตอบรับ"
-                              : "เข้าร่วมกลุ่ม"}
+                                ? "รอการตอบรับ"
+                                : "เข้าร่วมกลุ่ม"}
                           </Button>
                         </HStack>
 
@@ -645,23 +649,23 @@ export default function Group() {
                                     >
                                       {data.times && data.genre.length > 0
                                         ? data.genre.map((genre, index) => (
-                                            <Box
-                                              key={index}
-                                              marginLeft={2.5}
-                                              maxW={600}
-                                              float={"left"}
-                                              bg={"white"}
-                                              p={1}
-                                              pl={2}
-                                              pr={2}
-                                              borderColor={"black"}
-                                              borderWidth={2}
-                                              color={"black"}
-                                              borderRadius={"5"}
-                                            >
-                                              {genre}
-                                            </Box>
-                                          ))
+                                          <Box
+                                            key={index}
+                                            marginLeft={2.5}
+                                            maxW={600}
+                                            float={"left"}
+                                            bg={"white"}
+                                            p={1}
+                                            pl={2}
+                                            pr={2}
+                                            borderColor={"black"}
+                                            borderWidth={2}
+                                            color={"black"}
+                                            borderRadius={"5"}
+                                          >
+                                            {genre}
+                                          </Box>
+                                        ))
                                         : "ไม่มีหมวดหมู่"}
                                     </Box>
                                   </Flex>
@@ -691,16 +695,16 @@ export default function Group() {
                                     >
                                       {data.times && data.place.length > 0
                                         ? data.place.map((genre, index) => (
-                                            <Box
-                                              key={index}
-                                              className={style.tag}
-                                              marginLeft={2.5}
-                                              maxW={600}
-                                              float={"left"}
-                                            >
-                                              {genre}
-                                            </Box>
-                                          ))
+                                          <Box
+                                            key={index}
+                                            className={style.tag}
+                                            marginLeft={2.5}
+                                            maxW={600}
+                                            float={"left"}
+                                          >
+                                            {genre}
+                                          </Box>
+                                        ))
                                         : "ไม่มีหมวดหมู่"}
                                     </Box>
                                   </Flex>
@@ -730,16 +734,16 @@ export default function Group() {
                                     >
                                       {data.times && data.times.length > 0
                                         ? data.times.map((genre, index) => (
-                                            <Box
-                                              key={index}
-                                              className={style.tag}
-                                              marginLeft={2.5}
-                                              maxW={600}
-                                              float={"left"}
-                                            >
-                                              {genre}
-                                            </Box>
-                                          ))
+                                          <Box
+                                            key={index}
+                                            className={style.tag}
+                                            marginLeft={2.5}
+                                            maxW={600}
+                                            float={"left"}
+                                          >
+                                            {genre}
+                                          </Box>
+                                        ))
                                         : "ไม่มีหมวดหมู่"}
                                     </Box>
                                   </Flex>
@@ -770,18 +774,18 @@ export default function Group() {
                                       {data.tws
                                         ? data.tws.length > 0
                                           ? data.tws.map((tw, index) => (
-                                              <Box
-                                                bg={"#EA4545"}
-                                                p={2}
-                                                borderRadius={5}
-                                                color={"white"}
-                                                m={1}
-                                                key={index}
-                                                float="left"
-                                              >
-                                                {tw}
-                                              </Box>
-                                            ))
+                                            <Box
+                                              bg={"#EA4545"}
+                                              p={2}
+                                              borderRadius={5}
+                                              color={"white"}
+                                              m={1}
+                                              key={index}
+                                              float="left"
+                                            >
+                                              {tw}
+                                            </Box>
+                                          ))
                                           : "ไม่มีคำเตือน"
                                         : "ไม่มีคำเตือน"}
                                     </Box>
@@ -844,8 +848,8 @@ export default function Group() {
                                       >
                                         {data.averageTime
                                           ? data.averageTime +
-                                            " " +
-                                            data.averageTimeUnit
+                                          " " +
+                                          data.averageTimeUnit
                                           : "ไม่มีระยะเวลาโดยประมาณ"}
                                       </Box>
                                     </Flex>
@@ -945,8 +949,8 @@ export default function Group() {
                                         Object.keys(
                                           data.pendingmember
                                         ).includes(auth.currentUser?.uid)
-                                      ? "รอการตอบรับ"
-                                      : "เข้าร่วมกลุ่ม"}
+                                        ? "รอการตอบรับ"
+                                        : "เข้าร่วมกลุ่ม"}
                                   </Button>
                                 </VStack>
                               </AccordionPanel>
@@ -1272,8 +1276,8 @@ export default function Group() {
                       >
                         <Center
                           ml={-4}
-                          // w={850}
-                          // h={500}
+                        // w={850}
+                        // h={500}
                         >
                           {data.doclink && (
                             <Box
@@ -1299,8 +1303,8 @@ export default function Group() {
                                   borderRadius: "24px",
                                 },
                               }}
-                              // maxH={"75%"}
-                              // maxW={"70%"}
+                            // maxH={"75%"}
+                            // maxW={"70%"}
                             />
                           )}
                           {/* <Box
@@ -1333,13 +1337,13 @@ export default function Group() {
                             <Flex
                               bg={"white"}
                               borderRadius={"full"}
-                              // borderRightRadius={5}
-                              // boxShadow='base'
+                            // borderRightRadius={5}
+                            // boxShadow='base'
                             >
                               <Flex
                                 bg={"#6768AB"}
                                 borderLeftRadius="full"
-                                // borderBottomLeftRadius={''}
+                              // borderBottomLeftRadius={''}
                               >
                                 <Avatar
                                   rounded={"full"}
