@@ -17,6 +17,8 @@ import {
   HStack,
   Center,
   Button,
+  Tag,
+  VStack,
 } from "@chakra-ui/react";
 import { ChatCenteredText, Eye, Heart } from "phosphor-react";
 import React, { useState } from "react";
@@ -66,29 +68,39 @@ const Albuminfo = ({ data, chara, gid }) => {
   return (
     <Flex flexDirection={"column"}>
       <Box>
-        <Text textAlign={"center"}>{data.name}</Text>
-        <Divider />
+        <Text fontSize={30} textAlign={"center"}>{data.name}</Text>
+
       </Box>
-      <Box display={data.caid ? "initial" : "none"} textAlign={"center"} mb={5}>
-        <Text display={"inline-block"}>Album of</Text>
-        <Box
-          bg={"blue"}
-          textColor={"white"}
-          display={"inline-block"}
-          p={2}
-          borderRadius={5}
-          ml={2}
-          mr={2}
-        >
-          ตัวละคร
-        </Box>
+      <Box fontSize={'xl'} display={data.caid ? "initial" : "none"} textAlign={"center"} >
+        <Text display={"inline-block"} mr={2}>Album of</Text>
+
         <Text display={"inline-block"}>{chara[data.caid].name}</Text>
       </Box>
+
+      <HStack justifyContent={'center'}>
+        <Tag
+          bg={'royalblue'}
+          textColor={"white"}
+          display={"inline-block"}
+          py={1}
+          px={2}
+          borderRadius={5}
+          mx={2}
+          w={'auto'}
+          fontSize={'14'}
+        >
+          ตัวละคร
+        </Tag>
+      </HStack>
+
+
+      
       <Box>
-        <Text whiteSpace={"pre-line"} textAlign={"center"}>
+        <Text py={5} whiteSpace={"pre-line"} textAlign={"center"}>
           {data.description}
         </Text>
       </Box>
+      <Divider />
       <Grid
         width={"95%"}
         templateColumns="repeat(4, 1fr)"
