@@ -27,7 +27,7 @@ const MentionBox = ({ data, id, mention, setMention }) => {
   );
 
   return (
-    <Box w={"100%"} h={"auto"} float={"left"} zIndex={10000}>
+    <Box w={"100%"} h={"auto"} float={"left"} >
       <Box>
         <Wrap id="tags" mt={1.5} mb={1.5} position={"relative"}>
           {mention.map((chara, index) => (
