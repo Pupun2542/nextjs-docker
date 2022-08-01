@@ -213,10 +213,8 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
             <Divider mb={2} />
 
             <HStack w={'100%'} pt={1}>
-              <Text fontSize={14} color={'gray.400'}>ได้กล่าวถึง</Text>
-              <Tag color={'black'} bg={'gray.200'}>Mister Daruma</Tag>
-              <Tag colorScheme={'cyan'}>Day 1</Tag>
-              <Tag colorScheme={'orange'}>Talking</Tag>
+            {reply.mention?.length > 0 &&(<Text fontSize={14} color={'gray.400'}>ได้กล่าวถึง</Text>)}
+            {reply.mention?.map((tag)=> (<Tag color={'black'} bg={'gray.200'}>{tag.name}</Tag>))}
             </HStack>
 
             <Flex justifyContent={"center"} w={"100%"}>
