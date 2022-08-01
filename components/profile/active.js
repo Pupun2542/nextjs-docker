@@ -109,7 +109,6 @@ export const Active = ({ onEdit, value, isOwner }) => {
 
           <Center w={"100%"} borderRadius={10} bg={"gray.300"} p={1} h={12}>
             <Box w={"100%"} borderRadius={10} bg={"white"} p={2} h={10}>
-              {console.log(value)}
               {(!value || value?.time === undefined || value?.time == "1") && (
                 <Text>ตอบกลับตามความสะดวกของตนเอง</Text>
               )}

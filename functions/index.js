@@ -117,7 +117,7 @@ app.get("/", (req, res) => {
 });
 // app.post("/", DeletePreviewComment);
 
-app.post("/group/create", authmw, createGroup);
+app.post("/group/:gid/create", authmw, createGroup);
 app.post("/group/:id/update", authmw, updateGroup);
 app.post("/group/:id/delete", authmw, deleteGroup);
 app.post("/group/:id/acceptPlayer", authmw, acceptPlayer);
@@ -319,7 +319,15 @@ exports.onUserCreated = functions.region("asia-southeast1").auth.user().onCreate
       uid: user.uid,
       displayName: user.displayName,
       email: user.email,
-      photoURL: "",
+      active: {},
+      condition: {},
+      friend: {},
+      pendingFriend: {},
+      persoalconfig: {},
+      personalvalue: {},
+      playcom: {},
+      relationship: {},
+      roleplay: {},
     })
     .then();
 });

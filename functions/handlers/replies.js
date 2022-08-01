@@ -28,8 +28,19 @@ exports.createReply = (req, res) => {
                     reply: admin.firestore.FieldValue.increment(1),
                     follower: admin.firestore.FieldValue.arrayUnion(user),
                   });
+                  const existInboth = (arr1, arr2) => {
+                    const unfiltered = arr1.map((a) => {
+                      if (arr2.includes(a)) {
+                        return a;
+                      } else {
+                        return;
+                      }
+                    });
+                    const filtered = unfiltered.filter((v) => v);
+                    return filtered;
+                  };
                   sendNotifications(
-                      doc.data().follower,
+                      existInboth(gdoc.data().member, doc.data().follower),
                       103,
                       user,
                       req.params.gid,

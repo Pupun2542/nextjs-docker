@@ -7,7 +7,6 @@ const useStaffList = (data, gid) => {
   const [staff, setStaff] = useState(dataref.current);
   const [loading, setLoading] = useState(false);
   const { auth } = useApp();
-  console.log(dataref.current, staff);
 
   const getStaff = () => {
     return Object.values(staff);
@@ -30,7 +29,6 @@ const useStaffList = (data, gid) => {
     const removedstaff = Object.keys(dataref.current).filter(
       (v, i) => !Object.keys(staff).includes(v)
     );
-    console.log(newstaff, removedstaff);
     const token = await auth.currentUser.getIdToken();
     const promises = [];
     if (newstaff.length > 0) {

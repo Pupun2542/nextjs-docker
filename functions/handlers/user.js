@@ -19,8 +19,6 @@ exports.getDetailedUsers = async (req, res) => {
       .where("uid", "in", req.body.users)
       .get();
   if (!snap.empty) {
-    console.log(req.body.users);
-    console.log(snap.docs);
     return res.status(200).json(snap.docs.map((doc)=>doc.data()));
   } else {
     return res.status(404).send("users not found");

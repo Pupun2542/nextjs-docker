@@ -20,7 +20,6 @@ const Notitab = ({ notidata }) => {
         }
         groupdetail = [...groupdetail, data.group];
       });
-      // console.log(userdetail)
       const uniquser = [...new Set(userdetail)];
       const detaileduser = await getUser(uniquser);
       const uniqgroup = [...new Set(groupdetail)];
@@ -33,7 +32,6 @@ const Notitab = ({ notidata }) => {
           }
         })
       );
-      // console.log(detaileduser, detailedgroup);
       const mappedNotiData = [];
       notidata.map((data) => {
         const group = detailedgroup.find((v) => v?.gid === data.group);
@@ -66,10 +64,10 @@ const Notitab = ({ notidata }) => {
               ),
               time: caltime(data.timestamp),
               path: data.path.startsWith("/") ? data.path : "/" + data.path,
+              thumbnail: data.notitype==="002"? group.bannersqr : chara ? chara.photoURL : triggerer.photoURL,
             },
           ];
         }
-        // }
       });
       setNewNotiData(mappedNotiData);
     };
@@ -215,16 +213,13 @@ const Notitab = ({ notidata }) => {
   };
 
   const caltime = (timestamp) => {
-    // console.log(data.timestamp)
     const now = new Date(Date.now());
-    // console.log(data)
     const sentdate = new Date(timestamp);
 
     // const nowYear = now.getFullYear();
     // const nowMonth = now.getMonth();
 
     const minusDate = now - sentdate;
-    // console.log(now.getFullYear() - sentdate.getFullYear());
 
     if (
       now.getFullYear() - sentdate.getFullYear() > 0 &&
@@ -249,8 +244,6 @@ const Notitab = ({ notidata }) => {
 
   // const header = await getHeader(notidata.group);
 
-  // console.log(header)
-
   return (
     <Flex p={2} direction={"column"} overflowY={"auto"} maxH={550}>
       {newNotiData.map((data, k) => (
@@ -265,8 +258,7 @@ const Notitab = ({ notidata }) => {
           _hover={{ backgroundColor: "gray.100" }}
           key={k}
         >
-          {/* {console.log(data)} */}
-          <Avatar size={"lg"} src={data.triggerer.photoURL}></Avatar>
+          <Avatar size={"lg"} src={data.thumbnail}></Avatar>
           <VStack pt={2} pl={2} w={"100%"} float={"left"} spacing={0}>
             <Text w={"100%"}>{data.message}</Text>
             <Text w={"100%"} fontSize={14} color={"gray.500"}>

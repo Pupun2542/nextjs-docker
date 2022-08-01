@@ -109,7 +109,6 @@ function CustomNavbar() {
   } = useDisclosure();
   const router = useRouter();
   const [user, loading, error] = useAuthState(auth);
-  // console.log({bp: router.basePath, ap: router.asPath})
   const btnRef = React.useRef();
   const [data, setData] = useState(undefined);
   const [unreadChat, setUnreadChat] = useState([]);
@@ -131,12 +130,12 @@ function CustomNavbar() {
   };
   useOutsideClick({
     ref: chatTabRef,
-    handler: onChatClose
-  })
+    handler: onChatClose,
+  });
   useOutsideClick({
     ref: notiTabRef,
-    handler: onNotiClose
-  })
+    handler: onNotiClose,
+  });
   useEffect(() => {
     let unsubscribe = () => {};
     if (user && !loading) {
@@ -145,9 +144,9 @@ function CustomNavbar() {
         async (usrdoc) => {
           if (usrdoc.exists) {
             let pinnedgroup = [];
-            if (usrdoc.data().pinned?.length > 0) {
+            if (usrdoc.data()?.pinned?.length > 0) {
               await Promise.all(
-                usrdoc.data().pinned.map(async (gid) => {
+                usrdoc.data()?.pinned.map(async (gid) => {
                   const grp = await getgroup(gid);
                   pinnedgroup = [...pinnedgroup, grp];
                 })
@@ -183,80 +182,6 @@ function CustomNavbar() {
       setUnreadnoti(unreadedItem);
     }
   }, [notidata]);
-
-  const Loadthumbnail = () => {
-    if (user) {
-      return (
-        <Menu>
-          <MenuButton
-            as={Button}
-            rounded={"full"}
-            variant={"link"}
-            cursor={"pointer"}
-            minW={0}
-            minH={0}
-            _hover={{
-              textDecoration: "none",
-            }}
-          >
-            <Center
-              bg="white"
-              rounded={"full"}
-              minHeight={38}
-              borderWidth={2}
-              borderColor={"black"}
-              onClick={() => router.push("/profile/" + user.uid)}
-            >
-              <Avatar h={41} w={41} src={user.photoURL} loading={"lazy"} />
-              <Show above="lg">
-                <Center width={"auto"} h={41} px={5}>
-                  <Center
-                    fontFamily={"SarabunSB"}
-                    fontWeight={150}
-                    color={"black"}
-                  >
-                    {user.displayName}
-                  </Center>
-                </Center>
-              </Show>
-            </Center>
-          </MenuButton>
-        </Menu>
-      );
-    }
-
-    if (loading) {
-      return <div>loading user</div>;
-    }
-    return (
-      <Center bg={"#FFC75A"} rounded={"10"}>
-        <Button
-          variant="primary"
-          onClick={onSigninOpen}
-          title="Login"
-          color="#6768AB"
-        >
-          Login
-        </Button>
-
-        <Drawer
-          isOpen={isSigninOpen}
-          placement="right"
-          onClose={onSigninClose}
-          finalFocusRef={btnRef}
-          size={"sm"}
-        >
-          <DrawerOverlay />
-          <DrawerContent mt={55}>
-            <DrawerCloseButton />
-            <DrawerHeader>Sign in</DrawerHeader>
-
-            <SignIn />
-          </DrawerContent>
-        </Drawer>
-      </Center>
-    );
-  };
 
   const readNotification = () => {
     const batch = writeBatch(db);
@@ -456,13 +381,41 @@ function CustomNavbar() {
                   )}
                 </MenuList>
 
+                {!user && !loading &&(
+                  <Center bg={"#FFC75A"} rounded={"10"}>
+                    <Button
+                      variant="primary"
+                      onClick={onSigninOpen}
+                      title="Login"
+                      color="#6768AB"
+                    >
+                      Login
+                    </Button>
+
+                    <Drawer
+                      isOpen={isSigninOpen}
+                      placement="right"
+                      onClose={onSigninClose}
+                      finalFocusRef={btnRef}
+                      size={"sm"}
+                    >
+                      <DrawerOverlay />
+                      <DrawerContent mt={55}>
+                        <DrawerCloseButton />
+                        <DrawerHeader>Sign in</DrawerHeader>
+
+                        <SignIn />
+                      </DrawerContent>
+                    </Drawer>
+                  </Center>
+                )}
+
                 <Modal isOpen={isOpen} onClose={onClose}>
                   <ModalOverlay />
                   <ModalContent borderWidth={2} borderColor={"black"}>
                     <ModalHeader bg={"gray.50"}>My Pinned</ModalHeader>
                     <ModalCloseButton rounded={"full"} />
                     <ModalBody>
-                      {/* {console.log(data)} */}
                       {data?.pinned?.length > 0 &&
                         data.pinned.map((doc, k) => (
                           <Text
@@ -752,16 +705,13 @@ const ChatNotiIcon = ({ data, user }) => {
   }, [data, user]);
 
   const caltime = () => {
-    // console.log(data.timestamp)
     const now = new Date(Date.now());
-    // console.log(data)
     const sentdate = data.timestamp.toDate();
 
     // const nowYear = now.getFullYear();
     // const nowMonth = now.getMonth();
 
     const minusDate = now - sentdate;
-    // console.log(now.getFullYear() - sentdate.getFullYear());
 
     if (
       now.getFullYear() - sentdate.getFullYear() > 0 &&
@@ -784,7 +734,6 @@ const ChatNotiIcon = ({ data, user }) => {
     }
   };
 
-  // console.log(name)
   return (
     <Box
       w="100%"

@@ -35,7 +35,6 @@ export function SignIn() {
     const [password, setPassword] = useState("");
     const router = useRouter();
     const [consentCheck, setConsentcheck] = useState(false);
-    console.log(consentCheck);
     var mail;
     if (loading) {
         return <CustomNavbar />;

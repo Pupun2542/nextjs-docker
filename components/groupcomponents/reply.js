@@ -24,7 +24,7 @@ import {
   ChatCenteredText,
   Eye,
   DotsThreeVertical,
-  CaretDown
+  CaretDown,
 } from "phosphor-react";
 import { useApp } from "../../src/hook/local";
 import axios from "axios";
@@ -44,14 +44,13 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
   const router = useRouter();
   const { chara, refreshcharaList } = useCharaList(data, gid);
   const checkChara = () => {
-    // console.log(chara[chara.findIndex(v => v.refererId = reply.charaId)])
-    if (chara[chara.findIndex(v => v.refererId == reply.charaId)]) {
-      return chara[chara.findIndex(v => v.refererId == reply.charaId)];
+    if (chara[chara.findIndex((v) => v.refererId == reply.charaId)]) {
+      return chara[chara.findIndex((v) => v.refererId == reply.charaId)];
     } else {
       // refreshcharaList();
-      return ""
+      return "";
     }
-  }
+  };
   const postchara = checkChara();
 
   const rid = reply.rid;
@@ -99,7 +98,6 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
       );
     }
     // setMessage("");
-    // console.log(getpathfromUrl(commentdoc.imageURL))
   };
 
   const handleEdit = async () => {
@@ -117,7 +115,6 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
     );
     setEditMode(false);
     // setMessage(editMessage);
-    // console.log(getpathfromUrl(commentdoc.imageURL))
   };
 
   const HandleLove = async () => {
@@ -154,10 +151,10 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
   return (
     <Flex
       borderRadius={5}
-      bg={'gray.100'}
+      bg={"gray.100"}
       mt={2}
       p={1}
-      boxShadow={'base'}
+      boxShadow={"base"}
       w={"100%"}
     >
       {/* <Center m={1}>
@@ -177,10 +174,10 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
       </Center> */}
 
       <Flex
-        bg={'white'}
+        bg={"white"}
         p={2}
         // boxShadow={'"0 0 2px #000000"'}
-        boxShadow={'base'}
+        boxShadow={"base"}
         w={"100%"}
         direction={"column"}
         float={"right"}
@@ -193,28 +190,56 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
             h={45}
             w={45}
             src={postchara.name ? postchara.photoURL : creator.photoURL}
-            name={postchara.name ? postchara.name : creator.displayName}
-
+            name={
+              postchara.name ? postchara.name : creator?.displayName || "Dummy"
+            }
           />
           <VStack w={"100%"} spacing={0}>
-            <Box fontSize={18} w={"100%"} onClick={postchara.name ? () => { } : () => router.push("../../profile/" + creator?.uid)} cursor={"pointer"}>
-              {postchara.name ? postchara.name : creator.displayName}
+            <Box
+              fontSize={18}
+              w={"100%"}
+              onClick={
+                postchara.name
+                  ? () => {}
+                  : creator
+                  ? () => router.push("../../profile/" + creator?.uid)
+                  : () => {}
+              }
+              cursor={"pointer"}
+            >
+              {postchara.name ? postchara.name : creator.displayName || "Dummy"}
             </Box>
             <Flex w={"100%"} fontSize={14} color={"gray.400"}>
               <Box
+                onClick={
+                  postchara.name && creator
+                    ? () => router.push("../../profile/" + creator?.uid)
+                    : () => {}
+                }
                 cursor={"pointer"}
-                onClick={postchara.name ? () => router.push("../../profile/" + creator?.uid) : () => { }}
               >
-                {postchara.name ? creator.displayName : ""}
+                {postchara.name ? creator?.displayName : ""}
               </Box>
               <Spacer />
-              <Box float={"right"}>{parseDate(reply.timestamp)}</Box>
+              <Box float={"right"}>
+                {reply.timestamp
+                  ? parseDate(reply.timestamp)
+                  : "01/01/1970:00.00"}
+              </Box>
             </Flex>
             <Divider mb={2} />
 
-            <HStack w={'100%'} pt={1}>
-            {reply.mention?.length > 0 &&(<Text fontSize={14} color={'gray.400'}>ได้กล่าวถึง</Text>)}
-            {reply.mention?.map((tag)=> (<Tag color={'black'} bg={'gray.200'}>{tag.name}</Tag>))}
+            <HStack w={"100%"} pt={1}>
+              {reply.mention?.length > 0 && (
+                <Text fontSize={14} color={"gray.400"}>
+                  ได้กล่าวถึง
+                </Text>
+              )}
+              {reply.mention?.map((tag) => (
+                <Tag color={"black"} bg={"gray.200"}>
+                  {tag.name}
+                </Tag>
+              ))}
             </HStack>
 
             <Flex justifyContent={"center"} w={"100%"}>
@@ -282,18 +307,20 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
                   fontSize={14}
                   color={"GrayText"}
                   p={1}
-                  boxShadow={'base'}
-                  bg={'gray.100'}
+                  boxShadow={"base"}
+                  bg={"gray.100"}
                   borderRadius={5}
                 >
                   <Button
-                    leftIcon={<Heart
-                      weight={
-                        love.includes(auth.currentUser.uid)
-                          ? "fill"
-                          : "regular"
-                      }
-                    />}
+                    leftIcon={
+                      <Heart
+                        weight={
+                          love.includes(auth.currentUser.uid)
+                            ? "fill"
+                            : "regular"
+                        }
+                      />
+                    }
                     color={
                       love.includes(auth.currentUser.uid) ? "#EA4545" : "black"
                     }
@@ -303,12 +330,12 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
                     boxShadow={"base"}
                     variant="solid"
                     onClick={HandleLove}
-                    bg={'white'}
+                    bg={"white"}
                     h={30}
                   >
                     {reply.love.length}
                   </Button>
-                  <Box w={'100%'}></Box>
+                  <Box w={"100%"}></Box>
                 </HStack>
               </Flex>
             </Flex>
@@ -317,7 +344,7 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
           <Menu>
             <MenuButton ml={1} h={10} w={10}>
               <IconButton
-                size={'sm'}
+                size={"sm"}
                 icon={<DotsThreeVertical size={15} />}
                 rounded={"full"}
               />
@@ -325,7 +352,6 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
             <MenuList>
               {auth.currentUser.uid == reply.uid ? (
                 <>
-                  {/* {console.log(post)} */}
                   <MenuItem
                     onClick={() => {
                       setEditMode(true);
@@ -359,7 +385,5 @@ const parseDate = (seconds) => {
   });
   const spdate = formatted.split(" ");
   const formatted2 = `${spdate[0]} [${spdate[1]}]`;
-  // console.log(formatted2)
   return formatted2;
-  // console.log(seconds.toDate());
 };

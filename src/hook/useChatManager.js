@@ -41,7 +41,7 @@ const UseChatManager = () => {
     }
   };
 
-  const handleCommuGroupMessage = async (user, gid, groupName) => {
+  const handleCommuGroupMessage = async (user, gid, group) => {
     const snapshot = await getDocs(
       query(
         collection(db, "chatrooms"),
@@ -56,8 +56,9 @@ const UseChatManager = () => {
         const ref = await addDoc(collection(db, "chatrooms"), {
           member: [user.uid],
           type: "group",
-          name: groupName,
-          gid: gid
+          name: group.name,
+          gid: gid,
+          thumbnail: group.bannersqr || ""
         });
         await updateDoc(doc(db, "group", gid),{
           mainchatgroup: ref.id
@@ -85,7 +86,6 @@ const UseChatManager = () => {
         changeTab(docId.id);
       }
     } else {
-      console.log(gid)
       alert("คอมมูยังไม่มีแช็ทกลุ่ม")
     }
   };

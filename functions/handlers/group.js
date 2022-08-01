@@ -5,8 +5,8 @@ const {sendNotifications} = require("../utils/notifications");
 exports.createGroup = (req, res) => {
   const data = req.body;
   if (req.user) {
-    return db.collection("group")
-        .add({
+    return db.collection("group").doc(req.params.gid)
+        .set({
           name: data.name.trim(),
           creator: req.user.uid,
           type: data.type,
@@ -37,7 +37,7 @@ exports.createGroup = (req, res) => {
           registrationlink: data.registrationlink,
           statuschecklink: data.statuschecklink,
           // banner916: data.banner916,
-          // bannersqr: data.bannersqr,
+          bannersqr: data.sqrUrl,
           banner: data.bannerUrl,
           doclink: data.docUrl,
         })
@@ -81,7 +81,7 @@ exports.updateGroup = async (req, res) => {
         registrationlink: data.registrationlink,
         statuschecklink: data.statuschecklink,
         // banner916: data.banner916,
-        // bannersqr: data.bannersqr,
+        bannersqr: data.sqrUrl,
         banner: data.bannerUrl,
         doclink: data.docUrl,
         commentcount: 0,
@@ -146,7 +146,6 @@ exports.acceptPlayer = (req, res)=>{
   }
 };
 exports.removePlayer = (req, res) =>{
-  // staff กด
   if (req.user) {
     const user = req.user.uid;
     const id = req.body.id;
@@ -606,16 +605,16 @@ exports.getGroup = (req, res) =>{
           commentuser: Object.fromEntries(arrgrpmember.filter(([k, v], i)=>doc.data().commentuser.includes(v.uid))),
         };
         if (doc.data().chara) {
-          // console.log(doc.data().chara);
           const arrgrpchara = Object.entries(doc.data().chara);
-          // console.log(arrgrpchara);
           let newChara = [];
           arrgrpchara.map(([k, v])=> {
-            console.log(v.parentId);
-            const refname = grpmember[v.parentId].displayName;
-            newChara = [...newChara, [k, {...v, parentName: refname}]];
+            if (grpmember[v.parentId]) {
+              const refname = grpmember[v.parentId].displayName;
+              newChara = [...newChara, [k, {...v, parentName: refname}]];
+            } else {
+              newChara = [...newChara, [k, {...v, parentName: "อดีตสมาชิก"}]];
+            }
           });
-          // console.log(Object.fromEntries(newChara));
           mappeddocdata = {
             ...mappeddocdata,
             chara: Object.fromEntries(newChara),

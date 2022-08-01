@@ -134,7 +134,6 @@ function GroupSidebar() {
             <Button>
               {!loading &&
                 commu.map((value, index) => {
-                  // console.log(value.id);
                   return (
                     <Flex
                       key={index}
@@ -207,8 +206,6 @@ function GroupSidebar() {
     return <div></div>;
   };
   return CurrentUser();
-
-  // console.log(commu.length);
 }
 
 // function Menu() {

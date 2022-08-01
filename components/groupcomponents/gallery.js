@@ -50,7 +50,6 @@ const Gallery = ({ gid, mychara, data }) => {
     }
   };
   const fetchAlbum = async () => {
-    console.log("fetchalbum");
     const token = await auth.currentUser.getIdToken();
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${gid}/album/`,
@@ -66,7 +65,6 @@ const Gallery = ({ gid, mychara, data }) => {
   };
 
   useEffect(() => {
-    console.log(tabindex);
     if (tabindex == 0) {
       fetchGallery();
     } else {
@@ -75,7 +73,6 @@ const Gallery = ({ gid, mychara, data }) => {
   }, [gid, tabindex]);
 
   const editAlbum = (value) => {
-    console.log(value);
     const index = album.findIndex((v)=> v.aid === value.aid);
     let newalbum = [...album];
     newalbum[index] = value;
@@ -84,10 +81,6 @@ const Gallery = ({ gid, mychara, data }) => {
     }
     setAlbum(newalbum);
   }
-
-  useEffect(()=>{
-    console.log(album)
-  },[album])
 
   return (
     <Box>
@@ -121,7 +114,7 @@ const Gallery = ({ gid, mychara, data }) => {
               Album
             </Button>
           </Box>
-          {tabindex == 0 && !specificAlbum.uid && (
+          {/* {tabindex == 0 && !specificAlbum.uid && (
             <Button
               bg={"#FBBC43"}
               borderWidth={2}
@@ -130,7 +123,7 @@ const Gallery = ({ gid, mychara, data }) => {
             >
               Add Picture
             </Button>
-          )}
+          )} */}
           {tabindex == 1 && !specificAlbum.uid && (
             <Button
               bg={"#FBBC43"}

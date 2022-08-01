@@ -30,18 +30,33 @@ export async function Uploadprofilebannerimg(file, creator) {
   return downloadurl;
 }
 
-export async function UploadBannerImage(file, creator) {
+export async function UploadBannerImage(file, creator, group) {
   if (!file) {
     return;
   }
   const storageref = ref(
     store,
-    `publicResource/uploadImages/${creator}${Date.now()}.jpg`
+    `group/${group}/uploadImages/${creator}${Date.now()}.jpg`
   );
 
   const snapsnot = await uploadString(storageref, file, "data_url");
   const downloadurl = await getDownloadURL(snapsnot.ref);
-  // console.log(downloadurl)
+  return downloadurl;
+}
+export async function UploadBannerSquareImage(file, creator, group) {
+
+  if (!file) {
+    return;
+  }
+  const storageref = ref(
+    store,
+    `group/${group}/uploadImages/${creator}${Date.now()}.jpg`
+  );
+
+  // const compressed = await compressImage(file, 500)
+
+  const snapsnot = await uploadString(storageref, file, "data_url");
+  const downloadurl = await getDownloadURL(snapsnot.ref);
   return downloadurl;
 }
 
@@ -136,14 +151,14 @@ export const deleteImage = async (path) => {
   await deleteObject(storeRef);
 }
 
-const compressImage = async (dataurl) => {
+export const compressImage = async (dataurl, maxWidth = 250) => {
   const file = await imageCompression.getFilefromDataUrl(
     dataurl,
-    "defaule.jpg",
+    "default.jpg",
     Date.now()
   );
   const compress = await imageCompression(file, {
-    maxWidthOrHeight: 250,
+    maxWidthOrHeight: maxWidth,
   });
   const ret = await imageCompression.getDataUrlFromFile(compress);
   return ret;

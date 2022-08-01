@@ -62,7 +62,6 @@ export async function UpdateUserPinGroup(user, groupId) {
       if (PinnedGroups.length < 10) {
         if (PinnedGroups.includes(groupId)) {
             // console.log(PinnedGroups.includes(groupId), PinnedGroups.indexOf(groupId)) 
-            console.log("remove pin ", groupId)
             // console.log("Group: ", PinnedGroups, "After splice: " , PinnedGroups.splice(0,1))
             // const sp = PinnedGroups.splice(PinnedGroups.indexOf(groupId),1)
             // console.log(sp)
@@ -70,7 +69,6 @@ export async function UpdateUserPinGroup(user, groupId) {
             PinnedGroup: data.PinnedGroup.filter((removeId) => removeId !== groupId)
           });
         } else {
-            console.log("add pin ", groupId)
           await updateDoc(ref, {
             PinnedGroup: [...data.PinnedGroup, groupId],
           });

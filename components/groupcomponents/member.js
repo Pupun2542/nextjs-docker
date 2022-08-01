@@ -29,6 +29,7 @@ import {
   TabPanels,
   TabPanel,
   Icon,
+  Tooltip,
 } from "@chakra-ui/react";
 import { Check, DotsThreeVertical, MagnifyingGlass, X } from "phosphor-react";
 import { useState } from "react";
@@ -70,7 +71,7 @@ export const Member = ({ data, gid }) => {
   const [editForm, setEditForm] = useState(null);
   return (
     <Flex direction={"column"}>
-      <Tabs isFitted variant='line' mt={-8}>
+      <Tabs isFitted variant="line" mt={-8}>
         <TabList>
           <Tab>Pending</Tab>
           <Tab>Member</Tab>
@@ -137,7 +138,7 @@ export const Member = ({ data, gid }) => {
                 bg="#FFC75A"
                 borderRadius={10}
                 borderWidth={2}
-                borderColor={'black'}
+                borderColor={"black"}
                 _hover={{ bg: "#6768AB", textColor: "white" }}
                 onClick={() => setModalTopic(1)}
               >
@@ -161,8 +162,10 @@ export const Member = ({ data, gid }) => {
             </Box>
 
             <Divider />
-            <Flex p={1} bg={'white'} rounded={5} boxShadow={'base'}>
-              <Center p={1}><MagnifyingGlass size={'28px'} /></Center>
+            <Flex p={1} bg={"white"} rounded={5} boxShadow={"base"}>
+              <Center p={1}>
+                <MagnifyingGlass size={"28px"} />
+              </Center>
 
               <Input
                 width="100%"
@@ -180,18 +183,19 @@ export const Member = ({ data, gid }) => {
               <Flex>
                 <AvatarGroup size={"md"} mr={2} max={5}>
                   {member.map((mem) => (
-                    <Avatar
-                      src={mem.photoURL}
-                      name={mem.photoURL}
-                      size="md"
-                    />
+                    <Avatar src={mem.photoURL} name={mem.photoURL} size="md" />
                   ))}
                 </AvatarGroup>
               </Flex>
-
             </Flex>
 
-            <SimpleGrid p={5} spacing={5} columns={2} maxH={550} overflowY="auto">
+            <SimpleGrid
+              p={5}
+              spacing={5}
+              columns={2}
+              maxH={550}
+              overflowY="auto"
+            >
               {isEmptyOrSpaces(searchstr) &&
                 member.map((mem) => (
                   <Flex
@@ -208,7 +212,12 @@ export const Member = ({ data, gid }) => {
                       name={mem.displayName}
                     ></Avatar>
                     <VStack ml={"5px"} mr={"5px"} w={"100%"}>
-                      <Box mt={"5px"} fontSize={18} textAlign={"left"} width={"100%"}>
+                      <Box
+                        mt={"5px"}
+                        fontSize={18}
+                        textAlign={"left"}
+                        width={"100%"}
+                      >
                         {mem.displayName}
                       </Box>
                       {/* <Box
@@ -219,19 +228,52 @@ export const Member = ({ data, gid }) => {
               >
                 {mem.displayName}
               </Box> */}
+                      {console.log(data)}
                     </VStack>
-                    {data?.isStaff && (
-                      <Menu>
-                        <MenuButton m={2.5} h={5} w={5} borderRadius={100}>
-                          <DotsThreeVertical size={20} />
-                        </MenuButton>
-                        <MenuList>
-                          <MenuItem onClick={() => onRemoveMember(mem.uid)}>
-                            Kick
-                          </MenuItem>
-                        </MenuList>
-                      </Menu>
-                    )}
+
+                    <Menu>
+                      <MenuButton m={2.5} h={5} w={5} borderRadius={100}>
+                        <DotsThreeVertical size={20} />
+                      </MenuButton>
+                      <MenuList>
+                        {data?.isStaff && mem.uid !== auth.currentUser.uid && (
+                          <Tooltip
+                            label="ไม่สามารถเตะเจ้าของโรลได้"
+                            shouldWrapChildren
+                            isDisabled={
+                              !Object.keys(data.creator).includes(mem.uid)
+                            }
+                          >
+                            <MenuItem
+                              onClick={() => onRemoveMember(mem.uid)}
+                              isDisabled={Object.keys(data.creator).includes(
+                                mem.uid
+                              )}
+                            >
+                              Kick
+                            </MenuItem>
+                          </Tooltip>
+                        )}
+                        {mem.uid === auth.currentUser.uid && (
+                          <Tooltip
+                            label="เจ้าของกลุ่มออกกลุ่มไม่ได้"
+                            shouldWrapChildren
+                            isDisabled={
+                              !Object.keys(data.creator).includes(mem.uid)
+                            }
+                          >
+                            <MenuItem
+                              onClick={() => onRemoveMember(mem.uid)}
+                              isDisabled={Object.keys(data.creator).includes(
+                                mem.uid
+                              )}
+                            >
+                              Leave
+                            </MenuItem>
+                          </Tooltip>
+                        )}
+                      </MenuList>
+                    </Menu>
                   </Flex>
                 ))}
               {!isEmptyOrSpaces(searchstr) &&
@@ -251,19 +293,57 @@ export const Member = ({ data, gid }) => {
                       name={mem.displayName}
                     ></Avatar>
                     <VStack ml={"5px"} mr={"5px"} w={"100%"}>
-                      <Box mt={"5px"} fontSize={18} textAlign={"left"} width={"100%"}>
+                      <Box
+                        mt={"5px"}
+                        fontSize={18}
+                        textAlign={"left"}
+                        width={"100%"}
+                      >
                         {mem.displayName}
                       </Box>
                     </VStack>
-                    {data?.isStaff && (
+                    {data?.isStaff && auth.currentUser.uid !== mem.uid && (
                       <Menu>
                         <MenuButton m={2.5} h={10} w={10} borderRadius={100}>
                           <DotsThreeVertical size={30} />
                         </MenuButton>
                         <MenuList>
-                          <MenuItem onClick={() => onRemoveMember(mem.uid)}>
-                            Kick
-                          </MenuItem>
+                          {data?.isStaff && mem.uid !== auth.currentUser.uid && (
+                            <Tooltip
+                              label="ไม่สามารถเตะเจ้าของโรลได้"
+                              shouldWrapChildren
+                              isDisabled={
+                                !Object.keys(data.creator).includes(mem.uid)
+                              }
+                            >
+                              <MenuItem
+                                onClick={() => onRemoveMember(mem.uid)}
+                                isDisabled={Object.keys(data.creator).includes(
+                                  mem.uid
+                                )}
+                              >
+                                Kick
+                              </MenuItem>
+                            </Tooltip>
+                          )}
+                          {mem.uid === auth.currentUser.uid && (
+                            <Tooltip
+                              label="เจ้าของกลุ่มออกกลุ่มไม่ได้"
+                              shouldWrapChildren
+                              isDisabled={
+                                !Object.keys(data.creator).includes(mem.uid)
+                              }
+                            >
+                              <MenuItem
+                                onClick={() => onRemoveMember(mem.uid)}
+                                isDisabled={Object.keys(data.creator).includes(
+                                  mem.uid
+                                )}
+                              >
+                                Leave
+                              </MenuItem>
+                            </Tooltip>
+                          )}
                         </MenuList>
                       </Menu>
                     )}
@@ -282,7 +362,7 @@ export const Member = ({ data, gid }) => {
                 bg="#FFC75A"
                 borderRadius={10}
                 borderWidth={2}
-                borderColor={'black'}
+                borderColor={"black"}
                 _hover={{ bg: "blue", textColor: "white" }}
                 onClick={() => setModalTopic(2)}
               >
@@ -305,8 +385,10 @@ export const Member = ({ data, gid }) => {
               </Box>
             </Box>
 
-            <Flex p={1} bg={'white'} rounded={5} boxShadow={'base'}>
-              <Center p={1}><MagnifyingGlass size={'28px'} /></Center>
+            <Flex p={1} bg={"white"} rounded={5} boxShadow={"base"}>
+              <Center p={1}>
+                <MagnifyingGlass size={"28px"} />
+              </Center>
 
               <Input
                 width="100%"
@@ -317,21 +399,17 @@ export const Member = ({ data, gid }) => {
                 value={searchcharastr}
                 bg="white"
                 placeholder="ค้นหาคาร์แรคเตอร์ภายในกลุ่ม"
-              /></Flex>
+              />
+            </Flex>
 
             <Flex mt={3} justifyContent={"space-between"}>
               <Flex>
                 <AvatarGroup size="md" mr={2} max={5}>
                   {chara.map((mem) => (
-                    <Avatar
-                      src={mem.photoURL}
-                      name={mem.photoURL}
-                      size="md"
-                    />
+                    <Avatar src={mem.photoURL} name={mem.photoURL} size="md" />
                   ))}
                 </AvatarGroup>
               </Flex>
-
             </Flex>
             {showncharalist.map((mem) => (
               <Characard
@@ -340,8 +418,8 @@ export const Member = ({ data, gid }) => {
                   mem.parentId === auth.currentUser.uid
                     ? "charaowner"
                     : Object.keys(data.staff).includes(auth.currentUser.uid)
-                      ? "staff"
-                      : "user"
+                    ? "staff"
+                    : "user"
                 }
                 onRemove={() => onRemoveChara(mem.refererId)}
                 onEdit={() => setEditForm(mem)}
@@ -358,12 +436,19 @@ export const Member = ({ data, gid }) => {
                 />
               )}
               {modalTopic == 2 && (
-                <Createcharacterform onClose={() => setModalTopic(0)} onSubmit={onAddChara} />
+                <Createcharacterform
+                  onClose={() => setModalTopic(0)}
+                  onSubmit={onAddChara}
+                />
               )}
             </Modal>
             <Modal isOpen={editForm} onClose={() => setEditForm(null)}>
               <ModalOverlay />
-              <Updatecharacterform onClose={() => setEditForm(null)} onSubmit={(e) => onUpdateChara(editForm.refererId, e)} data={editForm} />
+              <Updatecharacterform
+                onClose={() => setEditForm(null)}
+                onSubmit={(e) => onUpdateChara(editForm.refererId, e)}
+                data={editForm}
+              />
             </Modal>
           </TabPanel>
         </TabPanels>
