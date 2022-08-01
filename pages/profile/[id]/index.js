@@ -197,7 +197,7 @@ export default function profile() {
             bg={"#F3F5F8"}
             width="100%"
             maxW={1000}
-            minH={914}
+            minH={'100vh'}
             spacing={0}
             boxShadow="base"
           >
