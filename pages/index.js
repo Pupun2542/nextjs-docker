@@ -31,6 +31,16 @@ import {
   Bell,
   FacebookLogo,
   DiscordLogo,
+  PushPin,
+  Heart,
+  Users,
+  AddressBook,
+  UserCirclePlus,
+  At,
+  StackSimple,
+  UserCircle,
+  UserList,
+  MagnifyingGlass,
 } from "phosphor-react";
 import { useRouter } from "next/router";
 import React from "react";
@@ -67,7 +77,7 @@ export default function Home() {
               w={"90%"}
             >
 
-              <Box m={5} width={{sm: "100%", lg:"50%"}}>
+              <Box m={5} width={{ sm: "100%", lg: "50%" }}>
                 <Heading
                   fontFamily={"MitrSB"}
                   fontSize={[42, 48]}
@@ -188,15 +198,15 @@ export default function Home() {
                 direction={{ base: "column-reverse", md: "row" }}
                 w={"100%"}
               >
+                {/* Community */}
                 <VStack
                   p={5}
                   bg={"white"}
                   boxShadow="base"
                   borderRadius={10}
                   w={170}
-                  h={180}
-                  mt={"2.5"}
-                  mb={"2.5"}
+                  h={'210px'}
+                  my={2}
                 >
                   <Center
                     bg={"#6768AB"}
@@ -217,18 +227,15 @@ export default function Home() {
                     คอมมูนิตี้ได้ที่นี่
                   </Center>
                 </VStack>
-
-                {/* <Spacer /> */}
-
+                {/* Notification */}
                 <VStack
                   p={5}
                   bg={"white"}
                   boxShadow="base"
                   borderRadius={10}
                   w={170}
-                  h={180}
-                  mt={"2.5"}
-                  mb={"2.5"}
+                  h={'210px'}
+                  my={2}
                 >
                   <Center
                     bg={"#6768AB"}
@@ -249,15 +256,15 @@ export default function Home() {
                     และประกาศข่าวสาร
                   </Center>
                 </VStack>
+                {/* Chat */}
                 <VStack
                   p={5}
                   bg={"white"}
                   boxShadow="base"
                   borderRadius={10}
                   w={170}
-                  h={180}
-                  mt={"2.5"}
-                  mb={"2.5"}
+                  h={'210px'}
+                  my={2}
                 >
                   <Center
                     bg={"#6768AB"}
@@ -277,11 +284,161 @@ export default function Home() {
                   <Center fontWeight={400} fontSize={14}>
                     แบบส่วนตัว
                   </Center>
+                  <Center fontWeight={400} fontSize={14}>
+                    และแบบกลุ่ม
+                  </Center>
                 </VStack>
               </Flex>
-            </VStack>
 
-            <Spacer />
+              <Flex
+                maxW={550}
+                align="center"
+                justify={{
+                  base: "center",
+                  md: "space-around",
+                  xl: "space-between",
+                }}
+                direction={{ base: "column-reverse", md: "row" }}
+                w={"100%"}
+              >
+                {/* User */}
+                <VStack
+                  p={5}
+                  bg={"white"}
+                  boxShadow="base"
+                  borderRadius={10}
+                  w={170}
+                  h={180}
+                  my={2}
+                >
+                  <Center
+                    bg={"#6768AB"}
+                    color={"#FFC75A"}
+                    borderRadius={100}
+                    h={42}
+                    w={42}
+                  >
+                    <UserCircle size={32} />
+                  </Center>
+                  <Center fontWeight={500} fontSize={18}>
+                    <b>User Profile</b>
+                  </Center>
+                  <Center fontWeight={400} fontSize={14}>
+                    บ่งบอกตัวตน
+                  </Center>
+                  <Center fontWeight={400} fontSize={14}>
+                    ของคุณได้ที่นี่
+                  </Center>
+                </VStack>
+                {/* Albums */}
+                <VStack
+                  p={5}
+                  bg={"white"}
+                  boxShadow="base"
+                  borderRadius={10}
+                  w={170}
+                  h={180}
+                  my={2}
+                >
+                  <Center
+                    bg={"#6768AB"}
+                    color={"#FFC75A"}
+                    borderRadius={100}
+                    h={42}
+                    w={42}
+                  >
+                    <StackSimple size={32} />
+                  </Center>
+                  <Center fontWeight={500} fontSize={18}>
+                    <b>Albums</b>
+                  </Center>
+                  <Center fontWeight={400} fontSize={14}>
+                    สร้างอัลบั้มภายในกลุ่ม
+                  </Center>
+                  <Center fontWeight={400} fontSize={14}>
+                    ได้แล้วที่นี่
+                  </Center>
+                </VStack>
+              </Flex>
+
+              <SimpleGrid px={'20px'} columns={3} spacing={5}
+                fontFamily={'SarabunSB'} fontSize={'14'}
+              >
+                <Flex
+                  bg={'white'}
+                  rounded={5}
+                  p={2}
+                  boxShadow={'base'}
+                >
+                  <Center mr={2} bg={'#6768AB'} rounded={'full'} p={1} >
+                    <PushPin size={30} color={'#FFC75A'} />
+                  </Center>
+                  <Center >Pin</Center>
+                </Flex>
+
+                <Flex
+                  bg={'white'}
+                  rounded={5}
+                  p={2}
+                  boxShadow={'base'}
+                >
+                  <Center mr={2} bg={'#6768AB'} rounded={'full'} p={1} >
+                    <Heart size={30} color={'#FFC75A'} />
+                  </Center>
+                  <Center >Reaction</Center>
+                </Flex>
+
+                <Flex
+                  bg={'white'}
+                  rounded={5}
+                  p={2}
+                  boxShadow={'base'}
+                >
+                  <Center mr={2} bg={'#6768AB'} rounded={'full'} p={1} >
+                    <Users size={30} color={'#FFC75A'} />
+                  </Center>
+                  <Center >Add Friends</Center>
+                </Flex>
+
+                <Flex
+                  bg={'white'}
+                  rounded={5}
+                  p={2}
+                  boxShadow={'base'}
+                >
+                  <Center mr={2} bg={'#6768AB'} rounded={'full'} p={1} >
+                    <AddressBook size={30} color={'#FFC75A'} />
+                  </Center>
+                  <Center >Chat Bar</Center>
+                </Flex>
+
+                <Flex
+                  bg={'white'}
+                  rounded={5}
+                  p={2}
+                  boxShadow={'base'}
+                >
+                  <Center mr={2} bg={'#6768AB'} rounded={'full'} p={1} >
+                    <UserCirclePlus size={30} color={'#FFC75A'} />
+                  </Center>
+                  <Center >Add Character (TEST)</Center>
+                </Flex>
+
+                <Flex
+                  bg={'white'}
+                  rounded={5}
+                  p={2}
+                  boxShadow={'base'}
+                >
+                  <Center mr={2} bg={'#6768AB'} rounded={'full'} p={1} >
+                    <At size={30} color={'#FFC75A'} />
+                  </Center>
+                  <Center>Mention</Center>
+                </Flex>
+              </SimpleGrid>
+
+
+            </VStack>
 
             <VStack
               p={10}
@@ -310,62 +467,38 @@ export default function Home() {
                   xl: "space-between",
                 }}
                 direction={{ base: "column-reverse", md: "row" }}
-                w={"50%"}
+                w={"100%"}
               >
-                {/* <VStack
-                p={5}
-                borderRadius={10}
-              // w={170}
-              // h={180}
-              >
-                <UserList size={100} color="#6768AB" weight="fill" />
-                <Center fontWeight={'extrabold'} fontSize={22}>Vote</Center>
-                <Center fontWeight={400} fontSize={14}>สามารถสร้างโพลล์โหวต</Center>
-                <Center fontWeight={400} fontSize={14}>ภายในคอมมูนิตี้</Center>
-              </VStack>
+                <VStack
+                  p={5}
+                  borderRadius={10}
+                // w={170}
+                // h={180}
+                >
+                  <Image
+                    src="buffalo_prototype2 (2).svg"
+                    w={150}
+                    color={'#6768AB'}
+                  />
+                  <Center fontWeight={'extrabold'} fontSize={22}>Registration</Center>
+                  <Center fontWeight={400} fontSize={14}>สามารถสมัครและวิ่งคอมมู</Center>
+                  <Center fontWeight={400} fontSize={14}>ได้ภายในเว็บไซต์นี่เลย</Center>
+                </VStack>
 
-              <Spacer />
 
-              <VStack
-                p={5}
-                borderRadius={10}
-              // w={170}
-              // h={180}
-              >
-                <UserCirclePlus size={100} color="#6768AB" weight="fill" />
-                <Center fontWeight={'extrabold'} fontSize={22}>Create Character</Center>
-                <Center fontWeight={400} fontSize={14}>ระบบการจัดการตัวละคร</Center>
-                <Center fontWeight={400} fontSize={14}>จัดสร้างและจัดการสตอรี่</Center>
-              </VStack> */}
+                <VStack
+                  p={5}
+                  borderRadius={10}
+                // w={170}
+                // h={180}
+                >
+                  <UserCirclePlus size={100} color="#6768AB" weight="fill" />
+                  <Center fontWeight={'extrabold'} fontSize={22}>Create Character</Center>
+                  <Center fontWeight={400} fontSize={14}>ระบบการจัดการตัวละคร</Center>
+                  <Center fontWeight={400} fontSize={14}>จัดสร้างและจัดการสตอรี่</Center>
+                </VStack>
 
-                {/* <Spacer /> */}
 
-                {/* <VStack
-                p={5}
-                borderRadius={10}
-                justifyContent='center'
-              // w={170}
-              // h={180}
-              >
-                <MagnifyingGlass size={100} color="#6768AB" weight="fill" />
-                <Center fontWeight={'extrabold'} fontSize={22}>Search</Center>
-                <Center fontWeight={400} fontSize={14}>สามารถค้นหา</Center>
-                <Center fontWeight={400} fontSize={14}>ได้ตามความสนใจ</Center>
-              </VStack> */}
-
-                {/* <Spacer /> */}
-
-                {/* <VStack
-                p={5}
-                borderRadius={10}
-              // w={170}
-              // h={180}
-              >
-                <PushPin size={100} color="#6768AB" weight="fill" />
-                <Center fontWeight={'extrabold'} fontSize={22}>Pin</Center>
-                <Center fontWeight={400} fontSize={14}>ปักหมุด</Center>
-                <Center fontWeight={400} fontSize={14}>รับการแจ้งเตือน</Center>
-              </VStack> */}
               </Flex>
             </VStack>
 
