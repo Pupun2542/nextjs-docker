@@ -43,6 +43,7 @@ import { isEmptyOrSpaces } from "../../src/services/utilsservice";
 import { GroupPost } from "./post";
 import useCharaList from "../../src/hook/useCharaList";
 import MentionBox from "../commonComponent/MentionBox";
+import { X } from "phosphor-react"
 export const PostContext = createContext();
 const Postsection = ({ data, pid, user, id, selectedchara, setSelectedchara }) => {
   const [orderby, setOrderby] = useState("timestamp");
@@ -72,7 +73,6 @@ const Postsection = ({ data, pid, user, id, selectedchara, setSelectedchara }) =
   const reducer = (state, action) => {
     switch (action.type) {
       case "set": {
-        // console.log(action.id, action.value, state[action.id])
         return {
           ...state,
           [action.id]: { ...state[action.id], ...action.value },
@@ -368,7 +368,6 @@ const Postsection = ({ data, pid, user, id, selectedchara, setSelectedchara }) =
         {/* <Input placeholder='Basic usage' w={'93%'} /> */}
       </Flex>
       {/* โพสต์ */}
-      {/* {console.log(post)} */}
       <PostContext.Provider value={pack}>
         {post &&
           Array.isArray(post) &&

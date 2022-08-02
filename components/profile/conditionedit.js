@@ -22,7 +22,7 @@ export const Editcondition = ({ value, onFinish, onRefresh }) => {
   const initalvalue = {
     doit: value?.doit ? value.doit : "",
     dontit: value?.dontit ? value.dontit : "",
-    pobia: value?.pobia ? value.pobia : "",
+    phobia: value?.phobia ? value.phobia : "",
     demand: value?.demand ? value.demand : 1,
     ref: value?.ref ? value.ref : 1,
     condition: value?.condition ? value.condition : [],

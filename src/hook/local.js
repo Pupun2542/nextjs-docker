@@ -94,7 +94,6 @@ export const OpenChatTabProvider = ({ children }) => {
     tabDispatcher({ type: "removeTab", payload });
   };
   const changeTab = (payload) => {
-    console.log(payload);
     tabDispatcher({ type: "changeOpenTab", payload });
   };
   const CloseTab = () => {
@@ -158,7 +157,6 @@ const initialUser = {
 const userReducer = (state, action) => {
   switch (action.type) {
     case "addUser":
-      // console.log(state.data, action.docdata)
       return {
         ...state,
         // data: {...state.data, [action.uid]:action.payload}
@@ -171,17 +169,13 @@ export const UserProvider = ({ children }) => {
   const [data, DataDispatcher] = useReducer(userReducer, initialUser);
 
   const getUser = async (uid) => {
-      // console.log("recieved", uid)
-      // console.log("stored ", data)
       let users = [];
       let newuid = uid;
       if (Array.isArray(uid)&&uid.length > 0) {
         uid.map((id) => {
           const user = data.data.find((v) => v.uid == id);
-          // console.log("search ", user)
           if (user){
             users = [...users, user];
-            // console.log("found ", users)
             newuid = newuid.filter((v,i)=>v!=id);
           }
         });
@@ -189,7 +183,6 @@ export const UserProvider = ({ children }) => {
         const user = data.data.find((v) => v.uid == uid);
         if (user){
           users = user;
-          // console.log("found ", users)
           newuid = [uid];
         }
       }
@@ -220,7 +213,6 @@ const initialGroup = {
 const groupNotiReducer = (state, action) => {
   switch (action.type) {
     case "addGroup":
-      // console.log(action)
       return {
         ...state,
         // data: {...state.data, [action.uid]:action.payload}

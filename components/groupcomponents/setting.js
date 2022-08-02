@@ -5,7 +5,6 @@ import Staffcard from './staffcard'
 import UserSearchInput from './userSearchInput'
 
 const Setting = ({ data, gid }) => {
-  // console.log(data.staff)
   const { getStaff, addStaff, removeStaff, commitStaffChange, loading } = useStaffList(data.staff, gid);
 
 

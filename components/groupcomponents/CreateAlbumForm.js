@@ -32,7 +32,7 @@ import axios from "axios";
 
 export const CreateAlbumForm = ({ onClose, mychara, gid, setAlb, alb }) => {
   const chara = mychara ? Object.values(mychara) : [];
-  const [formMode, setFormMode] = useState(mychara ? 1 : 0);
+  const [formMode, setFormMode] = useState(alb?.aid? alb.caid ? 1 : 0 : mychara? 1 : 0);
   const {
     isOpen: isCharSelectOpen,
     onOpen: onCharSelectOpen,
@@ -60,9 +60,14 @@ export const CreateAlbumForm = ({ onClose, mychara, gid, setAlb, alb }) => {
   useEffect(() => {
     if (alb?.aid) {
       setSelectedImage(alb.mediaList);
-      setSelectedchara(mychara[alb.caid]);
       setAlbName(alb.name);
       setAlbDesc(alb.description);
+
+      if (mychara && alb.caid && mychara[alb.caid]) {
+        setSelectedchara(mychara[alb.caid]);
+      }
+
+      
     }
     return () => {
       setSelectedImage([]);
@@ -105,7 +110,6 @@ export const CreateAlbumForm = ({ onClose, mychara, gid, setAlb, alb }) => {
                   uid: img.uid,
                 };
               }
-              // console.log(mappedImage);
               return mappedImage;
             })
           );
@@ -210,10 +214,10 @@ export const CreateAlbumForm = ({ onClose, mychara, gid, setAlb, alb }) => {
                 <Tooltip
                   label={"ต้องสร้างตัวละครก่อนถึงจะสร้างอัลบัมตัวละครได้"}
                   shouldWrapChildren
-                  isDisabled={mychara}
+                  isDisabled={mychara && Object.keys(mychara).length > 0}
                 >
                   <Button
-                    isDisabled={!mychara}
+                    isDisabled={!(mychara && Object.keys(mychara).length > 0)}
                     minWidth="150px"
                     onClick={() => setFormMode(1)}
                     bg={formMode == 1 ? "#4C4D88" : "#9999AF"}
@@ -246,7 +250,6 @@ export const CreateAlbumForm = ({ onClose, mychara, gid, setAlb, alb }) => {
                   borderBottomLeftRadius={5}
                 >
                   <Text position={"relative"} bottom="-4px" pl={1} pr={1}>
-                    {/* {console.log(selectedChar)} */}
                     {selectedChar.name ? selectedChar.name : "เลือกตัวละคร"}
                   </Text>
                 </Box>

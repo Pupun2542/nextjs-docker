@@ -108,7 +108,6 @@ export const Replypost = ({ replydoc, message, setMessage }) => {
       );
     }
     setMessage("");
-    // console.log(getpathfromUrl(commentdoc.imageURL))
   };
 
   const handleEdit = async () => {
@@ -126,7 +125,6 @@ export const Replypost = ({ replydoc, message, setMessage }) => {
     );
     setEditMode(false);
     // setMessage(editMessage);
-    // console.log(getpathfromUrl(commentdoc.imageURL))
   };
 
   return (
@@ -180,8 +178,6 @@ export const Replypost = ({ replydoc, message, setMessage }) => {
               {replydoc.timestamp
                 ? parseDate(replydoc.timestamp)
                 : "01/01/1970:00.00"}
-              {/* {console.log(doc.data().timestamp)} */}
-              {/* 01/01/1970:00.00 */}
             </Text>
           </Flex>
 

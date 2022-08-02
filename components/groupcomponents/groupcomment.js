@@ -70,7 +70,6 @@ export const Commentpost = ({
     if (rpymsg) {
       onOpen();
       // commentinputref.current.focus();
-      // console.log(commentinputref.current)
     }
     setMessage(cdoc.message);
     setLovecount(cdoc.love.length);
@@ -83,7 +82,6 @@ export const Commentpost = ({
       (snapshot) => {
         if (!snapshot.empty) {
           const creators = snapshot.docs.map((doc) => doc.data().uid);
-          // console.log(creators);
           let missing = [];
           let notmissing = [];
           creators.map((id) => {
@@ -93,12 +91,10 @@ export const Commentpost = ({
               missing = [...missing, id];
             }
           });
-          // console.log(missing, notmissing, commenters);
           if (missing.length > 0) {
             getuser(missing).then((found) => {
               let foundmissing = found;
               if (Object.keys(commenters).length > 0) {
-                // console.log()
                 const arrcommenters = Object.entries(commenters);
                 const mappedcommenters = Object.fromEntries([
                   arrcommenters.filter(([k, v]) =>
@@ -112,7 +108,6 @@ export const Commentpost = ({
                   ];
                 }
               }
-              // console.log(foundmissing);
               setReply(
                 snapshot.docs.map((doc) => ({
                   ...doc.data(),
@@ -126,13 +121,11 @@ export const Commentpost = ({
           } else {
             if (Object.keys(commenters).length > 0) {
               const arrcommenters = Object.entries(commenters);
-              // console.log(arrcommenters);
               const mappedcommenters = Object.fromEntries(
                 arrcommenters.filter(([k, v]) =>
                   Object.keys(commenters).includes(k)
                 )
               );
-              console.log(mappedcommenters);
               setReply(
                 snapshot.docs.map((doc) => ({
                   ...doc.data(),
@@ -166,7 +159,6 @@ export const Commentpost = ({
   }, [editMode])
 
   useEffect(() => {
-    // console.log(isOpen, rpymsg);
     if (isOpen && rpymsg && rpymsg !== "") {
       const end = rpymsg.length;
       commentinputref.current.setSelectionRange(end, end);
@@ -292,7 +284,6 @@ export const Commentpost = ({
     }
     setrpymsg("");
     setImage(null);
-    // console.log(getpathfromUrl(commentdoc.imageURL))
     onCommentDelete();
   };
 
@@ -317,7 +308,6 @@ export const Commentpost = ({
     }
 
     // setMessage(editMessage);
-    // console.log(getpathfromUrl(commentdoc.imageURL))
   };
 
   return (
@@ -506,7 +496,6 @@ export const Commentpost = ({
                 Load more
               </Text>
             )}
-            {/* {console.log(reply.reverse())} */}
             {isOpen &&
               reply
                 .map((rdoc) => (
@@ -529,7 +518,6 @@ export const Commentpost = ({
               value={rpymsg}
               mt={2}
               onChange={(e) => setrpymsg(e.target.value)}
-              // onChange={(e) => console.log(e.target.)}
               width="100%"
               placeholder="Write Something"
               backgroundColor="#F3F5F8"

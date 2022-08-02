@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Flex, Box, Text, VStack, Avatar, Button } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-
+import useCharaList from "../../src/hook/useCharaList";
+import { useRouter } from "next/dist/client/router";
 const Characard = ({ data, role, onExtend, onRemove, onEdit }) => {
-    const router = useRouter();
+  const router = useRouter()
+  const { getDetailedChara } = useCharaList({}, router.query.id);
+  const [detailed, setDetailed] = useState({});
+  useEffect(()=> {
+    if (data) {
+      getDetailedChara(data.refererId).then((res)=> {
+        setDetailed(res)
+      })
+    }
+    return () => setDetailed({})
+  },[data])
   return (
     <Flex
       justifyContent={"space-between"}
@@ -20,7 +30,9 @@ const Characard = ({ data, role, onExtend, onRemove, onEdit }) => {
         </Box>
         <Box ml={5}>
           <Text fontSize={"2xl"}>{data.name}</Text>
-          <Text fontSize={"sm"} color={"gray.600"}>{data.parentName}</Text>
+          <Text fontSize={"sm"} color={"gray.600"}>
+            {data.parentName}
+          </Text>
           <Text>{data.description}</Text>
         </Box>
       </Flex>
@@ -28,8 +40,8 @@ const Characard = ({ data, role, onExtend, onRemove, onEdit }) => {
         <Button
           w="100%"
           as="a"
-          target={data.docLink?"_blank": "_self"}
-          href={data.docLink? data.docLink: "#"}
+          target={detailed.docLink ? "_blank" : "_self"}
+          href={detailed.docLink ? data.docLink : "#"}
         >
           Info
         </Button>

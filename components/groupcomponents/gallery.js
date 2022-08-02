@@ -143,7 +143,7 @@ const Gallery = ({ gid, mychara, data }) => {
               borderRadius={10}
               onClick={() => setCreateAlbOpen(true)}
             >
-              Edit Albums
+              Edit Album
             </Button>
           )}
         </Flex>
@@ -174,13 +174,13 @@ const Gallery = ({ gid, mychara, data }) => {
                 <Albuminfo data={specificAlbum} chara={data.chara} gid={gid} />
               ) : (
                 <SimpleGrid columns={3} rowGap={3}>
-                  {gallery.length > 0 &&
+                  {album.length > 0 &&
                     album.map((alb, k) => (
                       <Box key={k} onClick={() => setSpecificAlbum(alb)}>
                         <Image
                           cursor={"pointer"}
-                          src={alb.mediaList[0].url}
-                          fallback={<Spinner />}
+                          src={alb.mediaList[0]?.url||"/placeholder.png"}
+                          // fallbackSrc={"/placeholder.png"}
                           width={225}
                           height={225}
                           objectFit={"contain"}

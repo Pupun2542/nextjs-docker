@@ -26,7 +26,6 @@ export default function Edit() {
 
   useEffect(() => {
     const Fetchdata = async () => {
-      // console.log(auth.currentUser)
       const token = await user.getIdToken();
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/group/${id}`,

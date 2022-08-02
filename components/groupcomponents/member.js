@@ -228,7 +228,6 @@ export const Member = ({ data, gid }) => {
               >
                 {mem.displayName}
               </Box> */}
-                      {console.log(data)}
                     </VStack>
 
                     <Menu>
@@ -363,7 +362,7 @@ export const Member = ({ data, gid }) => {
                 borderRadius={10}
                 borderWidth={2}
                 borderColor={"black"}
-                _hover={{ bg: "blue", textColor: "white" }}
+                _hover={{ bg: "#6768AB", textColor: "white" }}
                 onClick={() => setModalTopic(2)}
               >
                 Add Character

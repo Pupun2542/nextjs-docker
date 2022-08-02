@@ -58,7 +58,6 @@ exports.DeletePreviewReply = async (req, res) =>{
 };
 
 exports.UpdatePreviewReply = async (req, res) =>{
-  // console.log(req.user);
   if (req.user) {
     const replyref= db.collection("group").doc(req.params.gid).collection("comments").doc(req.params.cid).collection("replies").doc(req.params.rid);
     const reply = await replyref.get();
@@ -80,7 +79,6 @@ exports.UpdatePreviewReply = async (req, res) =>{
 };
 
 exports.lovePreviewReply = async (req, res) =>{
-  // console.log(req.user);
   if (req.user) {
     const replyref= db.collection("group").doc(req.params.gid).collection("comments").doc(req.params.cid).collection("replies").doc(req.params.rid);
     const reply = await replyref.get();

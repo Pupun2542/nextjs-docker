@@ -209,7 +209,6 @@ function dashboard() {
                     >
                       Member
                     </Tab>
-                    {/* {console.log(data)} */}
                     {data?.isStaff && (
                       <Tab
                         _selected={{
@@ -535,6 +534,5 @@ function dashboard() {
     );
   }
 }
-// console.log("test test")
 
 export default dashboard;

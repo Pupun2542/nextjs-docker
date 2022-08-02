@@ -31,7 +31,7 @@ exports.createGroup = (req, res) => {
           viewer: [],
           love: [],
           pinned: [],
-          member: [req.user.uid],
+          member: [req.user.uid, ...data.staff],
           commentuser: [],
           staff: [req.user.uid, ...data.staff],
           registrationlink: data.registrationlink,
@@ -42,6 +42,7 @@ exports.createGroup = (req, res) => {
           doclink: data.docUrl,
         })
         .then((ref) => {
+          sendNotifications(data.staff, "005A", req.user.uid, req.params.gid, "", `group/${req.params.gid}`);
           return res.status(200).send(ref.id);
         })
         .catch((e) => {
@@ -209,7 +210,6 @@ exports.invitePlayer = async (req, res)=>{
   if (req.user) {
     const user = req.user.uid;
     const ids = req.body.id;
-    // console.log(id);
     const groupref = db.collection("group").doc(req.params.id);
     const batch = db.batch();
     const group = await groupref.get();

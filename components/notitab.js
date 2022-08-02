@@ -64,7 +64,7 @@ const Notitab = ({ notidata }) => {
               ),
               time: caltime(data.timestamp),
               path: data.path.startsWith("/") ? data.path : "/" + data.path,
-              thumbnail: data.notitype==="002"? group.bannersqr : chara ? chara.photoURL : triggerer.photoURL,
+              thumbnail: ["002","005","005A"].includes(data.notitype) ? group.bannersqr : chara ? chara.photoURL : triggerer.photoURL,
             },
           ];
         }
@@ -113,6 +113,8 @@ const Notitab = ({ notidata }) => {
       } else {
         return `คุณถูก ${triggerer.displayName} เพิ่มเป็นผู้ดูแลกลุ่ม ${group.name}`;
       }
+    } else if (type === "005A") {
+        return `คุณถูก ${triggerer.displayName} เพิ่มเป็นผู้ดูแลกลุ่ม ${group.name}`;
     } else if (type === "006") {
       if (!auth.currentUser.uid === object.uid) {
         return `${triggerer.displayName} ได้ลบ ${object.name} จากการเป็นผู้ดูแลกลุ่ม ${group.name}`;

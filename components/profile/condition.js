@@ -72,7 +72,7 @@ export const Condition = ({ value, onEdit, isOwner }) => {
           </Box>
           <Center w={"100%"} borderRadius={10} bg={"gray.300"} p={1} h={12}>
             <Box w={"100%"} borderRadius={10} bg={"white"} p={2} h={10}>
-              {value?.phobia ? value.pobia : ""}
+              {value?.phobia ? value.phobia : ""}
             </Box>
           </Center>
         </Flex>

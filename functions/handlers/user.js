@@ -27,7 +27,6 @@ exports.getDetailedUsers = async (req, res) => {
 
 exports.getbatchUser = async (req, res) => {
   const toget = req.body.users;
-  // console.log(toget);
   if (toget && Array.isArray(toget)) {
     let identifiers = [];
     toget.map((user) => {

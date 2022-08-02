@@ -296,7 +296,7 @@ export default function Home() {
                 justify={{
                   base: "center",
                   md: "space-around",
-                  xl: "space-between",
+                  xl: "space-around",
                 }}
                 direction={{ base: "column-reverse", md: "row" }}
                 w={"100%"}

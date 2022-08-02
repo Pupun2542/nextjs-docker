@@ -235,7 +235,7 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${comment.gid}/${comment.pid}/comment/${comment.cid}/update`,
       {
-        message: message,
+        message: editMessage,
       },
       {
         headers: {
@@ -529,27 +529,6 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
                       .reverse()}
                   </>
                 )}
-
-                {image && (
-                  <Box pos={"relative"}>
-                    <Image
-                      src={image}
-                      width="250px"
-                      height="250px"
-                      onClick={() => setModalOpen(true)}
-                      objectFit="cover"
-                    />
-                    <IconButton
-                      icon={<X size={16} color="black" />}
-                      position="absolute"
-                      top={0}
-                      left={200}
-                      backgroundColor="transparent"
-                      _hover={{ backgroundColor: "transparent" }}
-                      onClick={() => setImage(null)}
-                    ></IconButton>
-                  </Box>
-                )}
               </Flex>
             </Flex>
           </VStack>
@@ -589,89 +568,113 @@ export const GroupComment = ({ comment, member, data, gid, mychara }) => {
             onChange={(e) => handleUploadFile(e)}
           />
         </Flex>
+        {isOpen && (
+          <>
+            <Flex mt={2}>
+              <Box mr={1}>
+                <Menu>
+                  <MenuButton
+                    w={42}
+                    h={42}
+                    _hover={{
+                      bg: "gray.100",
+                      borderRadius: "5",
+                    }}
+                  >
+                    <Avatar
+                      src={
+                        Object.keys(selectedchara).length > 0
+                          ? selectedchara.photoURL
+                          : ""
+                      }
+                      w={30}
+                      h={30}
+                    />
+                  </MenuButton>
+                  <MenuList>
+                    {mychara &&
+                      Object.values(mychara).map((cha) => (
+                        <MenuItem onClick={() => setSelectedchara(cha)}>
+                          <Flex alignItems={"center"}>
+                            <Avatar src={cha.photoURL} w={30} h={30} mr={2} />
+                            <Text fontSize={16}>{cha.name}</Text>
+                          </Flex>
+                        </MenuItem>
+                      ))}
+                  </MenuList>
+                </Menu>
+              </Box>
 
-        <Flex mt={2}>
-          <Box mr={1}>
-            <Menu>
-              <MenuButton
-                w={42}
-                h={42}
-                _hover={{
-                  bg: "gray.100",
-                  borderRadius: "5",
+              <Textarea
+                resize="none"
+                minHeight={11}
+                width="100%"
+                placeholder="Write Something"
+                height="42px"
+                backgroundColor="gray.100"
+                value={message}
+                ref={TextareaRef}
+                onKeyDown={(e) => {
+                  resizeTextArea(e);
+                  // if (e.key == "Enter" && !e.shiftKey) {
+                  //   handleSent();
+                  // }
                 }}
-              >
-                <Avatar
-                  src={
-                    Object.keys(selectedchara).length > 0
-                      ? selectedchara.photoURL
-                      : ""
-                  }
-                  w={30}
-                  h={30}
+                onChange={(e) => setMessage(e.target.value)}
+                onPaste={handleImagePaste}
+              />
+              <Box pl={2} whiteSpace="nowrap">
+                <IconButton
+                  rounded={"full"}
+                  icon={<ImageSquare size={28} />}
+                  mr={2}
+                  onClick={handleFile}
                 />
-              </MenuButton>
-              <MenuList>
-                {mychara &&
-                  Object.values(mychara).map((cha) => (
-                    <MenuItem onClick={() => setSelectedchara(cha)}>
-                      <Flex alignItems={"center"}>
-                        <Avatar src={cha.photoURL} w={30} h={30} mr={2} />
-                        <Text fontSize={16}>{cha.name}</Text>
-                      </Flex>
-                    </MenuItem>
-                  ))}
-              </MenuList>
-            </Menu>
-          </Box>
+                <IconButton
+                  rounded={"full"}
+                  icon={<PaperPlaneRight size={28} />}
+                  onClick={handleSent}
+                  disabled={
+                    (isEmptyOrSpaces(message) && image) ||
+                    Object.keys(selectedchara).length == 0
+                  }
+                />
+              </Box>
+            </Flex>
 
-          <Textarea
-            resize="none"
-            minHeight={11}
-            width="100%"
-            placeholder="Write Something"
-            height="42px"
-            backgroundColor="gray.100"
-            value={message}
-            ref={TextareaRef}
-            onKeyDown={(e) => {
-              resizeTextArea(e);
-              // if (e.key == "Enter" && !e.shiftKey) {
-              //   handleSent();
-              // }
-            }}
-            onChange={(e) => setMessage(e.target.value)}
-            onPaste={handleImagePaste}
-          />
-          <Box pl={2} whiteSpace="nowrap">
-            <IconButton
-              rounded={"full"}
-              icon={<ImageSquare size={28} />}
-              mr={2}
-              onClick={handleFile}
-            />
-            <IconButton
-              rounded={"full"}
-              icon={<PaperPlaneRight size={28} />}
-              onClick={handleSent}
-              disabled={
-                (isEmptyOrSpaces(message) && image) ||
-                Object.keys(selectedchara).length == 0
-              }
-            />
-          </Box>
-        </Flex>
-        <Flex boxShadow={"base"} mt={2} bg={"#F3F5F8"} rounded={5}>
-          <Text mx={2} fontSize={23}>
-            @
-          </Text>
-          <MentionBox
-            data={data}
-            id={gid}
-            mention={mention}
-            setMention={setMention}
-          />
-        </Flex>
+            <Flex boxShadow={"base"} mt={2} bg={"#F3F5F8"} rounded={5}>
+              <Text mx={2} fontSize={23}>
+                @
+              </Text>
+              <MentionBox
+                data={data}
+                id={gid}
+                mention={mention}
+                setMention={setMention}
+              />
+            </Flex>
+            {image && (
+                  <Box pos={"relative"}>
+                    <Image
+                      src={image}
+                      width="250px"
+                      height="250px"
+                      onClick={() => setModalOpen(true)}
+                      objectFit="cover"
+                    />
+                    <IconButton
+                      icon={<X size={16} color="black" />}
+                      position="absolute"
+                      top={0}
+                      left={200}
+                      backgroundColor="transparent"
+                      _hover={{ backgroundColor: "transparent" }}
+                      onClick={() => setImage(null)}
+                    ></IconButton>
+                  </Box>
+                )}
+          </>
+        )}
       </Flex>
     </Flex>
   );

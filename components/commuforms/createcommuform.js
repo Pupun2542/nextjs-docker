@@ -58,6 +58,7 @@ import {
 } from "../../src/services/filestoreageservice";
 import { collection, doc, getDocs, query, where } from "firebase/firestore";
 import UniversalUploadModal from "../universalUploadModal";
+import { isEmptyOrSpaces } from "../../src/services/utilsservice";
 
 export const Createcommuform = ({ data, uid, gid }) => {
   const { app, auth, db } = useApp();
@@ -297,6 +298,11 @@ export const Createcommuform = ({ data, uid, gid }) => {
     const token = await auth.currentUser.getIdToken();
     const groupId = gid || doc(collection(db, "group")).id;
 
+    if (isEmptyOrSpaces(fieldvalue.name) || isEmptyOrSpaces(fieldvalue.tag)) {
+      alert("กรอกชื่อคอมมูและชื่อย่อคอมมูด้วย")
+      return;
+    }
+
     if (bannerBlob && !bannerBlob.startsWith("http")) {
       bannerUrl = await UploadBannerImage(bannerBlob, auth.currentUser.uid, groupId);
     } else {
@@ -435,10 +441,10 @@ export const Createcommuform = ({ data, uid, gid }) => {
   };
 
   const setStaff = (index, data) => {
-    const newState = fieldvalue.statuschecklink.map((v, i) =>
+    const newState = fieldvalue.staff.map((v, i) =>
       i == index ? data : v
     );
-    setFieldvalue({ ...fieldvalue, statuschecklink: newState });
+    setFieldvalue({ ...fieldvalue, staff: newState });
   };
 
   return (
@@ -1665,9 +1671,9 @@ export const Createcommuform = ({ data, uid, gid }) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
+            {/* <Button colorScheme="blue" mr={3} onClick={onClose}>
               บันทึก
-            </Button>
+            </Button> */}
           </ModalFooter>
         </ModalContent>
       </Modal>

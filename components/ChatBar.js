@@ -137,8 +137,9 @@ export const ChatBar = ({
       // ]}
     >
       <VStack align={"start"} spacing={0} mt={1} mb={1}>
-        {displayWithMsg?.map((data) => (
+        {displayWithMsg?.map((data,k) => (
           <HStack
+          key={k}
             fontFamily={"mitr"}
             color={"white"}
             fontSize={14}

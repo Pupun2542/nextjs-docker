@@ -68,80 +68,92 @@ const Albuminfo = ({ data, chara, gid }) => {
   return (
     <Flex flexDirection={"column"}>
       <Box>
-        <Text fontSize={30} textAlign={"center"}>{data.name}</Text>
-
+        <Text fontSize={30} textAlign={"center"}>
+          {data.name}
+        </Text>
       </Box>
-      <Box fontSize={'xl'} display={data.caid ? "initial" : "none"} textAlign={"center"} >
-        <Text display={"inline-block"} mr={2}>Album of</Text>
+      {data.caid && (
+        <>
+          <Box
+            fontSize={"xl"}
+            display={data.caid ? "initial" : "none"}
+            textAlign={"center"}
+          >
+            <Text display={"inline-block"} mr={2}>
+              Album of
+            </Text>
 
-        <Text display={"inline-block"}>{chara[data.caid].name}</Text>
-      </Box>
+            <Text display={"inline-block"} fontStyle={chara[data.caid]? "normal" : "italic"} >{chara[data.caid]?.name || "ตัวละครที่ถูกลบไปแล้ว"}</Text>
+          </Box>
 
-      <HStack justifyContent={'center'}>
-        <Tag
-          bg={'royalblue'}
-          textColor={"white"}
-          display={"inline-block"}
-          py={1}
-          px={2}
-          borderRadius={5}
-          mx={2}
-          w={'auto'}
-          fontSize={'14'}
-        >
-          ตัวละคร
-        </Tag>
-      </HStack>
+          <HStack justifyContent={"center"}>
+            <Tag
+              bg={"royalblue"}
+              textColor={"white"}
+              display={"inline-block"}
+              py={1}
+              px={2}
+              borderRadius={5}
+              mx={2}
+              w={"auto"}
+              fontSize={"14"}
+            >
+              ตัวละคร
+            </Tag>
+          </HStack>
+        </>
+      )}
 
-
-      
       <Box>
         <Text py={5} whiteSpace={"pre-line"} textAlign={"center"}>
           {data.description}
         </Text>
       </Box>
       <Divider />
-      <Grid
-        width={"95%"}
-        templateColumns="repeat(4, 1fr)"
-        gap={3}
-        bg={"white"}
-        p={5}
-        boxShadow={"base"}
-        borderRadius={10}
-        mt={5}
-      >
-        <GridItem colSpan={2} rowSpan={2}>
-          <AspectRatio ratio={1 / 1}>
-            <Image
-              cursor={"pointer"}
-              src={thumbnail.url}
-              fallback={<Spinner />}
-              objectFit={"contain !important"}
-              boxShadow={"base"}
-              loading={"lazy"}
-              onClick={() => setModalImage(thumbnail.url)}
-            />
-          </AspectRatio>
-          <Text textAlign={"center"}>{thumbnail.desc}</Text>
-        </GridItem>
-        {images.map((img) => (
-          <GridItem colSpan={1} rowSpan={1}>
+      {images?.length > 0 && (
+        <Grid
+          width={"95%"}
+          templateColumns="repeat(4, 1fr)"
+          gap={3}
+          bg={"white"}
+          p={5}
+          boxShadow={"base"}
+          borderRadius={10}
+          mt={5}
+        >
+          <GridItem colSpan={2} rowSpan={2}>
             <AspectRatio ratio={1 / 1}>
               <Image
                 cursor={"pointer"}
-                src={img.url}
+                src={thumbnail.url}
                 fallback={<Spinner />}
                 objectFit={"contain !important"}
                 boxShadow={"base"}
                 loading={"lazy"}
-                onClick={() => setModalImage(img.url)}
+                onClick={() => setModalImage(thumbnail.url)}
               />
             </AspectRatio>
-            <Text textAlign={"center"}>{img.desc}</Text>
+            <Text textAlign={"center"}>{thumbnail.desc}</Text>
           </GridItem>
-        ))}
-      </Grid>
+          {images.map((img) => (
+            <GridItem colSpan={1} rowSpan={1}>
+              <AspectRatio ratio={1 / 1}>
+                <Image
+                  cursor={"pointer"}
+                  src={img.url}
+                  fallback={<Spinner />}
+                  objectFit={"contain !important"}
+                  boxShadow={"base"}
+                  loading={"lazy"}
+                  onClick={() => setModalImage(img.url)}
+                />
+              </AspectRatio>
+              <Text textAlign={"center"}>{img.desc}</Text>
+            </GridItem>
+          ))}
+        </Grid>
+      )}
+
       <HStack
         mt={2}
         spacing={4}

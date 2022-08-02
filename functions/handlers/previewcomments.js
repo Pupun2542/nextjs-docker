@@ -79,7 +79,6 @@ exports.UpdatePreviewComment = async (req, res) =>{
 };
 
 exports.lovePreviewComment = async (req, res) =>{
-  // console.log(req.user);
   if (req.user) {
     const commentnref= db.collection("group").doc(req.params.gid).collection("comments").doc(req.params.cid);
     const comment = await commentnref.get();
@@ -115,7 +114,6 @@ exports.unlovePreviewComment = async (req, res) =>{
 };
 
 exports.getAllPreviewcomment = async (req, res) => {
-  // console.log(req.query);
   const commentnref = db.collection("group").doc(req.params.gid).collection("comments").limit(parseInt(req.query.limit)).orderBy("timestamp", "desc");
   const snapshot = await commentnref.get();
   if (!snapshot.empty) {

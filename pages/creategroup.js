@@ -122,7 +122,6 @@ export default function CreateGroup() {
   const [type, setType] = useState("");
 
   const parseTime = (localtime) => {
-    // console.log(localtime);
     const spdatetime = localtime.split("T");
 
     const timebuild = spdatetime[0] + " เวลา " + spdatetime[1];

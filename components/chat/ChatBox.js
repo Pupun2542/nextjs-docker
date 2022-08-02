@@ -53,6 +53,7 @@ export const ChatBox = ({
     handleSent,
     onRemove,
     handleFocus,
+    topmsgref,
   } = useChatRoomManager(crid, user, onClose);
   useEffect(() => {
     setRoomDetail(mappedRoomDetail);
@@ -62,7 +63,7 @@ export const ChatBox = ({
     if (!loading && mappedRoomDetail) {
       if (firstload.current) {
         messagesEndRef.current?.scrollIntoView();
-        firstload.current == false;
+        firstload.current = false;
       }
     }
   }, [mappedMessage]);
@@ -76,7 +77,7 @@ export const ChatBox = ({
   }
 
   useEffect(() => {
-    handleFocus();
+      handleFocus();
   }, [crid]);
 
   const handleImagePaste = (e) => {

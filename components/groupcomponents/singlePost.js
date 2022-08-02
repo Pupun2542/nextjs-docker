@@ -138,7 +138,6 @@ export const GroupSinglePost = ({ post, member, onPostDelete, cid, rid, data, gi
       snapshot.docs.map(async (doc) => {
         let mappedcommentData = {};
         let creator = {};
-        // console.log(member, doc.data().uid)
         if (member[doc.data().uid]) {
           creator = member[doc.data().uid];
         } else {
@@ -177,7 +176,6 @@ export const GroupSinglePost = ({ post, member, onPostDelete, cid, rid, data, gi
           auth.currentUser.uid,
           post.gid
         );
-        // console.log(dlurl);
       }
       const token = await auth.currentUser.getIdToken();
       const res = await axios.post(
@@ -357,7 +355,6 @@ export const GroupSinglePost = ({ post, member, onPostDelete, cid, rid, data, gi
             <MenuList>
               {auth.currentUser.uid == post.uid ? (
                 <>
-                  {/* {console.log(post)} */}
                   <MenuItem
                     onClick={() => {
                       setEditMode(true);

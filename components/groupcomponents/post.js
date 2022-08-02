@@ -29,7 +29,7 @@ import {
   ImageSquare,
   X,
   PaperPlaneRight,
-  CaretDown
+  CaretDown,
 } from "phosphor-react";
 import { GroupComment } from "./comment";
 import {
@@ -51,11 +51,21 @@ import { isEmptyOrSpaces } from "../../src/services/utilsservice";
 import useCharaList from "../../src/hook/useCharaList";
 import { useRouter } from "next/router";
 import MentionBox from "../commonComponent/MentionBox";
-export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) => {
+export const GroupPost = ({
+  post,
+  member,
+  onPostDelete,
+  data,
+  gid,
+  mychara,
+}) => {
   const {
+    setStateData,
     setStateDataData,
     setStateDataPendingMessage,
     getStateDataPendingMessage,
+    setStateDataEditMessage,
+    getStateDataEditMessage,
     setStateDataPendingImage,
     getStateDataPendingImage,
     setStateDataLove,
@@ -65,10 +75,10 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
     setStateDataReply,
     getStateDataReply,
     selectedchara,
-    setSelectedchara
+    setSelectedchara,
   } = useContext(PostContext);
   const [mention, setMention] = useState([]);
-  const creator = member[Object.keys(member).find(v => v === post.uid)];
+  const creator = member[Object.keys(member).find((v) => v === post.uid)];
   const getUser = useUser();
   const { auth, db } = useApp();
   const [fetchlimit, setFetchlimit] = useState(20);
@@ -76,17 +86,17 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
   const inputFileRef = useRef(null);
   const pid = post.pid;
   const TextareaRef = useRef(null);
-  const { chara, refreshcharaList } = useCharaList(data, gid)
+  const { chara, refreshcharaList } = useCharaList(data, gid);
   const router = useRouter();
 
+
   const checkChara = () => {
-    if (chara[chara.findIndex(v => v.refererId == post.charaId)]) {
-      return chara[chara.findIndex(v => v.refererId == post.charaId)];
+    if (chara[chara.findIndex((v) => v.refererId == post.charaId)]) {
+      return chara[chara.findIndex((v) => v.refererId == post.charaId)];
     } else {
-      // refreshcharaList();
-      return {}
+      return {};
     }
-  }
+  };
   const postchara = checkChara();
   const love = getStateDataLove(pid);
   const setLove = (value) => {
@@ -96,9 +106,9 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
   const setEditMode = (state) => {
     setStateDataEdit(state, pid);
   };
-  const editMessage = getStateDataEdit(pid);
+  const editMessage = getStateDataEditMessage(pid);
   const setEditMessage = (value) => {
-    setStateDataEdit(value, pid);
+    setStateDataEditMessage(value, pid);
   };
   const message = getStateDataPendingMessage(pid);
   const setMessage = (value) => {
@@ -110,7 +120,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
   };
   const text = post.message;
   const setText = (value) => {
-    setStateDataData({ ...post, message: value });
+    setStateDataData({ ...post, message: value }, pid);
   };
 
   const isOpen = getStateDataReply(pid);
@@ -143,7 +153,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
         gid: post.gid,
       };
       comment = [...comment, mappedcommentData];
-    })
+    });
   }
 
   const resizeTextArea = (e) => {
@@ -170,7 +180,12 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
       const token = await auth.currentUser.getIdToken();
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${post.gid}/${post.pid}/comment/create`,
-        { message: message, imageUrl: dlurl, charaId: selectedchara.refererId, mention: mention },
+        {
+          message: message,
+          imageUrl: dlurl,
+          charaId: selectedchara.refererId,
+          mention: mention,
+        },
         {
           headers: {
             Authorization: token,
@@ -199,7 +214,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
         }
       );
       if (res.status !== 200) {
-        alert("เกิดข้อผิดพลาดกับระบบ กรุณาแจ้งทีมงาน")
+        alert("เกิดข้อผิดพลาดกับระบบ กรุณาแจ้งทีมงาน");
       }
     } else {
       setLove([...love, auth.currentUser.uid]);
@@ -213,13 +228,14 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
         }
       );
       if (res.status !== 200) {
-        alert("เกิดข้อผิดพลาดกับระบบ กรุณาแจ้งทีมงาน")
+        alert("เกิดข้อผิดพลาดกับระบบ กรุณาแจ้งทีมงาน");
       }
     }
   };
 
   const handleEdit = async () => {
     const token = await auth.currentUser.getIdToken();
+    
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${post.gid}/${post.pid}/update`,
       {
@@ -232,8 +248,9 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
       }
     );
     if (res.status === 200) {
-      setText(editMessage);
+      // setStateData({edit: false, message: editMessage}, pid);
       setEditMode(false);
+      setText(editMessage);
     } else {
       alert(res.data);
     }
@@ -306,7 +323,7 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
         bg={"white"}
         borderRadius={10}
         direction={"column"}
-        fontFamily={'Sarabun'}
+        fontFamily={"Sarabun"}
       >
         <Flex w={"100%"}>
           <Avatar
@@ -315,15 +332,32 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
             h={50}
             w={50}
             src={postchara.name ? postchara.photoURL : creator?.photoURL}
-            name={postchara.name ? postchara.name : creator?.displayName || "Dummy"}
+            name={
+              postchara.name ? postchara.name : creator?.displayName || "Dummy"
+            }
           />
           <VStack w={"100%"} spacing={0}>
-            <Box fontSize={18} w={"100%"} onClick={postchara.name ? () => { } : creator ? () => router.push("../../profile/" + creator?.uid) : ()=>{}} cursor={"pointer"}>
+            <Box
+              fontSize={18}
+              w={"100%"}
+              onClick={
+                postchara.name
+                  ? () => {}
+                  : creator
+                  ? () => router.push("../../profile/" + creator?.uid)
+                  : () => {}
+              }
+              cursor={"pointer"}
+            >
               {postchara.name ? postchara.name : creator.displayName || "Dummy"}
             </Box>
             <Flex w={"100%"} fontSize={14} color={"gray.400"}>
               <Box
-                onClick={postchara.name && creator ? () => router.push("../../profile/" + creator?.uid) : () => { }}
+                onClick={
+                  postchara.name && creator
+                    ? () => router.push("../../profile/" + creator?.uid)
+                    : () => {}
+                }
                 cursor={"pointer"}
               >
                 {postchara.name ? creator?.displayName : ""}
@@ -339,14 +373,11 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
           </VStack>
 
           <Menu>
-            <MenuButton
-              ml={1} h={10} w={10}
-
-            >
+            <MenuButton ml={1} h={10} w={10}>
               <IconButton
                 icon={<DotsThreeVertical size={15} />}
                 rounded={"full"}
-                size={'sm'}
+                size={"sm"}
                 // backgroundColor="black"
                 _hover={{ backgroundColor: "black" }}
               />
@@ -374,9 +405,19 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
 
         <Flex pl={55} pr={55} direction={"column"}>
           <HStack m={2}>
-            {post.mention&&post.mention.length > 0 &&(<Text fontSize={14} color={'gray.400'}>ได้กล่าวถึง</Text>)}
-            {post.mention?.map((tag)=> (<Tag color={'black'} bg={'gray.200'}>{tag.name}</Tag>))}
-            {post.tag?.map((tag)=> (<Tag colorScheme={'cyan'}>{tag}</Tag>))}
+            {post.mention && post.mention.length > 0 && (
+              <Text fontSize={14} color={"gray.400"}>
+                ได้กล่าวถึง
+              </Text>
+            )}
+            {post.mention?.map((tag) => (
+              <Tag color={"black"} bg={"gray.200"}>
+                {tag.name}
+              </Tag>
+            ))}
+            {post.tag?.map((tag) => (
+              <Tag colorScheme={"cyan"}>{tag}</Tag>
+            ))}
           </HStack>
 
           {editMode ? (
@@ -403,22 +444,21 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
               backgroundColor="gray.100"
               mb={2.5}
             />
-
           ) : (
             <Box w={"100%"} fontSize={16}>
               <Text whiteSpace="pre-line">{text ? text : ""}</Text>
             </Box>
           )}
 
-          <Center mt={3} w={"100%"} borderRadius={10} boxShadow={'xs'}>
+          <Center mt={3} w={"100%"} borderRadius={10} boxShadow={"xs"}>
             <Box
               display={"flex"}
               overflowX="auto"
               overflowY="hidden"
               whiteSpace="nowrap"
               alignContent={"center"}
-            // boxShadow={'base'}
-            // p={1}
+              // boxShadow={'base'}
+              // p={1}
             >
               {post.imageUrl &&
                 post.imageUrl.map((img, k) => (
@@ -452,8 +492,8 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
               fontSize={14}
               color={"GrayText"}
               p={1}
-              boxShadow={'base'}
-              bg={'#F3F5F8'}
+              boxShadow={"base"}
+              bg={"#F3F5F8"}
               borderRadius={5}
             >
               <Button
@@ -474,10 +514,12 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
                 boxShadow={"base"}
                 variant="solid"
                 onClick={HandleLove}
-                bg={'white'}
+                bg={"white"}
                 h={30}
               >
-                <Text color={'gray.500'}>{getStateDataLove(post.pid).length}</Text>
+                <Text color={"gray.500"}>
+                  {getStateDataLove(post.pid).length}
+                </Text>
               </Button>
               <Button
                 leftIcon={<ChatCenteredText />}
@@ -488,16 +530,16 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
                 boxShadow={"base"}
                 variant="solid"
                 onClick={onToggle}
-                bg={'white'}
+                bg={"white"}
                 h={30}
               >
-                <Text color={'gray.500'}>
+                <Text color={"gray.500"}>
                   {post.comment > comment?.length
                     ? post.comment
                     : comment?.length}
                 </Text>
               </Button>
-              <Box w={'100%'}></Box>
+              <Box w={"100%"}></Box>
               {/* <Center
                 color="black"
                 width={"35%"}
@@ -528,7 +570,13 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
                     comment
                       .map((cmt, i) => (
                         <Box key={i}>
-                          <GroupComment comment={cmt} member={member} data={data} gid={gid} mychara={mychara} />
+                          <GroupComment
+                            comment={cmt}
+                            member={member}
+                            data={data}
+                            gid={gid}
+                            mychara={mychara}
+                          />
                         </Box>
                       ))
                       .reverse()}
@@ -536,99 +584,119 @@ export const GroupPost = ({ post, member, onPostDelete, data, gid, mychara }) =>
               )}
             </Box>
 
-            <Flex mt={2}>
-              <Box mr={1}>
-                <Menu>
-                  <MenuButton
-                    w={42}
-                    h={42}
-                    _hover={{
-                      bg: 'gray.100',
-                      borderRadius: '5'
+            {isOpen && (
+              <>
+                <Flex mt={2}>
+                  <Box mr={1}>
+                    <Menu>
+                      <MenuButton
+                        w={42}
+                        h={42}
+                        _hover={{
+                          bg: "gray.100",
+                          borderRadius: "5",
+                        }}
+                      >
+                        <Avatar
+                          src={
+                            Object.keys(selectedchara).length > 0
+                              ? selectedchara.photoURL
+                              : ""
+                          }
+                          w={30}
+                          h={30}
+                        />
+                      </MenuButton>
+                      <MenuList>
+                        {mychara &&
+                          Object.values(mychara).map((cha, k) => (
+                            <MenuItem
+                              onClick={() => setSelectedchara(cha)}
+                              key={k}
+                            >
+                              <Flex alignItems={"center"}>
+                                <Avatar
+                                  src={cha.photoURL}
+                                  w={30}
+                                  h={30}
+                                  mr={2}
+                                />
+                                <Text fontSize={16}>{cha.name}</Text>
+                              </Flex>
+                            </MenuItem>
+                          ))}
+                      </MenuList>
+                    </Menu>
+                  </Box>
+                  <Textarea
+                    resize="none"
+                    minHeight={11}
+                    width="100%"
+                    placeholder="Write Something"
+                    height="42px"
+                    backgroundColor="#F3F5F8"
+                    value={message}
+                    ref={TextareaRef}
+                    onKeyDown={(e) => {
+                      resizeTextArea(e);
+                      // if (e.key == "Enter" && !e.shiftKey) {
+                      //   handleSent();
+                      // }
                     }}
-                  >
-                    <Avatar
-                      src={
-                        Object.keys(selectedchara).length > 0
-                          ? selectedchara.photoURL
-                          : ""
-                      }
-                      w={30}
-                      h={30}
-                    />
-                  </MenuButton>
-                  <MenuList>
-                    {mychara &&
-                      Object.values(mychara).map((cha, k) => (
-                        <MenuItem onClick={() => setSelectedchara(cha)} key={k}>
-                          <Flex alignItems={"center"}>
-                            <Avatar src={cha.photoURL} w={30} h={30} mr={2} />
-                            <Text fontSize={16}>{cha.name}</Text>
-                          </Flex>
-                        </MenuItem>
-                      ))}
-                  </MenuList>
-                </Menu>
-              </Box>
-              <Textarea
-                resize="none"
-                minHeight={11}
-                width="100%"
-                placeholder="Write Something"
-                height="42px"
-                backgroundColor="#F3F5F8"
-                value={message}
-                ref={TextareaRef}
-                onKeyDown={(e) => {
-                  resizeTextArea(e);
-                  // if (e.key == "Enter" && !e.shiftKey) {
-                  //   handleSent();
-                  // }
-                }}
-                onChange={(e) => setMessage(e.target.value)}
-                onPaste={handleImagePaste}
-              />
-              <Box pl={2} whiteSpace="nowrap">
-                <IconButton
-                  rounded={"full"}
-                  icon={<ImageSquare size={28} />}
-                  mr={2}
-                  onClick={handleFile}
-                />
-                <IconButton
-                  rounded={"full"}
-                  icon={<PaperPlaneRight size={28} />}
-                  onClick={handleSent}
-                  disabled={(isEmptyOrSpaces(message) && image) || Object.keys(selectedchara).length == 0}
-                />
-              </Box>
-            </Flex>
-
-            <Flex boxShadow={'base'} mt={2} bg={'#F3F5F8'} rounded={5}>
-              <Text mx={2} fontSize={23}>@</Text>
-              <MentionBox data={data} id={gid} mention={mention} setMention={setMention} />
-              {image && (
-                <Box pos={"relative"}>
-                  <Image
-                    src={image}
-                    width="250px"
-                    height="250px"
-                    onClick={() => setModalOpen(true)}
-                    objectFit="cover"
+                    onChange={(e) => setMessage(e.target.value)}
+                    onPaste={handleImagePaste}
                   />
-                  <IconButton
-                    icon={<X size={16} color="black" />}
-                    position="absolute"
-                    top={0}
-                    left={200}
-                    backgroundColor="transparent"
-                    _hover={{ backgroundColor: "transparent" }}
-                    onClick={() => setImage(null)}
-                  ></IconButton>
-                </Box>
-              )}
-            </Flex>
-
+                  <Box pl={2} whiteSpace="nowrap">
+                    <IconButton
+                      rounded={"full"}
+                      icon={<ImageSquare size={28} />}
+                      mr={2}
+                      onClick={handleFile}
+                    />
+                    <IconButton
+                      rounded={"full"}
+                      icon={<PaperPlaneRight size={28} />}
+                      onClick={handleSent}
+                      disabled={
+                        (isEmptyOrSpaces(message) && image) ||
+                        Object.keys(selectedchara).length == 0
+                      }
+                    />
+                  </Box>
+                </Flex>
+                <Flex boxShadow={"base"} mt={2} bg={"#F3F5F8"} rounded={5}>
+                  <Text mx={2} fontSize={23}>
+                    @
+                  </Text>
+                  <MentionBox
+                    data={data}
+                    id={gid}
+                    mention={mention}
+                    setMention={setMention}
+                  />
+                </Flex>
+                {image && (
+                    <Box pos={"relative"}>
+                      <Image
+                        src={image}
+                        width="250px"
+                        height="250px"
+                        onClick={() => setModalOpen(true)}
+                        objectFit="cover"
+                      />
+                      <IconButton
+                        icon={<X size={16} color="black" />}
+                        position="absolute"
+                        top={0}
+                        left={200}
+                        backgroundColor="transparent"
+                        _hover={{ backgroundColor: "transparent" }}
+                        onClick={() => setImage(null)}
+                      ></IconButton>
+                    </Box>
+                  )}
+              </>
+            )}
 
             <Input
               type="file"

@@ -43,7 +43,6 @@ export const Commentsection = ({ gid, commenters, initialcomment }) => {
   const [replyEditMessage, setReplyEditMessage] = useState({});
   const [commentcount, setCommentcount] = useState(initialcomment);
   const [initialcommentcount, setInitialcommentcount] = useState(initialcomment);
-  // console.log(replyMessage)
   const setStateReply = (id, msg) => {
     setReplyMessage({ ...replyMessage, [id]: msg });
   };
@@ -69,7 +68,9 @@ export const Commentsection = ({ gid, commenters, initialcomment }) => {
     setInitialcommentcount((initialcommentcount < snapshot.length? snapshot.length : initialcommentcount));
 
     const unsubscribe = onSnapshot(doc(db, "group", gid), (doc)=>{
-      setCommentcount(doc.data().commentcount);
+      if (doc.data()){
+        setCommentcount(doc.data().commentcount);
+      }
     });
     return () => {
       unsubscribe();

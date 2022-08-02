@@ -5,7 +5,6 @@ export const PostProvider = ({children}) => {
     const reducer = (state, action) => {
         switch (action.type) {
           case "set": {
-            // console.log(action.id, action.value, state[action.id])
             return {
               ...state,
               [action.id]: { ...state[action.id], ...action.value },

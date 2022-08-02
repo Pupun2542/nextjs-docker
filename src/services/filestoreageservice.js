@@ -67,7 +67,6 @@ export async function UploadDoc(file, creator) {
   );
   const snapshot = await uploadBytes(storageref, file);
   const downloadurl = getDownloadURL(snapshot.ref);
-  // console.log(downloadurl)
   return downloadurl;
 }
 
@@ -77,7 +76,6 @@ export async function UploadGroupCommentImage(file, creator, group) {
     `group/${group}/comments/${creator}${Date.now()}.jpg`
   );
   const snapsnot = await uploadString(storeRef, file, "data_url");
-  // console.log(snapsnot.ref)
   const downloadurl = await getDownloadURL(snapsnot.ref);
   return downloadurl;
 }
@@ -93,7 +91,6 @@ export async function UploadGroupImage(files, creator, group) {
           }.jpg`
         );
         const snapsnot = await uploadString(storeRef, file, "data_url");
-        // console.log(snapsnot.ref)
         const downloadurl = await getDownloadURL(snapsnot.ref);
         return downloadurl;
       })
@@ -122,7 +119,6 @@ export async function UploadGroupAlbumImage(file, creator, group, album) {
 export async function UploadChatImage(file, creator, crid) {
   const storeRef = ref(store, `chatrooms/${crid}/${creator}${Date.now()}.jpg`);
   const snapsnot = await uploadString(storeRef, file, "data_url");
-  // console.log(snapsnot.ref)
   const downloadurl = await getDownloadURL(snapsnot.ref);
   return downloadurl;
 }
@@ -133,7 +129,6 @@ export async function UploadCharaImage(file, creator, group) {
     `group/${group}/chara/${creator}${Date.now()}.jpg`
   );
   const snapsnot = await uploadString(storeRef, file, "data_url");
-  // console.log(snapsnot.ref)
   const downloadurl = await getDownloadURL(snapsnot.ref);
   return downloadurl;
 }

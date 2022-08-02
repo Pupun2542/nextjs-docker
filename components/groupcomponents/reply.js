@@ -105,7 +105,7 @@ export const GroupReply = ({ reply, data, gid, mychara }) => {
     axios.post(
       `${process.env.NEXT_PUBLIC_USE_API_URL}/post/${reply.gid}/${reply.pid}/comment/${reply.cid}/reply/${reply.rid}/update`,
       {
-        message: message,
+        message: editMessage,
       },
       {
         headers: {
