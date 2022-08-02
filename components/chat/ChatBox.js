@@ -36,7 +36,7 @@ export const ChatBox = ({
   const [msg, setMsg] = useState("");
   const messagesEndRef = useRef(null);
   const dropdownref = useRef(null);
-  const chatboxref = useRef(null)
+  const chatboxref = useRef(null);
 
   const firstload = useRef(true);
 
@@ -60,15 +60,14 @@ export const ChatBox = ({
 
   useEffect(() => {
     if (!loading && mappedRoomDetail) {
-      if (firstload.current){
+      if (firstload.current) {
         messagesEndRef.current?.scrollIntoView();
         firstload.current == false;
       }
-      
     }
   }, [mappedMessage]);
 
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     document.addEventListener("mousedown", (e) => {
       if (dropdownref.current && !dropdownref.current.contains(e.target)) {
         onSettingClose();
@@ -108,12 +107,12 @@ export const ChatBox = ({
     if (e.target.scrollTop == 0) {
       loadmore();
     }
-  }
+  };
 
   if (!loading && mappedRoomDetail) {
     return (
       <Box
-        fontFamily={'Sarabun'}
+        fontFamily={"Sarabun"}
         display={"flex"}
         background="white"
         borderColor={"black"}
@@ -155,7 +154,7 @@ export const ChatBox = ({
           >
             <Text paddingTop={"7px"}>{mappedRoomDetail.name}</Text>
           </Flex>
-          <Box 
+          <Box
           // float="right"
           >
             {/* <IconButton
@@ -188,7 +187,7 @@ export const ChatBox = ({
             top={"35px"}
             bg={"white"}
             boxShadow="base"
-            rounded={'5'}
+            rounded={"5"}
             divider={<StackDivider borderColor={"gray.300"} />}
             ref={dropdownref}
           >
@@ -222,9 +221,9 @@ export const ChatBox = ({
           {mappedMessage &&
             mappedRoomDetail &&
             Object.keys(mappedRoomDetail).length > 0 &&
-            mappedMessage.map((doc, k) => (
-              <ChatItem key={k} doc={doc} user={user} />
-            )).reverse()}
+            mappedMessage
+              .map((doc, k) => <ChatItem key={k} doc={doc} user={user} />)
+              .reverse()}
           <div ref={messagesEndRef}></div>
         </Box>
 
@@ -264,14 +263,16 @@ export const ChatBox = ({
               backgroundColor="gray.100"
               value={msg}
               onKeyUp={(e) => {
-                resizeTextArea(e);
+                // resizeTextArea(e);
                 if (e.key == "Enter" && !e.shiftKey) {
                   handleSent(user.uid, msg.trim(), image);
                   setMsg("");
                   setImage("");
                 }
               }}
-              onChange={(e) => {setMsg(e.target.value)}}
+              onChange={(e) => {
+                setMsg(e.target.value);
+              }}
               onPaste={handleImagePaste}
             />
           </Box>
