@@ -224,7 +224,7 @@ export const ChatBox = ({
             Object.keys(mappedRoomDetail).length > 0 &&
             mappedMessage.map((doc, k) => (
               <ChatItem key={k} doc={doc} user={user} />
-            ))}
+            )).reverse()}
           <div ref={messagesEndRef}></div>
         </Box>
 

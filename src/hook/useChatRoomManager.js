@@ -32,7 +32,7 @@ const useChatRoomManager = (crid, user, onClose) => {
   const [messages, messageLoading, messageError] = useCollectionData(
     query(
       collection(db, "chatrooms", crid, "message"),
-      orderBy("timestamp"),
+      orderBy("timestamp", "desc"),
       limit(loadLimit)
     )
   );
