@@ -263,15 +263,15 @@ export const ChatBox = ({
               height="42px"
               backgroundColor="gray.100"
               value={msg}
-              onKeyDown={(e) => {
+              onKeyUp={(e) => {
                 resizeTextArea(e);
                 if (e.key == "Enter" && !e.shiftKey) {
-                  handleSent(user.uid, msg, image);
+                  handleSent(user.uid, msg.trim(), image);
                   setMsg("");
                   setImage("");
                 }
               }}
-              onChange={(e) => setMsg(e.target.value)}
+              onChange={(e) => {setMsg(e.target.value)}}
               onPaste={handleImagePaste}
             />
           </Box>
@@ -279,7 +279,7 @@ export const ChatBox = ({
             float="right"
             marginRight={2}
             onClick={() => {
-              handleSent(user.uid, msg, image);
+              handleSent(user.uid, msg.trim(), image);
               setMsg("");
               setImage("");
             }}
