@@ -422,7 +422,7 @@ const Postsection = ({ data, pid, user, id, selectedchara, setSelectedchara }) =
                 <Text>
                   {Object.keys(selectedchara).length > 0
                     ? selectedchara.name
-                    : "Chara Name"}
+                    : "Character Name"}
                 </Text>
                 <Menu>
                   <MenuButton
