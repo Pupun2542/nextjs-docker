@@ -69,14 +69,10 @@ const MentionBox = ({ data, id, mention, setMention }) => {
               value={searchstr}
               type="text"
               placeholder={"เลือกตัวละครที่ต้องการกล่าวถึง"}
-              w={"auto"}
-              maxW={330}
+              w={"100%"}
+              maxW={500}
               float="left"
-              // mr={0.5}
-              // ml={1}
-              // mb={2}
-              // mt={0.5}
-              fontSize={16}
+              fontSize={14}
               h={31}
             />
             <VStack
