@@ -468,6 +468,7 @@ export default function Home() {
                 }}
                 direction={{ base: "column-reverse", md: "row" }}
                 w={"100%"}
+                maxW={500}
               >
                 <VStack
                   p={5}
