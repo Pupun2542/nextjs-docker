@@ -150,10 +150,10 @@ export const GroupBar = ({
                     : displayUser.isStaff
                     ? "Staff"
                     : displayUser.isMember
-                    ? "member"
+                    ? "Member"
                     : displayUser.refererId
-                    ? "character"
-                    : "visitor"}
+                    ? "Character"
+                    : "Visitor"}
                 </Text>
               </Flex>
             </Box>
