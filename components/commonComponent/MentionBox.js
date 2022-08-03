@@ -79,18 +79,21 @@ const MentionBox = ({ data, id, mention, setMention }) => {
               fontSize={16}
               h={31}
             />
-            <VStack 
-            position={"absolute"} 
-            p={1} 
-            top={"35px"} 
-            bg={"white"}
-            borderRadius={5}
-            display={searchstr ? "initial" : "none"}
+            <VStack
+              position={"absolute"}
+              p={1}
+              top={"30px"}
+              left={'0px'}
+              bg={"white"}
+              w={'100%'}
+              borderRadius={5}
+              zIndex={1000}
+              display={searchstr ? "initial" : "none"}
             >
               {filteredcharaSearchResult.map((char) => (
                 <Box
                   onClick={() => onSelectChara(char)}
-                  width={"100%"}
+                  width={"auto"}
                   borderRadius={5}
                   cursor={"pointer"}
                   p={1}
