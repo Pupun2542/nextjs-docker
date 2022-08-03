@@ -62,7 +62,7 @@ function about() {
                   fontSize={38}
                   fontWeight={"400"}
                   fontStyle={"normal"}
-                  // lineHeight={'75px'}
+                // lineHeight={'75px'}
                 >
                   Comuthor team
                 </Text>
@@ -167,17 +167,17 @@ function about() {
                   color={"white"}
                   justifyContent={"center"}
                 >
-                  <Flex w={"100%"} justifyContent={"center"}><Image src="Ko-fi_Icon_RGB_rounded.png" w={150}/>
-                    
+                  <Flex w={"100%"} justifyContent={"center"}><Image src="Ko-fi_Icon_RGB_rounded.png" w={150} />
+
                   </Flex>
 
                   <Flex m={2} direction={"column"} fontSize={20}>
                     <a target="_blank" href="https://ko-fi.com/comuthor">
                       <Center>
                         <Text as={'U'}>Click</Text>
-                        </Center>
+                      </Center>
                     </a>
-                    
+
                   </Flex>
                 </Flex>
               </Center>
@@ -189,53 +189,63 @@ function about() {
             </Box>
 
             <SimpleGrid spacing={5} columns={3} pr={5} pl={5} pb={5}>
-              <Flex
-                bg={"#6768AB"}
-                borderRadius={10}
-                p={2}
-                borderWidth={3}
-                color={"white"}
-                pl={5}
-                borderColor={"black"}
-                as={"button"}
-                 //<a target="_blank" href="https://discord.com/invite/BVrwyCPEHc"></a>
-              >
-                <a target="_blank" href="https://discord.com/invite/BVrwyCPEHc"><DiscordLogo size={60} /></a>
+              <a target="_blank" href="https://discord.com/invite/BVrwyCPEHc">
+                <Flex
+                  bg={"#6768AB"}
+                  borderRadius={10}
+                  p={2}
+                  borderWidth={3}
+                  color={"white"}
+                  pl={5}
+                  borderColor={"black"}
+                  as={"button"}
+                  w={'100%'}
+                //<a target="_blank" href="https://discord.com/invite/BVrwyCPEHc"></a>
+                >
+                  <a target="_blank" href="https://discord.com/invite/BVrwyCPEHc"><DiscordLogo size={60} /></a>
 
-                <Center h={55} pl={3} fontSize={18}>
-                  Discord
-                </Center>
-              </Flex>
+                  <Center h={55} pl={3} fontSize={18}>
+                    Discord
+                  </Center>
+                </Flex>
+              </a>
 
-              <Flex
-                bg={"#6768AB"}
-                borderRadius={10}
-                p={2}
-                borderWidth={3}
-                color={"white"}
-                pl={5}
-                borderColor={"black"}
-                as={"button"}
-              >
-                <a target="_blank" href="https://www.facebook.com/ComuthorCorp"><FacebookLogo size={60} /></a>
-                <Center h={55} pl={3} fontSize={18}>Facebook</Center>
-              </Flex>
 
-              <Flex
-                bg={"#6768AB"}
-                borderRadius={10}
-                p={2}
-                borderWidth={3}
-                color={"white"}
-                pl={5}
-                borderColor={"black"}
-                //cursor={"not-allowed"}
-              >
-                <a target="_blank" href="https://twitter.com/comuthor"><TwitterLogo size={60} /></a>
-                
+              <a target="_blank" href="https://www.facebook.com/ComuthorCorp">
+                <Flex
+                  bg={"#6768AB"}
+                  borderRadius={10}
+                  p={2}
+                  borderWidth={3}
+                  color={"white"}
+                  pl={5}
+                  borderColor={"black"}
+                  as={"button"}
+                  w={'100%'}
+                >
+                  <a target="_blank" href="https://www.facebook.com/ComuthorCorp"><FacebookLogo size={60} /></a>
+                  <Center h={55} pl={3} fontSize={18}>Facebook</Center>
+                </Flex>
+              </a>
 
-                <Center h={55} pl={3} fontSize={18}>Twitter</Center>
-              </Flex>
+              <a target="_blank" href="https://twitter.com/comuthor">
+                <Flex
+                  bg={"#6768AB"}
+                  borderRadius={10}
+                  p={2}
+                  borderWidth={3}
+                  color={"white"}
+                  pl={5}
+                  borderColor={"black"}
+                  w={'100%'}
+                >
+                  <a target="_blank" href="https://twitter.com/comuthor"><TwitterLogo size={60} /></a>
+
+
+                  <Center h={55} pl={3} fontSize={18}>Twitter</Center>
+                </Flex>
+              </a>
+
             </SimpleGrid>
 
             {/* Staff */}
